@@ -1,0 +1,5 @@
+C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\FilterBase\obj\Debug\FilterBase.csprojResolveAssemblyReference.cache
+C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\FilterBase\bin\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\FilterBase\bin\Debug\FilterBase.pdb
+C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\FilterBase\obj\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\FilterBase\obj\Debug\FilterBase.pdb
