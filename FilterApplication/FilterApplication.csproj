@@ -92,6 +92,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -101,7 +102,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\FilterBase\FilterBase.csproj">
       <Project>{322dbac2-fa5d-4ba8-904a-06921dcfd470}</Project>
@@ -110,6 +110,10 @@
     <ProjectReference Include="..\TreeGenerator\UIA.csproj">
       <Project>{b57de183-ab1c-469c-8418-7e695c8a922a}</Project>
       <Name>UIA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tree\Tree.csproj">
+      <Project>{5a4d371b-d8f6-4b3d-a965-8318b31c3cad}</Project>
+      <Name>Tree</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

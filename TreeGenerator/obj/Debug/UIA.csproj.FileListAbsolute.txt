@@ -5,3 +5,12 @@ C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\TreeGenerator\bin\Debug\Tr
 C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\TreeGenerator\bin\Debug\TreeGenerator.pdb
 C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\TreeGenerator\bin\Debug\FilterBase.dll
 C:\Users\mkarlapp\Documents\GRANT\GRANT_Code\UIA-Test\TreeGenerator\bin\Debug\FilterBase.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\bin\Debug\TreeGenerator.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\bin\Debug\TreeGenerator.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\obj\Debug\UIA.csprojResolveAssemblyReference.cache
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\obj\Debug\TreeGenerator.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\obj\Debug\TreeGenerator.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\bin\Debug\Tree.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\bin\Debug\Tree.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\bin\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\TreeGenerator\bin\Debug\FilterBase.pdb

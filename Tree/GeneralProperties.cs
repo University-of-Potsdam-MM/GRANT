@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FilterBase
+namespace Tree
 {
     public struct GeneralProperties
     {

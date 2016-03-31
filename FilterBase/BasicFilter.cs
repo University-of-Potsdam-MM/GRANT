@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common;
+using Tree;
+
 
 namespace FilterBase
 {
-    public class TreeGen
+    public class BasicFilter
     {
         public enum OperatorEnum { and, or };
+
+        //default = UIA
+        private Interfaces.IFilter specifiedFilter;
+        public ITree<GeneralProperties> filtering(IntPtr hwnd){
+            return specifiedFilter.filtering(hwnd);
+        }
+
+        public void setSpecifiedFilter(Interfaces.IFilter filter)
+        {
+            specifiedFilter = filter;
+        }
+        
 
         #region search
         /// <summary>

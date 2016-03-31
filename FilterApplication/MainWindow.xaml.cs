@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using FilterBase;
+using FilterBase.Interfaces;
+using UIA;
 using System.Windows.Automation;
 
 namespace FilterApplication
@@ -31,9 +33,14 @@ namespace FilterApplication
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-
+            //auslagern in UIA und BasicFilter
             UIA_Filter uia = new UIA_Filter();
-            TreeGenUia treeUia = new TreeGenUia();
+            
+            BasicFilter filter = new BasicFilter();
+            IFilter f = new UiaFilter();  
+            filter.setSpecifiedFilter(f);
+            
+            
             // ... Test for F5 key.
             if (e.Key == Key.F5)
             {
@@ -53,7 +60,7 @@ namespace FilterApplication
                         + "\n MAIN-HWND: " + uia.getProcessHwndFromHwnd(UIA_Filter.deliverAutomationElementID(uia.getHWND()));
 
 
-                        treeUia.generateTree(UIA_Filter.deliverAutomationElementFromHWND(uia.getProcessHwndFromHwnd(UIA_Filter.deliverAutomationElementID(uia.getHWND()))));
+                       f.filtering(uia.getProcessHwndFromHwnd(UIA_Filter.deliverAutomationElementID(uia.getHWND())));
 
                     }
                     catch (Exception ex)

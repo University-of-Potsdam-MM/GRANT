@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common;
-using FilterBase;
+using Tree;
 using System.Windows.Automation;
+using System.Diagnostics;
+using FilterBase;
+using FilterBase.Interfaces;
 
-namespace FilterBase
+namespace UIA
 {
-    public class TreeGenUia
+    public class UiaFilter : IFilter
     {
         /// <summary>
         /// Erstellt anhand eines AutomationElements den zugehörigen Baum
         /// </summary>
         /// <param name="mainWindowElement">gibt das AutomationElement an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
-        public ITree<GeneralProperties> generateTree(AutomationElement mainWindowElement)
+        public ITree<GeneralProperties> filtering(IntPtr hwnd)
         {
             ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
+            AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
             INode<GeneralProperties> top = tree.AddChild(setProperties(mainWindowElement));
             AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-            findChildrenOfNode(top, collection, 4);
-            TreeGen treeGen = new TreeGen();
-            treeGen.printTreeElements(tree, -1);
+            findChildrenOfNode(top, collection, -1);
             return tree;
         }
 
@@ -63,5 +64,18 @@ namespace FilterBase
                 }
             }
         }
+
+        #region Achtung: kopie aus FilterApplication.UIA_Filter
+
+        public static AutomationElement deliverAutomationElementFromHWND(IntPtr hwnd)
+        {
+            AutomationElement element = AutomationElement.FromHandle(hwnd);
+
+            //element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
+            return element;
+        }
+
+
+        #endregion
     }
 }

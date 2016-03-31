@@ -40,14 +40,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeneralTree\GeneralProperties.cs" />
-    <Compile Include="GeneralTree\Tree2.cs" />
-    <Compile Include="GeneralTree\TreeGen.cs" />
+    <Compile Include="BasicFilter.cs" />
+    <Compile Include="Interfaces\IFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GeneralFilter\" />
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\Tree\Tree.csproj">
+      <Project>{5a4d371b-d8f6-4b3d-a965-8318b31c3cad}</Project>
+      <Name>Tree</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

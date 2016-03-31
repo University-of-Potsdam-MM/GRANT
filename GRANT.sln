@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIA", "TreeGenerator\UIA.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterBase", "FilterBase\FilterBase.csproj", "{322DBAC2-FA5D-4BA8-904A-06921DCFD470}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tree", "Tree\Tree.csproj", "{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{322DBAC2-FA5D-4BA8-904A-06921DCFD470}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{322DBAC2-FA5D-4BA8-904A-06921DCFD470}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{322DBAC2-FA5D-4BA8-904A-06921DCFD470}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
