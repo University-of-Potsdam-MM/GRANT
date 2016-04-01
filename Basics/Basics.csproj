@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicFilterStrategy.cs" />
-    <Compile Include="BasicsTreeOperations.cs" />
+    <Compile Include="BasicTreeOperations.cs" />
     <Compile Include="BasicWindowsOperations.cs" />
     <Compile Include="Interfaces\IFilterStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
