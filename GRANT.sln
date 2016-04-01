@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterApplication", "FilterApplication\FilterApplication.csproj", "{8099D9BB-3DF0-4BA8-B334-34770BE9E534}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIA", "TreeGenerator\UIA.csproj", "{B57DE183-AB1C-469C-8418-7E695C8A922A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilterBase", "FilterBase\FilterBase.csproj", "{322DBAC2-FA5D-4BA8-904A-06921DCFD470}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tree", "Tree\Tree.csproj", "{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GApplication", "GApplication\GApplication.csproj", "{8099D9BB-3DF0-4BA8-B334-34770BE9E534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIA", "UIA\UIA.csproj", "{B57DE183-AB1C-469C-8418-7E695C8A922A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basics", "Basics\Basics.csproj", "{322DBAC2-FA5D-4BA8-904A-06921DCFD470}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +17,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8099D9BB-3DF0-4BA8-B334-34770BE9E534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8099D9BB-3DF0-4BA8-B334-34770BE9E534}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8099D9BB-3DF0-4BA8-B334-34770BE9E534}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,10 +33,6 @@ Global
 		{322DBAC2-FA5D-4BA8-904A-06921DCFD470}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{322DBAC2-FA5D-4BA8-904A-06921DCFD470}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{322DBAC2-FA5D-4BA8-904A-06921DCFD470}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

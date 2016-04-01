@@ -1,0 +1,14 @@
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\bin\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\bin\Debug\FilterBase.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\bin\Debug\Tree.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\bin\Debug\Tree.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\obj\Debug\Basics.csprojResolveAssemblyReference.cache
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\obj\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\FilterBase\obj\Debug\FilterBase.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\FilterBase.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\Tree.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\Tree.pdb
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\Basics.csprojResolveAssemblyReference.cache
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\FilterBase.dll
+C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\FilterBase.pdb
