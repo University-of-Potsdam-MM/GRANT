@@ -12,7 +12,7 @@ namespace Tree
 
        
         //TODO: evtl. Enum für ControlType erstellen
-        public String controlsTypeFiltered
+        public String controlTypeFiltered
         {
             get;
             set;

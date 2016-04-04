@@ -37,10 +37,10 @@ namespace UIA
         private GeneralProperties setProperties(AutomationElement element)
         {
             GeneralProperties elementP = new GeneralProperties();
-            elementP.Name = element.Current.Name;
-            elementP.LocalizedControlType = element.Current.LocalizedControlType;
-            elementP.BoundingRectangle = element.Current.BoundingRectangle;
-            elementP.IsEnabled = element.Current.IsEnabled;
+            elementP.nameFiltered = element.Current.Name;
+            elementP.controlTypeFiltered = element.Current.LocalizedControlType;
+            elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+            elementP.disabedFiltered = element.Current.IsEnabled;
             return elementP;
         }
 
@@ -76,7 +76,7 @@ namespace UIA
 
 
         // ProzessID vom AutomationElement
-        public static int deliverAutomationElementID(IntPtr hwnd)
+        public int deliverElementID(IntPtr hwnd)
         {
             //window = WindowFromPoint(cp);
             AutomationElement element = AutomationElement.FromHandle(hwnd);

@@ -6,5 +6,6 @@ namespace Basics.Interfaces
     public interface IFilterStrategy
     {
         ITree<GeneralProperties> filtering(IntPtr hwnd);
+        int deliverElementID(IntPtr hwnd);
     }
 }

@@ -60,7 +60,7 @@ namespace GApplication
                         IntPtr mainPointer = basicWindows.getProcessHwndFromHwnd(processIdentifier);
                         ITree<GeneralProperties> tree = filter.filtering(mainPointer);
                         Basics.BasicFilter.printTreeElements(tree, -1);*/
-                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(UiaFilterStrategy.deliverAutomationElementID(points)));
+                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(f.deliverElementID(points)));
                         Basics.BasicTreeOperations.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
