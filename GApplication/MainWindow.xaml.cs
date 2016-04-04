@@ -48,19 +48,18 @@ namespace GApplication
                     {
                         IntPtr points = basicWindows.getHWND();
                         
-                        UiaFilterStrategy f = new UiaFilterStrategy();
-
                         Settings settings = new Settings();
 
                         List<Filter> possibleFilter = settings.getPosibleFilters();
                         String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
                        
-                        filter.setSpecifiedFilter(settings.getFilterObjectName(cUserName));
+                        IFilterStrategy filterStrategy = settings.getFilterObjectName(cUserName);
+                        filter.setSpecifiedFilter(filterStrategy);
                         /*int  processIdentifier = UiaFilter.deliverAutomationElementID(points);
                         IntPtr mainPointer = basicWindows.getProcessHwndFromHwnd(processIdentifier);
                         ITree<GeneralProperties> tree = filter.filtering(mainPointer);
                         Basics.BasicFilter.printTreeElements(tree, -1);*/
-                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(f.deliverElementID(points)));
+                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         Basics.BasicTreeOperations.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
