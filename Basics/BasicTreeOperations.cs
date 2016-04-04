@@ -24,7 +24,7 @@ namespace Basics
             List<INode<GeneralProperties>> result = new List<INode<GeneralProperties>>();
             foreach (INode<GeneralProperties> node in tree.All.Nodes)
             {
-                if (node.Data.LocalizedControlType.Equals(controlType))
+                if (node.Data.controlTypeFiltered.Equals(controlType))
                 {
                     result.Add(node);
                 }
@@ -67,12 +67,12 @@ namespace Basics
             {
                 if (node.Depth <= depth || depth == -1)
                 {
-                    Console.Write("Node -  Anz. Kinder: {0},  Depth: {3},  Name: {1}, Type: {2},  hasNext: {4}, hasChild: {5}", node.DirectChildCount, node.Data.Name, node.Data.LocalizedControlType, node.Depth, node.HasNext, node.HasChild);
-                    Console.Write(", Position - Left: {0}, Right: {1}", node.Data.BoundingRectangle.Left, node.Data.BoundingRectangle.Right);
+                    Console.Write("Node -  Anz. Kinder: {0},  Depth: {3},  Name: {1}, Type: {2},  hasNext: {4}, hasChild: {5}", node.DirectChildCount, node.Data.nameFiltered, node.Data.controlTypeFiltered, node.Depth, node.HasNext, node.HasChild);
+                    Console.Write(", Position - Left: {0}, Right: {1}", node.Data.boundingRectangleFiltered.Left, node.Data.boundingRectangleFiltered.Right);
 
                     if (node.HasParent)
                     {
-                        Console.Write(", Parent: {0}", node.Parent.Data.Name);
+                        Console.Write(", Parent: {0}", node.Parent.Data.nameFiltered);
                     }
                     Console.WriteLine();
                 }
@@ -88,10 +88,10 @@ namespace Basics
         {
             foreach (INode<GeneralProperties> r in nodes)
             {
-                Console.Write("Node - Name: {0}, Type: {1}, Depth: {2}, hasNext: {3}, hasChild: {4}, isEnabled: {5}", r.Data.Name, r.Data.LocalizedControlType, r.Depth, r.HasNext, r.HasChild, r.Data.IsEnabled);
+                Console.Write("Node - Name: {0}, Type: {1}, Depth: {2}, hasNext: {3}, hasChild: {4}, isEnabled: {5}", r.Data.nameFiltered, r.Data.controlTypeFiltered, r.Depth, r.HasNext, r.HasChild, !r.Data.disabedFiltered);
                 if (r.HasParent)
                 {
-                    Console.Write(", Parent: {0}", r.Parent.Data.Name);
+                    Console.Write(", Parent: {0}", r.Parent.Data.nameFiltered);
                 }
                 Console.WriteLine();
             }

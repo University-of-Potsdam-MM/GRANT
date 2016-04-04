@@ -84,5 +84,7 @@ namespace UIA
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return processIdentifier;
         }
+
     }
+
 }
