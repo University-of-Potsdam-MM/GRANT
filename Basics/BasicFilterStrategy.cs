@@ -22,13 +22,11 @@ namespace Basics
         {
             specifiedFilter = filter;
         }
-
+        
         public Interfaces.IFilterStrategy getSpecifiedFilter()
         {
             return specifiedFilter;
         }
-            
-        
 
     }
 }

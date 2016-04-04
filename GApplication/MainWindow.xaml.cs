@@ -47,12 +47,15 @@ namespace GApplication
                     try
                     {
                         IntPtr points = basicWindows.getHWND();
-
-                        // entscheiden, welche Bibliothek !!!! User gibt UIA an TODO
                         
                         UiaFilterStrategy f = new UiaFilterStrategy();
-                        // dieser Parameter muss dynamisch ermittelt werden
-                        filter.setSpecifiedFilter(f);
+
+                        Settings settings = new Settings();
+
+                        List<Filter> possibleFilter = settings.getPosibleFilters();
+                        String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+                       
+                        filter.setSpecifiedFilter(settings.getFilterObjectName(cUserName));
                         /*int  processIdentifier = UiaFilter.deliverAutomationElementID(points);
                         IntPtr mainPointer = basicWindows.getProcessHwndFromHwnd(processIdentifier);
                         ITree<GeneralProperties> tree = filter.filtering(mainPointer);
@@ -65,6 +68,17 @@ namespace GApplication
                         Console.WriteLine("An error occurred: '{0}'", ex);
                     }
                 }
+            }
+            if (e.Key == Key.F6)
+            {
+                Settings settings = new Settings();
+                List<Filter> posibleFilter = settings.getPosibleFilters();
+                String result = "Mögliche Filter: ";
+                foreach (Filter f in posibleFilter)
+                {
+                    result = result + f.userName + ", ";
+                }
+                itemNameTextBox.Text = result;
             }
         }
 

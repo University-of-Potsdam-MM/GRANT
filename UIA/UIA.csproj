@@ -7,8 +7,8 @@
     <ProjectGuid>{B57DE183-AB1C-469C-8418-7E695C8A922A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Basics</RootNamespace>
-    <AssemblyName>TreeGenerator</AssemblyName>
+    <RootNamespace>UIA</RootNamespace>
+    <AssemblyName>UIA</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
