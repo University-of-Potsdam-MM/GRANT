@@ -85,6 +85,101 @@ namespace UIA
             return processIdentifier;
         }
 
+        /// <summary>
+        /// Ermittelt das zugehörige AutomationElement eines Knotens aus dem gespiegelten Baum
+        /// </summary>
+        /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
+        /// <param name="rootElement"></param> --- hier erst ermitteln
+        /// <returns>das zugehörige AutomationElement des Knotens</returns>
+        private AutomationElement getAutomationElementFromMirroredTree(INode<GeneralProperties> node, AutomationElement rootElement)
+        {
+            Condition condition = setPropertiesCondition(node.Data);
+            AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
+            if (foundedAutomationElements.Count == 0)
+            {
+                Console.WriteLine("Kein passendes AutomationElement gefunden!");
+                return null;
+            }
+            if (foundedAutomationElements.Count == 1)
+            {
+                return foundedAutomationElements[0];
+            }
+            //TODO: prüfen, welches das richtige Element ist
+            return foundedAutomationElements[0];
+        }
+
+        /// <summary>
+        /// Erstellt einen Baum mit allen Vorfahren eines Elementes
+        /// </summary>
+        /// <param name="node">gibt den Knoten des gespiegelten Baumes an, von dem die Vorfahren gesucht werden sollen</param>
+        /// <param name="hwnd">gibt den Handle des AutomationElementes an um anhand dessen das Root-AutomationElement zu bestimmen</param>
+        /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
+        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
+        {
+            BasicWindowsOperations basicWindows = new BasicWindowsOperations();
+            AutomationElement rootElement = deliverAutomationElementFromHWND(basicWindows.getProcessHwndFromHwnd(deliverElementID(hwnd))); // Ist das hier noch notwendig, oder bekommen wir an der Stelle eigentlich schon den richtigen Handle?
+            AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
+            if (element == null)
+            {
+                return null;
+            }
+            ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
+            tree.AddChild(setProperties(element));
+            findParentOfElement(element, rootElement, tree);
+            return tree;
+        }
+
+        /// <summary>
+        /// Findet rekusiv alle direkten Vorfahren eines AutomationElements
+        /// </summary>
+        /// <param name="element">gibt das AutomationElement an von dem die Vorfahren gesucht werden sollen</param>
+        /// <param name="rootElement">gibt das rootElemet der Suche an</param>
+        /// <param name="tree">gibt den aktuel erstellten Baum mit den Vorfahren des Elements an</param>
+        private void findParentOfElement(AutomationElement element, AutomationElement rootElement,ITree<GeneralProperties> tree)
+        {
+            TreeWalker walker = TreeWalker.ControlViewWalker;
+            AutomationElement elementParent = walker.GetParent(element);
+            addParentOfNode(elementParent, tree);
+            if (!rootElement.Equals(elementParent))
+            {
+                findParentOfElement(elementParent, rootElement, tree);
+            }
+        }
+        
+        /// <summary>
+        /// Fügt ein neues Elternelement einen Baum hinzu.
+        /// </summary>
+        /// <param name="parentElement">gibt das neue Elternelement an</param>
+        /// <param name="tree">gibt den "alten" Baum an</param>
+        private void addParentOfNode(AutomationElement parentElement, ITree<GeneralProperties> tree)
+        {
+            ITree<GeneralProperties> tree2 = NodeTree<GeneralProperties>.NewTree();
+            INode<GeneralProperties> node = tree2.AddChild(setProperties(parentElement));
+            node.AddChild(tree);
+            tree.Clear();
+            tree.AddChild(tree2);
+        }
+
+        /// <summary>
+        /// Erstellt die Condition zum suchen der AutomationElemente anhand der <code>GeneralProperties</code> eines Baum-Knoten
+        /// </summary>
+        /// <param name="properties">gibt die <code>GeneralProperties</code> eines Knoten an</param>
+        /// <returns>Eine Condition</returns>
+        private Condition setPropertiesCondition(GeneralProperties properties)
+        {
+            //TODO: Achtung einige Eigenschaften vonrscheinlich GeneralProperties sollten wahrscheinlich nicht genutzt werden
+            Condition resultCondition;
+            #region von allen auslesbar
+            resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
+            // ...
+            #endregion
+            if (properties.controlTypeFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.controlTypeFiltered), resultCondition);
+            }
+            //.. 
+            return resultCondition;
+        }
     }
 
 }

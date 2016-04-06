@@ -7,5 +7,6 @@ namespace Basics.Interfaces
     {
         ITree<GeneralProperties> filtering(IntPtr hwnd);
         int deliverElementID(IntPtr hwnd);
+        ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd);
     }
 }

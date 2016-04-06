@@ -16,7 +16,6 @@ using Basics;
 using Basics.Interfaces;
 using UIA;
 using Tree;
-using System.Windows.Automation;
 
 namespace GApplication
 {
@@ -78,6 +77,44 @@ namespace GApplication
                     result = result + f.userName + ", ";
                 }
                 itemNameTextBox.Text = result;
+            }
+
+            if (e.Key == Key.F7)
+            { /* Testaufruf um die Eltern eines Knotens des gespiegelten Baumes über das AutomationElement zu finden
+               * Es werden die Eltern des 3. Elementes des Baumes gesucht
+               */
+
+                if (basicWindows.deliverCursorPosition())
+                {
+                    try
+                    {
+                        #region kopiert von "if (e.Key == Key.F5) ..."
+                        IntPtr points = basicWindows.getHWND();
+                        Settings settings = new Settings();
+                        List<Filter> possibleFilter = settings.getPosibleFilters();
+                        String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+                        IFilterStrategy filterStrategy = settings.getFilterObjectName(cUserName);
+                        filter.setSpecifiedFilter(filterStrategy);
+                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        Basics.BasicTreeOperations.printTreeElements(tree, 4);
+                        Console.WriteLine("\n");
+                        #endregion
+
+                        INode<GeneralProperties> node = tree.Nodes.ElementAt(3); //Exemplarisch rausgesuchter Knoten
+                        Console.WriteLine("Node - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
+
+                        ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
+                        if (tree2 != null)
+                        {
+                            Basics.BasicTreeOperations.printTreeElements(tree2, -1);
+                        }
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", ex);
+                    }
+                }
             }
         }
 
