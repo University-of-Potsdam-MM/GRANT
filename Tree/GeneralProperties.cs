@@ -7,6 +7,7 @@ using System.Windows;
 
 namespace Tree
 {
+    //Properties
     public struct GeneralProperties
     {
 
