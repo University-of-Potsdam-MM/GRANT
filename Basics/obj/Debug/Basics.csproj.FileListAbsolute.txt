@@ -12,3 +12,10 @@ C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\Basics.dll
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\Basics.pdb
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\Basics.dll
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\Basics.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Basics.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Basics.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Tree.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Tree.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\obj\Debug\Basics.csprojResolveAssemblyReference.cache
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\obj\Debug\Basics.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\obj\Debug\Basics.pdb

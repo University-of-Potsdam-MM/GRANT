@@ -23,3 +23,12 @@ C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\UIA\bin\Debug\Basics.dll
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\UIA\bin\Debug\Basics.pdb
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\UIA\obj\Debug\UIA.dll
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\UIA\obj\Debug\UIA.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\bin\Debug\UIA.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\bin\Debug\UIA.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\bin\Debug\Basics.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\bin\Debug\Tree.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\bin\Debug\Basics.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\bin\Debug\Tree.pdb
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\obj\Debug\UIA.csprojResolveAssemblyReference.cache
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\obj\Debug\UIA.dll
+C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\UIA\obj\Debug\UIA.pdb
