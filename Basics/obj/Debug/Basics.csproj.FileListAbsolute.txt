@@ -12,6 +12,7 @@ C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\Basics.dll
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\bin\Debug\Basics.pdb
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\Basics.dll
 C:\Users\mkarlapp\Documents\GRANT\Code-Git\Filter\Basics\obj\Debug\Basics.pdb
+<<<<<<< HEAD
 C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Basics.dll
 C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Basics.pdb
 C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Tree.dll
@@ -19,3 +20,13 @@ C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\bin\Debug\Tree.pdb
 C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\obj\Debug\Basics.csprojResolveAssemblyReference.cache
 C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\obj\Debug\Basics.dll
 C:\Users\Admin\ownCloud\GRANT-ZIM\Code_Grant\Filter\Basics\obj\Debug\Basics.pdb
+||||||| merged common ancestors
+=======
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\obj\Debug\Basics.csprojResolveAssemblyReference.cache
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\bin\Debug\Basics.dll
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\bin\Debug\Basics.pdb
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\bin\Debug\Tree.dll
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\bin\Debug\Tree.pdb
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\obj\Debug\Basics.dll
+C:\Users\elnasm\Documents\GRANT\GrantProjekt\Filter\Filter\Basics\obj\Debug\Basics.pdb
+>>>>>>> 1f9bc09e69926ff61b1d32e24b86cbd0a643f02b

@@ -88,7 +88,7 @@ namespace Basics
         {
             foreach (INode<GeneralProperties> r in nodes)
             {
-                Console.Write("Node - Name: {0}, Type: {1}, Depth: {2}, hasNext: {3}, hasChild: {4}, isEnabled: {5}", r.Data.nameFiltered, r.Data.controlTypeFiltered, r.Depth, r.HasNext, r.HasChild, !r.Data.disabedFiltered);
+                Console.Write("Node - Name: {0}, Type: {1}, Depth: {2}, hasNext: {3}, hasChild: {4}, isEnabled: {5}", r.Data.nameFiltered, r.Data.controlTypeFiltered, r.Depth, r.HasNext, r.HasChild, !r.Data.isEnabledFiltered);
                 if (r.HasParent)
                 {
                     Console.Write(", Parent: {0}", r.Parent.Data.nameFiltered);
