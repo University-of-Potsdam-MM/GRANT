@@ -40,7 +40,7 @@ namespace UIA
             elementP.nameFiltered = element.Current.Name;
             elementP.controlTypeFiltered = element.Current.LocalizedControlType;
             elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
-            elementP.disabedFiltered = element.Current.IsEnabled;
+            elementP.isEnabledFiltered = element.Current.IsEnabled;
             return elementP;
         }
 

@@ -10,139 +10,170 @@ namespace Tree
     public struct GeneralProperties
     {
 
-       
-        //TODO: evtl. Enum für ControlType erstellen
-        public String controlTypeFiltered
+
+        //General Accessibility / Interaction
+
+        public String acceleratorKeyFiltered
         {
             get;
             set;
         }
 
-        //Property: isEnabled
-        // Boolean? => true, false, null
-        public Boolean? disabedFiltered
+        public String accessKeyFiltered
         {
             get;
             set;
         }
-        //Property: BoundingRectangle
+
+
+
+        public Boolean? isKeyboardFocusableFiltered
+        {
+            get;
+            set;
+        }
+
+
+
+        // STATE
+
+        // Boolean? => true, false, null
+        public Boolean? isEnabledFiltered
+        {
+            get;
+            set;
+        }
+
+        public Boolean? hasKeyboardFocusFiltered
+        {
+            get;
+            set;
+        }
+
+        // Visibility
+
         public Rect boundingRectangleFiltered
         {
             get;
             set;
         }
 
-        //Property: Name
+        public Boolean? isOffscreenFiltered
+        {
+            get;
+            set;
+        }
+
+        public String helpTextFiltered
+        {
+            get;
+            set;
+        }
+
+
+        //IDENTIFICATION/Elemttype
+
+        //nicht von UIA
+        public String IdGenerated
+        {
+            get;
+            set;
+        }
+
+        public String autoamtionIdFiltered
+        {
+            get;
+            set;
+        }
+
+
+        public String classNameFiltered
+        {
+            get;
+            set;
+        }
+
+        public String controlTypeFiltered
+        {
+            get;
+            set;
+        }
+
+        public String frameWorkIdFiltered
+        {
+            get;
+            set;
+        }
+
+        //typ?
+        public String hWndFiltered
+        {
+            get;
+            set;
+        }
+
+        public Boolean? isContentElementFiltered
+        {
+            get;
+            set;
+        }
+        //typ?
+        public String labeledbyFiltered
+        {
+            get;
+            set;
+        }
+
+        public Boolean? isControlElementFiltered
+        {
+            get;
+            set;
+        }
+
+        public Boolean? isPasswordFiltered
+        {
+            get;
+            set;
+        }
+
+        public String localizedControlTypeFiltered
+        {
+            get;
+            set;
+        }
+
         public String nameFiltered
         {
             get;
             set;
         }
 
-        //Property: AutoamtionId
-        public int IdFiltered
+        public int processIdFiltered
         {
             get;
             set;
         }
 
-        public int IdGenerated
+        public String itemTypeFiltered
         {
             get;
             set;
         }
-
-        public Boolean? checkedFiltered
+        public String itemStatusFiltered
         {
             get;
             set;
         }
-
-        public String controlsForFiltered
-        {
-            get;
-            set;
-        }
-
-        public String describedbyFiltered
-        {
-            get;
-            set;
-        }
-
-        
-        public String flowtoFiltered
-        {
-            get;
-            set;
-        }
-
-        public Boolean? invalidFiltered
-        {
-            get;
-            set;
-        }
-
-        public String labelledbyFiltered
-        {
-            get;
-            set;
-        }
-
-        public Boolean? liveFiltered
+        public Boolean? isRequiredForFormFiltered
         {
             get;
             set;
         }
 
 
-        public Boolean? multiselectedtableFiltered
-        {
-            get;
-            set;
-        }
-
-        public Boolean? readonlyFiltered
-        {
-            get;
-            set;
-        }
-
-        public Boolean? requiredFiltered
-        {
-            get;
-            set;
-        }
-
-        public Boolean? secretFiltered
-        {
-            get;
-            set;
-        }
-
-        public int valuemaxFiltered
-        {
-            get;
-            set;
-        }
-
-        public int valueminFiltered
-        {
-            get;
-            set;
-        }
-
-        public String valuenowFiltered
-        {
-            get;
-            set;
-        }
-
-
-       
-
-
-
+    }
 }
-}
+
+
+
 
