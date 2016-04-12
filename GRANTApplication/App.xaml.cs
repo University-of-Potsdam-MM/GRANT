@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace GApplication
+namespace GRANTApplication
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"

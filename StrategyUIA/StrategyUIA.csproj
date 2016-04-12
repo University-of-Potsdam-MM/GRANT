@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5A4D371B-D8F6-4B3D-A965-8318B31C3CAD}</ProjectGuid>
+    <ProjectGuid>{F181E453-0EBE-4775-9CC1-1CE26CDC4ED2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tree</RootNamespace>
-    <AssemblyName>Tree</AssemblyName>
+    <RootNamespace>StrategyUIA</RootNamespace>
+    <AssemblyName>StrategyUIA</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,12 +37,23 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeneralProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tree2.cs" />
+    <Compile Include="FilterStrategyUIA.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
+      <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
+      <Name>StrategyGenericTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyManager\StrategyManager.csproj">
+      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
+      <Name>StrategyManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

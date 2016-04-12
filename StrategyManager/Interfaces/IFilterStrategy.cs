@@ -1,7 +1,7 @@
 ﻿using System;
-using Tree;
+using StrategyGenericTree;
 
-namespace Basics.Interfaces
+namespace StrategyManager.Interfaces
 {
     public interface IFilterStrategy
     {

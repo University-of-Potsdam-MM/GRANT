@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tree;
+using StrategyGenericTree;
 using System.Windows.Automation;
 using System.Diagnostics;
-using Basics;
-using Basics.Interfaces;
+using StrategyManager;
+using StrategyManager.Interfaces;
 
-namespace UIA
+namespace StrategyUIA
 {
-    public class UiaFilterStrategy : IFilterStrategy
+    public class FilterStrategyUIA : IFilterStrategy
     {
         /// <summary>
         /// Erstellt anhand eines AutomationElements den zugehörigen Baum
@@ -135,7 +135,7 @@ namespace UIA
         /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
         public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
         {
-            BasicWindowsOperations basicWindows = new BasicWindowsOperations();
+            OperationSystemStrategy basicWindows = new OperationSystemStrategy();
             AutomationElement rootElement = deliverAutomationElementFromHWND(basicWindows.getProcessHwndFromHwnd(deliverElementID(hwnd))); // Ist das hier noch notwendig, oder bekommen wir an der Stelle eigentlich schon den richtigen Handle?
             AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
             if (element == null)
@@ -195,6 +195,20 @@ namespace UIA
             if (properties.controlTypeFiltered != null)
             {
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.controlTypeFiltered), resultCondition);
+            }
+            if (properties.acceleratorKeyFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AcceleratorKeyProperty, properties.acceleratorKeyFiltered), resultCondition);
+            }
+            if (properties.accessKeyFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AccessKeyProperty, properties.accessKeyFiltered), resultCondition);
+            }
+
+            //TODO: evtl. hier gleich am Anfang prüfen und ggf. (falls vorhanden) nur diese Propertie nehmen?
+            if (properties.autoamtionIdFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered), resultCondition);
             }
             //.. 
             return resultCondition;

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tree;
+using StrategyGenericTree;
 
-namespace Basics
+namespace StrategyManager
 {
-    public class BasicTreeOperations
+    public class TreeStrategy
     {
         
         public enum OperatorEnum { and, or };

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using Basics.Interfaces;
+using StrategyManager.Interfaces;
 
 
 

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Basics
+namespace StrategyManager
 {
-    public class BasicWindowsOperations
+    public class OperationSystemStrategy
     {
         internal static class NativeMethods
         {

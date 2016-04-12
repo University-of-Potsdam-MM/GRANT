@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Tree
+namespace StrategyGenericTree
 {
     //Properties
     public struct GeneralProperties

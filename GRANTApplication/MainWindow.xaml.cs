@@ -12,10 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Basics;
-using Basics.Interfaces;
-using UIA;
-using Tree;
+using StrategyManager;
+using StrategyManager.Interfaces;
+using StrategyGenericTree;
 
 namespace GApplication
 {
@@ -33,9 +32,9 @@ namespace GApplication
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            BasicWindowsOperations basicWindows = new BasicWindowsOperations();
+            OperationSystemStrategy basicWindows = new OperationSystemStrategy();
             
-            BasicFilterStrategy filter = new BasicFilterStrategy();
+            FilterStrategy filter = new FilterStrategy();
             
             
             // ... Test for F5 key.
@@ -59,7 +58,7 @@ namespace GApplication
                         ITree<GeneralProperties> tree = filter.filtering(mainPointer);
                         Basics.BasicFilter.printTreeElements(tree, -1);*/
                         ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        Basics.BasicTreeOperations.printTreeElements(tree, -1);
+                        StrategyManager.TreeStrategy.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
                     {
@@ -96,7 +95,7 @@ namespace GApplication
                         IFilterStrategy filterStrategy = settings.getFilterObjectName(cUserName);
                         filter.setSpecifiedFilter(filterStrategy);
                         ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        Basics.BasicTreeOperations.printTreeElements(tree, 4);
+                        StrategyManager.TreeStrategy.printTreeElements(tree, 4);
                         Console.WriteLine("\n");
                         #endregion
 
@@ -106,7 +105,7 @@ namespace GApplication
                         ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
                         if (tree2 != null)
                         {
-                            Basics.BasicTreeOperations.printTreeElements(tree2, -1);
+                            StrategyManager.TreeStrategy.printTreeElements(tree2, -1);
                         }
                         
                     }

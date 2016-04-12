@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{322DBAC2-FA5D-4BA8-904A-06921DCFD470}</ProjectGuid>
+    <ProjectGuid>{394E1F1D-B5D0-46E2-B60E-7BEE3A939DE2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Basics</RootNamespace>
-    <AssemblyName>Basics</AssemblyName>
+    <RootNamespace>StrategyManager</RootNamespace>
+    <AssemblyName>StrategyManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,16 +40,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicFilterStrategy.cs" />
-    <Compile Include="BasicTreeOperations.cs" />
-    <Compile Include="BasicWindowsOperations.cs" />
+    <Compile Include="FilterStrategy.cs" />
     <Compile Include="Interfaces\IFilterStrategy.cs" />
+    <Compile Include="OperationSystemStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tree\Tree.csproj">
-      <Project>{5a4d371b-d8f6-4b3d-a965-8318b31c3cad}</Project>
-      <Name>Tree</Name>
+    <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
+      <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
+      <Name>StrategyGenericTree</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
