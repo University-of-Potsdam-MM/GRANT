@@ -14,6 +14,8 @@ namespace Tree
 
         //General Accessibility / Interaction
 
+        //Anmerkung: laut den Beschreibungen scheint acceleratorKey und accessKey das gleiche zu sein (https://msdn.microsoft.com/en-us/library/ff400332%28VS.95%29.aspx)
+        // -> Es werden aber nicht immer beide Werte zugewiesen
         public String acceleratorKeyFiltered
         {
             get;
@@ -94,6 +96,7 @@ namespace Tree
             set;
         }
 
+        //Anmerkung: ich habe den LocalizedControlType genommen
         public String controlTypeFiltered
         {
             get;
@@ -107,7 +110,8 @@ namespace Tree
         }
 
         //typ?
-        public String hWndFiltered
+        // Anmerkung: von String zu int geändert
+        public int hWndFiltered
         {
             get;
             set;

@@ -37,10 +37,29 @@ namespace UIA
         private GeneralProperties setProperties(AutomationElement element)
         {
             GeneralProperties elementP = new GeneralProperties();
-            elementP.nameFiltered = element.Current.Name;
-            elementP.controlTypeFiltered = element.Current.LocalizedControlType;
+            elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+            elementP.accessKeyFiltered = element.Current.AccessKey;
+            elementP.autoamtionIdFiltered = element.Current.AutomationId;
             elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+            elementP.classNameFiltered = element.Current.ClassName;
+            elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
+            elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            elementP.helpTextFiltered = element.Current.HelpText;
+            elementP.hWndFiltered = element.Current.NativeWindowHandle;
+            elementP.isContentElementFiltered = element.Current.IsContentElement;
+            elementP.isControlElementFiltered = element.Current.IsControlElement;
             elementP.isEnabledFiltered = element.Current.IsEnabled;
+            elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            elementP.isPasswordFiltered = element.Current.IsPassword;
+            elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            elementP.itemStatusFiltered = element.Current.ItemStatus;
+            elementP.itemTypeFiltered = element.Current.ItemType;
+            
+            elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
+            elementP.nameFiltered = element.Current.Name;
+            elementP.processIdFiltered = element.Current.ProcessId;
             return elementP;
         }
 
