@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GApplication
 {
-    public struct Filter
+    public struct Strategy
     {
         public String className
         {

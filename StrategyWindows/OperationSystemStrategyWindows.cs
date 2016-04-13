@@ -5,10 +5,11 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using StrategyManager.Interfaces;
 
 namespace StrategyWindows
 {
-    public class OperationySystemStrategyWindows
+    public class OperationSystemStrategyWindows : IOperationSystemStrategy
     {
         internal static class NativeMethods
         {

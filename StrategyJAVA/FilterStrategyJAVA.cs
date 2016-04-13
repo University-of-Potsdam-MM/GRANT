@@ -13,6 +13,7 @@ namespace StrategyJAVA
     class FilterStrategyJAVA : IFilterStrategy
     {
         //Dummy
+
         public ITree<GeneralProperties> filtering(IntPtr hwnd)
         {
             ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
@@ -24,7 +25,7 @@ namespace StrategyJAVA
             return -1;
         }
 
-        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
+        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd, IOperationSystemStrategy operationSystemStrategy)
         {
             ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
             return tree;

@@ -63,7 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Filter.cs" />
+    <Compile Include="Strategy.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -87,7 +87,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Filter.config">
+    <None Include="Strategy.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -116,6 +116,10 @@
     <ProjectReference Include="..\StrategyUIA\StrategyUIA.csproj">
       <Project>{f181e453-0ebe-4775-9cc1-1ce26cdc4ed2}</Project>
       <Name>StrategyUIA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyWindows\StrategyWindows.csproj">
+      <Project>{8635b65c-13f9-4a97-88f6-e0507bd73d8d}</Project>
+      <Name>StrategyWindows</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

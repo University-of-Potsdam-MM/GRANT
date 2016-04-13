@@ -32,26 +32,31 @@ namespace GApplication
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            OperationSystemStrategy basicWindows = new OperationSystemStrategy();
+            //OperationSystemStrategy basicWindows = new OperationSystemStrategy();
+            Settings settings = new Settings();
             
+            OperationSystemStrategy operationSystem = new OperationSystemStrategy();
+            List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
+            String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
+            operationSystem.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
+            IOperationSystemStrategy operationSystemStrategy = operationSystem.getSpecifiedOperationSystem();
             FilterStrategy filter = new FilterStrategy();
-           
             // ... Test for F5 key.
             if (e.Key == Key.F5)
             {
-                if (basicWindows.deliverCursorPosition())
+                if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
                     {
-                        IntPtr points = basicWindows.getHWND();                        
-                       Settings settings = new Settings();
-                        List<Filter> possibleFilter = settings.getPosibleFilters();
-                       String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-                       
+                        IntPtr points = operationSystemStrategy.getHWND();
 
-                        filter.setSpecifiedFilter(settings.filterUserNameToClassName(cUserName));
-                        IFilterStrategy filterStrategy =filter.getSpecifiedFilter();
-                        ITree<GeneralProperties> tree = filterStrategy.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        List<Strategy> possibleFilter = settings.getPossibleFilters();
+                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+
+
+                        filter.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                        IFilterStrategy filterStrategy = filter.getSpecifiedFilter();
+                        ITree<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         StrategyManager.TreeStrategy2.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
@@ -62,10 +67,9 @@ namespace GApplication
             }
             if (e.Key == Key.F6)
             {
-                Settings settings = new Settings();
-                List<Filter> posibleFilter = settings.getPosibleFilters();
+                List<Strategy> posibleFilter = settings.getPossibleFilters();
                 String result = "Mögliche Filter: ";
-                foreach (Filter f in posibleFilter)
+                foreach (Strategy f in posibleFilter)
                 {
                     result = result + f.userName + ", ";
                 }
@@ -77,30 +81,28 @@ namespace GApplication
                * Es werden die Eltern des 3. Elementes des Baumes gesucht
                */
 
-                if (basicWindows.deliverCursorPosition())
+                if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
                     {
                         #region kopiert von "if (e.Key == Key.F5) ..."
-                        IntPtr points = basicWindows.getHWND();
+                        IntPtr points = operationSystemStrategy.getHWND();
 
-                        Settings settings = new Settings();
-
-                        List<Filter> possibleFilter = settings.getPosibleFilters();
+                        List<Strategy> possibleFilter = settings.getPossibleFilters();
                         String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
 
 
-                        filter.setSpecifiedFilter(settings.filterUserNameToClassName(cUserName));
+                        filter.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserName));
                         IFilterStrategy filterStrategy = filter.getSpecifiedFilter();
-                        ITree<GeneralProperties> tree = filterStrategy.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyManager.TreeStrategy2.printTreeElements(tree, -1);
+                        ITree<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        StrategyManager.TreeStrategy2.printTreeElements(tree, 2);
                         Console.WriteLine("\n");
                         #endregion
 
                         INode<GeneralProperties> node = tree.Nodes.ElementAt(3); //Exemplarisch rausgesuchter Knoten
                         Console.WriteLine("Node - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
 
-                        ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
+                        ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points, operationSystemStrategy); //Eigentlicher Aufruf der Suche
                         if (tree2 != null)
                         {
                             StrategyManager.TreeStrategy2.printTreeElements(tree2, -1);

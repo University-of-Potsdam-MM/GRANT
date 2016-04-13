@@ -20,13 +20,13 @@ namespace GApplication
             return value;
         }
 
-        private static List<String> getPosibleFilterClasses()
+        private static List<String> getPossibleStrategyClasses(String name)
         {
-            String filters = readAppSettings("PossibleFilters");
-            return splitFilterNames(filters); 
+            String filters = readAppSettings(name);
+            return splitNames(filters); 
         }
 
-        private static List<String> splitFilterNames(String filterName)
+        private static List<String> splitNames(String filterName)
         {
             if (filterName == null || filterName.Equals("ERROR") ) { return null; }
             return filterName.Split(new Char[] { ',' }).Select(s => s.Trim()).Where(s => s != String.Empty).ToList();
@@ -35,38 +35,42 @@ namespace GApplication
         /// <summary>
         /// Ordnet anhand der Filter.config einen Filter-Anzeigenamen  einen Filter-Klassennamen zu
         /// </summary>
-        /// <param name="filterUserName">gibt den Filter-Anzeigenamen an</param>
-        /// <returns>Den Klassenname der Filter-Klasse als String</returns>
-        public String filterUserNameToClassName(String filterUserName)
+        /// <param name="strategyUserName">gibt den Anzeigenamen an</param>
+        /// <returns>Den Klassenname der Strategy-Klasse als String</returns>
+        public String strategyUserNameToClassName(String strategyUserName)
         {
-            String classFilterName = readAppSettings(filterUserName);
-            return classFilterName;
+            String classStrategyName = readAppSettings(strategyUserName);
+            return classStrategyName;
         }
 
-        public List<Filter> getPosibleFilters()
+        public List<Strategy> getPossibleFilters()
         {
-            List<Filter> filter = new List<Filter>();
-            List<String> filterNames = getPosibleFilterClasses();
+            List<Strategy> filter = new List<Strategy>();
+            List<String> filterNames = getPossibleStrategyClasses("PossibleFilters");
             if (filterNames == null) { return filter; }
-            Filter f = new Filter();
+            Strategy f = new Strategy();
             foreach (String fName in filterNames)
             {
                 f.userName = fName;
-                f.className = filterUserNameToClassName(fName);
+                f.className = strategyUserNameToClassName(fName);
                 filter.Add(f);
             }
             return filter;
         }
-
-        /// <summary>
-        /// Ermittelt das Objekt einer FilterStrategy.
-        /// </summary>
-        /// <param name="filterUserName">gibt den Anzeigenamen der FilterStrategy an</param>
-        /// <returns><code>IFilterStrategy</code>-Objekt des genutzten Filters</returns>
-        /*public IFilterStrategy getFilterObjectName(String filterUserName)
+          
+        public List<Strategy> getPossibleOperationSystems()
         {
-            Type type = Type.GetType(filterUserNameToClassName(filterUserName));
-            return (IFilterStrategy)Activator.CreateInstance(type);
-        }*/
+            List<Strategy> operationSystems = new List<Strategy>();
+            List<String> operationSystemNames = getPossibleStrategyClasses("PossibleOperationSystems");
+            if (operationSystemNames == null) { return operationSystems; }
+            Strategy f = new Strategy();
+            foreach (String osName in operationSystemNames)
+            {
+                f.userName = osName;
+                f.className = strategyUserNameToClassName(osName);
+                operationSystems.Add(f);
+            }
+            return operationSystems;
+        }
     }
 }
