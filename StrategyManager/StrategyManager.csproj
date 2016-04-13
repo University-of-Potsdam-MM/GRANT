@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="FilterStrategy.cs" />
     <Compile Include="Interfaces\IFilterStrategy.cs" />
+    <Compile Include="Interfaces\IOperationSystemStrategy.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
     <Compile Include="OperationSystemStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

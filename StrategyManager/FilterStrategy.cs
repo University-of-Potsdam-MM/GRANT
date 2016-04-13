@@ -12,7 +12,6 @@ namespace StrategyManager
     public class FilterStrategy
     {
 
-
         private IFilterStrategy specifiedFilter;
         
         public void setSpecifiedFilter(String filterName)
@@ -22,7 +21,7 @@ namespace StrategyManager
  
         }
         
-        public Interfaces.IFilterStrategy getSpecifiedFilter()
+        public IFilterStrategy getSpecifiedFilter()
         {
             return specifiedFilter;
         }

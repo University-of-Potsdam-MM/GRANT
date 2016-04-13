@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyManager", "StrategyManager\StrategyManager.csproj", "{394E1F1D-B5D0-46E2-B60E-7BEE3A939DE2}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyGenericTree", "StrategyGenericTree\StrategyGenericTree.csproj", "{11274856-9C54-4D3D-B7E9-82B45414EA50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyJAVA", "StrategyJAVA\StrategyJAVA.csproj", "{24EB754E-2408-4B52-B9EA-1F11C4417F9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyWindows", "StrategyWindows\StrategyWindows.csproj", "{8635B65C-13F9-4A97-88F6-E0507BD73D8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8635B65C-13F9-4A97-88F6-E0507BD73D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8635B65C-13F9-4A97-88F6-E0507BD73D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8635B65C-13F9-4A97-88F6-E0507BD73D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8635B65C-13F9-4A97-88F6-E0507BD73D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
