@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StrategyGenericTree;
 
-namespace StrategyManager
+namespace StrategyManager.Interfaces
 {
-    public class TreeStrategy
+    public interface ITreeStrategy<T>
     {
     }
 }
