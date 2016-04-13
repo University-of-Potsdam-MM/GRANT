@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StrategyGenericTree;
+using StrategyManager.Interfaces;
 
 
 namespace StrategyManager
@@ -12,15 +13,13 @@ namespace StrategyManager
     {
 
 
-        private Interfaces.IFilterStrategy specifiedFilter;
+        private IFilterStrategy specifiedFilter;
         
-        public ITree<GeneralProperties> filtering(IntPtr hwnd){
-            return specifiedFilter.filtering(hwnd);
-        }
-
-        public void setSpecifiedFilter(Interfaces.IFilterStrategy filter)
+        public void setSpecifiedFilter(String filterName)
         {
-            specifiedFilter = filter;
+            Type type = Type.GetType(filterName);
+            specifiedFilter =  (IFilterStrategy)Activator.CreateInstance(type);
+ 
         }
         
         public Interfaces.IFilterStrategy getSpecifiedFilter()

@@ -11,7 +11,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Security.Permissions;
 
-// http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection
+//entnommen von: http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection (Autor: Nicholas Butler; Lizenz CPOL)
 
 [assembly: SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", Scope = "member", Target = "Common.NodeTree`1+EnumeratorBase`1.Count", MessageId = "o")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", Scope = "member", Target = "Common.NodeTree`1+BaseEnumerableCollectionPair+BaseNodesEnumerableCollection.Count", MessageId = "o")]

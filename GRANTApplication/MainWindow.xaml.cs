@@ -35,8 +35,7 @@ namespace GApplication
             OperationSystemStrategy basicWindows = new OperationSystemStrategy();
             
             FilterStrategy filter = new FilterStrategy();
-            
-            
+           
             // ... Test for F5 key.
             if (e.Key == Key.F5)
             {
@@ -44,21 +43,16 @@ namespace GApplication
                 {
                     try
                     {
-                        IntPtr points = basicWindows.getHWND();
-                        
-                        Settings settings = new Settings();
-
+                        IntPtr points = basicWindows.getHWND();                        
+                       Settings settings = new Settings();
                         List<Filter> possibleFilter = settings.getPosibleFilters();
-                        String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+                       String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
                        
-                        IFilterStrategy filterStrategy = settings.getFilterObjectName(cUserName);
-                        filter.setSpecifiedFilter(filterStrategy);
-                        /*int  processIdentifier = UiaFilter.deliverAutomationElementID(points);
-                        IntPtr mainPointer = basicWindows.getProcessHwndFromHwnd(processIdentifier);
-                        ITree<GeneralProperties> tree = filter.filtering(mainPointer);
-                        Basics.BasicFilter.printTreeElements(tree, -1);*/
-                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyManager.TreeStrategy.printTreeElements(tree, -1);
+
+                        filter.setSpecifiedFilter(settings.filterUserNameToClassName(cUserName));
+                        IFilterStrategy filterStrategy =filter.getSpecifiedFilter();
+                        ITree<GeneralProperties> tree = filterStrategy.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        StrategyManager.TreeStrategy2.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
                     {
@@ -89,13 +83,17 @@ namespace GApplication
                     {
                         #region kopiert von "if (e.Key == Key.F5) ..."
                         IntPtr points = basicWindows.getHWND();
+
                         Settings settings = new Settings();
+
                         List<Filter> possibleFilter = settings.getPosibleFilters();
                         String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-                        IFilterStrategy filterStrategy = settings.getFilterObjectName(cUserName);
-                        filter.setSpecifiedFilter(filterStrategy);
-                        ITree<GeneralProperties> tree = filter.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyManager.TreeStrategy.printTreeElements(tree, 4);
+
+
+                        filter.setSpecifiedFilter(settings.filterUserNameToClassName(cUserName));
+                        IFilterStrategy filterStrategy = filter.getSpecifiedFilter();
+                        ITree<GeneralProperties> tree = filterStrategy.filtering(basicWindows.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        StrategyManager.TreeStrategy2.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
 
@@ -105,7 +103,7 @@ namespace GApplication
                         ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
                         if (tree2 != null)
                         {
-                            StrategyManager.TreeStrategy.printTreeElements(tree2, -1);
+                            StrategyManager.TreeStrategy2.printTreeElements(tree2, -1);
                         }
                         
                     }

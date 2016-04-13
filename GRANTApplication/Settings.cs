@@ -63,10 +63,10 @@ namespace GApplication
         /// </summary>
         /// <param name="filterUserName">gibt den Anzeigenamen der FilterStrategy an</param>
         /// <returns><code>IFilterStrategy</code>-Objekt des genutzten Filters</returns>
-        public IFilterStrategy getFilterObjectName(String filterUserName)
+        /*public IFilterStrategy getFilterObjectName(String filterUserName)
         {
             Type type = Type.GetType(filterUserNameToClassName(filterUserName));
             return (IFilterStrategy)Activator.CreateInstance(type);
-        }
+        }*/
     }
 }

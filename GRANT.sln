@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRANTApplication", "GRANTAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyGenericTree", "StrategyGenericTree\StrategyGenericTree.csproj", "{11274856-9C54-4D3D-B7E9-82B45414EA50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyJAVA", "StrategyJAVA\StrategyJAVA.csproj", "{24EB754E-2408-4B52-B9EA-1F11C4417F9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{11274856-9C54-4D3D-B7E9-82B45414EA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11274856-9C54-4D3D-B7E9-82B45414EA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11274856-9C54-4D3D-B7E9-82B45414EA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EB754E-2408-4B52-B9EA-1F11C4417F9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
