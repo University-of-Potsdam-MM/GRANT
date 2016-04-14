@@ -34,13 +34,15 @@ namespace GApplication
         {
             //OperationSystemStrategy basicWindows = new OperationSystemStrategy();
             Settings settings = new Settings();
-            
-            OperationSystemStrategy operationSystem = new OperationSystemStrategy();
+
+            StrategyMgr strategyMgr = new StrategyMgr();
+
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
-            operationSystem.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
-            IOperationSystemStrategy operationSystemStrategy = operationSystem.getSpecifiedOperationSystem();
-            FilterStrategy filter = new FilterStrategy();
+            strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
+            //IOperationSystemStrategy operationSystemStrategy = operationSystem.getSpecifiedOperationSystem();
+           IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
+            
             // ... Test for F5 key.
             if (e.Key == Key.F5)
             {
@@ -52,10 +54,10 @@ namespace GApplication
 
                         List<Strategy> possibleFilter = settings.getPossibleFilters();
                         String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+           
+                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-
-                        filter.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
-                        IFilterStrategy filterStrategy = filter.getSpecifiedFilter();
                         ITree<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         StrategyManager.TreeStrategy2.printTreeElements(tree, -1);
                     }
@@ -76,46 +78,9 @@ namespace GApplication
                 itemNameTextBox.Text = result;
             }
 
-            if (e.Key == Key.F7)
-            { /* Testaufruf um die Eltern eines Knotens des gespiegelten Baumes über das AutomationElement zu finden
-               * Es werden die Eltern des 3. Elementes des Baumes gesucht
-               */
-
-                if (operationSystemStrategy.deliverCursorPosition())
-                {
-                    try
-                    {
-                        #region kopiert von "if (e.Key == Key.F5) ..."
-                        IntPtr points = operationSystemStrategy.getHWND();
-
-                        List<Strategy> possibleFilter = settings.getPossibleFilters();
-                        String cUserName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-
-
-                        filter.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserName));
-                        IFilterStrategy filterStrategy = filter.getSpecifiedFilter();
-                        ITree<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyManager.TreeStrategy2.printTreeElements(tree, 2);
-                        Console.WriteLine("\n");
-                        #endregion
-
-                        INode<GeneralProperties> node = tree.Nodes.ElementAt(3); //Exemplarisch rausgesuchter Knoten
-                        Console.WriteLine("Node - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
-
-                        ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points, operationSystemStrategy); //Eigentlicher Aufruf der Suche
-                        if (tree2 != null)
-                        {
-                            StrategyManager.TreeStrategy2.printTreeElements(tree2, -1);
-                        }
-                        
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("An error occurred: '{0}'", ex);
-                    }
-                }
+           
             }
         }
 
     }
-}
+
