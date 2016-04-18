@@ -20,7 +20,9 @@ namespace StrategyManager
         {
             Type type = Type.GetType(filterName);
             specifiedFilter =  (IFilterStrategy)Activator.CreateInstance(type);
- 
+            specifiedFilter.setSpecifiedOperationSystem(specifiedOperationSystem);
+            //specifiedFilter.setSpecifiedTree(specifiedTree);
+
         }
         
         public IFilterStrategy getSpecifiedFilter()

@@ -12,7 +12,30 @@ namespace StrategyJAVA
 {
     class FilterStrategyJAVA : IFilterStrategy
     {
-        //Dummy
+        private IOperationSystemStrategy specifiedOperationSystem;
+        private ITreeStrategy<GeneralProperties> specifiedTree;
+
+
+        public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
+        {
+            specifiedOperationSystem = operationSystem;
+        }
+
+        public IOperationSystemStrategy getSpecifiedOperationSystem()
+        {
+            return specifiedOperationSystem;
+        }
+
+
+        public void setSpecifiedTree(ITreeStrategy<GeneralProperties> tree)
+        {
+            specifiedTree = tree;
+        }
+
+        public ITreeStrategy<GeneralProperties> getSpecifiedTree()
+        {
+            return specifiedTree;
+        }
 
         public ITree<GeneralProperties> filtering(IntPtr hwnd)
         {
