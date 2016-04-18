@@ -48,7 +48,7 @@ namespace StrategyJAVA
             return -1;
         }
 
-        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd, IOperationSystemStrategy operationSystemStrategy)
+        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
         {
             ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
             return tree;

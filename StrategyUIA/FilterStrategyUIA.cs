@@ -161,10 +161,9 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten des gespiegelten Baumes an, von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="hwnd">gibt den Handle des AutomationElementes an um anhand dessen das Root-AutomationElement zu bestimmen</param>
         /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
-        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd, IOperationSystemStrategy operationSystemStrategy)
+        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
         {
-           AutomationElement rootElement = deliverAutomationElementFromHWND(operationSystemStrategy.getProcessHwndFromHwnd(deliverElementID(hwnd))); 
-            
+            AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
             AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
             if (element == null)
             {

@@ -77,6 +77,44 @@ namespace GApplication
                 }
                 itemNameTextBox.Text = result;
             }
+            if (e.Key == Key.F7)
+            { /* Testaufruf um die Eltern eines Knotens des gespiegelten Baumes über das AutomationElement zu finden
+               * Es werden die Eltern des 3. Elementes des Baumes gesucht
+               */
+
+                if (operationSystemStrategy.deliverCursorPosition())
+                 {
+                     try
+                     {
+                         #region kopiert von "if (e.Key == Key.F5) ..."
+                        IntPtr points = operationSystemStrategy.getHWND();
+
+                        List<Strategy> possibleFilter = settings.getPossibleFilters();
+                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+           
+                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+
+                        ITree<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        StrategyManager.TreeStrategy2.printTreeElements(tree, -1);
+                         Console.WriteLine("\n");
+                         #endregion
+                         INode<GeneralProperties> node = tree.Nodes.ElementAt(3);  //Exemplarisch rausgesuchter Knoten
+                         Console.WriteLine("Node - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
+
+                         ITree<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
+                         if (tree2 != null)
+                         {
+                             StrategyManager.TreeStrategy2.printTreeElements(tree2, -1);
+                         }
+                        
+                     }
+                     catch (Exception ex)
+                     {
+                         Console.WriteLine("An error occurred: '{0}'", ex);
+                     }
+                 }
+            }
 
            
             }
