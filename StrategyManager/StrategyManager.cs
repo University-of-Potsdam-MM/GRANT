@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyGenericTree;
+using StrategyManager;
 using StrategyManager.Interfaces;
 
 
@@ -14,6 +14,7 @@ namespace StrategyManager
 
         private IFilterStrategy specifiedFilter;
         private IOperationSystemStrategy specifiedOperationSystem;
+        //private ITreeStrategy<GeneralProperties> specifiedTree;
         private ITreeStrategy<GeneralProperties> specifiedTree;
 
         public void setSpecifiedFilter(String filterName)
@@ -21,7 +22,7 @@ namespace StrategyManager
             Type type = Type.GetType(filterName);
             specifiedFilter =  (IFilterStrategy)Activator.CreateInstance(type);
             specifiedFilter.setSpecifiedOperationSystem(specifiedOperationSystem);
-            //specifiedFilter.setSpecifiedTree(specifiedTree);
+            specifiedFilter.setSpecifiedTree(specifiedTree);
 
         }
         
@@ -47,7 +48,19 @@ namespace StrategyManager
 
         public void setSpecifiedTree(String treeName)
         {
-            //TODO;
+            Type type = Type.GetType(treeName);
+            Type[] typeArgs = { typeof(GeneralProperties) };
+            var makeme = type.MakeGenericType(typeArgs);
+            specifiedTree = (ITreeStrategy<GeneralProperties>)Activator.CreateInstance(makeme);
+
+
+
+        }
+
+        public void setSpecifiedTree(ITreeStrategy<GeneralProperties> treeName)
+        {
+            treeName.NewNodeTree();
+            specifiedTree = treeName;
         }
 
         public ITreeStrategy<GeneralProperties> getSpecifiedTree()

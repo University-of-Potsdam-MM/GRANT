@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace StrategyGenericTree
+namespace StrategyManager
 {
     //Properties
     public struct GeneralProperties
     {
-
 
         //General Accessibility / Interaction
 

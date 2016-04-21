@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyGenericTree;
+using StrategyManager;
 using System.Windows.Automation;
 using System.Diagnostics;
-using StrategyManager;
 using StrategyManager.Interfaces;
 
 namespace StrategyUIA
@@ -15,7 +14,6 @@ namespace StrategyUIA
     {
         private IOperationSystemStrategy specifiedOperationSystem;
         private ITreeStrategy<GeneralProperties> specifiedTree;
-
 
         public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
         {
@@ -39,18 +37,17 @@ namespace StrategyUIA
         }
 
 
-
-
         /// <summary>
         /// Erstellt anhand eines AutomationElements den zugehörigen Baum
         /// </summary>
         /// <param name="mainWindowElement">gibt das AutomationElement an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
-        public ITree<GeneralProperties> filtering(IntPtr hwnd)
+        public ITreeStrategy<GeneralProperties> filtering(IntPtr hwnd)
         {
-            ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
+
+            ITreeStrategy<GeneralProperties> tree = specifiedTree.NewNodeTree();
             AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
-            INode<GeneralProperties> top = tree.AddChild(setProperties(mainWindowElement));
+            ITreeStrategy<GeneralProperties> top = tree.AddChild(setProperties(mainWindowElement));
             AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             findChildrenOfNode(top, collection, -1);
             return tree;
@@ -98,13 +95,13 @@ namespace StrategyUIA
         /// <param name="top">gibt den Namen des Kindelementes an</param>
         /// <param name="collection">gibt die AutomationElement-Collection an</param>
         /// <param name="depth">gibt an wie tief der Suche ausgehend vom Root-Element an.</param>
-        private void findChildrenOfNode(INode<GeneralProperties> top, AutomationElementCollection collection, int depth)
+        private void findChildrenOfNode(ITreeStrategy<GeneralProperties> top, AutomationElementCollection collection, int depth)
         {
             foreach (AutomationElement element in collection)
             {
                 if (top.Depth < depth || depth == -1)
                 {
-                    INode<GeneralProperties> node = top.AddChild(setProperties(element));
+                    ITreeStrategy<GeneralProperties> node = top.AddChild(setProperties(element));
 
                     AutomationElementCollection c = element.FindAll(TreeScope.Children, Condition.TrueCondition);
                     findChildrenOfNode(node, c, depth);
@@ -138,7 +135,7 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
         /// <param name="rootElement"></param> --- hier erst ermitteln
         /// <returns>das zugehörige AutomationElement des Knotens</returns>
-        private AutomationElement getAutomationElementFromMirroredTree(INode<GeneralProperties> node, AutomationElement rootElement)
+        private AutomationElement getAutomationElementFromMirroredTree(ITreeStrategy<GeneralProperties> node, AutomationElement rootElement)
         {
             Condition condition = setPropertiesCondition(node.Data);
             AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
@@ -161,7 +158,7 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten des gespiegelten Baumes an, von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="hwnd">gibt den Handle des AutomationElementes an um anhand dessen das Root-AutomationElement zu bestimmen</param>
         /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
-        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
+        public ITreeStrategy<GeneralProperties> getParentsOfElement(ITreeStrategy<GeneralProperties> node, IntPtr hwnd)
         {
             AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
             AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
@@ -169,7 +166,7 @@ namespace StrategyUIA
             {
                 return null;
             }
-            ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
+            ITreeStrategy<GeneralProperties> tree = specifiedTree.NewNodeTree();
             tree.AddChild(setProperties(element));
             findParentOfElement(element, rootElement, tree);
             return tree;
@@ -181,7 +178,7 @@ namespace StrategyUIA
         /// <param name="element">gibt das AutomationElement an von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="rootElement">gibt das rootElemet der Suche an</param>
         /// <param name="tree">gibt den aktuel erstellten Baum mit den Vorfahren des Elements an</param>
-        private void findParentOfElement(AutomationElement element, AutomationElement rootElement,ITree<GeneralProperties> tree)
+        private void findParentOfElement(AutomationElement element, AutomationElement rootElement,ITreeStrategy<GeneralProperties> tree)
         {
             TreeWalker walker = TreeWalker.ControlViewWalker;
             AutomationElement elementParent = walker.GetParent(element);
@@ -197,13 +194,14 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="parentElement">gibt das neue Elternelement an</param>
         /// <param name="tree">gibt den "alten" Baum an</param>
-        private void addParentOfNode(AutomationElement parentElement, ITree<GeneralProperties> tree)
+        private void addParentOfNode(AutomationElement parentElement, ITreeStrategy<GeneralProperties> tree)
         {
-            ITree<GeneralProperties> tree2 = NodeTree<GeneralProperties>.NewTree();
-            INode<GeneralProperties> node = tree2.AddChild(setProperties(parentElement));
+            ITreeStrategy<GeneralProperties> tree2 = specifiedTree.NewNodeTree();
+            ITreeStrategy<GeneralProperties> node = tree2.AddChild(setProperties(parentElement));
             node.AddChild(tree);
             tree.Clear();
             tree.AddChild(tree2);
+            Console.WriteLine();
         }
 
         /// <summary>

@@ -43,10 +43,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
-      <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
-      <Name>StrategyGenericTree</Name>
-    </ProjectReference>
     <ProjectReference Include="..\StrategyManager\StrategyManager.csproj">
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>StrategyManager</Name>

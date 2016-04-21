@@ -72,5 +72,20 @@ namespace GApplication
             }
             return operationSystems;
         }
+
+        public List<Strategy> getPossibleTrees()
+        {
+            List<Strategy> trees = new List<Strategy>();
+            List<String> treeNames = getPossibleStrategyClasses("PossibleTrees");
+            if (treeNames == null) { return trees; }
+            Strategy t = new Strategy();
+            foreach (String tName in treeNames)
+            {
+                t.userName = tName;
+                t.className = strategyUserNameToClassName(tName);
+                trees.Add(t);
+            }
+            return trees;
+        }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StrategyManager;
-using StrategyGenericTree;
 using StrategyManager.Interfaces;
 
 
@@ -37,9 +36,9 @@ namespace StrategyJAVA
             return specifiedTree;
         }
 
-        public ITree<GeneralProperties> filtering(IntPtr hwnd)
+        public ITreeStrategy<GeneralProperties> filtering(IntPtr hwnd)
         {
-            ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
+            ITreeStrategy<GeneralProperties> tree = specifiedTree;
             return tree;
         }
 
@@ -48,9 +47,15 @@ namespace StrategyJAVA
             return -1;
         }
 
-        public ITree<GeneralProperties> getParentsOfElement(INode<GeneralProperties> node, IntPtr hwnd)
+        public ITreeStrategy<GeneralProperties> getParentsOfElement(ITreeStrategy<GeneralProperties> node, IntPtr hwnd)
         {
-            ITree<GeneralProperties> tree = NodeTree<GeneralProperties>.NewTree();
+            ITreeStrategy<GeneralProperties> tree = specifiedTree;
+            return tree;
+        }
+
+        public ITreeStrategy<GeneralProperties> NewNodeTree() 
+        {
+            ITreeStrategy<GeneralProperties> tree = specifiedTree;
             return tree;
         }
     }
