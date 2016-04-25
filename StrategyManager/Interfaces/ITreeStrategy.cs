@@ -93,5 +93,10 @@ namespace StrategyManager.Interfaces
    //     IEnumerableCollection<T> Values { get; }
         void XmlSerialize(System.IO.Stream stream);
 
+        #region eigene Methoden
+        void printTreeElements(ITreeStrategy<GeneralProperties> tree, int depth);
+        List<ITreeStrategy<GeneralProperties>> searchProperties(ITreeStrategy<GeneralProperties> tree, GeneralProperties properties, OperatorEnum oper);
+        #endregion
+
     }
 }

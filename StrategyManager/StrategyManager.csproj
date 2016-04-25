@@ -40,6 +40,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumClass.cs" />
     <Compile Include="GeneralProperties.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
     <Compile Include="StrategyManager.cs" />

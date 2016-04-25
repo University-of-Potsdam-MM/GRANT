@@ -61,7 +61,8 @@ namespace GApplication
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
                         ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
+                       // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
+                        treeStrategy.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
                     {
@@ -100,16 +101,16 @@ namespace GApplication
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
                         ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
+                        treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
                         ITreeStrategy<GeneralProperties> node = (ITreeStrategy<GeneralProperties>)((ITree<GeneralProperties>)tree).Nodes.ElementAt(3);  //Exemplarisch rausgesuchter Knoten
-                        Console.WriteLine("Node - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
+                        Console.WriteLine("Gesuchter Knoten:\nNode - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
 
                         ITreeStrategy<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
                         if (tree2 != null)
                         {
-                            StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree2, -1);
+                            treeStrategy.printTreeElements(tree2, -1);
                             Console.WriteLine();
                         }
 
@@ -138,15 +139,15 @@ namespace GApplication
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
                         ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
+                        treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
 
-                        StrategyGenericTree.TreeStrategyGenericTreeMethodes treeM = new TreeStrategyGenericTreeMethodes();
                         GeneralProperties searchedProperties = new GeneralProperties();
                         searchedProperties.localizedControlTypeFiltered ="Schaltfläche";
                         searchedProperties.nameFiltered = "";
-                        treeM.searchProperties(tree, searchedProperties, StrategyGenericTree.TreeStrategyGenericTreeMethodes.OperatorEnum.or);
+                        Console.Write("Gesuchte Eigenschaften ");
+                        treeStrategy.searchProperties(tree, searchedProperties, OperatorEnum.or);
 
                     }
                     catch (Exception ex)

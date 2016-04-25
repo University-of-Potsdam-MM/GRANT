@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Security.Permissions;
 using StrategyManager.Interfaces;
+using StrategyManager;
 
 
 //entnommen von: http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection (Autor: Nicholas Butler; Lizenz CPOL)
@@ -2775,7 +2776,217 @@ namespace StrategyGenericTree
         }
 
         //-----------------------------------------------------------------------------
-       
+
+        #region eigene Methoden
+        #region Print
+        /// <summary>
+        /// Gibt alle Knoten eines Baumes auf der Konsole aus.
+        /// </summary>
+        /// <param name="tree">gibt den Baum an</param>
+        /// <param name="depth">gibt an bis in welche Tiefe die Knoten ausgegeben werden sollen; <code>-1</code> für den ganzen Baum</param>
+        public void printTreeElements(ITreeStrategy<GeneralProperties> tree, int depth)
+        {
+            foreach (ITreeStrategy<GeneralProperties> node in ((ITree<GeneralProperties>)tree).All.Nodes)
+            {
+                if (node.Depth <= depth || depth == -1)
+                {
+                    Console.Write("Node -  Anz. Kinder: {0},  Depth: {1},  Type: {2},  hasNext: {3}, hasChild: {4}", node.DirectChildCount, node.Depth, node.Data.controlTypeFiltered, node.HasNext, node.HasChild);
+                    if (node.HasParent)
+                    {
+                        Console.Write(", Parent: {0}", node.Parent.Data.nameFiltered);
+                    }
+                    printProperties(node.Data);
+                    Console.WriteLine();
+                }
+            }
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Gibt eine Liste von Knoten auf der Konsole aus.
+        /// </summary>
+        /// <param name="nodes">gibt die Liste der auszugebenden Knoten an</param>
+        private void printNodeList(List<ITreeStrategy<GeneralProperties>> nodes)
+        {
+            foreach (ITreeStrategy<GeneralProperties> r in nodes)
+            {
+                Console.Write("Node - Depth: {0}, hasNext: {1}, hasChild: {2}", r.Depth, r.HasNext, r.HasChild);
+                if (r.HasParent)
+                {
+                    Console.Write(", Parent: {0}", r.Parent.Data.nameFiltered);
+                }
+                printProperties(r.Data);
+                Console.WriteLine();
+            }
+        }
+
+        #region print GeneralProperties
+        /// <summary>
+        /// Gibt allr gesetzten Properties auf der Konsole aus.
+        /// </summary>
+        /// <param name="properties">gibt fie Properies an</param>
+        private void printProperties(GeneralProperties properties)
+        {
+            Console.WriteLine("\nProperties:");
+            if (properties.localizedControlTypeFiltered != null)
+            {
+                Console.WriteLine("localizedControlTypeFiltered: {0}", properties.localizedControlTypeFiltered);
+            }
+            if (properties.nameFiltered != null)
+            {
+                Console.WriteLine("nameFiltered: {0}", properties.nameFiltered);
+            }
+            if (properties.acceleratorKeyFiltered != null)
+            {
+                Console.WriteLine("acceleratorKeyFiltered: {0}", properties.acceleratorKeyFiltered);
+            }
+            if (properties.accessKeyFiltered != null)
+            {
+                Console.WriteLine("accessKeyFiltered: {0}", properties.accessKeyFiltered);
+            }
+            if (properties.isKeyboardFocusableFiltered != null)
+            {
+                Console.WriteLine("isKeyboardFocusableFiltered: {0}", properties.isKeyboardFocusableFiltered);
+            }
+            if (properties.isEnabledFiltered != null)
+            {
+                Console.WriteLine("isEnabledFiltered: {0}", properties.isEnabledFiltered);
+            }
+            if (properties.hasKeyboardFocusFiltered != null)
+            {
+                Console.WriteLine("hasKeyboardFocusFiltered: {0}", properties.hasKeyboardFocusFiltered);
+            }
+            if (properties.boundingRectangleFiltered != null && properties.boundingRectangleFiltered != new System.Windows.Rect())
+            {
+                Console.WriteLine("boundingRectangleFiltered: {0}", properties.boundingRectangleFiltered);
+            }
+            if (properties.isOffscreenFiltered != null)
+            {
+                Console.WriteLine("isOffscreenFiltered: {0}", properties.isOffscreenFiltered);
+            }
+            if (properties.helpTextFiltered != null)
+            {
+                Console.WriteLine("helpTextFiltered: {0}", properties.helpTextFiltered);
+            }
+            if (properties.IdGenerated != null)
+            {
+                Console.WriteLine("IdGenerated: {0}", properties.IdGenerated);
+            }
+            if (properties.autoamtionIdFiltered != null)
+            {
+                Console.WriteLine("autoamtionIdFiltered: {0}", properties.autoamtionIdFiltered);
+            }
+            if (properties.controlTypeFiltered != null)
+            {
+                Console.WriteLine("controlTypeFiltered: {0}", properties.controlTypeFiltered);
+            }
+            if (properties.frameWorkIdFiltered != null)
+            {
+                Console.WriteLine("frameWorkIdFiltered: {0}", properties.frameWorkIdFiltered);
+            }
+            if (properties.hWndFiltered != 0)
+            {
+                Console.WriteLine("hWndFiltered: {0}", properties.hWndFiltered);
+            }
+            if (properties.isContentElementFiltered != null)
+            {
+                Console.WriteLine("isContentElementFiltered: {0}", properties.isContentElementFiltered);
+            }
+            if (properties.labeledbyFiltered != null)
+            {
+                Console.WriteLine("labeledbyFiltered: {0}", properties.labeledbyFiltered);
+            }
+            if (properties.isControlElementFiltered != null)
+            {
+                Console.WriteLine("isControlElementFiltered: {0}", properties.isControlElementFiltered);
+            }
+            if (properties.isPasswordFiltered != null)
+            {
+                Console.WriteLine("isPasswordFiltered: {0}", properties.isPasswordFiltered);
+            }
+            if (properties.processIdFiltered != 0)
+            {
+                Console.WriteLine("processIdFiltered: {0}", properties.processIdFiltered);
+            }
+            if (properties.itemTypeFiltered != null)
+            {
+                Console.WriteLine("itemTypeFiltered: {0}", properties.itemTypeFiltered);
+            }
+            if (properties.itemStatusFiltered != null)
+            {
+                Console.WriteLine("itemStatusFiltered: {0}", properties.itemStatusFiltered);
+            }
+            if (properties.isRequiredForFormFiltered != null)
+            {
+                Console.WriteLine("isRequiredForFormFiltered: {0}", properties.isRequiredForFormFiltered);
+            }
+            Console.WriteLine();
+        }
+        #endregion
+        #endregion
+
+        #region search
+        /// <summary>
+        /// Sucht anhand der angegebenen Eigenschaften alle Knoten, welche der Bedingung entsprechen (Tiefensuche). Debei werden nur Eigenschften berücksichtigt, welche angegeben wurden.
+        /// </summary>
+        /// <param name="tree">gibt den Baum in welchem gesucht werden soll an</param>
+        /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
+        /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
+        /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften <code>GeneralProperties</code> </returns>
+        public List<ITreeStrategy<GeneralProperties>> searchProperties(ITreeStrategy<GeneralProperties> tree, GeneralProperties properties, OperatorEnum oper)
+        {//TODO: hier fehlen noch viele Eigenschaften
+            printProperties(properties);
+            List<INode<GeneralProperties>> result = new List<INode<GeneralProperties>>();
+
+            foreach (INode<GeneralProperties> node in ((ITree<GeneralProperties>)tree).All.Nodes)
+            {
+                Boolean propertieLocalizedControlType = properties.localizedControlTypeFiltered == null || node.Data.localizedControlTypeFiltered.Equals(properties.localizedControlTypeFiltered);
+                Boolean propertieName = properties.nameFiltered == null || node.Data.nameFiltered.Equals(properties.nameFiltered);
+                Boolean propertieIsEnabled = properties.isEnabledFiltered == null || node.Data.isEnabledFiltered == properties.isEnabledFiltered;
+                Boolean propertieBoundingRectangle = properties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.boundingRectangleFiltered.Equals(properties.boundingRectangleFiltered);
+
+                if (OperatorEnum.Equals(oper, OperatorEnum.and))
+                {
+                    if (propertieBoundingRectangle && propertieIsEnabled && propertieLocalizedControlType && propertieName)
+                    {
+                        result.Add(node);
+                    }
+                }
+                if (OperatorEnum.Equals(oper, OperatorEnum.or))
+                {
+                    if ((properties.localizedControlTypeFiltered != null && propertieLocalizedControlType) ||
+                        (properties.nameFiltered != null && propertieName) ||
+                        (properties.isEnabledFiltered != null && propertieIsEnabled) ||
+                        (properties.boundingRectangleFiltered != new System.Windows.Rect()) && propertieBoundingRectangle)
+                    {
+                        result.Add(node);
+                    }
+                }
+            }
+            List<ITreeStrategy<GeneralProperties>> result2 = ListINodeToListITreeStrategy(result);
+            printNodeList(result2);
+            return result2;
+        }
+
+        #endregion
+        /// <summary>
+        /// Wandelt eine Liste von <code>INode</code> in eine Liste von <code>ITreeStrategy</code> um
+        /// </summary>
+        /// <param name="list">gibt die <code>INode</code>-Liste an</param>
+        /// <returns>eine <code>ITreeStrategy</code>-Liste</returns>
+        private List<ITreeStrategy<GeneralProperties>> ListINodeToListITreeStrategy(List<INode<GeneralProperties>> list)
+        {
+            List<ITreeStrategy<GeneralProperties>> result = new List<ITreeStrategy<GeneralProperties>>();
+            foreach (INode<GeneralProperties> node in list)
+            {
+                result.Add((ITreeStrategy<GeneralProperties>)node);
+            }
+
+            return result;
+        }
+
+        #endregion
+
     } // class NodeTree
 
     //-----------------------------------------------------------------------------
