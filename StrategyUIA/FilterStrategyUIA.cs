@@ -38,9 +38,9 @@ namespace StrategyUIA
 
 
         /// <summary>
-        /// Erstellt anhand eines AutomationElements den zugehörigen Baum
+        /// Erstellt anhand des Handles einer Anwendung den zugehörigen Baum
         /// </summary>
-        /// <param name="mainWindowElement">gibt das AutomationElement an</param>
+        /// <param name="hwnd">den handle der Anwendung an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
         public ITreeStrategy<GeneralProperties> filtering(IntPtr hwnd)
         {
