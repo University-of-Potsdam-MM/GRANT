@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace StrategyManager.Interfaces
@@ -92,10 +93,11 @@ namespace StrategyManager.Interfaces
    //     event EventHandler<NodeTreeDataEventArgs<T>> Validate;
    //     IEnumerableCollection<T> Values { get; }
         void XmlSerialize(System.IO.Stream stream);
+        ITreeStrategy<T> XmlDeserialize(Stream stream);
 
         #region eigene Methoden
-        void printTreeElements(ITreeStrategy<GeneralProperties> tree, int depth);
-        List<ITreeStrategy<GeneralProperties>> searchProperties(ITreeStrategy<GeneralProperties> tree, GeneralProperties properties, OperatorEnum oper);
+        void printTreeElements(ITreeStrategy<T> tree, int depth);
+        List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, T properties, OperatorEnum oper);
         #endregion
 
     }

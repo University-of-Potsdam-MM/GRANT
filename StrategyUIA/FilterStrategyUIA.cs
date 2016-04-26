@@ -65,7 +65,15 @@ namespace StrategyUIA
             elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
             elementP.accessKeyFiltered = element.Current.AccessKey;
             elementP.autoamtionIdFiltered = element.Current.AutomationId;
-            elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+            if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+            {
+                elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+            
             elementP.classNameFiltered = element.Current.ClassName;
             elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
             elementP.frameWorkIdFiltered = element.Current.FrameworkId;

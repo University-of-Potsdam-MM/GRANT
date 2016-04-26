@@ -656,7 +656,8 @@ namespace StrategyGenericTree
 
         }
 
-        public static ITree<T> XmlDeserialize(Stream stream)
+        //static rausgenommen, damit es ins Interface rein kann
+        public ITreeStrategy<T> XmlDeserialize(Stream stream)
         {
             XmlSerializer xmlSerializer;
 
@@ -686,7 +687,7 @@ namespace StrategyGenericTree
 
             ITree<T> tree = adapter.Tree;
 
-            return tree;
+            return (ITreeStrategy<T>) tree;
         }
 
         //-----------------------------------------------------------------------------
@@ -2784,18 +2785,27 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="tree">gibt den Baum an</param>
         /// <param name="depth">gibt an bis in welche Tiefe die Knoten ausgegeben werden sollen; <code>-1</code> für den ganzen Baum</param>
-        public void printTreeElements(ITreeStrategy<GeneralProperties> tree, int depth)
+        public void printTreeElements(ITreeStrategy<T> tree, int depth)
         {
-            foreach (ITreeStrategy<GeneralProperties> node in ((ITree<GeneralProperties>)tree).All.Nodes)
+            foreach (ITreeStrategy<T> node in ((ITree<T>)tree).All.Nodes)
             {
                 if (node.Depth <= depth || depth == -1)
                 {
-                    Console.Write("Node -  Anz. Kinder: {0},  Depth: {1},  Type: {2},  hasNext: {3}, hasChild: {4}", node.DirectChildCount, node.Depth, node.Data.controlTypeFiltered, node.HasNext, node.HasChild);
-                    if (node.HasParent)
+                   Console.Write("Node -  Anz. Kinder: {0},  Depth: {1},   hasNext: {2}, hasChild: {3}", node.DirectChildCount, node.Depth,  node.HasNext, node.HasChild);
+                   if (node.HasParent)
                     {
-                        Console.Write(", Parent: {0}", node.Parent.Data.nameFiltered);
+                        if (node.Parent.Data is GeneralProperties)
+                        {
+                            GeneralProperties parentData = (GeneralProperties)Convert.ChangeType(node.Parent.Data, typeof(GeneralProperties));
+                            Console.Write(", Parent: {0}", parentData.nameFiltered);
+                        }
                     }
-                    printProperties(node.Data);
+                    //TODO: ist es hier okay, dass wir von GeneralProperties "ausgehen"?
+                    if (node.Data is GeneralProperties)
+                    {
+                        GeneralProperties data = (GeneralProperties)Convert.ChangeType(node.Data, typeof(GeneralProperties));
+                        printProperties(data);
+                    }
                     Console.WriteLine();
                 }
             }
@@ -2806,16 +2816,25 @@ namespace StrategyGenericTree
         /// Gibt eine Liste von Knoten auf der Konsole aus.
         /// </summary>
         /// <param name="nodes">gibt die Liste der auszugebenden Knoten an</param>
-        private void printNodeList(List<ITreeStrategy<GeneralProperties>> nodes)
+        private void printNodeList(List<ITreeStrategy<T>> nodes)
         {
-            foreach (ITreeStrategy<GeneralProperties> r in nodes)
+            foreach (ITreeStrategy<T> r in nodes)
             {
                 Console.Write("Node - Depth: {0}, hasNext: {1}, hasChild: {2}", r.Depth, r.HasNext, r.HasChild);
                 if (r.HasParent)
                 {
-                    Console.Write(", Parent: {0}", r.Parent.Data.nameFiltered);
+                    if (r.Parent.Data is GeneralProperties)
+                    {
+                        GeneralProperties parentData = (GeneralProperties)Convert.ChangeType(r.Parent.Data, typeof(GeneralProperties));
+                        Console.Write(", Parent: {0}", parentData);
+                    }
+                    
                 }
-                printProperties(r.Data);
+                if (r.Data is GeneralProperties)
+                {
+                    GeneralProperties data = (GeneralProperties)Convert.ChangeType(r.Data, typeof(GeneralProperties));
+                    printProperties(data);
+                }
                 Console.WriteLine();
             }
         }
@@ -2825,6 +2844,7 @@ namespace StrategyGenericTree
         /// Gibt allr gesetzten Properties auf der Konsole aus.
         /// </summary>
         /// <param name="properties">gibt fie Properies an</param>
+        /// TODO: Die Methode könnte eigentlich für alle Baumklassen genutzt werden
         private void printProperties(GeneralProperties properties)
         {
             Console.WriteLine("\nProperties:");
@@ -2932,18 +2952,24 @@ namespace StrategyGenericTree
         /// <param name="tree">gibt den Baum in welchem gesucht werden soll an</param>
         /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
         /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
-        /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften <code>GeneralProperties</code> </returns>
-        public List<ITreeStrategy<GeneralProperties>> searchProperties(ITreeStrategy<GeneralProperties> tree, GeneralProperties properties, OperatorEnum oper)
+        /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
+        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, T properties, OperatorEnum oper)
         {//TODO: hier fehlen noch viele Eigenschaften
-            printProperties(properties);
+            //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
+            if (!(properties is GeneralProperties && tree is ITreeStrategy<GeneralProperties>))
+            {
+                throw new InvalidOperationException("Falscher Baum-Type!"); 
+            }
+            GeneralProperties generalProperties = (GeneralProperties)Convert.ChangeType(properties, typeof(GeneralProperties));
+            printProperties(generalProperties);
             List<INode<GeneralProperties>> result = new List<INode<GeneralProperties>>();
 
             foreach (INode<GeneralProperties> node in ((ITree<GeneralProperties>)tree).All.Nodes)
             {
-                Boolean propertieLocalizedControlType = properties.localizedControlTypeFiltered == null || node.Data.localizedControlTypeFiltered.Equals(properties.localizedControlTypeFiltered);
-                Boolean propertieName = properties.nameFiltered == null || node.Data.nameFiltered.Equals(properties.nameFiltered);
-                Boolean propertieIsEnabled = properties.isEnabledFiltered == null || node.Data.isEnabledFiltered == properties.isEnabledFiltered;
-                Boolean propertieBoundingRectangle = properties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.boundingRectangleFiltered.Equals(properties.boundingRectangleFiltered);
+                Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || node.Data.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
+                Boolean propertieName = generalProperties.nameFiltered == null || node.Data.nameFiltered.Equals(generalProperties.nameFiltered);
+                Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || node.Data.isEnabledFiltered == generalProperties.isEnabledFiltered;
+                Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
 
                 if (OperatorEnum.Equals(oper, OperatorEnum.and))
                 {
@@ -2954,16 +2980,16 @@ namespace StrategyGenericTree
                 }
                 if (OperatorEnum.Equals(oper, OperatorEnum.or))
                 {
-                    if ((properties.localizedControlTypeFiltered != null && propertieLocalizedControlType) ||
-                        (properties.nameFiltered != null && propertieName) ||
-                        (properties.isEnabledFiltered != null && propertieIsEnabled) ||
-                        (properties.boundingRectangleFiltered != new System.Windows.Rect()) && propertieBoundingRectangle)
+                    if ((generalProperties.localizedControlTypeFiltered != null && propertieLocalizedControlType) ||
+                        (generalProperties.nameFiltered != null && propertieName) ||
+                        (generalProperties.isEnabledFiltered != null && propertieIsEnabled) ||
+                        (generalProperties.boundingRectangleFiltered != new System.Windows.Rect()) && propertieBoundingRectangle)
                     {
                         result.Add(node);
                     }
                 }
             }
-            List<ITreeStrategy<GeneralProperties>> result2 = ListINodeToListITreeStrategy(result);
+            List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
             printNodeList(result2);
             return result2;
         }
@@ -2974,14 +3000,13 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="list">gibt die <code>INode</code>-Liste an</param>
         /// <returns>eine <code>ITreeStrategy</code>-Liste</returns>
-        private List<ITreeStrategy<GeneralProperties>> ListINodeToListITreeStrategy(List<INode<GeneralProperties>> list)
+        private List<ITreeStrategy<T>> ListINodeToListITreeStrategy(List<INode<T>> list)
         {
-            List<ITreeStrategy<GeneralProperties>> result = new List<ITreeStrategy<GeneralProperties>>();
-            foreach (INode<GeneralProperties> node in list)
+            List<ITreeStrategy<T>> result = new List<ITreeStrategy<T>>();
+            foreach (INode<T> node in list)
             {
-                result.Add((ITreeStrategy<GeneralProperties>)node);
+                result.Add((ITreeStrategy<T>)node);
             }
-
             return result;
         }
 

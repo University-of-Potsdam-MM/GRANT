@@ -144,7 +144,7 @@ namespace GApplication
                         #endregion
 
                         GeneralProperties searchedProperties = new GeneralProperties();
-                        searchedProperties.localizedControlTypeFiltered ="Schaltfläche";
+                        searchedProperties.localizedControlTypeFiltered = "Bildlaufleiste";
                         searchedProperties.nameFiltered = "";
                         Console.Write("Gesuchte Eigenschaften ");
                         treeStrategy.searchProperties(tree, searchedProperties, OperatorEnum.or);
@@ -156,10 +156,57 @@ namespace GApplication
                     }
                 }
             }
+            if (e.Key == Key.F9)
+            {/* Beispiel zum Schreiben in Datei
+              * Achtung: Pfad muss für jeden angepasst werden
+              * */
 
-           
+                if (operationSystemStrategy.deliverCursorPosition())
+                {
+                    try
+                    {
+                        #region kopiert von "if (e.Key == Key.F5) ..."
+                        IntPtr points = operationSystemStrategy.getHWND();
+
+                        List<Strategy> possibleFilter = settings.getPossibleFilters();
+                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+
+                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+
+                        ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        treeStrategy.printTreeElements(tree, -1);
+                        Console.WriteLine("\n");
+                        #endregion
+                        System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test2.xml");
+                        tree.XmlSerialize(fs);
+                        fs.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", ex);
+                    }
+                }
+            }
+            if (e.Key == Key.F4)
+            {/*Beispiel zum Lesenaus XML
+              * Achtung: Pfad muss für jeden angepasst werden und die Datei muss schon existieren
+              * */
+                try
+                {
+                    System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\test2.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    ITreeStrategy<GeneralProperties> tree3 = treeStrategy.XmlDeserialize(fs);
+                    fs.Close();
+                    treeStrategy.printTreeElements(tree3, -1);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: '{0}'", ex);
+                }
             }
         }
-
     }
+
+}
 
