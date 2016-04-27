@@ -16,6 +16,8 @@ using StrategyManager;
 using StrategyManager.Interfaces;
 using StrategyGenericTree;
 
+using System.Windows.Automation;
+
 namespace GApplication
 {
     
@@ -155,7 +157,6 @@ namespace GApplication
                         Console.WriteLine("An error occurred: '{0}'", ex);
                     }
                 }
-            }
             if (e.Key == Key.F9)
             {/* Beispiel zum Schreiben in Datei
               * Achtung: Pfad muss für jeden angepasst werden
@@ -207,6 +208,7 @@ namespace GApplication
             }
         }
     }
+}
 
 }
 

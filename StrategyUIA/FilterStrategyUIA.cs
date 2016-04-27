@@ -39,6 +39,7 @@ namespace StrategyUIA
 
         /// <summary>
         /// Erstellt anhand des Handles einer Anwendung den zugehörigen Baum
+        /// Variable mainWindowElement sollte umbenannt werden, da es nicht das mainwindow sein muss, es ist einfach nur ein automationelement, die übergabe des mainwindow erfolgt beim aufruf von filtering
         /// </summary>
         /// <param name="hwnd">den handle der Anwendung an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
@@ -50,12 +51,19 @@ namespace StrategyUIA
             ITreeStrategy<GeneralProperties> top = tree.AddChild(setProperties(mainWindowElement));
             AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             findChildrenOfNode(top, collection, -1);
+
+            UIAEventMonitor uiaEvents = new UIAEventMonitor();
+            uiaEvents.eventsUIA(hwnd);
+
             return tree;
         }
 
 
         /// <summary>
+        /// todo
         /// Ordnet die Eigenschaften eines AutomationElements dem <typeparamref name="GeneralProperties"/>-Objekt zu
+        /// Hier sollte noch überall ein try/Catch um jede Abfrage der Properties herum, da einge properties von einigen anwendungen bei der abfrage fehler werfen!
+        /// Desweiteren stellt sich die frage, ob cached abgefragt wird, oder current, wegen geschwindigekti der abfrage
         /// </summary>
         /// <param name="element">gibt das AutomationElement an</param>
         /// <returns>Ein <typeparamref name="GeneralProperties"/>-Objekt mit den Eigenschaften des AutomationElements.</returns>
@@ -98,6 +106,7 @@ namespace StrategyUIA
 
 
         /// <summary>
+        /// todo bzw. nachfrage: geht die methode findall nicht alleine alle elemente der collection durch? wird in der foreach-schleife dadurch nicht doppelt gearbeitet?
         /// Sucht rekusiv alle Kindelemente eines Knotens und ermittelt dessen Eingenschaften
         /// </summary>
         /// <param name="top">gibt den Namen des Kindelementes an</param>
@@ -248,4 +257,152 @@ namespace StrategyUIA
         }
     }
 
+
+    #region Events
+    /// <summary>
+    /// todo
+    /// Abfangen des events eines button funktioniert, auch für test-wpf-app
+    /// next step: events verallgemeinern + als stratgy-pattern nutzen
+    /// </summary>
+    public class UIAEventMonitor
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appHWND"></param>
+        public void eventsUIA(IntPtr appHWND)
+        {
+            try
+            {
+                //die Methode getProcessHwndFromHwnd liefert das GUElemtn der eigentlichen Anwendung
+                //appHWND = operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points));
+
+                Console.WriteLine("appHWND: '{0}'", appHWND.ToString());
+
+                //todo apphwnd durchgehen mittels treescope und den ersten button der app geben lassen
+                AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
+                
+                SubscribeToInvoke(at);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: '{0}'", ex);
+            }
+        }
+
+        #region UIA_Automation_Events
+        //Automation.AddAutomationEventHandler Method (AutomationEvent, AutomationElement, TreeScope, AutomationEventHandler)
+        //https://msdn.microsoft.com/en-us/library/system.windows.automation.automation.addautomationeventhandler%28v=vs.110%29.aspx
+
+        // Member Variables
+        AutomationElement ElementSubscribeButton;
+        AutomationEventHandler UIAeventHandler;
+
+        public void SubscribeToInvoke(AutomationElement elementButton)
+        {
+            if (elementButton != null)
+            {
+                // hier wurde auf children geändert und damit sollte alle events der eigentlichen hwnd anwendung berücksichtigt werden
+                Automation.AddAutomationEventHandler(InvokePattern.InvokedEvent,
+                     elementButton, TreeScope.Children,
+                     UIAeventHandler = new AutomationEventHandler(OnUIAutomationEvent));
+                ElementSubscribeButton = elementButton;
+            }
+        }
+
+        /// <summary>
+        /// AutomationEventHandler delegate.
+        /// </summary>
+        /// <param name="src">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnUIAutomationEvent(object src, AutomationEventArgs e)
+        {
+            // Make sure the element still exists. Elements such as tooltips
+            // can disappear before the event is processed.
+            AutomationElement sourceElement;
+            try
+            {
+                sourceElement = src as AutomationElement;
+            }
+            catch (ElementNotAvailableException)
+            {
+                return;
+            }
+            if (e.EventId == InvokePattern.InvokedEvent)
+            {
+                // TODO Add handling code.
+                Console.WriteLine("InvokedEvent raised '{0}'", sourceElement.ToString());
+            }
+            else
+            {
+                // TODO Handle any other events that have been subscribed to.
+            }
+        }
+
+        private void ShutdownUIA()
+        {
+            if (UIAeventHandler != null)
+            {
+                Automation.RemoveAutomationEventHandler(InvokePattern.InvokedEvent,
+                    ElementSubscribeButton, UIAeventHandler);
+            }
+        }
+        #endregion
+
+        #region UIA_Automation_Events
+        //Automation.AddAutomationPropertyChangedEventHandler Method (AutomationElement, TreeScope, AutomationPropertyChangedEventHandler, AutomationProperty[])
+        //https://msdn.microsoft.com/en-us/library/system.windows.automation.automation.addautomationpropertychangedeventhandler%28v=vs.110%29.aspx
+
+        AutomationPropertyChangedEventHandler propChangeHandler;
+        /// <summary>
+        /// Adds a handler for property-changed event; in particular, a change in the enabled state.
+        /// </summary>
+        /// <param name="element">The UI Automation element whose state is being monitored.</param>
+        public void SubscribePropertyChange(AutomationElement element)
+        {
+            Automation.AddAutomationPropertyChangedEventHandler(element,
+                TreeScope.Element,
+                propChangeHandler = new AutomationPropertyChangedEventHandler(OnPropertyChange),
+                AutomationElement.IsEnabledProperty);
+
+        }
+
+        /// <summary>
+        /// Handler for property changes.
+        /// </summary>
+        /// <param name="src">The source whose properties changed.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnPropertyChange(object src, AutomationPropertyChangedEventArgs e)
+        {
+            AutomationElement sourceElement = src as AutomationElement;
+            if (e.Property == AutomationElement.IsEnabledProperty)
+            {
+                bool enabled = (bool)e.NewValue;
+                // TODO: Do something with the new value. 
+                // The element that raised the event can be identified by its runtime ID property.
+            }
+            else
+            {
+                // TODO: Handle other property-changed events.
+            }
+        }
+
+        public void UnsubscribePropertyChange(AutomationElement element)
+        {
+            if (propChangeHandler != null)
+            {
+                Automation.RemoveAutomationPropertyChangedEventHandler(element, propChangeHandler);
+            }
+        }
+
+        #endregion
+
+
+    }
+    #endregion
+
 }
+
+
+
