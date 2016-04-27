@@ -19,8 +19,6 @@ namespace StrategyWindows
             [System.Runtime.InteropServices.DllImport("user32.dll")]
             public static extern IntPtr WindowFromPoint(CursorPoint lpPoint);
 
-
-
             [System.Runtime.InteropServices.DllImport("user32.dll")]
             internal static extern bool GetPhysicalCursorPos(ref CursorPoint lpPoint);
 
@@ -56,18 +54,36 @@ namespace StrategyWindows
         }
 
         //Gib Handle an CursorPostion zurück
+        // Fehlerbehandlung wie?
         public IntPtr getHWND()
         {
-            //GetPhysicalCursorPos(ref cp);
-            IntPtr hwnd = NativeMethods.WindowFromPoint(cp);
-            return hwnd;
+            try
+            {
+                IntPtr hwnd = NativeMethods.WindowFromPoint(cp);
+                return hwnd;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei getHWND: " + e.Message);
+            }
         }
 
         // Main WindowHandle vom Prozess
         public IntPtr getProcessHwndFromHwnd(int processId)
         {
-            Process p = Process.GetProcessById(processId);
-            return p.MainWindowHandle;
+            try
+            {
+                Process p = Process.GetProcessById(processId);
+                return p.MainWindowHandle;
+            }
+            catch (ArgumentException a)
+            {
+                throw new ArgumentException("Fehler bei MainWindowHandle: " +a.Message);
+            }
+            catch (InvalidOperationException i)
+            {
+                throw new InvalidOperationException("Fehler bei MainWindowHandle: " + i.Message);
+            }
         }
     }
 }
