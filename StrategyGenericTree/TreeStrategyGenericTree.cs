@@ -13,7 +13,6 @@ using System.Security.Permissions;
 using StrategyManager.Interfaces;
 using StrategyManager;
 
-
 //entnommen von: http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection (Autor: Nicholas Butler; Lizenz CPOL)
 
 [assembly: SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", Scope = "member", Target = "Common.NodeTree`1+EnumeratorBase`1.Count", MessageId = "o")]
