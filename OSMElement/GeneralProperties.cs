@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace StrategyManager
+namespace OSMElement
 {
     //Properties
     public struct GeneralProperties
@@ -173,8 +173,7 @@ namespace StrategyManager
             get;
             set;
         }
-
-
+        
     }
 }
 

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24EB754E-2408-4B52-B9EA-1F11C4417F9F}</ProjectGuid>
+    <ProjectGuid>{7765DC51-FF98-42EB-868B-582A0C2BA0AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StrategyJAVA</RootNamespace>
-    <AssemblyName>StrategyJAVA</AssemblyName>
+    <RootNamespace>StrategyBrailleIO</RootNamespace>
+    <AssemblyName>StrategyBrailleIO</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,17 +32,37 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilterStrategyJAVA.cs" />
+    <Compile Include="BrailleUserinterface.cs" />
+    <Compile Include="BrailleDisplayStrategyBrailleIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO\BrailleIO.csproj">
+      <Project>{623e618c-f034-473e-a5af-280b20a5ba8f}</Project>
+      <Name>BrailleIO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO_Interfaces\BrailleIO_Interfaces.csproj">
+      <Project>{168ec2f2-7e4a-493a-ab4a-9fb1b45dab64}</Project>
+      <Name>BrailleIO_Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO_ShowOff\BrailleIO_ShowOff.csproj">
+      <Project>{9cf455a0-b3b8-4d16-b54c-8eaf6bc97e06}</Project>
+      <Name>BrailleIO_ShowOff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\GestureRecognizer\GestureRecognizer.csproj">
+      <Project>{73bd1f41-ce19-40de-a0ec-a70a9f003dec}</Project>
+      <Name>GestureRecognizer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
       <Name>OSMElement</Name>

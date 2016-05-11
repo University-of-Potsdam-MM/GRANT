@@ -87,5 +87,20 @@ namespace GApplication
             }
             return trees;
         }
+
+        public List<Strategy> getPossibleBrailleDisplays()
+        {
+            List<Strategy> filter = new List<Strategy>();
+            List<String> filterNames = getPossibleStrategyClasses("PossibleBrailleDisplays");
+            if (filterNames == null) { return filter; }
+            Strategy f = new Strategy();
+            foreach (String fName in filterNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                filter.Add(f);
+            }
+            return filter;
+        }
     }
 }

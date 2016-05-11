@@ -97,7 +97,7 @@ namespace StrategyManager.Interfaces
 
         #region eigene Methoden
         void printTreeElements(ITreeStrategy<T> tree, int depth);
-        List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, T properties, OperatorEnum oper);
+        List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, OperatorEnum oper); //TODO: properties sollten generisch sein
         #endregion
 
     }

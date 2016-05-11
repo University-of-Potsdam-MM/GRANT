@@ -7,13 +7,14 @@ using StrategyManager;
 using System.Windows.Automation;
 using System.Diagnostics;
 using StrategyManager.Interfaces;
+using OSMElement;
 
 namespace StrategyUIA
 {
     public class FilterStrategyUIA : IFilterStrategy
     {
         private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<GeneralProperties> specifiedTree;
+        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
 
         public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
         {
@@ -26,12 +27,12 @@ namespace StrategyUIA
         }
 
         
-        public void setSpecifiedTree(ITreeStrategy<GeneralProperties> tree)
+        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             specifiedTree = tree;
         }
 
-        public ITreeStrategy<GeneralProperties> getSpecifiedTree()
+        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
         {
             return specifiedTree;
         }
@@ -43,12 +44,14 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="hwnd">den handle der Anwendung an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
-        public ITreeStrategy<GeneralProperties> filtering(IntPtr hwnd)
+        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {
 
-            ITreeStrategy<GeneralProperties> tree = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
             AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
-            ITreeStrategy<GeneralProperties> top = tree.AddChild(setProperties(mainWindowElement));
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            osmElement.properties = setProperties(mainWindowElement);
+            ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
             AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             findChildrenOfNode(top, collection, -1);
 
@@ -101,6 +104,7 @@ namespace StrategyUIA
             elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
             elementP.nameFiltered = element.Current.Name;
             elementP.processIdFiltered = element.Current.ProcessId;
+
             return elementP;
         }
 
@@ -112,13 +116,15 @@ namespace StrategyUIA
         /// <param name="top">gibt den Namen des Kindelementes an</param>
         /// <param name="collection">gibt die AutomationElement-Collection an</param>
         /// <param name="depth">gibt an wie tief der Suche ausgehend vom Root-Element an.</param>
-        private void findChildrenOfNode(ITreeStrategy<GeneralProperties> top, AutomationElementCollection collection, int depth)
+        private void findChildrenOfNode(ITreeStrategy<OSMElement.OSMElement> top, AutomationElementCollection collection, int depth)
         {
             foreach (AutomationElement element in collection)
             {
                 if (top.Depth < depth || depth == -1)
                 {
-                    ITreeStrategy<GeneralProperties> node = top.AddChild(setProperties(element));
+                    OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+                    osmElement.properties = setProperties(element);
+                    ITreeStrategy<OSMElement.OSMElement> node = top.AddChild(osmElement);
 
                     AutomationElementCollection c = element.FindAll(TreeScope.Children, Condition.TrueCondition);
                     findChildrenOfNode(node, c, depth);
@@ -152,9 +158,9 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
         /// <param name="rootElement"></param> --- hier erst ermitteln
         /// <returns>das zugehörige AutomationElement des Knotens</returns>
-        private AutomationElement getAutomationElementFromMirroredTree(ITreeStrategy<GeneralProperties> node, AutomationElement rootElement)
+        private AutomationElement getAutomationElementFromMirroredTree(ITreeStrategy<OSMElement.OSMElement> node, AutomationElement rootElement)
         {
-            Condition condition = setPropertiesCondition(node.Data);
+            Condition condition = setPropertiesCondition(node.Data.properties);
             AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
             if (foundedAutomationElements.Count == 0)
             {
@@ -175,7 +181,7 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten des gespiegelten Baumes an, von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="hwnd">gibt den Handle des AutomationElementes an um anhand dessen das Root-AutomationElement zu bestimmen</param>
         /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
-        public ITreeStrategy<GeneralProperties> getParentsOfElement(ITreeStrategy<GeneralProperties> node, IntPtr hwnd)
+        public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
             AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
             AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
@@ -183,8 +189,10 @@ namespace StrategyUIA
             {
                 return null;
             }
-            ITreeStrategy<GeneralProperties> tree = specifiedTree.NewNodeTree();
-            tree.AddChild(setProperties(element));
+            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            osmElement.properties =  setProperties(element);
+            tree.AddChild(osmElement);
             findParentOfElement(element, rootElement, tree);
             return tree;
         }
@@ -195,7 +203,7 @@ namespace StrategyUIA
         /// <param name="element">gibt das AutomationElement an von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="rootElement">gibt das rootElemet der Suche an</param>
         /// <param name="tree">gibt den aktuel erstellten Baum mit den Vorfahren des Elements an</param>
-        private void findParentOfElement(AutomationElement element, AutomationElement rootElement,ITreeStrategy<GeneralProperties> tree)
+        private void findParentOfElement(AutomationElement element, AutomationElement rootElement,ITreeStrategy<OSMElement.OSMElement> tree)
         {
             TreeWalker walker = TreeWalker.ControlViewWalker;
             AutomationElement elementParent = walker.GetParent(element);
@@ -211,10 +219,12 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="parentElement">gibt das neue Elternelement an</param>
         /// <param name="tree">gibt den "alten" Baum an</param>
-        private void addParentOfNode(AutomationElement parentElement, ITreeStrategy<GeneralProperties> tree)
+        private void addParentOfNode(AutomationElement parentElement, ITreeStrategy<OSMElement.OSMElement> tree)
         {
-            ITreeStrategy<GeneralProperties> tree2 = specifiedTree.NewNodeTree();
-            ITreeStrategy<GeneralProperties> node = tree2.AddChild(setProperties(parentElement));
+            ITreeStrategy<OSMElement.OSMElement> tree2 = specifiedTree.NewNodeTree();
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            osmElement.properties = setProperties(parentElement);
+            ITreeStrategy<OSMElement.OSMElement> node = tree2.AddChild(osmElement);
             node.AddChild(tree);
             tree.Clear();
             tree.AddChild(tree2);
@@ -255,6 +265,8 @@ namespace StrategyUIA
             //.. 
             return resultCondition;
         }
+
+
     }
 
 
