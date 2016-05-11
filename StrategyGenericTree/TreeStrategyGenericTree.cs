@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using System.Security.Permissions;
 using StrategyManager.Interfaces;
 using StrategyManager;
+using OSMElement;
 
 //entnommen von: http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection (Autor: Nicholas Butler; Lizenz CPOL)
 
@@ -2793,16 +2794,18 @@ namespace StrategyGenericTree
                    Console.Write("Node -  Anz. Kinder: {0},  Depth: {1},   hasNext: {2}, hasChild: {3}", node.DirectChildCount, node.Depth,  node.HasNext, node.HasChild);
                    if (node.HasParent)
                     {
-                        if (node.Parent.Data is GeneralProperties)
+                        if (node.Parent.Data is OSMElement.OSMElement)
                         {
-                            GeneralProperties parentData = (GeneralProperties)Convert.ChangeType(node.Parent.Data, typeof(GeneralProperties));
+                            OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Parent.Data, typeof(OSMElement.OSMElement));
+                            GeneralProperties parentData = osmElement.properties;
                             Console.Write(", Parent: {0}", parentData.nameFiltered);
                         }
                     }
                     //TODO: ist es hier okay, dass wir von GeneralProperties "ausgehen"?
-                    if (node.Data is GeneralProperties)
+                    if (node.Data is OSMElement.OSMElement)
                     {
-                        GeneralProperties data = (GeneralProperties)Convert.ChangeType(node.Data, typeof(GeneralProperties));
+                        OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Parent.Data, typeof(OSMElement.OSMElement));
+                        GeneralProperties data = osmElement.properties;
                         printProperties(data);
                     }
                     Console.WriteLine();
@@ -2822,16 +2825,18 @@ namespace StrategyGenericTree
                 Console.Write("Node - Depth: {0}, hasNext: {1}, hasChild: {2}", r.Depth, r.HasNext, r.HasChild);
                 if (r.HasParent)
                 {
-                    if (r.Parent.Data is GeneralProperties)
+                    if (r.Parent.Data is OSMElement.OSMElement)
                     {
-                        GeneralProperties parentData = (GeneralProperties)Convert.ChangeType(r.Parent.Data, typeof(GeneralProperties));
-                        Console.Write(", Parent: {0}", parentData);
+                        OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(r.Parent.Data, typeof(OSMElement.OSMElement));
+                        GeneralProperties parentData = osmElement.properties;
+                        Console.Write(", Parent: {0}", parentData.nameFiltered);
                     }
                     
                 }
                 if (r.Data is GeneralProperties)
                 {
-                    GeneralProperties data = (GeneralProperties)Convert.ChangeType(r.Data, typeof(GeneralProperties));
+                    OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(r.Parent.Data, typeof(OSMElement.OSMElement));
+                    GeneralProperties data = osmElement.properties;
                     printProperties(data);
                 }
                 Console.WriteLine();
@@ -2953,27 +2958,33 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
         /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
-        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, T properties, OperatorEnum oper)
+        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, OperatorEnum oper) //TODO: properties sollten generisch sein
         {//TODO: hier fehlen noch viele Eigenschaften
             //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
-            if (!(properties is GeneralProperties && tree is ITreeStrategy<GeneralProperties>))
+            if (!(properties is GeneralProperties && tree is ITreeStrategy<OSMElement.OSMElement>))
             {
                 throw new InvalidOperationException("Falscher Baum-Type!"); 
             }
             GeneralProperties generalProperties = (GeneralProperties)Convert.ChangeType(properties, typeof(GeneralProperties));
             printProperties(generalProperties);
-            List<INode<GeneralProperties>> result = new List<INode<GeneralProperties>>();
+            List<INode<OSMElement.OSMElement>> result = new List<INode<OSMElement.OSMElement>>();
 
-            foreach (INode<GeneralProperties> node in ((ITree<GeneralProperties>)tree).All.Nodes)
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
-                Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || node.Data.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
-                Boolean propertieName = generalProperties.nameFiltered == null || node.Data.nameFiltered.Equals(generalProperties.nameFiltered);
-                Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || node.Data.isEnabledFiltered == generalProperties.isEnabledFiltered;
-                Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
+                Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || node.Data.properties.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
+                Boolean propertieName = generalProperties.nameFiltered == null || node.Data.properties.nameFiltered.Equals(generalProperties.nameFiltered);
+                Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || node.Data.properties.isEnabledFiltered == generalProperties.isEnabledFiltered;
+                Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.properties.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
+                Boolean propertieIdGenerated = generalProperties.IdGenerated == null || generalProperties.IdGenerated.Equals(node.Data.properties.IdGenerated);
+
+                if (node.Data.properties.IdGenerated != null)
+                {
+                    Console.WriteLine();
+                }
 
                 if (OperatorEnum.Equals(oper, OperatorEnum.and))
                 {
-                    if (propertieBoundingRectangle && propertieIsEnabled && propertieLocalizedControlType && propertieName)
+                    if (propertieBoundingRectangle && propertieIsEnabled && propertieLocalizedControlType && propertieName && propertieIdGenerated)
                     {
                         result.Add(node);
                     }
@@ -2983,7 +2994,9 @@ namespace StrategyGenericTree
                     if ((generalProperties.localizedControlTypeFiltered != null && propertieLocalizedControlType) ||
                         (generalProperties.nameFiltered != null && propertieName) ||
                         (generalProperties.isEnabledFiltered != null && propertieIsEnabled) ||
-                        (generalProperties.boundingRectangleFiltered != new System.Windows.Rect()) && propertieBoundingRectangle)
+                        (generalProperties.boundingRectangleFiltered != new System.Windows.Rect() && propertieBoundingRectangle) ||
+                        (generalProperties.IdGenerated != null && propertieIdGenerated)
+                        )
                     {
                         result.Add(node);
                     }

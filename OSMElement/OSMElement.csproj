@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24EB754E-2408-4B52-B9EA-1F11C4417F9F}</ProjectGuid>
+    <ProjectGuid>{6EAFEFC6-7479-4591-A8D7-0F5EC7802F16}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StrategyJAVA</RootNamespace>
-    <AssemblyName>StrategyJAVA</AssemblyName>
+    <RootNamespace>OSMElement</RootNamespace>
+    <AssemblyName>OSMElement</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,25 +32,24 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilterStrategyJAVA.cs" />
+    <Compile Include="BrailleRepresentation.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="GeneralProperties.cs" />
+    <Compile Include="Interaction.cs" />
+    <Compile Include="OSMElement.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OSMElement\OSMElement.csproj">
-      <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
-      <Name>OSMElement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyManager\StrategyManager.csproj">
-      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
-      <Name>StrategyManager</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

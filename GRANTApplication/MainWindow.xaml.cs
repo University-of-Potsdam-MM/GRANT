@@ -17,6 +17,9 @@ using StrategyManager.Interfaces;
 using StrategyGenericTree;
 
 using System.Windows.Automation;
+using StrategyBrailleIO;
+using OSMElement;
+
 
 namespace GApplication
 {
@@ -26,26 +29,31 @@ namespace GApplication
     /// </summary>
     public partial class MainWindow : Window
     {
-       
+        Settings settings = new Settings();
+        StrategyMgr strategyMgr = new StrategyMgr();
+        IBrailleDisplayStrategy brailleDisplayStrategy;
+
         public MainWindow()
         {
             InitializeComponent();
+            strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            Settings settings = new Settings();
 
-            StrategyMgr strategyMgr = new StrategyMgr();
+
 
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
             List<Strategy> possibleTrees = settings.getPossibleTrees();
-            strategyMgr.setSpecifiedTree(possibleTrees[0].className);
+            strategyMgr.setSpecifiedTree(possibleTrees[0].className); // muss dynamisch ermittelt werden
+           // strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
-            ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
+            ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
+            
             
             // ... Test for F5 key.
             if (e.Key == Key.F5)
@@ -62,7 +70,7 @@ namespace GApplication
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                        ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                        // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                         treeStrategy.printTreeElements(tree, -1);
                     }
@@ -102,14 +110,14 @@ namespace GApplication
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                        ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
-                        ITreeStrategy<GeneralProperties> node = (ITreeStrategy<GeneralProperties>)((ITree<GeneralProperties>)tree).Nodes.ElementAt(3);  //Exemplarisch rausgesuchter Knoten
-                        Console.WriteLine("Gesuchter Knoten:\nNode - Name: {0}, Tiefe: {1}", node.Data.nameFiltered, node.Depth);
+                        ITreeStrategy<OSMElement.OSMElement> node = (ITreeStrategy<OSMElement.OSMElement>)((ITree<OSMElement.OSMElement>)tree).Nodes.ElementAt(3);  //Exemplarisch rausgesuchter Knoten
+                        Console.WriteLine("Gesuchter Knoten:\nNode - Name: {0}, Tiefe: {1}", node.Data.properties.nameFiltered, node.Depth);
 
-                        ITreeStrategy<GeneralProperties> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
+                        ITreeStrategy<OSMElement.OSMElement> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
                         if (tree2 != null)
                         {
                             treeStrategy.printTreeElements(tree2, -1);
@@ -140,14 +148,19 @@ namespace GApplication
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                        ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
 
+                        System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test.xml");
+                        tree.XmlSerialize(fs);
+                        fs.Close();
+
                         GeneralProperties searchedProperties = new GeneralProperties();
-                        searchedProperties.localizedControlTypeFiltered = "Bildlaufleiste";
-                        searchedProperties.nameFiltered = "";
+                        searchedProperties.localizedControlTypeFiltered = "Schaltfläche";
+                      //  searchedProperties.nameFiltered = "";
+
                         Console.Write("Gesuchte Eigenschaften ");
                         treeStrategy.searchProperties(tree, searchedProperties, OperatorEnum.or);
 
@@ -157,6 +170,7 @@ namespace GApplication
                         Console.WriteLine("An error occurred: '{0}'", ex);
                     }
                 }
+            }
             if (e.Key == Key.F9)
             {/* Beispiel zum Schreiben in Datei
               * Achtung: Pfad muss für jeden angepasst werden
@@ -175,11 +189,11 @@ namespace GApplication
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                        ITreeStrategy<GeneralProperties> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        treeStrategy.printTreeElements(tree, -1);
+                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        treeStrategy.printTreeElements(tree, 3);
                         Console.WriteLine("\n");
                         #endregion
-                        System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test2.xml");
+                        System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\testGui.xml");
                         tree.XmlSerialize(fs);
                         fs.Close();
 
@@ -196,8 +210,8 @@ namespace GApplication
               * */
                 try
                 {
-                    System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\test2.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                    ITreeStrategy<GeneralProperties> tree3 = treeStrategy.XmlDeserialize(fs);
+                    System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\testGui.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    ITreeStrategy<OSMElement.OSMElement> tree3 = treeStrategy.XmlDeserialize(fs);
                     fs.Close();
                     treeStrategy.printTreeElements(tree3, -1);
                 }
@@ -206,7 +220,7 @@ namespace GApplication
                     Console.WriteLine("An error occurred: '{0}'", ex);
                 }
             }
-        }
+        
     }
 }
 

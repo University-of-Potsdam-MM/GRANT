@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using StrategyManager;
 using StrategyManager.Interfaces;
+using OSMElement;
 
 
 namespace StrategyJAVA
 {
-    class FilterStrategyJAVA : IFilterStrategy
+    class FilterStrategyJAVA :IFilterStrategy
     {
         private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<GeneralProperties> specifiedTree;
+        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
 
 
         public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
@@ -26,19 +27,19 @@ namespace StrategyJAVA
         }
 
 
-        public void setSpecifiedTree(ITreeStrategy<GeneralProperties> tree)
+        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             specifiedTree = tree;
         }
 
-        public ITreeStrategy<GeneralProperties> getSpecifiedTree()
+        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
         {
             return specifiedTree;
         }
 
-        public ITreeStrategy<GeneralProperties> filtering(IntPtr hwnd)
+        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {
-            ITreeStrategy<GeneralProperties> tree = specifiedTree;
+            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
 
@@ -47,15 +48,15 @@ namespace StrategyJAVA
             return -1;
         }
 
-        public ITreeStrategy<GeneralProperties> getParentsOfElement(ITreeStrategy<GeneralProperties> node, IntPtr hwnd)
+        public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
-            ITreeStrategy<GeneralProperties> tree = specifiedTree;
+            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
 
-        public ITreeStrategy<GeneralProperties> NewNodeTree() 
+        public ITreeStrategy<OSMElement.OSMElement> NewNodeTree() 
         {
-            ITreeStrategy<GeneralProperties> tree = specifiedTree;
+            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
     }

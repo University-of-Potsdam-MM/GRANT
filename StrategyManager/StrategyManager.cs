@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StrategyManager;
 using StrategyManager.Interfaces;
+using OSMElement;
 
 
 namespace StrategyManager
@@ -14,8 +15,35 @@ namespace StrategyManager
 
         private IFilterStrategy specifiedFilter;
         private IOperationSystemStrategy specifiedOperationSystem;
-        //private ITreeStrategy<GeneralProperties> specifiedTree;
-        private ITreeStrategy<GeneralProperties> specifiedTree;
+        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
+        private IBrailleDisplayStrategy specifiedBrailleDisplay;
+
+        public void setSpecifiedBrailleDisplay(String brailleDisplayName)
+        {
+            try
+            {
+                Type type = Type.GetType(brailleDisplayName);
+                specifiedBrailleDisplay = (IBrailleDisplayStrategy)Activator.CreateInstance(type);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedBrailleDisplay: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedBrailleDisplay: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei StrategyManager_setSpecifiedBrailleDisplay: " + e.Message);
+            }
+        }
+
+        public IBrailleDisplayStrategy getSpecifiedBrailleDisplay()
+        {
+            return specifiedBrailleDisplay;
+        }
 
         public void setSpecifiedFilter(String filterName)
         {
@@ -80,9 +108,9 @@ namespace StrategyManager
         {
             try {
                 Type type = Type.GetType(treeName);
-                Type[] typeArgs = { typeof(GeneralProperties) };
+                Type[] typeArgs = { typeof(OSMElement.OSMElement) };
                 var makeme = type.MakeGenericType(typeArgs);
-                specifiedTree = (ITreeStrategy<GeneralProperties>)Activator.CreateInstance(makeme);
+                specifiedTree = (ITreeStrategy<OSMElement.OSMElement>)Activator.CreateInstance(makeme);
             }
             catch (InvalidCastException ic)
             {
@@ -99,7 +127,7 @@ namespace StrategyManager
             }
         }
 
-        public void setSpecifiedTree(ITreeStrategy<GeneralProperties> treeName)
+        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> treeName)
         {
             try {
                 treeName.NewNodeTree();
@@ -111,7 +139,7 @@ namespace StrategyManager
             }
         }
 
-        public ITreeStrategy<GeneralProperties> getSpecifiedTree()
+        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
         {
             return specifiedTree;
         }

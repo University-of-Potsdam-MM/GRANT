@@ -46,6 +46,10 @@
     <Compile Include="FilterStrategyUIA.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OSMElement\OSMElement.csproj">
+      <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
+      <Name>OSMElement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
       <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
       <Name>StrategyGenericTree</Name>
