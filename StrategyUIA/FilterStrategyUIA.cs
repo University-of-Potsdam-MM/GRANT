@@ -263,6 +263,7 @@ namespace StrategyUIA
     /// todo
     /// Abfangen des events eines button funktioniert, auch für test-wpf-app
     /// next step: events verallgemeinern + als stratgy-pattern nutzen
+    /// Events für Creation, Deletion, Update, Invoke (Aufruf), Focuswechsel
     /// </summary>
     public class UIAEventMonitor
     {
@@ -291,21 +292,26 @@ namespace StrategyUIA
             }
         }
 
-        #region UIA_Automation_Events
+        #region UIA_Automation_Events_Automation
         //Automation.AddAutomationEventHandler Method (AutomationEvent, AutomationElement, TreeScope, AutomationEventHandler)
         //https://msdn.microsoft.com/en-us/library/system.windows.automation.automation.addautomationeventhandler%28v=vs.110%29.aspx
 
         // Member Variables
         AutomationElement ElementSubscribeButton;
         AutomationEventHandler UIAeventHandler;
+        
+        //Angabe in welcher Ebene des Baumes gesucht werden soll, bzw. hier von welchem automationelement in der GUI aus weitere elementereignisse betrachtete werden sollen
+        TreeScope treeScope = TreeScope.Element;
 
         public void SubscribeToInvoke(AutomationElement elementButton)
         {
+            treeScope = TreeScope.Descendants;
+
             if (elementButton != null)
             {
-                // hier wurde auf children geändert und damit sollte alle events der eigentlichen hwnd anwendung berücksichtigt werden
+                // hier wurde auf descendants/Nachkommen geändert und damit sollte alle events der eigentlichen hwnd anwendung berücksichtigt werden
                 Automation.AddAutomationEventHandler(InvokePattern.InvokedEvent,
-                     elementButton, TreeScope.Children,
+                     elementButton, treeScope,
                      UIAeventHandler = new AutomationEventHandler(OnUIAutomationEvent));
                 ElementSubscribeButton = elementButton;
             }
@@ -350,7 +356,7 @@ namespace StrategyUIA
         }
         #endregion
 
-        #region UIA_Automation_Events
+        #region UIA_Automation_Events_Property
         //Automation.AddAutomationPropertyChangedEventHandler Method (AutomationElement, TreeScope, AutomationPropertyChangedEventHandler, AutomationProperty[])
         //https://msdn.microsoft.com/en-us/library/system.windows.automation.automation.addautomationpropertychangedeventhandler%28v=vs.110%29.aspx
 
@@ -398,6 +404,42 @@ namespace StrategyUIA
 
         #endregion
 
+        #region UIA_Automation_events_Focus
+
+        AutomationFocusChangedEventHandler focusHandler = null;
+
+        /// <summary>
+        /// Create an event handler and register it.
+        /// </summary>
+        public void SubscribeToFocusChange()
+        {
+            focusHandler = new AutomationFocusChangedEventHandler(OnFocusChange);
+            Automation.AddAutomationFocusChangedEventHandler(focusHandler);
+        }
+
+        /// <summary>
+        /// Handle the event.
+        /// </summary>
+        /// <param name="src">Object that raised the event.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnFocusChange(object src, AutomationFocusChangedEventArgs e)
+        {
+            // TODO Add event handling code.
+            // The arguments tell you which elements have lost and received focus.
+        }
+
+        /// <summary>
+        /// Cancel subscription to the event.
+        /// </summary>
+        public void UnsubscribeFocusChange()
+        {
+            if (focusHandler != null)
+            {
+                Automation.RemoveAutomationFocusChangedEventHandler(focusHandler);
+            }
+        }
+
+        #endregion
 
     }
     #endregion
