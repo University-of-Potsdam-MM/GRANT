@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using StrategyManager;
 using StrategyManager.Interfaces;
 using OSMElement;
+using System.Windows;
 
 
 namespace StrategyJAVA
@@ -58,6 +59,12 @@ namespace StrategyJAVA
         {
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
+        }
+
+        public Rect getMouseRect(IntPtr hwnd)
+        {
+            Rect rect = new Rect();
+            return rect;
         }
     }
 }
