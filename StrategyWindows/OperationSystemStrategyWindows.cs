@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using StrategyManager.Interfaces;
+using System.Windows;
 
 namespace StrategyWindows
 {
@@ -85,5 +86,10 @@ namespace StrategyWindows
                 throw new InvalidOperationException("Fehler bei MainWindowHandle: " + i.Message);
             }
         }
+        public void paintMouseRect(Rect mouseRect)
+        {
+
+        }
     }
+    
 }

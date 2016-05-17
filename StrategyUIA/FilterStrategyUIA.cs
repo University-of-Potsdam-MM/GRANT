@@ -8,6 +8,7 @@ using System.Windows.Automation;
 using System.Diagnostics;
 using StrategyManager.Interfaces;
 using OSMElement;
+using System.Windows;
 
 namespace StrategyUIA
 {
@@ -150,6 +151,13 @@ namespace StrategyUIA
 
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return processIdentifier;
+        }
+
+        public Rect getMouseRect(IntPtr hwnd)
+        {
+            AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+            Rect mouseRect = mouseElement.Current.BoundingRectangle;
+            return mouseRect;
         }
 
         /// <summary>
