@@ -60,7 +60,6 @@ namespace StrategyJAVA
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
-
         public Rect getMouseRect(IntPtr hwnd)
         {
             Rect rect = new Rect();
