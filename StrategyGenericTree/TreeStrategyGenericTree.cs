@@ -2797,14 +2797,13 @@ namespace StrategyGenericTree
                         if (node.Parent.Data is OSMElement.OSMElement)
                         {
                             OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Parent.Data, typeof(OSMElement.OSMElement));
-                            GeneralProperties parentData = osmElement.properties;
-                            Console.Write(", Parent: {0}", parentData.nameFiltered);
+                            Console.Write(", Parent: {0}", osmElement.properties.nameFiltered);
                         }
                     }
                     //TODO: ist es hier okay, dass wir von GeneralProperties "ausgehen"?
                     if (node.Data is OSMElement.OSMElement)
                     {
-                        OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Parent.Data, typeof(OSMElement.OSMElement));
+                        OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Data, typeof(OSMElement.OSMElement));
                         GeneralProperties data = osmElement.properties;
                         printProperties(data);
                     }

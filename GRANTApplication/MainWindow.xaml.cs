@@ -138,7 +138,7 @@ namespace GApplication
                * Hier wird teilweise direkt auf Methoden der Klasse TreeStrategyGenericTree zugegriffen
                */
 
-               /* if (operationSystemStrategy.deliverCursorPosition())
+               if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
                     {
@@ -171,7 +171,7 @@ namespace GApplication
                     {
                         Console.WriteLine("An error occurred: '{0}'", ex);
                     }
-                }*/
+                }
             }
             if (e.Key == Key.F8)
             { /* Testaufruf: suche nach eigenschaften im Baum
