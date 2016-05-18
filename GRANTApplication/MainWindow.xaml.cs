@@ -138,7 +138,7 @@ namespace GApplication
                * Hier wird teilweise direkt auf Methoden der Klasse TreeStrategyGenericTree zugegriffen
                */
 
-                if (operationSystemStrategy.deliverCursorPosition())
+               /* if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
                     {
@@ -155,6 +155,7 @@ namespace GApplication
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
+                        
                         ITreeStrategy<OSMElement.OSMElement> node = (ITreeStrategy<OSMElement.OSMElement>)((ITree<OSMElement.OSMElement>)tree).Nodes.ElementAt(3);  //Exemplarisch rausgesuchter Knoten
                         Console.WriteLine("Gesuchter Knoten:\nNode - Name: {0}, Tiefe: {1}", node.Data.properties.nameFiltered, node.Depth);
 
@@ -170,7 +171,7 @@ namespace GApplication
                     {
                         Console.WriteLine("An error occurred: '{0}'", ex);
                     }
-                }
+                }*/
             }
             if (e.Key == Key.F8)
             { /* Testaufruf: suche nach eigenschaften im Baum
@@ -255,6 +256,29 @@ namespace GApplication
                     ITreeStrategy<OSMElement.OSMElement> tree3 = treeStrategy.XmlDeserialize(fs);
                     fs.Close();
                     treeStrategy.printTreeElements(tree3, -1);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: '{0}'", ex);
+                }
+            }
+            if (e.Key == Key.F2)
+            {/*Beispiel BrailleDiss 
+              * Beispiel-Datei liegt mit im git
+              * */
+                try
+                {
+                    brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
+                    brailleDisplayStrategy.initializedSimulator();
+
+
+                 //   System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\testBraille2.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    System.IO.FileStream fs = System.IO.File.Open("..\\..\\..\\testBraille2.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    ITreeStrategy<OSMElement.OSMElement> osm = treeStrategy.XmlDeserialize(fs);
+                    fs.Close();
+                    treeStrategy.printTreeElements(osm, -1);
+
+                    brailleDisplayStrategy.generatedBrailleUi(osm);
                 }
                 catch (Exception ex)
                 {

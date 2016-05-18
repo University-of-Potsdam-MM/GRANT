@@ -80,12 +80,7 @@ namespace StrategyUIA
             if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
             {
                 elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
-            }
-            else
-            {
-                Console.WriteLine();
-            }
-            
+            }            
             elementP.classNameFiltered = element.Current.ClassName;
             elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
             elementP.frameWorkIdFiltered = element.Current.FrameworkId;

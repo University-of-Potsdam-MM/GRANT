@@ -8,8 +8,8 @@ namespace OSMElement
 { 
     public struct BrailleRepresentation
     {
-        Position position { get; set; }
-        Content content { get; set; }
-        String screenName { get; set; }
+        public Position position { get; set; }
+        public Content content { get; set; }
+        public String screenName { get; set; }
     }
 }

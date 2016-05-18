@@ -9,14 +9,16 @@ namespace OSMElement
 {
     public struct Position
     {
-        Padding padding { get; set; }
-        Padding margin { get; set; }
-        Padding boarder { get; set; }
-        int width;
-        int height;
+        public Padding padding { get; set; }
+        public Padding margin { get; set; }
+        public Padding boarder { get; set; }
+        public int width;
+        public int height;
+        public int left;
+        public int top;
 
         //nötig?
-        int XOffset;
-        int Yoffset;
+        public int XOffset;
+        public int Yoffset;
     }
 }
