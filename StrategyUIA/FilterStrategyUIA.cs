@@ -74,33 +74,168 @@ namespace StrategyUIA
         private GeneralProperties setProperties(AutomationElement element)
         {
             GeneralProperties elementP = new GeneralProperties();
-            elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
-            elementP.accessKeyFiltered = element.Current.AccessKey;
-            elementP.autoamtionIdFiltered = element.Current.AutomationId;
-            if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+            try
             {
-                elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
-            }            
-            elementP.classNameFiltered = element.Current.ClassName;
-            elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
-            elementP.frameWorkIdFiltered = element.Current.FrameworkId;
-            elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
-            elementP.helpTextFiltered = element.Current.HelpText;
-            elementP.hWndFiltered = element.Current.NativeWindowHandle;
-            elementP.isContentElementFiltered = element.Current.IsContentElement;
-            elementP.isControlElementFiltered = element.Current.IsControlElement;
-            elementP.isEnabledFiltered = element.Current.IsEnabled;
-            elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
-            elementP.isOffscreenFiltered = element.Current.IsOffscreen;
-            elementP.isPasswordFiltered = element.Current.IsPassword;
-            elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
-            elementP.itemStatusFiltered = element.Current.ItemStatus;
-            elementP.itemTypeFiltered = element.Current.ItemType;
-            
-            elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
-            elementP.nameFiltered = element.Current.Name;
-            elementP.processIdFiltered = element.Current.ProcessId;
+                elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (Accelerator) '{0}'", a.ToString());
+            }
+            try
+            {
+                elementP.accessKeyFiltered = element.Current.AccessKey;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (AccessKey) '{0}'", a.ToString());
+            }
+            try
+            {
+                elementP.autoamtionIdFiltered = element.Current.AutomationId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (AutomationId) '{0}'", a.ToString());
+            }
 
+            try {
+                if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+                {
+                    elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+                }
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (BoundingRectangle) '{0}'", a.ToString());
+            }
+            try {
+                elementP.classNameFiltered = element.Current.ClassName;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
+            }
+            try {
+                elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
+            }
+            try {
+                elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (FrameworkId) '{0}'", a.ToString());
+            }
+            try {
+                elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (HasKeyboardFocus) '{0}'", a.ToString());
+            }
+            try {
+                elementP.helpTextFiltered = element.Current.HelpText;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
+            }
+            try {
+                elementP.hWndFiltered = element.Current.NativeWindowHandle;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (NativeWindowHandle) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isContentElementFiltered = element.Current.IsContentElement;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsContentElement) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isControlElementFiltered = element.Current.IsControlElement;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsControlElement) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isEnabledFiltered = element.Current.IsEnabled;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsEnabled) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsKeyboardFocusable) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsOffscreen) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isPasswordFiltered = element.Current.IsPassword;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsPassword) '{0}'", a.ToString());
+            }
+            try {
+                elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsRequiredForForm) '{0}'", a.ToString());
+            }
+            try {
+                elementP.itemStatusFiltered = element.Current.ItemStatus;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ItemStatus) '{0}'", a.ToString());
+            }
+            try {
+                elementP.itemTypeFiltered = element.Current.ItemType;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ItemType) '{0}'", a.ToString());
+            }
+            try {
+                elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
+            }
+            try {
+                elementP.nameFiltered = element.Current.Name;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (Name) '{0}'", a.ToString());
+            }
+            try
+            {
+                elementP.processIdFiltered = element.Current.ProcessId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
+            }
             return elementP;
         }
 
