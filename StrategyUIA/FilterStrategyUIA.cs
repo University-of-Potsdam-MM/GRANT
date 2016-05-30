@@ -148,11 +148,18 @@ namespace StrategyUIA
             return processIdentifier;
         }
 
-        public Rect getMouseRect(IntPtr hwnd)
+        public void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height)
         {
             AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
-            Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            return mouseRect;
+            //Rect mouseRect = mouseElement.Current.BoundingRectangle;
+            x = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+            y = (int)mouseElement.Current.BoundingRectangle.TopRight.Y;
+            height = (int)mouseElement.Current.BoundingRectangle.Width;
+            width = (int)mouseElement.Current.BoundingRectangle.Height;
+            Console.WriteLine("hier x: " + x);
+            Console.WriteLine("hier y: " + y);
+            Console.WriteLine("hier w: " + width);
+            Console.WriteLine("hier h: " + height);
         }
 
         /// <summary>

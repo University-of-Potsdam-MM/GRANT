@@ -15,7 +15,6 @@ namespace StrategyManager.Interfaces
         IOperationSystemStrategy getSpecifiedOperationSystem();
         void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree);
         ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree();
-        Rect getMouseRect(IntPtr hwnd);
-
+        void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height);
     }
 }
