@@ -9,9 +9,9 @@ namespace OSMElement
 {
     public struct Content
     {
-        String text { get; set; } //TODO: Angabe für "dynamischen" Text
-        Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt
-        bool[,] matrix { get; set; }
-        String viewName { get; set; }
+        public String text { get; set; } //TODO: Angabe für "dynamischen" Text
+        Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt; public
+        bool[,] matrix { get; set; } //TODO: public
+        public String viewName { get; set; }
     }
 }

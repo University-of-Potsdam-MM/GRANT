@@ -41,26 +41,33 @@ namespace StrategyBrailleIO
 
 
         /// <summary>
-        /// Erstellt die iniziale UI auf der Striftplatte
+        /// Erstellt die GUI auf der Stiftplatte
         /// </summary>
-        /// <param name="xmlObject">gibt die (ausgelesene) Beschreibung der GUI an</param>
-        /// <param name="tree">gibt den zugehörigen Baum an</param>
-        /// <param name="treeStrategy">enthält die verwendete Tree-Strategy</param> //TODO. sollte nicht jedesmal übergeben werden
-        public void generatedBrailleUi(XMLDevice xmlObject, ITreeStrategy<OSMElement.OSMElement> tree, ITreeStrategy<OSMElement.OSMElement> treeStrategy)
+        /// <param name="osm">gibt das Baum-Objekt der Oberflaeche an</param>
+        public void generatedBrailleUi(ITreeStrategy<OSMElement.OSMElement> osm)
         {
-            createScreens(xmlObject.Screens);
-        //    createViews(xmlObject.Objects, tree, treeStrategy); TODO
+            createViews(osm);
         }
 
         /// <summary>
-        /// Erstellt alle potenziell anzuzeigenden Screens
+        /// Erstellt einen neuen Screen, falls dieser noch nicht existiert
         /// </summary>
-        /// <param name="screens"></param>
-        private void createScreens(String[] screens)
+        /// <param name="screens">gibt den Namen des Screens an</param>
+        private void createScreen(String screenName)
         {
-            foreach (String s in screens)
+            try
             {
-                brailleIOMediator.AddView(s, new BrailleIOScreen());
+                 object screen = brailleIOMediator.GetView(screenName);
+                 if (screen == null)
+                 {
+                     brailleIOMediator.AddView(screenName, new BrailleIOScreen());
+                 }
+               //  Console.WriteLine();
+                // der screen existiert schon -> ok
+            }
+            catch
+            {
+                brailleIOMediator.AddView(screenName, new BrailleIOScreen());
             }
         }
 
@@ -118,78 +125,83 @@ namespace StrategyBrailleIO
 
             return bmp;
         }
-        
+
         /// <summary>
-        /// Erstellt aus einem angegeben (XML-)Objekt die entsprechenden View
+        /// Geht rekursive durch alle Baumelemente und erstellt die einzelnen Views
         /// </summary>
-        /// <param name="xmlViews">Enthält die Beschreibung, wie die Views angeordnet werden sollen</param>
-        /// <param name="tree">gibt den zugehörigen Baum der gefilterten Anwendung an</param>
-        /// <param name="treeStrategy">enthält die verwendete Tree-Strategy</param> //TODO. sollte nicht jedesmal übergeben werden
-        private void createViews(XMLDeviceObject[] xmlViews, ITreeStrategy<GeneralProperties> tree, ITreeStrategy<GeneralProperties> treeStrategy)
+        /// <param name="osm">gibt das Baum-Objekt der Oberflaeche an</param>
+        private void createViews(ITreeStrategy<OSMElement.OSMElement> osm)
         {
-            XMLDeviceObjectText textObject = new XMLDeviceObjectText();
-            foreach (XMLDeviceObject o in xmlViews)
+            ITreeStrategy<OSMElement.OSMElement> node1;
+            while (osm.HasChild && !(osm.Count == 1 && osm.Depth == -1))
             {
-                if (o.Text != null && !o.Text.Equals(textObject))
+                if (osm.HasChild)
                 {
-                    String text;
-                    if (isFixedTextFirst(o.Text))
+                    node1 = osm.Child;
+                    if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
                     {
-                        text = o.Text.fix + getDynamicTextFromTree(tree, o.GeneratedId, treeStrategy);
+                        createScreen(node1.Data.brailleRepresentation.screenName);
+                        createViews(node1.Data.brailleRepresentation);
                     }
-                    else
-                    {
-                        //TODO: auslesen lassen
-                        text = getDynamicTextFromTree(tree, o.GeneratedId, treeStrategy) + o.Text.fix;
-                    }
-                    createViewText(brailleIOMediator.GetView(o.Screen) as BrailleIOScreen, text, o.Position.View, o.Position.ViewRange.Left, o.Position.ViewRange.Top, o.Position.ViewRange.Width, o.Position.ViewRange.Height);
-                }
-                else
-                {
-                    bool[][] a = new bool[0][];
-
-                    if (o.Matrix != null && !Enumerable.SequenceEqual(o.Matrix, new bool[0][]))
-                    {
-                        bool[,] matrix = convertBoolmatrix(o.Matrix);
-                        createViewMatrix(brailleIOMediator.GetView(o.Screen) as BrailleIOScreen, matrix, o.Position.View, o.Position.ViewRange.Left, o.Position.ViewRange.Top, o.Position.ViewRange.Width, o.Position.ViewRange.Height);
-                    }
-                    else
-                    {
-                        if (o.Bitmap != null)
-                        {
-                            if (o.Bitmap.guiObject)
-                            {
-                                GeneralProperties propertie = new GeneralProperties();
-
-                                propertie.IdGenerated = o.GeneratedId;
-                                ITreeStrategy<GeneralProperties> tree2 = treeStrategy.searchProperties(tree, propertie, OperatorEnum.and)[0]; //Achtung kann Fehler verursachen
-                                createViewImage(brailleIOMediator.GetView(o.Screen) as BrailleIOScreen, captureScreen(tree2), o.Position.View, o.Position.ViewRange.Left, o.Position.ViewRange.Top, o.Position.ViewRange.Width, o.Position.ViewRange.Height);
-                            }
-                        }
-                    }
+                    createViews(node1);
                 }
             }
+            if(osm.Count == 1 && osm.Depth == -1){
+                if (!osm.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+                {
+                    createScreen(osm.Data.brailleRepresentation.screenName);
+                    createViews(osm.Data.brailleRepresentation);
+                }
+            }
+            if (!osm.HasChild)
+            {
+                node1 = osm;
+                if (osm.HasParent)
+                {
+                    node1.Remove();
+                }
+            }            
+
+        /*    foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)osm).All.Nodes)
+            {
+                if (!node.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+                {
+                    createScreen(node.Data.brailleRepresentation.screenName);
+                    createViews(node.Data.brailleRepresentation, treeStrategy);
+                }
+            }*/
         }
 
-        #region create Views
         /// <summary>
-        /// Erstellt eine Text-View
-        /// </summary> //TODO: + weitere Eigenschaften
+        /// Erstellt aus einer <code>BrailleRepresentation</code> die entsprechende View
+        /// </summary>
+        /// <param name="brailleRepresentation">gibt die Darstellung des GUI-Objektes fuer die Stiftplatte an</param>
+        private void createViews(BrailleRepresentation brailleRepresentation)
+        {
+            if (brailleRepresentation.content.text != null)
+            {
+                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.content.viewName, brailleRepresentation.position);
+                return;
+            }
+           //TODO
+        }
+
+        #region create Views       
+        /// <summary>
+        /// Erstellt eine View mit einem Text
+        /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
         /// <param name="text">gibt den anzuzeigenden Text an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
-        /// <param name="left">gibt den Versatz nach links an</param>
-        /// <param name="top">gibt den Versatz nach oben an</param>
-        /// <param name="width">gibt die Breite an</param>
-        /// <param name="height">gibt dei Höhe an</param>
-        private void createViewText(BrailleIOScreen screen, String text, String viewName, int left, int top, int width, int height)
+        /// <param name="position">gibt die position des Objektest an</param>
+        private void createViewText(BrailleIOScreen screen, String text, String viewName, Position position)
         {
-            BrailleIOViewRange vr = new BrailleIOViewRange(left, top, width, height, new bool[0, 0]);
+            BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetText(text);
-            vr.ShowScrollbars = true;
-            //vr.SetPadding(2);
-            //vr.SetMargin(2);
-            //vr.SetBorder(1,0);
+          //  vr.ShowScrollbars = true;
+         //   vr.SetBorder(position.boarder);
+          //  vr.SetMargin(position.margin);
+           // vr.SetPadding(position.padding);
 
             screen.AddViewRange(viewName, vr);
         }
@@ -200,15 +212,11 @@ namespace StrategyBrailleIO
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
         /// <param name="matrix">gibt die bool-Matrix an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
-        /// <param name="left">gibt den Versatz nach links an</param>
-        /// <param name="top">gibt den Versatz nach oben an</param>
-        /// <param name="width">gibt die Breite an</param>
-        /// <param name="height">gibt dei Höhe an</param>
-        private void createViewMatrix(BrailleIOScreen screen, bool[,] matrix, String viewName, int left, int top, int width, int height)
+        /// <param name="position">gibt die position des Objektest an</param>
+        private void createViewMatrix(BrailleIOScreen screen, bool[,] matrix, String viewName, Position position)
         {
-            BrailleIOViewRange vr = new BrailleIOViewRange(left, top, width, height, new bool[0, 0]);
+            BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetMatrix(matrix);
-
             screen.AddViewRange(viewName, vr);
         }
 
@@ -219,13 +227,10 @@ namespace StrategyBrailleIO
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
         /// <param name="image">gibt das Bild an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
-        /// <param name="left">gibt den Versatz nach links an</param>
-        /// <param name="top">gibt den Versatz nach oben an</param>
-        /// <param name="width">gibt die Breite an</param>
-        /// <param name="height">gibt dei Höhe an</param>
-        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, int left, int top, int width, int height)
+        /// <param name="position">gibt die position des Objektest an</param>
+        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position)
         {
-            BrailleIOViewRange vr = new BrailleIOViewRange(left, top, width, height, new bool[0, 0]);
+            BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetBitmap(image);
             screen.AddViewRange(viewName, vr);
         }

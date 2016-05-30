@@ -1,6 +1,7 @@
 ﻿using System;
 using StrategyManager;
 using OSMElement;
+using System.Windows;
 
 namespace StrategyManager.Interfaces
 {
@@ -14,6 +15,6 @@ namespace StrategyManager.Interfaces
         IOperationSystemStrategy getSpecifiedOperationSystem();
         void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree);
         ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree();
-
+        void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height);
     }
 }

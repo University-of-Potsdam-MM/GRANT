@@ -8,6 +8,7 @@ using System.Windows.Automation;
 using System.Diagnostics;
 using StrategyManager.Interfaces;
 using OSMElement;
+using System.Windows;
 
 namespace StrategyUIA
 {
@@ -79,12 +80,7 @@ namespace StrategyUIA
             if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
             {
                 elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
-            }
-            else
-            {
-                Console.WriteLine();
-            }
-            
+            }            
             elementP.classNameFiltered = element.Current.ClassName;
             elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
             elementP.frameWorkIdFiltered = element.Current.FrameworkId;
@@ -150,6 +146,20 @@ namespace StrategyUIA
 
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return processIdentifier;
+        }
+
+        public void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height)
+        {
+            AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+            //Rect mouseRect = mouseElement.Current.BoundingRectangle;
+            x = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+            y = (int)mouseElement.Current.BoundingRectangle.TopRight.Y;
+            height = (int)mouseElement.Current.BoundingRectangle.Width;
+            width = (int)mouseElement.Current.BoundingRectangle.Height;
+            Console.WriteLine("hier x: " + x);
+            Console.WriteLine("hier y: " + y);
+            Console.WriteLine("hier w: " + width);
+            Console.WriteLine("hier h: " + height);
         }
 
         /// <summary>

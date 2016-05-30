@@ -10,6 +10,6 @@ namespace StrategyManager.Interfaces
     public interface IBrailleDisplayStrategy
     {
         void initializedSimulator();
-        void generatedBrailleUi(XMLDevice xmlObject, ITreeStrategy<OSMElement.OSMElement> tree, ITreeStrategy<OSMElement.OSMElement> treeStrategy);
+        void generatedBrailleUi(ITreeStrategy<OSMElement.OSMElement> osm);
     }
 }

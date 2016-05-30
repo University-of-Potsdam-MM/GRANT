@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace StrategyManager.Interfaces
 {
@@ -11,5 +12,6 @@ namespace StrategyManager.Interfaces
         bool deliverCursorPosition();
         IntPtr getHWND();
         IntPtr getProcessHwndFromHwnd(int processId);
+        void paintMouseRect(Rect mouseRect);
     }
 }
