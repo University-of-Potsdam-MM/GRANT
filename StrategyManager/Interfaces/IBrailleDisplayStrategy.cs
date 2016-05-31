@@ -11,5 +11,9 @@ namespace StrategyManager.Interfaces
     {
         void initializedSimulator();
         void generatedBrailleUi(ITreeStrategy<OSMElement.OSMElement> osm);
+
+        void setStrategyMgr(StrategyMgr strategyMgr);
+        StrategyMgr getStrategyMgr();
+
     }
 }

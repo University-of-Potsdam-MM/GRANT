@@ -2779,6 +2779,10 @@ namespace StrategyGenericTree
         //-----------------------------------------------------------------------------
 
         #region eigene Methoden
+        private StrategyMgr strategyMgr;
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyMgr mamager) { strategyMgr = mamager; }
+
         #region Print
         /// <summary>
         /// Gibt alle Knoten eines Baumes auf der Konsole aus.
@@ -3003,6 +3007,83 @@ namespace StrategyGenericTree
             List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
             printNodeList(result2);
             return result2;
+        }
+
+        /// <summary>
+        /// Sucht im gespiegelten Baum nach einem bestimmten Knoten anhand der IdGenerated
+        /// </summary>
+        /// <param name="generatedId">gibt die generierte Id des Knotens an</param>
+        /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
+        public List<ITreeStrategy<T>> searchMirroredNodeById(String generatedId)
+        { 
+            List<INode<OSMElement.OSMElement>> result = new List<INode<OSMElement.OSMElement>>();
+            Console.WriteLine(strategyMgr.getSpecifiedTree().GetType());
+            if(!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
+            {
+                throw new InvalidOperationException("Falscher Baum-Typ");
+            }
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getMirroredTree()).All.Nodes)
+            {
+                Boolean propertieIdGenerated = generatedId == null || generatedId.Equals(node.Data.properties.IdGenerated);
+
+                    if (propertieIdGenerated)
+                    {
+                        result.Add(node);
+                    }                
+            }
+            List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
+            printNodeList(result2);
+            return result2;
+        }
+
+        /// <summary>
+        /// Ändert von einem Knoten die <code>Generalproperties</code> ausgehend von der <code>IdGenerated</code>
+        /// </summary>
+        /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
+        public void changePropertiesOfNode(GeneralProperties properties)
+        {
+            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getMirroredTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(properties.IdGenerated))
+                {
+                    OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                    osm.brailleRepresentation = node.Data.brailleRepresentation;
+                    osm.events = node.Data.events;
+                    osm.interaction = node.Data.interaction;
+                    osm.properties = properties;
+                    node.Data = osm;
+
+                    break;
+                }
+            }
+            System.Console.WriteLine(); 
+        }
+
+        /// <summary>
+        /// Ermittelt den anzuzeigenden Text eines GUI-Elementes TODO: angeben, welche Eigenschaft als Text zurückgegeben werden soll
+        /// </summary>
+        /// <param name="idBrailleGui">gibt die generierte Id des Braille-GUI-elementes an</param>
+        /// <returns>gibt den anzuzeigenden Text an</returns>
+        public String getTextFormGui(String idBrailleGui)
+        {  
+            String result = "";
+            List<osmRelationship.OsmRelationship<String, String>> osmRelationship = strategyMgr.getOsmRelationship().FindAll(r => r.Second.Equals(idBrailleGui) || r.First.Equals(idBrailleGui)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+
+            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getMirroredTree();
+            foreach (osmRelationship.OsmRelationship<String, String> relationship in osmRelationship)
+            {
+                foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
+                {
+                    if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(relationship.First))
+                    {
+                        result = node.Data.properties.valueFiltered;
+                        break;
+                    }
+                }
+            }
+            
+            return result;
         }
 
         #endregion

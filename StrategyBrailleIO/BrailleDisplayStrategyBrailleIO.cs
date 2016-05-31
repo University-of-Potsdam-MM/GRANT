@@ -17,12 +17,19 @@ namespace StrategyBrailleIO
 {
     public class BrailleDisplayStrategyBrailleIO : IBrailleDisplayStrategy
     {
-        IBrailleIOShowOffMonitor monitor;
+       IBrailleIOShowOffMonitor monitor;
         BrailleIOMediator brailleIOMediator;
         AbstractBrailleIOAdapterBase showOffAdapter;
         //GestureRecognizer showOffGestureRecognizer;
         //AbstractBrailleIOAdapterManagerBase brailleDisAdapter; //TODO       evtl. beides in Listen u.ä.
         //GestureRecognizer brailleDisRecognizer; //TODO
+
+        private StrategyMgr strategyMgr;
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyMgr manager)
+        {
+            strategyMgr = manager;
+        }
 
         /// <summary>
         /// Erstellt, sofern noch nicht vorhanden, ein simulator für das Ausgabegerät
@@ -69,21 +76,6 @@ namespace StrategyBrailleIO
             {
                 brailleIOMediator.AddView(screenName, new BrailleIOScreen());
             }
-        }
-
-        private bool isFixedTextFirst(XMLDeviceObjectText order)
-        {
-            //TODO
-            return false;
-        }
-
-        private String getDynamicTextFromTree(ITreeStrategy<GeneralProperties> tree, String generatedId, ITreeStrategy<GeneralProperties> treeStrategy)
-        { //nur Beispielhaft -> so nicht verwenden
-            
-            GeneralProperties propertie = new GeneralProperties();
-            propertie.IdGenerated = generatedId;
-            ITreeStrategy<GeneralProperties> node = treeStrategy.searchProperties(tree, propertie, OperatorEnum.and)[0];
-            return node.Data.nameFiltered;
         }
 
         /// <summary>
@@ -141,7 +133,7 @@ namespace StrategyBrailleIO
                     if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
                     {
                         createScreen(node1.Data.brailleRepresentation.screenName);
-                        createViews(node1.Data.brailleRepresentation);
+                        createViews(node1.Data);
                     }
                     createViews(node1);
                 }
@@ -150,7 +142,7 @@ namespace StrategyBrailleIO
                 if (!osm.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
                 {
                     createScreen(osm.Data.brailleRepresentation.screenName);
-                    createViews(osm.Data.brailleRepresentation);
+                    createViews(osm.Data);
                 }
             }
             if (!osm.HasChild)
@@ -176,15 +168,28 @@ namespace StrategyBrailleIO
         /// Erstellt aus einer <code>BrailleRepresentation</code> die entsprechende View
         /// </summary>
         /// <param name="brailleRepresentation">gibt die Darstellung des GUI-Objektes fuer die Stiftplatte an</param>
-        private void createViews(BrailleRepresentation brailleRepresentation)
+        private void createViews(OSMElement.OSMElement osmElement)
         {
-            if (brailleRepresentation.content.text != null)
+            OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
+            if (brailleRepresentation.content.text != null && !brailleRepresentation.content.text.Equals("")) //TODO: Views von leeren Textfeldern
             {
                 createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.content.viewName, brailleRepresentation.position);
                 return;
             }
+            if (brailleRepresentation.content.fromGuiElement != null && !brailleRepresentation.content.fromGuiElement.Equals("") )
+            {
+              //  osmRelationship.OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.Second.Equals(osmElement.properties.IdGenerated) || r.First.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+
+              //  strategyMgr.getSpecifiedFilter().updateNodeOfMirroredTree(osmRelationships.First);   //nur testweise
+                String text = strategyMgr.getSpecifiedTree().getTextFormGui(osmElement.properties.IdGenerated);
+
+                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, text, brailleRepresentation.content.viewName, brailleRepresentation.position);
+                return;
+            }
            //TODO
         }
+
+
 
         #region create Views       
         /// <summary>

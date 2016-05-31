@@ -12,11 +12,46 @@ namespace StrategyManager
 {
     public class StrategyMgr
     {
+        //in extra Klasse auslagern?
+        private ITreeStrategy<OSMElement.OSMElement> mirroredTree;
+        private ITreeStrategy<OSMElement.OSMElement> brailleTree;
+        private List<osmRelationship.OsmRelationship<String, String>> osmRelationship;
 
         private IFilterStrategy specifiedFilter;
         private IOperationSystemStrategy specifiedOperationSystem;
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
         private IBrailleDisplayStrategy specifiedBrailleDisplay;
+
+        public void setMirroredTree(ITreeStrategy<OSMElement.OSMElement> tree)
+        {
+            mirroredTree = tree;
+        }
+
+        public ITreeStrategy<OSMElement.OSMElement> getMirroredTree()
+        {
+            return mirroredTree;
+        }
+
+        public void setBrailleTree(ITreeStrategy<OSMElement.OSMElement> tree)
+        {
+            brailleTree = tree;
+        }
+
+        public List<osmRelationship.OsmRelationship<String, String>> getOsmRelationship()
+        {
+            return osmRelationship;
+        }
+
+
+        public void setOsmRelationship(List<osmRelationship.OsmRelationship<String, String>> relationship)
+        {
+            osmRelationship = relationship;
+        }
+
+        public ITreeStrategy<OSMElement.OSMElement> getBrailleTree()
+        {
+            return brailleTree;
+        }
 
         public void setSpecifiedBrailleDisplay(String brailleDisplayName)
         {
@@ -24,6 +59,7 @@ namespace StrategyManager
             {
                 Type type = Type.GetType(brailleDisplayName);
                 specifiedBrailleDisplay = (IBrailleDisplayStrategy)Activator.CreateInstance(type);
+                
             }
             catch (InvalidCastException ic)
             {

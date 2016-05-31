@@ -13,5 +13,6 @@ namespace OSMElement
         Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt; public
         bool[,] matrix { get; set; } //TODO: public
         public String viewName { get; set; }
+        public String fromGuiElement { get; set; }
     }
 }

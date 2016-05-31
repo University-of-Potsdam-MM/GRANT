@@ -15,6 +15,10 @@ namespace StrategyJAVA
     {
         private IOperationSystemStrategy specifiedOperationSystem;
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
+        private StrategyMgr strategyMgr;
+
+        public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
 
 
         public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
@@ -65,5 +69,7 @@ namespace StrategyJAVA
             Rect rect = new Rect();
             return rect;
         }
+
+        public void updateNodeOfMirroredTree(String mirroredTreeGeneratedId) { }
     }
 }

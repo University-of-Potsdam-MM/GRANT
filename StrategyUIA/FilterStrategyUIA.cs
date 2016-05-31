@@ -15,7 +15,14 @@ namespace StrategyUIA
     public class FilterStrategyUIA : IFilterStrategy
     {
         private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
+        private ITreeStrategy<OSMElement.OSMElement> specifiedTree; //ersetzen durch
+        private StrategyMgr strategyMgr;
+
+        public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+
+
+
 
         public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
         {
@@ -59,6 +66,8 @@ namespace StrategyUIA
             UIAEventMonitor uiaEvents = new UIAEventMonitor();
             uiaEvents.eventsUIA(hwnd);
 
+
+
             return tree;
         }
 
@@ -100,10 +109,45 @@ namespace StrategyUIA
             elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
             elementP.nameFiltered = element.Current.Name;
             elementP.processIdFiltered = element.Current.ProcessId;
-
+            setPropertiesOfPattern(ref elementP, element);
+            
             return elementP;
         }
 
+        /// <summary>
+        /// Sofern vorhanden, wird der Text aus Eingabefeldern ausgelesen und 'valueFiltered' zugewiesen
+        /// </summary>
+        /// <param name="properties">gibt die Propertoes des Knotens an</param>
+        /// <param name="element">gibt das AutomationElement des knotens an</param>
+        private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement element)
+        {
+            object valuePattern = null;
+            if (element.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
+            {
+                properties.IdGenerated = "gui123_3"; //nur testweise -> raus
+                properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
+            }
+        }
+
+        /// <summary>
+        /// Ändert die <code>GeneralProperties</code> im gespiegelten Baum anhand der angegebenen <code>IdGenerated</code>. (Sollten mehrere Knoten mit der selben Id existieren, so werden alle aktualisiert.)
+        /// </summary>
+        /// <param name="mirroredTreeGeneratedId">gibt die generierte Id des zu ändernden knotens im gespielgelten Baum an.</param>
+        public void updateNodeOfMirroredTree(String mirroredTreeGeneratedId)
+        {
+            AutomationElement au;
+            List<ITreeStrategy<OSMElement.OSMElement>> relatedMirroredTreeObject =  strategyMgr.getSpecifiedTree().searchMirroredNodeById(mirroredTreeGeneratedId); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedMirroredTreeObject)
+            {
+                au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, setPropertiesCondition(treeElement.Data.properties));
+                if (au != null)
+                {
+                    GeneralProperties propertiesUpdated = setProperties(au);
+                    specifiedTree.changePropertiesOfNode(propertiesUpdated);
+                    break;
+                }
+            }
+        }
 
         /// <summary>
         /// todo bzw. nachfrage: geht die methode findall nicht alleine alle elemente der collection durch? wird in der foreach-schleife dadurch nicht doppelt gearbeitet?
@@ -241,6 +285,12 @@ namespace StrategyUIA
         /// <returns>Eine Condition</returns>
         private Condition setPropertiesCondition(GeneralProperties properties)
         {
+            //Falls die "AutomationId" gesetzt wurde, so ist diese Eigenschaft ausreichend um das Element eindeutig zu identifizieren
+            if (properties.autoamtionIdFiltered != null)
+            {
+                return  new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
+            }
+
             //TODO: Achtung einige Eigenschaften vonrscheinlich GeneralProperties sollten wahrscheinlich nicht genutzt werden
             Condition resultCondition;
             #region von allen auslesbar
@@ -260,11 +310,7 @@ namespace StrategyUIA
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AccessKeyProperty, properties.accessKeyFiltered), resultCondition);
             }
 
-            //TODO: evtl. hier gleich am Anfang prüfen und ggf. (falls vorhanden) nur diese Propertie nehmen?
-            if (properties.autoamtionIdFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered), resultCondition);
-            }
+
             //.. 
             return resultCondition;
         }
