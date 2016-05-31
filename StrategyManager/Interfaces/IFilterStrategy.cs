@@ -15,10 +15,8 @@ namespace StrategyManager.Interfaces
         IOperationSystemStrategy getSpecifiedOperationSystem();
         void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree);
         ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree();
-        Rect getMouseRect(IntPtr hwnd);
-        void updateNodeOfMirroredTree(String mirroredTreeGeneratedId);
+		void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height);		
+		void updateNodeOfMirroredTree(String mirroredTreeGeneratedId);
         void setStrategyMgr(StrategyMgr strategyMgr);
-        StrategyMgr getStrategyMgr();
-
-    }
+        StrategyMgr getStrategyMgr();    }
 }

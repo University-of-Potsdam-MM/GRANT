@@ -64,12 +64,15 @@ namespace StrategyJAVA
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
-        public Rect getMouseRect(IntPtr hwnd)
+        public void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height)
         {
-            Rect rect = new Rect();
-            return rect;
+            x = 0;
+            y = 0;
+            width = 0;
+            height = 0;
         }
 
         public void updateNodeOfMirroredTree(String mirroredTreeGeneratedId) { }
     }
+    
 }

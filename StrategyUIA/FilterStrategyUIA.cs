@@ -83,34 +83,169 @@ namespace StrategyUIA
         private GeneralProperties setProperties(AutomationElement element)
         {
             GeneralProperties elementP = new GeneralProperties();
+            try
+            {
             elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (Accelerator) '{0}'", a.ToString());
+            }
+            try
+            {
             elementP.accessKeyFiltered = element.Current.AccessKey;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (AccessKey) '{0}'", a.ToString());
+            }
+            try
+            {
             elementP.autoamtionIdFiltered = element.Current.AutomationId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (AutomationId) '{0}'", a.ToString());
+            }
+
+            try {
             if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
             {
                 elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
-            }            
+                }
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (BoundingRectangle) '{0}'", a.ToString());
+            }
+            try {
             elementP.classNameFiltered = element.Current.ClassName;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
+            }
+            try {
             elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
+            }
+            try {
             elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (FrameworkId) '{0}'", a.ToString());
+            }
+            try {
             elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (HasKeyboardFocus) '{0}'", a.ToString());
+            }
+            try {
             elementP.helpTextFiltered = element.Current.HelpText;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
+            }
+            try {
             elementP.hWndFiltered = element.Current.NativeWindowHandle;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (NativeWindowHandle) '{0}'", a.ToString());
+            }
+            try {
             elementP.isContentElementFiltered = element.Current.IsContentElement;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsContentElement) '{0}'", a.ToString());
+            }
+            try {
             elementP.isControlElementFiltered = element.Current.IsControlElement;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsControlElement) '{0}'", a.ToString());
+            }
+            try {
             elementP.isEnabledFiltered = element.Current.IsEnabled;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsEnabled) '{0}'", a.ToString());
+            }
+            try {
             elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsKeyboardFocusable) '{0}'", a.ToString());
+            }
+            try {
             elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsOffscreen) '{0}'", a.ToString());
+            }
+            try {
             elementP.isPasswordFiltered = element.Current.IsPassword;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsPassword) '{0}'", a.ToString());
+            }
+            try {
             elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsRequiredForForm) '{0}'", a.ToString());
+            }
+            try {
             elementP.itemStatusFiltered = element.Current.ItemStatus;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ItemStatus) '{0}'", a.ToString());
+            }
+            try {
             elementP.itemTypeFiltered = element.Current.ItemType;
-            
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ItemType) '{0}'", a.ToString());
+            }
+            try {
             elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
+            }
+            try {
             elementP.nameFiltered = element.Current.Name;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (Name) '{0}'", a.ToString());
+            }
+            try
+            {
             elementP.processIdFiltered = element.Current.ProcessId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
+            }
             setPropertiesOfPattern(ref elementP, element);
-            
             return elementP;
         }
 
@@ -192,11 +327,18 @@ namespace StrategyUIA
             return processIdentifier;
         }
 
-        public Rect getMouseRect(IntPtr hwnd)
+        public void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height)
         {
             AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
-            Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            return mouseRect;
+            //Rect mouseRect = mouseElement.Current.BoundingRectangle;
+            x = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+            y = (int)mouseElement.Current.BoundingRectangle.TopRight.Y;
+            height = (int)mouseElement.Current.BoundingRectangle.Width;
+            width = (int)mouseElement.Current.BoundingRectangle.Height;
+            Console.WriteLine("hier x: " + x);
+            Console.WriteLine("hier y: " + y);
+            Console.WriteLine("hier w: " + width);
+            Console.WriteLine("hier h: " + height);
         }
 
         /// <summary>

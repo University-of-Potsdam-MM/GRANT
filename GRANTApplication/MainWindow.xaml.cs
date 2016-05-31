@@ -19,6 +19,8 @@ using StrategyGenericTree;
 using System.Windows.Automation;
 using StrategyBrailleIO;
 using OSMElement;
+using System.Windows.Forms;
+using System.Drawing;
 
 
 namespace GApplication
@@ -60,7 +62,7 @@ namespace GApplication
             treeStrategy.setStrategyMgr(strategyMgr);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
 
 
@@ -109,8 +111,23 @@ namespace GApplication
                     {
                         IntPtr points = operationSystemStrategy.getHWND();
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                        Rect mouseRect = filterStrategy.getMouseRect(points);
+
+                        int x;
+                        int y;
+                        int width;
+                        int height;
+                        filterStrategy.getMouseRect(points, out x, out y, out width, out height);
+                        System.Windows.Rect mouseRect = new System.Windows.Rect(x, y, width, height);
                         operationSystemStrategy.paintMouseRect(mouseRect);
+
+                        Console.WriteLine("x: " + x);
+                        Console.WriteLine("y: " + y);
+                        Console.WriteLine("w: " + width);
+                        Console.WriteLine("h: " + height);
+
+                        //soperationSystemStrategy.paintMouseRect(mouseRect);
+                        
+                        
                         //AutomationElement element = filterStrategy.deliverAutomationElementFromHWND(points);
                         //ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
