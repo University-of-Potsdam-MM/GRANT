@@ -353,8 +353,9 @@ namespace GApplication
             BrailleRepresentation e1 = new BrailleRepresentation();
             e1.screenName = "screen1";
             Content c1 = new Content();
-            c1.text = "Hallo";
+            //c1.text = "Hallo";
             c1.viewName = "v1";
+            c1.fromGuiElement ="nameFiltered";
             e1.content = c1;
             Position p1 = new Position();
             p1.height = 8;
@@ -418,15 +419,16 @@ namespace GApplication
         {
             List<osmRelationship.OsmRelationship<String, String>> relationships = new List<osmRelationship.OsmRelationship<String, String>>();
             osmRelationship.OsmRelationship<String, String> r1 = new osmRelationship.OsmRelationship<String, String>();
-            r1.First = "gui123_1";
+            r1.First = "4221280DCDC4EFF4D178B9D84EE93F59"; //Notepad;
             r1.Second = "braille123_1";
-            osmRelationship.OsmRelationship<String, String> r3 = new osmRelationship.OsmRelationship<String, String>();
-            r3.First = "gui123_3";
-            r3.Second = "braille123_3";
             osmRelationship.OsmRelationship<String, String> r2 = new osmRelationship.OsmRelationship<String, String>();
             r2.First = "gui123_2";
             r2.Second = "braille123_2";
-           // relationships.Add(r1);
+            osmRelationship.OsmRelationship<String, String> r3 = new osmRelationship.OsmRelationship<String, String>();
+            r3.First = "E5216B66877ECD3634A27A664C5AA518";
+            r3.Second = "braille123_3";
+
+         //  relationships.Add(r1);
            // relationships.Add(r2);
             relationships.Add(r3);
             return relationships;

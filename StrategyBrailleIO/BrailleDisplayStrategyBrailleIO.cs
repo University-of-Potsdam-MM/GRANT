@@ -181,8 +181,19 @@ namespace StrategyBrailleIO
               //  osmRelationship.OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.Second.Equals(osmElement.properties.IdGenerated) || r.First.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
               //  strategyMgr.getSpecifiedFilter().updateNodeOfMirroredTree(osmRelationships.First);   //nur testweise
-                String text = strategyMgr.getSpecifiedTree().getTextFormGui(osmElement.properties.IdGenerated);
-
+                osmRelationship.OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.Second.Equals(osmElement.properties.IdGenerated) || r.First.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                if (osmRelationship == null)
+                {
+                    Console.WriteLine("kein passendes objekt gefunden");
+                    return;
+                }
+                ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationship.First);
+                String text = "";
+                if (associatedNode != null)
+                {
+                    object objectText = OSMElement.Helper.getGeneralPropertieElement(brailleRepresentation.content.fromGuiElement, associatedNode.Data.properties);
+                    text = (objectText != null ? objectText.ToString() : "");
+                }
                 createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, text, brailleRepresentation.content.viewName, brailleRepresentation.position);
                 return;
             }

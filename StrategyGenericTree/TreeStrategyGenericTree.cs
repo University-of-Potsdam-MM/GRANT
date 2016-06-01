@@ -2963,7 +2963,7 @@ namespace StrategyGenericTree
         public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, OperatorEnum oper) //TODO: properties sollten generisch sein
         {//TODO: hier fehlen noch viele Eigenschaften
             //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
-            if (!(properties is GeneralProperties && tree is ITreeStrategy<OSMElement.OSMElement>))
+            if (!( tree is ITreeStrategy<OSMElement.OSMElement>))
             {
                 throw new InvalidOperationException("Falscher Baum-Type!"); 
             }
@@ -3010,30 +3010,53 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Sucht im gespiegelten Baum nach einem bestimmten Knoten anhand der IdGenerated
+        /// Sucht im gespiegelten Baum nach bestimmten Knoten anhand der IdGenerated
         /// </summary>
-        /// <param name="generatedId">gibt die generierte Id des Knotens an</param>
+        /// <param name="idMirroredTree">gibt die generierte Id des Knotens an</param>
         /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
-        public List<ITreeStrategy<T>> searchMirroredNodeById(String generatedId)
+        public List<ITreeStrategy<T>> getAssociatedNodeList(String idMirroredTree)
         { 
-            List<INode<OSMElement.OSMElement>> result = new List<INode<OSMElement.OSMElement>>();
-            Console.WriteLine(strategyMgr.getSpecifiedTree().GetType());
-            if(!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
+            List<ITreeStrategy<T>> result = new List<ITreeStrategy<T>>();
+            if (!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getMirroredTree()).All.Nodes)
             {
-                Boolean propertieIdGenerated = generatedId == null || generatedId.Equals(node.Data.properties.IdGenerated);
+                Boolean propertieIdGenerated = idMirroredTree == null || idMirroredTree.Equals(node.Data.properties.IdGenerated);
 
                     if (propertieIdGenerated)
                     {
-                        result.Add(node);
+                        result.Add((ITreeStrategy<T>) node); 
                     }                
+            }            
+            printNodeList(result);
+            return result;
+        }
+
+
+        /// <summary>
+        /// Sucht im gespiegelten Baum nach bestimmten Knoten anhand der IdGenerated 
+        /// </summary>
+        /// <param name="idMirroredTree">gibt die generierte Id des Knotens an</param>
+        /// <returns>zugehöriger Knoten</returns>
+        public ITreeStrategy<T> getAssociatedNode(String idMirroredTree)
+        {
+            if (!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
+            {
+                throw new InvalidOperationException("Falscher Baum-Typ");
             }
-            List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
-            printNodeList(result2);
-            return result2;
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getMirroredTree()).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idMirroredTree))
+                {
+                    return (ITreeStrategy<T>)node;
+                }
+            }
+
+            Console.WriteLine("Kein passendes Element gefunden!"); //TODO. throw?
+            return default(ITreeStrategy<T>);
+
         }
 
         /// <summary>
@@ -3058,32 +3081,6 @@ namespace StrategyGenericTree
                 }
             }
             System.Console.WriteLine(); 
-        }
-
-        /// <summary>
-        /// Ermittelt den anzuzeigenden Text eines GUI-Elementes TODO: angeben, welche Eigenschaft als Text zurückgegeben werden soll
-        /// </summary>
-        /// <param name="idBrailleGui">gibt die generierte Id des Braille-GUI-elementes an</param>
-        /// <returns>gibt den anzuzeigenden Text an</returns>
-        public String getTextFormGui(String idBrailleGui)
-        {  
-            String result = "";
-            List<osmRelationship.OsmRelationship<String, String>> osmRelationship = strategyMgr.getOsmRelationship().FindAll(r => r.Second.Equals(idBrailleGui) || r.First.Equals(idBrailleGui)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
-
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getMirroredTree();
-            foreach (osmRelationship.OsmRelationship<String, String> relationship in osmRelationship)
-            {
-                foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
-                {
-                    if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(relationship.First))
-                    {
-                        result = node.Data.properties.valueFiltered;
-                        break;
-                    }
-                }
-            }
-            
-            return result;
         }
 
         #endregion

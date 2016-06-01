@@ -231,7 +231,7 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
             }
             try {
-            elementP.nameFiltered = element.Current.Name;
+                elementP.nameFiltered = element.Current.Name;
             }
             catch (Exception a)
             {
@@ -246,6 +246,12 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
             }
             setPropertiesOfPattern(ref elementP, element);
+            if (elementP.IdGenerated == null)
+            {
+                elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf; sollte eigentlich nicht wieder neu berechnet werden
+                Console.WriteLine("hash = " + elementP.IdGenerated);
+            }
+
             return elementP;
         }
 
@@ -259,7 +265,6 @@ namespace StrategyUIA
             object valuePattern = null;
             if (element.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
             {
-                properties.IdGenerated = "gui123_3"; //nur testweise -> raus
                 properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
             }
         }
@@ -271,10 +276,21 @@ namespace StrategyUIA
         public void updateNodeOfMirroredTree(String mirroredTreeGeneratedId)
         {
             AutomationElement au;
-            List<ITreeStrategy<OSMElement.OSMElement>> relatedMirroredTreeObject =  strategyMgr.getSpecifiedTree().searchMirroredNodeById(mirroredTreeGeneratedId); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            List<ITreeStrategy<OSMElement.OSMElement>> relatedMirroredTreeObject =  strategyMgr.getSpecifiedTree().getAssociatedNodeList(mirroredTreeGeneratedId); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            AutomationElement mainWindowElement;
             foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedMirroredTreeObject)
             {
-                au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, setPropertiesCondition(treeElement.Data.properties));
+                Condition cond = setPropertiesCondition(treeElement.Data.properties);
+                if (treeElement.Data.properties.hWndFiltered == 0)
+                {
+                    au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond);
+                }
+                else
+                {//ist der Weg wirklich schneller?
+                    IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID((IntPtr)treeElement.Data.properties.hWndFiltered));
+                    mainWindowElement = deliverAutomationElementFromHWND(pointer);
+                    au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                }
                 if (au != null)
                 {
                     GeneralProperties propertiesUpdated = setProperties(au);
@@ -428,7 +444,7 @@ namespace StrategyUIA
         private Condition setPropertiesCondition(GeneralProperties properties)
         {
             //Falls die "AutomationId" gesetzt wurde, so ist diese Eigenschaft ausreichend um das Element eindeutig zu identifizieren
-            if (properties.autoamtionIdFiltered != null)
+            if (properties.autoamtionIdFiltered != null && !properties.autoamtionIdFiltered.Equals(""))
             {
                 return  new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
             }
@@ -436,7 +452,9 @@ namespace StrategyUIA
             //TODO: Achtung einige Eigenschaften vonrscheinlich GeneralProperties sollten wahrscheinlich nicht genutzt werden
             Condition resultCondition;
             #region von allen auslesbar
-            resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
+            //resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
+                resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
+            
             // ...
             #endregion
             if (properties.controlTypeFiltered != null)
