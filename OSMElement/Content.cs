@@ -9,10 +9,11 @@ namespace OSMElement
 {
     public struct Content
     {
-        public String text { get; set; } //TODO: Angabe für "dynamischen" Text
+        public String text { get; set; } //TODO: Man könnte an der Stelle auch immer den "dynamisch" ausgelesenen Text reinschreiben
         Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt; public
-        bool[,] matrix { get; set; } //TODO: public
+        public bool[,] matrix { get; set; }
         public String viewName { get; set; }
         public String fromGuiElement { get; set; }
+        public Boolean showScrollbar { get; set; }
     }
 }

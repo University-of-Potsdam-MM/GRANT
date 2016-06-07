@@ -60,6 +60,7 @@ namespace GApplication
             brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             brailleDisplayStrategy.setStrategyMgr(strategyMgr);
             treeStrategy.setStrategyMgr(strategyMgr);
+
         }
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -67,12 +68,11 @@ namespace GApplication
 
 
 
-            List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
+          /*  List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
-            strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
+            strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));*/
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
-            List<Strategy> possibleTrees = settings.getPossibleTrees();
-            strategyMgr.setSpecifiedTree(possibleTrees[0].className); // muss dynamisch ermittelt werden
+           
                                                                       // strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
             ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
@@ -286,8 +286,10 @@ namespace GApplication
 
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                     filterStrategy.setStrategyMgr(strategyMgr);
-                    treeStrategy.setStrategyMgr(strategyMgr);
-                   if (strategyMgr.getMirroredTree() == null)
+                    //treeStrategy.setStrategyMgr(strategyMgr);
+                    ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
+                    strategyMgr.setBrailleTree(treeGuiOma);
+                   if (strategyMgr.getFilteredTree() == null)
                     {
                         #region kopiert von "if (e.Key == Key.F5) ..."
                         if (operationSystemStrategy.deliverCursorPosition())
@@ -302,9 +304,11 @@ namespace GApplication
                                // IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
                                 ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                                strategyMgr.setMirroredTree(tree);
+                                strategyMgr.setFilteredTree(tree);
                                 // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                                 //  treeStrategy.printTreeElements(tree, -1);
+                                brailleDisplayStrategy.initializedSimulator();
+                                brailleDisplayStrategy.initializedBrailleDisplay();
                             }
                             catch (Exception ex)
                             {
@@ -313,27 +317,23 @@ namespace GApplication
                         }
                        
                         #endregion
-                        
+                        if (strategyMgr.getOsmRelationship() == null)
+                        {
+                            List<osmRelationship.OsmRelationship<String, String>> relationship = setOsmRelationship();
+                            strategyMgr.setOsmRelationship(relationship);
+                        }
+                        brailleDisplayStrategy.generatedBrailleUi(treeGuiOma);
                     }
                     else
                     {
-                        osmRelationship.OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.Second.Equals("braille123_3") || r.First.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                        osmRelationship.OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
-                        strategyMgr.getSpecifiedFilter().updateNodeOfMirroredTree(osmRelationships.First);
+                        strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+
+                        brailleDisplayStrategy.updateViewContent(getDauOsmElement());
                     }
 
-                    brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
-                    brailleDisplayStrategy.initializedSimulator();
-                    
 
-
-                    IBrailleDisplayStrategy display = strategyMgr.getSpecifiedBrailleDisplay();
-                    display.setStrategyMgr(strategyMgr);
-                    ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
-                    List<osmRelationship.OsmRelationship<String, String>> relationship = setOsmRelationship();
-                    strategyMgr.setOsmRelationship(relationship);
-                    brailleDisplayStrategy.generatedBrailleUi(treeGuiOma);
-                    
                 }
                 catch (Exception ex)
                 {
@@ -344,53 +344,9 @@ namespace GApplication
         }
 
         #region Beispielobjekte
-        private ITreeStrategy<OSMElement.OSMElement> getDauGui()
+
+        private OSMElement.OSMElement getDauOsmElement()
         {
-            ITreeStrategy<OSMElement.OSMElement> osmDau = strategyMgr.getSpecifiedTree().NewNodeTree();
-
-            #region Element 1
-            OSMElement.OSMElement osm1 = new OSMElement.OSMElement();
-            BrailleRepresentation e1 = new BrailleRepresentation();
-            e1.screenName = "screen1";
-            Content c1 = new Content();
-            //c1.text = "Hallo";
-            c1.viewName = "v1";
-            c1.fromGuiElement ="nameFiltered";
-            e1.content = c1;
-            Position p1 = new Position();
-            p1.height = 8;
-            p1.width = 20;
-            p1.left = 0;
-            p1.top = 0;
-            e1.position = p1;
-            GeneralProperties proper1 = new GeneralProperties();
-            proper1.IdGenerated = "braille123_1";
-            osm1.brailleRepresentation = e1;
-            osm1.properties = proper1;
-            ITreeStrategy<OSMElement.OSMElement> top = osmDau.AddChild(osm1);            
-            #endregion
-
-            #region Element 2
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            BrailleRepresentation e2 = new BrailleRepresentation();
-            e2.screenName = "screen1";
-            Content c2 = new Content();
-            c2.text = "Hallo 2";
-            c2.viewName = "v2";
-            e2.content = c2;
-            Position p2 = new Position();
-            p2.height = 8;
-            p2.width = 20;
-            p2.left = 0;
-            p2.top = 16;
-            e2.position = p2;
-            GeneralProperties proper2 = new GeneralProperties();
-            proper2.IdGenerated = "braille123_2";
-            osm2.brailleRepresentation = e2;
-            osm2.properties = proper2;
-            ITreeStrategy<OSMElement.OSMElement> child = top.AddChild(osm2);
-            #endregion
-
             #region Element 3
             OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
             BrailleRepresentation e3 = new BrailleRepresentation();
@@ -409,9 +365,115 @@ namespace GApplication
             proper3.IdGenerated = "braille123_3";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
+            #endregion
+            return osm3;
+        }
+
+        private ITreeStrategy<OSMElement.OSMElement> getDauGui()
+        {
+            ITreeStrategy<OSMElement.OSMElement> osmDau = strategyMgr.getSpecifiedTree().NewNodeTree();
+
+            #region Element 1
+            OSMElement.OSMElement osm1 = new OSMElement.OSMElement();
+            BrailleRepresentation e1 = new BrailleRepresentation();
+            e1.screenName = "screen1";
+            Content c1 = new Content();
+            //c1.text = "Hallo";
+            c1.viewName = "v1";
+            c1.fromGuiElement ="nameFiltered";
+            c1.showScrollbar = true;
+            e1.content = c1;
+            Position p1 = new Position();
+            p1.height = 8;
+            p1.width = 23;
+            p1.left = 0;
+            p1.top = 0;
+            e1.position = p1;
+            GeneralProperties proper1 = new GeneralProperties();
+            proper1.IdGenerated = "braille123_1";
+            osm1.brailleRepresentation = e1;
+            osm1.properties = proper1;
+            ITreeStrategy<OSMElement.OSMElement> top = osmDau.AddChild(osm1);       
+            #endregion
+
+            #region Element 2
+            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            BrailleRepresentation e2 = new BrailleRepresentation();
+            e2.screenName = "screen1";
+            Content c2 = new Content();
+            c2.text = "Hallo 2";
+            c2.viewName = "v2";
+            c2.showScrollbar = true;
+            e2.content = c2;
+            Position p2 = new Position();
+            p2.height = 12;
+            p2.width = 29;
+            p2.left = 0;
+            p2.top = 16;
+
+            Padding padding = new Padding(1, 1, 1, 1);
+            p2.padding = padding;
+            Padding margin = new Padding(1, 1, 1, 1);
+            p2.margin = margin;
+            Padding boarder = new Padding(1,1,2,1);
+            p2.boarder = boarder;
+            e2.position = p2;
+            GeneralProperties proper2 = new GeneralProperties();
+            proper2.IdGenerated = "braille123_2";
+            osm2.brailleRepresentation = e2;
+            osm2.properties = proper2;
+            ITreeStrategy<OSMElement.OSMElement> child = top.AddChild(osm2);
+            #endregion
+
+            #region Element 3
+            OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
+            BrailleRepresentation e3 = new BrailleRepresentation();
+            e3.screenName = "screen1";
+            Content c3 = new Content();
+            c3.fromGuiElement = "valueFiltered";
+            c3.viewName = "v3";
+            e3.content = c3;
+            Position p3 = new Position();
+            p3.height = 8;
+            p3.width = 23;
+            p3.left = 0;
+            p3.top = 30;
+            e3.position = p3;
+            GeneralProperties proper3 = new GeneralProperties();
+            proper3.IdGenerated = "braille123_3";
+            osm3.brailleRepresentation = e3;
+            osm3.properties = proper3;
             top = top.AddChild(osm3);
             #endregion
 
+            #region Element 4
+            OSMElement.OSMElement osm4 = new OSMElement.OSMElement();
+            BrailleRepresentation e4 = new BrailleRepresentation();
+            e4.screenName = "screen1";
+            Content c4 = new Content();
+            c4.matrix = new bool[,] { 
+                {false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false},
+                {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false},
+                {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true},
+                {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true},
+                {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true},
+                {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false},
+                {false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false},
+            };
+            c4.viewName = "v4";
+            e4.content = c4;
+            Position p4 = new Position();
+            p4.height = 10;
+            p4.width = 20;
+            p4.left = 10;
+            p4.top = 40;
+            e4.position = p4;
+            GeneralProperties proper4 = new GeneralProperties();
+            proper4.IdGenerated = "braille123_4";
+            osm4.brailleRepresentation = e4;
+            osm4.properties = proper4;
+            top = top.AddChild(osm4);
+            #endregion
             return osmDau;
         }
 
@@ -419,16 +481,16 @@ namespace GApplication
         {
             List<osmRelationship.OsmRelationship<String, String>> relationships = new List<osmRelationship.OsmRelationship<String, String>>();
             osmRelationship.OsmRelationship<String, String> r1 = new osmRelationship.OsmRelationship<String, String>();
-            r1.First = "4221280DCDC4EFF4D178B9D84EE93F59"; //Notepad;
-            r1.Second = "braille123_1";
+            r1.FilteredTree = "461FD37218F2E2BCBE4C5486629A2FC6"; //Notepad;
+            r1.BrailleTree = "braille123_1";
             osmRelationship.OsmRelationship<String, String> r2 = new osmRelationship.OsmRelationship<String, String>();
-            r2.First = "gui123_2";
-            r2.Second = "braille123_2";
+            r2.FilteredTree = "gui123_2";
+            r2.BrailleTree = "braille123_2";
             osmRelationship.OsmRelationship<String, String> r3 = new osmRelationship.OsmRelationship<String, String>();
-            r3.First = "E5216B66877ECD3634A27A664C5AA518";
-            r3.Second = "braille123_3";
+            r3.FilteredTree = "6941463181BDAA498DBC02B4164EF1AA";
+            r3.BrailleTree = "braille123_3";
 
-         //  relationships.Add(r1);
+           relationships.Add(r1);
            // relationships.Add(r2);
             relationships.Add(r3);
             return relationships;

@@ -19,20 +19,20 @@ namespace OSMElement
             {
             }
 
-            public OsmRelationship(T first, U second)
+            public OsmRelationship(T filteredTree, U brailleTree)
             {
-                this.First = first;
-                this.Second = second;
+                this.FilteredTree = filteredTree;
+                this.BrailleTree = brailleTree;
             }
 
             /// <summary>
-            /// First bezieht sich auf das Element im gespiegelten Baum
+            /// bezieht sich auf das Element im gefiltert Baum
             /// </summary>
-            public T First { get; set; }
+            public T FilteredTree { get; set; }
             /// <summary>
-            /// Second bezieht sich auf das Element der Braille-GUI
+            /// bezieht sich auf das Element der Braille-GUI
             /// </summary>
-            public U Second { get; set; }
+            public U BrailleTree { get; set; }
         };
 
        // public List<OsmRelationship<String, String>> relationship { get; set; }

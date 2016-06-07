@@ -13,23 +13,26 @@ namespace StrategyManager
     public class StrategyMgr
     {
         //in extra Klasse auslagern?
-        private ITreeStrategy<OSMElement.OSMElement> mirroredTree;
-        private ITreeStrategy<OSMElement.OSMElement> brailleTree;
+        private ITreeStrategy<OSMElement.OSMElement> filteredTree; // enthält den gefilterten Baum
+        private ITreeStrategy<OSMElement.OSMElement> brailleTree; // enthält die Baumdarstellung der UI auf der stiftplatte
+        /// <summary>
+        /// gibt die Beziehung zwischen <code>filteredTree</code> und <code>brailleTree</code> anhand der generierten Id an
+        /// </summary>
         private List<osmRelationship.OsmRelationship<String, String>> osmRelationship;
 
-        private IFilterStrategy specifiedFilter;
-        private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
-        private IBrailleDisplayStrategy specifiedBrailleDisplay;
+        private IFilterStrategy specifiedFilter; //enthält die gewählte Filterstrategy (UIA, Java-Access-Bridge, ...)
+        private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)
+        private ITreeStrategy<OSMElement.OSMElement> specifiedTree; // enthält die gewählte Klasse der Baumdarstellung/-verarbeitung
+        private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
 
-        public void setMirroredTree(ITreeStrategy<OSMElement.OSMElement> tree)
+        public void setFilteredTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
-            mirroredTree = tree;
+            filteredTree = tree;
         }
 
-        public ITreeStrategy<OSMElement.OSMElement> getMirroredTree()
+        public ITreeStrategy<OSMElement.OSMElement> getFilteredTree()
         {
-            return mirroredTree;
+            return filteredTree;
         }
 
         public void setBrailleTree(ITreeStrategy<OSMElement.OSMElement> tree)

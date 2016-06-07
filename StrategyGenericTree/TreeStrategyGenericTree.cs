@@ -3012,18 +3012,18 @@ namespace StrategyGenericTree
         /// <summary>
         /// Sucht im gespiegelten Baum nach bestimmten Knoten anhand der IdGenerated
         /// </summary>
-        /// <param name="idMirroredTree">gibt die generierte Id des Knotens an</param>
+        /// <param name="idFilteredTree">gibt die generierte Id des Knotens an</param>
         /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
-        public List<ITreeStrategy<T>> getAssociatedNodeList(String idMirroredTree)
+        public List<ITreeStrategy<T>> getAssociatedNodeList(String idFilteredTree)
         { 
             List<ITreeStrategy<T>> result = new List<ITreeStrategy<T>>();
             if (!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getMirroredTree()).All.Nodes)
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getFilteredTree()).All.Nodes)
             {
-                Boolean propertieIdGenerated = idMirroredTree == null || idMirroredTree.Equals(node.Data.properties.IdGenerated);
+                Boolean propertieIdGenerated = idFilteredTree == null || idFilteredTree.Equals(node.Data.properties.IdGenerated);
 
                     if (propertieIdGenerated)
                     {
@@ -3038,17 +3038,17 @@ namespace StrategyGenericTree
         /// <summary>
         /// Sucht im gespiegelten Baum nach bestimmten Knoten anhand der IdGenerated 
         /// </summary>
-        /// <param name="idMirroredTree">gibt die generierte Id des Knotens an</param>
+        /// <param name="idFilteredTree">gibt die generierte Id des Knotens an</param>
         /// <returns>zugehöriger Knoten</returns>
-        public ITreeStrategy<T> getAssociatedNode(String idMirroredTree)
+        public ITreeStrategy<T> getAssociatedNode(String idFilteredTree)
         {
             if (!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getMirroredTree()).All.Nodes)
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getFilteredTree()).All.Nodes)
             {
-                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idMirroredTree))
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idFilteredTree))
                 {
                     return (ITreeStrategy<T>)node;
                 }
@@ -3065,7 +3065,7 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
         public void changePropertiesOfNode(GeneralProperties properties)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getMirroredTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(properties.IdGenerated))

@@ -16,7 +16,7 @@ namespace StrategyManager.Interfaces
         void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree);
         ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree();
 		void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height);		
-		void updateNodeOfMirroredTree(String mirroredTreeGeneratedId);
+		void updateNodeOfFilteredTree(String filteredTreeGeneratedId);
         void setStrategyMgr(StrategyMgr strategyMgr);
         StrategyMgr getStrategyMgr();    }
 }

@@ -72,7 +72,7 @@ namespace StrategyJAVA
             height = 0;
         }
 
-        public void updateNodeOfMirroredTree(String mirroredTreeGeneratedId) { }
+        public void updateNodeOfFilteredTree(String filteredTreeGeneratedId) { }
     }
     
 }

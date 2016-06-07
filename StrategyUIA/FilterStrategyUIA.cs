@@ -272,13 +272,13 @@ namespace StrategyUIA
         /// <summary>
         /// Ändert die <code>GeneralProperties</code> im gespiegelten Baum anhand der angegebenen <code>IdGenerated</code>. (Sollten mehrere Knoten mit der selben Id existieren, so werden alle aktualisiert.)
         /// </summary>
-        /// <param name="mirroredTreeGeneratedId">gibt die generierte Id des zu ändernden knotens im gespielgelten Baum an.</param>
-        public void updateNodeOfMirroredTree(String mirroredTreeGeneratedId)
+        /// <param name="filteredTreeGeneratedId">gibt die generierte Id des zu ändernden knotens im gespielgelten Baum an.</param>
+        public void updateNodeOfFilteredTree(String filteredTreeGeneratedId)
         {
             AutomationElement au;
-            List<ITreeStrategy<OSMElement.OSMElement>> relatedMirroredTreeObject =  strategyMgr.getSpecifiedTree().getAssociatedNodeList(mirroredTreeGeneratedId); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            List<ITreeStrategy<OSMElement.OSMElement>> relatedFilteredTreeObject =  strategyMgr.getSpecifiedTree().getAssociatedNodeList(filteredTreeGeneratedId); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
             AutomationElement mainWindowElement;
-            foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedMirroredTreeObject)
+            foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
             {
                 Condition cond = setPropertiesCondition(treeElement.Data.properties);
                 if (treeElement.Data.properties.hWndFiltered == 0)
@@ -363,7 +363,7 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
         /// <param name="rootElement"></param> --- hier erst ermitteln
         /// <returns>das zugehörige AutomationElement des Knotens</returns>
-        private AutomationElement getAutomationElementFromMirroredTree(ITreeStrategy<OSMElement.OSMElement> node, AutomationElement rootElement)
+        private AutomationElement getAutomationElementFromFilteredTree(ITreeStrategy<OSMElement.OSMElement> node, AutomationElement rootElement)
         {
             Condition condition = setPropertiesCondition(node.Data.properties);
             AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
@@ -389,7 +389,7 @@ namespace StrategyUIA
         public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
             AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
-            AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
+            AutomationElement element = getAutomationElementFromFilteredTree(node, rootElement);
             if (element == null)
             {
                 return null;
