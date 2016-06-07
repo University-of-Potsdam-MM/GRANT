@@ -329,8 +329,10 @@ namespace GApplication
                         osmRelationship.OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
                         strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-
-                        brailleDisplayStrategy.updateViewContent(getDauOsmElement());
+                        ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
+                        strategyMgr.getSpecifiedTree().setStrategyMgr(strategyMgr);
+                        strategyMgr.getSpecifiedBrailleDisplay().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
+                        brailleDisplayStrategy.updateViewContent(relatedBrailleTreeObject.Data);
                     }
 
 
@@ -344,31 +346,6 @@ namespace GApplication
         }
 
         #region Beispielobjekte
-
-        private OSMElement.OSMElement getDauOsmElement()
-        {
-            #region Element 3
-            OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
-            BrailleRepresentation e3 = new BrailleRepresentation();
-            e3.screenName = "screen1";
-            Content c3 = new Content();
-            c3.fromGuiElement = "valueFiltered";
-            c3.viewName = "v3";
-            e3.content = c3;
-            Position p3 = new Position();
-            p3.height = 8;
-            p3.width = 20;
-            p3.left = 0;
-            p3.top = 30;
-            e3.position = p3;
-            GeneralProperties proper3 = new GeneralProperties();
-            proper3.IdGenerated = "braille123_3";
-            osm3.brailleRepresentation = e3;
-            osm3.properties = proper3;
-            #endregion
-            return osm3;
-        }
-
         private ITreeStrategy<OSMElement.OSMElement> getDauGui()
         {
             ITreeStrategy<OSMElement.OSMElement> osmDau = strategyMgr.getSpecifiedTree().NewNodeTree();
@@ -422,7 +399,7 @@ namespace GApplication
             proper2.IdGenerated = "braille123_2";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            ITreeStrategy<OSMElement.OSMElement> child = top.AddChild(osm2);
+            top = top.AddChild(osm2);
             #endregion
 
             #region Element 3
@@ -430,6 +407,7 @@ namespace GApplication
             BrailleRepresentation e3 = new BrailleRepresentation();
             e3.screenName = "screen1";
             Content c3 = new Content();
+         //   c3.text = "Start Text";
             c3.fromGuiElement = "valueFiltered";
             c3.viewName = "v3";
             e3.content = c3;

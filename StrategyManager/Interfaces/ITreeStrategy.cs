@@ -99,11 +99,12 @@ namespace StrategyManager.Interfaces
         #region eigene Methoden
         void printTreeElements(ITreeStrategy<T> tree, int depth);
         List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, GeneralProperties properties, OperatorEnum oper); //TODO: properties sollten generisch sein
-        List<ITreeStrategy<T>> getAssociatedNodeList(String generatedId);
+        List<ITreeStrategy<T>> getAssociatedNodeList(String generatedId, ITreeStrategy<T> tree);
         void changePropertiesOfNode(GeneralProperties properties);
         StrategyMgr getStrategyMgr();
         void setStrategyMgr(StrategyMgr strategyMgr);
-        ITreeStrategy<T> getAssociatedNode(String id);
+        ITreeStrategy<T> getAssociatedNode(String id, ITreeStrategy<T> tree);
+        void changeBrailleRepresentation(OSMElement.OSMElement element);
         #endregion
 
     }

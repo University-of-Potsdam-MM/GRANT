@@ -16,7 +16,7 @@ namespace StrategyManager.Interfaces
         void setStrategyMgr(StrategyMgr strategyMgr);
         StrategyMgr getStrategyMgr();
 
-        void updateNodeOfBrailleUi(OSMElement.OSMElement element, String filteredTreeGeneratedId);
+        void updateNodeOfBrailleUi(OSMElement.OSMElement element);
 
     }
 }

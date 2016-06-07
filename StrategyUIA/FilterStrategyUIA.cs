@@ -276,7 +276,7 @@ namespace StrategyUIA
         public void updateNodeOfFilteredTree(String filteredTreeGeneratedId)
         {
             AutomationElement au;
-            List<ITreeStrategy<OSMElement.OSMElement>> relatedFilteredTreeObject =  strategyMgr.getSpecifiedTree().getAssociatedNodeList(filteredTreeGeneratedId); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            List<ITreeStrategy<OSMElement.OSMElement>> relatedFilteredTreeObject =  strategyMgr.getSpecifiedTree().getAssociatedNodeList(filteredTreeGeneratedId, strategyMgr.getFilteredTree()); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
             AutomationElement mainWindowElement;
             foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
             {

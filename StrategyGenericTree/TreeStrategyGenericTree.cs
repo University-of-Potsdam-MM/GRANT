@@ -3010,20 +3010,22 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Sucht im gespiegelten Baum nach bestimmten Knoten anhand der IdGenerated
+        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated
         /// </summary>
-        /// <param name="idFilteredTree">gibt die generierte Id des Knotens an</param>
+        /// <param name="idGenereted">gibt die generierte Id des Knotens an</param>
+        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
-        public List<ITreeStrategy<T>> getAssociatedNodeList(String idFilteredTree)
+        public List<ITreeStrategy<T>> getAssociatedNodeList(String idGenereted, ITreeStrategy<T> tree)
         { 
             List<ITreeStrategy<T>> result = new List<ITreeStrategy<T>>();
-            if (!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
+            if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getFilteredTree()).All.Nodes)
+           
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes) 
             {
-                Boolean propertieIdGenerated = idFilteredTree == null || idFilteredTree.Equals(node.Data.properties.IdGenerated);
+                Boolean propertieIdGenerated = idGenereted == null || idGenereted.Equals(node.Data.properties.IdGenerated);
 
                     if (propertieIdGenerated)
                     {
@@ -3036,19 +3038,20 @@ namespace StrategyGenericTree
 
 
         /// <summary>
-        /// Sucht im gespiegelten Baum nach bestimmten Knoten anhand der IdGenerated 
+        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated 
         /// </summary>
-        /// <param name="idFilteredTree">gibt die generierte Id des Knotens an</param>
+        /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
+        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>zugehöriger Knoten</returns>
-        public ITreeStrategy<T> getAssociatedNode(String idFilteredTree)
+        public ITreeStrategy<T> getAssociatedNode(String idGenerated, ITreeStrategy<T> tree)
         {
-            if (!(strategyMgr.getSpecifiedTree().GetType() == typeof(NodeTree<OSMElement.OSMElement>)))
+            if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)strategyMgr.getFilteredTree()).All.Nodes)
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
-                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idFilteredTree))
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idGenerated))
                 {
                     return (ITreeStrategy<T>)node;
                 }
@@ -3081,6 +3084,25 @@ namespace StrategyGenericTree
                 }
             }
             System.Console.WriteLine(); 
+        }
+
+        public void changeBrailleRepresentation(OSMElement.OSMElement element)
+        {
+            ITreeStrategy<OSMElement.OSMElement> brailleTree = strategyMgr.getBrailleTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)brailleTree).All.Nodes)
+            {
+                if(node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(element.properties.IdGenerated))
+                {
+                   /* OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                    osm.brailleRepresentation = node.Data.brailleRepresentation;
+                    osm.events = node.Data.events;
+                    osm.interaction = node.Data.interaction;
+                    osm.properties = element.;*/
+                    node.Data = element;
+
+                    break;
+                }
+            }
         }
 
         #endregion

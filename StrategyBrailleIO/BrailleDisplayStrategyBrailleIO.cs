@@ -21,10 +21,19 @@ namespace StrategyBrailleIO
     {
        IBrailleIOShowOffMonitor monitor;
         BrailleIOMediator brailleIOMediator {get; set;}
+
+        /// <summary>
+        /// Ist der Adapter des Simolator
+        /// </summary>
         AbstractBrailleIOAdapterBase showOffAdapter;
         //GestureRecognizer showOffGestureRecognizer;
-        AbstractBrailleIOAdapterBase brailleDisAdapter; //TODO       evtl. beides in Listen u.ä.
+
+        /// <summary>
+        /// Ist der Adapter des BrailleDis
+        /// </summary>
+        AbstractBrailleIOAdapterBase brailleDisAdapter;
         //GestureRecognizer brailleDisRecognizer; //TODO
+
 
         private StrategyMgr strategyMgr;
         public StrategyMgr getStrategyMgr() { return strategyMgr; }
@@ -95,7 +104,7 @@ namespace StrategyBrailleIO
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
 
-            createBrailleDis();
+          //  createBrailleDis();
 
         }
 
@@ -132,14 +141,9 @@ namespace StrategyBrailleIO
             {
                 throw new Exception("Der View existiert (in dem Screen) nicht!");
             }
-            if (element.brailleRepresentation.content.text != null && !element.brailleRepresentation.content.text.Equals("")) //TODO: Views von leeren Textfeldern
+            if (element.brailleRepresentation.content.text != null)
             {
-                view.SetText(element.brailleRepresentation.content.text);//TODO: Kann sich hier der Text überhaupt ändern?
-                return;
-            }
-            if (element.brailleRepresentation.content.fromGuiElement != null && !element.brailleRepresentation.content.fromGuiElement.Equals(""))
-            {
-                view.SetText(getTextForView(element));
+                view.SetText(element.brailleRepresentation.content.text);
                 return;
             }
             if (element.brailleRepresentation.content.matrix != null)
@@ -240,21 +244,20 @@ namespace StrategyBrailleIO
         private void createView(OSMElement.OSMElement osmElement)
         {
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
-            if (brailleRepresentation.content.text != null && !brailleRepresentation.content.text.Equals("")) //TODO: Views von leeren Textfeldern
+            if (brailleRepresentation.content.text != null)
             {
                 createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
-                return;
-            }
-            if (brailleRepresentation.content.fromGuiElement != null && !brailleRepresentation.content.fromGuiElement.Equals("") )
-            {
-                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, getTextForView(osmElement), brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
                 return;
             }
             if (brailleRepresentation.content.matrix != null)
             {
                 createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+                return;
             }
-           //TODO
+            //TODO: weitere Möglichkeiten?
+
+            //im Zweifelsfall wird immer eine "Text-View" mit einem leeren Text erstellt
+            createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, (brailleRepresentation.content.text != null) ? brailleRepresentation.content.text : "", brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
         }
 
         /// <summary>
@@ -270,7 +273,7 @@ namespace StrategyBrailleIO
                 Console.WriteLine("kein passendes objekt gefunden");
                 return "";
             }
-            ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationship.FilteredTree);
+            ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
             String text = "";
             if (associatedNode != null)
             {
@@ -280,12 +283,18 @@ namespace StrategyBrailleIO
             return text;
         }
 
-       public void updateNodeOfBrailleUi(OSMElement.OSMElement element, String filteredTreeGeneratedId)
-        {//TODO: hier weiter machen
-            String text = getTextForView(element);
-          //  element.brailleRepresentation.content.setText(getTextForView(element));
-           // strategyMgr.getBrailleTree().changeBrailleRepresentation(element);
-                
+        /// <summary>
+        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyMgr.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert!
+        /// </summary>
+        /// <param name="element">gibt den zu verändernden Knoten an</param>
+       public void updateNodeOfBrailleUi(OSMElement.OSMElement element)
+        {          
+           Content updatedContent = element.brailleRepresentation.content;
+           updatedContent.text = getTextForView(element);
+           BrailleRepresentation updatedBrailleReprasentation = element.brailleRepresentation;
+           updatedBrailleReprasentation.content = updatedContent;
+           element.brailleRepresentation = updatedBrailleReprasentation;
+           strategyMgr.getSpecifiedTree().changeBrailleRepresentation(element);//hier ist das Element schon geändert                
         }
 
         #region create Views       
