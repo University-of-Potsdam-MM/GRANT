@@ -49,7 +49,7 @@
     <Compile Include="Helper.cs" />
     <Compile Include="Interaction.cs" />
     <Compile Include="OSMElement.cs" />
-    <Compile Include="osmRelationship.cs" />
+    <Compile Include="OsmRelationship.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

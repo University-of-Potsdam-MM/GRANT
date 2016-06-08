@@ -319,14 +319,14 @@ namespace GApplication
                         #endregion
                         if (strategyMgr.getOsmRelationship() == null)
                         {
-                            List<osmRelationship.OsmRelationship<String, String>> relationship = setOsmRelationship();
+                            List<OsmRelationship<String, String>> relationship = setOsmRelationship();
                             strategyMgr.setOsmRelationship(relationship);
                         }
                         brailleDisplayStrategy.generatedBrailleUi(treeGuiOma);
                     }
                     else
                     {
-                        osmRelationship.OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                        OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
                         strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
@@ -356,7 +356,7 @@ namespace GApplication
             e1.screenName = "screen1";
             Content c1 = new Content();
             //c1.text = "Hallo";
-            c1.viewName = "v1";
+            e1.viewName = "v1";
             c1.fromGuiElement ="nameFiltered";
             c1.showScrollbar = true;
             e1.content = c1;
@@ -379,7 +379,7 @@ namespace GApplication
             e2.screenName = "screen1";
             Content c2 = new Content();
             c2.text = "Hallo 2";
-            c2.viewName = "v2";
+            e2.viewName = "v2";
             c2.showScrollbar = true;
             e2.content = c2;
             Position p2 = new Position();
@@ -409,7 +409,7 @@ namespace GApplication
             Content c3 = new Content();
          //   c3.text = "Start Text";
             c3.fromGuiElement = "valueFiltered";
-            c3.viewName = "v3";
+            e3.viewName = "v3";
             e3.content = c3;
             Position p3 = new Position();
             p3.height = 8;
@@ -438,7 +438,7 @@ namespace GApplication
                 {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false},
                 {false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false},
             };
-            c4.viewName = "v4";
+            e4.viewName = "v4";
             e4.content = c4;
             Position p4 = new Position();
             p4.height = 10;
@@ -455,16 +455,16 @@ namespace GApplication
             return osmDau;
         }
 
-        private List<osmRelationship.OsmRelationship<String, String>> setOsmRelationship()
+        private List<OsmRelationship<String, String>> setOsmRelationship()
         {
-            List<osmRelationship.OsmRelationship<String, String>> relationships = new List<osmRelationship.OsmRelationship<String, String>>();
-            osmRelationship.OsmRelationship<String, String> r1 = new osmRelationship.OsmRelationship<String, String>();
+            List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
+            OsmRelationship<String, String> r1 = new OsmRelationship<String, String>();
             r1.FilteredTree = "461FD37218F2E2BCBE4C5486629A2FC6"; //Notepad;
             r1.BrailleTree = "braille123_1";
-            osmRelationship.OsmRelationship<String, String> r2 = new osmRelationship.OsmRelationship<String, String>();
+            OsmRelationship<String, String> r2 = new OsmRelationship<String, String>();
             r2.FilteredTree = "gui123_2";
             r2.BrailleTree = "braille123_2";
-            osmRelationship.OsmRelationship<String, String> r3 = new osmRelationship.OsmRelationship<String, String>();
+            OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
             r3.FilteredTree = "6941463181BDAA498DBC02B4164EF1AA";
             r3.BrailleTree = "braille123_3";
 

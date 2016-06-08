@@ -136,7 +136,7 @@ namespace StrategyBrailleIO
             {
                 throw new Exception("Der Screen existiert nicht!");
             }
-            BrailleIOViewRange view = screen.GetViewRange(element.brailleRepresentation.content.viewName) as BrailleIOViewRange;
+            BrailleIOViewRange view = screen.GetViewRange(element.brailleRepresentation.viewName) as BrailleIOViewRange;
             if (view == null)
             {
                 throw new Exception("Der View existiert (in dem Screen) nicht!");
@@ -246,18 +246,18 @@ namespace StrategyBrailleIO
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
             if (brailleRepresentation.content.text != null)
             {
-                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
                 return;
             }
             if (brailleRepresentation.content.matrix != null)
             {
-                createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+                createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
                 return;
             }
             //TODO: weitere Möglichkeiten?
 
             //im Zweifelsfall wird immer eine "Text-View" mit einem leeren Text erstellt
-            createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, (brailleRepresentation.content.text != null) ? brailleRepresentation.content.text : "", brailleRepresentation.content.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+            createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, (brailleRepresentation.content.text != null) ? brailleRepresentation.content.text : "", brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace StrategyBrailleIO
         /// <returns>den anzuzeigenden Text</returns>
         private String getTextForView(OSMElement.OSMElement osmElement)
         {
-            osmRelationship.OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");

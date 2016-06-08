@@ -20,10 +20,6 @@ namespace OSMElement
         /// </summary>
         public bool[,] matrix { get; set; }
 
-        /// <summary>
-        /// Gibt die View, in welcher der Inhalt angezeigt werden soll an.
-        /// </summary>
-        public String viewName { get; set; }
 
         /// <summary>
         /// Gibt den Bezug zu einem GUI-Element an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden

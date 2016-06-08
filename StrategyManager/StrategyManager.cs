@@ -18,7 +18,7 @@ namespace StrategyManager
         /// <summary>
         /// gibt die Beziehung zwischen <code>filteredTree</code> und <code>brailleTree</code> anhand der generierten Id an
         /// </summary>
-        private List<osmRelationship.OsmRelationship<String, String>> osmRelationship;
+        private List<OsmRelationship<String, String>> osmRelationship;
 
         private IFilterStrategy specifiedFilter; //enthält die gewählte Filterstrategy (UIA, Java-Access-Bridge, ...)
         private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)
@@ -65,7 +65,7 @@ namespace StrategyManager
         /// Gibt die Beziehungen zwischen <value>brailleTree</value> und <value>filteredTree</value> an
         /// </summary>
         /// <returns>Beziehungen zwischen <value>brailleTree</value> und <value>filteredTree</value></returns>
-        public List<osmRelationship.OsmRelationship<String, String>> getOsmRelationship()
+        public List<OsmRelationship<String, String>> getOsmRelationship()
         {
             return osmRelationship;
         }
@@ -74,7 +74,7 @@ namespace StrategyManager
         /// Setzt die Beziehungen zwischen <value>brailleTree</value> und <value>filteredTree</value>
         /// </summary>
         /// <param name="relationship"></param>
-        public void setOsmRelationship(List<osmRelationship.OsmRelationship<String, String>> relationship)
+        public void setOsmRelationship(List<OsmRelationship<String, String>> relationship)
         {
             osmRelationship = relationship;
         }
