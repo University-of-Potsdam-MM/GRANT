@@ -22,7 +22,7 @@ namespace OSMElement
 
 
         /// <summary>
-        /// Gibt den Bezug zu einem GUI-Element an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden
+        /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden
         /// </summary>
         public String fromGuiElement { get; set; }
 

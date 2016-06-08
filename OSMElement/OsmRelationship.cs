@@ -34,6 +34,4 @@ namespace OSMElement
         public U BrailleTree { get; set; }
     }
 
-    // public List<OsmRelationship<String, String>> relationship { get; set; }
-
 }

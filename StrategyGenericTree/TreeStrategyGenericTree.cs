@@ -3066,7 +3066,7 @@ namespace StrategyGenericTree
         /// Ändert von einem Knoten die <code>Generalproperties</code> ausgehend von der <code>IdGenerated</code>
         /// </summary>
         /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
-        public void changePropertiesOfNode(GeneralProperties properties)
+        public void changePropertiesOfFilteredNode(GeneralProperties properties)
         {
             ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)

@@ -43,7 +43,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrailleUserinterface.cs" />
     <Compile Include="BrailleDisplayStrategyBrailleIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

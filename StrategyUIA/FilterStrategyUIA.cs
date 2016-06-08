@@ -294,7 +294,7 @@ namespace StrategyUIA
                 if (au != null)
                 {
                     GeneralProperties propertiesUpdated = setProperties(au);
-                    specifiedTree.changePropertiesOfNode(propertiesUpdated);
+                    specifiedTree.changePropertiesOfFilteredNode(propertiesUpdated);
                     break;
                 }
             }
@@ -385,7 +385,7 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="node">gibt den Knoten des gespiegelten Baumes an, von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="hwnd">gibt den Handle des AutomationElementes an um anhand dessen das Root-AutomationElement zu bestimmen</param>
-        /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
+        /// <returns>ein <code>ITreeStrategy</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
         public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
             AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
