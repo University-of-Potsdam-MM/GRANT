@@ -22,7 +22,6 @@ using OSMElement;
 using System.Windows.Forms;
 using System.Drawing;
 
-
 namespace GApplication
 {
 
