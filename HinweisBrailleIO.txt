@@ -1,0 +1,3 @@
+BrailleIO muss aus dem git der TU-Dresden (https://github.com/TUD-INF-IAI-MCI/BrailleIO/) hinzugefügt werden!
+
+Damit auch das BrailleDis angesprochen werden kann müssen die Projekte HBBrailleDisV2 und BrailleIOBraillDisAdapter auch hinzugefügt werden. Diese sind nicht im offiziellen git der TU Dresden enthalten sondern befinden sich bei BoxUP im Ordner BrailleDis.

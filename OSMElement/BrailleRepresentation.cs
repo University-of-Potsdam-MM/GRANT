@@ -10,6 +10,13 @@ namespace OSMElement
     {
         public Position position { get; set; }
         public Content content { get; set; }
+        /// <summary>
+        /// Gibt den Namen des Screens an, auf welchem die View angezeigt werden soll
+        /// </summary>
         public String screenName { get; set; }
+        /// <summary>
+        /// Gibt die View, in welcher der Inhalt angezeigt werden soll an.
+        /// </summary>
+        public String viewName { get; set; }
     }
 }

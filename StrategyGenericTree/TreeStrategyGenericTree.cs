@@ -2779,6 +2779,10 @@ namespace StrategyGenericTree
         //-----------------------------------------------------------------------------
 
         #region eigene Methoden
+        private StrategyMgr strategyMgr;
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyMgr mamager) { strategyMgr = mamager; }
+
         #region Print
         /// <summary>
         /// Gibt alle Knoten eines Baumes auf der Konsole aus.
@@ -2960,7 +2964,7 @@ namespace StrategyGenericTree
         public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, OperatorEnum oper) //TODO: properties sollten generisch sein
         {//TODO: hier fehlen noch viele Eigenschaften
             //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
-            if (!(properties is GeneralProperties && tree is ITreeStrategy<OSMElement.OSMElement>))
+            if (!( tree is ITreeStrategy<OSMElement.OSMElement>))
             {
                 throw new InvalidOperationException("Falscher Baum-Type!"); 
             }
@@ -3004,6 +3008,102 @@ namespace StrategyGenericTree
             List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
             printNodeList(result2);
             return result2;
+        }
+
+        /// <summary>
+        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated
+        /// </summary>
+        /// <param name="idGenereted">gibt die generierte Id des Knotens an</param>
+        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
+        /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
+        public List<ITreeStrategy<T>> getAssociatedNodeList(String idGenereted, ITreeStrategy<T> tree)
+        { 
+            List<ITreeStrategy<T>> result = new List<ITreeStrategy<T>>();
+            if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
+            {
+                throw new InvalidOperationException("Falscher Baum-Typ");
+            }
+           
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes) 
+            {
+                Boolean propertieIdGenerated = idGenereted == null || idGenereted.Equals(node.Data.properties.IdGenerated);
+
+                    if (propertieIdGenerated)
+                    {
+                        result.Add((ITreeStrategy<T>) node); 
+                    }                
+            }            
+            printNodeList(result);
+            return result;
+        }
+
+
+        /// <summary>
+        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated 
+        /// </summary>
+        /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
+        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
+        /// <returns>zugehöriger Knoten</returns>
+        public ITreeStrategy<T> getAssociatedNode(String idGenerated, ITreeStrategy<T> tree)
+        {
+            if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
+            {
+                throw new InvalidOperationException("Falscher Baum-Typ");
+            }
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idGenerated))
+                {
+                    return (ITreeStrategy<T>)node;
+                }
+            }
+
+            Console.WriteLine("Kein passendes Element gefunden!"); //TODO. throw?
+            return default(ITreeStrategy<T>);
+
+        }
+
+        /// <summary>
+        /// Ändert von einem Knoten die <code>Generalproperties</code> ausgehend von der <code>IdGenerated</code>
+        /// </summary>
+        /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
+        public void changePropertiesOfFilteredNode(GeneralProperties properties)
+        {
+            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(properties.IdGenerated))
+                {
+                    OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                    osm.brailleRepresentation = node.Data.brailleRepresentation;
+                    osm.events = node.Data.events;
+                    osm.interaction = node.Data.interaction;
+                    osm.properties = properties;
+                    node.Data = osm;
+
+                    break;
+                }
+            }
+            System.Console.WriteLine(); 
+        }
+
+        public void changeBrailleRepresentation(OSMElement.OSMElement element)
+        {
+            ITreeStrategy<OSMElement.OSMElement> brailleTree = strategyMgr.getBrailleTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)brailleTree).All.Nodes)
+            {
+                if(node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(element.properties.IdGenerated))
+                {
+                   /* OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                    osm.brailleRepresentation = node.Data.brailleRepresentation;
+                    osm.events = node.Data.events;
+                    osm.interaction = node.Data.interaction;
+                    osm.properties = element.;*/
+                    node.Data = element;
+
+                    break;
+                }
+            }
         }
 
         #endregion

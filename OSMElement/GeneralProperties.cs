@@ -173,6 +173,8 @@ namespace OSMElement
             get;
             set;
         }
+
+        public String valueFiltered { get; set; }
         
     }
 }

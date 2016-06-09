@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows;
+using System.Windows.Forms;
 
 using BrailleIO;
+using BrailleIO.Structs;
 using Gestures.Recognition;
 using StrategyManager.Interfaces;
 using StrategyManager;
@@ -17,28 +19,140 @@ namespace StrategyBrailleIO
 {
     public class BrailleDisplayStrategyBrailleIO : IBrailleDisplayStrategy
     {
-        IBrailleIOShowOffMonitor monitor;
-        BrailleIOMediator brailleIOMediator;
-        AbstractBrailleIOAdapterBase showOffAdapter;
-        //GestureRecognizer showOffGestureRecognizer;
-        //AbstractBrailleIOAdapterManagerBase brailleDisAdapter; //TODO       evtl. beides in Listen u.ä.
-        //GestureRecognizer brailleDisRecognizer; //TODO
+       IBrailleIOShowOffMonitor monitor;
+        BrailleIOMediator brailleIOMediator {get; set;}
 
         /// <summary>
-        /// Erstellt, sofern noch nicht vorhanden, ein simulator für das Ausgabegerät
+        /// Ist der Adapter des Simolator
+        /// </summary>
+        AbstractBrailleIOAdapterBase showOffAdapter;
+        //GestureRecognizer showOffGestureRecognizer;
+
+        /// <summary>
+        /// Ist der Adapter des BrailleDis
+        /// </summary>
+        AbstractBrailleIOAdapterBase brailleDisAdapter;
+        //GestureRecognizer brailleDisRecognizer; //TODO
+
+
+        private StrategyMgr strategyMgr;
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyMgr manager)
+        {
+            strategyMgr = manager;
+        }
+
+        /// <summary>
+        /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
         /// </summary>
         public void initializedSimulator()
         {
             if (brailleIOMediator == null )
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
-                brailleIOMediator.AdapterManager = new ShowOffBrailleIOAdapterManager();
-                monitor = ((ShowOffBrailleIOAdapterManager)brailleIOMediator.AdapterManager).Monitor;
-                showOffAdapter = brailleIOMediator.AdapterManager.ActiveAdapter as AbstractBrailleIOAdapterBase;
-                
+            }
+            /// aus BrailleIOExample (getShowOff()) -> erstmal gekürzt
+            if (brailleIOMediator != null)
+            {
+                // if the current Adapter manager holds an debug dapter, use it
+                if (brailleIOMediator.AdapterManager is ShowOffBrailleIOAdapterManager)
+                {
+                    monitor = ((ShowOffBrailleIOAdapterManager)brailleIOMediator.AdapterManager).Monitor;
+                    foreach (var adapter in brailleIOMediator.AdapterManager.GetAdapters())
+                    {
+                        if (adapter is BrailleIOAdapter_ShowOff)
+                        {
+                            showOffAdapter = adapter as AbstractBrailleIOAdapterBase;
+                            break;
+                        }
+                    }
+                }
+
+                // if no debug device currently exists, create a new one
+                if (showOffAdapter == null)
+                {
+                    monitor = new ShowOff();
+                    showOffAdapter = monitor.GetAdapter(brailleIOMediator.AdapterManager);
+                    if (showOffAdapter != null) brailleIOMediator.AdapterManager.AddAdapter(showOffAdapter);
+                }
+
+                // if a debug adapter could been created, register to its events
+                if (showOffAdapter != null)
+                {
+                    showOffAdapter.Synch = true; // activate that this device receives the pin matrix of the active device, too.
+
+                    /*     #region events
+
+                         showOffAdapter.touchValuesChanged += new EventHandler<BrailleIO_TouchValuesChanged_EventArgs>(_bda_touchValuesChanged);
+                         showOffAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
+
+                         #endregion*/
+                }
+
+                /*  if (monitor != null)
+                  {
+                      monitor.Disposed += new EventHandler(monitor_Disposed);
+                  }
+                  */
             }
         }
 
+        public void initializedBrailleDisplay()
+        {
+            if (brailleIOMediator == null)
+            {
+                brailleIOMediator = BrailleIOMediator.Instance;
+            }
+
+          //  createBrailleDis();
+
+        }
+
+        private AbstractBrailleIOAdapterBase createBrailleDis()
+        {/// aus BrailleIOExample -> erstmal gekürzt
+            if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
+            {
+                brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet(brailleIOMediator.AdapterManager);
+                brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
+
+           /*     #region BrailleDis events
+                brailleDisAdapter.touchValuesChanged += new EventHandler<BrailleIO_TouchValuesChanged_EventArgs>(_bda_touchValuesChanged);
+                brailleDisAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
+                #endregion
+                */
+                return brailleDisAdapter;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Ändert den Inhalt einer View -- Momentan wird nur der Text geändert!
+        /// </summary>
+        /// <param name="element">Gibt das OSM-element an, bei dem eine Änderung erfolgte</param>
+        public void updateViewContent(OSMElement.OSMElement element)
+        {
+            BrailleIOScreen screen = brailleIOMediator.GetView(element.brailleRepresentation.screenName) as BrailleIOScreen;
+            if (screen == null)
+            {
+                throw new Exception("Der Screen existiert nicht!");
+            }
+            BrailleIOViewRange view = screen.GetViewRange(element.brailleRepresentation.viewName) as BrailleIOViewRange;
+            if (view == null)
+            {
+                throw new Exception("Der View existiert (in dem Screen) nicht!");
+            }
+            if (element.brailleRepresentation.content.text != null)
+            {
+                view.SetText(element.brailleRepresentation.content.text);
+                return;
+            }
+            if (element.brailleRepresentation.content.matrix != null)
+            {
+                view.SetMatrix(element.brailleRepresentation.content.matrix);
+            }
+           // ...
+            Console.WriteLine();
+        }
 
         /// <summary>
         /// Erstellt die GUI auf der Stiftplatte
@@ -62,52 +176,12 @@ namespace StrategyBrailleIO
                  {
                      brailleIOMediator.AddView(screenName, new BrailleIOScreen());
                  }
-               //  Console.WriteLine();
                 // der screen existiert schon -> ok
             }
             catch
             {
-                brailleIOMediator.AddView(screenName, new BrailleIOScreen());
+                throw new Exception("Fehler in createScreen(String screenName) in BrailleDisplayStrategyBrailleIO");
             }
-        }
-
-        private bool isFixedTextFirst(XMLDeviceObjectText order)
-        {
-            //TODO
-            return false;
-        }
-
-        private String getDynamicTextFromTree(ITreeStrategy<GeneralProperties> tree, String generatedId, ITreeStrategy<GeneralProperties> treeStrategy)
-        { //nur Beispielhaft -> so nicht verwenden
-            
-            GeneralProperties propertie = new GeneralProperties();
-            propertie.IdGenerated = generatedId;
-            ITreeStrategy<GeneralProperties> node = treeStrategy.searchProperties(tree, propertie, OperatorEnum.and)[0];
-            return node.Data.nameFiltered;
-        }
-
-        /// <summary>
-        /// Konvertiert eine Bool-Matrix
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <returns></returns>
-        private bool[,] convertBoolmatrix(bool[][] matrix)
-        {
-            int length = 0;
-            if (matrix.Length > 0)
-            {
-                length = matrix[0].Length;
-            }
-            bool[,] convertetMatrix = new bool[matrix.Length, length];
-            for (int zeile = 0; zeile < matrix.Length; zeile++)
-            {
-                for (int zelle = 0; zelle < matrix[0].Length; zelle++)
-                {
-                    convertetMatrix[zeile, zelle] = matrix[zeile][zelle];
-                }
-            }
-
-            return convertetMatrix;
         }
 
         /// <summary>
@@ -141,7 +215,7 @@ namespace StrategyBrailleIO
                     if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
                     {
                         createScreen(node1.Data.brailleRepresentation.screenName);
-                        createViews(node1.Data.brailleRepresentation);
+                        createView(node1.Data);
                     }
                     createViews(node1);
                 }
@@ -150,7 +224,7 @@ namespace StrategyBrailleIO
                 if (!osm.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
                 {
                     createScreen(osm.Data.brailleRepresentation.screenName);
-                    createViews(osm.Data.brailleRepresentation);
+                    createView(osm.Data);
                 }
             }
             if (!osm.HasChild)
@@ -161,29 +235,66 @@ namespace StrategyBrailleIO
                     node1.Remove();
                 }
             }            
-
-        /*    foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)osm).All.Nodes)
-            {
-                if (!node.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
-                {
-                    createScreen(node.Data.brailleRepresentation.screenName);
-                    createViews(node.Data.brailleRepresentation, treeStrategy);
-                }
-            }*/
         }
 
         /// <summary>
-        /// Erstellt aus einer <code>BrailleRepresentation</code> die entsprechende View
+        /// Erstellt aus einer <code>OSMElement.OSMElement</code> die entsprechende View
         /// </summary>
         /// <param name="brailleRepresentation">gibt die Darstellung des GUI-Objektes fuer die Stiftplatte an</param>
-        private void createViews(BrailleRepresentation brailleRepresentation)
+        private void createView(OSMElement.OSMElement osmElement)
         {
+            OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
             if (brailleRepresentation.content.text != null)
             {
-                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.content.viewName, brailleRepresentation.position);
+                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
                 return;
             }
-           //TODO
+            if (brailleRepresentation.content.matrix != null)
+            {
+                createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+                return;
+            }
+            //TODO: weitere Möglichkeiten?
+
+            //im Zweifelsfall wird immer eine "Text-View" mit einem leeren Text erstellt
+            createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, (brailleRepresentation.content.text != null) ? brailleRepresentation.content.text : "", brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+        }
+
+        /// <summary>
+        /// Ermittelt aufgrund der im StrategyMgr angegebenen Beziehungen den anzuzeigenden Text
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <returns>den anzuzeigenden Text</returns>
+        private String getTextForView(OSMElement.OSMElement osmElement)
+        {
+            OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            if (osmRelationship == null)
+            {
+                Console.WriteLine("kein passendes objekt gefunden");
+                return "";
+            }
+            ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
+            String text = "";
+            if (associatedNode != null)
+            {
+                object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.content.fromGuiElement, associatedNode.Data.properties);
+                text = (objectText != null ? objectText.ToString() : "");
+            }
+            return text;
+        }
+
+        /// <summary>
+        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyMgr.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert!
+        /// </summary>
+        /// <param name="element">gibt den zu verändernden Knoten an</param>
+       public void updateNodeOfBrailleUi(OSMElement.OSMElement element)
+        {          
+           Content updatedContent = element.brailleRepresentation.content;
+           updatedContent.text = getTextForView(element);
+           BrailleRepresentation updatedBrailleReprasentation = element.brailleRepresentation;
+           updatedBrailleReprasentation.content = updatedContent;
+           element.brailleRepresentation = updatedBrailleReprasentation;
+           strategyMgr.getSpecifiedTree().changeBrailleRepresentation(element);//hier ist das Element schon geändert                
         }
 
         #region create Views       
@@ -194,29 +305,34 @@ namespace StrategyBrailleIO
         /// <param name="text">gibt den anzuzeigenden Text an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
-        private void createViewText(BrailleIOScreen screen, String text, String viewName, Position position)
+        /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls der Text zu lang für die View ist)</param>
+        private void createViewText(BrailleIOScreen screen, String text, String viewName, Position position, Boolean showScrollbar)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetText(text);
-          //  vr.ShowScrollbars = true;
-         //   vr.SetBorder(position.boarder);
-          //  vr.SetMargin(position.margin);
-           // vr.SetPadding(position.padding);
-
+            vr.ShowScrollbars = showScrollbar;
+            vr.SetPadding(paddingToBoxModel(position.padding));
+            vr.SetMargin(paddingToBoxModel(position.margin));
+            vr.SetBorder(paddingToBoxModel(position.boarder));
             screen.AddViewRange(viewName, vr);
         }
 
         /// <summary>
         /// Erstellt eine View mit einer Bool-Matrix
-        /// </summary> //TODO: + weitere Eigenschaften
+        /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
         /// <param name="matrix">gibt die bool-Matrix an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
-        private void createViewMatrix(BrailleIOScreen screen, bool[,] matrix, String viewName, Position position)
+        /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls die Matrix zu lang für die View ist)</param>
+        private void createViewMatrix(BrailleIOScreen screen, bool[,] matrix, String viewName, Position position, Boolean showScrollbar)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetMatrix(matrix);
+            vr.ShowScrollbars = showScrollbar;
+            vr.SetPadding(paddingToBoxModel(position.padding));
+            vr.SetMargin(paddingToBoxModel(position.margin));
+            vr.SetBorder(paddingToBoxModel(position.boarder));
             screen.AddViewRange(viewName, vr);
         }
 
@@ -228,13 +344,33 @@ namespace StrategyBrailleIO
         /// <param name="image">gibt das Bild an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
-        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position)
+        /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls das Bild  zu groß für die View ist)</param>
+        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position, Boolean showScrollbar)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetBitmap(image);
+            vr.ShowScrollbars = showScrollbar;
+            vr.SetPadding(paddingToBoxModel(position.padding));
+            vr.SetMargin(paddingToBoxModel(position.margin));
+            vr.SetBorder(paddingToBoxModel(position.boarder));
             screen.AddViewRange(viewName, vr);
         }
         #endregion
+
+        /// <summary>
+        /// Wandelt <code>System.Windows.Forms.Padding</code> in <code>BrailleIO.Structs.BoxModel</code> um
+        /// </summary>
+        /// <param name="padding">gibt ein <code>Padding</code>-Objekt an</param>
+        /// <returns>das übergebene Objekt als <code>BoxModel</code></returns>
+        private BoxModel paddingToBoxModel(Padding padding)
+        {
+            BoxModel boxModel = new BoxModel();
+            boxModel.Bottom = (uint) padding.Bottom;
+            boxModel.Left = (uint)padding.Left;
+            boxModel.Right = (uint)padding.Right;
+            boxModel.Top = (uint)padding.Top;
+            return boxModel;
+        }
 
         #region copy of BrailleIOExample
 

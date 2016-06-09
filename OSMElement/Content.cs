@@ -9,9 +9,26 @@ namespace OSMElement
 {
     public struct Content
     {
-        public String text { get; set; } //TODO: Angabe für "dynamischen" Text
-        Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt; public
-        bool[,] matrix { get; set; } //TODO: public
-        public String viewName { get; set; }
+        /// <summary>
+        /// gibt den anzuzeigenden Text an
+        /// </summary>
+        public String text { get; set; }
+        public Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt; public
+
+        /// <summary>
+        /// Gibt eine matrix die Dargestellt werden soll an.
+        /// </summary>
+        public bool[,] matrix { get; set; }
+
+
+        /// <summary>
+        /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden
+        /// </summary>
+        public String fromGuiElement { get; set; }
+
+        /// <summary>
+        /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat
+        /// </summary>
+        public Boolean showScrollbar { get; set; }
     }
 }

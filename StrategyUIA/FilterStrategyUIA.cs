@@ -25,7 +25,14 @@ namespace StrategyUIA
     public class FilterStrategyUIA : IFilterStrategy
     {
         private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
+        private ITreeStrategy<OSMElement.OSMElement> specifiedTree; //ersetzen durch
+        private StrategyMgr strategyMgr;
+
+        public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
+        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+
+
+
 
         public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
         {
@@ -69,6 +76,8 @@ namespace StrategyUIA
             UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             uiaEvents.eventsUIA(hwnd);
 
+
+
             return tree;
         }
 
@@ -84,36 +93,222 @@ namespace StrategyUIA
         private GeneralProperties setProperties(AutomationElement element)
         {
             GeneralProperties elementP = new GeneralProperties();
+            try
+            {
             elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (Accelerator) '{0}'", a.ToString());
+            }
+            try
+            {
             elementP.accessKeyFiltered = element.Current.AccessKey;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (AccessKey) '{0}'", a.ToString());
+            }
+            try
+            {
             elementP.autoamtionIdFiltered = element.Current.AutomationId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (AutomationId) '{0}'", a.ToString());
+            }
+
+            try {
             if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
             {
                 elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
-            }            
+                }
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (BoundingRectangle) '{0}'", a.ToString());
+            }
+            try {
             elementP.classNameFiltered = element.Current.ClassName;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
+            }
+            try {
             elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
+            }
+            try {
             elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (FrameworkId) '{0}'", a.ToString());
+            }
+            try {
             elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (HasKeyboardFocus) '{0}'", a.ToString());
+            }
+            try {
             elementP.helpTextFiltered = element.Current.HelpText;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
+            }
+            try {
             elementP.hWndFiltered = element.Current.NativeWindowHandle;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (NativeWindowHandle) '{0}'", a.ToString());
+            }
+            try {
             elementP.isContentElementFiltered = element.Current.IsContentElement;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsContentElement) '{0}'", a.ToString());
+            }
+            try {
             elementP.isControlElementFiltered = element.Current.IsControlElement;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsControlElement) '{0}'", a.ToString());
+            }
+            try {
             elementP.isEnabledFiltered = element.Current.IsEnabled;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsEnabled) '{0}'", a.ToString());
+            }
+            try {
             elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsKeyboardFocusable) '{0}'", a.ToString());
+            }
+            try {
             elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsOffscreen) '{0}'", a.ToString());
+            }
+            try {
             elementP.isPasswordFiltered = element.Current.IsPassword;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsPassword) '{0}'", a.ToString());
+            }
+            try {
             elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (IsRequiredForForm) '{0}'", a.ToString());
+            }
+            try {
             elementP.itemStatusFiltered = element.Current.ItemStatus;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ItemStatus) '{0}'", a.ToString());
+            }
+            try {
             elementP.itemTypeFiltered = element.Current.ItemType;
-            
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ItemType) '{0}'", a.ToString());
+            }
+            try {
             elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
-            elementP.nameFiltered = element.Current.Name;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
+            }
+            try {
+                elementP.nameFiltered = element.Current.Name;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (Name) '{0}'", a.ToString());
+            }
+            try
+            {
             elementP.processIdFiltered = element.Current.ProcessId;
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
+            }
+            setPropertiesOfPattern(ref elementP, element);
+            if (elementP.IdGenerated == null)
+            {
+                elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf; sollte eigentlich nicht wieder neu berechnet werden
+                Console.WriteLine("hash = " + elementP.IdGenerated);
+            }
 
             return elementP;
         }
 
+        /// <summary>
+        /// Sofern vorhanden, wird der Text aus Eingabefeldern ausgelesen und 'valueFiltered' zugewiesen
+        /// </summary>
+        /// <param name="properties">gibt die Propertoes des Knotens an</param>
+        /// <param name="element">gibt das AutomationElement des knotens an</param>
+        private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement element)
+        {
+            object valuePattern = null;
+            if (element.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
+            {
+                properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
+            }
+        }
+
+        /// <summary>
+        /// Ändert die <code>GeneralProperties</code> im gespiegelten Baum anhand der angegebenen <code>IdGenerated</code>. (Sollten mehrere Knoten mit der selben Id existieren, so werden alle aktualisiert.)
+        /// </summary>
+        /// <param name="filteredTreeGeneratedId">gibt die generierte Id des zu ändernden knotens im gespielgelten Baum an.</param>
+        public void updateNodeOfFilteredTree(String filteredTreeGeneratedId)
+        {
+            AutomationElement au;
+            List<ITreeStrategy<OSMElement.OSMElement>> relatedFilteredTreeObject =  strategyMgr.getSpecifiedTree().getAssociatedNodeList(filteredTreeGeneratedId, strategyMgr.getFilteredTree()); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            AutomationElement mainWindowElement;
+            foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
+            {
+                Condition cond = setPropertiesCondition(treeElement.Data.properties);
+                if (treeElement.Data.properties.hWndFiltered == 0)
+                {
+                    au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond);
+                }
+                else
+                {//ist der Weg wirklich schneller?
+                    IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID((IntPtr)treeElement.Data.properties.hWndFiltered));
+                    mainWindowElement = deliverAutomationElementFromHWND(pointer);
+                    au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                }
+                if (au != null)
+                {
+                    GeneralProperties propertiesUpdated = setProperties(au);
+                    specifiedTree.changePropertiesOfFilteredNode(propertiesUpdated);
+                    break;
+                }
+            }
+        }
 
         /// <summary>
         /// todo bzw. nachfrage: geht die methode findall nicht alleine alle elemente der collection durch? wird in der foreach-schleife dadurch nicht doppelt gearbeitet?
@@ -178,7 +373,7 @@ namespace StrategyUIA
         /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
         /// <param name="rootElement"></param> --- hier erst ermitteln
         /// <returns>das zugehörige AutomationElement des Knotens</returns>
-        private AutomationElement getAutomationElementFromMirroredTree(ITreeStrategy<OSMElement.OSMElement> node, AutomationElement rootElement)
+        private AutomationElement getAutomationElementFromFilteredTree(ITreeStrategy<OSMElement.OSMElement> node, AutomationElement rootElement)
         {
             Condition condition = setPropertiesCondition(node.Data.properties);
             AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
@@ -200,11 +395,11 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="node">gibt den Knoten des gespiegelten Baumes an, von dem die Vorfahren gesucht werden sollen</param>
         /// <param name="hwnd">gibt den Handle des AutomationElementes an um anhand dessen das Root-AutomationElement zu bestimmen</param>
-        /// <returns>ein <code>ITree</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
+        /// <returns>ein <code>ITreeStrategy</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
         public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
             AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
-            AutomationElement element = getAutomationElementFromMirroredTree(node, rootElement);
+            AutomationElement element = getAutomationElementFromFilteredTree(node, rootElement);
             if (element == null)
             {
                 return null;
@@ -258,10 +453,18 @@ namespace StrategyUIA
         /// <returns>Eine Condition</returns>
         private Condition setPropertiesCondition(GeneralProperties properties)
         {
+            //Falls die "AutomationId" gesetzt wurde, so ist diese Eigenschaft ausreichend um das Element eindeutig zu identifizieren
+            if (properties.autoamtionIdFiltered != null && !properties.autoamtionIdFiltered.Equals(""))
+            {
+                return  new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
+            }
+
             //TODO: Achtung einige Eigenschaften vonrscheinlich GeneralProperties sollten wahrscheinlich nicht genutzt werden
             Condition resultCondition;
             #region von allen auslesbar
-            resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
+            //resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
+                resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
+            
             // ...
             #endregion
             if (properties.controlTypeFiltered != null)
@@ -277,11 +480,7 @@ namespace StrategyUIA
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AccessKeyProperty, properties.accessKeyFiltered), resultCondition);
             }
 
-            //TODO: evtl. hier gleich am Anfang prüfen und ggf. (falls vorhanden) nur diese Propertie nehmen?
-            if (properties.autoamtionIdFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered), resultCondition);
-            }
+
             //.. 
             return resultCondition;
         }
