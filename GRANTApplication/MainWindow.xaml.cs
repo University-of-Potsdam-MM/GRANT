@@ -90,7 +90,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                         treeStrategy.printTreeElements(tree, -1);
@@ -129,6 +129,7 @@ namespace GApplication
                         
                         //AutomationElement element = filterStrategy.deliverAutomationElementFromHWND(points);
                         //ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         //treeStrategy.printTreeElements(tree, -1);
                     }
@@ -168,7 +169,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
@@ -207,7 +208,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
@@ -244,7 +245,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, 3);
                         Console.WriteLine("\n");

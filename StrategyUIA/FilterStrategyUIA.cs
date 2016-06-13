@@ -24,37 +24,10 @@ namespace StrategyUIA
     #region filterStrategyUIAClass
     public class FilterStrategyUIA : IFilterStrategy
     {
-        private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree; //ersetzen durch
         private StrategyMgr strategyMgr;
 
         public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
         public StrategyMgr getStrategyMgr() { return strategyMgr; }
-
-
-
-
-        public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
-        {
-             specifiedOperationSystem = operationSystem;
-        }
-
-        public IOperationSystemStrategy getSpecifiedOperationSystem()
-        {
-            return specifiedOperationSystem;
-        }
-
-        
-        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree)
-        {
-            specifiedTree = tree;
-        }
-
-        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
-        {
-            return specifiedTree;
-        }
-
 
         /// <summary>
         /// Erstellt anhand des Handles einer Anwendung den zugehörigen Baum
@@ -65,7 +38,7 @@ namespace StrategyUIA
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {
 
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainWindowElement);
@@ -304,7 +277,7 @@ namespace StrategyUIA
                 if (au != null)
                 {
                     GeneralProperties propertiesUpdated = setProperties(au);
-                    specifiedTree.changePropertiesOfFilteredNode(propertiesUpdated);
+                    getStrategyMgr().getSpecifiedTree().changePropertiesOfFilteredNode(propertiesUpdated);
                     break;
                 }
             }
@@ -398,13 +371,13 @@ namespace StrategyUIA
         /// <returns>ein <code>ITreeStrategy</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
         public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
-            AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
+            AutomationElement rootElement = deliverAutomationElementFromHWND(getStrategyMgr().getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(hwnd)));             
             AutomationElement element = getAutomationElementFromFilteredTree(node, rootElement);
             if (element == null)
             {
                 return null;
             }
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties =  setProperties(element);
             tree.AddChild(osmElement);
@@ -436,7 +409,7 @@ namespace StrategyUIA
         /// <param name="tree">gibt den "alten" Baum an</param>
         private void addParentOfNode(AutomationElement parentElement, ITreeStrategy<OSMElement.OSMElement> tree)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree2 = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree2 = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(parentElement);
             ITreeStrategy<OSMElement.OSMElement> node = tree2.AddChild(osmElement);

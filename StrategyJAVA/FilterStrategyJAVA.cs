@@ -20,28 +20,6 @@ namespace StrategyJAVA
         public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
         public StrategyMgr getStrategyMgr() { return strategyMgr; }
 
-
-        public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
-        {
-            specifiedOperationSystem = operationSystem;
-        }
-
-        public IOperationSystemStrategy getSpecifiedOperationSystem()
-        {
-            return specifiedOperationSystem;
-        }
-
-
-        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree)
-        {
-            specifiedTree = tree;
-        }
-
-        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
-        {
-            return specifiedTree;
-        }
-
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;

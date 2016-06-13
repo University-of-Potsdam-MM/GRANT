@@ -23,10 +23,6 @@ namespace StrategyManager.Interfaces
         /// <returns>Ein Baum mit allen Vorgängern des Knotens</returns>
         ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd);
 
-        void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem);
-        IOperationSystemStrategy getSpecifiedOperationSystem();
-        void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree);
-        ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree();
 		void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height);
 	    /// <summary>
 	    /// Filtert von dem angegebenen Knoten die Eigenschaften neu und ändert entsprechend das Baum-Objekt
