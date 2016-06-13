@@ -175,6 +175,11 @@ namespace OSMElement
         }
 
         public String valueFiltered { get; set; }
+
+        public RangeValue rangeValue
+        {
+            get; set; 
+        }
         
     }
 }

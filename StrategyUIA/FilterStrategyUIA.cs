@@ -239,17 +239,36 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Sofern vorhanden, wird der Text aus Eingabefeldern ausgelesen und 'valueFiltered' zugewiesen
+        /// Die Mehtode behhandelt die verschiedenen Pattern
         /// </summary>
         /// <param name="properties">gibt die Propertoes des Knotens an</param>
         /// <param name="element">gibt das AutomationElement des knotens an</param>
         private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement element)
-        {
+        {//https://msdn.microsoft.com/de-de/library/ms750574(v=vs.110).aspx
+
             object valuePattern = null;
             if (element.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
-            {
+            {/* 
+              * Conditional Support: Combo Box, Data Item, Edit,Hyperlink, List Item, Progress Bar, Slider,Spinner
+              */
                 properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
             }
+            object rangeValuePattern = null;
+            if(element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
+            {
+                /*
+                 * Conditional Support: Edit, Progress Bar, Scroll Bar, Slider, Spinner
+                 */                
+                RangeValue rangeValue = new RangeValue();
+                rangeValue.isReadOnly = (rangeValuePattern as RangeValuePattern).Current.IsReadOnly;
+                rangeValue.largeChange = (rangeValuePattern as RangeValuePattern).Current.LargeChange;
+                rangeValue.maximum = (rangeValuePattern as RangeValuePattern).Current.Maximum;
+                rangeValue.minimum = (rangeValuePattern as RangeValuePattern).Current.Minimum;
+                rangeValue.smallChange = (rangeValuePattern as RangeValuePattern).Current.SmallChange;
+                rangeValue.currentValue = (rangeValuePattern as RangeValuePattern).Current.Value;
+                properties.rangeValue = rangeValue;
+            }
+
         }
 
         /// <summary>
