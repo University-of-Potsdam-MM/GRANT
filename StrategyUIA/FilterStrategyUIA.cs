@@ -238,6 +238,7 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
             }
             setPropertiesOfPattern(ref elementP, element);
+            setSupportedPatterns(ref elementP, element);
             if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf; sollte eigentlich nicht wieder neu berechnet werden
@@ -251,7 +252,7 @@ namespace StrategyUIA
         /// Die Mehtode behhandelt die verschiedenen Pattern
         /// </summary>
         /// <param name="properties">gibt die Propertoes des Knotens an</param>
-        /// <param name="element">gibt das AutomationElement des knotens an</param>
+        /// <param name="element">gibt das AutomationElement des Knotens an</param>
         private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement element)
         {//https://msdn.microsoft.com/de-de/library/ms750574(v=vs.110).aspx
 
@@ -279,6 +280,18 @@ namespace StrategyUIA
             }
 
         }
+
+        /// <summary>
+        /// Ermittelt die unterstützten Pattern;
+        /// Das zugewiesene Object ist dabei vom Type <code>AutomationPattern[]</code>
+        /// </summary>
+        /// <param name="properties">Eine Referenz zu den gesetzten Properties des Elements</param>
+        /// <param name="element">gibt das AutomationElement des Knotens an</param>
+        private void setSupportedPatterns(ref GeneralProperties properties, AutomationElement element)
+        {
+            properties.suportedPatterns = element.GetSupportedPatterns().ToArray();
+        }
+
 
         /// <summary>
         /// Ändert die <code>GeneralProperties</code> im gespiegelten Baum anhand der angegebenen <code>IdGenerated</code>. (Sollten mehrere Knoten mit der selben Id existieren, so werden alle aktualisiert.)

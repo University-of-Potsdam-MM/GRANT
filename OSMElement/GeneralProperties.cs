@@ -184,6 +184,12 @@ namespace OSMElement
         {
             get; set; 
         }
+
+
+        /// <summary>
+        /// Enthält die unterstützten Pattern
+        /// </summary>
+        public object[] suportedPatterns { get; set; }
         
     }
 }
