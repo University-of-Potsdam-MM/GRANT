@@ -14,7 +14,7 @@ namespace StrategyManager.Interfaces
         /// <param name="hwnd">gibt den Handle an, von dem die Filterung starten soll</param>
         /// <returns>Ein Baum mit den gefilterten Eigenschaften</returns>
         ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd);
-        OSMElement.OSMElement filterElement(IntPtr hwnd);
+        //OSMElement.OSMElement filterElement(IntPtr hwnd);
         int deliverElementID(IntPtr hwnd);
 
         /// <summary>
