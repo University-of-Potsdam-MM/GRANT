@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Drawing;
 
 namespace StrategyManager.Interfaces
 {
@@ -12,6 +13,8 @@ namespace StrategyManager.Interfaces
         bool deliverCursorPosition();
         IntPtr getHWND();
         IntPtr getProcessHwndFromHwnd(int processId);
-        void paintMouseRect(Rect mouseRect);
+        void paintMouseRect(OSMElement.OSMElement osmElement);
+        IntPtr deliverDesktopHWND();
+        void getCursorPoint(out int x, out int y);
     }
 }

@@ -137,7 +137,7 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
             }
             try {
-            elementP.hWndFiltered = element.Current.NativeWindowHandle;
+            elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
             }
             catch (Exception a)
             {
@@ -206,6 +206,14 @@ namespace StrategyUIA
             {
                 Console.WriteLine("Property: (ItemType) '{0}'", a.ToString());
             }
+            try
+            {
+                elementP.runtimeIDFiltered = element.GetRuntimeId();
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (runtime) '{0}'", a.ToString());
+            }
             try {
             elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
             }
@@ -213,8 +221,9 @@ namespace StrategyUIA
             {
                 Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
             }
-            try {
-                elementP.nameFiltered = element.Current.Name;
+            try
+            {
+                //elementP.nameFiltered = element.Current.Name;
             }
             catch (Exception a)
             {
@@ -232,7 +241,7 @@ namespace StrategyUIA
             if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf; sollte eigentlich nicht wieder neu berechnet werden
-                Console.WriteLine("hash = " + elementP.IdGenerated);
+                //Console.WriteLine("hash = " + elementP.IdGenerated);
             }
 
             return elementP;
@@ -264,7 +273,7 @@ namespace StrategyUIA
             foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
             {
                 Condition cond = setPropertiesCondition(treeElement.Data.properties);
-                if (treeElement.Data.properties.hWndFiltered == 0)
+                if (treeElement.Data.properties.hWndFiltered == null)
                 {
                     au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond);
                 }
@@ -326,19 +335,51 @@ namespace StrategyUIA
             return processIdentifier;
         }
 
-        public void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height)
+        public AutomationElement deliverAutomationElementFromCursor(int x, int y)
         {
-            AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+            // Convert mouse position from System.Drawing.Point to System.Windows.Point.
+            System.Windows.Point point = new System.Windows.Point(x, y);
+
+            AutomationElement element = AutomationElement.FromPoint(point);
+            return element;
+        }
+
+        public OSMElement.OSMElement setOSMElement(int pointX, int pointY)
+        {
+            
+            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
+
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+
+            osmElement.properties = setProperties(mouseElement);
+
+            return osmElement;
+        }
+
+       /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
+        {
+            //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
+
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+
+            osmElement.properties = setProperties(mouseElement);
+            
             //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
-            y = (int)mouseElement.Current.BoundingRectangle.TopRight.Y;
-            height = (int)mouseElement.Current.BoundingRectangle.Width;
-            width = (int)mouseElement.Current.BoundingRectangle.Height;
+            x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
+            y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
+            int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+            int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
+            int[] runtimes= mouseElement.GetRuntimeId();
+            height = y2 - y;
+            width = x2 - x;
+          
             Console.WriteLine("hier x: " + x);
             Console.WriteLine("hier y: " + y);
             Console.WriteLine("hier w: " + width);
             Console.WriteLine("hier h: " + height);
-        }
+            Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
+        }*/
 
         /// <summary>
         /// Ermittelt das zugehörige AutomationElement eines Knotens aus dem gespiegelten Baum
