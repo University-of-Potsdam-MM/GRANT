@@ -1,30 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using StrategyManager;
 using StrategyManager.Interfaces;
 using StrategyGenericTree;
 
-using System.Windows.Automation;
-using StrategyBrailleIO;
 using OSMElement;
 using System.Windows.Forms;
+
 using System.Drawing;
 
 namespace GApplication
 {
-
+    
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
@@ -62,25 +52,10 @@ namespace GApplication
 
         }
 
-        public void filterElement(IntPtr hwnd)
-        {
-            //AutomationElement element = AutomationElement.FromHandle(hwnd);
-            
-            //ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
-            //AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
-            //OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
-            //osmElement.properties = setProperties(mainWindowElement);
-            ////ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
-            ////AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-            ////findChildrenOfNode(top, collection, -1);
-
-            ////UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-            ////uiaEvents.eventsUIA(hwnd);
-
-            //return tree;
-        }
-
-
+        
+        //System.Drawing.Rectangle theRectangle = new System.Drawing.Rectangle(new System.Drawing.Point(0, 0), new System.Drawing.Size(0, 0));
+        //System.Drawing.Point startPoint;
+       
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
 
@@ -109,7 +84,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                         treeStrategy.printTreeElements(tree, -1);
@@ -127,34 +102,30 @@ namespace GApplication
                 {
                     try
                     {
-                        IntPtr points = operationSystemStrategy.getHWND();
-                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+                       IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                        int x;
-                        int y;
-                        int width;
-                        int height;
-                        filterStrategy.getMouseRect(points, out x, out y, out width, out height);
-                        System.Windows.Rect mouseRect = new System.Windows.Rect(x, y, width, height);
-                        operationSystemStrategy.paintMouseRect(mouseRect);
+                        int pointX;
+                        int pointY;
 
-                        Console.WriteLine("x: " + x);
-                        Console.WriteLine("y: " + y);
-                        Console.WriteLine("w: " + width);
-                        Console.WriteLine("h: " + height);
+                        operationSystemStrategy.getCursorPoint(out pointX, out pointY);
 
-                        //soperationSystemStrategy.paintMouseRect(mouseRect);
-                        
-                        
-                        //AutomationElement element = filterStrategy.deliverAutomationElementFromHWND(points);
-                        //ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
-                        
-                        ////ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        Console.WriteLine("Pointx: " + pointX);
+                        Console.WriteLine("Pointy: " + pointY);
+                       
+                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
 
-                        OSMElement.OSMElement osmSingleElement = filterStrategy.filterElement(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        //filterStrategy.getMouseRect(points, pointX, pointY, out x, out y, out width, out height);
 
-                        Console.WriteLine(osmSingleElement.properties.hWndFiltered.ToString() + "___" + osmSingleElement.properties.processIdFiltered.ToString() + "___"
-                            + osmSingleElement.properties.boundingRectangleFiltered.TopLeft.X.ToString() + osmSingleElement.properties.boundingRectangleFiltered.TopLeft.Y.ToString());
+                        //System.Drawing.Rectangle mouseRect = new System.Drawing.Rectangle(x, y, width, height);
+                        operationSystemStrategy.paintMouseRect(osmElement);
+
+                       
+  
+
+        //AutomationElement element = filterStrategy.deliverAutomationElementFromHWND(points);
+        //ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
+        //filterStrategy.setStrategyMgr(strategyMgr);
+          //              ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         //treeStrategy.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
@@ -193,7 +164,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
@@ -232,7 +203,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, -1);
                         Console.WriteLine("\n");
@@ -269,7 +240,7 @@ namespace GApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
+                        filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         treeStrategy.printTreeElements(tree, 3);
                         Console.WriteLine("\n");

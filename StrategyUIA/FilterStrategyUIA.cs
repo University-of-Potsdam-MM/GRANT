@@ -24,37 +24,10 @@ namespace StrategyUIA
     #region filterStrategyUIAClass
     public class FilterStrategyUIA : IFilterStrategy
     {
-        private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree; //ersetzen durch
         private StrategyMgr strategyMgr;
 
         public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
         public StrategyMgr getStrategyMgr() { return strategyMgr; }
-
-
-
-
-        public void setSpecifiedOperationSystem(IOperationSystemStrategy operationSystem)
-        {
-             specifiedOperationSystem = operationSystem;
-        }
-
-        public IOperationSystemStrategy getSpecifiedOperationSystem()
-        {
-            return specifiedOperationSystem;
-        }
-
-        
-        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> tree)
-        {
-            specifiedTree = tree;
-        }
-
-        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
-        {
-            return specifiedTree;
-        }
-
 
         /// <summary>
         /// Erstellt anhand des Handles einer Anwendung den zugehörigen Baum
@@ -65,7 +38,7 @@ namespace StrategyUIA
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {
 
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainWindowElement);
@@ -181,7 +154,7 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
             }
             try {
-            elementP.hWndFiltered = element.Current.NativeWindowHandle;
+            elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
             }
             catch (Exception a)
             {
@@ -250,6 +223,14 @@ namespace StrategyUIA
             {
                 Console.WriteLine("Property: (ItemType) '{0}'", a.ToString());
             }
+            try
+            {
+                elementP.runtimeIDFiltered = element.GetRuntimeId();
+            }
+            catch (Exception a)
+            {
+                Console.WriteLine("Property: (runtime) '{0}'", a.ToString());
+            }
             try {
             elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
             }
@@ -257,8 +238,9 @@ namespace StrategyUIA
             {
                 Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
             }
-            try {
-                elementP.nameFiltered = element.Current.Name;
+            try
+            {
+                //elementP.nameFiltered = element.Current.Name;
             }
             catch (Exception a)
             {
@@ -273,28 +255,60 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
             }
             setPropertiesOfPattern(ref elementP, element);
+            setSupportedPatterns(ref elementP, element);
             if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf; sollte eigentlich nicht wieder neu berechnet werden
-                Console.WriteLine("hash = " + elementP.IdGenerated);
+                //Console.WriteLine("hash = " + elementP.IdGenerated);
             }
 
             return elementP;
         }
 
         /// <summary>
-        /// Sofern vorhanden, wird der Text aus Eingabefeldern ausgelesen und 'valueFiltered' zugewiesen
+        /// Die Mehtode behhandelt die verschiedenen Pattern
         /// </summary>
         /// <param name="properties">gibt die Propertoes des Knotens an</param>
-        /// <param name="element">gibt das AutomationElement des knotens an</param>
+        /// <param name="element">gibt das AutomationElement des Knotens an</param>
         private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement element)
-        {
+        {//https://msdn.microsoft.com/de-de/library/ms750574(v=vs.110).aspx
+
             object valuePattern = null;
             if (element.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
-            {
+            {/* 
+              * Conditional Support: Combo Box, Data Item, Edit,Hyperlink, List Item, Progress Bar, Slider,Spinner
+              */
                 properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
             }
+            object rangeValuePattern = null;
+            if(element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
+            {
+                /*
+                 * Conditional Support: Edit, Progress Bar, Scroll Bar, Slider, Spinner
+                 */                
+                RangeValue rangeValue = new RangeValue();
+                rangeValue.isReadOnly = (rangeValuePattern as RangeValuePattern).Current.IsReadOnly;
+                rangeValue.largeChange = (rangeValuePattern as RangeValuePattern).Current.LargeChange;
+                rangeValue.maximum = (rangeValuePattern as RangeValuePattern).Current.Maximum;
+                rangeValue.minimum = (rangeValuePattern as RangeValuePattern).Current.Minimum;
+                rangeValue.smallChange = (rangeValuePattern as RangeValuePattern).Current.SmallChange;
+                rangeValue.currentValue = (rangeValuePattern as RangeValuePattern).Current.Value;
+                properties.rangeValue = rangeValue;
+            }
+
         }
+
+        /// <summary>
+        /// Ermittelt die unterstützten Pattern;
+        /// Das zugewiesene Object ist dabei vom Type <code>AutomationPattern[]</code>
+        /// </summary>
+        /// <param name="properties">Eine Referenz zu den gesetzten Properties des Elements</param>
+        /// <param name="element">gibt das AutomationElement des Knotens an</param>
+        private void setSupportedPatterns(ref GeneralProperties properties, AutomationElement element)
+        {
+            properties.suportedPatterns = element.GetSupportedPatterns().ToArray();
+        }
+
 
         /// <summary>
         /// Ändert die <code>GeneralProperties</code> im gespiegelten Baum anhand der angegebenen <code>IdGenerated</code>. (Sollten mehrere Knoten mit der selben Id existieren, so werden alle aktualisiert.)
@@ -308,7 +322,7 @@ namespace StrategyUIA
             foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
             {
                 Condition cond = setPropertiesCondition(treeElement.Data.properties);
-                if (treeElement.Data.properties.hWndFiltered == 0)
+                if (treeElement.Data.properties.hWndFiltered == null)
                 {
                     au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond);
                 }
@@ -321,7 +335,7 @@ namespace StrategyUIA
                 if (au != null)
                 {
                     GeneralProperties propertiesUpdated = setProperties(au);
-                    specifiedTree.changePropertiesOfFilteredNode(propertiesUpdated);
+                    getStrategyMgr().getSpecifiedTree().changePropertiesOfFilteredNode(propertiesUpdated);
                     break;
                 }
             }
@@ -370,19 +384,51 @@ namespace StrategyUIA
             return processIdentifier;
         }
 
-        public void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height)
+        public AutomationElement deliverAutomationElementFromCursor(int x, int y)
         {
-            AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+            // Convert mouse position from System.Drawing.Point to System.Windows.Point.
+            System.Windows.Point point = new System.Windows.Point(x, y);
+
+            AutomationElement element = AutomationElement.FromPoint(point);
+            return element;
+        }
+
+        public OSMElement.OSMElement setOSMElement(int pointX, int pointY)
+        {
+            
+            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
+
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+
+            osmElement.properties = setProperties(mouseElement);
+
+            return osmElement;
+        }
+
+       /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
+        {
+            //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
+
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+
+            osmElement.properties = setProperties(mouseElement);
+            
             //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
-            y = (int)mouseElement.Current.BoundingRectangle.TopRight.Y;
-            height = (int)mouseElement.Current.BoundingRectangle.Width;
-            width = (int)mouseElement.Current.BoundingRectangle.Height;
+            x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
+            y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
+            int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+            int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
+            int[] runtimes= mouseElement.GetRuntimeId();
+            height = y2 - y;
+            width = x2 - x;
+          
             Console.WriteLine("hier x: " + x);
             Console.WriteLine("hier y: " + y);
             Console.WriteLine("hier w: " + width);
             Console.WriteLine("hier h: " + height);
-        }
+            Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
+        }*/
 
         /// <summary>
         /// Ermittelt das zugehörige AutomationElement eines Knotens aus dem gespiegelten Baum
@@ -415,13 +461,13 @@ namespace StrategyUIA
         /// <returns>ein <code>ITreeStrategy</code>-Objekt mit den Vorfahren des Knotens (inkl. des Knotens selbst)</returns>
         public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
         {
-            AutomationElement rootElement = deliverAutomationElementFromHWND(specifiedOperationSystem.getProcessHwndFromHwnd(deliverElementID(hwnd)));             
+            AutomationElement rootElement = deliverAutomationElementFromHWND(getStrategyMgr().getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(hwnd)));             
             AutomationElement element = getAutomationElementFromFilteredTree(node, rootElement);
             if (element == null)
             {
                 return null;
             }
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties =  setProperties(element);
             tree.AddChild(osmElement);
@@ -453,7 +499,7 @@ namespace StrategyUIA
         /// <param name="tree">gibt den "alten" Baum an</param>
         private void addParentOfNode(AutomationElement parentElement, ITreeStrategy<OSMElement.OSMElement> tree)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree2 = specifiedTree.NewNodeTree();
+            ITreeStrategy<OSMElement.OSMElement> tree2 = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(parentElement);
             ITreeStrategy<OSMElement.OSMElement> node = tree2.AddChild(osmElement);

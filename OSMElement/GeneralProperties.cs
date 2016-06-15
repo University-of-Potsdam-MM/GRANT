@@ -35,7 +35,11 @@ namespace OSMElement
             set;
         }
 
-
+        public int[] runtimeIDFiltered
+        {
+            get;
+            set;
+        }
 
         // STATE
 
@@ -110,7 +114,7 @@ namespace OSMElement
 
         //typ?
         // Anmerkung: von String zu int geändert
-        public int hWndFiltered
+        public IntPtr hWndFiltered
         {
             get;
             set;
@@ -175,6 +179,17 @@ namespace OSMElement
         }
 
         public String valueFiltered { get; set; }
+
+        public RangeValue rangeValue
+        {
+            get; set; 
+        }
+
+
+        /// <summary>
+        /// Enthält die unterstützten Pattern
+        /// </summary>
+        public object[] suportedPatterns { get; set; }
         
     }
 }

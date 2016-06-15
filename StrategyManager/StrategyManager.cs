@@ -125,8 +125,6 @@ namespace StrategyManager
             {
                 Type type = Type.GetType(filterClassName);
                 specifiedFilter = (IFilterStrategy)Activator.CreateInstance(type);
-                specifiedFilter.setSpecifiedOperationSystem(specifiedOperationSystem);
-                specifiedFilter.setSpecifiedTree(specifiedTree);
             }
 
             catch (InvalidCastException ic)
