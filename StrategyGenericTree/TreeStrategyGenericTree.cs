@@ -2911,7 +2911,7 @@ namespace StrategyGenericTree
             {
                 Console.WriteLine("frameWorkIdFiltered: {0}", properties.frameWorkIdFiltered);
             }
-            if (properties.hWndFiltered != 0)
+            if (properties.hWndFiltered != null)
             {
                 Console.WriteLine("hWndFiltered: {0}", properties.hWndFiltered);
             }

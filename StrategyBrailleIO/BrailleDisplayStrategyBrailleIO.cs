@@ -195,7 +195,7 @@ namespace StrategyBrailleIO
 
             int h = Convert.ToInt32(node.Data.boundingRectangleFiltered.Height);
             int w = Convert.ToInt32(node.Data.boundingRectangleFiltered.Width);
-            bmp = ScreenCapture.CaptureWindow(new IntPtr(node.Data.hWndFiltered), h, w, 0, 0, 0, 0);
+            bmp = ScreenCapture.CaptureWindow(node.Data.hWndFiltered, h, w, 0, 0, 0, 0);
 
             return bmp;
         }

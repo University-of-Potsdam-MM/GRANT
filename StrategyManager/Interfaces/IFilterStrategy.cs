@@ -2,6 +2,7 @@
 using StrategyManager;
 using OSMElement;
 using System.Windows;
+using System.Windows.Automation;
 
 namespace StrategyManager.Interfaces
 {
@@ -23,12 +24,15 @@ namespace StrategyManager.Interfaces
         /// <returns>Ein Baum mit allen Vorgängern des Knotens</returns>
         ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd);
 
-		void getMouseRect(IntPtr hwnd, out int x, out int y, out int width, out int height);
-	    /// <summary>
-	    /// Filtert von dem angegebenen Knoten die Eigenschaften neu und ändert entsprechend das Baum-Objekt
-	    /// </summary>
-	    /// <param name="filteredTreeGeneratedId">gibt die generierte Id des Knotens an, welcher neu gefiltert werden soll</param>
-		void updateNodeOfFilteredTree(String filteredTreeGeneratedId);
+		//void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height);
+        OSMElement.OSMElement setOSMElement(int pointX, int pointY);
+        
+        //AutomationElement ElementFromCursor(int pointsX, int pointsY);
+        /// <summary>
+        /// Filtert von dem angegebenen Knoten die Eigenschaften neu und ändert entsprechend das Baum-Objekt
+        /// </summary>
+        /// <param name="filteredTreeGeneratedId">gibt die generierte Id des Knotens an, welcher neu gefiltert werden soll</param>
+        void updateNodeOfFilteredTree(String filteredTreeGeneratedId);
         void setStrategyMgr(StrategyMgr strategyMgr);
         StrategyMgr getStrategyMgr();    }
 }

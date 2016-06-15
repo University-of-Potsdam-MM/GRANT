@@ -35,7 +35,11 @@ namespace OSMElement
             set;
         }
 
-
+        public int[] runtimeIDFiltered
+        {
+            get;
+            set;
+        }
 
         // STATE
 
@@ -110,7 +114,7 @@ namespace OSMElement
 
         //typ?
         // Anmerkung: von String zu int geändert
-        public int hWndFiltered
+        public IntPtr hWndFiltered
         {
             get;
             set;
