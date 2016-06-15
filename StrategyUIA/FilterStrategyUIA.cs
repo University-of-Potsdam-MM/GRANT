@@ -76,9 +76,26 @@ namespace StrategyUIA
             UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             uiaEvents.eventsUIA(hwnd);
 
-
-
             return tree;
+        }
+
+        public OSMElement.OSMElement filterElement(IntPtr hwnd)
+        {
+            //ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+
+            AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
+
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+
+            //ITreeStrategy<OSMElement.OSMElement> osmElement = new ITreeStrategy<OSMElement.OSMElement>;
+            
+            osmElement.properties = setProperties(mainWindowElement);
+            
+            //ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
+            //AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
+            //findChildrenOfNode(top, collection, -1);
+
+            return osmElement;
         }
 
 

@@ -62,6 +62,25 @@ namespace GApplication
 
         }
 
+        public void filterElement(IntPtr hwnd)
+        {
+            //AutomationElement element = AutomationElement.FromHandle(hwnd);
+            
+            //ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
+            //AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
+            //OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            //osmElement.properties = setProperties(mainWindowElement);
+            ////ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
+            ////AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
+            ////findChildrenOfNode(top, collection, -1);
+
+            ////UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+            ////uiaEvents.eventsUIA(hwnd);
+
+            //return tree;
+        }
+
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
 
@@ -129,7 +148,13 @@ namespace GApplication
                         
                         //AutomationElement element = filterStrategy.deliverAutomationElementFromHWND(points);
                         //ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
-                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                        
+                        ////ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+
+                        OSMElement.OSMElement osmSingleElement = filterStrategy.filterElement(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+
+                        Console.WriteLine(osmSingleElement.properties.hWndFiltered.ToString() + "___" + osmSingleElement.properties.processIdFiltered.ToString() + "___"
+                            + osmSingleElement.properties.boundingRectangleFiltered.TopLeft.X.ToString() + osmSingleElement.properties.boundingRectangleFiltered.TopLeft.Y.ToString());
                         //treeStrategy.printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
