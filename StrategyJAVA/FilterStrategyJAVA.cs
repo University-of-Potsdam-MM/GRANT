@@ -26,6 +26,12 @@ namespace StrategyJAVA
             return tree;
         }
 
+        //public OSMElement.OSMElement filterElement(IntPtr hwnd)
+        //{
+        //    OSMElement.OSMElement tree = new OSMElement.OSMElement();
+        //    return tree;
+        //}
+
         public int deliverElementID(IntPtr hwnd)
         {            
             return -1;

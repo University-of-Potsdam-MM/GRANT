@@ -179,6 +179,17 @@ namespace OSMElement
         }
 
         public String valueFiltered { get; set; }
+
+        public RangeValue rangeValue
+        {
+            get; set; 
+        }
+
+
+        /// <summary>
+        /// Enthält die unterstützten Pattern
+        /// </summary>
+        public object[] suportedPatterns { get; set; }
         
     }
 }
