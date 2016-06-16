@@ -13,8 +13,10 @@ namespace StrategyManager.Interfaces
         bool deliverCursorPosition();
         IntPtr getHWND();
         IntPtr getProcessHwndFromHwnd(int processId);
-        void paintMouseRect(OSMElement.OSMElement osmElement);
+        //void paintRect(Rectangle rect, Graphics desktop);
+        void paintRect(Rectangle rect);
         IntPtr deliverDesktopHWND();
         void getCursorPoint(out int x, out int y);
+        Rectangle getRect(OSMElement.OSMElement osmElement);
     }
 }
