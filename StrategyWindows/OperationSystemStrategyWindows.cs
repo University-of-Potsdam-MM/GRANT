@@ -9,6 +9,7 @@ using StrategyManager.Interfaces;
 using System.Windows;
 using System.Drawing;
 using OSMElement;
+using System.Drawing.Imaging;
 
 namespace StrategyWindows
 {
@@ -27,9 +28,14 @@ namespace StrategyWindows
 
             [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = false)]
             public static extern IntPtr GetDesktopWindow();
+
+          
+
         }
 
         private CursorPoint cp = new CursorPoint();
+        
+        
 
         public CursorPoint Cp
         {
@@ -126,37 +132,52 @@ namespace StrategyWindows
                 throw new InvalidOperationException("Fehler bei MainWindowHandle: " + i.Message);
             }
         }
-        public void paintMouseRect_2(OSMElement.OSMElement osmElement)
+
+        public Rectangle getRect(OSMElement.OSMElement osmElement)
         {
+
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
             int y = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.Y;
             int x2 = (int)osmElement.properties.boundingRectangleFiltered.TopRight.X;
             int y2 = (int)osmElement.properties.boundingRectangleFiltered.BottomLeft.Y;
-            //IntPtr points = osmElement.properties.hWndFiltered;
             int height = y2 - y;
             int width = x2 - x;
-
-
-            Console.WriteLine("x: " + osmElement.properties.boundingRectangleFiltered.TopLeft.X);
+            // Create rectangle.
+            return new Rectangle(x,y,width,height);
+        }
+        
+        public void paintRect(Rectangle rect)
+        {
+            
+            Graphics desktop = Graphics.FromHwnd(NativeMethods.GetDesktopWindow());
+           
+           
+            Graphics newGraphics = desktop;
+            Pen redPen = new Pen(Color.Red, 5);
+            newGraphics.DrawRectangle(redPen, rect);
+            //newGraphics.Dispose();
+           
+//Console.WriteLine("x: " + osmElement.properties.boundingRectangleFiltered.TopLeft.X);
 
             //IntPtr points = operationSystemStrategy.getHWND();
             //IntPtr MainHWND = operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points));
 
             // Create new graphics object using handle to window.
-            Graphics newGraphics = Graphics.FromHwnd(deliverDesktopHWND());
+  //          Graphics newGraphics = Graphics.FromHwnd(deliverDesktopHWND());
 
-            System.Drawing.Size s = this.Size;
+    //        System.Drawing.Size s = this.Size;
 
 
-            Graphics newGraphics2 = Graphics.FromHwnd(deliverDesktopHWND());
+      //      Graphics newGraphics2 = Graphics.FromHwnd(deliverDesktopHWND());
 
-            newGraphics2.CopyFromScreen();
+        //    newGraphics2.CopyFromScreen();
 
             // Draw rectangle to screen.
-            newGraphics.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.Red, 5), x, y, width, height);
+          //  newGraphics.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.Red, 5), x, y, width, height);
 
             // Dispose of new graphics.
-            newGraphics.Dispose();
+            //newGraphics.Dispose();
+
         }
     }
     
