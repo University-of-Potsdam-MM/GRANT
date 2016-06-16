@@ -125,7 +125,7 @@ namespace GApplication
                         Rectangle rect = operationSystemStrategy.getRect(osmElement);
 
                         // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
-                       
+                        operationSystemStrategy.paintRect(rect);
     }
                     catch (Exception ex)
                     {
