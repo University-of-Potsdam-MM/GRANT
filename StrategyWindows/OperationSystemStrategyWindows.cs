@@ -126,7 +126,7 @@ namespace StrategyWindows
                 throw new InvalidOperationException("Fehler bei MainWindowHandle: " + i.Message);
             }
         }
-        public void paintMouseRect(OSMElement.OSMElement osmElement)
+        public void paintMouseRect_2(OSMElement.OSMElement osmElement)
         {
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
             int y = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.Y;
@@ -144,6 +144,13 @@ namespace StrategyWindows
 
             // Create new graphics object using handle to window.
             Graphics newGraphics = Graphics.FromHwnd(deliverDesktopHWND());
+
+            System.Drawing.Size s = this.Size;
+
+
+            Graphics newGraphics2 = Graphics.FromHwnd(deliverDesktopHWND());
+
+            newGraphics2.CopyFromScreen();
 
             // Draw rectangle to screen.
             newGraphics.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.Red, 5), x, y, width, height);
