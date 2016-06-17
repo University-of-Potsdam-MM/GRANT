@@ -29,8 +29,12 @@ namespace StrategyWindows
             [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = false)]
             public static extern IntPtr GetDesktopWindow();
 
-          
+            [System.Runtime.InteropServices.DllImport("user32.dll")]
+            public static extern bool UpdateWindow(IntPtr hWnd);
 
+            [System.Runtime.InteropServices.DllImport("user32.dll")]
+            public static extern bool InvalidateRect(IntPtr hwnd, IntPtr lpRect, bool
+            bErase);
         }
 
         private CursorPoint cp = new CursorPoint();
@@ -133,9 +137,22 @@ namespace StrategyWindows
             }
         }
 
+        // refresht Ansicht des übergebenen hwnd
+        public bool updateWindow(IntPtr hwnd)
+        {
+            try
+            {
+                NativeMethods.UpdateWindow(hwnd);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei UpdateWindow: " + e.Message);
+            }
+        }
+
         public Rectangle getRect(OSMElement.OSMElement osmElement)
         {
-
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
             int y = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.Y;
             int x2 = (int)osmElement.properties.boundingRectangleFiltered.TopRight.X;
@@ -147,15 +164,64 @@ namespace StrategyWindows
         }
         
         public void paintRect(Rectangle rect)
-        {
-            
-            Graphics desktop = Graphics.FromHwnd(NativeMethods.GetDesktopWindow());
-           
-           
+        {            
+            Graphics desktop = Graphics.FromHwnd(NativeMethods.GetDesktopWindow());           
             Graphics newGraphics = desktop;
             Pen redPen = new Pen(Color.Red, 5);
             newGraphics.DrawRectangle(redPen, rect);
+
+            System.Threading.Thread.Sleep(1000);
+            
+            NativeMethods.InvalidateRect(IntPtr.Zero ,IntPtr.Zero , true);
+
+            //updatewindow säubert nicht ordentlich den screen
+            //updateWindow(IntPtr.Zero);
+
+            newGraphics.Dispose();
+        }
+    
+    
+
+
+        public void paintRect_Test(Rectangle rect)
+        {            
+            Graphics desktop = Graphics.FromHwnd(NativeMethods.GetDesktopWindow());           
+           
+            Graphics newGraphics = desktop;
+
+         //   newGraphics.SetClip(rect);
+//            System.Drawing.Drawing2D.GraphicsContainer cont;
+
+//            cont = newGraphics.BeginContainer();
+
+            //Graphics newGraphics2 = newGraphics;
+            //newGraphics2.beg
+            
+            Pen redPen = new Pen(Color.Red, 5);
+            //redPen.
+            newGraphics.DrawRectangle(redPen, rect);
             //newGraphics.Dispose();
+
+
+
+            System.Threading.Thread.Sleep(1000);
+
+            //newGraphics.Clear(System.Drawing.Color.Transparent);
+
+       //     newGraphics.ResetClip();
+
+
+//           newGraphics.EndContainer(cont);
+
+            //newGraphics.ResetTransform();
+            
+            //NativeMethods.InvalidateRect(NativeMethods.GetDesktopWindow(),null, true);
+            NativeMethods.InvalidateRect(IntPtr.Zero ,IntPtr.Zero , true);
+
+           //updateWindow(NativeMethods.GetDesktopWindow());
+
+            ///newGraphics.ResetClip();
+
            
 //Console.WriteLine("x: " + osmElement.properties.boundingRectangleFiltered.TopLeft.X);
 
@@ -176,7 +242,7 @@ namespace StrategyWindows
           //  newGraphics.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.Red, 5), x, y, width, height);
 
             // Dispose of new graphics.
-            //newGraphics.Dispose();
+            newGraphics.Dispose();
 
         }
     }
