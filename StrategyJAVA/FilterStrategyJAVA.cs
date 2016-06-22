@@ -26,6 +26,11 @@ namespace StrategyJAVA
             return tree;
         }
 
+        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, StrategyManager.TreeScopeEnum treeScope, int depth)
+        {
+            return specifiedTree;
+        }
+
         //public OSMElement.OSMElement filterElement(IntPtr hwnd)
         //{
         //    OSMElement.OSMElement tree = new OSMElement.OSMElement();
@@ -35,12 +40,6 @@ namespace StrategyJAVA
         public int deliverElementID(IntPtr hwnd)
         {            
             return -1;
-        }
-
-        public ITreeStrategy<OSMElement.OSMElement> getParentsOfElement(ITreeStrategy<OSMElement.OSMElement> node, IntPtr hwnd)
-        {
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
-            return tree;
         }
 
         public ITreeStrategy<OSMElement.OSMElement> NewNodeTree() 

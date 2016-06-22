@@ -2947,6 +2947,10 @@ namespace StrategyGenericTree
             {
                 Console.WriteLine("isRequiredForFormFiltered: {0}", properties.isRequiredForFormFiltered);
             }
+            if (properties.valueFiltered != null)
+            {
+                Console.WriteLine("valueFiltered: {0}", properties.valueFiltered);
+            }
             Console.WriteLine();
         }
         #endregion

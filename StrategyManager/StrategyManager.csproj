@@ -51,6 +51,7 @@
     <Compile Include="Interfaces\IFilterStrategy.cs" />
     <Compile Include="Interfaces\IOperationSystemStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeScopeEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
