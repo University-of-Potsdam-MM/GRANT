@@ -52,7 +52,12 @@ namespace GApplication
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
             brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             brailleDisplayStrategy.setStrategyMgr(strategyMgr);
-            treeStrategy.setStrategyMgr(strategyMgr);
+
+            Type to = typeof(TreeOperations<OSMElement.OSMElement>);
+            Console.WriteLine("Type: " + to.Assembly.FullName.ToString());
+            Console.WriteLine("Type: " + to.AssemblyQualifiedName.ToString());
+            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
+            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
         }
 
         /*
@@ -99,7 +104,7 @@ namespace GApplication
                          int pointY;
                          operationSystemStrategy.getCursorPoint(out pointX, out pointY);
                          ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
-                        treeStrategy.printTreeElements(tree, -1);
+                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                     }
                     catch (Exception ex)
                     {
@@ -166,7 +171,7 @@ namespace GApplication
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                         filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        treeStrategy.printTreeElements(tree, -1);
+                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
 
@@ -175,7 +180,7 @@ namespace GApplication
                         //  searchedProperties.nameFiltered = "";
 
                         Console.Write("Gesuchte Eigenschaften ");
-                        treeStrategy.searchProperties(tree, searchedProperties, OperatorEnum.or);
+                        strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, searchedProperties, OperatorEnum.or);
 
                     }
                     catch (Exception ex)
@@ -258,7 +263,7 @@ namespace GApplication
                     System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\testGui.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
                     ITreeStrategy<OSMElement.OSMElement> tree3 = treeStrategy.XmlDeserialize(fs);
                     fs.Close();
-                    treeStrategy.printTreeElements(tree3, -1);
+                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree3, -1);
                 }
                 catch (Exception ex)
                 {
@@ -266,7 +271,7 @@ namespace GApplication
                 }
             }
             if (e.Key == Key.F2)
-            {/*Beispiel BrailleDiss 
+            {/*Beispiel BrailleDis 
               * 
               * */
                 try
@@ -317,8 +322,8 @@ namespace GApplication
                         OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
                         strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
-                        strategyMgr.getSpecifiedTree().setStrategyMgr(strategyMgr);
+                        ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
+                        strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
                         strategyMgr.getSpecifiedBrailleDisplay().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
                         brailleDisplayStrategy.updateViewContent(relatedBrailleTreeObject.Data);
                     }

@@ -102,5 +102,22 @@ namespace GApplication
             }
             return filter;
         }
+
+        public List<Strategy> getPossibleTreeOperations()
+        {
+            List<Strategy> trees = new List<Strategy>();
+            List<String> treeNames = getPossibleStrategyClasses("PossibleTreeOperations");
+            if (treeNames == null) { return trees; }
+            Strategy t = new Strategy();
+            foreach (String tName in treeNames)
+            {
+                t.userName = tName;
+                t.className = strategyUserNameToClassName(tName);
+                trees.Add(t);
+            }
+            return trees;
+        }
+
+
     }
 }

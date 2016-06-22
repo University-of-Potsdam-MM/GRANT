@@ -273,7 +273,7 @@ namespace StrategyBrailleIO
                 Console.WriteLine("kein passendes objekt gefunden");
                 return "";
             }
-            ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
+            ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
             String text = "";
             if (associatedNode != null)
             {
@@ -294,7 +294,8 @@ namespace StrategyBrailleIO
            BrailleRepresentation updatedBrailleReprasentation = element.brailleRepresentation;
            updatedBrailleReprasentation.content = updatedContent;
            element.brailleRepresentation = updatedBrailleReprasentation;
-           strategyMgr.getSpecifiedTree().changeBrailleRepresentation(element);//hier ist das Element schon geändert                
+           strategyMgr.getSpecifiedTreeOperations().changeBrailleRepresentation(element);//hier ist das Element schon geändert                
+           
         }
 
         #region create Views       
