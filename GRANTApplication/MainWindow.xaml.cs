@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 using System.Drawing;
 
+
 namespace GApplication
 {
     
@@ -23,9 +24,12 @@ namespace GApplication
         Settings settings;
         StrategyMgr strategyMgr;
         IBrailleDisplayStrategy brailleDisplayStrategy;
+        //private PaintEventHandler Paint;
+        
 
         public MainWindow()
         {
+
             InitializeComponent();
             InitializeFilterComponent();
         }
@@ -49,26 +53,30 @@ namespace GApplication
             brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             brailleDisplayStrategy.setStrategyMgr(strategyMgr);
             treeStrategy.setStrategyMgr(strategyMgr);
-
         }
 
+        /*
+        private void Window_Paint(object sender, PaintEventArgs e)
+        {
+            Console.WriteLine("oder HIIIIIER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ");
+            GetPixel_Example(e);
+        }
+
+        private void GetPixel_Example(PaintEventArgs e)
+        {
+            
+            Console.WriteLine("HIIIIIER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ");
+           
+            //e.Graphics.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.Red, 5), 10,10,10,10);
+            //e.Graphics.Dispose();
+        }
+        */
         
-        //System.Drawing.Rectangle theRectangle = new System.Drawing.Rectangle(new System.Drawing.Point(0, 0), new System.Drawing.Size(0, 0));
-        //System.Drawing.Point startPoint;
-       
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-
-
-
-          /*  List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
-            String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
-            strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));*/
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
            
-                                                                      // strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
-
-            ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
+           ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
 
 
             // ... Test for F5 key.
@@ -106,32 +114,23 @@ namespace GApplication
                 {
                     try
                     {
+
                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
                         int pointX;
                         int pointY;
 
                         operationSystemStrategy.getCursorPoint(out pointX, out pointY);
-
+                        
                         Console.WriteLine("Pointx: " + pointX);
                         Console.WriteLine("Pointy: " + pointY);
                        
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        Rectangle rect = operationSystemStrategy.getRect(osmElement);
 
-                        //filterStrategy.getMouseRect(points, pointX, pointY, out x, out y, out width, out height);
-
-                        //System.Drawing.Rectangle mouseRect = new System.Drawing.Rectangle(x, y, width, height);
-                        operationSystemStrategy.paintMouseRect(osmElement);
-
-                       
-  
-
-        //AutomationElement element = filterStrategy.deliverAutomationElementFromHWND(points);
-        //ITreeStrategy<GeneralProperties> treeStrategy = strategyMgr.getSpecifiedTree();
-        //filterStrategy.setStrategyMgr(strategyMgr);
-          //              ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        //treeStrategy.printTreeElements(tree, -1);
-                    }
+                        // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
+                        operationSystemStrategy.paintRect(rect);
+    }
                     catch (Exception ex)
                     {
                         Console.WriteLine("An error occurred: '{0}'", ex);
@@ -334,6 +333,8 @@ namespace GApplication
 
         }
 
+      
+
         #region Beispielobjekte
         private ITreeStrategy<OSMElement.OSMElement> getDauGui()
         {
@@ -479,3 +480,12 @@ namespace GApplication
     }
 }
 
+/*Form topMostForm = new Form();
+                       // Set the size of the form larger than the default size.
+                       topMostForm.Size = new System.Drawing.Size(300, 300);
+                       // Set the position of the top most form to center of screen.
+                       topMostForm.StartPosition = FormStartPosition.CenterScreen;
+                       // Display the form as top most form.
+                       topMostForm.TopMost = true;
+                       topMostForm.Show();
+                       */

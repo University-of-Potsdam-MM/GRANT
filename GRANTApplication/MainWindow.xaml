@@ -7,6 +7,5 @@
         <TextBlock HorizontalAlignment="Center" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="61"><Run Language="de-de" Text="UIA - Filter"/></TextBlock>
         <TextBox Name="itemNameTextBox" HorizontalAlignment="Left" Height="218" Margin="19,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="470"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="96,32,0,0" VerticalAlignment="Top" Width="75"/>
-
     </Grid>
 </Window>
