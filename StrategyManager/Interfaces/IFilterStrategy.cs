@@ -6,6 +6,9 @@ using System.Windows.Automation;
 
 namespace StrategyManager.Interfaces
 {
+    /// <summary>
+    /// Das Interface IFilterStrategy enthält die Methoden-Signaturen für die Filterung der Anwendungsdaten. 
+    /// </summary>
     public interface IFilterStrategy
     {
         /// <summary>

@@ -198,7 +198,7 @@ namespace StrategyGenericTree
         #endregion
 
         #region search
-        ///todo treeKlasse enthält eine Methode namens contains, ist diese in suche nutzbar?
+        ///todo treeKlasse enthält eine Methode namens contains, ist diese in suche nutzbar?  -> Nein, da hier nicht nach einem Element im Baum gesucht werden soll, wo alle Eigenschaften übereinstimmen, sondern nur einige (die anderen haben sich in der zwischenzeit geändert)
         /// <summary>
         /// Sucht anhand der angegebenen Eigenschaften alle Knoten, welche der Bedingung entsprechen (Tiefensuche). Debei werden nur Eigenschften berücksichtigt, welche angegeben wurden.
         /// </summary>

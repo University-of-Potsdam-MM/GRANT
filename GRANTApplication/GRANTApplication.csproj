@@ -105,6 +105,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GuiElementRenderer\GuiElementRenderer.csproj">
+      <Project>{8fdc0093-e06d-4116-b182-79eeed0645ab}</Project>
+      <Name>GuiElementRenderer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
       <Name>OSMElement</Name>

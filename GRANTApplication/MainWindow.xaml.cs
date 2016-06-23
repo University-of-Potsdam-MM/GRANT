@@ -447,6 +447,28 @@ namespace GApplication
             osm4.properties = proper4;
             top = top.AddChild(osm4);
             #endregion
+
+            #region Element 5
+            OSMElement.OSMElement osm5 = new OSMElement.OSMElement();
+            BrailleRepresentation e5 = new BrailleRepresentation();
+            e5.screenName = "screen1";
+            Content c5 = new Content();
+            //   c3.text = "Start Text";
+            c5.otherContent = "Button Name";
+            e5.viewName = "v5";
+            e5.content = c5;
+            Position p5 = new Position();
+            p5.height = 8;
+            p5.width = 40;
+            p5.left = 30;
+            p5.top = 30;
+            e5.position = p5;
+            GeneralProperties proper5 = new GeneralProperties();
+            proper5.IdGenerated = "braille123_5";
+            osm5.brailleRepresentation = e5;
+            osm5.properties = proper5;
+            top = top.AddChild(osm5);
+            #endregion
             return osmDau;
         }
 

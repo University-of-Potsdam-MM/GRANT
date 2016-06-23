@@ -13,6 +13,7 @@ using Gestures.Recognition;
 using StrategyManager.Interfaces;
 using StrategyManager;
 using OSMElement;
+using GuiElementRenderer;
 
 
 namespace StrategyBrailleIO
@@ -254,6 +255,11 @@ namespace StrategyBrailleIO
                 createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
                 return;
             }
+            if (brailleRepresentation.content.otherContent != null)
+            {
+                createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.otherContent, brailleRepresentation.viewName, brailleRepresentation.position);
+                return;
+            }
             //TODO: weitere Möglichkeiten?
 
             //im Zweifelsfall wird immer eine "Text-View" mit einem leeren Text erstellt
@@ -355,6 +361,19 @@ namespace StrategyBrailleIO
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
             screen.AddViewRange(viewName, vr);
+        }
+
+
+        private void createViewOtherContent(BrailleIOScreen screen, object otherContent, String viewName, Position position)
+        {
+            BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
+            BrailleIOButtonToMatrixRenderer buttonRenderer = new BrailleIOButtonToMatrixRenderer();
+            vr.SetOtherContent(otherContent, buttonRenderer);
+            vr.SetPadding(paddingToBoxModel(position.padding));
+            vr.SetMargin(paddingToBoxModel(position.margin));
+            vr.SetBorder(paddingToBoxModel(position.boarder));
+            screen.AddViewRange(viewName, vr);
+            Console.WriteLine();
         }
         #endregion
 
