@@ -13,7 +13,7 @@ using Gestures.Recognition;
 using StrategyManager.Interfaces;
 using StrategyManager;
 using OSMElement;
-using GuiElementRenderer;
+using BrailleIOGuiElementRenderer;
 
 
 namespace StrategyBrailleIO

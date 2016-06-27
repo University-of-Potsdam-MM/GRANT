@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOBraillDisAdapter",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HBBrailleDisV2", "..\BrailleIO\BrailleDis\HBBrailleDisV2\HBBrailleDisV2.csproj", "{E5454493-14E2-4429-8EC9-646154154482}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuiElementRenderer", "GuiElementRenderer\GuiElementRenderer.csproj", "{8FDC0093-E06D-4116-B182-79EEED0645AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOGuiElementRenderer", "BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj", "{8FDC0093-E06D-4116-B182-79EEED0645AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

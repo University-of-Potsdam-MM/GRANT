@@ -454,11 +454,11 @@ namespace GApplication
             e5.screenName = "screen1";
             Content c5 = new Content();
             //   c3.text = "Start Text";
-            c5.otherContent = "Button Name";
+            c5.otherContent = "Hallo - Button";
             e5.viewName = "v5";
             e5.content = c5;
             Position p5 = new Position();
-            p5.height = 8;
+            p5.height = 20;
             p5.width = 40;
             p5.left = 30;
             p5.top = 30;
