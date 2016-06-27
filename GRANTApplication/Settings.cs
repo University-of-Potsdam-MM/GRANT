@@ -9,7 +9,7 @@ using StrategyManager.Interfaces;
 
 namespace GApplication
 {
-    class Settings
+    public class Settings
     {
         private static String readAppSettings(String name)
         {

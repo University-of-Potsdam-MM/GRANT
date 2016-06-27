@@ -152,7 +152,6 @@ namespace StrategyBrailleIO
                 view.SetMatrix(element.brailleRepresentation.content.matrix);
             }
            // ...
-            Console.WriteLine();
         }
 
         /// <summary>

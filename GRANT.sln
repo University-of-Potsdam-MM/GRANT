@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HBBrailleDisV2", "..\Braill
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOGuiElementRenderer", "BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj", "{8FDC0093-E06D-4116-B182-79EEED0645AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRANTExample", "GRANTExample\GRANTExample.csproj", "{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -454,6 +456,31 @@ Global
 		{8FDC0093-E06D-4116-B182-79EEED0645AB}.Setup_x64|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8FDC0093-E06D-4116-B182-79EEED0645AB}.Setup_x64|Mixed Platforms.Build.0 = Release|Any CPU
 		{8FDC0093-E06D-4116-B182-79EEED0645AB}.Setup_x64|x86.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.DebugLibre|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.DebugLibre|Any CPU.Build.0 = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.DebugLibre|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.DebugLibre|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.DebugLibre|x86.ActiveCfg = Debug|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Release|x86.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.ReleaseLibre|Any CPU.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.ReleaseLibre|Any CPU.Build.0 = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.ReleaseLibre|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.ReleaseLibre|Mixed Platforms.Build.0 = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.ReleaseLibre|x86.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Setup_x64|Any CPU.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Setup_x64|Any CPU.Build.0 = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Setup_x64|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Setup_x64|Mixed Platforms.Build.0 = Release|Any CPU
+		{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}.Setup_x64|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
