@@ -302,15 +302,14 @@ namespace StrategyGenericTree
                     return (ITreeStrategy<T>)node;
                 }
             }
-
-            Console.WriteLine("Kein passendes Element gefunden!"); //TODO. throw?
             return default(ITreeStrategy<T>);
 
         }
+
         #endregion
 
         /// <summary>
-        /// Ändert von einem Knoten die <code>Generalproperties</code> ausgehend von der <code>IdGenerated</code>
+        /// Ändert von einem Knoten die <code>GeneralProperties</code> ausgehend von der <code>IdGenerated</code>
         /// </summary>
         /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
         public void changePropertiesOfFilteredNode(GeneralProperties properties)
@@ -419,17 +418,37 @@ namespace StrategyGenericTree
             }
           
             //prüfen, ob der Knoten schon vorhanden ist
-            GeneralProperties properties = new GeneralProperties();
-            properties.IdGenerated = brailleNode.properties.IdGenerated;
-            List<ITreeStrategy<T>> result = searchProperties(strategyMgr.getBrailleTree() as ITreeStrategy<T>, properties, OperatorEnum.and);
-            if ( result == null || result.Count == 0)
+            ITreeStrategy<OSMElement.OSMElement> nodeToRemove = getAssociatedNode(brailleNode.properties.IdGenerated, strategyMgr.getBrailleTree() as ITreeStrategy<T>) as ITreeStrategy<OSMElement.OSMElement>;
+            if (nodeToRemove == null || nodeToRemove.Equals(strategyMgr.getSpecifiedTree().NewNodeTree()))
             {
                 strategyMgr.getBrailleTree().AddChild(brailleNode);
             }
             else
             {
                 changeBrailleRepresentation(brailleNode);
+            }            
+        }
+
+        /// <summary>
+        /// entfernt einen Knoten vom Baum der Braille-Darstellung
+        /// </summary>
+        /// <param name="brailleNode">gibt das OSM-element des Knotens der entfernt werden soll an</param>
+        public void removeNodeInBrailleTree(OSMElement.OSMElement brailleNode)
+        {
+            if (strategyMgr.getBrailleTree() == null)
+            {
+                Console.WriteLine("Der Baum ist leer");
+                return;
             }
+
+            //prüfen, ob der Knoten vorhanden ist
+            ITreeStrategy<OSMElement.OSMElement> nodeToRemove =  getAssociatedNode(brailleNode.properties.IdGenerated, strategyMgr.getBrailleTree() as ITreeStrategy<T>) as ITreeStrategy<OSMElement.OSMElement>;
+            if (nodeToRemove == null || nodeToRemove.Equals(strategyMgr.getSpecifiedTree().NewNodeTree()))
+            {
+                Console.WriteLine("Der Knoten ist nicht vorhanden!");
+                return;
+            }
+            strategyMgr.getBrailleTree().Remove(nodeToRemove.Data);
             
         }
     }

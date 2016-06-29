@@ -30,5 +30,24 @@ namespace StrategyManager
                 osmRelationship.Add(relationship);
             }
         }
+
+        /// <summary>
+        /// Entfernt eine Beziehung zwischen einem Knoten des gefilterten Baumes und dem Baum der Braille-Darstellung 
+        /// </summary>
+        /// <param name="idFilteredTree">gibt die 'IdGenerated' des Knotens aus dem gefilterten Baum an</param>
+        /// <param name="idBrailleTree">gibt die 'IdGenerated' des Knotens aus dem Baum mit der Braille-Darstellung an</param>
+        /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
+        public static void removeOsmRelationship(String idFilteredTree, String idBrailleTree, ref List<OsmRelationship<String, String>> osmRelationship)
+        {
+            if (osmRelationship.Exists(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree)))
+            {
+                OsmRelationship<String, String> relationshipToRemove = osmRelationship.Find(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree));
+                osmRelationship.Remove(relationshipToRemove);
+            }
+            else
+            {
+                Console.WriteLine("Die angegebene Beziehung war nicht vorhanden!");
+            }
+        }
     }
 }

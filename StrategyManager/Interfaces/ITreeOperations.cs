@@ -54,6 +54,13 @@ namespace StrategyManager.Interfaces
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
         void addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
 
+        /// <summary>
+        /// entfernt einen Knoten vom Baum der Braille-Darstellung
+        /// </summary>
+        /// <param name="brailleNode">gibt das OSM-element des Knotens der entfernt werden soll an</param>
+        void removeNodeInBrailleTree(OSMElement.OSMElement brailleNode);
+
+
         void setStrategyMgr(StrategyManager.StrategyMgr mamager);
         StrategyManager.StrategyMgr getStrategyMgr();
     }

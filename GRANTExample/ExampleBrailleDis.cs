@@ -194,6 +194,7 @@ namespace GRANTExample
             osm5.properties = proper5;
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm5);
             #endregion
+            Console.WriteLine();
         }
 
 
