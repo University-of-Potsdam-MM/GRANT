@@ -227,7 +227,7 @@ namespace GApplication
                                     brailleDisplayStrategy.initializedSimulator();
                                     brailleDisplayStrategy.initializedBrailleDisplay();
 
-                                    brailleDisplayStrategy.generatedBrailleUi(treeGuiOma);
+                                    brailleDisplayStrategy.generatedBrailleUi();
                                 }
                                 catch (Exception ex)
                                 {
@@ -315,7 +315,7 @@ namespace GApplication
                             List<OsmRelationship<String, String>> relationship = setOsmRelationship();
                             strategyMgr.setOsmRelationship(relationship);
                         }
-                        brailleDisplayStrategy.generatedBrailleUi(treeGuiOma);
+                        brailleDisplayStrategy.generatedBrailleUi();
                     }
                     else
                     {
@@ -324,7 +324,7 @@ namespace GApplication
                         strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
                         strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-                        strategyMgr.getSpecifiedBrailleDisplay().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
                         brailleDisplayStrategy.updateViewContent(relatedBrailleTreeObject.Data);
                     }
 

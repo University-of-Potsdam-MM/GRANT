@@ -18,7 +18,7 @@ namespace StrategyManager
         /// <summary>
         /// gibt die Beziehung zwischen <code>filteredTree</code> und <code>brailleTree</code> anhand der generierten Id an
         /// </summary>
-        private List<OsmRelationship<String, String>> osmRelationship;
+        private List<OsmRelationship<String, String>> osmRelationship = new List<OsmRelationship<string,string>>();
 
         private IFilterStrategy specifiedFilter; //enthält die gewählte Filterstrategy (UIA, Java-Access-Bridge, ...)
         private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)

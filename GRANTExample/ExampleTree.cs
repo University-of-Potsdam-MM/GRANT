@@ -119,8 +119,6 @@ namespace GRANTExample
             {
                     filterTreeOfApplication();
             }
-
-
             GeneralProperties searchedProperties = new GeneralProperties();
             searchedProperties.localizedControlTypeFiltered = localizedControlTypeFiltered.Equals("") ? "Schaltfläche" : localizedControlTypeFiltered;
             //  searchedProperties.nameFiltered = "";
@@ -154,8 +152,9 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
 
-                        List<OsmRelationship<String, String>> relationship = setOsmRelationship(osmElement.properties.IdGenerated);
-                        strategyMgr.setOsmRelationship(relationship);
+                        List<OsmRelationship<String, String>> relationship = strategyMgr.getOsmRelationship();
+
+                        OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
                     }
 
                 }
@@ -166,16 +165,20 @@ namespace GRANTExample
             }
         }
 
-        private List<OsmRelationship<String, String>> setOsmRelationship(String guiID)
+       /* private List<OsmRelationship<String, String>> setOsmRelationship(String guiID)
         {
-            List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
+            if (strategyMgr.getOsmRelationship() == null)
+            {
+                //List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
+                strategyMgr.setOsmRelationship(new List<OsmRelationship<String, String>>());
+            }
             OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
             r3.FilteredTree = guiID;
             r3.BrailleTree =  "braille123_3";
-
-            relationships.Add(r3);
-            return relationships;
-        }
+            strategyMgr.getOsmRelationship().Add(r3);
+           // relationships.Add(r3);
+            return strategyMgr.getOsmRelationship();
+        }*/
 
         public static List<OsmRelationship<String, String>> setOsmRelationship()
         {

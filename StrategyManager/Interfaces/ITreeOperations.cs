@@ -4,10 +4,10 @@ namespace StrategyManager.Interfaces
     public interface ITreeOperations<T>
     {
         /// <summary>
-        /// Ändert von einem angegeben Knoten im Braille-Baum die Eigenschaften 
+        /// Ändert die Eigenschaften eines Elementes der Braille-UI --> Momentan wird nur der anzuzeigende Text geändert!
         /// </summary>
-        /// <param name="element">Gibt die neuen Eigenschften an</param>
-        void changeBrailleRepresentation(OSMElement.OSMElement element);
+        /// <param name="element">gibt das zuändernde Element an</param>
+        void updateNodeOfBrailleUi(OSMElement.OSMElement element);
 
         /// <summary>
         /// Ändert die Eigenschaften eines Knotens des gefilterten Baumes.
@@ -46,6 +46,13 @@ namespace StrategyManager.Interfaces
         /// <param name="oper">gibt an wie die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste mit allen Knoten auf den die Eigenschaften zutreffen</returns>
         System.Collections.Generic.List<StrategyManager.Interfaces.ITreeStrategy<T>> searchProperties(StrategyManager.Interfaces.ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, StrategyManager.OperatorEnum oper);
+
+        /// <summary>
+        /// Fügt einen Knoten dem Baum der  Braille-Darstellung hinzu;
+        /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
+        /// </summary>
+        /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
+        void addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
 
         void setStrategyMgr(StrategyManager.StrategyMgr mamager);
         StrategyManager.StrategyMgr getStrategyMgr();

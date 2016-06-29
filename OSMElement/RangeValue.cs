@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OSMElement
 {
     /// <summary>
-    /// Entspricht dem DatenType System.Windows.Automation.RangeValuePattern; damit dieser aber nicht UIA
+    /// Entspricht dem DatenType System.Windows.Automation.RangeValuePattern; damit dieser aber nicht UIA spezifisch ist, wurde er neu erstellt
     /// </summary>
     public struct RangeValue
     {

@@ -22,8 +22,7 @@ namespace GRANTExample
         {
             try
             {
-                ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui(fromGuiElement);
-                strategyMgr.setBrailleTree(treeGuiOma);
+                setDauGui(fromGuiElement);
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
                 {
                     Settings settings = new Settings();
@@ -32,7 +31,7 @@ namespace GRANTExample
                     strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
                     strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
                     strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
-                    strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi(treeGuiOma);
+                    strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 }
 
                 if (strategyMgr.getOsmRelationship() == null)
@@ -55,7 +54,7 @@ namespace GRANTExample
                     ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
                     if (relatedBrailleTreeObject != null)
                     {
-                        strategyMgr.getSpecifiedBrailleDisplay().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
                     }
                 }
@@ -68,10 +67,8 @@ namespace GRANTExample
         }
 
         #region Beispielobjekte
-        private ITreeStrategy<OSMElement.OSMElement> getDauGui(String fromGuiElement3)
+        private void setDauGui(String fromGuiElement3)
         {
-            ITreeStrategy<OSMElement.OSMElement> osmDau = strategyMgr.getSpecifiedTree().NewNodeTree();
-
             #region Element 1
             OSMElement.OSMElement osm1 = new OSMElement.OSMElement();
             BrailleRepresentation e1 = new BrailleRepresentation();
@@ -92,7 +89,7 @@ namespace GRANTExample
             proper1.IdGenerated = "braille123_1";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
-            ITreeStrategy<OSMElement.OSMElement> top = osmDau.AddChild(osm1);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
             #endregion
 
             #region Element 2
@@ -121,7 +118,7 @@ namespace GRANTExample
             proper2.IdGenerated = "braille123_2";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            top = top.AddChild(osm2);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3
@@ -144,7 +141,7 @@ namespace GRANTExample
             proper3.IdGenerated = "braille123_3";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
-            top = top.AddChild(osm3);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm3);
             #endregion
 
             #region Element 4
@@ -173,7 +170,7 @@ namespace GRANTExample
             proper4.IdGenerated = "braille123_4";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
-            top = top.AddChild(osm4);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm4);
             #endregion
 
             #region Element 5
@@ -195,9 +192,8 @@ namespace GRANTExample
             proper5.IdGenerated = "braille123_5";
             osm5.brailleRepresentation = e5;
             osm5.properties = proper5;
-            top = top.AddChild(osm5);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm5);
             #endregion
-            return osmDau;
         }
 
 

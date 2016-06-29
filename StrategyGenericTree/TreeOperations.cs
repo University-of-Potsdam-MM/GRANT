@@ -307,6 +307,7 @@ namespace StrategyGenericTree
             return default(ITreeStrategy<T>);
 
         }
+        #endregion
 
         /// <summary>
         /// Ändert von einem Knoten die <code>Generalproperties</code> ausgehend von der <code>IdGenerated</code>
@@ -332,18 +333,17 @@ namespace StrategyGenericTree
             System.Console.WriteLine();
         }
 
-        public void changeBrailleRepresentation(OSMElement.OSMElement element)
+        /// <summary>
+        /// Ändert in der Braille-Darstellung das angegebene Element
+        /// </summary>
+        /// <param name="element">das geänderte Element für die Braille-Darstellung</param>
+        private void changeBrailleRepresentation(OSMElement.OSMElement element)
         {
             ITreeStrategy<OSMElement.OSMElement> brailleTree = strategyMgr.getBrailleTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)brailleTree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(element.properties.IdGenerated))
                 {
-                    /* OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                     osm.brailleRepresentation = node.Data.brailleRepresentation;
-                     osm.events = node.Data.events;
-                     osm.interaction = node.Data.interaction;
-                     osm.properties = element.;*/
                     node.Data = element;
 
                     break;
@@ -351,7 +351,46 @@ namespace StrategyGenericTree
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyMgr.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert!
+        /// </summary>
+        /// <param name="element">gibt den zu verändernden Knoten an</param>
+        public void updateNodeOfBrailleUi(OSMElement.OSMElement element)
+        {
+            Content updatedContent = element.brailleRepresentation.content;
+            updatedContent.text = getTextForView(element);
+            BrailleRepresentation updatedBrailleReprasentation = element.brailleRepresentation;
+            updatedBrailleReprasentation.content = updatedContent;
+            element.brailleRepresentation = updatedBrailleReprasentation;
+            changeBrailleRepresentation(element);//hier ist das Element schon geändert                
+
+        }
+
+
+        /// <summary>
+        /// Ermittelt aufgrund der im StrategyMgr angegebenen Beziehungen den anzuzeigenden Text
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <returns>den anzuzeigenden Text</returns>
+        private String getTextForView(OSMElement.OSMElement osmElement)
+        {
+            OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            if (osmRelationship == null)
+            {
+                Console.WriteLine("kein passendes objekt gefunden");
+                return "";
+            }
+            ITreeStrategy<OSMElement.OSMElement> associatedNode =  getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree() as ITreeStrategy<T>) as ITreeStrategy<OSMElement.OSMElement>;
+            //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
+            String text = "";
+            if (associatedNode != null)
+            {
+                object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.content.fromGuiElement, associatedNode.Data.properties);
+                text = (objectText != null ? objectText.ToString() : "");
+            }
+            return text;
+        }
+
         /// <summary>
         /// Wandelt eine Liste von <code>INode</code> in eine Liste von <code>ITreeStrategy</code> um
         /// </summary>
@@ -365,6 +404,33 @@ namespace StrategyGenericTree
                 result.Add((ITreeStrategy<T>)node);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Fügt einen Knoten dem Baum der  Braille-Darstellung hinzu;
+        /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
+        /// </summary>
+        /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
+        public void addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
+        {//TODO: muss an der Stelle die 'IdGenerated' eneriert werden oder passiert das vorher?
+            if (strategyMgr.getBrailleTree() == null)
+            {
+                strategyMgr.setBrailleTree( strategyMgr.getSpecifiedTree().NewNodeTree());
+            }
+          
+            //prüfen, ob der Knoten schon vorhanden ist
+            GeneralProperties properties = new GeneralProperties();
+            properties.IdGenerated = brailleNode.properties.IdGenerated;
+            List<ITreeStrategy<T>> result = searchProperties(strategyMgr.getBrailleTree() as ITreeStrategy<T>, properties, OperatorEnum.and);
+            if ( result == null || result.Count == 0)
+            {
+                strategyMgr.getBrailleTree().AddChild(brailleNode);
+            }
+            else
+            {
+                changeBrailleRepresentation(brailleNode);
+            }
+            
         }
     }
 }

@@ -47,6 +47,7 @@
     <Compile Include="Interfaces\IBrailleDisplayStrategy.cs" />
     <Compile Include="Interfaces\ITreeOperations.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
+    <Compile Include="OsmTreeRelationship.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="StrategyManager.cs" />
     <Compile Include="Interfaces\IFilterStrategy.cs" />
