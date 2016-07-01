@@ -7,7 +7,7 @@ using StrategyManager;
 using OSMElement;
 using StrategyManager.Interfaces;
 using System.Windows.Forms;
-using GApplication;
+using GRANTApplication;
 
 namespace GRANTExample
 {

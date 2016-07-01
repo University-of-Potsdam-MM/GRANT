@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 
 using System.Drawing;
 using GRANTApplication;
-using GApplication;
 using OSMElement;
 using StrategyManager;
 using StrategyManager.Interfaces;

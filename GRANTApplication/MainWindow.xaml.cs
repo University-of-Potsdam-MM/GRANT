@@ -147,9 +147,7 @@ namespace GRANTApplication
 
 
             // ... Test for F5 key.
-<<<<<<< HEAD
-           
-=======
+/*
             if (e.Key == Key.F5)
             {
                 if (operationSystemStrategy.deliverCursorPosition())
@@ -177,8 +175,8 @@ namespace GRANTApplication
                     }
                 }
             }
->>>>>>> ef90c13b8d160da90637b623665951706009ad3d
 
+            */
            /* if (e.Key == Key.F1)
             {
                 if (operationSystemStrategy.deliverCursorPosition())
