@@ -1,0 +1,61 @@
+﻿<Window x:Class="FilterApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FilterApplication"
+        mc:Ignorable="d"
+        Title="Hallo" Height="850" Width="1225">
+
+    <DockPanel Name="Verify">
+        <WrapPanel>
+            
+        </WrapPanel>
+        <WrapPanel MouseUp="OSM_Elements_Tree_MouseUp" Name="OSM_Elements_Tree" Height="750" Width="400" VerticalAlignment="Center" HorizontalAlignment="Left" Background="AliceBlue" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <Menu IsMainMenu="True">
+                <MenuItem Header="_File" />
+                <MenuItem Header="_Edit" />
+                <MenuItem Header="_View" />
+                <MenuItem Header="_Window" />
+                <MenuItem Header="_Help" />
+            </Menu>
+
+        </WrapPanel>
+        <WrapPanel Name="Middle" Height="800" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Aquamarine">
+            <Menu IsMainMenu="True">
+                <MenuItem Header="_File" />
+                <MenuItem Header="_Edit" />
+                <MenuItem Header="_View" />
+                <MenuItem Header="_Window" />
+                <MenuItem Header="_Help" />
+            </Menu>
+            <WrapPanel Name="Tests" Height="250" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Beige">
+                <Menu IsMainMenu="True">
+                    <MenuItem Header="_File" />
+                    <MenuItem Header="_Edit" />
+                    <MenuItem Header="_View" />
+                    <MenuItem Header="_Window" />
+                    <MenuItem Header="_Help" />
+                </Menu>
+            </WrapPanel>
+            <WrapPanel Name="Test_Results" Height="550" Width="400" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <Menu>
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_New..." />
+                        <Separator />
+                        <MenuItem Header="_Open..." />
+                        <Separator />
+                        <MenuItem Header="_Save" />
+                        <MenuItem Header="_Save As..." />
+                        <Separator />
+                        <MenuItem Header="_Exit" />
+                    </MenuItem>
+                </Menu>
+            </WrapPanel>
+        </WrapPanel>
+        <WrapPanel Name="Properties" Height="800" Width="300">
+           
+        </WrapPanel>
+    </DockPanel>
+   
+</Window>
