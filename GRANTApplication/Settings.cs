@@ -7,7 +7,7 @@ using StrategyManager.Interfaces;
 
 
 
-namespace GApplication
+namespace GRANTApplication
 {
     class Settings
     {

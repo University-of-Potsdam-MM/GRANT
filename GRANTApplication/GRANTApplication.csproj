@@ -58,7 +58,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GUIInspector.xaml.cs">
+      <DependentUpon>GUIInspector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OutputDesigner.xaml.cs">
+      <DependentUpon>OutputDesigner.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
+    <Page Include="GUIInspector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,6 +82,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="OutputDesigner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

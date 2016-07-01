@@ -6,14 +6,12 @@ using System.Windows.Input;
 using StrategyManager;
 using StrategyManager.Interfaces;
 using StrategyGenericTree;
-
 using OSMElement;
 using System.Windows.Forms;
-
 using System.Drawing;
+using System.Diagnostics;
 
-
-namespace GApplication
+namespace GRANTApplication
 {
     
     /// <summary>
@@ -24,8 +22,11 @@ namespace GApplication
         Settings settings;
         StrategyMgr strategyMgr;
         IBrailleDisplayStrategy brailleDisplayStrategy;
-        //private PaintEventHandler Paint;
+        GUIInspector GuiInspector;
+        bool wopen = false;
         
+        //private PaintEventHandler Paint;
+
 
         public MainWindow()
         {
@@ -33,11 +34,13 @@ namespace GApplication
             InitializeComponent();
             InitializeFilterComponent();
         }
-
+        
         private void InitializeFilterComponent()
         {
             settings = new Settings();
             strategyMgr = new StrategyMgr();
+            GuiInspector = new GUIInspector();
+
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -55,6 +58,65 @@ namespace GApplication
             treeStrategy.setStrategyMgr(strategyMgr);
         }
 
+      
+        private void OpenNewWindow(object sender, RoutedEventArgs e)
+         {
+           GUIInspector window1 = new GUIInspector();
+            GuiInspector.ShowInTaskbar = true;
+            GuiInspector.Owner = App.Current.MainWindow;
+            window1.ShowDialog();
+         }
+      
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            if (wopen == false)
+            {
+                if (!GuiInspector.IsLoaded)
+                {
+                    //GuiInspector.Topmost = true;
+                    //GuiInspector.Show();
+                    GuiInspector.ShowInTaskbar = false;
+                    GuiInspector.Owner = App.Current.MainWindow;
+                    GuiInspector.Show();
+
+                }
+                
+            }//e.Handled = true;
+            //this.Close();
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            this.Title = "Checked";
+            this.GuiInspector.Topmost=true;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.Title = "Unchecked";
+        }
+
+        private void CheckBox_Indeterminate(object sender, RoutedEventArgs e)
+        {
+            this.Title = "Indeterminate";
+        }
+
+
+        /* private void Window_GotFocus(object sender, RoutedEventArgs e)
+         {
+             var mainWindow = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
+
+             mainWindow.Topmost = true;
+             this.Topmost = true;
+
+         }*/
+        /*private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+            GuiInspector.Close();
+            //radioButton_check.IsChecked = false;
+        }*/
         /*
         private void Window_Paint(object sender, PaintEventArgs e)
         {
@@ -71,7 +133,7 @@ namespace GApplication
             //e.Graphics.Dispose();
         }
         */
-        
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
@@ -80,31 +142,9 @@ namespace GApplication
 
 
             // ... Test for F5 key.
-            if (e.Key == Key.F5)
-            {
-                if (operationSystemStrategy.deliverCursorPosition())
-                {
-                    try
-                    {
-                        IntPtr points = operationSystemStrategy.getHWND();
-                        List<Strategy> possibleFilter = settings.getPossibleFilters();
-                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+           
 
-                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
-                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                        filterStrategy.setStrategyMgr(strategyMgr);
-                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
-                        treeStrategy.printTreeElements(tree, -1);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("An error occurred: '{0}'", ex);
-                    }
-                }
-            }
-
-            if (e.Key == Key.F1)
+           /* if (e.Key == Key.F1)
             {
                 if (operationSystemStrategy.deliverCursorPosition())
                 {
@@ -132,7 +172,7 @@ namespace GApplication
                         Console.WriteLine("An error occurred: '{0}'", ex);
                     }
                 }
-            }
+            }*/
 
             if (e.Key == Key.F6)
             {
@@ -470,8 +510,11 @@ namespace GApplication
             return relationships;
         }
 
+
+
         #endregion
 
+      
     }
 
 }
