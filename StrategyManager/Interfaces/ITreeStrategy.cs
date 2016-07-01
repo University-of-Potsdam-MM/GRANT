@@ -96,50 +96,5 @@ namespace StrategyManager.Interfaces
         void XmlSerialize(System.IO.Stream stream);
         ITreeStrategy<T> XmlDeserialize(Stream stream);
 
-        #region eigene Methoden
-        /// <summary>
-        /// Gibt die (einige) <code>GeneralProperties</code> des angegebenen Baumes aus
-        /// </summary>
-        /// <param name="tree">Gibt den auszugebenen Baum an</param>
-        /// <param name="depth">Gibt die Tiefe der Ausgabe an; Wenn der gesamte Baum ausgegeben werden soll, so muss <value>-1</value> angegeben werden.</param>
-        void printTreeElements(ITreeStrategy<T> tree, int depth);
-        
-        /// <summary>
-        /// Sucht anhand der angegebenen <code>GeneralProperties</code> alle Knoten die diesen Eigenschaften entsprechen
-        /// </summary>
-        /// <param name="tree">Gibt den Baum an, in welchem gesucht werden soll</param>
-        /// <param name="properties">gibt die zusuchenden Eigenschaften an</param>
-        /// <param name="oper">gibt an wie die Eigenschaften verknüpft werden sollen</param>
-        /// <returns>Eine Liste mit allen Knoten auf den die Eigenschaften zutreffen</returns>
-        List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, GeneralProperties properties, OperatorEnum oper); //TODO: properties sollten generisch sein
-        /// <summary>
-        /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum alle zugehörigen Knoten an
-        /// </summary>
-        /// <param name="generatedId">Gibt die Id an zuder die zugehörigen Knoten ermittelt werden sollen</param>
-        /// <param name="tree">gibt den Baum an, in welchem die zugehörigen Knoten ermittelt werden sollen </param>
-        /// <returns>Gibt eine Liste mit den Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-        List<ITreeStrategy<T>> getAssociatedNodeList(String generatedId, ITreeStrategy<T> tree);
-        /// <summary>
-        /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum einen zugehörigen Knoten an
-        /// </summary>
-        /// <param name="generatedId">Gibt die Id an zuder ein zugehöriger Knoten ermittelt werden soll</param>
-        /// <param name="tree">gibt den Baum an, in welchem ein zugehöriger Knoten ermittelt werden soll</param>
-        /// <returns>Gibt einen Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-        ITreeStrategy<T> getAssociatedNode(String id, ITreeStrategy<T> tree);
-        /// <summary>
-        /// Ändert die Eigenschaften eines Knotens des gefilterten Baumes.
-        /// </summary>
-        /// <param name="properties">Gibt die neuen Eigenschaften an.</param>
-        void changePropertiesOfFilteredNode(GeneralProperties properties);
-        StrategyMgr getStrategyMgr();
-        void setStrategyMgr(StrategyMgr strategyMgr);
-
-        /// <summary>
-        /// Ändert von einem angegeben Knoten im Braille-Baum die Eigenschaften 
-        /// </summary>
-        /// <param name="element">Gibt die neuen Eigenschften an</param>
-        void changeBrailleRepresentation(OSMElement.OSMElement element);
-        #endregion
-
     }
 }

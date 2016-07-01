@@ -18,12 +18,47 @@ namespace StrategyManager
         /// <summary>
         /// gibt die Beziehung zwischen <code>filteredTree</code> und <code>brailleTree</code> anhand der generierten Id an
         /// </summary>
-        private List<OsmRelationship<String, String>> osmRelationship;
+        private List<OsmRelationship<String, String>> osmRelationship = new List<OsmRelationship<string,string>>();
 
         private IFilterStrategy specifiedFilter; //enthält die gewählte Filterstrategy (UIA, Java-Access-Bridge, ...)
         private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree; // enthält die gewählte Klasse der Baumdarstellung/-verarbeitung
         private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
+
+        private ITreeOperations<OSMElement.OSMElement> specifiedTreeOperations;
+
+        /// <summary>
+        /// Setz die Klasse für spezielle Baum-Operationen
+        /// </summary>
+        /// <param name="treeClassNames"></param>
+        public void setSpecifiedTreeOperations(String treeOperationsClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(treeOperationsClassName);
+                Type[] typeArgs = { typeof(OSMElement.OSMElement) };
+                var makeme = type.MakeGenericType(typeArgs);
+                specifiedTreeOperations = (ITreeOperations<OSMElement.OSMElement>)Activator.CreateInstance(makeme);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedTreeOperationsr: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedTreeOperations: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei StrategyManager_setSpecifiedTreeOperations: " + e.Message);
+            }
+        }
+
+        public ITreeOperations<OSMElement.OSMElement> getSpecifiedTreeOperations()
+        {
+            return specifiedTreeOperations;
+        }
 
         /// <summary>
         /// Setzt den aktuell gefilterten Baum

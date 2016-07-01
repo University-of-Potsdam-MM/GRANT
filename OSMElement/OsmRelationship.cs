@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace OSMElement
 {
+
     /// <summary>
     /// Gibt die Beziehungen zwischen dem gefilterten Baum und der Braille-Darstellung an über "IdGenerated"
+    /// http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
     /// </summary>
-    //http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
-
-
+    /// <typeparam name="T">gibt die IdGenerated des Knotens im gefilterten Baum an</typeparam>
+    /// <typeparam name="U">gibt die IdGenerated des Knotens im Baum der Braille-Darstellung an</typeparam>
     public class OsmRelationship<T, U>
     {
         public OsmRelationship()

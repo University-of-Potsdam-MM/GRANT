@@ -55,7 +55,12 @@ namespace GRANTApplication
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
             brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             brailleDisplayStrategy.setStrategyMgr(strategyMgr);
-            treeStrategy.setStrategyMgr(strategyMgr);
+
+            Type to = typeof(TreeOperations<OSMElement.OSMElement>);
+            Console.WriteLine("Type: " + to.Assembly.FullName.ToString());
+            Console.WriteLine("Type: " + to.AssemblyQualifiedName.ToString());
+            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
+            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
         }
 
       
@@ -142,7 +147,37 @@ namespace GRANTApplication
 
 
             // ... Test for F5 key.
+<<<<<<< HEAD
            
+=======
+            if (e.Key == Key.F5)
+            {
+                if (operationSystemStrategy.deliverCursorPosition())
+                {
+                    try
+                    {
+                        IntPtr points = operationSystemStrategy.getHWND();
+                        List<Strategy> possibleFilter = settings.getPossibleFilters();
+                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+
+                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+                        filterStrategy.setStrategyMgr(strategyMgr);
+                        //ITreeStrategy<OSMElement.OSMElement> tree1 = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                       // strategyMgr.setFilteredTree(tree1);
+                         int pointX;
+                         int pointY;
+                         operationSystemStrategy.getCursorPoint(out pointX, out pointY);
+                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
+                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", ex);
+                    }
+                }
+            }
+>>>>>>> ef90c13b8d160da90637b623665951706009ad3d
 
            /* if (e.Key == Key.F1)
             {
@@ -184,48 +219,6 @@ namespace GRANTApplication
                 }
                 itemNameTextBox.Text = result;
             }
-            if (e.Key == Key.F7)
-            { /* Testaufruf um die Eltern eines Knotens des gespiegelten Baumes über das AutomationElement zu finden
-               * Es werden die Eltern des 3. Elementes des Baumes gesucht
-               * 
-               * Hier wird teilweise direkt auf Methoden der Klasse TreeStrategyGenericTree zugegriffen
-               */
-
-               if (operationSystemStrategy.deliverCursorPosition())
-                {
-                    try
-                    {
-                        #region kopiert von "if (e.Key == Key.F5) ..."
-                        IntPtr points = operationSystemStrategy.getHWND();
-
-                        List<Strategy> possibleFilter = settings.getPossibleFilters();
-                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-
-                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
-                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                        filterStrategy.setStrategyMgr(strategyMgr);
-                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        treeStrategy.printTreeElements(tree, -1);
-                        Console.WriteLine("\n");
-                        #endregion
-                        
-                        ITreeStrategy<OSMElement.OSMElement> node = (ITreeStrategy<OSMElement.OSMElement>)((ITree<OSMElement.OSMElement>)tree).Nodes.ElementAt(3);  //Exemplarisch rausgesuchter Knoten
-                        Console.WriteLine("Gesuchter Knoten:\nNode - Name: {0}, Tiefe: {1}", node.Data.properties.nameFiltered, node.Depth);
-
-                        ITreeStrategy<OSMElement.OSMElement> tree2 = filterStrategy.getParentsOfElement(node, points); //Eigentlicher Aufruf der Suche
-                        if (tree2 != null)
-                        {
-                            treeStrategy.printTreeElements(tree2, -1);
-                            Console.WriteLine();
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("An error occurred: '{0}'", ex);
-                    }
-                }
-            }
             if (e.Key == Key.F8)
             { /* Testaufruf: suche nach eigenschaften im Baum
                */
@@ -244,7 +237,7 @@ namespace GRANTApplication
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                         filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        treeStrategy.printTreeElements(tree, -1);
+                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
 
@@ -253,7 +246,7 @@ namespace GRANTApplication
                         //  searchedProperties.nameFiltered = "";
 
                         Console.Write("Gesuchte Eigenschaften ");
-                        treeStrategy.searchProperties(tree, searchedProperties, OperatorEnum.or);
+                        strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, searchedProperties, OperatorEnum.or);
 
                     }
                     catch (Exception ex)
@@ -263,30 +256,62 @@ namespace GRANTApplication
                 }
             }
             if (e.Key == Key.F9)
-            {/* Beispiel zum Schreiben in Datei
-              * Achtung: Pfad muss für jeden angepasst werden
+            {/* Beispiel zum Setzen von einer Beziehung von unserer GUI zur BrailleGUI, dazu muss sich die Maus über dem gewünschten GUI-Element befinden --> es wird nameFiltered angezeigt
+              * 
+              * Nach dem ein Baum gefiltert wurde (F5) kann mittels (F9) die Beziehung zu dem Element gesetzt werden und dann mittels (F2) auf dem BrailleDis angezeigt werden
+              * Soll die selbe Anzeige aktualisiert werden, so kann nochmal (F2) gedrückt werden
+              * Soll ein anderes Element der selben Anwendung angezeigt werden, so muss erst wieder (F9) und dann (F2) gedrückt werden
+              * Um ein Element einer anderen Anwendung anzuzeigen muss erst (F5), dann (F9) und anschließend (F2)  gedrückt werden
               * */
 
                 if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
                     {
-                        #region kopiert von "if (e.Key == Key.F5) ..."
-                        IntPtr points = operationSystemStrategy.getHWND();
 
-                        List<Strategy> possibleFilter = settings.getPossibleFilters();
-                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-
-                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                         filterStrategy.setStrategyMgr(strategyMgr);
-                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        treeStrategy.printTreeElements(tree, 3);
-                        Console.WriteLine("\n");
-                        #endregion
-                        System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\testGui.xml");
-                        tree.XmlSerialize(fs);
-                        fs.Close();
+                        ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
+                        strategyMgr.setBrailleTree(treeGuiOma);
+                        
+                            #region kopiert von "if (e.Key == Key.F5) ..."
+                            if (operationSystemStrategy.deliverCursorPosition())
+                            {
+                                try
+                                {
+                                    IntPtr points = operationSystemStrategy.getHWND();
+                                    List<Strategy> possibleFilter = settings.getPossibleFilters();
+                                    String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+
+                                    strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                                    // IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+
+                                    ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                                    strategyMgr.setFilteredTree(tree);
+                                    // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
+                                    //  treeStrategy.printTreeElements(tree, -1);
+                                    brailleDisplayStrategy.initializedSimulator();
+                                    brailleDisplayStrategy.initializedBrailleDisplay();
+
+                                    brailleDisplayStrategy.generatedBrailleUi();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("An error occurred: '{0}'", ex);
+                                }
+                            }
+
+                            #endregion
+
+                            int pointX;
+                            int pointY;
+
+                        operationSystemStrategy.getCursorPoint(out pointX, out pointY);
+                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+
+                        List<OsmRelationship<String, String>> relationship = setOsmRelationship(osmElement.properties.IdGenerated);
+                        strategyMgr.setOsmRelationship(relationship);
+
 
                     }
                     catch (Exception ex)
@@ -304,7 +329,7 @@ namespace GRANTApplication
                     System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\testGui.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
                     ITreeStrategy<OSMElement.OSMElement> tree3 = treeStrategy.XmlDeserialize(fs);
                     fs.Close();
-                    treeStrategy.printTreeElements(tree3, -1);
+                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree3, -1);
                 }
                 catch (Exception ex)
                 {
@@ -312,7 +337,7 @@ namespace GRANTApplication
                 }
             }
             if (e.Key == Key.F2)
-            {/*Beispiel BrailleDiss 
+            {/*Beispiel BrailleDis 
               * 
               * */
                 try
@@ -356,16 +381,16 @@ namespace GRANTApplication
                             List<OsmRelationship<String, String>> relationship = setOsmRelationship();
                             strategyMgr.setOsmRelationship(relationship);
                         }
-                        brailleDisplayStrategy.generatedBrailleUi(treeGuiOma);
+                        brailleDisplayStrategy.generatedBrailleUi();
                     }
                     else
                     {
                         OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
                         strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTree().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
-                        strategyMgr.getSpecifiedTree().setStrategyMgr(strategyMgr);
-                        strategyMgr.getSpecifiedBrailleDisplay().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
+                        ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
+                        strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
                         brailleDisplayStrategy.updateViewContent(relatedBrailleTreeObject.Data);
                     }
 
@@ -444,12 +469,12 @@ namespace GRANTApplication
             e3.screenName = "screen1";
             Content c3 = new Content();
          //   c3.text = "Start Text";
-            c3.fromGuiElement = "valueFiltered";
+            c3.fromGuiElement = "nameFiltered";
             e3.viewName = "v3";
             e3.content = c3;
             Position p3 = new Position();
-            p3.height = 8;
-            p3.width = 23;
+            p3.height = 20;
+            p3.width = 30;
             p3.left = 0;
             p3.top = 30;
             e3.position = p3;
@@ -479,8 +504,8 @@ namespace GRANTApplication
             Position p4 = new Position();
             p4.height = 10;
             p4.width = 20;
-            p4.left = 10;
-            p4.top = 40;
+            p4.left = 40;
+            p4.top = 50;
             e4.position = p4;
             GeneralProperties proper4 = new GeneralProperties();
             proper4.IdGenerated = "braille123_4";
@@ -488,7 +513,40 @@ namespace GRANTApplication
             osm4.properties = proper4;
             top = top.AddChild(osm4);
             #endregion
+
+            #region Element 5
+            OSMElement.OSMElement osm5 = new OSMElement.OSMElement();
+            BrailleRepresentation e5 = new BrailleRepresentation();
+            e5.screenName = "screen1";
+            Content c5 = new Content();
+            //   c3.text = "Start Text";
+            c5.otherContent = "Hallo - Button";
+            e5.viewName = "v5";
+            e5.content = c5;
+            Position p5 = new Position();
+            p5.height = 20;
+            p5.width = 40;
+            p5.left = 30;
+            p5.top = 30;
+            e5.position = p5;
+            GeneralProperties proper5 = new GeneralProperties();
+            proper5.IdGenerated = "braille123_5";
+            osm5.brailleRepresentation = e5;
+            osm5.properties = proper5;
+            top = top.AddChild(osm5);
+            #endregion
             return osmDau;
+        }
+
+        private List<OsmRelationship<String, String>> setOsmRelationship(String guiID)
+        {
+            List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
+            OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
+            r3.FilteredTree = guiID;
+            r3.BrailleTree = "braille123_3";
+
+            relationships.Add(r3);
+            return relationships;
         }
 
         private List<OsmRelationship<String, String>> setOsmRelationship()
@@ -516,7 +574,6 @@ namespace GRANTApplication
 
       
     }
-
 }
 
 /*Form topMostForm = new Form();
