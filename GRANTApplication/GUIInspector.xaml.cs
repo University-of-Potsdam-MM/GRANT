@@ -39,33 +39,36 @@ namespace GRANTApplication
             //brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             //brailleDisplayStrategy.setStrategyMgr(strategyMgr);
 
+            /*MenuItem root = new MenuItem();
+            
+            MenuItem childItem1 = new MenuItem() { Title = "Child item #1" };
+            childItem1.Items.Add(new MenuItem() { ID = "Child item #1.1" });
+            childItem1.Items.Add(new MenuItem() { Title = "Child item #1.1" });
+            childItem1.Items.Add(new MenuItem() { Title = "Child item #1.2" });
+            root.Items.Add(childItem1);
+            root.Items.Add(new MenuItem() { ID = "Child item #2" });
+            tvMain.Items.Add(root);
+           */
             
         }
 
-        public class MenuItem
-        {
-            public MenuItem()
-            {
-                this.Items = new ObservableCollection<MenuItem>();
-            }
+        
 
-            public string Title { get; set; }
 
-            public ObservableCollection<MenuItem> Items { get; set; }
-        }
-        TreeViewItem child = new TreeViewItem();
-       
 
-        private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, TreeViewItem root)
+        private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, MenuItem root)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
 
-
             while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
             {
-                TreeViewItem child = new TreeViewItem();
+                MenuItem child = new MenuItem();
                 node1 = tree.Child;
-                child.Header = node1.Data.properties.controlTypeFiltered;
+                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
+               
+                child.IdGenerated = node1.Data.properties.IdGenerated;
+               
+
                 root.Items.Add(child);
 
                 if (node1.HasChild)
@@ -82,9 +85,10 @@ namespace GRANTApplication
             }
             while (tree.HasNext)
             {
-                TreeViewItem sibling = new TreeViewItem();
+                MenuItem sibling = new MenuItem();
                 node1 = tree.Next;
-                sibling.Header = node1.Data.properties.controlTypeFiltered;
+                sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
+                sibling.IdGenerated = node1.Data.properties.IdGenerated;
                 root.Items.Add(sibling);
 
                 if (node1.HasChild)
@@ -123,8 +127,18 @@ namespace GRANTApplication
             }
         }
 
+        void root_Selected(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = sender as TreeViewItem;
+            //you can access item properties eg item.Header etc. 
+            //your logic here 
+            
+            Console.WriteLine("Pointx: ");
+           
 
-      
+        }
+
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
         IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
@@ -183,12 +197,16 @@ namespace GRANTApplication
 
                         // TreeViewItem treeItem = null;
                         // treeItem = new TreeViewItem();
-                        
-                        TreeViewItem root = new TreeViewItem();
-                        root.Header = tree.Data.properties.controlTypeFiltered;
-                        treeIteration(tree, root);
 
-                       
+                        MenuItem root = new MenuItem();
+
+                        //TreeViewItem root = new TreeViewItem();
+                        root.controlTypeFiltered = tree.Data.properties.controlTypeFiltered;
+                        root.controlTypeFiltered = tree.Data.properties.IdGenerated;
+                        //
+                        treeIteration(tree, root);
+                        //root.Selected += root_Selected;
+
                         //
 
 
@@ -203,5 +221,189 @@ namespace GRANTApplication
 
 
         }
-}
+
+        public class MenuItem
+        {
+            public MenuItem()
+            {
+                this.Items = new ObservableCollection<MenuItem>();
+            }
+
+
+            public String acceleratorKeyFiltered
+            {
+                get;
+                set;
+            }
+
+            public String accessKeyFiltered
+            {
+                get;
+                set;
+            }
+
+
+
+            public Boolean? isKeyboardFocusableFiltered
+            {
+                get;
+                set;
+            }
+
+            public int[] runtimeIDFiltered
+            {
+                get;
+                set;
+            }
+
+            // STATE
+
+            // Boolean? => true, false, null
+            public Boolean? isEnabledFiltered
+            {
+                get;
+                set;
+            }
+
+            public Boolean? hasKeyboardFocusFiltered
+            {
+                get;
+                set;
+            }
+
+            // Visibility
+
+            public Rect boundingRectangleFiltered
+            {
+                get;
+                set;
+            }
+
+            public Boolean? isOffscreenFiltered
+            {
+                get;
+                set;
+            }
+
+            public String helpTextFiltered
+            {
+                get;
+                set;
+            }
+
+
+            //IDENTIFICATION/Elemttype
+
+            //nicht von UIA
+            public String IdGenerated
+            {
+                get;
+                set;
+            }
+
+            public String autoamtionIdFiltered
+            {
+                get;
+                set;
+            }
+
+
+            public String classNameFiltered
+            {
+                get;
+                set;
+            }
+
+            //Anmerkung: ich habe den LocalizedControlType genommen
+            public String controlTypeFiltered
+            {
+                get;
+                set;
+            }
+
+            public String frameWorkIdFiltered
+            {
+                get;
+                set;
+            }
+
+            //typ?
+            // Anmerkung: von String zu int geändert
+            public IntPtr hWndFiltered
+            {
+                get;
+                set;
+            }
+
+            public Boolean? isContentElementFiltered
+            {
+                get;
+                set;
+            }
+            //typ?
+            public String labeledbyFiltered
+            {
+                get;
+                set;
+            }
+
+            public Boolean? isControlElementFiltered
+            {
+                get;
+                set;
+            }
+
+            public Boolean? isPasswordFiltered
+            {
+                get;
+                set;
+            }
+
+            public String localizedControlTypeFiltered
+            {
+                get;
+                set;
+            }
+
+            public String nameFiltered
+            {
+                get;
+                set;
+            }
+
+            public int processIdFiltered
+            {
+                get;
+                set;
+            }
+
+            public String itemTypeFiltered
+            {
+                get;
+                set;
+            }
+            public String itemStatusFiltered
+            {
+                get;
+                set;
+            }
+            public Boolean? isRequiredForFormFiltered
+            {
+                get;
+                set;
+            }
+
+            public String valueFiltered { get; set; }
+
+            
+
+            /// <summary>
+            /// Enthält die unterstützten Pattern
+            /// </summary>
+            public object[] suportedPatterns { get; set; }
+
+            public ObservableCollection<MenuItem> Items { get; set; }
+        }
+    }
+  
 }
