@@ -52,62 +52,66 @@ namespace GRANTApplication
             
         }
 
-        
 
-
-
-        private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, MenuItem root)
+        private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref MenuItem root)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
 
             while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
             {
+                
                 MenuItem child = new MenuItem();
                 node1 = tree.Child;
                 child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
                 child.IdGenerated = node1.Data.properties.IdGenerated;
                 child.nameFiltered = node1.Data.properties.nameFiltered;
-
+                child.parentMenuItem = root;
                 root.Items.Add(child);
 
                 if (node1.HasChild)
                 {
-                    treeIteration(node1, child);
+                    treeIteration(node1, ref child);
                 }
                 else
                 {
-                    treeIteration(node1, root);
+                    if (node1.IsFirst && node1.IsLast)
+                    {
+                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                    }
+                    treeIteration(node1, ref root);
                 }
-
-
-              
             }
             while (tree.HasNext)
             {
+
                 MenuItem sibling = new MenuItem();
                 node1 = tree.Next;
                 sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
                 sibling.IdGenerated = node1.Data.properties.IdGenerated;
                 sibling.nameFiltered = node1.Data.properties.nameFiltered;
-
+                sibling.parentMenuItem = root;
                 root.Items.Add(sibling);
 
                 if (node1.HasChild)
                 {
-                    treeIteration(node1, sibling);
+                    treeIteration(node1, ref sibling);
                 }
                 else
                 {
-                    treeIteration(node1, root);
+                    if (node1.IsFirst && node1.IsLast)
+                    {
+                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                    }
+                    if (!node1.HasChild && !node1.HasNext)
+                    {
+                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                    }
+                    treeIteration(node1, ref root);
                 }
-
-                
             }
             if (tree.Count == 1 && tree.Depth == -1)
             {
-                //baumSchleife(tree);
                 tvMain.Items.Add(root);
-
                 return;
             }
             if (!tree.HasChild)
@@ -116,16 +120,21 @@ namespace GRANTApplication
                 if (tree.HasParent)
                 {
                     node1.Remove();
+                    return;
                 }
             }
-            if (!tree.HasNext && !tree.HasParent)
+            if (tree.IsFirst && tree.IsLast)
+            {
+                root = root.parentMenuItem == null ? root : root.parentMenuItem;
+            }
+         /*   if (!tree.HasNext && !tree.HasParent)
             {
                 if (tree.HasPrevious)
                 {
                     node1 = tree;
                     node1.Remove();
                 }
-            }
+            }*/
         }
 
         void root_Selected(object sender, RoutedEventArgs e)
@@ -205,7 +214,7 @@ namespace GRANTApplication
                         root.controlTypeFiltered = tree.Data.properties.controlTypeFiltered;
                         root.controlTypeFiltered = tree.Data.properties.IdGenerated;
                         //
-                        treeIteration(tree, root);
+                        treeIteration(tree, ref root);
                        // root.Selected += root_Selected;
 
                         //
