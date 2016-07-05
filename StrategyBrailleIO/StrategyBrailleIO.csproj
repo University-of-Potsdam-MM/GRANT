@@ -71,6 +71,10 @@
       <Project>{73bd1f41-ce19-40de-a0ec-a70a9f003dec}</Project>
       <Name>GestureRecognizer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj">
+      <Project>{8fdc0093-e06d-4116-b182-79eeed0645ab}</Project>
+      <Name>BrailleIOGuiElementRenderer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
       <Name>OSMElement</Name>

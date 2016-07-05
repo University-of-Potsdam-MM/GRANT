@@ -172,7 +172,7 @@ namespace StrategyWindows
 
             System.Threading.Thread.Sleep(1000);
             
-            NativeMethods.InvalidateRect(IntPtr.Zero ,IntPtr.Zero , true);
+            NativeMethods.InvalidateRect(IntPtr.Zero, IntPtr.Zero , true);
 
             //updatewindow säubert nicht ordentlich den screen
             //updateWindow(IntPtr.Zero);
