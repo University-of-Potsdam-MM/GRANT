@@ -14,7 +14,7 @@ using StrategyManager.Interfaces;
 using StrategyManager;
 using OSMElement;
 using BrailleIOGuiElementRenderer;
-
+using BrailleIO.Interface;
 
 namespace StrategyBrailleIO
 {
@@ -142,14 +142,21 @@ namespace StrategyBrailleIO
             {
                 throw new Exception("Der View existiert (in dem Screen) nicht!");
             }
-            if (element.brailleRepresentation.content.text != null)
+            if (element.brailleRepresentation.content.otherContent != null)
             {
-                view.SetText(element.brailleRepresentation.content.text);
+                IBrailleIOContentRenderer renderer = getRenderer(element.brailleRepresentation.content.otherContent.ToString());
+                view.SetOtherContent(element.brailleRepresentation.content.text, renderer);
                 return;
             }
             if (element.brailleRepresentation.content.matrix != null)
             {
                 view.SetMatrix(element.brailleRepresentation.content.matrix);
+                return;
+            }
+            if (element.brailleRepresentation.content.text != null)
+            {
+                view.SetText(element.brailleRepresentation.content.text);
+                return;
             }
            // ...
         }
@@ -266,11 +273,7 @@ namespace StrategyBrailleIO
         private void createView(OSMElement.OSMElement osmElement)
         {
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
-            if (brailleRepresentation.content.text != null)
-            {
-                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
-                return;
-            }
+
             if (brailleRepresentation.content.matrix != null)
             {
                 createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
@@ -278,7 +281,13 @@ namespace StrategyBrailleIO
             }
             if (brailleRepresentation.content.otherContent != null)
             {
-                createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.otherContent, brailleRepresentation.viewName, brailleRepresentation.position);
+                IBrailleIOContentRenderer renderer = getRenderer(brailleRepresentation.content.otherContent.ToString());
+               createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, renderer, brailleRepresentation.viewName, brailleRepresentation.position);
+                return;
+            }
+            if (brailleRepresentation.content.text != null)
+            {
+                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
                 return;
             }
             //TODO: weitere Möglichkeiten?
@@ -347,11 +356,11 @@ namespace StrategyBrailleIO
         }
 
 
-        private void createViewOtherContent(BrailleIOScreen screen, object otherContent, String viewName, Position position)
+        private void createViewOtherContent(BrailleIOScreen screen, object otherContent, IBrailleIOContentRenderer renderer, String viewName, Position position)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             BrailleIOButtonToMatrixRenderer buttonRenderer = new BrailleIOButtonToMatrixRenderer();
-            vr.SetOtherContent(otherContent, buttonRenderer);
+            vr.SetOtherContent(otherContent, renderer);
             vr.SetPadding(paddingToBoxModel(position.padding));
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
@@ -374,6 +383,19 @@ namespace StrategyBrailleIO
             boxModel.Top = (uint)padding.Top;
             return boxModel;
         }
+
+        private static IBrailleIOContentRenderer getRenderer(String guiElementType)
+        {
+            switch (guiElementType.ToString())
+            {
+                case "Button":
+                    return new BrailleIOButtonToMatrixRenderer();
+            }
+            return null;
+
+            //  return guiElementType.GetType().GetProperties(guiElementType.ToString());   //GetProperty(guiElementType).GetValue(UiObjectsEnum, null);
+        }
+
 
         #region copy of BrailleIOExample
 

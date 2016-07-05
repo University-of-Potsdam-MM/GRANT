@@ -32,6 +32,23 @@ namespace StrategyManager
         }
 
         /// <summary>
+        /// Setzt eine Osm-Beziehung (die alten werden gelöscht)
+        /// </summary>
+        /// <param name="idFilteredTree">gibt die 'IdGenerated' des Knotens aus dem gefilterten Baum an</param>
+        /// <param name="idBrailleTree">gibt die 'IdGenerated' des Knotens aus dem Baum mit der Braille-Darstellung an</param>
+        /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
+        public static void setOsmRelationship(String idFilteredTree, String idBrailleTree, ref List<OsmRelationship<String, String>> osmRelationship)
+        {
+                //alte Beziehungen löschen
+            osmRelationship.Clear();
+
+                OsmRelationship<String, String> relationship = new OsmRelationship<String, String>();
+                relationship.BrailleTree = idBrailleTree;
+                relationship.FilteredTree = idFilteredTree;
+                osmRelationship.Add(relationship);
+        }
+
+        /// <summary>
         /// Entfernt eine Beziehung zwischen einem Knoten des gefilterten Baumes und dem Baum der Braille-Darstellung 
         /// </summary>
         /// <param name="idFilteredTree">gibt die 'IdGenerated' des Knotens aus dem gefilterten Baum an</param>

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="BrailleIOButtonToMatrixRenderer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UiObjectsEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO_Interfaces\BrailleIO_Interfaces.csproj">

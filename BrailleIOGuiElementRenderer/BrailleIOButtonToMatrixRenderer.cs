@@ -18,25 +18,26 @@ namespace BrailleIOGuiElementRenderer
             {
                 buttonText = otherContent as String;
             }
-            catch(InvalidCastException ice) 
+            catch (InvalidCastException ice)
             {
                 throw new InvalidCastException("Can't cast otherContent to String! {0}", ice);
             }
 
-            return RenderButton(view, buttonText);
+            return RenderButton(view, buttonText); 
+         //   return RenderButton(view, "buttonText");
         }
 
         public bool[,] RenderButton(IViewBoxModel view, String buttonText)
         {
             //call pre hooks  --> wie funktioniert das richtig?
             object cM = buttonText as object;
-          //  callAllPreHooks(ref view, ref cM);
+           callAllPreHooks(ref view, ref cM);
 
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
             
-            //TODO String to Braille/Matrix
+            //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, buttonText as object, false);
+            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (buttonText as object == null ? "" : buttonText as object), false);
             copyMatrixInmatrix(textMatrix, ref viewMatrix);
             //erstmal ein eckiger Button
             for (int height = 0; height < view.ViewBox.Height; height++)
@@ -63,7 +64,7 @@ namespace BrailleIOGuiElementRenderer
             viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 1] = false;
 
             //call post hooks --> wie funktioniert das richtig?
-         //   callAllPostHooks(view, cM, ref viewMatrix, false);
+            callAllPostHooks(view, cM, ref viewMatrix, false);
 
             return viewMatrix;
         }

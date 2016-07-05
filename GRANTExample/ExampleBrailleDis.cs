@@ -8,6 +8,7 @@ using OSMElement;
 using StrategyManager.Interfaces;
 using System.Windows.Forms;
 using GRANTApplication;
+using BrailleIOGuiElementRenderer;
 
 namespace GRANTExample
 {
@@ -47,10 +48,13 @@ namespace GRANTExample
                         Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                         return;
                     }
-                   String  brailleId =  "braille123_3";
+                   String  brailleId =  "braille123_5";
                     OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                    if (osmRelationships != null)
+                    {
+                        strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                    strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+
                     ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
                     if (relatedBrailleTreeObject != null)
                     {
@@ -58,6 +62,7 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
                     }
                 }
+            }
             }
             catch (Exception ex)
             {
@@ -74,9 +79,9 @@ namespace GRANTExample
             BrailleRepresentation e1 = new BrailleRepresentation();
             e1.screenName = "screen1";
             Content c1 = new Content();
-            //c1.text = "Hallo";
+            c1.text = "Hallo";
             e1.viewName = "v1";
-            c1.fromGuiElement = "nameFiltered";
+           // c1.fromGuiElement = "nameFiltered";
             c1.showScrollbar = true;
             e1.content = c1;
             Position p1 = new Position();
@@ -161,7 +166,7 @@ namespace GRANTExample
             e4.viewName = "v4";
             e4.content = c4;
             Position p4 = new Position();
-            p4.height = 10;
+            p4.height = 7;
             p4.width = 20;
             p4.left = 40;
             p4.top = 50;
@@ -179,7 +184,10 @@ namespace GRANTExample
             e5.screenName = "screen1";
             Content c5 = new Content();
             //   c3.text = "Start Text";
-            c5.otherContent = "Hallo - Button";
+            object[] otherContent = {UiObjectsEnum.Button};
+            c5.otherContent = UiObjectsEnum.Button;
+           // c5.otherContent = "Hallo - Button";
+            c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";
             e5.content = c5;
             Position p5 = new Position();

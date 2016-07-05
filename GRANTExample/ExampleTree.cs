@@ -106,11 +106,50 @@ namespace GRANTExample
                     strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                     strategyMgr.setFilteredTree(tree);
 
-                    
+                  //  baumSchleife(tree);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("An error occurred: '{0}'", ex);
+                }
+            }
+        }
+
+        private void baumSchleife(ITreeStrategy<OSMElement.OSMElement> tree)
+        {
+            
+            ITreeStrategy<OSMElement.OSMElement> node1;
+            while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
+            {
+                node1 = tree.Child;
+                Console.WriteLine("Name: {0}, Type: {1}", node1.Data.properties.nameFiltered, tree.Data.properties.localizedControlTypeFiltered);
+                baumSchleife(node1);
+            }
+            while (tree.HasNext)
+            {
+                node1 = tree.Next;
+                Console.WriteLine("Name: {0}, Type: {1}", node1.Data.properties.nameFiltered, tree.Data.properties.localizedControlTypeFiltered);
+                baumSchleife(node1);
+            }
+            if (tree.Count == 1 && tree.Depth == -1)
+            {
+                //baumSchleife(tree);
+                return;
+            }
+            if (!tree.HasChild)
+            {
+                node1 = tree;
+                if (tree.HasParent)
+                {
+                    node1.Remove();
+                }
+            }
+            if (!tree.HasNext && !tree.HasParent)
+            {
+                if (tree.HasPrevious)
+                {
+                    node1 = tree;
+                    node1.Remove();
                 }
             }
         }
@@ -154,9 +193,12 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
 
-                        List<OsmRelationship<String, String>> relationship = strategyMgr.getOsmRelationship();
-
-                        OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
+                        List<OsmRelationship<String, String>> relationshipList = strategyMgr.getOsmRelationship();
+                     //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
+                      //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
+                        OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationshipList);
+                        strategyMgr.setOsmRelationship(relationshipList);
+                      
                     }
 
                 }

@@ -21,14 +21,13 @@ namespace OSMElement
         public bool[,] matrix { get; set; }
 
         /// <summary>
-        /// gibt an, dass es sich bei dem GUI-Element nicht um ein Text, Bild oder eine Matrix handelt dondern um otherContent (vgl. BrailleIO)
-        /// hierbei gibt es später spezielle Renderer für BrailleIO die die verschiedenen GUI-Elemente darstellen
+        /// gibt an, dass es sich bei dem GUI-Element nicht um ein Text, Bild oder eine Matrix handelt sondern um otherContent (vgl. BrailleIO) -> ist ein Verweis zum Renderer
         /// </summary>
         public object otherContent { get; set; }
 
 
         /// <summary>
-        /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden
+        /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden. Der Wert dieser Eigenschaft soll angezeigt werden
         /// </summary>
         public String fromGuiElement { get; set; }
 

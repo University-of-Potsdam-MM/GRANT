@@ -22,7 +22,6 @@ namespace StrategyGenericTree
         public StrategyMgr getStrategyMgr() { return strategyMgr; }
         public void setStrategyMgr(StrategyMgr mamager) { strategyMgr = mamager; }
 
-        public ITreeStrategy<T> tree;
 
         #region Print
         /// <summary>

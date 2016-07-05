@@ -383,8 +383,8 @@ namespace StrategyUIA
             setSupportedPatterns(ref elementP, element);
             if (elementP.IdGenerated == null)
             {
-                elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf; sollte eigentlich nicht wieder neu berechnet werden
-                //Console.WriteLine("hash = " + elementP.IdGenerated);
+                elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
+               // Console.WriteLine("hash = " + elementP.IdGenerated);
             }
 
             return elementP;
