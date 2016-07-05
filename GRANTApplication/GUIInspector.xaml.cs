@@ -83,9 +83,10 @@ namespace GRANTApplication
             }
             while (tree.HasNext)
             {
-
                 MenuItem sibling = new MenuItem();
                 node1 = tree.Next;
+                //Pruefung, ob wir es ans richtige Element ranhängen und ggf. korrigieren
+                rootMenuItemCheckSibling(ref root, tree);
                 sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
                 sibling.IdGenerated = node1.Data.properties.IdGenerated;
                 sibling.nameFiltered = node1.Data.properties.nameFiltered;
@@ -127,14 +128,24 @@ namespace GRANTApplication
             {
                 root = root.parentMenuItem == null ? root : root.parentMenuItem;
             }
-         /*   if (!tree.HasNext && !tree.HasParent)
+        }
+
+        /// <summary>
+        /// prueft, ob der knoten an der richtigen Stelle dargestellt wird und korrigiert es ggf.
+        /// </summary>
+        /// <param name="root">gibt das (erwartete) Eltern-menuItem-element an</param>
+        /// <param name="parentNode">gibt den vorgängert Knoten (linker Geschwisterknoten) an</param>
+        private void rootMenuItemCheckSibling(ref MenuItem root, ITreeStrategy<OSMElement.OSMElement> siblingNode)
+        {               
+            if (siblingNode.HasParent && !siblingNode.Parent.Data.properties.IdGenerated.Equals(root.IdGenerated))
             {
-                if (tree.HasPrevious)
+                Console.WriteLine();
+                if (root.parentMenuItem.IdGenerated.Equals(siblingNode.Parent.Data.properties.IdGenerated))
                 {
-                    node1 = tree;
-                    node1.Remove();
+                    root = root.parentMenuItem;
+                    rootMenuItemCheckSibling(ref root, siblingNode);
                 }
-            }*/
+            } 
         }
 
         void root_Selected(object sender, RoutedEventArgs e)
