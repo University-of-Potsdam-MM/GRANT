@@ -65,9 +65,8 @@ namespace GRANTApplication
                 MenuItem child = new MenuItem();
                 node1 = tree.Child;
                 child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
-               
                 child.IdGenerated = node1.Data.properties.IdGenerated;
-               
+                child.nameFiltered = node1.Data.properties.nameFiltered;
 
                 root.Items.Add(child);
 
@@ -89,6 +88,8 @@ namespace GRANTApplication
                 node1 = tree.Next;
                 sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
                 sibling.IdGenerated = node1.Data.properties.IdGenerated;
+                sibling.nameFiltered = node1.Data.properties.nameFiltered;
+
                 root.Items.Add(sibling);
 
                 if (node1.HasChild)
@@ -129,11 +130,11 @@ namespace GRANTApplication
 
         void root_Selected(object sender, RoutedEventArgs e)
         {
-            TreeViewItem item = sender as TreeViewItem;
+            MenuItem item = sender as MenuItem;
             //you can access item properties eg item.Header etc. 
             //your logic here 
             
-            Console.WriteLine("Pointx: ");
+            Console.WriteLine("Pointx: " + item.IdGenerated);
            
 
         }
@@ -205,7 +206,7 @@ namespace GRANTApplication
                         root.controlTypeFiltered = tree.Data.properties.IdGenerated;
                         //
                         treeIteration(tree, root);
-                        //root.Selected += root_Selected;
+                       // root.Selected += root_Selected;
 
                         //
 
@@ -395,7 +396,12 @@ namespace GRANTApplication
 
             public String valueFiltered { get; set; }
 
-            
+            public MenuItem parentMenuItem
+            {
+                get;
+                set;
+            }
+
 
             /// <summary>
             /// Enthält die unterstützten Pattern
@@ -404,6 +410,8 @@ namespace GRANTApplication
 
             public ObservableCollection<MenuItem> Items { get; set; }
         }
+
+     
     }
   
 }

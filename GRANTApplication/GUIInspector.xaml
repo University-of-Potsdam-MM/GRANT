@@ -23,28 +23,29 @@
             <TextBlock Height="30" Foreground="White">Status Bar</TextBlock>
         </StackPanel>
         <!-- Left-->
-        <StackPanel Background="Yellow" DockPanel.Dock="Left" Margin="4" MinWidth="400" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+        <StackPanel Background="Yellow" DockPanel.Dock="Left" Margin="4" MinWidth="400">
             <TextBlock Height="30" Foreground="White">Status Bar</TextBlock>
-
+          
             <Grid Margin="10" >
-               <TreeView Name="tvMain" Margin="0,0,0,-254">
+                <TreeView Name="tvMain" Margin="0,0,0,-254">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock> - </TextBlock>
-                                <TextBlock Text="{Binding IdGenerated}" />
-                                <TextBlock> - </TextBlock>
                                 <TextBlock Text="{Binding controlTypeFiltered}" />
-                                
+                                <TextBlock> -</TextBlock>
+                                <TextBlock Visibility="Collapsed" Text="{Binding IdGenerated}" />
+                                <TextBlock> -</TextBlock>
+                                <TextBlock Text="{Binding nameFiltered}" />
+                                <TextBlock> -</TextBlock>
                             </StackPanel>
                         </HierarchicalDataTemplate>
                       
                     </TreeView.ItemTemplate>
 
                 </TreeView>
+            
 
-
-                <!-- 
+            <!-- 
                 <TreeView ItemsSource="{Binding DeviceGroups}">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding DeviceTypes}">
@@ -59,7 +60,10 @@
                 </TreeView>-->
 
             </Grid>
+
         </StackPanel>
+        
+        
 
         <StackPanel Background="Green" DockPanel.Dock="Right" Margin="4" MinWidth="200" Orientation="Horizontal">
             <TextBlock Height="30" Foreground="White">Status Bar</TextBlock>
