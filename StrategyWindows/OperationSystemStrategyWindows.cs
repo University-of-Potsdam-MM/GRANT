@@ -179,8 +179,23 @@ namespace StrategyWindows
 
             newGraphics.Dispose();
         }
-    
-    
+
+        public void paintScreenWithoutRect(Rectangle rect)
+        {
+            //System.Windows//.Automation.Automationelement screenHWND = NativeMethods.GetDesktopWindow();
+
+              //              OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+
+            IntPtr screen = NativeMethods.GetDesktopWindow();
+            
+
+            //osmElement.properties = setProperties(mouseElement);
+
+            Graphics desktop = Graphics.FromHwnd(screen);
+            Graphics newGraphics = desktop;
+
+            //Rectangle rect = operationSystemStrategy.getRect(osmElement);
+        }
 
 
         public void paintRect_Test(Rectangle rect)

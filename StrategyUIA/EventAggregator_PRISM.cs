@@ -90,6 +90,9 @@ namespace StrategyUIA
         //Kreierung des events
         public class stringOSMEvent : PubSubEvent<string> { }
 
+        //timerEvent
+        public class stringTimeEvent : PubSubEvent<string> { }
+
         #endregion
     }
 
