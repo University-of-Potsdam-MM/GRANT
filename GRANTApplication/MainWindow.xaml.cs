@@ -207,16 +207,7 @@ namespace GRANTApplication
                 }
             }*/
 
-            if (e.Key == Key.F6)
-            {
-                List<Strategy> posibleFilter = settings.getPossibleFilters();
-                String result = "Mögliche Filter: ";
-                foreach (Strategy f in posibleFilter)
-                {
-                    result = result + f.userName + ", ";
-                }
-                itemNameTextBox.Text = result;
-            }
+      
             if (e.Key == Key.F8)
             { /* Testaufruf: suche nach eigenschaften im Baum
                */
