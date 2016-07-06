@@ -65,15 +65,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO.csproj">
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO\BrailleIO.csproj">
       <Project>{623E618C-F034-473E-A5AF-280B20A5BA8F}</Project>
       <Name>BrailleIO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\BrailleIO\BrailleIO_Interfaces\BrailleIO_Interfaces.csproj">
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO_Interfaces\BrailleIO_Interfaces.csproj">
       <Project>{168ec2f2-7e4a-493a-ab4a-9fb1b45dab64}</Project>
       <Name>BrailleIO_Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HBBrailleDisV2\HBBrailleDisV2.csproj">
+    <ProjectReference Include="..\..\BrailleIO\BrailleDis\HBBrailleDisV2\HBBrailleDisV2.csproj">
       <Project>{E5454493-14E2-4429-8EC9-646154154482}</Project>
       <Name>HBBrailleDisV2</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>

@@ -105,7 +105,7 @@ namespace StrategyBrailleIO
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
 
-          //  createBrailleDis();
+            createBrailleDis();
 
         }
 
@@ -113,7 +113,10 @@ namespace StrategyBrailleIO
         {/// aus BrailleIOExample -> erstmal gekürzt
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet(brailleIOMediator.AdapterManager);
+
+                // brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet(brailleIOMediator.AdapterManager);
+
+                brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD(brailleIOMediator.AdapterManager);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
 
            /*     #region BrailleDis events
