@@ -46,8 +46,9 @@ namespace StrategyUIA
             AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             findChildrenOfNode(top, collection, TreeScope.Children,  -1);
 
-            UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-            uiaEvents.eventsUIA(hwnd);
+            ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
+            //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+            //uiaEvents.eventsUIA_withHWND(hwnd);
 
             return tree;
         }
@@ -68,6 +69,9 @@ namespace StrategyUIA
                 throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
             }
             ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+
+            UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+            uiaEvents.eventsUIA_withAutomationElement(mainElement);
 
             switch (treeScope)
             {
