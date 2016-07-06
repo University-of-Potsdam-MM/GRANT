@@ -101,6 +101,7 @@ namespace StrategyUIA
         /// eventdoku 06.07.2016
         /// Für das Anmelden der "Aktivierung des Buttonelements"/den Klick auf den Button wird sich durch drücken der taste f7 mit dem button unter grantexample registriert 
         /// es wird nur das Automationelement unter dem mauszeiger gefiltert und in dieser subscribetoinvokemthode nur ei element für events berücksichtigt, auswahl über treescope
+        /// unsubscribe für das event einbauen!
         /// </summary>
         /// <param name="elementButton">The automation element.</param>
         public void SubscribeToInvoke(AutomationElement elementButton)
@@ -144,21 +145,28 @@ namespace StrategyUIA
                 // TODO Add handling code.
                 Console.WriteLine("InvokedEvent raised '{0}'", sourceElement.ToString(), sourceElement.Current.LocalizedControlType.ToString());
 
-                Console.WriteLine("Event Aktiviert");
+                Console.WriteLine("Event ausgelöst durch Klick auf Button");
 
                 //todo
-                //hier aufruf des publisher/das event eventOsmChangedHandler() wurde geworfen
                 //classEventAggregator cea = new classEventAggregator();
 
-                //todo: folgenden doppelt kommentierten zeilen für prism nutzen
-                //////cea.aggSubscribe(); 
-                //////cea.eventOsmChangedHandler();
-
-                //cea.agg.GetEvent<stringOSMEvent>().Publish("tada");
-
+                //nur einmaliges subscriben erlauben von einer klasse aus, nicht mehrmalig für dasselbe event anmelden!
+                //Prism-subscribe passiert von der klasse aus, welche über das prism-event informiert weden möchte
+                //dieses subscribe hier sollte natürlich nur einmal bei initialisierung in eventverarbeitender klasse erfolgen
+                cea.aggSubscribe();
                 
-                //cea.mainEvent();
-                
+                //das publish passiert auch hier, das subscribe kann in einer anderen klasse sein, das publish muss/sollte nach dem grant-konzept dort sein, wo das egentliche event zuerst abgefangen wird, also bei uia in dem handler, 
+                //welcher das event zuerst verarbeitet
+
+                //cea.agg.GetEvent<stringOSMEvent>().Publish("Wurf aus UIAEventsMonitorKlasse");
+                //kann genutzt werden
+                //oder über den
+                //aufruf des publisher in einer methode, wie eventOsmChangedHandler(); mit dieser art und weise könnte dann allerdings auch direkt der aufruf von methoden, welche das allererste event verarbeiten wollen, erfolgen
+                // es soll aber so sein, dass nach dem ersten event ein neues event über publish geworfen wird und sämtliche unterschiedliche arten von events dieses event werfen 
+                //und damit dann über prism eine ordentliche verarbeitung der events erfolgt, in der methode "eventosmchangedhandler" wird das neue event ge-published und die eigentliche verarbeitung über handler kann dann ganz woanders erfolgen
+                // was den publisher eben nicht kümmert, wie und wo es verarbeitet wird, derzeit wird es in generateosm(string osm) verarbeitet
+                cea.eventOsmChangedHandler();
+
             }
             else
             {
