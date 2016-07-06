@@ -32,33 +32,28 @@ namespace StrategyUIA
             //public SubscriptionToken objSubToken;
             //public SubscriptionToken stringSubToken;
 
+            //nur einmaliges subscriben erlauben von einer klasse aus, nicht mehrmalig für dasselbe event anmelden!
             public void aggSubscribe()
             {
                 agg.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM);
-                agg.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM_2);
+                ////agg.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM_2);
 
 
                 agg.GetEvent<stringOSMEvent>().Subscribe(generateOSM);
+                Console.WriteLine("Für Button Event in Prism subscribed");
+
                 //agg.GetEvent<stringOSMEvent>().Subscribe(generateOSM, ThreadOption.UIThread);
-                agg.GetEvent<stringOSMEvent>().Subscribe(generateOSM_2);
             }
 
         //generateosm verarbeitet das event generateosm2 verarbeitet dasselbe event auch noch anders.
             public void generateOSM(string osm)
             {
-                Console.WriteLine("event verarbeitet" + osm);
-                osm = "werhers";
+                Console.WriteLine("event verarbeitet, derzeit in EventAggregator_Prism, mit übergabe folgenden strings aus der publish-methode: " + osm);
+                //osm = "werhers";
             }
 
-            public void generateOSM_2(string osm)
-            {
-                Console.WriteLine("event anders verarbeitet" + osm);
-                osm = "werhers";
-            }
-
-
-        //todo
-        //problem unsubscribe fehlt in auslösen des event in uia, 
+        //todo???
+        //problem unsubscribe fehlt in auslösen und anmeldung für das event in uia, 
         // es wird dann mehrfach geworfen, da es bei jdem auslösen des buttonevent ein erneutes subscriben und erstellen des prismevent gibt?
 
             //event publisher
@@ -69,11 +64,9 @@ namespace StrategyUIA
                 //public class UIAEventMonitor
 
                 //dazu verstehen, wie methoden in anderen klassen aufgerfuen werden und wie dies in grant läuft! mit strategy
-                agg.GetEvent<stringOSMEvent>().Publish("tada");
+                agg.GetEvent<stringOSMEvent>().Publish("Wurf aus EventAggregator_PRISM.cs");
 
-                agg.GetEvent<stringOSMEvent>().Publish("zweiteevent werfen nach dem eigentlichen event vom button aus uia");
-
-                Console.WriteLine("event geworfen");
+                Console.WriteLine("event gepublished in EventAggregator_Prism ");
             }
 
             //der publisher ist der button der normalen anwendung, dieser wirft ein eneus event 

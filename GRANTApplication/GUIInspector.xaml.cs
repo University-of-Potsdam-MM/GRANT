@@ -16,6 +16,7 @@ namespace GRANTApplication
     {
         Settings settings;
         StrategyMgr strategyMgr;
+        
 
         public GUIInspector()
         {
@@ -52,6 +53,20 @@ namespace GRANTApplication
             tvMain.Items.Add(root);
            */
 
+            InitializeComponent();
+           
+
+
+        }
+
+        void updateProperties(MenuItem item)
+        {
+            List<MenuItem> properties = new List<MenuItem>();
+
+            properties.Add(new MenuItem() { nameFiltered = item.nameFiltered });
+            properties.Add(new MenuItem() { IdGenerated = item.IdGenerated });
+
+            dgUsers.ItemsSource = properties;
         }
 
         void tvMain_SelectedItemChanged(object sender,
@@ -69,6 +84,7 @@ namespace GRANTApplication
                 //root = root.parentMenuItem == null ? root : root.parentMenuItem;
                 //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
 
+                updateProperties(item);
             //Methode MenuItem übergeben - tabelle
             }
             else if (tree.SelectedItem is string)
@@ -234,10 +250,11 @@ namespace GRANTApplication
                         // treeItem = new TreeViewItem();
 
                         MenuItem root = new MenuItem();
+                       
 
                         //TreeViewItem root = new TreeViewItem();
-                        root.controlTypeFiltered = tree.Data.properties.controlTypeFiltered;
-                        root.controlTypeFiltered = tree.Data.properties.IdGenerated;
+                        root.controlTypeFiltered = "Filtered-Tree";
+                        
                         //
                         treeIteration(tree, ref root);
                        // root.Selected += root_Selected;
@@ -255,6 +272,16 @@ namespace GRANTApplication
             }
 
 
+        }
+        public class User
+        {
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public DateTime Birthday { get; set; }
+
+          
         }
 
         public class MenuItem

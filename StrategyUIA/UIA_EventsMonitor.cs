@@ -33,7 +33,7 @@ namespace StrategyUIA
         /// 
         /// </summary>
         /// <param name="appHWND"></param>
-        public void eventsUIA(IntPtr appHWND)
+        public void eventsUIA_withHWND(IntPtr appHWND)
         {
             try
             {
@@ -43,8 +43,10 @@ namespace StrategyUIA
                 Console.WriteLine("appHWND: '{0}'", appHWND.ToString());
 
                 //todo apphwnd durchgehen mittels treescope und den ersten button der app geben lassen
+                //todo//AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
+
                 AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
-                
+
                 SubscribeToInvoke(at);
 
             }
@@ -53,6 +55,32 @@ namespace StrategyUIA
                 Console.WriteLine("An error occurred: '{0}'", ex);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appHWND"></param>
+        public void eventsUIA_withAutomationElement(AutomationElement mainElement)
+        {
+            try
+            {
+                //die Methode getProcessHwndFromHwnd liefert das GUElemtn der eigentlichen Anwendung
+                //appHWND = operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points));
+
+                Console.WriteLine("AutomationElement: '{0}'", mainElement.Current.LocalizedControlType.ToString());
+
+                //todo apphwnd durchgehen mittels treescope und den ersten button der app geben lassen
+                //AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
+
+                SubscribeToInvoke(mainElement);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: '{0}'", ex);
+            }
+        }
+
 
         #region UIA_Automation_Events_Automation
         //Automation.AddAutomationEventHandler Method (AutomationEvent, AutomationElement, TreeScope, AutomationEventHandler)
@@ -67,9 +95,22 @@ namespace StrategyUIA
 
         EventAggregator_PRISM cea = new EventAggregator_PRISM();
 
+        /// <summary>
+        /// Register an event handler for InvokedEvent on the specified element.
+        /// 
+        /// eventdoku 06.07.2016
+        /// Für das Anmelden der "Aktivierung des Buttonelements"/den Klick auf den Button wird sich durch drücken der taste f7 mit dem button unter grantexample registriert 
+        /// es wird nur das Automationelement unter dem mauszeiger gefiltert und in dieser subscribetoinvokemthode nur ei element für events berücksichtigt, auswahl über treescope
+        /// unsubscribe für das event einbauen!
+        /// </summary>
+        /// <param name="elementButton">The automation element.</param>
         public void SubscribeToInvoke(AutomationElement elementButton)
         {
-            treeScope = TreeScope.Descendants;
+
+            //auswahl über treescope welche elemente für events betrachtete werden sollen
+            //treeScope = TreeScope.Descendants;
+
+            treeScope = TreeScope.Element;
 
             if (elementButton != null)
             {
@@ -103,19 +144,29 @@ namespace StrategyUIA
             {
                 // TODO Add handling code.
                 Console.WriteLine("InvokedEvent raised '{0}'", sourceElement.ToString(), sourceElement.Current.LocalizedControlType.ToString());
+
+                Console.WriteLine("Event ausgelöst durch Klick auf Button");
+
                 //todo
-                //hier aufruf des publisher/das event eventOsmChangedHandler() wurde geworfen
                 //classEventAggregator cea = new classEventAggregator();
 
-                cea.aggSubscribe(); 
+                //nur einmaliges subscriben erlauben von einer klasse aus, nicht mehrmalig für dasselbe event anmelden!
+                //Prism-subscribe passiert von der klasse aus, welche über das prism-event informiert weden möchte
+                //dieses subscribe hier sollte natürlich nur einmal bei initialisierung in eventverarbeitender klasse erfolgen
+                cea.aggSubscribe();
+                
+                //das publish passiert auch hier, das subscribe kann in einer anderen klasse sein, das publish muss/sollte nach dem grant-konzept dort sein, wo das egentliche event zuerst abgefangen wird, also bei uia in dem handler, 
+                //welcher das event zuerst verarbeitet
 
+                //cea.agg.GetEvent<stringOSMEvent>().Publish("Wurf aus UIAEventsMonitorKlasse");
+                //kann genutzt werden
+                //oder über den
+                //aufruf des publisher in einer methode, wie eventOsmChangedHandler(); mit dieser art und weise könnte dann allerdings auch direkt der aufruf von methoden, welche das allererste event verarbeiten wollen, erfolgen
+                // es soll aber so sein, dass nach dem ersten event ein neues event über publish geworfen wird und sämtliche unterschiedliche arten von events dieses event werfen 
+                //und damit dann über prism eine ordentliche verarbeitung der events erfolgt, in der methode "eventosmchangedhandler" wird das neue event ge-published und die eigentliche verarbeitung über handler kann dann ganz woanders erfolgen
+                // was den publisher eben nicht kümmert, wie und wo es verarbeitet wird, derzeit wird es in generateosm(string osm) verarbeitet
                 cea.eventOsmChangedHandler();
 
-                //cea.agg.GetEvent<stringOSMEvent>().Publish("tada");
-
-                
-                //cea.mainEvent();
-                
             }
             else
             {
