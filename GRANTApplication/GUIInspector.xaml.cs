@@ -36,6 +36,8 @@ namespace GRANTApplication
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
+            tvMain.SelectedItemChanged +=
+           new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             //brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             //brailleDisplayStrategy.setStrategyMgr(strategyMgr);
 
@@ -49,10 +51,32 @@ namespace GRANTApplication
             root.Items.Add(new MenuItem() { ID = "Child item #2" });
             tvMain.Items.Add(root);
            */
-            
+
         }
 
+        void tvMain_SelectedItemChanged(object sender,
+        RoutedPropertyChangedEventArgs<object> e)
+        {
+            var tree = sender as TreeView;
 
+            // ... Determine type of SelectedItem.
+            if (tree.SelectedItem is MenuItem)
+            {
+                // ... Handle a TreeViewItem.
+                MenuItem item = tree.SelectedItem as MenuItem;
+                //this.Title = "Selected header: " + item.IdGenerated.ToString();
+                Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+                //root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
+
+            //Methode MenuItem übergeben - tabelle
+            }
+            else if (tree.SelectedItem is string)
+            {
+                // ... Handle a string.
+                this.Title = "Selected: " + tree.SelectedItem.ToString();
+            }
+        }
         private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref MenuItem root)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
@@ -137,17 +161,7 @@ namespace GRANTApplication
             }*/
         }
 
-        void root_Selected(object sender, RoutedEventArgs e)
-        {
-            MenuItem item = sender as MenuItem;
-            //you can access item properties eg item.Header etc. 
-            //your logic here 
-            
-            Console.WriteLine("Pointx: " + item.IdGenerated);
-           
-
-        }
-
+      
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
