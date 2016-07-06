@@ -306,7 +306,7 @@ namespace BrailleIOBraillDisAdapter
                 }
             }
 
-            Debug.Print ("<-- SendPins Len={0} Rect={1} Thread={2}", ba.Length, rect, Thread.CurrentThread.ManagedThreadId);
+            //Debug.Print ("<-- SendPins Len={0} Rect={1} Thread={2}", ba.Length, rect, Thread.CurrentThread.ManagedThreadId);
             Send(ba);
         }
 
