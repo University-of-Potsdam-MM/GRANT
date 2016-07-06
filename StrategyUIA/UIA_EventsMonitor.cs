@@ -33,7 +33,7 @@ namespace StrategyUIA
         /// 
         /// </summary>
         /// <param name="appHWND"></param>
-        public void eventsUIA(IntPtr appHWND)
+        public void eventsUIA_withHWND(IntPtr appHWND)
         {
             try
             {
@@ -43,8 +43,10 @@ namespace StrategyUIA
                 Console.WriteLine("appHWND: '{0}'", appHWND.ToString());
 
                 //todo apphwnd durchgehen mittels treescope und den ersten button der app geben lassen
+                //todo//AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
+
                 AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
-                
+
                 SubscribeToInvoke(at);
 
             }
@@ -53,6 +55,32 @@ namespace StrategyUIA
                 Console.WriteLine("An error occurred: '{0}'", ex);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="appHWND"></param>
+        public void eventsUIA_withAutomationElement(AutomationElement mainElement)
+        {
+            try
+            {
+                //die Methode getProcessHwndFromHwnd liefert das GUElemtn der eigentlichen Anwendung
+                //appHWND = operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points));
+
+                Console.WriteLine("AutomationElement: '{0}'", mainElement.Current.LocalizedControlType.ToString());
+
+                //todo apphwnd durchgehen mittels treescope und den ersten button der app geben lassen
+                //AutomationElement at = FilterStrategyUIA.deliverAutomationElementFromHWND(appHWND);
+
+                SubscribeToInvoke(mainElement);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: '{0}'", ex);
+            }
+        }
+
 
         #region UIA_Automation_Events_Automation
         //Automation.AddAutomationEventHandler Method (AutomationEvent, AutomationElement, TreeScope, AutomationEventHandler)
@@ -67,9 +95,21 @@ namespace StrategyUIA
 
         EventAggregator_PRISM cea = new EventAggregator_PRISM();
 
+        /// <summary>
+        /// Register an event handler for InvokedEvent on the specified element.
+        /// 
+        /// eventdoku 06.07.2016
+        /// Für das Anmelden der "Aktivierung des Buttonelements"/den Klick auf den Button wird sich durch drücken der taste f7 mit dem button unter grantexample registriert 
+        /// es wird nur das Automationelement unter dem mauszeiger gefiltert und in dieser subscribetoinvokemthode nur ei element für events berücksichtigt, auswahl über treescope
+        /// </summary>
+        /// <param name="elementButton">The automation element.</param>
         public void SubscribeToInvoke(AutomationElement elementButton)
         {
-            treeScope = TreeScope.Descendants;
+
+            //auswahl über treescope welche elemente für events betrachtete werden sollen
+            //treeScope = TreeScope.Descendants;
+
+            treeScope = TreeScope.Element;
 
             if (elementButton != null)
             {
@@ -103,13 +143,16 @@ namespace StrategyUIA
             {
                 // TODO Add handling code.
                 Console.WriteLine("InvokedEvent raised '{0}'", sourceElement.ToString(), sourceElement.Current.LocalizedControlType.ToString());
+
+                Console.WriteLine("Event Aktiviert");
+
                 //todo
                 //hier aufruf des publisher/das event eventOsmChangedHandler() wurde geworfen
                 //classEventAggregator cea = new classEventAggregator();
 
-                cea.aggSubscribe(); 
-
-                cea.eventOsmChangedHandler();
+                //todo: folgenden doppelt kommentierten zeilen für prism nutzen
+                //////cea.aggSubscribe(); 
+                //////cea.eventOsmChangedHandler();
 
                 //cea.agg.GetEvent<stringOSMEvent>().Publish("tada");
 
