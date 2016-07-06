@@ -144,8 +144,19 @@ namespace StrategyBrailleIO
             }
             if (element.brailleRepresentation.content.otherContent != null)
             {
-                IBrailleIOContentRenderer renderer = getRenderer(element.brailleRepresentation.content.otherContent.ToString());
-                view.SetOtherContent(element.brailleRepresentation.content.text, renderer);
+                IBrailleIOContentRenderer renderer;                
+                Type typeOtherContent = element.brailleRepresentation.content.otherContent.GetType();
+                if (typeOtherContent.Equals(typeof(BrailleIOGuiElementRenderer.UiObjectsEnum)))
+                {
+                    renderer = getRenderer((UiObjectsEnum)element.brailleRepresentation.content.otherContent);
+                    view.SetOtherContent(element.brailleRepresentation.content.text, renderer);
+                }
+                else
+                {// == Object[]
+                    renderer = getRenderer((UiObjectsEnum)(element.brailleRepresentation.content.otherContent as object[])[0]);
+                    //TODO: wann wird der Text hinzugefügt?
+                    view.SetOtherContent(((element.brailleRepresentation.content.otherContent) as object[])[1], renderer);
+                }
                 return;
             }
             if (element.brailleRepresentation.content.matrix != null)
@@ -276,24 +287,36 @@ namespace StrategyBrailleIO
 
             if (brailleRepresentation.content.matrix != null)
             {
-                createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+                createViewMatrix(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.matrix, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar, brailleRepresentation.isVisible);
                 return;
             }
             if (brailleRepresentation.content.otherContent != null)
             {
-                IBrailleIOContentRenderer renderer = getRenderer(brailleRepresentation.content.otherContent.ToString());
-               createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, renderer, brailleRepresentation.viewName, brailleRepresentation.position);
+                Type typeOtherContent = brailleRepresentation.content.otherContent.GetType();
+                IBrailleIOContentRenderer renderer;
+                if (typeOtherContent.Equals(typeof(BrailleIOGuiElementRenderer.UiObjectsEnum)))
+                {
+                    renderer = getRenderer((UiObjectsEnum)brailleRepresentation.content.otherContent);
+                    createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, renderer, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.isVisible);
+                }
+                else
+                {// == Object[]
+                    renderer = getRenderer((UiObjectsEnum)(brailleRepresentation.content.otherContent as object[])[0]);
+                    //TODO: wann wird der Text hinzugefügt?
+                    createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, ((brailleRepresentation.content.otherContent) as object[])[1], renderer, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.isVisible);
+              
+                }
                 return;
             }
             if (brailleRepresentation.content.text != null)
             {
-                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+                createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar, brailleRepresentation.isVisible);
                 return;
             }
             //TODO: weitere Möglichkeiten?
 
             //im Zweifelsfall wird immer eine "Text-View" mit einem leeren Text erstellt
-            createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, (brailleRepresentation.content.text != null) ? brailleRepresentation.content.text : "", brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar);
+            createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, (brailleRepresentation.content.text != null) ? brailleRepresentation.content.text : "", brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar, brailleRepresentation.isVisible);
         }
 
         #region create Views       
@@ -305,7 +328,8 @@ namespace StrategyBrailleIO
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
         /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls der Text zu lang für die View ist)</param>
-        private void createViewText(BrailleIOScreen screen, String text, String viewName, Position position, Boolean showScrollbar)
+        /// <param name="isVisible">gibt an, ob die View angezeigt werden soll</param>
+        private void createViewText(BrailleIOScreen screen, String text, String viewName, Position position, Boolean showScrollbar, Boolean isVisible)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetText(text);
@@ -313,7 +337,9 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(position.padding));
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
+            
             screen.AddViewRange(viewName, vr);
+            vr.SetVisibility(isVisible);
         }
 
         /// <summary>
@@ -324,7 +350,8 @@ namespace StrategyBrailleIO
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
         /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls die Matrix zu lang für die View ist)</param>
-        private void createViewMatrix(BrailleIOScreen screen, bool[,] matrix, String viewName, Position position, Boolean showScrollbar)
+        /// <param name="isVisible">gibt an, ob die View angezeigt werden soll</param>
+        private void createViewMatrix(BrailleIOScreen screen, bool[,] matrix, String viewName, Position position, Boolean showScrollbar, Boolean isVisible)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetMatrix(matrix);
@@ -332,7 +359,9 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(position.padding));
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
+            
             screen.AddViewRange(viewName, vr);
+            vr.SetVisibility(isVisible);
         }
 
 
@@ -344,7 +373,8 @@ namespace StrategyBrailleIO
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
         /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls das Bild  zu groß für die View ist)</param>
-        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position, Boolean showScrollbar)
+        /// <param name="isVisible">gibt an, ob die View angezeigt werden soll</param>
+        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position, Boolean showScrollbar, Boolean isVisible)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetBitmap(image);
@@ -352,11 +382,13 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(position.padding));
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
+            
             screen.AddViewRange(viewName, vr);
+            vr.SetVisibility(isVisible);
         }
 
 
-        private void createViewOtherContent(BrailleIOScreen screen, object otherContent, IBrailleIOContentRenderer renderer, String viewName, Position position)
+        private void createViewOtherContent(BrailleIOScreen screen, object otherContent, IBrailleIOContentRenderer renderer, String viewName, Position position, Boolean isVisible)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             BrailleIOButtonToMatrixRenderer buttonRenderer = new BrailleIOButtonToMatrixRenderer();
@@ -364,8 +396,9 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(position.padding));
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
+         //   vr.SetVisibility(isVisible);
             screen.AddViewRange(viewName, vr);
-            Console.WriteLine();
+            vr.SetVisibility(isVisible);
         }
         #endregion
 
@@ -384,12 +417,16 @@ namespace StrategyBrailleIO
             return boxModel;
         }
 
-        private static IBrailleIOContentRenderer getRenderer(String guiElementType)
+        private static IBrailleIOContentRenderer getRenderer(UiObjectsEnum guiElementType)
         {
             switch (guiElementType.ToString())
             {
                 case "Button":
                     return new BrailleIOButtonToMatrixRenderer();
+                case "TextBox":
+                    return new BrailleIOTextBoxToMatrixRenderer();
+                case "DropDownMenu":
+                    return new BrailleIODropDownMenuToMatrixRenderer();
             }
             return null;
 

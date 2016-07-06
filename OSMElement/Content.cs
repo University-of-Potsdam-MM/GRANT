@@ -32,7 +32,7 @@ namespace OSMElement
         public String fromGuiElement { get; set; }
 
         /// <summary>
-        /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat
+        /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat (falls nicht gesetzt, wird von true ausgegangen)
         /// </summary>
         public Boolean showScrollbar { get; set; }
     }

@@ -196,7 +196,7 @@ namespace GRANTExample
                         List<OsmRelationship<String, String>> relationshipList = strategyMgr.getOsmRelationship();
                      //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
                       //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
-                        OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationshipList);
+                        OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationshipList);
                         strategyMgr.setOsmRelationship(relationshipList);
                       
                     }

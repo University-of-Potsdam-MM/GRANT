@@ -8,6 +8,18 @@ namespace BrailleIOGuiElementRenderer
 {//TODO: evtl. in ein anderes Packet
     public enum UiObjectsEnum
     {
-        Button, Enumeration
+        Button, TextBox, DropDownMenu
+    }
+
+    public struct DropDownMenu
+    {
+        public bool isOpen { get; set; }
+        public bool hasChild { get; set; }
+        public bool isChild { get; set; }
+        public bool hasNext { get; set; }
+        public bool hasPrevious { get; set; }
+        public bool isDeactiveted { get; set; }
+        public bool isVertical { get; set; }
+        public String text { get; set; }
     }
 }

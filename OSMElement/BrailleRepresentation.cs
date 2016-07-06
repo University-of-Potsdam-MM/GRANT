@@ -18,5 +18,10 @@ namespace OSMElement
         /// Gibt die View, in welcher der Inhalt angezeigt werden soll an.
         /// </summary>
         public String viewName { get; set; }
+
+        /// <summary>
+        /// Gibt an, ob der Inhalt sichtbar sein soll
+        /// </summary>
+        public bool isVisible { get; set; }
     }
 }
