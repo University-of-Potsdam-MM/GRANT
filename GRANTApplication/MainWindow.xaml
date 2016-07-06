@@ -3,26 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="1250" Width="1225"
         KeyDown="Window_KeyDown"        >
-    <Grid>
-       
-    
-        <TextBlock HorizontalAlignment="Center" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="22" Width="61"><Run Language="de-de" Text="UIA - Filter"/></TextBlock>
-        <TextBox Name="itemNameTextBox" HorizontalAlignment="Left" Height="218" Margin="19,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="470"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="96,32,0,0" VerticalAlignment="Top" Width="75"/>
-        <Grid>
-            <Button Name="button1" Content="Open new Window" Width="100" Height="100" Click="button1_Click"/>
-            <StackPanel Margin="10">
-                <Label FontWeight="Bold">Activate Filtering</Label>
-                <CheckBox Content="CheckBox"  Checked="CheckBox_Checked"
-	    Unchecked="CheckBox_Unchecked" Indeterminate="CheckBox_Indeterminate"
-	    IsThreeState="True"/>
-                <!--<RadioButton Content="No" Name="radioButton_uncheck"  Checked="RadioButton_Checked"/>-->
-            </StackPanel>
-        </Grid>
+    <Grid Background="GhostWhite">
+        <Label FontWeight="Bold">Open Filtering Window</Label>
+               
         <Grid>
             <Button Content="Open new window" HorizontalAlignment="Left" Margin="50" VerticalAlignment="Top"
                 Width="150" Click="OpenNewWindow" />
         </Grid>
+        <Grid>
+            <Button Name="button1" Content="Open new Window (active)"  HorizontalAlignment="Right" Margin="50" VerticalAlignment="Top"
+                Width="150" Click="button1_Click" />
+        </Grid>
+       
     </Grid>
-    
 </Window>
