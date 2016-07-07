@@ -14,17 +14,18 @@ namespace BrailleIOGuiElementRenderer
         /// </summary>
         /// <param name="smallMatrix">gibt die kleinere Matrix (mit Braille-Text an) an</param>
         /// <param name="bigMatrix">gibt die größere Matrix an</param>
-        public static void copyTextMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix)
+        /// <param name="spaceLeft">gibt an wieviele pins nach Links (und  Rechts) frei bleiben sollen</param>
+        public static void copyTextMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int spaceLeft)
         {
             //Console.WriteLine("GetLength = {0},  GetUpperBound = {1}", bigMatrix.GetLength(0), bigMatrix.GetUpperBound(0));
             // getLength ^= Anzahl der Zeilen
             // Length ^= Anzahl der Elemente insgesamt
             // Length / getLength ^= Pins pro Zeile
-            for (int i = 2; (i < (bigMatrix.Length / bigMatrix.GetLength(0)) - 2) && (i < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)//ab Pinreihe 2 soll der Text erscheinen
+            for (int i = spaceLeft; (i < (bigMatrix.Length / bigMatrix.GetLength(0)) - 2) && (i < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)//ab Pinreihe 'spaceLeft' soll der Text erscheinen
             {
                 for (int j = 2; (j < bigMatrix.GetLength(0) - 2) && (j < smallMatrix.GetLength(0) + 2); j++)
                 {
-                    bigMatrix[j, i] = smallMatrix[j - 2, i - 2];
+                    bigMatrix[j, i] = smallMatrix[j - 2, i - spaceLeft];
                 }
             }
         }
@@ -96,6 +97,7 @@ namespace BrailleIOGuiElementRenderer
                             {
                                 viewMatrix[height, width + 1] = true;
                             }
+
                         }
                         else
                         {

@@ -63,7 +63,7 @@ namespace BrailleIOGuiElementRenderer
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
             bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (dropDownMenu.text as object == null ? "" : dropDownMenu.text as object), false);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref boxMatrix);
+            Helper.copyTextMatrixInMatrix(textMatrix, ref boxMatrix, 2);
             if (dropDownMenu.hasNext) { SeparatorNextDropDownMenuElementDown(ref boxMatrix); }
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
             // bool[,] viewMatrix =  Helper.createBox(view.ViewBox.Height - 2, view.ViewBox.Width);
@@ -101,7 +101,7 @@ namespace BrailleIOGuiElementRenderer
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
             bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (dropDownMenu.text as object == null ? "" : dropDownMenu.text as object), false);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref boxMatrix);
+            Helper.copyTextMatrixInMatrix(textMatrix, ref boxMatrix, 2);
             if (dropDownMenu.hasNext) { SeparatorNextDropDownMenuElementRight(ref boxMatrix); }
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
             // bool[,] viewMatrix =  Helper.createBox(view.ViewBox.Height - 2, view.ViewBox.Width);

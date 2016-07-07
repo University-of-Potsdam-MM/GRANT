@@ -43,6 +43,7 @@
     <Compile Include="BrailleIOButtonToMatrixRenderer.cs" />
     <Compile Include="BrailleIODropDownMenuToMatrixRenderer.cs" />
     <Compile Include="BrailleIOTextBoxToMatrixRenderer.cs" />
+    <Compile Include="Button.cs" />
     <Compile Include="DropDownMenu.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

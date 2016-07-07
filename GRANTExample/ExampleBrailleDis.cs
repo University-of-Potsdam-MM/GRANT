@@ -185,16 +185,19 @@ namespace GRANTExample
             e5.screenName = "screen1";
             Content c5 = new Content();
             c5.text = "Button";
-           // object[] otherContent = {UiObjectsEnum.Button};
-            c5.otherContent = UiObjectsEnum.Button;
+            BrailleIOGuiElementRenderer.Button button5 = new BrailleIOGuiElementRenderer.Button();
+            button5.isDeactiveted = false;
+            button5.text = "Button";
+            object[] otherContent = {UiObjectsEnum.Button, button5};
+            c5.otherContent = otherContent;
            // c5.otherContent = "Hallo - Button";
            // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";
             e5.content = c5;
             e5.isVisible = true;
             Position p5 = new Position();
-            p5.height = 8;
-            p5.width = 20;
+            p5.height = 9;
+            p5.width = 24;
             p5.left = 55;
             p5.top = 30;
             e5.position = p5;
@@ -245,14 +248,14 @@ namespace GRANTExample
             dropDownMenu.isOpen = true;
             dropDownMenu.isVertical = true;
             dropDownMenu.text = "Datei";
-             object[] otherContent = {UiObjectsEnum.DropDownMenu, dropDownMenu};
-            c7.otherContent = otherContent;
+             object[] otherContent7 = {UiObjectsEnum.DropDownMenu, dropDownMenu};
+            c7.otherContent = otherContent7;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e7.viewName = "v7";
             e7.content = c7;
             Position p7 = new Position();
             p7.height = 10;
-            p7.width = 30;
+            p7.width = 25;
             p7.left = 0;
             p7.top = 0;
             e7.position = p7;
@@ -286,8 +289,8 @@ namespace GRANTExample
             e8.content = c8;
             Position p8 = new Position();
             p8.height = 10;
-            p8.width = 31;
-            p8.left = 30;
+            p8.width = 35;
+            p8.left = 25;
             p8.top = 0;
             e8.position = p8;
             GeneralProperties proper8 = new GeneralProperties();
@@ -366,6 +369,35 @@ namespace GRANTExample
             osm10.brailleRepresentation = e10;
             osm10.properties = proper10;
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm10);
+            #endregion
+
+            #region Element 11
+            OSMElement.OSMElement osm11 = new OSMElement.OSMElement();
+            BrailleRepresentation e11 = new BrailleRepresentation();
+            e11.screenName = "screen1";
+            Content c11 = new Content();
+            c11.text = "Button 2";
+            BrailleIOGuiElementRenderer.Button button11 = new BrailleIOGuiElementRenderer.Button();
+            button11.isDeactiveted = true;
+            button11.text = "Button 2";
+            object[] otherContent11 = { UiObjectsEnum.Button, button11 };
+            c11.otherContent = otherContent11;
+            // c5.otherContent = "Hallo - Button";
+            // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e11.viewName = "v11";
+            e11.content = c11;
+            e11.isVisible = true;
+            Position p11 = new Position();
+            p11.height = 9;
+            p11.width = 30;
+            p11.left = 81;
+            p11.top = 30;
+            e11.position = p11;
+            GeneralProperties proper11 = new GeneralProperties();
+            proper11.IdGenerated = "braille123_11";
+            osm11.brailleRepresentation = e11;
+            osm11.properties = proper11;
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm11);
             #endregion
 
         }

@@ -13,28 +13,36 @@ namespace BrailleIOGuiElementRenderer
     {
         public bool[,] RenderMatrix(IViewBoxModel view, object otherContent)
         {
-            String buttonText;
-            try
+            Button button;
+            Type typeOtherContent = otherContent.GetType();
+            if (typeof(Button).Equals(typeOtherContent))
             {
-                buttonText = otherContent as String;
+                button = (Button)otherContent;
             }
-            catch (InvalidCastException ice)
+            else
             {
-                throw new InvalidCastException("Can't cast otherContent to String! {0}", ice);
+                throw new InvalidCastException("Can't cast otherContent to dropDownMenu! {0}");
             }
 
-            return RenderButton(view, buttonText); 
-         //   return RenderButton(view, "textBoxText");
+
+            return RenderButton(view, button); 
         }
 
-        public bool[,] RenderButton(IViewBoxModel view, String buttonText)
+        public bool[,] RenderButton(IViewBoxModel view, Button button)
         {
             //call pre hooks  --> wie funktioniert das richtig?
-            object cM = buttonText as object;
+            object cM = button.text as object;
            callAllPreHooks(ref view, ref cM);
 
-           bool[,] viewMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width); //erstmal ein eckiger Button
-
+           bool[,] viewMatrix;
+           if (button.isDeactiveted)
+           {
+               viewMatrix = Helper.createBoxDeaktivatedUpDown(view.ViewBox.Height, view.ViewBox.Width);
+           }
+           else
+           {
+               viewMatrix =   Helper.createBox(view.ViewBox.Height, view.ViewBox.Width); //erstmal ein eckiger Button
+           }
             //Ecken abrunden
             //links oben
             viewMatrix[0, 0] = false;
@@ -59,8 +67,8 @@ namespace BrailleIOGuiElementRenderer
 
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (buttonText as object == null ? "" : buttonText as object), false);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix);
+            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (button.text as object == null ? "" : button.text as object), false);
+            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 3);
 
             //call post hooks --> wie funktioniert das richtig?
             callAllPostHooks(view, cM, ref viewMatrix, false);

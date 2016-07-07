@@ -41,7 +41,7 @@ namespace BrailleIOGuiElementRenderer
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
             bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (textBoxText as object == null ? "" : textBoxText as object), false);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix);
+            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 2);
             
             //call post hooks --> wie funktioniert das richtig?
             callAllPostHooks(view, cM, ref viewMatrix, false);
