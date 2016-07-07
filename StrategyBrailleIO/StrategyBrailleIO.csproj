@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows" />
@@ -70,6 +71,10 @@
     <ProjectReference Include="..\..\BrailleIO\BrailleIO\GestureRecognizer\GestureRecognizer.csproj">
       <Project>{73bd1f41-ce19-40de-a0ec-a70a9f003dec}</Project>
       <Name>GestureRecognizer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BrailleIOBraillDisAdapterMVBD\BrailleIOBraillDisAdapterMVBD.csproj">
+      <Project>{3b1787c9-b1a9-406f-951a-80e8681e6c6c}</Project>
+      <Name>BrailleIOBraillDisAdapterMVBD</Name>
     </ProjectReference>
     <ProjectReference Include="..\BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj">
       <Project>{8fdc0093-e06d-4116-b182-79eeed0645ab}</Project>

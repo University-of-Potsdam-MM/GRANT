@@ -48,7 +48,7 @@ namespace GRANTExample
                         Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                         return;
                     }
-                   String  brailleId =  "braille123_5";
+                   String  brailleId =  "braille123_6";
                     OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
                     if (osmRelationships != null)
                     {
@@ -94,7 +94,7 @@ namespace GRANTExample
             proper1.IdGenerated = "braille123_1";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
+           // strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
             #endregion
 
             #region Element 2
@@ -123,7 +123,7 @@ namespace GRANTExample
             proper2.IdGenerated = "braille123_2";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
+           // strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3
@@ -136,10 +136,11 @@ namespace GRANTExample
             c3.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e3.viewName = "v3";
             e3.content = c3;
+            e3.isVisible = false;
             Position p3 = new Position();
             p3.height = 20;
             p3.width = 30;
-            p3.left = 0;
+            p3.left = 70;
             p3.top = 30;
             e3.position = p3;
             GeneralProperties proper3 = new GeneralProperties();
@@ -183,17 +184,18 @@ namespace GRANTExample
             BrailleRepresentation e5 = new BrailleRepresentation();
             e5.screenName = "screen1";
             Content c5 = new Content();
-            //   c3.text = "Start Text";
-            object[] otherContent = {UiObjectsEnum.Button};
+            c5.text = "Button";
+           // object[] otherContent = {UiObjectsEnum.Button};
             c5.otherContent = UiObjectsEnum.Button;
            // c5.otherContent = "Hallo - Button";
-            c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+           // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";
             e5.content = c5;
+            e5.isVisible = true;
             Position p5 = new Position();
-            p5.height = 20;
-            p5.width = 40;
-            p5.left = 30;
+            p5.height = 8;
+            p5.width = 20;
+            p5.left = 55;
             p5.top = 30;
             e5.position = p5;
             GeneralProperties proper5 = new GeneralProperties();
@@ -202,7 +204,170 @@ namespace GRANTExample
             osm5.properties = proper5;
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm5);
             #endregion
-            Console.WriteLine();
+
+            #region Element 6
+            OSMElement.OSMElement osm6 = new OSMElement.OSMElement();
+            BrailleRepresentation e6 = new BrailleRepresentation();
+            e6.screenName = "screen1";
+            Content c6 = new Content();
+           // c6.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
+            c6.otherContent = UiObjectsEnum.TextBox;
+            c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e6.viewName = "v6";
+            e6.content = c6;
+            e6.isVisible = true;
+            Position p6 = new Position();
+            p6.height = 28;
+            p6.width = 50;
+            p6.left = 0;
+            p6.top = 29;
+            e6.position = p6;
+            GeneralProperties proper6 = new GeneralProperties();
+            proper6.IdGenerated = "braille123_6";
+            osm6.brailleRepresentation = e6;
+            osm6.properties = proper6;
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm6);
+            #endregion
+
+            #region Element 7
+            OSMElement.OSMElement osm7 = new OSMElement.OSMElement();
+            BrailleRepresentation e7 = new BrailleRepresentation();
+            e7.screenName = "screen1";
+            e7.isVisible = true;
+            Content c7 = new Content();
+            c7.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
+            DropDownMenu dropDownMenu = new DropDownMenu();
+            dropDownMenu.hasChild = true;
+            dropDownMenu.hasNext = true;
+            dropDownMenu.hasPrevious = false;
+            dropDownMenu.isChild = false;
+            dropDownMenu.isDeactiveted = false;
+            dropDownMenu.isOpen = true;
+            dropDownMenu.isVertical = true;
+            dropDownMenu.text = "Datei";
+             object[] otherContent = {UiObjectsEnum.DropDownMenu, dropDownMenu};
+            c7.otherContent = otherContent;
+            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e7.viewName = "v7";
+            e7.content = c7;
+            Position p7 = new Position();
+            p7.height = 10;
+            p7.width = 30;
+            p7.left = 0;
+            p7.top = 0;
+            e7.position = p7;
+            GeneralProperties proper7 = new GeneralProperties();
+            proper7.IdGenerated = "braille123_7";
+            osm7.brailleRepresentation = e7;
+            osm7.properties = proper7;
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm7);
+            #endregion
+
+            #region Element 8
+            OSMElement.OSMElement osm8 = new OSMElement.OSMElement();
+            BrailleRepresentation e8 = new BrailleRepresentation();
+            e8.screenName = "screen1";
+            e8.isVisible = true;
+            Content c8 = new Content();
+            c8.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
+            DropDownMenu dropDownMenu8 = new DropDownMenu();
+            dropDownMenu8.hasChild = false;
+            dropDownMenu8.hasNext = false;
+            dropDownMenu8.hasPrevious = true;
+            dropDownMenu8.isChild = false;
+            dropDownMenu8.isDeactiveted = false;
+            dropDownMenu8.isOpen = false;
+            dropDownMenu8.isVertical = true;
+            dropDownMenu8.text = "Bearbeiten";
+            object[] otherContent8 = { UiObjectsEnum.DropDownMenu, dropDownMenu8 };
+            c8.otherContent = otherContent8;
+            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e8.viewName = "v8";
+            e8.content = c8;
+            Position p8 = new Position();
+            p8.height = 10;
+            p8.width = 31;
+            p8.left = 30;
+            p8.top = 0;
+            e8.position = p8;
+            GeneralProperties proper8 = new GeneralProperties();
+            proper8.IdGenerated = "braille123_8";
+            osm8.brailleRepresentation = e8;
+            osm8.properties = proper8;
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm8);
+            #endregion
+
+            #region Element 9
+            OSMElement.OSMElement osm9 = new OSMElement.OSMElement();
+            BrailleRepresentation e9 = new BrailleRepresentation();
+            e9.screenName = "screen1";
+            e9.isVisible = true;
+            Content c9 = new Content();
+            c9.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
+            DropDownMenu dropDownMenu9 = new DropDownMenu();
+            dropDownMenu9.hasChild = true;
+            dropDownMenu9.hasNext = true;
+            dropDownMenu9.hasPrevious = false;
+            dropDownMenu9.isChild = true;
+            dropDownMenu9.isDeactiveted = false;
+            dropDownMenu9.isOpen = false;
+            dropDownMenu9.isVertical = true;
+            dropDownMenu9.text = "Neu";
+            object[] otherContent9 = { UiObjectsEnum.DropDownMenu, dropDownMenu9 };
+            c9.otherContent = otherContent9;
+            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e9.viewName = "v9";
+            e9.content = c9;
+            Position p9 = new Position();
+            p9.height = 8;
+            p9.width = 30;
+            p9.left = 0;
+            p9.top = 11;
+            e9.position = p9;
+            GeneralProperties proper9 = new GeneralProperties();
+            proper9.IdGenerated = "braille123_9";
+            osm9.brailleRepresentation = e9;
+            osm9.properties = proper9;
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm9);
+            #endregion
+
+            #region Element 10
+            OSMElement.OSMElement osm10 = new OSMElement.OSMElement();
+            BrailleRepresentation e10 = new BrailleRepresentation();
+            e10.screenName = "screen1";
+            e10.isVisible = true;
+            Content c10 = new Content();
+            DropDownMenu dropDownMenu10 = new DropDownMenu();
+            dropDownMenu10.hasChild = false;
+            dropDownMenu10.hasNext = false;
+            dropDownMenu10.hasPrevious = true;
+            dropDownMenu10.isChild = true;
+            dropDownMenu10.isDeactiveted = true;
+            dropDownMenu10.isOpen = false;
+            dropDownMenu10.isVertical = true;
+            dropDownMenu10.text = "Beenden";
+            object[] otherContent10 = { UiObjectsEnum.DropDownMenu, dropDownMenu10 };
+            c10.otherContent = otherContent10;
+            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e10.viewName = "v10";
+            e10.content = c10;
+            Position p10 = new Position();
+            p10.height = 8;
+            p10.width = 30;
+            p10.left = 0;
+            p10.top = 19;
+            /*p10.height = 10;
+            p10.width = 30;
+            p10.left = 31;
+            p10.top = 11;*/
+            e10.position = p10;
+            GeneralProperties proper10 = new GeneralProperties();
+            proper10.IdGenerated = "braille123_10";
+            osm10.brailleRepresentation = e10;
+            osm10.properties = proper10;
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm10);
+            #endregion
+
         }
 
 

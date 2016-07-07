@@ -24,7 +24,7 @@ namespace BrailleIOGuiElementRenderer
             }
 
             return RenderButton(view, buttonText); 
-         //   return RenderButton(view, "buttonText");
+         //   return RenderButton(view, "textBoxText");
         }
 
         public bool[,] RenderButton(IViewBoxModel view, String buttonText)
@@ -33,35 +33,34 @@ namespace BrailleIOGuiElementRenderer
             object cM = buttonText as object;
            callAllPreHooks(ref view, ref cM);
 
-            bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
-            
+           bool[,] viewMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width); //erstmal ein eckiger Button
+
+            //Ecken abrunden
+            //links oben
+            viewMatrix[0, 0] = false;
+            viewMatrix[1, 0] = false;
+            viewMatrix[0, 1] = false;
+            viewMatrix[1, 1] = true;
+            //links unten
+            viewMatrix[view.ViewBox.Height - 1, 0] = false;
+            viewMatrix[view.ViewBox.Height - 1, 1] = false;
+            viewMatrix[view.ViewBox.Height - 2, 0] = false;
+            viewMatrix[view.ViewBox.Height - 2, 1] = true;
+            //rechts oben
+            viewMatrix[1, view.ViewBox.Width - 1] = false;
+            viewMatrix[0, view.ViewBox.Width - 2] = false;
+            viewMatrix[0, view.ViewBox.Width - 1] = false;
+            viewMatrix[1, view.ViewBox.Width - 2] = true;
+            //rechts unten
+            viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 1] = false;
+            viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 1] = false;
+            viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 2] = false;
+            viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 2] = true;
+
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
             bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (buttonText as object == null ? "" : buttonText as object), false);
-            copyMatrixInmatrix(textMatrix, ref viewMatrix);
-            //erstmal ein eckiger Button
-            for (int height = 0; height < view.ViewBox.Height; height++)
-            {
-                for (int width = 0; width < view.ViewBox.Width; width++)
-                {
-                    if (height == 0 || height == view.ViewBox.Height - 1)
-                    {
-                        viewMatrix[height, width] = true;
-                    }
-                    else
-                    {
-                        if (width == 0 || width == view.ViewBox.Width - 1)
-                        {
-                            viewMatrix[height, width] = true;
-                        }
-                    }
-                }
-            }
-            //Ecken abrunden
-            viewMatrix[0, 0] = false;
-            viewMatrix[view.ViewBox.Height - 1, 0] = false;
-            viewMatrix[0, view.ViewBox.Width - 1] = false;
-            viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 1] = false;
+            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix);
 
             //call post hooks --> wie funktioniert das richtig?
             callAllPostHooks(view, cM, ref viewMatrix, false);
@@ -69,20 +68,5 @@ namespace BrailleIOGuiElementRenderer
             return viewMatrix;
         }
 
-        private void copyMatrixInmatrix(bool[,] smallMatrix, ref bool[,] bigMatrix)
-        {
-            //Console.WriteLine("GetLength = {0},  GetUpperBound = {1}", bigMatrix.GetLength(0), bigMatrix.GetUpperBound(0));
-            // getLength ^= Anzahl der Zeilen
-            // Length ^= Anzahl der Elemente insgesamt
-            // Length / getLength ^= Pins pro Zeile
-            for (int i = 2; (i < (bigMatrix.Length / bigMatrix.GetLength(0)) - 2) && (i < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)//ab Zeile 2 soll der Text erscheinen
-            {
-                for (int j = 2; (j < bigMatrix.GetLength(0) - 2) && (j < smallMatrix.GetLength(0) + 2); j++)
-                {
-                    bigMatrix[j, i] = smallMatrix[j - 2, i - 2];
-                }
-            }
-            Console.WriteLine();
-        }
     }
 }
