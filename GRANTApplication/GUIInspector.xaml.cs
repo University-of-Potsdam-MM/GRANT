@@ -94,8 +94,8 @@ namespace GRANTApplication
             Grid.SetRow(prop1, 1);
             Grid.SetColumn(prop1, 1);
 
-
-           prop2.Text = item.IdGenerated.ToString();
+            if (item.IdGenerated == null) { return; }
+            prop2.Text = item.IdGenerated.ToString();
             Grid.SetRow(prop2, 2);
             Grid.SetColumn(prop2, 1);
 
