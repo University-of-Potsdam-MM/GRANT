@@ -45,11 +45,20 @@ namespace BrailleIOGuiElementRenderer
             //call pre hooks  --> wie funktioniert das richtig?
             object cM = dropDownMenu.text as object;
             callAllPreHooks(ref view, ref cM);
+            bool[,] boxMatrix;
+            if(dropDownMenu.isDeactiveted)
+            {
+                boxMatrix = Helper.createBoxDeaktivatedLeft(view.ViewBox.Height , view.ViewBox.Width-2); 
+            }
+            else
+            {
+                boxMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width-2); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
+            }
 
-            bool[,] boxMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width - 2); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
             if (dropDownMenu.hasPrevious)
             {
-                Helper.RemoveDownBoarder(ref boxMatrix);
+                //Helper.RemoveDownBoarder(ref boxMatrix);
+                Helper.RemoveUpBoarder(ref boxMatrix);
             }
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
@@ -75,8 +84,16 @@ namespace BrailleIOGuiElementRenderer
             //call pre hooks  --> wie funktioniert das richtig?
             object cM = dropDownMenu.text as object;
             callAllPreHooks(ref view, ref cM);
-            
-            bool[,] boxMatrix = Helper.createBox(view.ViewBox.Height - 2, view.ViewBox.Width); //erstmal eine eckige Matrix // view.ViewBox.Height -2 => da open/close noch angezeigt werden muss
+
+            bool[,] boxMatrix;
+            if (dropDownMenu.isDeactiveted)
+            {
+                boxMatrix = Helper.createBoxDeaktivatedUpDown(view.ViewBox.Height-2, view.ViewBox.Width);
+            }
+            else
+            {
+                boxMatrix = Helper.createBox(view.ViewBox.Height-2, view.ViewBox.Width); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
+            }
             if (dropDownMenu.hasPrevious)
             {
                 Helper.RemoveLeftBoarder(ref boxMatrix);

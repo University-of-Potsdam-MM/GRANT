@@ -50,7 +50,7 @@ namespace BrailleIOGuiElementRenderer
         /// </summary>
         /// <param name="heightView">gibt die Höhe der Box an</param>
         /// <param name="widthView">gibt die Breite der Box an</param>
-        /// <returns></returns>
+        /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
         public static bool[,] createBox(int heightView, int widthView)
         {
             bool[,] viewMatrix = new bool[heightView, widthView];
@@ -67,6 +67,101 @@ namespace BrailleIOGuiElementRenderer
                         if (width == 0 || width == widthView - 1)
                         {
                             viewMatrix[height, width] = true;
+                        }
+                    }
+                }
+            }
+            return viewMatrix;
+        }
+
+        /// <summary>
+        /// Erstellt eine Box mit gestrichelten Linien oben und unten --> Element ist deaktiviert
+        /// </summary>
+        /// <param name="heightView">gibt die Höhe der Box an</param>
+        /// <param name="widthView">gibt die Breite der Box an</param>
+        /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
+        public static bool[,] createBoxDeaktivatedUpDown(int heightView, int widthView)
+        {
+            bool[,] viewMatrix = new bool[heightView, widthView];
+            for (int height = 0; height < heightView; height++)
+            {
+                for (int width = 0; width < widthView; width++)
+                {
+                    if (height == 0 || height == heightView - 1)
+                    {
+                        if (width % 4 == 0)
+                        {
+                            viewMatrix[height, width] = true;
+                            if (width + 1 < widthView)
+                            {
+                                viewMatrix[height, width + 1] = true;
+                            }
+                        }
+                        else
+                        {
+                            if (width == widthView-1)
+                            {//damit das Menuelement noch Erkennbar ist, den letzten Pin mit setzen
+                            //    viewMatrix[height, width + -1] = true;
+                                viewMatrix[height, width ] = true; 
+                            }
+                        }                        
+                    }
+                    else
+                    {
+                        if (width == 0 || width == widthView - 1)
+                        {
+                            viewMatrix[height, width] = true;
+                        }
+                    }
+                }
+            }
+            return viewMatrix;
+        }
+
+        /// <summary>
+        /// Erstellt eine Box mit gestrichelten Linien links  --> Element ist deaktiviert
+        /// </summary>
+        /// <param name="heightView">gibt die Höhe der Box an</param>
+        /// <param name="widthView">gibt die Breite der Box an</param>
+        /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
+        public static bool[,] createBoxDeaktivatedLeft(int heightView, int widthView)
+        {
+            bool[,] viewMatrix = new bool[heightView, widthView];
+            for (int height = 0; height < heightView; height++)
+            {
+                for (int width = 0; width < widthView; width++)
+                {
+                    if (height == 0 || height == heightView - 1)
+                    {
+                        viewMatrix[height, width] = true;
+                    }
+                    else
+                    {
+                        if (width == 0)
+                        {
+                            if (height % 4 == 0)
+                            {
+                                viewMatrix[height, width] = true;
+                                if (height + 1 < heightView)
+                                {
+                                    viewMatrix[height+1, width ] = true;
+                                }
+                            }
+                            else
+                            {
+                                if (height == heightView - 1)
+                                {//damit das Menuelement noch Erkennbar ist, den letzten Pin mit setzen
+                                    //    viewMatrix[height+1, width] = true;
+                                    viewMatrix[height, width] = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if ( width == widthView - 1)
+                            {
+                                viewMatrix[height, width] = true;
+                            }
                         }
                     }
                 }
@@ -93,9 +188,22 @@ namespace BrailleIOGuiElementRenderer
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
         public static void RemoveDownBoarder(ref bool[,] viewMatrix)
         {
-            for (int i = 1; i < viewMatrix.Length /viewMatrix.GetLength(0) ; i++)
+            for (int i = 1; i < (viewMatrix.Length /viewMatrix.GetLength(0))-1 ; i++)
             {
-                viewMatrix[viewMatrix.GetLength(0), i] = false;
+                viewMatrix[viewMatrix.GetLength(0)-1, i] = false;
+            }
+        }
+
+
+        /// <summary>
+        /// entfernt von einer bool-Matrix den oberen Rand
+        /// </summary>
+        /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
+        public static void RemoveUpBoarder(ref bool[,] viewMatrix)
+        {
+            for (int i = 1; i < (viewMatrix.Length / viewMatrix.GetLength(0)) - 1; i++)
+            {
+                viewMatrix[0, i] = false;
             }
         }
     }

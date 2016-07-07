@@ -65,7 +65,8 @@ namespace StrategyGenericTree
         {
             foreach (ITreeStrategy<T> r in nodes)
             {
-                Console.Write("Node - Depth: {0}, hasNext: {1}, hasChild: {2}", r.Depth, r.HasNext, r.HasChild);
+                OSMElement.OSMElement osmElement1 = (OSMElement.OSMElement)Convert.ChangeType(r.Data, typeof(OSMElement.OSMElement));
+                Console.Write("Node - Name: {3}, Depth: {0}, hasNext: {1}, hasChild: {2}", r.Depth, r.HasNext, r.HasChild, osmElement1.properties.nameFiltered);
                 if (r.HasParent)
                 {
                     if (r.Parent.Data is OSMElement.OSMElement)
@@ -223,11 +224,6 @@ namespace StrategyGenericTree
                 Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || node.Data.properties.isEnabledFiltered == generalProperties.isEnabledFiltered;
                 Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.properties.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
                 Boolean propertieIdGenerated = generalProperties.IdGenerated == null || generalProperties.IdGenerated.Equals(node.Data.properties.IdGenerated);
-
-                if (node.Data.properties.IdGenerated != null)
-                {
-                    Console.WriteLine();
-                }
 
                 if (OperatorEnum.Equals(oper, OperatorEnum.and))
                 {

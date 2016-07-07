@@ -35,7 +35,7 @@ namespace GRANTApplication
         /// <summary>
         /// Ordnet anhand der Filter.config einen Filter-Anzeigenamen  einen Filter-Klassennamen zu
         /// </summary>
-        /// <param name="strategyUserName">gibt den Anzeigenamen an</param>
+        /// <param name="uiElement">gibt den Anzeigenamen an</param>
         /// <returns>Den Klassenname der Strategy-Klasse als String</returns>
         public String strategyUserNameToClassName(String strategyUserName)
         {

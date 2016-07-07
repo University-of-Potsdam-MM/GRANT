@@ -105,7 +105,7 @@ namespace StrategyBrailleIO
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
 
-            createBrailleDis();
+         //   createBrailleDis();
 
         }
 
@@ -152,11 +152,21 @@ namespace StrategyBrailleIO
                 if (typeOtherContent.Equals(typeof(BrailleIOGuiElementRenderer.UiObjectsEnum)))
                 {
                     renderer = getRenderer((UiObjectsEnum)element.brailleRepresentation.content.otherContent);
+                    if (renderer == null)
+                    {
+                        Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", element.brailleRepresentation.content.otherContent);
+                        return;
+                    }
                     view.SetOtherContent(element.brailleRepresentation.content.text, renderer);
                 }
                 else
                 {// == Object[]
                     renderer = getRenderer((UiObjectsEnum)(element.brailleRepresentation.content.otherContent as object[])[0]);
+                    if (renderer == null)
+                    {
+                        Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", element.brailleRepresentation.content.otherContent);
+                        return;
+                    }
                     //TODO: wann wird der Text hinzugefügt?
                     view.SetOtherContent(((element.brailleRepresentation.content.otherContent) as object[])[1], renderer);
                 }
@@ -300,11 +310,21 @@ namespace StrategyBrailleIO
                 if (typeOtherContent.Equals(typeof(BrailleIOGuiElementRenderer.UiObjectsEnum)))
                 {
                     renderer = getRenderer((UiObjectsEnum)brailleRepresentation.content.otherContent);
+                    if (renderer == null)
+                    {
+                        Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", brailleRepresentation.content.otherContent);
+                        return;
+                    }
                     createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, renderer, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.isVisible);
                 }
                 else
                 {// == Object[]
                     renderer = getRenderer((UiObjectsEnum)(brailleRepresentation.content.otherContent as object[])[0]);
+                    if (renderer == null)
+                    {
+                        Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", brailleRepresentation.content.otherContent);
+                        return;
+                    }
                     //TODO: wann wird der Text hinzugefügt?
                     createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, ((brailleRepresentation.content.otherContent) as object[])[1], renderer, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.isVisible);
               
@@ -420,9 +440,14 @@ namespace StrategyBrailleIO
             return boxModel;
         }
 
+        /// <summary>
+        /// Ermittelt den zugehörigen renderer für ein UI-Element
+        /// </summary>
+        /// <param name="guiElementType">gibt den Namen des UI-Elements an</param>
+        /// <returns>der Renderer für das UI-Element oder null</returns>
         private static IBrailleIOContentRenderer getRenderer(UiObjectsEnum guiElementType)
         {
-            switch (guiElementType.ToString())
+           switch (guiElementType.ToString())
             {
                 case "Button":
                     return new BrailleIOButtonToMatrixRenderer();
@@ -432,14 +457,13 @@ namespace StrategyBrailleIO
                     return new BrailleIODropDownMenuToMatrixRenderer();
             }
             return null;
-
-            //  return guiElementType.GetType().GetProperties(guiElementType.ToString());   //GetProperty(guiElementType).GetValue(UiObjectsEnum, null);
         }
 
 
         #region copy of BrailleIOExample
 
         #endregion
+
 
     }
 }
