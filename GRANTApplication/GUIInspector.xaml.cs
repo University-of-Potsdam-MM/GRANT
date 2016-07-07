@@ -16,7 +16,8 @@ namespace GRANTApplication
     {
         Settings settings;
         StrategyMgr strategyMgr;
-        
+
+       
 
         public GUIInspector()
         {
@@ -36,6 +37,8 @@ namespace GRANTApplication
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
+
+           
 
             tvMain.SelectedItemChanged +=
            new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
@@ -61,12 +64,106 @@ namespace GRANTApplication
 
         void updateProperties(MenuItem item)
         {
-            List<MenuItem> properties = new List<MenuItem>();
+            TextBlock prop1;
+            TextBlock prop2;
+            TextBlock prop3;
+            TextBlock prop4;
+            TextBlock prop5;
+            TextBlock prop6;
+            TextBlock prop7;
+            TextBlock prop8;
+            TextBlock prop9;
+            TextBlock prop10;
+            TextBlock prop11;
+            TextBlock prop12;
 
-            properties.Add(new MenuItem() { nameFiltered = item.nameFiltered });
-            properties.Add(new MenuItem() { IdGenerated = item.IdGenerated });
+            prop1 = new TextBlock();
+            prop2 = new TextBlock();
+            prop3 = new TextBlock();
+            prop4 = new TextBlock();
+            prop5 = new TextBlock();
+            prop6 = new TextBlock();
+            prop7 = new TextBlock();
+            prop8 = new TextBlock();
+            prop9 = new TextBlock();
+            prop10 = new TextBlock();
+            prop11 = new TextBlock();
+            prop12 = new TextBlock();
 
-            dgUsers.ItemsSource = properties;
+            prop1.Text = item.controlTypeFiltered;
+            Grid.SetRow(prop1, 1);
+            Grid.SetColumn(prop1, 1);
+
+
+           prop2.Text = item.IdGenerated.ToString();
+            Grid.SetRow(prop2, 2);
+            Grid.SetColumn(prop2, 1);
+
+
+            prop3.Text = item.nameFiltered.ToString();
+            Grid.SetRow(prop3, 3);
+            Grid.SetColumn(prop3, 1);
+
+
+            prop4.Text = item.acceleratorKeyFiltered.ToString();
+            Grid.SetRow(prop4, 4);
+            Grid.SetColumn(prop4, 1);
+
+
+            prop5.Text = item.accessKeyFiltered.ToString();
+            Grid.SetRow(prop5, 5);
+            Grid.SetColumn(prop5, 1);
+
+
+            prop6.Text = item.helpTextFiltered.ToString();
+            Grid.SetRow(prop6, 6);
+            Grid.SetColumn(prop6, 1);
+
+
+            prop7.Text = item.autoamtionIdFiltered.ToString();
+            Grid.SetRow(prop7, 7);
+            Grid.SetColumn(prop7, 1);
+
+
+            prop8.Text = item.classNameFiltered.ToString();
+            Grid.SetRow(prop8, 8);
+            Grid.SetColumn(prop8, 1);
+
+
+            prop9.Text = item.frameWorkIdFiltered.ToString();
+            Grid.SetRow(prop9, 9);
+            Grid.SetColumn(prop9, 1);
+
+
+            prop10.Text = item.itemTypeFiltered.ToString();
+            Grid.SetRow(prop10, 10);
+            Grid.SetColumn(prop10, 1);
+
+
+            prop11.Text = item.valueFiltered.ToString();
+            Grid.SetRow(prop11, 11);
+            Grid.SetColumn(prop8, 1);
+
+
+            prop12.Text = item.itemStatusFiltered.ToString();
+            Grid.SetRow(prop12, 12);
+            Grid.SetColumn(prop12, 1);
+           
+            dgUsers.Children.Add(prop1);
+            dgUsers.Children.Add(prop2);
+            dgUsers.Children.Add(prop3);
+            dgUsers.Children.Add(prop4);
+            dgUsers.Children.Add(prop5);
+            dgUsers.Children.Add(prop6);
+            dgUsers.Children.Add(prop7);
+            dgUsers.Children.Add(prop8);
+            dgUsers.Children.Add(prop9);
+            dgUsers.Children.Add(prop10);
+            dgUsers.Children.Add(prop11);
+            dgUsers.Children.Add(prop12);
+           
+
+           
         }
 
         void tvMain_SelectedItemChanged(object sender,
@@ -80,7 +177,7 @@ namespace GRANTApplication
                 // ... Handle a TreeViewItem.
                 MenuItem item = tree.SelectedItem as MenuItem;
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
-                Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+               // Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
                 //root = root.parentMenuItem == null ? root : root.parentMenuItem;
                 //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
 
@@ -90,7 +187,7 @@ namespace GRANTApplication
             else if (tree.SelectedItem is string)
             {
                 // ... Handle a string.
-                this.Title = "Selected: " + tree.SelectedItem.ToString();
+                this.Name = "Selected: " + tree.SelectedItem.ToString();
             }
         }
         private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref MenuItem root)
@@ -102,10 +199,26 @@ namespace GRANTApplication
                 
                 MenuItem child = new MenuItem();
                 node1 = tree.Child;
-                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
-                child.IdGenerated = node1.Data.properties.IdGenerated;
-                child.nameFiltered = node1.Data.properties.nameFiltered;
-                child.parentMenuItem = root;
+                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                child.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
+                child.nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
+                child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
+                child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
+                child.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
+                child.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
+                child.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
+                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                child.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
+                child.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
+                child.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
+                child.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
+
+
+
+
+
+
+        child.parentMenuItem = root;
                 root.Items.Add(child);
 
                 if (node1.HasChild)
@@ -127,9 +240,29 @@ namespace GRANTApplication
                 node1 = tree.Next;
                 //Pruefung, ob wir es ans richtige Element ranhängen und ggf. korrigieren
                 rootMenuItemCheckSibling(ref root, tree);
-                sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered;
-                sibling.IdGenerated = node1.Data.properties.IdGenerated;
-                sibling.nameFiltered = node1.Data.properties.nameFiltered;
+
+                sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                sibling.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
+                sibling.nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
+
+                sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
+                sibling.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
+
+                sibling.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
+                sibling.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
+                sibling.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
+                sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                sibling.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
+
+
+
+                sibling.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
+                sibling.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
+
+
+                sibling.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
+
+
                 sibling.parentMenuItem = root;
                 root.Items.Add(sibling);
 
@@ -273,17 +406,7 @@ namespace GRANTApplication
 
 
         }
-        public class User
-        {
-            public int Id { get; set; }
-
-            public string Name { get; set; }
-
-            public DateTime Birthday { get; set; }
-
-          
-        }
-
+   
         public class MenuItem
         {
             public MenuItem()
