@@ -119,6 +119,7 @@ namespace StrategyBrailleIO
                 brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD(brailleIOMediator.AdapterManager);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
 
+                
            /*     #region BrailleDis events
                 brailleDisAdapter.touchValuesChanged += new EventHandler<BrailleIO_TouchValuesChanged_EventArgs>(_bda_touchValuesChanged);
                 brailleDisAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
@@ -130,11 +131,13 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Ändert den Inhalt einer View -- Momentan wird nur der Text geändert!
+        /// Ändert den Inhalt einer View
         /// </summary>
         /// <param name="element">Gibt das OSM-element an, bei dem eine Änderung erfolgte</param>
         public void updateViewContent(OSMElement.OSMElement element)
         {
+            IBrailleIOAdapterManager adapter =  brailleIOMediator.AdapterManager;
+
             BrailleIOScreen screen = brailleIOMediator.GetView(element.brailleRepresentation.screenName) as BrailleIOScreen;
             if (screen == null)
             {
@@ -143,7 +146,11 @@ namespace StrategyBrailleIO
             BrailleIOViewRange view = screen.GetViewRange(element.brailleRepresentation.viewName) as BrailleIOViewRange;
             if (view == null)
             {
-                throw new Exception("Der View existiert (in dem Screen) nicht!");
+                createScreen(element.brailleRepresentation.screenName);
+                createView(element);
+                view = screen.GetViewRange(element.brailleRepresentation.viewName) as BrailleIOViewRange;
+                //throw new Exception("Der View existiert (in dem Screen) nicht!");
+                Console.WriteLine("Die View exisiterte noch nicht; sie wurde gerade erstellt");
             }
             if (element.brailleRepresentation.content.otherContent != null)
             {
@@ -167,7 +174,6 @@ namespace StrategyBrailleIO
                         Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", element.brailleRepresentation.content.otherContent);
                         return;
                     }
-                    //TODO: wann wird der Text hinzugefügt?
                     view.SetOtherContent(((element.brailleRepresentation.content.otherContent) as object[])[1], renderer);
                 }
                 return;
@@ -175,6 +181,15 @@ namespace StrategyBrailleIO
             if (element.brailleRepresentation.content.matrix != null)
             {
                 view.SetMatrix(element.brailleRepresentation.content.matrix);
+                return;
+            }
+            if (element.brailleRepresentation.content.screenshot)
+            {
+                Image img = captureScreen(element.properties.IdGenerated);
+                if (img == null) { return; }
+                view.SetZoom(element.brailleRepresentation.content.zoom);
+                view.SetContrastThreshold(element.brailleRepresentation.content.contrast);
+                view.SetBitmap(img);
                 return;
             }
             if (element.brailleRepresentation.content.text != null)
@@ -220,16 +235,21 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Ermittelt ein Bereich und das zugehörige anzuzeigende Bild
         /// </summary>
-        /// <param name="node">gibt den Knoten an, welcher die Definition für den Bildbereich hat</param>
+        /// <param param name="idGeneratedFilteredTreeNode">gibt die generierte Id des Knotens das Braille-Baum-Elements an</param>
         /// <returns>ein <code>Image</code> des Bildbereiches</returns>
-        private Image captureScreen(ITreeStrategy<GeneralProperties> node)
+        private Image captureScreen(String idGeneratedBrailleNode)
         {
+            OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
+            if (osmRelationships == null) { return null; }
+            ITreeStrategy<OSMElement.OSMElement> nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.FilteredTree, strategyMgr.getFilteredTree());
+            if (nodeFilteredTree == null) { return null; }
             Image bmp;
-
-            int h = Convert.ToInt32(node.Data.boundingRectangleFiltered.Height);
-            int w = Convert.ToInt32(node.Data.boundingRectangleFiltered.Width);
-            bmp = ScreenCapture.CaptureWindow(node.Data.hWndFiltered, h, w, 0, 0, 0, 0);
-
+           /* int h = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Height);
+            int w = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Width);
+            bmp = ScreenCapture.CaptureWindow(nodeFilteredTree.Data.properties.hWndFiltered, h, w, 0, 0, 0, 0);*/
+            Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree.Data);
+          //  Console.WriteLine("Braille -- Rect: x = {0}, y = {1}, höhe = {2}, breite= {3}", rect.X, rect.Y, rect.Height, rect.Width);
+            bmp = ScreenCapture.CaptureScreenPos(rect);
             return bmp;
         }
 
@@ -331,6 +351,13 @@ namespace StrategyBrailleIO
                 }
                 return;
             }
+            if (brailleRepresentation.content.screenshot)
+            {
+                Image img = captureScreen(osmElement.properties.IdGenerated);
+                if (img == null) { return; }
+                createViewImage(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, img, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.isVisible, brailleRepresentation.content);
+                return;
+            }
             if (brailleRepresentation.content.text != null)
             {
                 createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, brailleRepresentation.content.text, brailleRepresentation.viewName, brailleRepresentation.position, brailleRepresentation.content.showScrollbar, brailleRepresentation.isVisible);
@@ -392,20 +419,21 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einem Bild
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="image">gibt das Bild an</param>
+        /// <param name="screenshot">gibt das Bild an</param>
         /// <param name="viewName">gibt den Namen der view an</param>
         /// <param name="position">gibt die position des Objektest an</param>
         /// <param name="showScrollbar">gibt an, ob Scrollbars gezeigt werden sollen (falls das Bild  zu groß für die View ist)</param>
         /// <param name="isVisible">gibt an, ob die View angezeigt werden soll</param>
-        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position, Boolean showScrollbar, Boolean isVisible)
+        private void createViewImage(BrailleIOScreen screen, System.Drawing.Image image, String viewName, Position position,Boolean isVisible, Content content)
         {
             BrailleIOViewRange vr = new BrailleIOViewRange(position.left, position.top, position.width, position.height, new bool[0, 0]);
             vr.SetBitmap(image);
-            vr.ShowScrollbars = showScrollbar;
+            vr.ShowScrollbars = content.showScrollbar;
             vr.SetPadding(paddingToBoxModel(position.padding));
             vr.SetMargin(paddingToBoxModel(position.margin));
             vr.SetBorder(paddingToBoxModel(position.boarder));
-            
+            vr.SetContrastThreshold(content.contrast);
+            vr.SetZoom(content.zoom);
             screen.AddViewRange(viewName, vr);
             vr.SetVisibility(isVisible);
         }

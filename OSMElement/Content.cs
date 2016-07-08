@@ -13,7 +13,7 @@ namespace OSMElement
         /// gibt den anzuzeigenden Text an
         /// </summary>
         public String text { get; set; }
-        public Image image { get; set; } //TODO: Pfad? oder bezug zum GUI-objekt; public
+        public bool screenshot { get; set; } 
 
         /// <summary>
         /// Gibt eine matrix die Dargestellt werden soll an.
@@ -36,5 +36,9 @@ namespace OSMElement
         /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat (falls nicht gesetzt, wird von true ausgegangen)
         /// </summary>
         public Boolean showScrollbar { get; set; }
+
+        public int contrast { get; set; }
+        public double zoom { get; set; }
+        
     }
 }

@@ -74,7 +74,6 @@ namespace GRANTExample
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            // ... Test for F5 key.
             if (e.Key == Key.F5)
             {
                 exampleTree.filterTreeOfApplication();
@@ -103,7 +102,14 @@ namespace GRANTExample
                 String element = exampleTree.filterNodOfApplicatione();
                 NodeBox.Text = element;
             }
-
+            if (e.Key == Key.F3)
+            {
+                exampleTree.setOSMRelationshipImg();
+            }
+            if (e.Key == Key.F4)
+            {
+                exampleBrailleDis.updateImg();
+            }
         }
     }
 }

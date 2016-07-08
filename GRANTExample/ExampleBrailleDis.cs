@@ -71,6 +71,28 @@ namespace GRANTExample
             
         }
 
+        public void updateImg()
+        {
+            if (strategyMgr.getFilteredTree() == null)
+            {
+                Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
+                return;
+            }
+            String brailleId = "braille123_1";
+            OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
+            {
+                strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+
+
+                ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
+                if (relatedBrailleTreeObject != null)
+                {
+                  //  strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
+                    strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
+                }
+            }
+        }
+
         #region Beispielobjekte
         private void setDauGui(String fromGuiElement3)
         {
@@ -79,22 +101,25 @@ namespace GRANTExample
             BrailleRepresentation e1 = new BrailleRepresentation();
             e1.screenName = "screen1";
             Content c1 = new Content();
-            c1.text = "Hallo";
+            c1.screenshot = true;
+            c1.zoom = 1;
+            c1.contrast = 120;
             e1.viewName = "v1";
            // c1.fromGuiElement = "nameFiltered";
             c1.showScrollbar = true;
+            e1.isVisible = true;
             e1.content = c1;
             Position p1 = new Position();
-            p1.height = 8;
-            p1.width = 23;
-            p1.left = 0;
+            p1.height = 30;
+            p1.width = 50;
+            p1.left = 70;
             p1.top = 0;
             e1.position = p1;
             GeneralProperties proper1 = new GeneralProperties();
             proper1.IdGenerated = "braille123_1";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
-           // strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
             #endregion
 
             #region Element 2

@@ -170,6 +170,43 @@ namespace GRANTExample
         }
 
         /// <summary>
+        /// Setzt die Beziehung von dem "realen" GUI Element zu dem UI-Element auf der Stiftplatte umd die Darstellung eines Screenshots zu testen
+        /// falls noch kein Baum gefiltert wurde, so wird die Anwendung gefiltert
+        /// </summary>
+        public void setOSMRelationshipImg()
+        {
+            if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
+            {
+                try
+                {
+                    IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+
+                    if (strategyMgr.getFilteredTree() == null)
+                    {
+                        filterTreeOfApplication();
+                    }
+                    if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
+                    {
+                        int pointX;
+                        int pointY;
+
+                        strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
+                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+
+                        List<OsmRelationship<String, String>> relationshipList = strategyMgr.getOsmRelationship();
+                        OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_1", ref relationshipList);
+                        strategyMgr.setOsmRelationship(relationshipList);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: '{0}'", ex);
+                }
+            }
+        }
+
+        /// <summary>
         /// Setzt die Beziehung von dem "realen" GUI Element zu dem UI-Element auf der Stiftplatte mit der Id = "braille123_3"
         /// falls noch kein Baum gefiltert wurde, so wird die Anwendung gefiltert
         /// </summary>
