@@ -105,7 +105,7 @@ namespace StrategyBrailleIO
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
 
-         //   createBrailleDis();
+            createBrailleDis();
 
         }
 

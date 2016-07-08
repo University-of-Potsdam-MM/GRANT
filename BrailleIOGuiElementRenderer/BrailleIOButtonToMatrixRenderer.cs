@@ -35,7 +35,7 @@ namespace BrailleIOGuiElementRenderer
            callAllPreHooks(ref view, ref cM);
 
            bool[,] viewMatrix;
-           if (button.isDeactiveted)
+           if (button.isDisabled)
            {
                viewMatrix = Helper.createBoxDeaktivatedUpDown(view.ViewBox.Height, view.ViewBox.Width);
            }

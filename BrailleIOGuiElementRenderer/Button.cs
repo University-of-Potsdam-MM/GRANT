@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BrailleIOGuiElementRenderer
 {
-    public struct Button
+    public struct Button : IOtherContent
     {
-        public bool isDeactiveted { get; set; }
+        public bool isDisabled { get; set; }
         public String text { get; set; }
     }
 }

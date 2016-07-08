@@ -21,7 +21,8 @@ namespace OSMElement
         public bool[,] matrix { get; set; }
 
         /// <summary>
-        /// gibt an, dass es sich bei dem GUI-Element nicht um ein Text, Bild oder eine Matrix handelt sondern um otherContent (vgl. BrailleIO) -> ist ein Verweis zum Renderer
+        /// gibt an, dass es sich bei dem GUI-Element nicht um ein Text, Bild oder eine Matrix handelt sondern um otherContent (vgl. BrailleIO) 
+        /// -> es kann hier auch ein Array angegeben werden; dann ist dass erste element immer ein Verweis zum Renderer
         /// </summary>
         public object otherContent { get; set; }
 

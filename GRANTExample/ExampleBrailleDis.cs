@@ -48,7 +48,7 @@ namespace GRANTExample
                         Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                         return;
                     }
-                   String  brailleId =  "braille123_6";
+                    String brailleId = "braille123_6";
                     OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
                     if (osmRelationships != null)
                     {
@@ -186,7 +186,7 @@ namespace GRANTExample
             Content c5 = new Content();
             c5.text = "Button";
             BrailleIOGuiElementRenderer.Button button5 = new BrailleIOGuiElementRenderer.Button();
-            button5.isDeactiveted = false;
+            button5.isDisabled = false;
             button5.text = "Button";
             object[] otherContent = {UiObjectsEnum.Button, button5};
             c5.otherContent = otherContent;
@@ -218,7 +218,7 @@ namespace GRANTExample
             c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e6.viewName = "v6";
             e6.content = c6;
-            e6.isVisible = true;
+            e6.isVisible = true;            
             Position p6 = new Position();
             p6.height = 28;
             p6.width = 50;
@@ -244,7 +244,7 @@ namespace GRANTExample
             dropDownMenu.hasNext = true;
             dropDownMenu.hasPrevious = false;
             dropDownMenu.isChild = false;
-            dropDownMenu.isDeactiveted = false;
+            dropDownMenu.isDisabled = false;
             dropDownMenu.isOpen = true;
             dropDownMenu.isVertical = true;
             dropDownMenu.text = "Datei";
@@ -278,7 +278,7 @@ namespace GRANTExample
             dropDownMenu8.hasNext = false;
             dropDownMenu8.hasPrevious = true;
             dropDownMenu8.isChild = false;
-            dropDownMenu8.isDeactiveted = false;
+            dropDownMenu8.isDisabled = false;
             dropDownMenu8.isOpen = false;
             dropDownMenu8.isVertical = true;
             dropDownMenu8.text = "Bearbeiten";
@@ -312,7 +312,7 @@ namespace GRANTExample
             dropDownMenu9.hasNext = true;
             dropDownMenu9.hasPrevious = false;
             dropDownMenu9.isChild = true;
-            dropDownMenu9.isDeactiveted = false;
+            dropDownMenu9.isDisabled = false;
             dropDownMenu9.isOpen = false;
             dropDownMenu9.isVertical = true;
             dropDownMenu9.text = "Neu";
@@ -345,7 +345,7 @@ namespace GRANTExample
             dropDownMenu10.hasNext = false;
             dropDownMenu10.hasPrevious = true;
             dropDownMenu10.isChild = true;
-            dropDownMenu10.isDeactiveted = true;
+            dropDownMenu10.isDisabled = true;
             dropDownMenu10.isOpen = false;
             dropDownMenu10.isVertical = true;
             dropDownMenu10.text = "Beenden";
@@ -376,9 +376,10 @@ namespace GRANTExample
             BrailleRepresentation e11 = new BrailleRepresentation();
             e11.screenName = "screen1";
             Content c11 = new Content();
-            c11.text = "Button 2";
+            //c11.text = "Button 2";
+          //  c11.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             BrailleIOGuiElementRenderer.Button button11 = new BrailleIOGuiElementRenderer.Button();
-            button11.isDeactiveted = true;
+            button11.isDisabled = true;
             button11.text = "Button 2";
             object[] otherContent11 = { UiObjectsEnum.Button, button11 };
             c11.otherContent = otherContent11;

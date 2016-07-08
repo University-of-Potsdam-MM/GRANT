@@ -46,7 +46,7 @@ namespace BrailleIOGuiElementRenderer
             object cM = dropDownMenu.text as object;
             callAllPreHooks(ref view, ref cM);
             bool[,] boxMatrix;
-            if(dropDownMenu.isDeactiveted)
+            if(dropDownMenu.isDisabled)
             {
                 boxMatrix = Helper.createBoxDeaktivatedLeft(view.ViewBox.Height , view.ViewBox.Width-2); 
             }
@@ -86,7 +86,7 @@ namespace BrailleIOGuiElementRenderer
             callAllPreHooks(ref view, ref cM);
 
             bool[,] boxMatrix;
-            if (dropDownMenu.isDeactiveted)
+            if (dropDownMenu.isDisabled)
             {
                 boxMatrix = Helper.createBoxDeaktivatedUpDown(view.ViewBox.Height-2, view.ViewBox.Width);
             }

@@ -13,6 +13,7 @@ using System.Security.Permissions;
 using StrategyManager.Interfaces;
 using StrategyManager;
 using OSMElement;
+using BrailleIOGuiElementRenderer;
 
 namespace StrategyGenericTree
 {
@@ -346,13 +347,27 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyMgr.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert!
+        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyMgr.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert und ob das Element deaktiviert ist!
         /// </summary>
         /// <param name="element">gibt den zu verändernden Knoten an</param>
         public void updateNodeOfBrailleUi(OSMElement.OSMElement element)
         {
             Content updatedContent = element.brailleRepresentation.content;
-            updatedContent.text = getTextForView(element);
+            String updatedText = getTextForView(element);            
+            if (element.brailleRepresentation.content.otherContent != null && !typeof(BrailleIOGuiElementRenderer.UiObjectsEnum).Equals(element.brailleRepresentation.content.otherContent.GetType()))
+            {//immer wenn 'OtherContent' ein Array und nicht nur den namen des UI-Elementes (als Enum) enthält, muss der Text hierdrinn geupdatet werden
+                updatedContent.otherContent = element.brailleRepresentation.content.otherContent;
+                IOtherContent otherContent = (element.brailleRepresentation.content.otherContent as object[])[1] as IOtherContent;
+                otherContent.text = updatedText;
+                bool? isDisable = isUiElementDisable(element);
+                if(isDisable != null){
+                    otherContent.isDisabled = (bool)isDisable;
+                }
+            }
+            else
+            {
+                updatedContent.text = updatedText;
+            }
             BrailleRepresentation updatedBrailleReprasentation = element.brailleRepresentation;
             updatedBrailleReprasentation.content = updatedContent;
             element.brailleRepresentation = updatedBrailleReprasentation;
@@ -383,6 +398,30 @@ namespace StrategyGenericTree
                 text = (objectText != null ? objectText.ToString() : "");
             }
             return text;
+        }
+
+        /// <summary>
+        /// Ermittelt aufgrund der im StrategyMgr angegebenen Beziehungen, ob das UI-Element deaktiviert ist
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <returns><code>true</code> fals das UI-Element deaktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>
+        private bool? isUiElementDisable(OSMElement.OSMElement osmElement)
+        {
+            OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            if (osmRelationship == null)
+            {
+                Console.WriteLine("kein passendes objekt gefunden");
+                return null;
+            }
+            ITreeStrategy<OSMElement.OSMElement> associatedNode = getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree() as ITreeStrategy<T>) as ITreeStrategy<OSMElement.OSMElement>;
+            //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
+            bool? isDisable = null;
+            if (associatedNode != null)
+            {
+                object objectEnable = OSMElement.Helper.getGeneralPropertieElement("isEnabledFiltered", associatedNode.Data.properties);
+                isDisable = (objectEnable != null ? !((bool?)objectEnable) : null);
+            }
+            return isDisable;
         }
 
         /// <summary>
