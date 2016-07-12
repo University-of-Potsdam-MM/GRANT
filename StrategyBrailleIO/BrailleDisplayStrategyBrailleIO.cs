@@ -487,6 +487,24 @@ namespace StrategyBrailleIO
             return null;
         }
 
+        /// <summary>
+        /// Ermittelt zu einem Punkt die Id des zugehörige Braille-UI-Elements
+        /// </summary>
+        /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
+        /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
+        /// <returns>falls ein passender Knoten gefunden wurde dessen generierte Id; sonst <code>null</code></returns>
+        public String getBrailleUiElementIdAtPoint(int x, int y)
+        {
+            BrailleIOViewRange viewAtPoint = brailleIOMediator.GetViewAtPosition(x, y);
+           //TODO
+            if(viewAtPoint == null){
+                Console.WriteLine("zu dem Punkt wurde keine passende View gefunden.");
+                return null;
+            }
+            return strategyMgr.getSpecifiedTreeOperations().getIdOfView(viewAtPoint.Name);
+        }
+
+        
 
         #region copy of BrailleIOExample
 
