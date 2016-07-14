@@ -31,7 +31,7 @@ namespace GRANTExample
 
                     strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
                     strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
-                    strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
+               //     strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 }
 
@@ -127,28 +127,30 @@ namespace GRANTExample
             BrailleRepresentation e2 = new BrailleRepresentation();
             e2.screenName = "screen1";
             Content c2 = new Content();
-            c2.text = "Hallo 2";
-            e2.viewName = "v2";
+            c2.text = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
+          //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             c2.showScrollbar = true;
             e2.content = c2;
+            e2.viewName = "v2";
+            e2.isVisible = false;
             Position p2 = new Position();
-            p2.height = 12;
+            p2.height = 15;
             p2.width = 29;
-            p2.left = 0;
-            p2.top = 16;
+            p2.left = 90;
+            p2.top = 42;
 
             Padding padding = new Padding(1, 1, 1, 1);
-            p2.padding = padding;
+            //p2.padding = padding;
             Padding margin = new Padding(1, 1, 1, 1);
-            p2.margin = margin;
+            //p2.margin = margin;
             Padding boarder = new Padding(1, 1, 2, 1);
-            p2.boarder = boarder;
+            //p2.boarder = boarder;
             e2.position = p2;
             GeneralProperties proper2 = new GeneralProperties();
             proper2.IdGenerated = "braille123_2";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-           // strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
+            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3
@@ -239,8 +241,14 @@ namespace GRANTExample
             e6.screenName = "screen1";
             Content c6 = new Content();
            // c6.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
-            c6.otherContent = UiObjectsEnum.TextBox;
+            BrailleIOGuiElementRenderer.TextBox textBox6 = new BrailleIOGuiElementRenderer.TextBox();
+            textBox6.showScrollbar = true;
+            textBox6.screen = e6.screenName;
+            object[] otherContent6 = { UiObjectsEnum.TextBox, textBox6 };
+            c6.otherContent = otherContent6;
             c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c6.showScrollbar = true;
+            
             e6.viewName = "v6";
             e6.content = c6;
             e6.isVisible = true;            

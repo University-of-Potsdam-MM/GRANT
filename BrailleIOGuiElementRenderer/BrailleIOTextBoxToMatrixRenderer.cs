@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BrailleIO.Interface;
 using BrailleIO.Renderer;
 using System.Drawing;
+using BrailleIO;
 
 namespace BrailleIOGuiElementRenderer
 {
@@ -13,40 +14,99 @@ namespace BrailleIOGuiElementRenderer
     {
         public bool[,] RenderMatrix(IViewBoxModel view, object otherContent)
         {
-            String textBoxText;
+            TextBox textBox;
             try
             {
-                textBoxText = otherContent as String;
+                textBox = (TextBox)otherContent;
             }
             catch (InvalidCastException ice)
             {
-                throw new InvalidCastException("Can't cast otherContent to String! {0}", ice);
+                throw new InvalidCastException("Can't cast otherContent to TextBox! {0}", ice);
             }
-            return RenderTextBox(view, textBoxText);
+            //der eigentliche Text wird seperat gerendert, da das Scrollen ansonsten unschöne Nebenefekte hätte (Box würde mitscrollen)
+            RenderTextBoxTextView(view, textBox);
+            return RenderTextBox(view, textBox);
         }
 
-        private bool[,] RenderTextBox(IViewBoxModel view, String textBoxText)
+        private bool[,] RenderTextBoxTextView(IViewBoxModel view, TextBox textBox)
         {
-            //call pre hooks  --> wie funktioniert das richtig?
-            object cM = textBoxText as object;
-            callAllPreHooks(ref view, ref cM);
+            MatrixBrailleRenderer m = new MatrixBrailleRenderer();
+            BrailleIOViewRange tmpTextBoxView = new BrailleIOViewRange(view.ViewBox.Left + 2, view.ViewBox.Top + 2, view.ViewBox.Width - 4, view.ViewBox.Height - 4);
+            tmpTextBoxView.Name = "_T_" + textBox.screen + view.ViewBox.Left + view.ViewBox.Top + view.ViewBox.Width + view.ViewBox.Height;
+            tmpTextBoxView.SetText(textBox.text);
+            tmpTextBoxView.ShowScrollbars = textBox.showScrollbar;
+            ((BrailleIOViewRange)view).GetYOffset();
+            tmpTextBoxView.SetXOffset(((BrailleIOViewRange)view).GetXOffset());
+            tmpTextBoxView.SetYOffset(((BrailleIOViewRange)view).GetYOffset());
+            tmpTextBoxView.SetZIndex(3);
+            bool[,] textMatrix = m.RenderMatrix(tmpTextBoxView, (textBox.text as object == null ? "" : textBox.text as object));
 
-            bool[,] viewMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width); //erstmal eine eckige Matrix
+            BrailleIOMediator brailleIOMediator = BrailleIOMediator.Instance;
+            BrailleIOScreen screen = (BrailleIOScreen)brailleIOMediator.GetView(textBox.screen);
+            if (screen != null)
+            {
+                BrailleIOViewRange viewRange = screen.GetViewRange(tmpTextBoxView.Name);
+                if (viewRange == null)
+                {
+                    ((BrailleIOScreen)brailleIOMediator.GetView(textBox.screen)).AddViewRange(tmpTextBoxView.Name, tmpTextBoxView);
+                }
+                else
+                {
+                    viewRange.SetXOffset(((BrailleIOViewRange)view).GetXOffset());
+                    viewRange.SetYOffset(((BrailleIOViewRange)view).GetYOffset());
+                    viewRange.SetText(textBox.text);
+                }
+            }
+
+            return textMatrix;
+        }
+
+
+        private bool[,] RenderTextBox(IViewBoxModel view, TextBox textBox)
+        {
+            bool[,] viewMatrix;
+            if (textBox.isDisabled)
+            {
+                viewMatrix = Helper.createBoxDeaktivatedUpDown(view.ViewBox.Height, view.ViewBox.Width);
+            }
+            else
+            {
+                viewMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width); //erstmal eine eckige Matrix
+            }
+
             //Ecke links oben abrunden
             viewMatrix[0, 0] = false;
             viewMatrix[1, 0] = false;
             viewMatrix[0, 1] = false;
             viewMatrix[1, 1] = true;
 
-            //String to Braille/Matrix
-            MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (textBoxText as object == null ? "" : textBoxText as object), false);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 2);
-            
-            //call post hooks --> wie funktioniert das richtig?
-            callAllPostHooks(view, cM, ref viewMatrix, false);
+            BrailleIOViewRange tmpBoxView = new BrailleIOViewRange(view.ViewBox.Left, view.ViewBox.Top, view.ViewBox.Width, view.ViewBox.Height);
+            tmpBoxView.Name = "_B-"+ textBox.screen + view.ViewBox.Left + view.ViewBox.Top + view.ViewBox.Width + view.ViewBox.Height;
+            // tmpBoxView.SetText(textBoxText);
+            tmpBoxView.SetMatrix(viewMatrix);
+            // tmpBoxView.ShowScrollbars = true;
+            tmpBoxView.SetYOffset(0);
+            tmpBoxView.SetZIndex(2);
 
+            object cM = textBox.text as object;
+            IViewBoxModel tmpModel = tmpBoxView as IViewBoxModel;
+            callAllPreHooks(ref tmpModel, ref cM);
+            tmpBoxView = tmpBoxView as BrailleIOViewRange;
+            BrailleIOMediator brailleIOMediator = BrailleIOMediator.Instance;
+            BrailleIOScreen screen = (BrailleIOScreen)brailleIOMediator.GetView(textBox.screen);
+            if (screen != null)
+            {
+                BrailleIOViewRange viewRange = screen.GetViewRange(tmpBoxView.Name);
+                if (viewRange == null)
+                {
+                    ((BrailleIOScreen)brailleIOMediator.GetView(textBox.screen)).AddViewRange(tmpBoxView.Name, tmpBoxView);
+                }
+
+            }
+
+            callAllPostHooks(tmpBoxView, cM, ref viewMatrix, false);
             return viewMatrix;
+
         }
     }
 }

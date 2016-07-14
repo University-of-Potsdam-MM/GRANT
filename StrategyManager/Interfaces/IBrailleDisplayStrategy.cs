@@ -35,7 +35,7 @@ namespace StrategyManager.Interfaces
         /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
         /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
         /// <returns>falls ein passender Knoten gefunden wurde dessen generierte Id; sonst <code>null</code></returns>
-        String getBrailleUiElementIdAtPoint(int x, int y);
+        String getBrailleUiElementIdAtPoint(int x, int y);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
 
 
         void setStrategyMgr(StrategyMgr strategyMgr);
