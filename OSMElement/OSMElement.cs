@@ -10,7 +10,6 @@ namespace OSMElement
     {
         public GeneralProperties properties { get; set; }
         public Events events { get; set; }
-        public Interaction interaction { get; set; }
         public BrailleRepresentation brailleRepresentation { get; set; }
     }
 }

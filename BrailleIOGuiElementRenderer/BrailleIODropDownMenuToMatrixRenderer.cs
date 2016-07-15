@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BrailleIO.Interface;
 using BrailleIO.Renderer;
 using System.Drawing;
+using BrailleIOGuiElementRenderer.UiElements;
 
 namespace BrailleIOGuiElementRenderer
 {
@@ -13,40 +14,46 @@ namespace BrailleIOGuiElementRenderer
     {
         public bool[,] RenderMatrix(IViewBoxModel view, object otherContent)
         {
-            DropDownMenu dropDownMenu;
+            UiElement uiElement;
             Type typeOtherContent = otherContent.GetType();
-            if (typeof(DropDownMenu).Equals(typeOtherContent))
+            if (typeof(UiElement).Equals(typeOtherContent))
             {
-                dropDownMenu = (DropDownMenu)otherContent;
+                uiElement = (UiElement)otherContent;
             }
             else
             {
-                throw new InvalidCastException("Can't cast otherContent to dropDownMenu! {0}");
+                throw new InvalidCastException("Can't cast otherContent to BrailleRepresentation! {0}");
             }
+            Type typetypeSpecialContent = uiElement.uiElementSpecialContent.GetType();
+            DropDownMenu dropDownMenu;
+            if(typeof(DropDownMenu).Equals(typetypeSpecialContent)){
+                dropDownMenu = (DropDownMenu)uiElement.uiElementSpecialContent;
+            }
+            else { throw new InvalidCastException("Can't cast uiElementSpecialContent to DropDownMenu! {0}"); }
             if (!dropDownMenu.isChild) 
             {//bei der obersten "Leiste" im DropDownMenu muss bei der Ausrichtung nichts unterschieden werden
-                return RenderDropDownMenuHorizontal(view, dropDownMenu);
+                return RenderDropDownMenuHorizontal(view, uiElement);
             }
             else
             {
                 if (!dropDownMenu.isVertical)
                 {// die horizontale Darstellung von Kindelementen entspricht den der obersten "Leiste"
-                    return RenderDropDownMenuHorizontal(view, dropDownMenu);
+                    return RenderDropDownMenuHorizontal(view, uiElement);
                 }
                 else
                 {
-                    return RenderDropDownMenuVertical(view, dropDownMenu);
+                    return RenderDropDownMenuVertical(view, uiElement);
                 }
             }
         }
 
-        private bool[,] RenderDropDownMenuVertical(IViewBoxModel view, DropDownMenu dropDownMenu)
+        private bool[,] RenderDropDownMenuVertical(IViewBoxModel view, UiElement uiContent)
         {//TODO: Element muss eine Mindestgröße haben
             //call pre hooks  --> wie funktioniert das richtig?
-            object cM = dropDownMenu.text as object;
+            object cM = uiContent.text as object;
             callAllPreHooks(ref view, ref cM);
             bool[,] boxMatrix;
-            if(dropDownMenu.isDisabled)
+            if(uiContent.isDisabled)
             {
                 boxMatrix = Helper.createBoxDeaktivatedLeft(view.ViewBox.Height , view.ViewBox.Width-2); 
             }
@@ -54,7 +61,7 @@ namespace BrailleIOGuiElementRenderer
             {
                 boxMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width-2); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
             }
-
+            DropDownMenu dropDownMenu = (DropDownMenu)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde
             if (dropDownMenu.hasPrevious)
             {
                 //Helper.RemoveDownBoarder(ref boxMatrix);
@@ -62,7 +69,7 @@ namespace BrailleIOGuiElementRenderer
             }
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (dropDownMenu.text as object == null ? "" : dropDownMenu.text as object), false);
+            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (uiContent.text as object == null ? "" : uiContent.text as object), false);
             Helper.copyTextMatrixInMatrix(textMatrix, ref boxMatrix, 2);
             if (dropDownMenu.hasNext) { SeparatorNextDropDownMenuElementDown(ref boxMatrix); }
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
@@ -79,14 +86,14 @@ namespace BrailleIOGuiElementRenderer
             return viewMatrix;
         }
 
-        private bool[,] RenderDropDownMenuHorizontal(IViewBoxModel view, DropDownMenu dropDownMenu)
+        private bool[,] RenderDropDownMenuHorizontal(IViewBoxModel view, UiElement uiContent)
         {//TODO: Element muss eine Mindestgröße haben
             //call pre hooks  --> wie funktioniert das richtig?
-            object cM = dropDownMenu.text as object;
+            object cM = uiContent.text as object;
             callAllPreHooks(ref view, ref cM);
 
             bool[,] boxMatrix;
-            if (dropDownMenu.isDisabled)
+            if (uiContent.isDisabled)
             {
                 boxMatrix = Helper.createBoxDeaktivatedUpDown(view.ViewBox.Height-2, view.ViewBox.Width);
             }
@@ -94,13 +101,14 @@ namespace BrailleIOGuiElementRenderer
             {
                 boxMatrix = Helper.createBox(view.ViewBox.Height-2, view.ViewBox.Width); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
             }
+            DropDownMenu dropDownMenu = (DropDownMenu)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde
             if (dropDownMenu.hasPrevious)
             {
                 Helper.RemoveLeftBoarder(ref boxMatrix);
             }
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (dropDownMenu.text as object == null ? "" : dropDownMenu.text as object), false);
+            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (uiContent.text as object == null ? "" : uiContent.text as object), false);
             Helper.copyTextMatrixInMatrix(textMatrix, ref boxMatrix, 2);
             if (dropDownMenu.hasNext) { SeparatorNextDropDownMenuElementRight(ref boxMatrix); }
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];

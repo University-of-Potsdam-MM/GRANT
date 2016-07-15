@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using OSMElement.UiElements;
 
-namespace OSMElement
-{ 
-    public struct BrailleRepresentation
+namespace BrailleIOGuiElementRenderer
+{
+    public struct UiElement //ähnlich OsmElement.BrailleRepresentation
     {
+        // public Position position { get; set; }
+
         /// <summary>
         /// Gibt die View, in welcher der Inhalt angezeigt werden soll an.
         /// </summary>
@@ -21,14 +21,9 @@ namespace OSMElement
         public bool isVisible { get; set; }
 
         /// <summary>
-        /// Gibt eine Matrix die Dargestellt werden soll an.
+        /// Gibt eine matrix die Dargestellt werden soll an.
         /// </summary>
         public bool[,] matrix { get; set; }
-
-        /// <summary>
-        /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden. Der Wert dieser Eigenschaft soll angezeigt werden
-        /// </summary>
-        public String fromGuiElement { get; set; }
 
         public int contrast { get; set; }
         public double zoom { get; set; }
@@ -44,17 +39,19 @@ namespace OSMElement
         public String text { get; set; }
 
         /// <summary>
+        /// Gibt an, ob das UI-Element deaktiviert ist
+        /// </summary>
+        public Boolean isDisabled { get; set; }
+
+        /// <summary>
         /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat (falls nicht gesetzt, wird von true ausgegangen)
         /// </summary>
-        public bool showScrollbar { get; set; }
+        public Boolean showScrollbar { get; set; }
 
         /// <summary>
         /// Gibt für UI-Elemente weiteren (speziellen) Inhalt an
         /// </summary>
         public object uiElementSpecialContent { get; set; }
 
-        public Padding padding { get; set; }
-        public Padding margin { get; set; }
-        public Padding boarder { get; set; }
     }
 }
