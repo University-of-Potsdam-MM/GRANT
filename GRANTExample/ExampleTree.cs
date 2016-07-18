@@ -18,7 +18,7 @@ namespace GRANTExample
             strategyMgr = mgr;
         }
 
-        public String filterNodOfApplicatione()
+        public String filterNodeOfApplicatione()
         {
             if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
             {

@@ -74,33 +74,15 @@ namespace GRANTExample
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.F5)
-            {
-                exampleTree.filterTreeOfApplication();
-            }
+
 
             if (e.Key == Key.F1)
             {
                 exampleInspectGui.inspect();
             }
-
-            if (e.Key == Key.F9)
-            {
-                exampleTree.setOSMRelationship();
-            }
             if (e.Key == Key.F2)
             {
                 exampleBrailleDis.UiBrailleDis(AnzeigeEigenschaftBox.Text);
-            }
-            if (e.Key == Key.F8)
-            {
-                String localizedControlTypeFiltered = itemNameTextBox.Text;
-                exampleTree.searchPropertie(localizedControlTypeFiltered);
-            }
-            if (e.Key == Key.F7)
-            {
-                String element = exampleTree.filterNodOfApplicatione();
-                NodeBox.Text = element;
             }
             if (e.Key == Key.F3)
             {
@@ -110,6 +92,32 @@ namespace GRANTExample
             {
                 exampleBrailleDis.updateImg();
             }
+            if (e.Key == Key.F5)
+            {
+                exampleTree.filterTreeOfApplication();
+            }
+            if (e.Key == Key.F6)
+            {
+                exampleBrailleDis.getRendererExample();
+            }
+            if (e.Key == Key.F7)
+            {
+                String element = exampleTree.filterNodeOfApplicatione();
+                NodeBox.Text = element;
+            }
+            if (e.Key == Key.F8)
+            {
+                String localizedControlTypeFiltered = itemNameTextBox.Text;
+                exampleTree.searchPropertie(localizedControlTypeFiltered);
+            }
+            if (e.Key == Key.F9)
+            {
+                exampleTree.setOSMRelationship();
+            }
+
+
+
+
         }
     }
 }

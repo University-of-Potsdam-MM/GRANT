@@ -43,6 +43,13 @@ namespace StrategyManager.Interfaces
         /// <returns>Liste der Renderer</returns>
         List<String> getUiElementRenderer();
 
+        /// <summary>
+        /// Gibt zu einem Renderer beispielhaft die Darstellung an
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
+        /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
+        bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElement);
+
 
         void setStrategyMgr(StrategyMgr strategyMgr);
         StrategyMgr getStrategyMgr();

@@ -477,6 +477,49 @@ namespace StrategyBrailleIO
             return uiElementRenderer;
         }
 
+        /// <summary>
+        /// Gibt zu einem Renderer beispielhaft die Darstellung an
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
+        /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
+        public bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElement)
+        {
+            if (brailleIOMediator == null)
+            {
+                brailleIOMediator = BrailleIOMediator.Instance;
+            }
+            UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
+            createScreen(osmElement.brailleRepresentation.screenName);
+            createView(osmElement);
+            BrailleIOViewRange tmpView = (brailleIOMediator.GetView(osmElement.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElement.brailleRepresentation.viewName);
+            String uiElementType = osmElement.properties.controlTypeFiltered;
+            bool[,] matrix;
+            if (!(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // für alle anderen muss bei BrailleIO "otherContent" zugewiesen werden
+            {
+
+                IBrailleIOContentRenderer renderer = getRenderer(uiElementType);
+                matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetOtherContent());
+            }else if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetText());
+            }
+            else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetMatrix());
+            }
+            else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetImage());
+            }
+            else { throw new Exception("Kein passenden Renderer gefunden!"); }
+            
+            //löschen den temporär erstellten Screens inkl aller temporär erstellten Views
+            brailleIOMediator.RemoveView(osmElement.brailleRepresentation.screenName);
+            return matrix;
+        }
+
         #region Konvertieren von Elementen
         /// <summary>
         /// Wandelt <code>System.Windows.Forms.Padding</code> in <code>BrailleIO.Structs.BoxModel</code> um

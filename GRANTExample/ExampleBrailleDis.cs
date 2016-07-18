@@ -95,6 +95,27 @@ namespace GRANTExample
             }
         }
 
+        public bool[,] getRendererExample()
+        {
+            if (strategyMgr.getFilteredTree() == null)
+            {
+                Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
+                return null;
+            }
+            if (strategyMgr.getOsmRelationship() == null)
+            {
+                Console.WriteLine("Es sind noch keine OSM-Beziehungen vorhanden!");
+                return null;
+            }
+            Settings settings = new Settings();
+            strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
+            strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+         //   strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
+            setDauGui("nameFiltered");
+            OSMElement.OSMElement osmElement = strategyMgr.getBrailleTree().Child.Data;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
+            return strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
+        }
+
         #region Beispielobjekte
         private void setDauGui(String fromGuiElement3)
         {
@@ -411,6 +432,8 @@ namespace GRANTExample
             #endregion
 
         }
+
+
 
 
 
