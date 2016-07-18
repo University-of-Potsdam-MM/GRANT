@@ -47,7 +47,6 @@
     <Compile Include="Events.cs" />
     <Compile Include="GeneralProperties.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Interaction.cs" />
     <Compile Include="OSMElement.cs" />
     <Compile Include="OsmRelationship.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -496,7 +496,12 @@ namespace StrategyBrailleIO
             return brailleIOMenu;
         }
 
-        private object convertUielementSpecialContent(object osmElement)
+        /// <summary>
+        /// Konvertiert den <code>uiElementSpecialContent</code> des <code>OSMElement</code>s zu einem entsprechenden Objekt, welches BrailleIO bekannt ist
+        /// </summary>
+        /// <param name="osmElement">gibt das osmElement an</param>
+        /// <returns>ein Objekt mit dem konvertierten Inhalt</returns>
+        private object convertUiElementSpecialContent(object osmElement)
         {
             object brailleIOElement = new object();
             if (osmElement == null) { return brailleIOElement; }
@@ -508,6 +513,11 @@ namespace StrategyBrailleIO
             return brailleIOElement;
         }
 
+        /// <summary>
+        /// Konvertiert Inhalte des <code>OSMElement</code>s zu einer entsprechendend Darstellung vom <code>BrailleIOGuiElementRenderer.UiElement</code> um das Element einem Renderer zu übergeben
+        /// </summary>
+        /// <param name="osmElement">gibt das <code>OSMElement</code> an</param>
+        /// <returns>ein <code>BrailleIOGuiElementRenderer.UiElement</code></returns>
         private BrailleIOGuiElementRenderer.UiElement convertToBrailleIOUiElement(OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleIOElement = new BrailleIOGuiElementRenderer.UiElement();
@@ -518,7 +528,7 @@ namespace StrategyBrailleIO
             brailleIOElement.screenName = osmElement.brailleRepresentation.screenName;
             brailleIOElement.showScrollbar = osmElement.brailleRepresentation.showScrollbar;
             brailleIOElement.text = osmElement.brailleRepresentation.text;
-            brailleIOElement.uiElementSpecialContent = convertUielementSpecialContent(osmElement.brailleRepresentation.uiElementSpecialContent);
+            brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement.brailleRepresentation.uiElementSpecialContent);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
             return brailleIOElement;
