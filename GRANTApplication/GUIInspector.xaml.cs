@@ -6,6 +6,7 @@ using StrategyManager.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Data;
 
 namespace GRANTApplication
 {
@@ -64,106 +65,85 @@ namespace GRANTApplication
 
         void updateProperties(MenuItem item)
         {
-            TextBlock prop1;
-            TextBlock prop2;
-            TextBlock prop3;
-            TextBlock prop4;
-            TextBlock prop5;
-            TextBlock prop6;
-            TextBlock prop7;
-            TextBlock prop8;
-            TextBlock prop9;
-            TextBlock prop10;
-            TextBlock prop11;
-            TextBlock prop12;
+            DataTable dataTable = new DataTable();
 
-            prop1 = new TextBlock();
-            prop2 = new TextBlock();
-            prop3 = new TextBlock();
-            prop4 = new TextBlock();
-            prop5 = new TextBlock();
-            prop6 = new TextBlock();
-            prop7 = new TextBlock();
-            prop8 = new TextBlock();
-            prop9 = new TextBlock();
-            prop10 = new TextBlock();
-            prop11 = new TextBlock();
-            prop12 = new TextBlock();
-
-            prop1.Text = item.controlTypeFiltered;
-            Grid.SetRow(prop1, 1);
-            Grid.SetColumn(prop1, 1);
-
-            if (item.IdGenerated == null) { return; }
-            prop2.Text = item.IdGenerated.ToString();
-            Grid.SetRow(prop2, 2);
-            Grid.SetColumn(prop2, 1);
-
-
-            prop3.Text = item.nameFiltered.ToString();
-            Grid.SetRow(prop3, 3);
-            Grid.SetColumn(prop3, 1);
-
-
-            prop4.Text = item.acceleratorKeyFiltered.ToString();
-            Grid.SetRow(prop4, 4);
-            Grid.SetColumn(prop4, 1);
-
-
-            prop5.Text = item.accessKeyFiltered.ToString();
-            Grid.SetRow(prop5, 5);
-            Grid.SetColumn(prop5, 1);
-
-
-            prop6.Text = item.helpTextFiltered.ToString();
-            Grid.SetRow(prop6, 6);
-            Grid.SetColumn(prop6, 1);
-
-
-            prop7.Text = item.autoamtionIdFiltered.ToString();
-            Grid.SetRow(prop7, 7);
-            Grid.SetColumn(prop7, 1);
-
-
-            prop8.Text = item.classNameFiltered.ToString();
-            Grid.SetRow(prop8, 8);
-            Grid.SetColumn(prop8, 1);
-
-
-            prop9.Text = item.frameWorkIdFiltered.ToString();
-            Grid.SetRow(prop9, 9);
-            Grid.SetColumn(prop9, 1);
-
-
-            prop10.Text = item.itemTypeFiltered.ToString();
-            Grid.SetRow(prop10, 10);
-            Grid.SetColumn(prop10, 1);
-
-
-            prop11.Text = item.valueFiltered.ToString();
-            Grid.SetRow(prop11, 11);
-            Grid.SetColumn(prop8, 1);
-
-
-            prop12.Text = item.itemStatusFiltered.ToString();
-            Grid.SetRow(prop12, 12);
-            Grid.SetColumn(prop12, 1);
-           
-            dgUsers.Children.Add(prop1);
-            dgUsers.Children.Add(prop2);
-            dgUsers.Children.Add(prop3);
-            dgUsers.Children.Add(prop4);
-            dgUsers.Children.Add(prop5);
-            dgUsers.Children.Add(prop6);
-            dgUsers.Children.Add(prop7);
-            dgUsers.Children.Add(prop8);
-            dgUsers.Children.Add(prop9);
-            dgUsers.Children.Add(prop10);
-            dgUsers.Children.Add(prop11);
-            dgUsers.Children.Add(prop12);
+            DataColumn dc = new DataColumn();
+            dataTable.Columns.Add(new DataColumn("Property"));
+            dataTable.Columns.Add(new DataColumn("Content"));
            
 
+            DataRow dataRow = dataTable.NewRow();
+            DataRow dataRow1 = dataTable.NewRow();
+            DataRow dataRow2 = dataTable.NewRow();
+            DataRow dataRow3 = dataTable.NewRow();
+            DataRow dataRow4 = dataTable.NewRow();
+            DataRow dataRow5 = dataTable.NewRow();
+            DataRow dataRow6 = dataTable.NewRow();
+            DataRow dataRow7 = dataTable.NewRow();
+            DataRow dataRow8 = dataTable.NewRow();
+            DataRow dataRow9 = dataTable.NewRow();
+            DataRow dataRow10 = dataTable.NewRow();
+            DataRow dataRow11 = dataTable.NewRow();
+            DataRow dataRow12 = dataTable.NewRow();
+          
+            dataRow[0] = "IdGenerated";
+            dataRow[1] = item.IdGenerated.ToString();
+            dataTable.Rows.Add(dataRow);
+
+            
+            dataRow1[0] = "ControlTypeFiltered";
+            dataRow1[1] = item.controlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow1);
+
+            dataRow2[0] = "nameFiltered";
+            dataRow2[1] = item.nameFiltered.ToString();
+            dataTable.Rows.Add(dataRow2);
+
+            dataRow3["Property"] = "acceleratorKeyFiltered";
+            dataRow3["Content"] = item.acceleratorKeyFiltered.ToString();
+            dataTable.Rows.Add(dataRow3);
+
+            dataRow4["Property"] = "accessKeyFiltered";
+            dataRow4["Content"] = item.accessKeyFiltered.ToString();
+            dataTable.Rows.Add(dataRow4);
+
+            dataRow5["Property"] = "helpTextFiltered";
+            dataRow5["Content"] = item.helpTextFiltered.ToString();
+            dataTable.Rows.Add(dataRow5);
+
+            dataRow6["Property"] = "autoamtionIdFiltered";
+            dataRow6["Content"] = item.autoamtionIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow6);
+
+            dataRow7["Property"] = "classNameFiltered";
+            dataRow7["Content"] = item.classNameFiltered.ToString();
+            dataTable.Rows.Add(dataRow7);
+
+            dataRow8["Property"] = "controlTypeFiltered";
+            dataRow8["Content"] = item.controlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow8);
+
+            dataRow9["Property"] = "frameWorkIdFiltered";
+            dataRow9["Content"] = item.frameWorkIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow9);
+
+            dataRow10["Property"] = "itemTypeFiltered";
+            dataRow10["Content"] = item.itemTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow10);
+
+            dataRow11["Property"] = "itemStatusFiltered";
+            dataRow11["Content"] = item.itemStatusFiltered.ToString();
+            dataTable.Rows.Add(dataRow11);
+
+            dataRow12["Property"] = "valueFiltered";
+            dataRow12["Content"] = item.valueFiltered.ToString();
+            dataTable.Rows.Add(dataRow12);
+
+            //dataTable.Rows.Add(dataRow);
+            dataGrid1.ItemsSource = dataTable.DefaultView;
+         
            
+
         }
 
         void tvMain_SelectedItemChanged(object sender,

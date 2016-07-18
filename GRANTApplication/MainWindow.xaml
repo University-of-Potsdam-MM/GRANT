@@ -1,18 +1,19 @@
 ﻿<Window x:Class="GRANTApplication.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="1250" Width="1225"
-        KeyDown="Window_KeyDown"        >
+        Title="MainWindow" Height="700" Width="1700"
+        KeyDown="Window_KeyDown"        
+        WindowStartupLocation="Manual" Left="20" Top="50">
     <Grid Background="GhostWhite">
         <Label FontWeight="Bold">Open Filtering Window</Label>
                
         <Grid>
             <Button Content="Open new window" HorizontalAlignment="Left" Margin="50" VerticalAlignment="Top"
-                Width="150" Click="OpenNewWindow" />
+                 Click="OpenNewWindow" />
         </Grid>
         <Grid>
             <Button Name="button1" Content="Open new Window (active)"  HorizontalAlignment="Right" Margin="50" VerticalAlignment="Top"
-                Width="150" Click="button1_Click" />
+                 Click="button1_Click" />
         </Grid>
        
     </Grid>
