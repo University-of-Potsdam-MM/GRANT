@@ -496,8 +496,15 @@ namespace StrategyUIA
         //  AutomationElement vom HWND
         public static AutomationElement deliverAutomationElementFromHWND(IntPtr hwnd)
         {
-            AutomationElement element = AutomationElement.FromHandle(hwnd);
-
+            AutomationElement element;
+            try
+            {
+                element = AutomationElement.FromHandle(hwnd);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                throw new System.ComponentModel.Win32Exception("AutomationElement kann nicht ermittelt werden -- Zugriff verweigert");
+            }
             //element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return element;
         }
@@ -507,8 +514,14 @@ namespace StrategyUIA
         public int deliverElementID(IntPtr hwnd)
         {
             //window = WindowFromPoint(cp);
-            AutomationElement element = AutomationElement.FromHandle(hwnd);
-
+            AutomationElement element;
+            try{
+                element =  AutomationElement.FromHandle(hwnd);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                throw new System.ComponentModel.Win32Exception("AutomationElement kann nicht ermittelt werden -- Zugriff verweigert");
+            }
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return processIdentifier;
         }
@@ -518,7 +531,15 @@ namespace StrategyUIA
             // Convert mouse position from System.Drawing.Point to System.Windows.Point.
             System.Windows.Point point = new System.Windows.Point(x, y);
 
-            AutomationElement element = AutomationElement.FromPoint(point);
+            AutomationElement element;
+            try
+            {
+                element = AutomationElement.FromPoint(point);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                throw new System.ComponentModel.Win32Exception("AutomationElement kann nicht ermittelt werden -- Zugriff verweigert");
+            }
             return element;
         }
 

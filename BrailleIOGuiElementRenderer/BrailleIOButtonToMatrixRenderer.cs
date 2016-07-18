@@ -13,22 +13,22 @@ namespace BrailleIOGuiElementRenderer
     {
         public bool[,] RenderMatrix(IViewBoxModel view, object otherContent)
         {
-            Button button;
+            UiElement button;
             Type typeOtherContent = otherContent.GetType();
-            if (typeof(Button).Equals(typeOtherContent))
+            if (typeof(UiElement).Equals(typeOtherContent))
             {
-                button = (Button)otherContent;
+                button = (UiElement)otherContent;
             }
             else
             {
-                throw new InvalidCastException("Can't cast otherContent to dropDownMenu! {0}");
+                throw new InvalidCastException("Can't cast otherContent to UiContent! {0}");
             }
 
 
             return RenderButton(view, button); 
         }
 
-        public bool[,] RenderButton(IViewBoxModel view, Button button)
+        public bool[,] RenderButton(IViewBoxModel view, UiElement button)
         {
             //call pre hooks  --> wie funktioniert das richtig?
             object cM = button.text as object;

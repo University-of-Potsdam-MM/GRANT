@@ -60,6 +60,20 @@ namespace StrategyManager.Interfaces
         /// <param name="brailleNode">gibt das OSM-element des Knotens der entfernt werden soll an</param>
         void removeNodeInBrailleTree(OSMElement.OSMElement brailleNode);
 
+        /// <summary>
+        /// Ermittelt zu einer View den zugehörigen Knoten
+        /// </summary>
+        /// <param name="viewName">gibt den Namen der View an</param>
+        /// <returns></returns>
+        OSMElement.OSMElement getNodeOfView(String viewName);
+
+        /// <summary>
+        /// Ermittelt zu einer View die Id des zugehörigen Knotens
+        /// </summary>
+        /// <param name="viewName">gibt den Namen der View an</param>
+        /// <returns>falls der Knoten gefunden wurde, die generierte Id des Knotens; sonst <code>null</code> </returns>
+        String getIdOfView(String viewName);
+
 
         void setStrategyMgr(StrategyManager.StrategyMgr mamager);
         StrategyManager.StrategyMgr getStrategyMgr();
