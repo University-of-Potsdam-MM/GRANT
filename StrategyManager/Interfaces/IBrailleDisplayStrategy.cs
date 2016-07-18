@@ -37,6 +37,12 @@ namespace StrategyManager.Interfaces
         /// <returns>falls ein passender Knoten gefunden wurde dessen generierte Id; sonst <code>null</code></returns>
         String getBrailleUiElementIdAtPoint(int x, int y);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
 
+        /// <summary>
+        /// Gibt eine Liste mit möglichen Renderen zurück
+        /// </summary>
+        /// <returns>Liste der Renderer</returns>
+        List<String> getUiElementRenderer();
+
 
         void setStrategyMgr(StrategyMgr strategyMgr);
         StrategyMgr getStrategyMgr();

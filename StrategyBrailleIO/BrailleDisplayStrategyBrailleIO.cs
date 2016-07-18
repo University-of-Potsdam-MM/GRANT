@@ -461,7 +461,21 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
         /// </summary>
-        public enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox } //TODO: hier sollte es ein Interface zu geben
+        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox } //TODO: hier sollte es ein Interface zu geben
+
+        /// <summary>
+        /// Gibt eine Liste mit möglichen Renderen für BrailleIO zurück
+        /// </summary>
+        /// <returns>Liste der BrailleIO-Renderer</returns>
+        public List<String> getUiElementRenderer()
+        {
+            List<String> uiElementRenderer = new List<String>();
+            foreach(uiElementeTypesBrailleIoEnum uiEnum in Enum.GetValues(typeof(uiElementeTypesBrailleIoEnum)))
+            {
+                uiElementRenderer.Add(uiEnum.ToString());
+            }
+            return uiElementRenderer;
+        }
 
         #region Konvertieren von Elementen
         /// <summary>
