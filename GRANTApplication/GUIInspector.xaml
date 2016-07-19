@@ -39,7 +39,7 @@
                     <Label VerticalAlignment="Top" Content="Filterstrategy: "/>
                     <RadioButton GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
                     <RadioButton GroupName="Filter" Content="JAB"  Click="RadioButton_Click"  Height="14" Width="42" />
-                    
+                    <RadioButton GroupName="Filter" Content="UIA2"  Click="RadioButton_Click"  Height="14" Width="42" />
                     
                 </StackPanel>
 

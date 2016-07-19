@@ -139,6 +139,10 @@
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>StrategyManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StrategyUIA2\StrategyUIA2.csproj">
+      <Project>{843cdd4d-dc6a-40d4-984f-73f18413117e}</Project>
+      <Name>StrategyUIA2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StrategyUIA\StrategyUIA.csproj">
       <Project>{f181e453-0ebe-4775-9cc1-1ce26cdc4ed2}</Project>
       <Name>StrategyUIA</Name>

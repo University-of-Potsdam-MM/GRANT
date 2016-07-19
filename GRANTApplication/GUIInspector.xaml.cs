@@ -587,8 +587,9 @@ namespace GRANTApplication
 
             // ... Display button content as title.
             this.Title = button.Content.ToString();
-            Console.WriteLine("Filter: " + Title);
+            //Console.WriteLine("Filter: " + Title);
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(Title));
+            //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 
      
