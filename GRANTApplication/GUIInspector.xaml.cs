@@ -372,7 +372,7 @@ namespace GRANTApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                        filterStrategy.setStrategyMgr(strategyMgr);
+                      //  filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                         //strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);

@@ -57,7 +57,7 @@ namespace GRANTExample
              List<Strategy> possibleFilter = settings.getPossibleFilters();
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
-            strategyMgr.getSpecifiedFilter().setStrategyMgr(strategyMgr);
+          //  strategyMgr.getSpecifiedFilter().setStrategyMgr(strategyMgr);
 
          //   strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
            // brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
@@ -98,7 +98,7 @@ namespace GRANTExample
             }
             if (e.Key == Key.F6)
             {
-                exampleBrailleDis.getRendererExample();
+                exampleTree.changeFilter();
             }
             if (e.Key == Key.F7)
             {

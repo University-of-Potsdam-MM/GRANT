@@ -25,7 +25,7 @@ namespace GRANTApplication
         IBrailleDisplayStrategy brailleDisplayStrategy;
         GUIInspector GuiInspector;
         bool wopen = false;
-        
+        UpdateNode updateNode;
         //private PaintEventHandler Paint;
 
 
@@ -62,6 +62,8 @@ namespace GRANTApplication
             Console.WriteLine("Type: " + to.AssemblyQualifiedName.ToString());
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
+
+            updateNode = new UpdateNode(strategyMgr);
         }
 
       
@@ -225,7 +227,7 @@ namespace GRANTApplication
 
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                        filterStrategy.setStrategyMgr(strategyMgr);
+                     //   filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                         Console.WriteLine("\n");
@@ -260,7 +262,7 @@ namespace GRANTApplication
                     {
 
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                        filterStrategy.setStrategyMgr(strategyMgr);
+                     //   filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
                         strategyMgr.setBrailleTree(treeGuiOma);
                         
@@ -334,7 +336,7 @@ namespace GRANTApplication
                 {
 
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                    filterStrategy.setStrategyMgr(strategyMgr);
+                  //  filterStrategy.setStrategyMgr(strategyMgr);
                     //treeStrategy.setStrategyMgr(strategyMgr);
                     ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
                     strategyMgr.setBrailleTree(treeGuiOma);
@@ -377,7 +379,8 @@ namespace GRANTApplication
                     {
                         OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
-                        strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                       // strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                        updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
                         strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
                         strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);

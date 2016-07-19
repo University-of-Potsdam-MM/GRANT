@@ -160,6 +160,7 @@ namespace StrategyManager
             {
                 Type type = Type.GetType(filterClassName);
                 specifiedFilter = (IFilterStrategy)Activator.CreateInstance(type);
+                specifiedFilter.setStrategyMgr(this); //damit beim Filter-Wechsel nicht der Setter vergessen wird
             }
 
             catch (InvalidCastException ic)

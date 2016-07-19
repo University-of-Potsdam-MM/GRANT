@@ -30,8 +30,12 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
+                    if (strategyMgr.getFilteredTree() != null)
+                    {
+                        strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(tree.Child.Data.properties);
+                    }
                     strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
-                    if (tree.HasChild != null)
+                    if (tree.HasChild == true)
                     {
                         return printProperties(tree.Child.Data.properties);
                     }
@@ -245,6 +249,30 @@ namespace GRANTExample
                     Console.WriteLine("An error occurred: '{0}'", ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Wechselt zwischen dem UIA-Filter und dem UIA2-filter
+        /// </summary>
+        public void changeFilter()
+        {
+            Type currentFilter = strategyMgr.getSpecifiedFilter().GetType();
+            Settings settings = new Settings();
+            List<Strategy> possibleFilter = settings.getPossibleFilters();
+            if (currentFilter == Type.GetType(possibleFilter[0].className))
+            {
+                strategyMgr.setSpecifiedFilter(possibleFilter[2].className);
+                Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", possibleFilter[2].userName);
+            }
+            else
+            {
+                strategyMgr.setSpecifiedFilter(possibleFilter[0].className);
+                Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", possibleFilter[0].userName);
+            }
+
+            //String cUserFilterName = possibleFilter[2].userName; // der Filter muss dynamisch ermittelt werden
+            //strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+            //Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", cUserFilterName);
         }
 
        /* private List<OsmRelationship<String, String>> setOsmRelationship(String guiID)

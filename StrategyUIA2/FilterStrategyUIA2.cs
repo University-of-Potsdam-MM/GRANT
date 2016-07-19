@@ -12,17 +12,19 @@ using System.Windows;
 
 //using Microsoft.Practices.Prism;
 //using Microsoft.Practices.Prism.PubSubEvents;
-using Prism.Events;
 //https://msdn.microsoft.com/en-us/library/ff649187.aspx
 //https://github.com/PrismLibrary/Prism/blob/master/Documentation/WPF/70-CommunicatingBetweenLooselyCoupledComponents.md
 
 //http://www.codeproject.com/Articles/355473/Prism-EventAggregator-Sample
 
 
-namespace StrategyUIA
+namespace StrategyUIA2
 {
     #region filterStrategyUIAClass
-    public class FilterStrategyUIA : IFilterStrategy
+    /// <summary>
+    /// Das ist eine Kopie von StrategyUIA.FilterStrategyUIA um das Filtern von Knoten mit unterschiedlichen Filtern zu testen
+    /// </summary>
+    public class FilterStrategyUIA2 : IFilterStrategy
     {
         private StrategyMgr strategyMgr;
 
@@ -44,7 +46,7 @@ namespace StrategyUIA
             osmElement.properties = setProperties(mainWindowElement);
             ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
             AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-            findChildrenOfNode(top, collection, TreeScope.Children,  -1);
+            findChildrenOfNode(top, collection, TreeScope.Children, -1);
 
             ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
@@ -69,9 +71,6 @@ namespace StrategyUIA
                 throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
             }
             ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
-
-            UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-            uiaEvents.eventsUIA_withAutomationElement(mainElement);
 
             switch (treeScope)
             {
@@ -122,11 +121,11 @@ namespace StrategyUIA
         private void filterApplication(AutomationElement element, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             IntPtr mainAppHwdn = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(element.Current.ProcessId);
-            AutomationElement mainAppAutomationelement =  deliverAutomationElementFromHWND(mainAppHwdn);
+            AutomationElement mainAppAutomationelement = deliverAutomationElementFromHWND(mainAppHwdn);
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainAppAutomationelement);
-            ITreeStrategy<OSMElement.OSMElement> top  = tree.AddChild(osmElement);
+            ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
             filterChildren(mainAppAutomationelement, -1, ref top);
         }
 
@@ -150,7 +149,7 @@ namespace StrategyUIA
         /// <param name="tree">referenziert den gefilterten Baum</param>
         private void filterChildren(AutomationElement mainElement, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
-           //TODO: oder auch über TreeWalker?
+            //TODO: oder auch über TreeWalker?
             AutomationElementCollection collection = mainElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             findChildrenOfNode(tree, collection, TreeScope.Children, depth);
         }
@@ -200,9 +199,9 @@ namespace StrategyUIA
         //    OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
 
         //    //ITreeStrategy<OSMElement.OSMElement> osmElement = new ITreeStrategy<OSMElement.OSMElement>;
-            
+
         //    osmElement.properties = setProperties(mainWindowElement);
-            
+
         //    //ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
         //    //AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
         //    //findChildrenOfNode(top, collection, -1);
@@ -224,7 +223,7 @@ namespace StrategyUIA
             GeneralProperties elementP = new GeneralProperties();
             try
             {
-            elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+                elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
             }
             catch (Exception a)
             {
@@ -232,7 +231,7 @@ namespace StrategyUIA
             }
             try
             {
-            elementP.accessKeyFiltered = element.Current.AccessKey;
+                elementP.accessKeyFiltered = element.Current.AccessKey;
             }
             catch (Exception a)
             {
@@ -240,123 +239,139 @@ namespace StrategyUIA
             }
             try
             {
-            elementP.autoamtionIdFiltered = element.Current.AutomationId;
+                elementP.autoamtionIdFiltered = element.Current.AutomationId;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (AutomationId) '{0}'", a.ToString());
             }
 
-            try {
-            if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+            try
             {
-                elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+                if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+                {
+                    elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
                 }
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (BoundingRectangle) '{0}'", a.ToString());
             }
-            try {
-            elementP.classNameFiltered = element.Current.ClassName;
+            try
+            {
+                elementP.classNameFiltered = element.Current.ClassName;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
             }
-            try {
-            elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
+            try
+            {
+                elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
             }
-            try {
-            elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            try
+            {
+                elementP.frameWorkIdFiltered = element.Current.FrameworkId;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (FrameworkId) '{0}'", a.ToString());
             }
-            try {
-            elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            try
+            {
+                elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (HasKeyboardFocus) '{0}'", a.ToString());
             }
-            try {
-            elementP.helpTextFiltered = element.Current.HelpText;
+            try
+            {
+                elementP.helpTextFiltered = element.Current.HelpText;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
             }
-            try {
-            elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
+            try
+            {
+                elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (NativeWindowHandle) '{0}'", a.ToString());
             }
-            try {
-            elementP.isContentElementFiltered = element.Current.IsContentElement;
+            try
+            {
+                elementP.isContentElementFiltered = element.Current.IsContentElement;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsContentElement) '{0}'", a.ToString());
             }
-            try {
-            elementP.isControlElementFiltered = element.Current.IsControlElement;
+            try
+            {
+                elementP.isControlElementFiltered = element.Current.IsControlElement;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsControlElement) '{0}'", a.ToString());
             }
-            try {
-            elementP.isEnabledFiltered = element.Current.IsEnabled;
+            try
+            {
+                elementP.isEnabledFiltered = element.Current.IsEnabled;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsEnabled) '{0}'", a.ToString());
             }
-            try {
-            elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            try
+            {
+                elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsKeyboardFocusable) '{0}'", a.ToString());
             }
-            try {
-            elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            try
+            {
+                elementP.isOffscreenFiltered = element.Current.IsOffscreen;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsOffscreen) '{0}'", a.ToString());
             }
-            try {
-            elementP.isPasswordFiltered = element.Current.IsPassword;
+            try
+            {
+                elementP.isPasswordFiltered = element.Current.IsPassword;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsPassword) '{0}'", a.ToString());
             }
-            try {
-            elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            try
+            {
+                elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsRequiredForForm) '{0}'", a.ToString());
             }
-            try {
-            elementP.itemStatusFiltered = element.Current.ItemStatus;
+            try
+            {
+                elementP.itemStatusFiltered = element.Current.ItemStatus;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ItemStatus) '{0}'", a.ToString());
             }
-            try {
-            elementP.itemTypeFiltered = element.Current.ItemType;
+            try
+            {
+                elementP.itemTypeFiltered = element.Current.ItemType;
             }
             catch (Exception a)
             {
@@ -370,8 +385,9 @@ namespace StrategyUIA
             {
                 Console.WriteLine("Property: (runtime) '{0}'", a.ToString());
             }
-            try {
-            elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
+            try
+            {
+                elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
             }
             catch (Exception a)
             {
@@ -387,7 +403,7 @@ namespace StrategyUIA
             }
             try
             {
-            elementP.processIdFiltered = element.Current.ProcessId;
+                elementP.processIdFiltered = element.Current.ProcessId;
             }
             catch (Exception a)
             {
@@ -398,16 +414,19 @@ namespace StrategyUIA
             if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
-                //Console.WriteLine("hash = " + elementP.IdGenerated);
+                Console.WriteLine("hash = " + elementP.IdGenerated);
             }
             //prüfen, ob es jetzt eine andere Filter-Strategy ist
-            if (strategyMgr.getFilteredTree() != null && strategyMgr.getFilteredTree().HasChild)
+            if (strategyMgr.getFilteredTree() != null && strategyMgr.getFilteredTree().HasChild) //TODO: gleich prüfen, ob es überhaut angegeben ist
             {
                 Type interfaceOfClass = this.GetType().GetInterfaces()[0]; // das diese Klasse ein interface hat wissen wir hier
                 // wenn das angegebene Interface nicht gefunden wird ist der Wert hier null
                 Type interfacesOfTree = (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
                 if (interfacesOfTree != null)
                 {
+                    Console.WriteLine("this.GetType() = {0}", this.GetType());
+                    Console.WriteLine("strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type = {0}", strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type);
+
                     if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
                     {//wir haben hier nicht die Standard-Filter-Methode
                         elementP.grantFilterStrategy = this.GetType();
@@ -433,11 +452,11 @@ namespace StrategyUIA
                 properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
             }
             object rangeValuePattern = null;
-            if(element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
+            if (element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
             {
                 /*
                  * Conditional Support: Edit, Progress Bar, Scroll Bar, Slider, Spinner
-                 */                
+                 */
                 RangeValue rangeValue = new RangeValue();
                 rangeValue.isReadOnly = (rangeValuePattern as RangeValuePattern).Current.IsReadOnly;
                 rangeValue.largeChange = (rangeValuePattern as RangeValuePattern).Current.LargeChange;
@@ -461,11 +480,6 @@ namespace StrategyUIA
             properties.suportedPatterns = element.GetSupportedPatterns().ToArray();
         }
 
-        /// <summary>
-        /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
-        /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element an welches aktualisiert werden soll</param>
-        /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
@@ -545,8 +559,9 @@ namespace StrategyUIA
         {
             //window = WindowFromPoint(cp);
             AutomationElement element;
-            try{
-                element =  AutomationElement.FromHandle(hwnd);
+            try
+            {
+                element = AutomationElement.FromHandle(hwnd);
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -575,7 +590,7 @@ namespace StrategyUIA
 
         public OSMElement.OSMElement setOSMElement(int pointX, int pointY)
         {
-            
+
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
@@ -585,30 +600,30 @@ namespace StrategyUIA
             return osmElement;
         }
 
-       /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
-        {
-            //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
-            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
+        /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
+         {
+             //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
 
-            osmElement.properties = setProperties(mouseElement);
+             osmElement.properties = setProperties(mouseElement);
             
-            //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
-            y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
-            int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
-            int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
-            int[] runtimes= mouseElement.GetRuntimeId();
-            height = y2 - y;
-            width = x2 - x;
+             //Rect mouseRect = mouseElement.Current.BoundingRectangle;
+             x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
+             y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
+             int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+             int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
+             int[] runtimes= mouseElement.GetRuntimeId();
+             height = y2 - y;
+             width = x2 - x;
           
-            Console.WriteLine("hier x: " + x);
-            Console.WriteLine("hier y: " + y);
-            Console.WriteLine("hier w: " + width);
-            Console.WriteLine("hier h: " + height);
-            Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
-        }*/
+             Console.WriteLine("hier x: " + x);
+             Console.WriteLine("hier y: " + y);
+             Console.WriteLine("hier w: " + width);
+             Console.WriteLine("hier h: " + height);
+             Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
+         }*/
 
         /// <summary>
         /// Ermittelt das zugehörige AutomationElement eines Knotens aus dem gefilterten Baum
@@ -660,15 +675,15 @@ namespace StrategyUIA
             //Falls die "AutomationId" gesetzt wurde, so ist diese Eigenschaft ausreichend um das Element eindeutig zu identifizieren
             if (properties.autoamtionIdFiltered != null && !properties.autoamtionIdFiltered.Equals(""))
             {
-                return  new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
+                return new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
             }
 
             //TODO: Achtung einige Eigenschaften vonrscheinlich GeneralProperties sollten wahrscheinlich nicht genutzt werden
             Condition resultCondition;
             #region von allen auslesbar
             //resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
-                resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
-            
+            resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
+
             // ...
             #endregion
             if (properties.controlTypeFiltered != null)
