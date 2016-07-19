@@ -17,10 +17,18 @@ namespace GRANTExample
     public class ExampleBrailleDis
     {
         StrategyMgr strategyMgr;
+        UpdateNode updateNode;
         public ExampleBrailleDis(StrategyMgr mgr)
         {
             strategyMgr = mgr;
+            updateNode = new UpdateNode(strategyMgr);
         }
+
+        /// <summary>
+        /// Initialisiert, sofern nochnicht vorhanden, ein Ausgabegerät mit den angegebenen Ansichten;
+        /// Aktualisiert die Darstellung des Knotens "braille123_6"
+        /// </summary>
+        /// <param name="fromGuiElement">gibt an welche <code>GeneralProperties</code>-Eigenschaft angezeigt werden soll</param>
         public void UiBrailleDis(String fromGuiElement)
         {
             try
@@ -54,8 +62,8 @@ namespace GRANTExample
                     OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
                     if (osmRelationships != null)
                     {
-                        strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-
+                        //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                        updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
                     ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
                     if (relatedBrailleTreeObject != null)
@@ -83,8 +91,8 @@ namespace GRANTExample
             String brailleId = "braille123_1";
             OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
             {
-                strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-
+                //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
                 ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
                 if (relatedBrailleTreeObject != null)

@@ -35,11 +35,14 @@ namespace StrategyManager.Interfaces
         OSMElement.OSMElement setOSMElement(int pointX, int pointY);
         
         //AutomationElement ElementFromCursor(int pointsX, int pointsY);
+
         /// <summary>
-        /// Filtert von dem angegebenen Knoten die Eigenschaften neu und ändert entsprechend das Baum-Objekt
+        /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
         /// </summary>
-        /// <param name="filteredTreeGeneratedId">gibt die generierte Id des Knotens an, welcher neu gefiltert werden soll</param>
-        void updateNodeOfFilteredTree(String filteredTreeGeneratedId);
+        /// <param name="osmElement">gibt das OSM-Element an welches aktualisiert werden soll</param>
+        /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
+        GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement);
+
         void setStrategyMgr(StrategyMgr strategyMgr);
         StrategyMgr getStrategyMgr();    }
 }

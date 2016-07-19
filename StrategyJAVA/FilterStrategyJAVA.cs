@@ -59,7 +59,7 @@ namespace StrategyJAVA
             return new OSMElement.OSMElement();
         }
 
-        public void updateNodeOfFilteredTree(String filteredTreeGeneratedId) { }
+        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement) { return new GeneralProperties(); }
     }
     
 }

@@ -190,6 +190,12 @@ namespace OSMElement
         /// Enthält die unterstützten Pattern
         /// </summary>
         public object[] suportedPatterns { get; set; }
+
+        /// <summary>
+        /// gibt die Filter-Strategy an, sofern dieses bei einem Knoten abweichend ist 
+        /// (wird gesetzt beim Update eines Konotens gesetzt, wenn es nicht der selbe Filter wie für die ganze Anwendung ist)
+        /// </summary>
+        public object grantFilterStrategy { get; set; }
         
     }
 }
