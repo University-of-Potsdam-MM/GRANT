@@ -30,12 +30,12 @@ namespace StrategyManager.Interfaces
         void updateViewContent(OSMElement.OSMElement element);
 
         /// <summary>
-        /// Ermittelt zu einem Punkt die Id des zugehörige Braille-UI-Elements
+        /// Ermittelt zu einem Punkt den zugehörigen View-Name
         /// </summary>
         /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
         /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
-        /// <returns>falls ein passender Knoten gefunden wurde dessen generierte Id; sonst <code>null</code></returns>
-        String getBrailleUiElementIdAtPoint(int x, int y);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
+        /// <returns>falls eine passende View gefunden wurde dessen Name; sonst <code>null</code></returns>
+        String getBrailleUiElementViewNameAtPoint(int x, int y);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
 
         /// <summary>
         /// Gibt eine Liste mit möglichen Renderen zurück

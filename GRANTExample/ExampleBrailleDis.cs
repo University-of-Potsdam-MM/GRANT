@@ -23,6 +23,12 @@ namespace GRANTExample
             strategyMgr = mgr;
             updateNode = new UpdateNode(strategyMgr);
         }
+
+        /// <summary>
+        /// Initialisiert, sofern nochnicht vorhanden, ein Ausgabegerät mit den angegebenen Ansichten;
+        /// Aktualisiert die Darstellung des Knotens "braille123_6"
+        /// </summary>
+        /// <param name="fromGuiElement">gibt an welche <code>GeneralProperties</code>-Eigenschaft angezeigt werden soll</param>
         public void UiBrailleDis(String fromGuiElement)
         {
             try
