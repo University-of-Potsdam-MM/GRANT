@@ -5,21 +5,57 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="GRANTApplication.GUIInspector"
        Title="GUIInspector" 
         KeyDown="Window_KeyDown"
-         WindowStartupLocation="Manual" Left="40" Top="280" Height="450" Width="600">
-    <DockPanel LastChildFill="True" Height="Auto" VerticalAlignment="Top">
+         WindowStartupLocation="Manual" Left="40" Top="210" Height="600" Width="600">
+    <DockPanel LastChildFill="True" Height="584" VerticalAlignment="Top">
         <!-- Status Bar-->
+
         <StackPanel Background="Gray" DockPanel.Dock="Top"  Height="Auto" >
-            <TextBlock Height="Auto" Foreground="White" ><Run Text="Menubar"/></TextBlock>
+            <!-- <TextBlock Height="Auto" Foreground="White" ><Run Text="Menubar"/></TextBlock>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open"/>
+                    <MenuItem Header="_Close"/>
+                    <MenuItem Header="_Save"/>
+                </MenuItem>
+            </Menu>-->
+
+            <StackPanel VerticalAlignment="Top">
+                <Menu Width="Auto" Height="20">
+                    <MenuItem Header="_File">
+                        <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
+                        <!-- Click="AppExit_Click"-->
+                    </MenuItem>
+                    <MenuItem Header="_Tools">
+                        <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
+                    </MenuItem>
+                    <MenuItem Header="_Help">
+                        <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                        <Separator />
+                        <MenuItem x:Name="Autor" Header="&amp;Autor" HorizontalAlignment="Left" Width="140"/>
+                    </MenuItem>
+
+                </Menu>
+                <StackPanel Orientation="Horizontal"  Background="Gray">
+                    <Label VerticalAlignment="Top" Content="Filterstrategy: "/>
+                    <RadioButton GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
+                    <RadioButton GroupName="Filter" Content="JAB"  Click="RadioButton_Click"  Height="14" Width="42" />
+                    
+                    
+                </StackPanel>
+
+            </StackPanel>
         </StackPanel>
-        <StackPanel Background="Gray" DockPanel.Dock="Bottom"  Height="Auto" >
-           
-            <TextBlock Height="Auto" Foreground="White" >
-               <Run Text="Footbar"/></TextBlock>
+
+        <StackPanel Background="White" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="200" >
+            <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Height="190" Width="607"><Run FontWeight="Bold" Text="Anleitung Key-Event:"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F5: "/><Run Text=" Baum filtern -&gt; es wird der Baum gefiltert von der Anwendung wo sich der Mauszeiger befindet"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F1: "/><Run Text=" inspect GUI-Element"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F9: "/><Run Text=" setzt eine Beziehung zu dem GUI-Element unter dem Curser"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F2: "/><Run Text=" Erstellt die UI auf dem BrailleDis bzw. aktualisiert sie"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F8:  "/><Run Text=" Sucht nach 'Schaltfläche' oder dem in der Textbox angegebenen localizedControlTypeFiltered"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F7: "/><Run Text=" Filtert den Knoten unter dem Mauszeiger, gibt einige Eigenschaften aus und aktualisiert den Baum "/><LineBreak/><Run  FontWeight="Bold" FontStyle="Oblique" Text="F3: "/><Run Text=" Setzt eine Beziehung zu einem element von dem ein screenshot erstellt werden soll"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F4: "/><Run  Text=" aktualisiert den Screenschot (vgl. F3)"/>
+            <LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F4: "/><Run  Text=" wechselt die Filtermethode (UIA und UIA2)"/></TextBlock>
+
         </StackPanel>
+
         <!-- Left-->
-        <ScrollViewer VerticalScrollBarVisibility="Visible" Width="216" >
-            <StackPanel Background="GhostWhite" DockPanel.Dock="Left" Height="Auto" Width="202" >
-                <TextBlock Background="GhostWhite" Height="25" FontSize="10"  FontWeight="Bold" Foreground="Red" ><Run Text="Enter F5 to start filtering and diplay tree"/></TextBlock>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="Auto" Height="Auto" >
+            <StackPanel Background="GhostWhite" DockPanel.Dock="Left" Height="320" Width="250">
+                <Label BorderThickness="1" BorderBrush="Gray" Background="GhostWhite" FontSize="14" FontWeight="Bold" Content="Control View"/>
                 <TreeView Background="GhostWhite" x:Name="tvMain" BorderThickness="0">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
@@ -42,11 +78,11 @@
 
             </StackPanel>
         </ScrollViewer>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="Auto" Margin="0,0,0,1" Height="396">
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="Auto" Height="Auto">
 
-            <StackPanel Background="GhostWhite" DockPanel.Dock="Right" Width="Auto" Height="389">
-                <TextBlock  FontSize="10"  FontWeight="Bold" Background="GhostWhite" VerticalAlignment="Top" Height="24" ><Run Text="Properties"/></TextBlock>
-                <DataGrid BorderThickness="0" x:Name="dataGrid1" HorizontalAlignment="Left" Background="GhostWhite" />
+            <StackPanel Background="GhostWhite" DockPanel.Dock="Right" Width="Auto" Height="320">
+                <Label FontSize="14" FontWeight="Bold"  BorderThickness="1" BorderBrush="Gray" Background="GhostWhite" Content="Properties"/>
+                <DataGrid BorderThickness="0" x:Name="dataGrid1" HorizontalAlignment="Left"/>
 
 
 

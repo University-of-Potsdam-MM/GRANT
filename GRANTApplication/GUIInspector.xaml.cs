@@ -70,7 +70,7 @@ namespace GRANTApplication
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
             dataTable.Columns.Add(new DataColumn("Content"));
-           
+
 
             DataRow dataRow = dataTable.NewRow();
             DataRow dataRow1 = dataTable.NewRow();
@@ -85,64 +85,68 @@ namespace GRANTApplication
             DataRow dataRow10 = dataTable.NewRow();
             DataRow dataRow11 = dataTable.NewRow();
             DataRow dataRow12 = dataTable.NewRow();
-          
+
             dataRow[0] = "IdGenerated";
+            if (item.IdGenerated == null) { return; }
             dataRow[1] = item.IdGenerated.ToString();
             dataTable.Rows.Add(dataRow);
 
             
-            dataRow1[0] = "ControlTypeFiltered";
+            dataRow1[0] = "ControlType";
             dataRow1[1] = item.controlTypeFiltered.ToString();
             dataTable.Rows.Add(dataRow1);
 
-            dataRow2[0] = "nameFiltered";
+            dataRow2[0] = "Name";
             dataRow2[1] = item.nameFiltered.ToString();
             dataTable.Rows.Add(dataRow2);
 
-            dataRow3["Property"] = "acceleratorKeyFiltered";
+            dataRow3["Property"] = "AcceleratorKey";
             dataRow3["Content"] = item.acceleratorKeyFiltered.ToString();
             dataTable.Rows.Add(dataRow3);
 
-            dataRow4["Property"] = "accessKeyFiltered";
+            dataRow4["Property"] = "AccessKey";
             dataRow4["Content"] = item.accessKeyFiltered.ToString();
             dataTable.Rows.Add(dataRow4);
 
-            dataRow5["Property"] = "helpTextFiltered";
+            dataRow5["Property"] = "HelpText";
             dataRow5["Content"] = item.helpTextFiltered.ToString();
             dataTable.Rows.Add(dataRow5);
 
-            dataRow6["Property"] = "autoamtionIdFiltered";
+            dataRow6["Property"] = "AutoamtionId";
             dataRow6["Content"] = item.autoamtionIdFiltered.ToString();
             dataTable.Rows.Add(dataRow6);
 
-            dataRow7["Property"] = "classNameFiltered";
+            dataRow7["Property"] = "ClassName";
             dataRow7["Content"] = item.classNameFiltered.ToString();
             dataTable.Rows.Add(dataRow7);
 
-            dataRow8["Property"] = "controlTypeFiltered";
-            dataRow8["Content"] = item.controlTypeFiltered.ToString();
+            dataRow8["Property"] = "Name";
+            dataRow8["Content"] = item.nameFiltered.ToString();
             dataTable.Rows.Add(dataRow8);
 
-            dataRow9["Property"] = "frameWorkIdFiltered";
+            dataRow9["Property"] = "FrameWorkId";
             dataRow9["Content"] = item.frameWorkIdFiltered.ToString();
             dataTable.Rows.Add(dataRow9);
 
-            dataRow10["Property"] = "itemTypeFiltered";
+            dataRow10["Property"] = "ItemType";
             dataRow10["Content"] = item.itemTypeFiltered.ToString();
             dataTable.Rows.Add(dataRow10);
 
-            dataRow11["Property"] = "itemStatusFiltered";
+            dataRow11["Property"] = "ItemStatus";
             dataRow11["Content"] = item.itemStatusFiltered.ToString();
             dataTable.Rows.Add(dataRow11);
 
-            dataRow12["Property"] = "valueFiltered";
+            dataRow12["Property"] = "Value";
             dataRow12["Content"] = item.valueFiltered.ToString();
             dataTable.Rows.Add(dataRow12);
 
             //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
-         
+
+      
+       
            
+       
 
         }
 
@@ -573,6 +577,18 @@ namespace GRANTApplication
             public object[] suportedPatterns { get; set; }
 
             public ObservableCollection<MenuItem> Items { get; set; }
+        }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+           
+            //sender.ToString();
+            var button = sender as RadioButton;
+
+            // ... Display button content as title.
+            this.Title = button.Content.ToString();
+            Console.WriteLine("Filter: " + Title);
+            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(Title));
         }
 
      
