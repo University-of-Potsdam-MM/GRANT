@@ -19,14 +19,12 @@ namespace StrategyMVBD
         private StrategyMgr strategyMgr;
 
         private Device activeDevice { get; set; }
-        private AdapterClass adapterClassMVBD { get; set; }
 
         public DisplayStrategyMVBD(StrategyMgr strategyMgr) : base(strategyMgr)
         {
             this.strategyMgr = strategyMgr;
             _endPoint = new IPEndPoint(IPAddress.Loopback, 2017); //TODO: auslesen
             ThreadPool.QueueUserWorkItem(new WaitCallback(Thread_Callback));
-            adapterClassMVBD = new AdapterClass("BrailleIOAdapter_BrailleDisNet_MVBD", "BrailleIOBraillDisAdapter", "BrailleIOBrailleDisAdapterMVBD");
         }
 
         ~DisplayStrategyMVBD() { Dispose(); }
@@ -59,8 +57,8 @@ namespace StrategyMVBD
             //TODO: hier muss apäter auf die antwort gewartet werden
             //Die Implemetierung stimmt so noch nicht -> ist nur für Testzwecke da
             List<Device> deviceList = new List<Device>();
-            deviceList.Add(new Device(64, 30, OrientationEnum.Front, "MVDB_1", adapterClassMVBD));
-            deviceList.Add(new Device(60, 60, OrientationEnum.Front, "MVDB_2", adapterClassMVBD));
+            deviceList.Add(new Device(64, 30, OrientationEnum.Front, "MVDB_1", this.GetType()));
+            deviceList.Add(new Device(60, 60, OrientationEnum.Front, "MVDB_2", this.GetType()));
             return deviceList;
 
         }
@@ -114,7 +112,7 @@ namespace StrategyMVBD
                                 {
                                     orientation = (OrientationEnum)ba[2];
                                 }
-                                activeDevice = new Device(ba[1], ba[0], orientation, ba[3] + " "+ba[4] + " "+ ba[5] + " "+ ba[6], adapterClassMVBD);//TODO: name ordentlich vergeben
+                                activeDevice = new Device(ba[1], ba[0], orientation, ba[3] + " "+ba[4] + " "+ ba[5] + " "+ ba[6], this.GetType());//TODO: name ordentlich vergeben
                                 Debug.Print("--> DeviceInfo {0}x{1}", ba[0], ba[1]);
                             }
                         }

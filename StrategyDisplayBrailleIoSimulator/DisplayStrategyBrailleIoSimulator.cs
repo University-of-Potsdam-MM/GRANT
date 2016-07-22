@@ -16,8 +16,7 @@ namespace StrategyDisplayBrailleIoSimulator
         public DisplayStrategyBrailleIoSimulator(StrategyMgr strategyMgr) : base(strategyMgr)
         {
             this.strategyMgr = strategyMgr;
-            AdapterClass adapterClassBrailleDisSimulator = new AdapterClass("DisplayStrategyBrailleIoSimulator", "StrategyDisplayBrailleIoSimulator", "StrategyDisplayBrailleIoSimulator");
-            activeDevice = new Device(120, 60, OrientationEnum.Front, "BrailleDisSimulator", adapterClassBrailleDisSimulator);
+            activeDevice = new Device(120, 60, OrientationEnum.Front, "BrailleDisSimulator", this.GetType());
         }
 
         public override Device getActiveDevice()

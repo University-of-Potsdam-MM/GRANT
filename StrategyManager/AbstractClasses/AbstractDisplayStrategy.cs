@@ -16,6 +16,10 @@ namespace StrategyManager.AbstractClasses
 
         private List<Device> allDevices;
 
+        /// <summary>
+        /// Gibt das gewählte ausgabegerät zurück
+        /// </summary>
+        /// <returns></returns>
         public abstract Device getActiveDevice();
 
         /// <summary>
@@ -26,7 +30,7 @@ namespace StrategyManager.AbstractClasses
         public void setActiveDevice(Device device)
         {
             //TODO: prüfen, ob es nötig ist
-            strategyMgr.setSpecifiedDisplayStrategy("TODO");
+            strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassType.AssemblyQualifiedName); //TODO: testen
             //TODO: bei MVDB Gerät setzen
         }
 
@@ -69,12 +73,11 @@ namespace StrategyManager.AbstractClasses
                     }
                 }
             }
-           // System.GC.Collect(); //wird selbst aufgerufen, damit die TCPIP-Verbindungen beendet werden
-            //System.GC.Collect();
+
             return allDevices;
             
         }
-
+        
     }
 
         

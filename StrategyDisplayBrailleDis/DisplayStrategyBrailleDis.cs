@@ -16,8 +16,7 @@ namespace StrategyDisplayBrailleDis
         public DisplayStrategyBrailleDis(StrategyMgr strategyMgr) : base(strategyMgr)
         {
             this.strategyMgr = strategyMgr;
-            AdapterClass adapterClassBrailleDis = new AdapterClass("BrailleIOAdapter_BrailleDisNet", "BrailleIOBraillDisAdapter", "BrailleIOBrailleDisAdapter");
-            activeDevice = new Device(120, 60, OrientationEnum.Front, "BrailleDis",  adapterClassBrailleDis);
+            activeDevice = new Device(120, 60, OrientationEnum.Front, "BrailleDis", this.GetType());
         }
 
         public override Device getActiveDevice()

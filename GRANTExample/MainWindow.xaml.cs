@@ -67,7 +67,7 @@ namespace GRANTExample
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
 
-            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[2].className);
+            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
             exampleTree = new ExampleTree(strategyMgr);
             exampleInspectGui = new InspectGui(strategyMgr);

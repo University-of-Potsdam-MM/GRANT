@@ -112,26 +112,17 @@ namespace StrategyBrailleIO
 
         private void createBrailleDis()
         {
-            String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().adapterClass.name;
-            if (name.Equals("DisplayStrategyBrailleIoSimulator"))
+            String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
+            String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Namespace;
+            //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
+            if (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Equals(typeof(StrategyDisplayBrailleIoSimulator.DisplayStrategyBrailleIoSimulator)))
             {
                 initializedSimulator();
                 return;
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                
-                String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().adapterClass.namespaceString;
-                String dll = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().adapterClass.dllName; 
-                Type type = Type.GetType(ns+"."+name+", "+dll);
-                //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
-                
-                if (type == null)
-                {
-                    Console.WriteLine("Ausgabegerät konnte nicht erstellt werden - Typ ist nicht ermittelbar");
-                    return;
-                }
-                brailleDisAdapter =  (AbstractBrailleIOAdapterBase)Activator.CreateInstance(type, brailleIOMediator.AdapterManager);
+                brailleDisAdapter = displayStrategyClassToBrailleIoAdapterClass(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
 
                 
@@ -606,6 +597,31 @@ namespace StrategyBrailleIO
         }
 
         #endregion
+
+        /// <summary>
+        /// Ermittelt anhand des genutzten Typs der DisplayStrategy welcher Adapter verwendet werden muss
+        /// </summary>
+        /// <param name="displayStrategyType">gibt die genutzte DisplayStrategy an</param>
+        /// <returns>der Adapter für die Ausgabe</returns>
+        private AbstractBrailleIOAdapterBase displayStrategyClassToBrailleIoAdapterClass(Type displayStrategyType)
+        {
+            Type brailleAdapterType = null;
+            //if (displayStrategyClass.namespaceString.Equals("StrategyMVBD") && displayStrategyClass.name.Equals("DisplayStrategyMVBD"))
+            if(displayStrategyType.Equals(typeof(StrategyMVBD.DisplayStrategyMVBD)))
+            {
+                brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD);
+            }
+            if (displayStrategyType.Equals(typeof(StrategyDisplayBrailleDis.DisplayStrategyBrailleDis)))
+            {
+                brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet);
+            }
+            if (displayStrategyType.Equals(typeof(StrategyDisplayBrailleIoSimulator.DisplayStrategyBrailleIoSimulator)))
+            {
+                //hier brauchen wir den Type nicht, da der Simulator anders erstellt wird
+            }
+            if (brailleAdapterType != null) { return (AbstractBrailleIOAdapterBase)Activator.CreateInstance(brailleAdapterType, brailleIOMediator.AdapterManager); }
+            return null;
+        }
 
 
     }

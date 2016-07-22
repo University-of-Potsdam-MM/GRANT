@@ -14,17 +14,18 @@ namespace StrategyManager
         public int height { get; set; }
         public int width {get; set; }
         public OrientationEnum orientation{ get; set; }
-        public AdapterClass adapterClass { get; set; }
         public String name { get; set; }
+        public Type deviceClassType { get; set; }
         //TODO: + Toche, Hardwaretasten
 
-        public Device(int height, int width, OrientationEnum orientation, String name, AdapterClass adapterClass) : this()
+        public Device(int height, int width, OrientationEnum orientation, String name, Type deviceClassType)
+            : this()
         {
             this.height = height;
             this.width = width;
             this.orientation = orientation;
-            this.adapterClass = adapterClass;
             this.name = name;
+            this.deviceClassType = deviceClassType;
         }
 
         public override string ToString()
@@ -38,20 +39,4 @@ namespace StrategyManager
     /// </summary>
     public enum OrientationEnum {Unknown = -1, Front, Right, Rear, Left }
 
-    /// <summary>
-    /// struktur, welche Namen und Namespace des Adapters fure das Device enthält
-    /// </summary>
-    public struct AdapterClass
-    {
-        public String name { get; set; }
-        public String namespaceString {get; set; }
-        public String dllName { get; set; }
-
-        public AdapterClass(String name, String nsString, String dll) : this()
-        {
-            this.name = name;
-            this.namespaceString = nsString;
-            this.dllName = dll;
-        }
-    }
 }
