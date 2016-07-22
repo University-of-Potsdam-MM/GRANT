@@ -110,14 +110,28 @@ namespace StrategyBrailleIO
 
         }
 
-        private AbstractBrailleIOAdapterBase createBrailleDis()
-        {/// aus BrailleIOExample -> erstmal gekürzt
+        private void createBrailleDis()
+        {
+            String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().adapterClass.name;
+            if (name.Equals("DisplayStrategyBrailleIoSimulator"))
+            {
+                initializedSimulator();
+                return;
+            }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-
-                // brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet(brailleIOMediator.AdapterManager);
-
-                brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD(brailleIOMediator.AdapterManager);
+                
+                String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().adapterClass.namespaceString;
+                String dll = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().adapterClass.dllName; 
+                Type type = Type.GetType(ns+"."+name+", "+dll);
+                //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
+                
+                if (type == null)
+                {
+                    Console.WriteLine("Ausgabegerät konnte nicht erstellt werden - Typ ist nicht ermittelbar");
+                    return;
+                }
+                brailleDisAdapter =  (AbstractBrailleIOAdapterBase)Activator.CreateInstance(type, brailleIOMediator.AdapterManager);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
 
                 
@@ -126,9 +140,9 @@ namespace StrategyBrailleIO
                 brailleDisAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
                 #endregion
                 */
-                return brailleDisAdapter;
+                //return brailleDisAdapter;
             }
-            return null;
+            return;
         }
 
         /// <summary>

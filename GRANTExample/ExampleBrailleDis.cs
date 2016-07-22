@@ -40,8 +40,8 @@ namespace GRANTExample
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
                     strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
-                    strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
-               //     strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
+                   // strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
+                    strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 }
 
@@ -70,6 +70,7 @@ namespace GRANTExample
                     {
                         strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
+                        
                     }
                 }
             }
@@ -118,7 +119,7 @@ namespace GRANTExample
             Settings settings = new Settings();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
-         //   strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
+   //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
             OSMElement.OSMElement osmElement = strategyMgr.getBrailleTree().Child.Data;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
             return strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);

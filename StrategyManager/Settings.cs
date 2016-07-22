@@ -7,7 +7,7 @@ using StrategyManager.Interfaces;
 
 
 
-namespace GRANTApplication
+namespace StrategyManager
 {
     public class Settings
     {
@@ -118,6 +118,20 @@ namespace GRANTApplication
             return trees;
         }
 
+        public List<Strategy> getPosibleDisplayStrategies()
+        {
+            List<Strategy> displayStrategy = new List<Strategy>();
+            List<String> filterNames = getPossibleStrategyClasses("PossibleDisplayStrategies");
+            if (filterNames == null) { return displayStrategy; }
+            Strategy f = new Strategy();
+            foreach (String fName in filterNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                displayStrategy.Add(f);
+            }
+            return displayStrategy;
+        }
 
     }
 }

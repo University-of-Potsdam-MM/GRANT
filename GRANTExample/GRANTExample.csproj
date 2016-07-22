@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExampleBrailleDis.cs" />
+    <Compile Include="ExampleDisplayStrategy.cs" />
     <Compile Include="ExampleTree.cs" />
     <Compile Include="InspectGui.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -99,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BrailleIO\BrailleDis\BrailleIOBraillDisAdapter\BrailleIOBraillDisAdapter.csproj">
+      <Project>{4306fcd9-4dd1-42ce-b449-07abab7fd8f7}</Project>
+      <Name>BrailleIOBraillDisAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO\BrailleIO.csproj">
       <Project>{623e618c-f034-473e-a5af-280b20a5ba8f}</Project>
       <Name>BrailleIO</Name>
@@ -123,6 +128,14 @@
       <Project>{7765dc51-ff98-42eb-868b-582a0c2ba0aa}</Project>
       <Name>StrategyBrailleIO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StrategyDisplayBrailleDis\StrategyDisplayBrailleDis.csproj">
+      <Project>{964196dd-a44f-4414-b4c5-de0569016c91}</Project>
+      <Name>StrategyDisplayBrailleDis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyDisplayBrailleIoSimulator\StrategyDisplayBrailleIoSimulator.csproj">
+      <Project>{f151b250-b466-4f74-b0d2-930f1c77a073}</Project>
+      <Name>StrategyDisplayBrailleIoSimulator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
       <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
       <Name>StrategyGenericTree</Name>
@@ -134,6 +147,10 @@
     <ProjectReference Include="..\StrategyManager\StrategyManager.csproj">
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>StrategyManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyMVBD\StrategyMVBD.csproj">
+      <Project>{1fe9346f-83a2-4ae3-9c3c-8b77d9dd4a52}</Project>
+      <Name>StrategyMVBD</Name>
     </ProjectReference>
     <ProjectReference Include="..\StrategyUIA2\StrategyUIA2.csproj">
       <Project>{843cdd4d-dc6a-40d4-984f-73f18413117e}</Project>
