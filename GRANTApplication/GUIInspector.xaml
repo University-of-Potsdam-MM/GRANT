@@ -5,8 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="GRANTApplication.GUIInspector"
        Title="GUIInspector" 
         KeyDown="Window_KeyDown"
-         WindowStartupLocation="Manual" Left="40" Top="210" Height="600" Width="600">
-    <DockPanel LastChildFill="True" Height="584" VerticalAlignment="Top">
+         WindowStartupLocation="Manual" Left="40" Top="210" MaxHeight="1000" Width="Auto" MaxWidth="1200" Height="800" Background="GhostWhite">
+    <DockPanel LastChildFill="True" Height="765" Width="Auto" VerticalAlignment="Top" Background="GhostWhite">
         <!-- Status Bar-->
 
         <StackPanel Background="Gray" DockPanel.Dock="Top"  Height="Auto" >
@@ -40,23 +40,22 @@
                     <RadioButton GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
                     <RadioButton GroupName="Filter" Content="JAB"  Click="RadioButton_Click"  Height="14" Width="42" />
                     <RadioButton GroupName="Filter" Content="UIA2"  Click="RadioButton_Click"  Height="14" Width="42" />
-                    
+
                 </StackPanel>
 
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Background="White" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="200" >
-            <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Height="190" Width="607"><Run FontWeight="Bold" Text="Anleitung Key-Event:"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F5: "/><Run Text=" Baum filtern -&gt; es wird der Baum gefiltert von der Anwendung wo sich der Mauszeiger befindet"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F1: "/><Run Text=" inspect GUI-Element"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F9: "/><Run Text=" setzt eine Beziehung zu dem GUI-Element unter dem Curser"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F2: "/><Run Text=" Erstellt die UI auf dem BrailleDis bzw. aktualisiert sie"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F8:  "/><Run Text=" Sucht nach 'Schaltfläche' oder dem in der Textbox angegebenen localizedControlTypeFiltered"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F7: "/><Run Text=" Filtert den Knoten unter dem Mauszeiger, gibt einige Eigenschaften aus und aktualisiert den Baum "/><LineBreak/><Run  FontWeight="Bold" FontStyle="Oblique" Text="F3: "/><Run Text=" Setzt eine Beziehung zu einem element von dem ein screenshot erstellt werden soll"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F4: "/><Run  Text=" aktualisiert den Screenschot (vgl. F3)"/>
-            <LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F4: "/><Run  Text=" wechselt die Filtermethode (UIA und UIA2)"/></TextBlock>
+        <StackPanel Background="GhostWhite" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Top" Height="171" Width="Auto" Margin="5,0" >
+            <TextBlock Background="GhostWhite" VerticalAlignment="Bottom" HorizontalAlignment="Left"  TextWrapping="Wrap"  Height="110" Width="600" ><Run FontWeight="Bold" Text="Anleitung Key-Event:"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F5: "/><Run Text=" Baum filtern -&gt; es wird der Baum gefiltert von der Anwendung wo sich der Mauszeiger befindet"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F1: "/><Run Text=" inspect GUI-Element"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F9: "/><Run Text=" setzt eine Beziehung zu dem GUI-Element unter dem Curser"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F2: "/><Run Text=" Erstellt die UI auf dem BrailleDis bzw. aktualisiert sie"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F8:  "/><Run Text=" Sucht nach 'Schaltfläche' oder dem in der Textbox angegebenen localizedControlTypeFiltered"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F7: "/><Run Text=" Filtert den Knoten unter dem Mauszeiger, gibt einige Eigenschaften aus und aktualisiert den Baum "/><LineBreak/><Run  FontWeight="Bold" FontStyle="Oblique" Text="F3: "/><Run Text=" Setzt eine Beziehung zu einem element von dem ein screenshot erstellt werden soll"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F6: "/><Run  Text=" aktualisiert den Screenschot (vgl. F3)"/><LineBreak/><Run FontWeight="Bold" FontStyle="Oblique" Text="F4: "/><Run  Text=" wechselt die Filtermethode (UIA und UIA2)"/></TextBlock>
 
         </StackPanel>
 
         <!-- Left-->
-        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="Auto" Height="Auto" >
-            <StackPanel Background="GhostWhite" DockPanel.Dock="Left" Height="320" Width="250">
-                <Label BorderThickness="1" BorderBrush="Gray" Background="GhostWhite" FontSize="14" FontWeight="Bold" Content="Control View"/>
-                <TreeView Background="GhostWhite" x:Name="tvMain" BorderThickness="0">
+        <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Width="420" Background="GhostWhite" Margin="0,0,0,13">
+            <StackPanel Background="GhostWhite" DockPanel.Dock="Left" Width="400" Height="530" VerticalAlignment="Top">
+                <Label BorderThickness="0" BorderBrush="Gray" Background="GhostWhite" FontSize="14" FontWeight="Bold" Content="Control View" Height="31" Margin="5,5,1,10"/>
+                <TreeView Background="White" x:Name="tvMain" BorderThickness="0" MinHeight="300" MinWidth="380" MaxWidth="380" Margin="10,10,10,10" Height="472">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                             <StackPanel Orientation="Horizontal">
@@ -78,17 +77,20 @@
 
             </StackPanel>
         </ScrollViewer>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="Auto" Height="Auto">
 
-            <StackPanel Background="GhostWhite" DockPanel.Dock="Right" Width="Auto" Height="320">
-                <Label FontSize="14" FontWeight="Bold"  BorderThickness="1" BorderBrush="Gray" Background="GhostWhite" Content="Properties"/>
-                <DataGrid BorderThickness="0" x:Name="dataGrid1" HorizontalAlignment="Left"/>
+        <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Width="702" Background="GhostWhite" HorizontalAlignment="Left" Margin="0,0,0,14">
+            <Grid Background="GhostWhite" DockPanel.Dock="Right" Width="690" Height="533" HorizontalAlignment="Left">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="0*"/>
+                </Grid.RowDefinitions>
+                <Label FontSize="14" FontWeight="Bold"  BorderThickness="0" BorderBrush="Gray" Background="GhostWhite" Content="Properties" Margin="1,0,22,504"/>
+                <DataGrid HorizontalAlignment="Left" BorderThickness="0" x:Name="dataGrid1" Background="GhostWhite"  SelectionChanged="dataGrid1_SelectionChanged" Width="663" Margin="7,35,0,4.667">
 
-
-
-
-            </StackPanel>
+                </DataGrid>
+            </Grid>
         </ScrollViewer>
+
     </DockPanel>
 
 </Window>

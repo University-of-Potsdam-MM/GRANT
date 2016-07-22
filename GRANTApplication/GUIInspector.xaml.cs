@@ -592,7 +592,10 @@ namespace GRANTApplication
             //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 
-     
+        private void dataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
   
 }
