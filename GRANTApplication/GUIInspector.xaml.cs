@@ -84,7 +84,7 @@ namespace GRANTApplication
             DataRow dataRow9 = dataTable.NewRow();
             DataRow dataRow10 = dataTable.NewRow();
             DataRow dataRow11 = dataTable.NewRow();
-            DataRow dataRow12 = dataTable.NewRow();
+
 
             dataRow[0] = "IdGenerated";
             if (item.IdGenerated == null) { return; }
@@ -120,8 +120,8 @@ namespace GRANTApplication
             dataRow7["Content"] = item.classNameFiltered.ToString();
             dataTable.Rows.Add(dataRow7);
 
-            dataRow8["Property"] = "Name";
-            dataRow8["Content"] = item.nameFiltered.ToString();
+            dataRow8["Property"] = "Value";
+            dataRow8["Content"] = item.valueFiltered.ToString();
             dataTable.Rows.Add(dataRow8);
 
             dataRow9["Property"] = "FrameWorkId";
@@ -136,9 +136,7 @@ namespace GRANTApplication
             dataRow11["Content"] = item.itemStatusFiltered.ToString();
             dataTable.Rows.Add(dataRow11);
 
-            dataRow12["Property"] = "Value";
-            dataRow12["Content"] = item.valueFiltered.ToString();
-            dataTable.Rows.Add(dataRow12);
+            dataTable.Rows.Add();
 
             //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
