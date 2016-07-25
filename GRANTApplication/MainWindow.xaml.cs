@@ -381,10 +381,10 @@ namespace GRANTApplication
 
                        // strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
+                        OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
                         strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
-                        brailleDisplayStrategy.updateViewContent(relatedBrailleTreeObject.Data);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
+                        brailleDisplayStrategy.updateViewContent(ref relatedBrailleTreeObject);
                     }
 
 

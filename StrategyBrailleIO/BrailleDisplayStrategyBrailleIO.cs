@@ -140,7 +140,7 @@ namespace StrategyBrailleIO
         /// Ändert den Inhalt einer View
         /// </summary>
         /// <param name="element">Gibt das OSM-element an, bei dem eine Änderung erfolgte</param>
-        public void updateViewContent(OSMElement.OSMElement element)
+        public void updateViewContent(ref OSMElement.OSMElement element)
         {
             IBrailleIOAdapterManager adapter =  brailleIOMediator.AdapterManager;
 
@@ -233,13 +233,13 @@ namespace StrategyBrailleIO
         {
             OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
-            ITreeStrategy<OSMElement.OSMElement> nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.FilteredTree, strategyMgr.getFilteredTree());
-            if (nodeFilteredTree == null) { return null; }
+            OSMElement.OSMElement nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
+            if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }
             Image bmp;
            /* int h = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Height);
             int w = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Width);
             bmp = ScreenCapture.CaptureWindow(nodeFilteredTree.Data.properties.hWndFiltered, h, w, 0, 0, 0, 0);*/
-            Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree.Data);
+            Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree);
           //  Console.WriteLine("Braille -- Rect: x = {0}, y = {1}, höhe = {2}, breite= {3}", rect.X, rect.Y, rect.Height, rect.Width);
             bmp = ScreenCapture.CaptureScreenPos(rect);
             return bmp;

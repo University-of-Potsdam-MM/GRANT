@@ -65,11 +65,11 @@ namespace GRANTExample
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                    ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
-                    if (relatedBrailleTreeObject != null)
+                    OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                    if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                     {
-                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
-                        strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
+                        strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
                         
                     }
                 }
@@ -95,11 +95,11 @@ namespace GRANTExample
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                 updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
-                if (relatedBrailleTreeObject != null)
+                OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                 {
                   //  strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
-                    strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
+                    strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
                 }
             }
         }
