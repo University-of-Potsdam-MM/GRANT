@@ -166,10 +166,10 @@ namespace GRANTApplication
 
         void updatePropertiesTable(String IdGenerated)
         {
-            OSMElement.OSMElement osmElement = getOSMElementFromID(IdGenerated);
-
+            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
             
-                DataTable dataTable = new DataTable();
+            
+            DataTable dataTable = new DataTable();
 
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
@@ -189,56 +189,56 @@ namespace GRANTApplication
             DataRow dataRow10 = dataTable.NewRow();
             DataRow dataRow11 = dataTable.NewRow();
 
-            osmElement.properties.boundingRectangleFiltered;
+            
 
             dataRow[0] = "IdGenerated";
-            if (item.IdGenerated == null) { return; }
-            dataRow[1] = item.IdGenerated.ToString();
+            if (osmElement.properties.IdGenerated == null) { return; }
+            dataRow[1] = osmElement.properties.IdGenerated.ToString();
             dataTable.Rows.Add(dataRow);
 
 
             dataRow1[0] = "ControlType";
-            dataRow1[1] = item.controlTypeFiltered.ToString();
+            dataRow1[1] = osmElement.properties.controlTypeFiltered.ToString();
             dataTable.Rows.Add(dataRow1);
 
             dataRow2[0] = "Name";
-            dataRow2[1] = item.nameFiltered.ToString();
+            dataRow2[1] = osmElement.properties.nameFiltered.ToString();
             dataTable.Rows.Add(dataRow2);
 
             dataRow3["Property"] = "AcceleratorKey";
-            dataRow3["Content"] = item.acceleratorKeyFiltered.ToString();
+            dataRow3["Content"] = osmElement.properties.acceleratorKeyFiltered.ToString();
             dataTable.Rows.Add(dataRow3);
 
             dataRow4["Property"] = "AccessKey";
-            dataRow4["Content"] = item.accessKeyFiltered.ToString();
+            dataRow4["Content"] = osmElement.properties.accessKeyFiltered.ToString();
             dataTable.Rows.Add(dataRow4);
 
             dataRow5["Property"] = "HelpText";
-            dataRow5["Content"] = item.helpTextFiltered.ToString();
+            dataRow5["Content"] = osmElement.properties.helpTextFiltered.ToString();
             dataTable.Rows.Add(dataRow5);
 
             dataRow6["Property"] = "AutoamtionId";
-            dataRow6["Content"] = item.autoamtionIdFiltered.ToString();
+            dataRow6["Content"] = osmElement.properties.autoamtionIdFiltered.ToString();
             dataTable.Rows.Add(dataRow6);
 
             dataRow7["Property"] = "ClassName";
-            dataRow7["Content"] = item.classNameFiltered.ToString();
+            dataRow7["Content"] = osmElement.properties.classNameFiltered.ToString();
             dataTable.Rows.Add(dataRow7);
 
             dataRow8["Property"] = "Value";
-            dataRow8["Content"] = item.valueFiltered.ToString();
+            dataRow8["Content"] = osmElement.properties.valueFiltered.ToString();
             dataTable.Rows.Add(dataRow8);
 
             dataRow9["Property"] = "FrameWorkId";
-            dataRow9["Content"] = item.frameWorkIdFiltered.ToString();
+            dataRow9["Content"] = osmElement.properties.frameWorkIdFiltered.ToString();
             dataTable.Rows.Add(dataRow9);
 
             dataRow10["Property"] = "ItemType";
-            dataRow10["Content"] = item.itemTypeFiltered.ToString();
+            dataRow10["Content"] = osmElement.properties.itemTypeFiltered.ToString();
             dataTable.Rows.Add(dataRow10);
 
             dataRow11["Property"] = "ItemStatus";
-            dataRow11["Content"] = item.itemStatusFiltered.ToString();
+            dataRow11["Content"] = osmElement.properties.itemStatusFiltered.ToString();
             dataTable.Rows.Add(dataRow11);
 
             dataTable.Rows.Add();
@@ -246,20 +246,9 @@ namespace GRANTApplication
             //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
 
+            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
 
-            // in eine Methode packen in operationsystem interface
-            int x = (int)item.boundingRectangleFiltered.TopLeft.X;
-            int y = (int)item.boundingRectangleFiltered.TopLeft.Y;
-            int x2 = (int)item.boundingRectangleFiltered.TopRight.X;
-            int y2 = (int)item.boundingRectangleFiltered.BottomLeft.Y;
-            int height = y2 - y;
-            int width = x2 - x;
-
-
-
-            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(x, y, width, height);
-
-
+            
             // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
 
@@ -723,7 +712,7 @@ namespace GRANTApplication
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
             UpdateNode node = new UpdateNode(strategyMgr);
-            node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
+           // node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
 
 
         }
