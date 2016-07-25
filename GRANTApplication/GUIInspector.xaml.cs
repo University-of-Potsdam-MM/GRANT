@@ -485,9 +485,8 @@ namespace GRANTApplication
                         root.controlTypeFiltered = "Filtered-Tree";
                         
                         //
-                        treeIteration(tree, ref root);
+                        treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyMgr auch verändert (nur noch ein Knoten)
                        // root.Selected += root_Selected;
-
                         //
 
 

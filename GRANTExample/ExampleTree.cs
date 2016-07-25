@@ -109,7 +109,7 @@ namespace GRANTExample
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
                     strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                     strategyMgr.setFilteredTree(tree);
-
+                    Console.WriteLine();
                   //  baumSchleife(tree);
                 }
                 catch (Exception ex)

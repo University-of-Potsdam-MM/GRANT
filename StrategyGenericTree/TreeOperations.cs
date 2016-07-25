@@ -332,12 +332,12 @@ namespace StrategyGenericTree
 
         public OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNode(idGenerated, strategyMgr.getFilteredTree() as ITreeStrategy<T>);
+            return getAssociatedNode(idGenerated, strategyMgr.getFilteredTree());
         }
 
         public OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNode(idGenerated, strategyMgr.getBrailleTree() as ITreeStrategy<T>);
+            return getAssociatedNode(idGenerated, strategyMgr.getBrailleTree());
         }
 
 
@@ -347,8 +347,9 @@ namespace StrategyGenericTree
         /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
         /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>zugehöriger Knoten</returns>
-        private OSMElement.OSMElement getAssociatedNode(String idGenerated, ITreeStrategy<T> tree)
+        private OSMElement.OSMElement getAssociatedNode(String idGenerated, ITreeStrategy<OSMElement.OSMElement> tree)
         {
+            
             if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
