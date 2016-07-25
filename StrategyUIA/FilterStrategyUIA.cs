@@ -49,7 +49,16 @@ namespace StrategyUIA
             ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             //uiaEvents.eventsUIA_withHWND(hwnd);
-
+            if (tree.HasChild)//Filterart setzen
+            {
+                GeneralProperties prop = tree.Child.Data.properties;
+                prop.grantFilterStrategy = this.GetType();
+                OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
+                osm.events = tree.Child.Data.events;
+                osm.properties = prop;
+                tree.Child.Data = osm;
+            }
             return tree;
         }
 
@@ -405,12 +414,15 @@ namespace StrategyUIA
             {
                 Type interfaceOfClass = this.GetType().GetInterfaces()[0]; // das diese Klasse ein interface hat wissen wir hier
                 // wenn das angegebene Interface nicht gefunden wird ist der Wert hier null
-                Type interfacesOfTree = (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
-                if (interfacesOfTree != null)
+                if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
                 {
-                    if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
-                    {//wir haben hier nicht die Standard-Filter-Methode
-                        elementP.grantFilterStrategy = this.GetType();
+                    Type interfacesOfTree = (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
+                    if (interfacesOfTree != null)
+                    {
+                        if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
+                        {//wir haben hier nicht die Standard-Filter-Methode
+                            elementP.grantFilterStrategy = this.GetType();
+                        }
                     }
                 }
             }

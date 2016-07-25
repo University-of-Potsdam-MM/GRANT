@@ -48,8 +48,10 @@ namespace StrategyManager
                 //Filtern + Knoten aktualisieren
                 OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(treeElement.Data);
                 strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
-                strategyMgr.setSpecifiedFilter((strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).FullName + ", " + (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
-                
+                if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
+                {
+                    strategyMgr.setSpecifiedFilter((strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).FullName + ", " + (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                }
                 if (interfaceOfNode != null)
                 {
                     //Filter wieder zurücksetzen

@@ -51,7 +51,16 @@ namespace StrategyUIA2
             ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             //uiaEvents.eventsUIA_withHWND(hwnd);
-
+            if (tree.HasChild)//Filterart setzen
+            {
+                GeneralProperties prop = tree.Child.Data.properties;
+                prop.grantFilterStrategy = this.GetType();
+                OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
+                osm.events = tree.Child.Data.events;
+                osm.properties = prop;
+                tree.Child.Data = osm;
+            }
             return tree;
         }
 

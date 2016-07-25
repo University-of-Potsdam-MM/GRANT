@@ -713,7 +713,7 @@ namespace GRANTApplication
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
             UpdateNode node = new UpdateNode(strategyMgr);
-           // node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
+            node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
 
 
         }
