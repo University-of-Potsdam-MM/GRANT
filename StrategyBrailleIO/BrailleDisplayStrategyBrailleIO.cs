@@ -110,14 +110,19 @@ namespace StrategyBrailleIO
 
         }
 
-        private AbstractBrailleIOAdapterBase createBrailleDis()
-        {/// aus BrailleIOExample -> erstmal gekürzt
+        private void createBrailleDis()
+        {
+            String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
+            String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Namespace;
+            //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
+            if (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Equals(typeof(StrategyDisplayBrailleIoSimulator.DisplayStrategyBrailleIoSimulator)))
+            {
+                initializedSimulator();
+                return;
+            }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-
-                // brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet(brailleIOMediator.AdapterManager);
-
-                brailleDisAdapter = new BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD(brailleIOMediator.AdapterManager);
+                brailleDisAdapter = displayStrategyClassToBrailleIoAdapterClass(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
 
                 
@@ -126,16 +131,16 @@ namespace StrategyBrailleIO
                 brailleDisAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
                 #endregion
                 */
-                return brailleDisAdapter;
+                //return brailleDisAdapter;
             }
-            return null;
+            return;
         }
 
         /// <summary>
         /// Ändert den Inhalt einer View
         /// </summary>
         /// <param name="element">Gibt das OSM-element an, bei dem eine Änderung erfolgte</param>
-        public void updateViewContent(OSMElement.OSMElement element)
+        public void updateViewContent(ref OSMElement.OSMElement element)
         {
             IBrailleIOAdapterManager adapter =  brailleIOMediator.AdapterManager;
 
@@ -228,13 +233,13 @@ namespace StrategyBrailleIO
         {
             OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
-            ITreeStrategy<OSMElement.OSMElement> nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.FilteredTree, strategyMgr.getFilteredTree());
-            if (nodeFilteredTree == null) { return null; }
+            OSMElement.OSMElement nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
+            if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }
             Image bmp;
            /* int h = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Height);
             int w = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Width);
             bmp = ScreenCapture.CaptureWindow(nodeFilteredTree.Data.properties.hWndFiltered, h, w, 0, 0, 0, 0);*/
-            Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree.Data);
+            Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree);
           //  Console.WriteLine("Braille -- Rect: x = {0}, y = {1}, höhe = {2}, breite= {3}", rect.X, rect.Y, rect.Height, rect.Width);
             bmp = ScreenCapture.CaptureScreenPos(rect);
             return bmp;
@@ -592,6 +597,31 @@ namespace StrategyBrailleIO
         }
 
         #endregion
+
+        /// <summary>
+        /// Ermittelt anhand des genutzten Typs der DisplayStrategy welcher Adapter verwendet werden muss
+        /// </summary>
+        /// <param name="displayStrategyType">gibt die genutzte DisplayStrategy an</param>
+        /// <returns>der Adapter für die Ausgabe</returns>
+        private AbstractBrailleIOAdapterBase displayStrategyClassToBrailleIoAdapterClass(Type displayStrategyType)
+        {
+            Type brailleAdapterType = null;
+            //if (displayStrategyClass.namespaceString.Equals("StrategyMVBD") && displayStrategyClass.name.Equals("DisplayStrategyMVBD"))
+            if(displayStrategyType.Equals(typeof(StrategyMVBD.DisplayStrategyMVBD)))
+            {
+                brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD);
+            }
+            if (displayStrategyType.Equals(typeof(StrategyDisplayBrailleDis.DisplayStrategyBrailleDis)))
+            {
+                brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet);
+            }
+            if (displayStrategyType.Equals(typeof(StrategyDisplayBrailleIoSimulator.DisplayStrategyBrailleIoSimulator)))
+            {
+                //hier brauchen wir den Type nicht, da der Simulator anders erstellt wird
+            }
+            if (brailleAdapterType != null) { return (AbstractBrailleIOAdapterBase)Activator.CreateInstance(brailleAdapterType, brailleIOMediator.AdapterManager); }
+            return null;
+        }
 
 
     }

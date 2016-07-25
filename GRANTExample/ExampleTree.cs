@@ -252,7 +252,7 @@ namespace GRANTExample
         }
 
         /// <summary>
-        /// Wechselt zwischen dem UIA-Filter und dem UIA2-filter
+        /// Wechselt zwischen dem UIA-Filter und dem UIA2-displayStrategy
         /// </summary>
         public void changeFilter()
         {

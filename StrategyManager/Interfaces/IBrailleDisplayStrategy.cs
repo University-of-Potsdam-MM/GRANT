@@ -27,7 +27,7 @@ namespace StrategyManager.Interfaces
         /// Ändert von dem angegebenen Element die Darstellung (Achtung: Momentan wird nur der Text geändert!)
         /// </summary>
         /// <param name="element">gibt das Element an, von welchem die Darstellung geändert werden soll</param>
-        void updateViewContent(OSMElement.OSMElement element);
+        void updateViewContent(ref OSMElement.OSMElement element);
 
         /// <summary>
         /// Ermittelt zu einem Punkt den zugehörigen View-Name

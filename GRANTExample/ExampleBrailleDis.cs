@@ -40,8 +40,8 @@ namespace GRANTExample
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
                     strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
-                    strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
-               //     strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
+                   // strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
+                    strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 }
 
@@ -65,11 +65,12 @@ namespace GRANTExample
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                    ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
-                    if (relatedBrailleTreeObject != null)
+                    OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                    if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                     {
-                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
-                        strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
+                        strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
+                        
                     }
                 }
             }
@@ -94,11 +95,11 @@ namespace GRANTExample
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                 updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                ITreeStrategy<OSMElement.OSMElement> relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNode(osmRelationships.BrailleTree, strategyMgr.getBrailleTree());
-                if (relatedBrailleTreeObject != null)
+                OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                 {
                   //  strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
-                    strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(relatedBrailleTreeObject.Data);
+                    strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
                 }
             }
         }
@@ -118,7 +119,7 @@ namespace GRANTExample
             Settings settings = new Settings();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
-         //   strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
+   //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
             OSMElement.OSMElement osmElement = strategyMgr.getBrailleTree().Child.Data;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
             return strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);

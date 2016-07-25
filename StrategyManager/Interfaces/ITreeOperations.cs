@@ -7,7 +7,7 @@ namespace StrategyManager.Interfaces
         /// Ändert die Eigenschaften eines Elementes der Braille-UI --> Momentan wird nur der anzuzeigende Text geändert!
         /// </summary>
         /// <param name="element">gibt das zuändernde Element an</param>
-        void updateNodeOfBrailleUi(OSMElement.OSMElement element);
+        void updateNodeOfBrailleUi(ref OSMElement.OSMElement element);
 
         /// <summary>
         /// Ändert die Eigenschaften eines Knotens des gefilterten Baumes.
@@ -21,7 +21,10 @@ namespace StrategyManager.Interfaces
         /// <param name="generatedId">Gibt die Id an zuder ein zugehöriger Knoten ermittelt werden soll</param>
         /// <param name="tree">gibt den Baum an, in welchem ein zugehöriger Knoten ermittelt werden soll</param>
         /// <returns>Gibt einen Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-        StrategyManager.Interfaces.ITreeStrategy<T> getAssociatedNode(string idGenerated, StrategyManager.Interfaces.ITreeStrategy<T> tree);
+       // StrategyManager.Interfaces.ITreeStrategy<T> getAssociatedNode(string idGenerated, StrategyManager.Interfaces.ITreeStrategy<T> tree);
+
+        OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated);
+        OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated);
 
         /// <summary>
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum alle zugehörigen Knoten an

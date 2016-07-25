@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StrategyManager;
 using StrategyManager.Interfaces;
+using StrategyManager.AbstractClasses;
 using OSMElement;
 
 
@@ -24,6 +25,7 @@ namespace StrategyManager
         private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree; // enthält die gewählte Klasse der Baumdarstellung/-verarbeitung
         private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
+        private AbstractDisplayStrategy specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
 
         private ITreeOperations<OSMElement.OSMElement> specifiedTreeOperations;
 
@@ -269,6 +271,33 @@ namespace StrategyManager
         public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
         {
             return specifiedTree;
+        }
+
+        public void setSpecifiedDisplayStrategy(String displayStrategyClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(displayStrategyClassName);
+                specifiedDisplayStrategy = (AbstractDisplayStrategy)Activator.CreateInstance(type, this);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifieddisplayStrategy: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifieddisplayStrategy: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei StrategyManager_setSpecifieddisplayStrategy: " + e.Message);
+            }
+        }
+
+        public AbstractDisplayStrategy getSpecifiedDisplayStrategy()
+        {
+            return specifiedDisplayStrategy;
         }
 
     }

@@ -40,6 +40,7 @@ namespace GRANTExample
         ExampleTree exampleTree;
         InspectGui exampleInspectGui;
         ExampleBrailleDis exampleBrailleDis;
+        ExampleDisplayStrategy exampleDisplay;
 
         private void InitializeFilterComponent()
         {
@@ -66,9 +67,12 @@ namespace GRANTExample
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
 
+            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[2].className);
+
             exampleTree = new ExampleTree(strategyMgr);
             exampleInspectGui = new InspectGui(strategyMgr);
             exampleBrailleDis = new ExampleBrailleDis(strategyMgr);
+            exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
         }
 
 
@@ -113,6 +117,14 @@ namespace GRANTExample
             if (e.Key == Key.F9)
             {
                 exampleTree.setOSMRelationship();
+            }
+            if (e.Key == Key.A)
+            {
+                exampleDisplay.deviceInfo();
+            }
+            if (e.Key == Key.B)
+            {
+                exampleDisplay.allDevices();
             }
 
 
