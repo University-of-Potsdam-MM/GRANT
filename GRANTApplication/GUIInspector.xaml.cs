@@ -39,7 +39,9 @@ namespace GRANTApplication
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
-           
+            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
+            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
+
 
             tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             //brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
@@ -64,7 +66,7 @@ namespace GRANTApplication
 
         
 
-
+/*
         void updateProperties(MenuItem item)
         {
             DataTable dataTable = new DataTable();
@@ -162,7 +164,7 @@ namespace GRANTApplication
 
             NodeButton.CommandParameter = item.IdGenerated;
 
-        }
+        }*/
 
         void updatePropertiesTable(String IdGenerated)
         {
@@ -226,7 +228,7 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow7);
 
             dataRow8["Property"] = "Value";
-            dataRow8["Content"] = osmElement.properties.valueFiltered.ToString();
+            dataRow8["Content"] = osmElement.properties.valueFiltered;
             dataTable.Rows.Add(dataRow8);
 
             dataRow9["Property"] = "FrameWorkId";
@@ -272,7 +274,8 @@ namespace GRANTApplication
                 //root = root.parentMenuItem == null ? root : root.parentMenuItem;
                 //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
 
-                updateProperties(item);
+                //updateProperties(item);
+                updatePropertiesTable(item.IdGenerated);
             //Methode MenuItem übergeben - tabelle
             }
             else if (tree.SelectedItem is string)
@@ -294,7 +297,7 @@ namespace GRANTApplication
                 child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
                 child.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
                 child.nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
-                child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
+              /*  child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
                 child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
                 child.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
                 child.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
@@ -304,9 +307,8 @@ namespace GRANTApplication
                 child.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
                 child.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
                 child.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
-
                 child.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
-
+*/
 
 
 
@@ -337,7 +339,7 @@ namespace GRANTApplication
                 sibling.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
                 sibling.nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
 
-                sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
+         /*       sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
                 sibling.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
 
                 sibling.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
@@ -355,7 +357,7 @@ namespace GRANTApplication
                 sibling.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
 
                 sibling.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
-
+                */
                 sibling.parentMenuItem = root;
                 root.Items.Add(sibling);
 

@@ -64,11 +64,7 @@
                 <Label BorderThickness="0" BorderBrush="Gray" Background="GhostWhite" FontSize="14" FontWeight="Bold" Content="Control View" Height="31" Margin="7,5,-1,10"/>
 
                 <TreeView Background="White" x:Name="tvMain" BorderThickness="1" MinHeight="300" MinWidth="380" MaxWidth="380" Margin="10,-10,10,10" Height="491">
-                    <TreeView.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                        </Style>
-                    </TreeView.ItemContainerStyle>
+                   
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                             <StackPanel Orientation="Horizontal">
