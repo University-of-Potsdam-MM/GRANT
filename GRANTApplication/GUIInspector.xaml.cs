@@ -269,13 +269,16 @@ namespace GRANTApplication
                 // ... Handle a TreeViewItem.
                 MenuItem item = tree.SelectedItem as MenuItem;
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
-               Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+                if (item.IdGenerated != null)
+                {
+                    Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
 
-                //root = root.parentMenuItem == null ? root : root.parentMenuItem;
-                //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
+                    //root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                    //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
 
-                //updateProperties(item);
-                updatePropertiesTable(item.IdGenerated);
+                    //updateProperties(item);
+                    updatePropertiesTable(item.IdGenerated);
+                }
             //Methode MenuItem übergeben - tabelle
             }
             else if (tree.SelectedItem is string)
