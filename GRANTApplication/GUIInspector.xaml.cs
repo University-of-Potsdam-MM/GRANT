@@ -41,8 +41,7 @@ namespace GRANTApplication
 
            
 
-            tvMain.SelectedItemChanged +=
-           new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
+            tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             //brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             //brailleDisplayStrategy.setStrategyMgr(strategyMgr);
 
@@ -62,6 +61,9 @@ namespace GRANTApplication
 
 
         }
+
+        
+
 
         void updateProperties(MenuItem item)
         {
@@ -141,10 +143,127 @@ namespace GRANTApplication
             //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
 
-      
-       
+
+            // in eine Methode packen in operationsystem interface
+            int x = (int)item.boundingRectangleFiltered.TopLeft.X;
+            int y = (int)item.boundingRectangleFiltered.TopLeft.Y;
+            int x2 = (int)item.boundingRectangleFiltered.TopRight.X;
+            int y2 = (int)item.boundingRectangleFiltered.BottomLeft.Y;
+            int height = y2 - y;
+            int width = x2 - x;
+
            
-       
+
+           System.Drawing.Rectangle rect = new System.Drawing.Rectangle(x, y, width, height);
+
+
+            // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
+            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+
+            NodeButton.CommandParameter = item.IdGenerated;
+
+        }
+
+        void updatePropertiesTable(String IdGenerated)
+        {
+            OSMElement.OSMElement osmElement = getOSMElementFromID(IdGenerated);
+
+            
+                DataTable dataTable = new DataTable();
+
+            DataColumn dc = new DataColumn();
+            dataTable.Columns.Add(new DataColumn("Property"));
+            dataTable.Columns.Add(new DataColumn("Content"));
+
+
+            DataRow dataRow = dataTable.NewRow();
+            DataRow dataRow1 = dataTable.NewRow();
+            DataRow dataRow2 = dataTable.NewRow();
+            DataRow dataRow3 = dataTable.NewRow();
+            DataRow dataRow4 = dataTable.NewRow();
+            DataRow dataRow5 = dataTable.NewRow();
+            DataRow dataRow6 = dataTable.NewRow();
+            DataRow dataRow7 = dataTable.NewRow();
+            DataRow dataRow8 = dataTable.NewRow();
+            DataRow dataRow9 = dataTable.NewRow();
+            DataRow dataRow10 = dataTable.NewRow();
+            DataRow dataRow11 = dataTable.NewRow();
+
+            osmElement.properties.boundingRectangleFiltered;
+
+            dataRow[0] = "IdGenerated";
+            if (item.IdGenerated == null) { return; }
+            dataRow[1] = item.IdGenerated.ToString();
+            dataTable.Rows.Add(dataRow);
+
+
+            dataRow1[0] = "ControlType";
+            dataRow1[1] = item.controlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow1);
+
+            dataRow2[0] = "Name";
+            dataRow2[1] = item.nameFiltered.ToString();
+            dataTable.Rows.Add(dataRow2);
+
+            dataRow3["Property"] = "AcceleratorKey";
+            dataRow3["Content"] = item.acceleratorKeyFiltered.ToString();
+            dataTable.Rows.Add(dataRow3);
+
+            dataRow4["Property"] = "AccessKey";
+            dataRow4["Content"] = item.accessKeyFiltered.ToString();
+            dataTable.Rows.Add(dataRow4);
+
+            dataRow5["Property"] = "HelpText";
+            dataRow5["Content"] = item.helpTextFiltered.ToString();
+            dataTable.Rows.Add(dataRow5);
+
+            dataRow6["Property"] = "AutoamtionId";
+            dataRow6["Content"] = item.autoamtionIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow6);
+
+            dataRow7["Property"] = "ClassName";
+            dataRow7["Content"] = item.classNameFiltered.ToString();
+            dataTable.Rows.Add(dataRow7);
+
+            dataRow8["Property"] = "Value";
+            dataRow8["Content"] = item.valueFiltered.ToString();
+            dataTable.Rows.Add(dataRow8);
+
+            dataRow9["Property"] = "FrameWorkId";
+            dataRow9["Content"] = item.frameWorkIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow9);
+
+            dataRow10["Property"] = "ItemType";
+            dataRow10["Content"] = item.itemTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow10);
+
+            dataRow11["Property"] = "ItemStatus";
+            dataRow11["Content"] = item.itemStatusFiltered.ToString();
+            dataTable.Rows.Add(dataRow11);
+
+            dataTable.Rows.Add();
+
+            //dataTable.Rows.Add(dataRow);
+            dataGrid1.ItemsSource = dataTable.DefaultView;
+
+
+            // in eine Methode packen in operationsystem interface
+            int x = (int)item.boundingRectangleFiltered.TopLeft.X;
+            int y = (int)item.boundingRectangleFiltered.TopLeft.Y;
+            int x2 = (int)item.boundingRectangleFiltered.TopRight.X;
+            int y2 = (int)item.boundingRectangleFiltered.BottomLeft.Y;
+            int height = y2 - y;
+            int width = x2 - x;
+
+
+
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(x, y, width, height);
+
+
+            // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
+            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+
+            NodeButton.CommandParameter = IdGenerated;
 
         }
 
@@ -159,7 +278,8 @@ namespace GRANTApplication
                 // ... Handle a TreeViewItem.
                 MenuItem item = tree.SelectedItem as MenuItem;
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
-               // Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+               Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+
                 //root = root.parentMenuItem == null ? root : root.parentMenuItem;
                 //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
 
@@ -172,6 +292,7 @@ namespace GRANTApplication
                 this.Name = "Selected: " + tree.SelectedItem.ToString();
             }
         }
+
         private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref MenuItem root)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
@@ -195,12 +316,12 @@ namespace GRANTApplication
                 child.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
                 child.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
 
+                child.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
 
 
 
 
-
-        child.parentMenuItem = root;
+                child.parentMenuItem = root;
                 root.Items.Add(child);
 
                 if (node1.HasChild)
@@ -244,6 +365,7 @@ namespace GRANTApplication
 
                 sibling.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
 
+                sibling.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
 
                 sibling.parentMenuItem = root;
                 root.Items.Add(sibling);
@@ -330,6 +452,7 @@ namespace GRANTApplication
 
                     OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                     System.Drawing.Rectangle rect = operationSystemStrategy.getRect(osmElement);
+                    
 
                     // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
                     operationSystemStrategy.paintRect(rect);
@@ -567,6 +690,7 @@ namespace GRANTApplication
                 get;
                 set;
             }
+         
 
 
             /// <summary>
@@ -590,8 +714,17 @@ namespace GRANTApplication
             //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 
-        private void dataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+       private void dataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+        }
+        
+        private void Node_Click(object sender, RoutedEventArgs e)
+        {
+            System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
+            UpdateNode node = new UpdateNode(strategyMgr);
+            node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
+
 
         }
     }
