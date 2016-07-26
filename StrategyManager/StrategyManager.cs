@@ -278,6 +278,11 @@ namespace StrategyManager
             try
             {
                 Type type = Type.GetType(displayStrategyClassName);
+                if (specifiedDisplayStrategy != null)
+                {
+                    specifiedDisplayStrategy.Dispose(); //sorgt dafür, dass ggf. die alte TCP-Verbindung beendet wird
+                  //  specifiedDisplayStrategy = null;
+                }
                 specifiedDisplayStrategy = (AbstractDisplayStrategy)Activator.CreateInstance(type, this);
             }
             catch (InvalidCastException ic)

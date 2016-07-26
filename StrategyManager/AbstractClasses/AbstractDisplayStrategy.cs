@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace StrategyManager.AbstractClasses
 {
-    public abstract class AbstractDisplayStrategy
+    public abstract class AbstractDisplayStrategy : IDisposable
     {
         private StrategyMgr strategyMgr;
 
@@ -59,9 +59,12 @@ namespace StrategyManager.AbstractClasses
                     {
                         Type type = Type.GetType(st.className);
                         if (type == null) { break; }
-                        AbstractDisplayStrategy ads = (AbstractDisplayStrategy)Activator.CreateInstance(type, strategyMgr);
-                        List<Device> devices = ads.getPosibleDevices();
-                        allDevices.AddRange(devices);
+                        //beendet ggf. gleich wieder die TCPIP-Verbimdung (Dispose() wird aufgerufen)
+                        using (AbstractDisplayStrategy ads = (AbstractDisplayStrategy)Activator.CreateInstance(type, strategyMgr))
+                        {
+                            List<Device> devices = ads.getPosibleDevices();
+                            allDevices.AddRange(devices);
+                        }
                     }
                     catch (InvalidCastException ic)
                     {
@@ -77,7 +80,9 @@ namespace StrategyManager.AbstractClasses
             return allDevices;
             
         }
-        
+
+
+        public abstract void Dispose();
     }
 
         

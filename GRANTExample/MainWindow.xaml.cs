@@ -120,13 +120,20 @@ namespace GRANTExample
             }
             if (e.Key == Key.A)
             {
-                exampleDisplay.deviceInfo();
+                NodeBox.Text = exampleDisplay.deviceInfo();
             }
             if (e.Key == Key.B)
             {
-                exampleDisplay.allDevices();
+                NodeBox.Text = exampleDisplay.allDevices();
             }
-
+            if (e.Key == Key.C)
+            {
+                exampleDisplay.setMVBDDevice();
+            }
+            if (e.Key == Key.D)
+            {
+                exampleDisplay.setBrailleIoSimulatorDevice();
+            }
 
 
 

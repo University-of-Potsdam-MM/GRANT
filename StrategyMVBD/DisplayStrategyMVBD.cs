@@ -12,11 +12,12 @@ using System.Diagnostics;
 
 namespace StrategyMVBD
 {
-    public class DisplayStrategyMVBD : AbstractDisplayStrategy, IDisposable
+    public class DisplayStrategyMVBD : AbstractDisplayStrategy //, IDisposable
     {
         protected IPEndPoint _endPoint;
         protected TcpClient _tcpClient;
         private StrategyMgr strategyMgr;
+        protected bool isDisposed = false;
 
         private Device activeDevice { get; set; }
 
@@ -69,7 +70,7 @@ namespace StrategyMVBD
         /// <summary>Working Thread</summary>
         protected void Thread_Callback(object o)
         {
-            while (true)
+            while (!isDisposed)
             {
                 try
                 {
@@ -172,11 +173,24 @@ namespace StrategyMVBD
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if ((_tcpClient != null) && (_tcpClient.Connected == true))
             {
+                try
+                {
+                    NetworkStream ns = _tcpClient.GetStream();
+                    if (ns != null)
+                    {
+                        ns.Flush();
+                        isDisposed = true;
+                        ns.Close();
+                        ns = null;
+                    }
+                }
+                catch (ObjectDisposedException) { }
                 _tcpClient.Close();
+                _tcpClient = null;
             }
         }
         #endregion

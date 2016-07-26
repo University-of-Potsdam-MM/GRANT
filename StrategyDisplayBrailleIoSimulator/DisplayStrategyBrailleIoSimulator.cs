@@ -31,5 +31,9 @@ namespace StrategyDisplayBrailleIoSimulator
             deviceList.Add(activeDevice);
             return deviceList;
         }
+
+        public override void Dispose()
+        {
+        }
     }
 }

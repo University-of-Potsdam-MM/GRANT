@@ -38,5 +38,9 @@ namespace StrategyDisplayBrailleDis
             deviceList.Add(activeDevice);
             return deviceList;
         }
+
+        public override void Dispose()
+        {
+        }
     }
 }
