@@ -279,7 +279,7 @@ namespace StrategyManager
             {
                 Type type = Type.GetType(displayStrategyClassName);
                 if (specifiedDisplayStrategy != null)
-                {
+                {                    
                     specifiedDisplayStrategy.Dispose(); //sorgt dafür, dass ggf. die alte TCP-Verbindung beendet wird
                   //  specifiedDisplayStrategy = null;
                 }

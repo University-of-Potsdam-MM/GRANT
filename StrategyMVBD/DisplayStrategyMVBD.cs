@@ -21,7 +21,7 @@ namespace StrategyMVBD
 
         private Device activeDevice { get; set; }
 
-        public DisplayStrategyMVBD(StrategyMgr strategyMgr) : base(strategyMgr)
+        public DisplayStrategyMVBD(StrategyMgr strategyMgr) : base(strategyMgr) 
         {
             this.strategyMgr = strategyMgr;
             _endPoint = new IPEndPoint(IPAddress.Loopback, 2017); //TODO: auslesen
@@ -42,17 +42,6 @@ namespace StrategyMVBD
             return activeDevice;            
         }
 
-      /*  public override bool setActiveDevice(Device device)
-        {
-            //TODO:
-            //1. über TCPIP Auswahl senden
-            //2. Ergbnis abwarten
-            //3. (falls Ergebnis positiv ist)
-            activeDevice = device;
-            return true;
-        }*/
-        
-
         public override List<Device> getPosibleDevices()
         {
             //TODO: hier muss apäter auf die antwort gewartet werden
@@ -60,6 +49,7 @@ namespace StrategyMVBD
             List<Device> deviceList = new List<Device>();
             deviceList.Add(new Device(64, 30, OrientationEnum.Front, "MVDB_1", this.GetType()));
             deviceList.Add(new Device(60, 60, OrientationEnum.Front, "MVDB_2", this.GetType()));
+            Thread.Sleep(100);//damit die Verbindung aufgebaut wird, später müsste hier auf die Antwort gewartet werden
             return deviceList;
 
         }
@@ -82,19 +72,19 @@ namespace StrategyMVBD
                     }
 
 
-                    if (_tcpClient.Connected == false)
+                    if (!isDisposed && _tcpClient.Connected == false)
                     {
                         TryConnect();
 
-                        if (_tcpClient.Connected == true)
+                        if (!isDisposed &&_tcpClient.Connected == true)
                         {
                             SendGetDeviceInfo();
                         }
                     }
-                    if (_tcpClient.Connected == true)
+                    if (!isDisposed && _tcpClient.Connected == true)
                     {
 
-                        if (_tcpClient.Available > 3)
+                        if (!isDisposed && _tcpClient.Available > 3)
                         {
                             NetworkStream ns = _tcpClient.GetStream();
                             int cmd = ns.ReadByte();
