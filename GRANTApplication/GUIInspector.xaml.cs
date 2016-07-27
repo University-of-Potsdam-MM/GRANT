@@ -17,8 +17,9 @@ namespace GRANTApplication
     {
         Settings settings;
         StrategyMgr strategyMgr;
+        MenuItem root;
 
-       
+
 
         public GUIInspector()
         {
@@ -57,6 +58,8 @@ namespace GRANTApplication
             root.Items.Add(new MenuItem() { ID = "Child item #2" });
             tvMain.Items.Add(root);
            */
+
+            root = new MenuItem();
 
             InitializeComponent();
            
@@ -190,8 +193,8 @@ namespace GRANTApplication
             DataRow dataRow9 = dataTable.NewRow();
             DataRow dataRow10 = dataTable.NewRow();
             DataRow dataRow11 = dataTable.NewRow();
+            DataRow dataRow12 = dataTable.NewRow();
 
-            
 
             dataRow[0] = "IdGenerated";
             if (osmElement.properties.IdGenerated == null) { return; }
@@ -243,6 +246,12 @@ namespace GRANTApplication
             dataRow11["Content"] = osmElement.properties.itemStatusFiltered.ToString();
             dataTable.Rows.Add(dataRow11);
 
+            dataRow12["Property"] = "Filterstrategy";
+            dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
+            dataTable.Rows.Add(dataRow12);
+
+            
+
             dataTable.Rows.Add();
 
             //dataTable.Rows.Add(dataRow);
@@ -291,7 +300,7 @@ namespace GRANTApplication
         private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref MenuItem root)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
-
+            
             while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
             {
                 
@@ -384,6 +393,7 @@ namespace GRANTApplication
             if (tree.Count == 1 && tree.Depth == -1)
             {
                 tvMain.Items.Add(root);
+                
                 return;
             }
             if (!tree.HasChild)
@@ -481,8 +491,10 @@ namespace GRANTApplication
                         // TreeViewItem treeItem = null;
                         // treeItem = new TreeViewItem();
 
-                        MenuItem root = new MenuItem();
-                       
+
+                        tvMain.Items.Clear();
+                        root.Items.Clear();
+
 
                         //TreeViewItem root = new TreeViewItem();
                         root.controlTypeFiltered = "Filtered-Tree";
