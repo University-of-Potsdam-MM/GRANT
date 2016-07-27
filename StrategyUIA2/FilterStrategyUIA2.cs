@@ -458,7 +458,11 @@ namespace StrategyUIA2
             {/* 
               * Conditional Support: Combo Box, Data Item, Edit,Hyperlink, List Item, Progress Bar, Slider,Spinner
               */
-                properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
+                try
+                {
+                    properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
+                }
+                catch (System.NullReferenceException) { }
             }
             object rangeValuePattern = null;
             if (element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
