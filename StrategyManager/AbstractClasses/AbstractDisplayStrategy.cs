@@ -29,8 +29,12 @@ namespace StrategyManager.AbstractClasses
         /// <param name="device">gibt das ausgewählte Ausgabegerät an</param>
         public void setActiveDevice(Device device)
         {
-            //TODO: prüfen, ob es nötig ist
-            strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassType.AssemblyQualifiedName); //TODO: testen
+            //prüfen, ob es nötig ist
+           // Console.WriteLine("this = {0}\n neu = {1}", this.GetType().AssemblyQualifiedName.ToString(), device.deviceClassType.AssemblyQualifiedName);
+            if (!this.GetType().AssemblyQualifiedName.Equals(device.deviceClassType.AssemblyQualifiedName))
+            {
+                strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassType.AssemblyQualifiedName);
+            }            
             //TODO: bei MVDB Gerät setzen
         }
 
@@ -64,7 +68,7 @@ namespace StrategyManager.AbstractClasses
                         {
                             List<Device> devices = ads.getPosibleDevices();
                             allDevices.AddRange(devices);
-                        }
+                        }                        
                     }
                     catch (InvalidCastException ic)
                     {

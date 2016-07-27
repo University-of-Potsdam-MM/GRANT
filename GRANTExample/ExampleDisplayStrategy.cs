@@ -78,7 +78,7 @@ namespace GRANTExample
 
         private Device getDeviceByName(String deviceName)
         {
-            /*  List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
+              List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
 
               foreach (Device d in devices)
               {
@@ -86,7 +86,7 @@ namespace GRANTExample
                   {
                       return d;
                   }
-              }*/
+              }
             return new Device();
         }
 
