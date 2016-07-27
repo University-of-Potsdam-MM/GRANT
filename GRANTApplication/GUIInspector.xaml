@@ -45,7 +45,7 @@
 
                 <StackPanel Orientation="Horizontal"  Background="Gainsboro" Margin="0,0,-6,0">
                     <Label VerticalAlignment="Top" Content="Filter marked tree node with choosen Filterstrategy: "/>
-                    <Button Content="Filter Node" Click="Node_Click" x:Name="NodeButton" CommandParameter="{Binding IdGenerated}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="100"/>
+                    <Button Content="Filter Node" Click="Node_Click" x:Name="NodeButton" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="100"/>
 
                 </StackPanel>
 

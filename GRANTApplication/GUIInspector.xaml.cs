@@ -60,6 +60,8 @@ namespace GRANTApplication
            */
 
             root = new MenuItem();
+            NodeButton.IsEnabled = false;
+
 
             InitializeComponent();
            
@@ -270,6 +272,7 @@ namespace GRANTApplication
         void tvMain_SelectedItemChanged(object sender,
         RoutedPropertyChangedEventArgs<object> e)
         {
+            NodeButton.IsEnabled = true;
             var tree = sender as TreeView;
 
             // ... Determine type of SelectedItem.
@@ -294,6 +297,7 @@ namespace GRANTApplication
             {
                 // ... Handle a string.
                 this.Name = "Selected: " + tree.SelectedItem.ToString();
+                
             }
         }
 
@@ -308,19 +312,24 @@ namespace GRANTApplication
                 node1 = tree.Child;
                 child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
                 child.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
-                child.nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
-              /*  child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
-                child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
-                child.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
-                child.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
-                child.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
-                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                child.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
-                child.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
-                child.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
-                child.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
-                child.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
-*/
+                String nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
+                if (nameFiltered.Length > 40)
+                {
+                    child.nameFiltered = nameFiltered.Substring(0, 40);
+                }
+
+                /*  child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
+                  child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
+                  child.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
+                  child.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
+                  child.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
+                  child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                  child.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
+                  child.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
+                  child.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
+                  child.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
+                  child.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
+  */
 
 
 
@@ -349,27 +358,30 @@ namespace GRANTApplication
 
                 sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
                 sibling.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
-                sibling.nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
+                String nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered.ToString();
+                if (nameFiltered.Length > 40)
+                {
+                    sibling.nameFiltered = nameFiltered.Substring(0, 20);
+                }
+                /*       sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
+                       sibling.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
 
-         /*       sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
-                sibling.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
-
-                sibling.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
-                sibling.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
-                sibling.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
-                sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                sibling.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
-
-
-
-                sibling.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
-                sibling.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
+                       sibling.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
+                       sibling.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
+                       sibling.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
+                       sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                       sibling.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
 
 
-                sibling.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
 
-                sibling.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
-                */
+                       sibling.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
+                       sibling.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
+
+
+                       sibling.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
+
+                       sibling.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
+                       */
                 sibling.parentMenuItem = root;
                 root.Items.Add(sibling);
 
@@ -393,7 +405,7 @@ namespace GRANTApplication
             if (tree.Count == 1 && tree.Depth == -1)
             {
                 tvMain.Items.Add(root);
-                
+                NodeButton.IsEnabled = false;
                 return;
             }
             if (!tree.HasChild)
@@ -470,6 +482,8 @@ namespace GRANTApplication
 
             if (e.Key == Key.F5)
             {
+                
+
                 if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
@@ -491,6 +505,7 @@ namespace GRANTApplication
                         // TreeViewItem treeItem = null;
                         // treeItem = new TreeViewItem();
 
+                       // ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
 
                         tvMain.Items.Clear();
                         root.Items.Clear();
@@ -729,6 +744,17 @@ namespace GRANTApplication
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
             UpdateNode node = new UpdateNode(strategyMgr);
             node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
+
+             ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
+
+            tvMain.Items.Clear();
+            root.Items.Clear();
+
+            //TreeViewItem root = new TreeViewItem();
+            root.controlTypeFiltered = "Filtered- Updated- Tree";
+
+            //
+            treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyMgr auch verändert (nur noch ein Knoten)
 
 
         }
