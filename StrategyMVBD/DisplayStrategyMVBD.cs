@@ -20,6 +20,7 @@ namespace StrategyMVBD
         protected bool isDisposed = false;
 
         private Device activeDevice { get; set; }
+        private List<Device> deviceList;
 
         public DisplayStrategyMVBD(StrategyMgr strategyMgr) : base(strategyMgr) 
         {
@@ -38,18 +39,21 @@ namespace StrategyMVBD
             {
                 SendGetDeviceInfo();
                 // 2. Empfange Ergebnis ist im Thread (Thread_Callback)
+                //warten auf Antwort
+                while (activeDevice.Equals(new Device())) { Task.Delay(10).Wait(); }
             }
+            
             return activeDevice;            
         }
 
         public override List<Device> getPosibleDevices()
         {
-            //TODO: hier muss apäter auf die antwort gewartet werden
-            //Die Implemetierung stimmt so noch nicht -> ist nur für Testzwecke da
-            List<Device> deviceList = new List<Device>();
-            deviceList.Add(new Device(64, 30, OrientationEnum.Front, "MVDB_1", this.GetType()));
-            deviceList.Add(new Device(60, 60, OrientationEnum.Front, "MVDB_2", this.GetType()));
-            Thread.Sleep(100);//damit die Verbindung aufgebaut wird, später müsste hier auf die Antwort gewartet werden
+            //warten bis die TCPIP-Verbindung aufgebaut ist
+            while (_tcpClient == null || !_tcpClient.Connected) { Task.Delay(10).Wait(); }
+            SendGetPosibleDevices();
+            //warten bis Antwort kommt
+            while (deviceList == null) { Task.Delay(10).Wait(); }
+           // Thread.Sleep(7000);//damit die Verbindung aufgebaut wird, später müsste hier auf die Antwort gewartet werden
             return deviceList;
 
         }
@@ -106,6 +110,13 @@ namespace StrategyMVBD
                                 activeDevice = new Device(ba[1], ba[0], orientation, ba[3] + " "+ba[4] + " "+ ba[5] + " "+ ba[6], this.GetType());//TODO: name ordentlich vergeben
                                 Debug.Print("--> DeviceInfo {0}x{1}", ba[0], ba[1]);
                             }
+                            if (cmd == 26)
+                            {
+                                //TODO: antwort interpretieren und Liste richtig setzen
+                                deviceList = new List<Device>();
+                                deviceList.Add(new Device(64, 30, OrientationEnum.Front, "MVDB_1", this.GetType()));
+                                deviceList.Add(new Device(60, 60, OrientationEnum.Front, "MVDB_2", this.GetType()));
+                            }
                         }
                     }
                 }
@@ -123,6 +134,19 @@ namespace StrategyMVBD
             ba[2] = 0;
 
             Debug.Print("<-- SendGetDeviceInfo");
+            Send(ba);
+        }
+
+        private void SendGetPosibleDevices()
+        {
+            if ((_tcpClient == null) || (_tcpClient.Connected == false)) return; // -->
+
+            byte[] ba = new byte[3];
+            ba[0] = 26;
+            ba[1] = 0;
+            ba[2] = 0;
+
+            Debug.Print("<-- SendGetPosibleDevices");
             Send(ba);
         }
 
