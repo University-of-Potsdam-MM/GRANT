@@ -170,11 +170,13 @@ namespace StrategyBrailleIO
                     return;
                 }
                 view.SetOtherContent(convertToBrailleIOUiElement(element), renderer);
+                brailleIOMediator.RenderDisplay();
                 return;
             }
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString()))
             {
                 view.SetMatrix(element.brailleRepresentation.matrix);
+                brailleIOMediator.RenderDisplay();
                 return;
             }
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString()))
@@ -184,11 +186,13 @@ namespace StrategyBrailleIO
                 view.SetZoom(element.brailleRepresentation.zoom);
                 view.SetContrastThreshold(element.brailleRepresentation.contrast);
                 view.SetBitmap(img);
+                brailleIOMediator.RenderDisplay();
                 return;
             }
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString()))
             {
                 view.SetText(element.brailleRepresentation.text);
+                brailleIOMediator.RenderDisplay();
                 return;
             }
         }
@@ -200,6 +204,7 @@ namespace StrategyBrailleIO
         {
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViews(osm);
+            brailleIOMediator.RenderDisplay();
         }
 
         /// <summary>
@@ -595,8 +600,6 @@ namespace StrategyBrailleIO
             return brailleIOElement;
         }
 
-        #endregion
-
         /// <summary>
         /// Ermittelt anhand des genutzten Typs der DisplayStrategy welcher Adapter verwendet werden muss
         /// </summary>
@@ -621,7 +624,7 @@ namespace StrategyBrailleIO
             if (brailleAdapterType != null) { return (AbstractBrailleIOAdapterBase)Activator.CreateInstance(brailleAdapterType, brailleIOMediator.AdapterManager); }
             return null;
         }
-
+        #endregion
 
     }
 }
