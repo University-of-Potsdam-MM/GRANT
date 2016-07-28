@@ -13,9 +13,11 @@ namespace GRANTExample
     public class ExampleTree
     {
         StrategyManager strategyMgr;
-        public ExampleTree(StrategyManager mgr)
+        GeneratedGrantTrees grantTree;
+        public ExampleTree(StrategyManager mgr, GeneratedGrantTrees tree)
         {
             strategyMgr = mgr;
+            grantTree = tree;
         }
 
         public String filterNodeOfApplicatione()
@@ -30,7 +32,7 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
-                    if (strategyMgr.getFilteredTree() != null)
+                    if (grantTree.getFilteredTree() != null)
                     {
                         strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(tree.Child.Data.properties);
                     }
@@ -108,7 +110,7 @@ namespace GRANTExample
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
                     strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
-                    strategyMgr.setFilteredTree(tree);
+                    grantTree.setFilteredTree(tree);
                     Console.WriteLine();
                   //  baumSchleife(tree);
                 }
@@ -160,7 +162,7 @@ namespace GRANTExample
 
         public void searchPropertie(String localizedControlTypeFiltered)
         {
-            if (strategyMgr.getFilteredTree() == null)
+            if (grantTree.getFilteredTree() == null)
             {
                     filterTreeOfApplication();
             }
@@ -169,7 +171,7 @@ namespace GRANTExample
             //  searchedProperties.nameFiltered = "";
 
             Console.Write("Gesuchte Eigenschaften ");
-            strategyMgr.getSpecifiedTreeOperations().searchProperties(strategyMgr.getFilteredTree(), searchedProperties, OperatorEnum.or);
+            strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), searchedProperties, OperatorEnum.or);
 
         }
 
@@ -185,7 +187,7 @@ namespace GRANTExample
                 {
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                    if (strategyMgr.getFilteredTree() == null)
+                    if (grantTree.getFilteredTree() == null)
                     {
                         filterTreeOfApplication();
                     }
@@ -197,9 +199,9 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
 
-                        List<OsmRelationship<String, String>> relationshipList = strategyMgr.getOsmRelationship();
+                        List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
                         OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_1", ref relationshipList);
-                        strategyMgr.setOsmRelationship(relationshipList);
+                        grantTree.setOsmRelationship(relationshipList);
                     }
 
                 }
@@ -222,7 +224,7 @@ namespace GRANTExample
                 {
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                    if (strategyMgr.getFilteredTree() == null)
+                    if (grantTree.getFilteredTree() == null)
                     {
                         filterTreeOfApplication();
                     }
@@ -234,12 +236,12 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
 
-                        List<OsmRelationship<String, String>> relationshipList = strategyMgr.getOsmRelationship();
+                        List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
                      //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
                       //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
                         OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_6", ref relationshipList);
                       //  OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_11", ref relationshipList);
-                        strategyMgr.setOsmRelationship(relationshipList);
+                        grantTree.setOsmRelationship(relationshipList);
                       
                     }
 

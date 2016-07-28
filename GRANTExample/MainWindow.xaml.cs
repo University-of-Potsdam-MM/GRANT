@@ -35,7 +35,7 @@ namespace GRANTExample
 
         Settings settings;
         StrategyManager strategyMgr;
-        IBrailleDisplayStrategy brailleDisplayStrategy;
+        GeneratedGrantTrees grantTree;
 
         ExampleTree exampleTree;
         InspectGui exampleInspectGui;
@@ -46,10 +46,10 @@ namespace GRANTExample
         {
             settings = new Settings();
             strategyMgr = new StrategyManager();
+            grantTree = new GeneratedGrantTrees();
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
-            strategyMgr.getSpecifiedOperationSystem();
 
             List<Strategy> possibleTrees = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
@@ -66,12 +66,14 @@ namespace GRANTExample
 
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTree);
 
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[2].className);
+            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
 
-            exampleTree = new ExampleTree(strategyMgr);
+            exampleTree = new ExampleTree(strategyMgr, grantTree);
             exampleInspectGui = new InspectGui(strategyMgr);
-            exampleBrailleDis = new ExampleBrailleDis(strategyMgr);
+            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
         }
 

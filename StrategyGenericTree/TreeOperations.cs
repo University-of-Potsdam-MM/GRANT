@@ -26,8 +26,10 @@ namespace StrategyGenericTree
     public class TreeOperations<T> : ITreeOperations<T>
     {
         private StrategyManager strategyMgr;
+        private GeneratedGrantTrees grantTrees;
         public StrategyManager getStrategyMgr() { return strategyMgr; }
-        public void setStrategyMgr(StrategyManager mamager) { strategyMgr = mamager; }
+        public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
 
 
         #region Print
@@ -264,7 +266,7 @@ namespace StrategyGenericTree
         /// <returns>falls der Knoten gefunden wurde, die generierte Id des Knotens; sonst <code>null</code> </returns>
         public String getIdOfView(String viewName)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getBrailleTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
             if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
@@ -287,7 +289,7 @@ namespace StrategyGenericTree
         /// <returns></returns>
         public OSMElement.OSMElement getNodeOfView(String viewName)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getBrailleTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
             if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
@@ -332,12 +334,12 @@ namespace StrategyGenericTree
 
         public OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNode(idGenerated, strategyMgr.getFilteredTree());
+            return getAssociatedNode(idGenerated, grantTrees.getFilteredTree());
         }
 
         public OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNode(idGenerated, strategyMgr.getBrailleTree());
+            return getAssociatedNode(idGenerated, grantTrees.getBrailleTree());
         }
 
 
@@ -373,7 +375,7 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
         public void changePropertiesOfFilteredNode(GeneralProperties properties)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(properties.IdGenerated))
@@ -396,7 +398,7 @@ namespace StrategyGenericTree
         /// <param name="element">das geänderte Element für die Braille-Darstellung</param>
         private void changeBrailleRepresentation(ref OSMElement.OSMElement element)
         {
-            ITreeStrategy<OSMElement.OSMElement> brailleTree = strategyMgr.getBrailleTree();
+            ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.getBrailleTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)brailleTree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(element.properties.IdGenerated))
@@ -439,7 +441,7 @@ namespace StrategyGenericTree
         /// <returns>den anzuzeigenden Text</returns>
         private String getTextForView(OSMElement.OSMElement osmElement)
         {
-            OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -463,7 +465,7 @@ namespace StrategyGenericTree
         /// <returns><code>true</code> fals das UI-Element aktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>
         private bool? isUiElementEnable(OSMElement.OSMElement osmElement)
         {
-            OsmRelationship<String, String> osmRelationship = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -502,16 +504,16 @@ namespace StrategyGenericTree
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
         public void addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
         {//TODO: muss an der Stelle die 'IdGenerated' eneriert werden oder passiert das vorher?
-            if (strategyMgr.getBrailleTree() == null)
+            if (grantTrees.getBrailleTree() == null)
             {
-                strategyMgr.setBrailleTree( strategyMgr.getSpecifiedTree().NewNodeTree());
+                grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewNodeTree());
             }
           
             //prüfen, ob der Knoten schon vorhanden ist
             OSMElement.OSMElement nodeToRemove = getBrailleTreeOsmElementById(brailleNode.properties.IdGenerated);
             if (nodeToRemove.Equals(new OSMElement.OSMElement()))
             {
-                strategyMgr.getBrailleTree().AddChild(brailleNode);
+                grantTrees.getBrailleTree().AddChild(brailleNode);
             }
             else
             {
@@ -525,7 +527,7 @@ namespace StrategyGenericTree
         /// <param name="brailleNode">gibt das OSM-element des Knotens der entfernt werden soll an</param>
         public void removeNodeInBrailleTree(OSMElement.OSMElement brailleNode)
         {
-            if (strategyMgr.getBrailleTree() == null)
+            if (grantTrees.getBrailleTree() == null)
             {
                 Console.WriteLine("Der Baum ist leer");
                 return;
@@ -538,7 +540,7 @@ namespace StrategyGenericTree
                 Console.WriteLine("Der Knoten ist nicht vorhanden!");
                 return;
             }
-            strategyMgr.getBrailleTree().Remove(nodeToRemove);
+            grantTrees.getBrailleTree().Remove(nodeToRemove);
             
         }
     }

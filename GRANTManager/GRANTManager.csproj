@@ -47,6 +47,7 @@
     <Compile Include="AbstractClasses\AOutputManager.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="EnumClass.cs" />
+    <Compile Include="GeneratedGrantTrees.cs" />
     <Compile Include="Interfaces\IBrailleDisplayStrategy.cs" />
     <Compile Include="Interfaces\ITreeOperations.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />

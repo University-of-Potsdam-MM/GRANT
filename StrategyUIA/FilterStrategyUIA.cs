@@ -25,8 +25,9 @@ namespace StrategyUIA
     public class FilterStrategyUIA : IFilterStrategy
     {
         private StrategyManager strategyMgr;
-
+        private GeneratedGrantTrees grantTrees;
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
         public StrategyManager getStrategyMgr() { return strategyMgr; }
 
         /// <summary>
@@ -410,16 +411,16 @@ namespace StrategyUIA
                 //Console.WriteLine("hash = " + elementP.IdGenerated);
             }
             //prüfen, ob es jetzt eine andere Filter-Strategy ist
-            if (strategyMgr.getFilteredTree() != null && strategyMgr.getFilteredTree().HasChild)
+            if (grantTrees != null && grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild)
             {
                 Type interfaceOfClass = this.GetType().GetInterfaces()[0]; // das diese Klasse ein interface hat wissen wir hier
                 // wenn das angegebene Interface nicht gefunden wird ist der Wert hier null
-                if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
+                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
                 {
-                    Type interfacesOfTree = (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
+                    Type interfacesOfTree = (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
                     if (interfacesOfTree != null)
                     {
-                        if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
+                        if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
                         {//wir haben hier nicht die Standard-Filter-Methode
                             elementP.grantFilterStrategy = this.GetType();
                         }
@@ -498,9 +499,9 @@ namespace StrategyUIA
             }
             else
             {
-                if (strategyMgr.getFilteredTree() != null && strategyMgr.getFilteredTree().HasChild && strategyMgr.getFilteredTree().Child.Data.properties.hWndFiltered != IntPtr.Zero)
+                if (grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild && grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered != IntPtr.Zero)
                 {
-                    IntPtr hwnd = strategyMgr.getFilteredTree().Child.Data.properties.hWndFiltered;
+                    IntPtr hwnd = grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered;
                     //IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(strategyMgr.getFilteredTree().Child.Data.properties.hWndFiltered));
                     AutomationElement element = AutomationElement.FromHandle(hwnd);
                     au = element.FindFirst(TreeScope.Descendants, cond);

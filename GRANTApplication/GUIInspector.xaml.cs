@@ -17,6 +17,7 @@ namespace GRANTApplication
     {
         Settings settings;
         StrategyManager strategyMgr;
+        GeneratedGrantTrees grantTrees;
         MenuItem root;
 
 
@@ -27,6 +28,7 @@ namespace GRANTApplication
 
             settings = new Settings();
             strategyMgr = new StrategyManager();
+            grantTrees = new GeneratedGrantTrees();
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -37,12 +39,13 @@ namespace GRANTApplication
             List<Strategy> possibleFilter = settings.getPossibleFilters();
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-
+            strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTrees);
 
             tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             //brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
@@ -516,7 +519,7 @@ namespace GRANTApplication
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                         //strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
-                        strategyMgr.setFilteredTree(tree);
+                        grantTrees.setFilteredTree(tree);
 
 
                         // TreeViewItem treeItem = null;
@@ -766,10 +769,10 @@ namespace GRANTApplication
         private void Node_Click(object sender, RoutedEventArgs e)
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
-            UpdateNode node = new UpdateNode(strategyMgr);
+            UpdateNode node = new UpdateNode(strategyMgr, grantTrees);
             node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
 
-             ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
             tvMain.Items.Clear();
             root.Items.Clear();

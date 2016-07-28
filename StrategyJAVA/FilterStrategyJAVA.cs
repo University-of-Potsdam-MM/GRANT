@@ -17,7 +17,9 @@ namespace StrategyJAVA
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
         private StrategyManager strategyMgr;
 
+        private GeneratedGrantTrees grantTrees;
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
         public StrategyManager getStrategyMgr() { return strategyMgr; }
 
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)

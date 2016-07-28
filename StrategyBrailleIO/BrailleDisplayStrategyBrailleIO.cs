@@ -38,11 +38,10 @@ namespace StrategyBrailleIO
 
 
         private StrategyManager strategyMgr;
+        private GeneratedGrantTrees grantTrees;
         public StrategyManager getStrategyMgr() { return strategyMgr; }
-        public void setStrategyMgr(StrategyManager manager)
-        {
-            strategyMgr = manager;
-        }
+        public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
 
         /// <summary>
         /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
@@ -199,7 +198,7 @@ namespace StrategyBrailleIO
         /// </summary>
         public void generatedBrailleUi()
         {
-            ITreeStrategy<OSMElement.OSMElement> osm = strategyMgr.getBrailleTree().Copy();
+            ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViews(osm);
         }
 
@@ -231,7 +230,7 @@ namespace StrategyBrailleIO
         /// <returns>ein <code>Image</code> des Bildbereiches</returns>
         private Image captureScreen(String idGeneratedBrailleNode)
         {
-            OsmRelationship<String, String> osmRelationships = strategyMgr.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
+            OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
             OSMElement.OSMElement nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
             if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }

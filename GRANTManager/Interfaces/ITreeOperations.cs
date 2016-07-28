@@ -78,7 +78,8 @@ namespace GRANTManager.Interfaces
         String getIdOfView(String viewName);
 
 
-        void setStrategyMgr(GRANTManager.StrategyManager mamager);
-        GRANTManager.StrategyManager getStrategyMgr();
+        void setStrategyMgr(StrategyManager mamager);
+        void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
+        StrategyManager getStrategyMgr();
     }
 }
