@@ -21,7 +21,7 @@ namespace GRANTApplication
     public partial class MainWindow : Window
     {
         Settings settings;
-        StrategyMgr strategyMgr;
+        StrategyManager strategyMgr;
         IBrailleDisplayStrategy brailleDisplayStrategy;
         GUIInspector GuiInspector;
         bool wopen = false;
@@ -39,7 +39,7 @@ namespace GRANTApplication
         private void InitializeFilterComponent()
         {
             settings = new Settings();
-            strategyMgr = new StrategyMgr();
+            strategyMgr = new StrategyManager();
             GuiInspector = new GUIInspector();
 
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();

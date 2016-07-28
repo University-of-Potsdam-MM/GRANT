@@ -16,9 +16,9 @@ namespace GRANTExample
 {
     public class ExampleBrailleDis
     {
-        StrategyMgr strategyMgr;
+        StrategyManager strategyMgr;
         UpdateNode updateNode;
-        public ExampleBrailleDis(StrategyMgr mgr)
+        public ExampleBrailleDis(StrategyManager mgr)
         {
             strategyMgr = mgr;
             updateNode = new UpdateNode(strategyMgr);

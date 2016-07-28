@@ -15,10 +15,10 @@ namespace StrategyJAVA
     {
         private IOperationSystemStrategy specifiedOperationSystem;
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
 
-        public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
-        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public StrategyManager getStrategyMgr() { return strategyMgr; }
 
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {

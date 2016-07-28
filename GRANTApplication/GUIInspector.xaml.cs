@@ -16,7 +16,7 @@ namespace GRANTApplication
     public partial class GUIInspector : Window
     {
         Settings settings;
-        StrategyMgr strategyMgr;
+        StrategyManager strategyMgr;
         MenuItem root;
 
 
@@ -26,7 +26,7 @@ namespace GRANTApplication
             InitializeComponent();
 
             settings = new Settings();
-            strategyMgr = new StrategyMgr();
+            strategyMgr = new StrategyManager();
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -538,7 +538,7 @@ namespace GRANTApplication
                         //root.controlTypeFiltered = "Filtered-Tree";
                         //ITreeStrategy<OSMElement.OSMElement> copy = tree.Child;
                         //
-                        treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyMgr auch verändert (nur noch ein Knoten)
+                        treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                                                                     // root.Selected += root_Selected;
                                                                     //
                         
@@ -778,7 +778,7 @@ namespace GRANTApplication
             root.controlTypeFiltered = "Filtered- Updated- Tree";
 
             //
-            treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyMgr auch verändert (nur noch ein Knoten)
+            treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
 
 
         }

@@ -26,10 +26,10 @@ namespace StrategyUIA2
     /// </summary>
     public class FilterStrategyUIA2 : IFilterStrategy
     {
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
 
-        public void setStrategyMgr(StrategyMgr manager) { strategyMgr = manager; }
-        public StrategyMgr getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public StrategyManager getStrategyMgr() { return strategyMgr; }
 
         /// <summary>
         /// Erstellt anhand des Handles einer Anwendung den zugehörigen Baum

@@ -12,9 +12,9 @@ namespace GRANTManager
     /// </summary>
     public class UpdateNode
     {
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
 
-        public UpdateNode(StrategyMgr strategyMgr)
+        public UpdateNode(StrategyManager strategyMgr)
         {
             this.strategyMgr = strategyMgr;
         }

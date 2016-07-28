@@ -10,8 +10,8 @@ namespace GRANTExample
 {
     public class InspectGui
     {
-        StrategyMgr strategyMgr;
-        public InspectGui(StrategyMgr mgr)
+        StrategyManager strategyMgr;
+        public InspectGui(StrategyManager mgr)
         {
             strategyMgr = mgr;
         }

@@ -43,6 +43,6 @@ namespace GRANTManager.Interfaces
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement);
 
-        void setStrategyMgr(StrategyMgr strategyMgr);
-        StrategyMgr getStrategyMgr();    }
+        void setStrategyMgr(StrategyManager strategyMgr);
+        StrategyManager getStrategyMgr();    }
 }

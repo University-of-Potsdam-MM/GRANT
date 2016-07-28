@@ -8,11 +8,11 @@ using System.Reflection;
 
 namespace GRANTManager.AbstractClasses
 {
-    public abstract class AbstractDisplayStrategy : IDisposable
+    public abstract class AOutputManager : IDisposable
     {
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
 
-        public AbstractDisplayStrategy(StrategyMgr strategyMgr) { this.strategyMgr = strategyMgr; }
+        public AOutputManager(StrategyManager strategyMgr) { this.strategyMgr = strategyMgr; }
 
         private List<Device> allDevices;
 
@@ -64,7 +64,7 @@ namespace GRANTManager.AbstractClasses
                         Type type = Type.GetType(st.className);
                         if (type == null) { break; }
                         //beendet ggf. gleich wieder die TCPIP-Verbimdung (Dispose() wird aufgerufen)
-                        using (AbstractDisplayStrategy ads = (AbstractDisplayStrategy)Activator.CreateInstance(type, strategyMgr))
+                        using (AOutputManager ads = (AOutputManager)Activator.CreateInstance(type, strategyMgr))
                         {
                             List<Device> devices = ads.getPosibleDevices();
                             allDevices.AddRange(devices);

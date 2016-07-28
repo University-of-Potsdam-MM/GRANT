@@ -25,9 +25,9 @@ namespace StrategyGenericTree
 {
     public class TreeOperations<T> : ITreeOperations<T>
     {
-        private StrategyMgr strategyMgr;
-        public StrategyMgr getStrategyMgr() { return strategyMgr; }
-        public void setStrategyMgr(StrategyMgr mamager) { strategyMgr = mamager; }
+        private StrategyManager strategyMgr;
+        public StrategyManager getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyManager mamager) { strategyMgr = mamager; }
 
 
         #region Print
@@ -409,7 +409,7 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyMgr.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert und ob das Element deaktiviert ist!
+        /// Ändert die Eigenschaften des angegebenen Knotens in StrategyManager.brailleRepresentation --> Momentan wird nur der anzuzeigende Text geändert und ob das Element deaktiviert ist!
         /// </summary>
         /// <param name="element">gibt den zu verändernden Knoten an</param>
         public void updateNodeOfBrailleUi(ref OSMElement.OSMElement element)
@@ -433,7 +433,7 @@ namespace StrategyGenericTree
 
 
         /// <summary>
-        /// Ermittelt aufgrund der im StrategyMgr angegebenen Beziehungen den anzuzeigenden Text
+        /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text
         /// </summary>
         /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns>den anzuzeigenden Text</returns>
@@ -457,7 +457,7 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Ermittelt aufgrund der im StrategyMgr angegebenen Beziehungen, ob das UI-Element aktiviert ist
+        /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen, ob das UI-Element aktiviert ist
         /// </summary>
         /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns><code>true</code> fals das UI-Element aktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>

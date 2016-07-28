@@ -51,8 +51,8 @@ namespace GRANTManager.Interfaces
         bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElement);
 
 
-        void setStrategyMgr(StrategyMgr strategyMgr);
-        StrategyMgr getStrategyMgr();
+        void setStrategyMgr(StrategyManager strategyMgr);
+        StrategyManager getStrategyMgr();
 
 
 

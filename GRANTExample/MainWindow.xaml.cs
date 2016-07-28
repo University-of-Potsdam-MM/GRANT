@@ -34,7 +34,7 @@ namespace GRANTExample
         }
 
         Settings settings;
-        StrategyMgr strategyMgr;
+        StrategyManager strategyMgr;
         IBrailleDisplayStrategy brailleDisplayStrategy;
 
         ExampleTree exampleTree;
@@ -45,7 +45,7 @@ namespace GRANTExample
         private void InitializeFilterComponent()
         {
             settings = new Settings();
-            strategyMgr = new StrategyMgr();
+            strategyMgr = new StrategyManager();
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));

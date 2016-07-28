@@ -8,12 +8,12 @@ using GRANTManager;
 
 namespace StrategyDisplayBrailleIoSimulator
 {
-    public class DisplayStrategyBrailleIoSimulator : AbstractDisplayStrategy
+    public class DisplayStrategyBrailleIoSimulator : AOutputManager
     {
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
         Device activeDevice;
 
-        public DisplayStrategyBrailleIoSimulator(StrategyMgr strategyMgr) : base(strategyMgr)
+        public DisplayStrategyBrailleIoSimulator(StrategyManager strategyMgr) : base(strategyMgr)
         {
             this.strategyMgr = strategyMgr;
             activeDevice = new Device(120, 60, OrientationEnum.Front, "BrailleDisSimulator", this.GetType());

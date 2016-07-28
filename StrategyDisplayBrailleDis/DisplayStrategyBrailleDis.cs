@@ -8,12 +8,12 @@ using GRANTManager.AbstractClasses;
 
 namespace StrategyDisplayBrailleDis
 {
-    public class DisplayStrategyBrailleDis : AbstractDisplayStrategy
+    public class DisplayStrategyBrailleDis : AOutputManager
     {
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
         Device activeDevice;
 
-        public DisplayStrategyBrailleDis(StrategyMgr strategyMgr) : base(strategyMgr)
+        public DisplayStrategyBrailleDis(StrategyManager strategyMgr) : base(strategyMgr)
         {
             this.strategyMgr = strategyMgr;
             activeDevice = new Device(120, 60, OrientationEnum.Front, "BrailleDis", this.GetType());
@@ -26,7 +26,7 @@ namespace StrategyDisplayBrailleDis
 
       /*  public override bool setActiveDevice(Device device)
         {
-            //ändert (TODO: ggf.) im StrategyMgr die gewählte Implementierung
+            //ändert (TODO: ggf.) im StrategyManager die gewählte Implementierung
             strategyMgr.
             return true;
         }*/

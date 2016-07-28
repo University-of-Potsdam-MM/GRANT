@@ -37,9 +37,9 @@ namespace StrategyBrailleIO
         //GestureRecognizer brailleDisRecognizer; //TODO
 
 
-        private StrategyMgr strategyMgr;
-        public StrategyMgr getStrategyMgr() { return strategyMgr; }
-        public void setStrategyMgr(StrategyMgr manager)
+        private StrategyManager strategyMgr;
+        public StrategyManager getStrategyMgr() { return strategyMgr; }
+        public void setStrategyMgr(StrategyManager manager)
         {
             strategyMgr = manager;
         }

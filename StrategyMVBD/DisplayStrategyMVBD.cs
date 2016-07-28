@@ -12,17 +12,17 @@ using System.Diagnostics;
 
 namespace StrategyMVBD
 {
-    public class DisplayStrategyMVBD : AbstractDisplayStrategy //, IDisposable
+    public class DisplayStrategyMVBD : AOutputManager //, IDisposable
     {
         protected IPEndPoint _endPoint;
         protected TcpClient _tcpClient;
-        private StrategyMgr strategyMgr;
+        private StrategyManager strategyMgr;
         protected bool isDisposed = false;
 
         private Device activeDevice { get; set; }
         private List<Device> deviceList;
 
-        public DisplayStrategyMVBD(StrategyMgr strategyMgr) : base(strategyMgr) 
+        public DisplayStrategyMVBD(StrategyManager strategyMgr) : base(strategyMgr) 
         {
             this.strategyMgr = strategyMgr;
             _endPoint = new IPEndPoint(IPAddress.Loopback, 2017); //TODO: auslesen

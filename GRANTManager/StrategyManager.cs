@@ -11,7 +11,7 @@ using OSMElement;
 
 namespace GRANTManager
 {
-    public class StrategyMgr
+    public class StrategyManager
     {
         //in extra Klasse auslagern?
         private ITreeStrategy<OSMElement.OSMElement> filteredTree; // enthält den gefilterten Baum
@@ -25,7 +25,7 @@ namespace GRANTManager
         private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)
         private ITreeStrategy<OSMElement.OSMElement> specifiedTree; // enthält die gewählte Klasse der Baumdarstellung/-verarbeitung
         private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
-        private AbstractDisplayStrategy specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
+        private AOutputManager specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
 
         private ITreeOperations<OSMElement.OSMElement> specifiedTreeOperations;
 
@@ -283,7 +283,7 @@ namespace GRANTManager
                     specifiedDisplayStrategy.Dispose(); //sorgt dafür, dass ggf. die alte TCP-Verbindung beendet wird
                   //  specifiedDisplayStrategy = null;
                 }
-                specifiedDisplayStrategy = (AbstractDisplayStrategy)Activator.CreateInstance(type, this);
+                specifiedDisplayStrategy = (AOutputManager)Activator.CreateInstance(type, this);
             }
             catch (InvalidCastException ic)
             {
@@ -300,7 +300,7 @@ namespace GRANTManager
             }
         }
 
-        public AbstractDisplayStrategy getSpecifiedDisplayStrategy()
+        public AOutputManager getSpecifiedDisplayStrategy()
         {
             return specifiedDisplayStrategy;
         }

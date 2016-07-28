@@ -12,8 +12,8 @@ namespace GRANTExample
 {
     public class ExampleTree
     {
-        StrategyMgr strategyMgr;
-        public ExampleTree(StrategyMgr mgr)
+        StrategyManager strategyMgr;
+        public ExampleTree(StrategyManager mgr)
         {
             strategyMgr = mgr;
         }

@@ -13,9 +13,9 @@ namespace GRANTExample
 {
     public class ExampleDisplayStrategy
     {
-        StrategyMgr strategyMgr;
+        StrategyManager strategyMgr;
 
-        public ExampleDisplayStrategy(StrategyMgr strategy)
+        public ExampleDisplayStrategy(StrategyManager strategy)
         {
             strategyMgr = strategy;
         }

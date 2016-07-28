@@ -44,7 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractClasses\AbstractDisplayStrategy.cs" />
+    <Compile Include="AbstractClasses\AOutputManager.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="EnumClass.cs" />
     <Compile Include="Interfaces\IBrailleDisplayStrategy.cs" />
