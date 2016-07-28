@@ -25,7 +25,8 @@ namespace GRANTApplication
         GeneratedGrantTrees grantTrees;
         IBrailleDisplayStrategy brailleDisplayStrategy;
         GUIInspector GuiInspector;
-        bool wopen = false;
+        bool filterWindowOpen = false;
+        bool outputDesignerWindowOpen = false;
         UpdateNode updateNode;
         //private PaintEventHandler Paint;
 
@@ -69,32 +70,61 @@ namespace GRANTApplication
         }
 
       
-        private void OpenNewWindow(object sender, RoutedEventArgs e)
+    /*    private void OpenNewWindow(object sender, RoutedEventArgs e)
          {
            GUIInspector window1 = new GUIInspector();
             GuiInspector.ShowInTaskbar = true;
             GuiInspector.Owner = App.Current.MainWindow;
-            window1.ShowDialog();
-         }
-      
+            //window1.ShowDialog();
+            window1.Show();
+        }
+      */
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void button_FilterClick(object sender, RoutedEventArgs e)
         {
-            if (wopen == false)
+            if (filterWindowOpen == false)
             {
-                if (!GuiInspector.IsLoaded)
-                {
-                    //GuiInspector.Topmost = true;
-                    //GuiInspector.Show();
-                    GuiInspector.ShowInTaskbar = false;
-                    GuiInspector.Owner = App.Current.MainWindow;
-                    GuiInspector.Show();
+                var aboutFilterWindow = new GUIInspector();
+                aboutFilterWindow.Closed += new EventHandler(aboutFilterWindow_Closed);
+                //GuiInspector.Topmost = true;
+                aboutFilterWindow.Topmost = true;
+                aboutFilterWindow.Show();
+    
+                filterWindowOpen = true;
 
-                }
+            }
                 
-            }//e.Handled = true;
-            //this.Close();
+            //e.Handled = true;
+           // this.Close();
 
+        }
+
+        void aboutFilterWindow_Closed(object sender, EventArgs e)
+        {
+            filterWindowOpen = false;
+        }
+
+        private void button_OutputDesignerClick(object sender, RoutedEventArgs e)
+        {
+            if (outputDesignerWindowOpen == false)
+            {
+                var aboutOutputDesigner = new OutputDesigner();
+                aboutOutputDesigner.Closed += new EventHandler(aboutOutputDesignerWindow_Closed);
+                aboutOutputDesigner.Topmost = true;
+                aboutOutputDesigner.Show();
+                
+                outputDesignerWindowOpen = true;
+
+            }
+
+            //e.Handled = true;
+            // this.Close();
+
+        }
+
+        void aboutOutputDesignerWindow_Closed(object sender, EventArgs e)
+        {
+            outputDesignerWindowOpen = false;
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

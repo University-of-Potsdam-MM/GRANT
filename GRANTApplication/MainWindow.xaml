@@ -8,12 +8,12 @@
         <Label FontWeight="Bold">Open Filtering Window</Label>
                
         <Grid>
-            <Button Content="Open new window" HorizontalAlignment="Left" Margin="50" VerticalAlignment="Top"
-                 Click="OpenNewWindow" />
+            <Button Content="Open filter window" HorizontalAlignment="Left" Margin="50" VerticalAlignment="Top"
+                 Click="button_FilterClick" />
         </Grid>
         <Grid>
-            <Button Name="button1" Content="Open new Window (active)"  HorizontalAlignment="Right" Margin="50" VerticalAlignment="Top"
-                 Click="button1_Click" />
+            <Button Name="button1" Content="Open output Window (active)"  HorizontalAlignment="Right" Margin="50" VerticalAlignment="Top"
+                 Click="button_OutputDesignerClick" />
         </Grid>
        
     </Grid>
