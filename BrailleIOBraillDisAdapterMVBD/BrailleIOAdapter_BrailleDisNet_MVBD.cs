@@ -20,12 +20,12 @@ namespace BrailleIOBraillDisAdapter
         protected TcpClient         _tcpClient;
 
 
-
         public BrailleIOAdapter_BrailleDisNet_MVBD(IBrailleIOAdapterManager manager) : base(manager)
         {
             _ep         = new IPEndPoint(IPAddress.Loopback, 2017);
 
             ThreadPool.QueueUserWorkItem( new WaitCallback( Thread_Callback ) );
+            while (this.Device == null) { }//warten bis DeviceInfos abgerufen wurden
 
         }
 
@@ -126,7 +126,7 @@ namespace BrailleIOBraillDisAdapter
                                     //_graphicDisplay.PinCountX = ba[1];
                                     //_graphicDisplay.PinCountY = ba[0];
                                 }
-
+                                this.Device = new BrailleIODevice(ba[0], ba[1], "MVBD_" + ba[4], true, true, 30); //TODO: Ausrichtung beachten; ab Name einträge dynamisch bestimmen
                                 //_formMain.Draw();
 
                                 Debug.Print ("--> DeviceInfo {0}x{1}", ba[0], ba[1]);

@@ -49,7 +49,7 @@ namespace BrailleIOGuiElementRenderer
 
         private bool[,] RenderDropDownMenuVertical(IViewBoxModel view, UiElement uiContent)
         {//TODO: Element muss eine Mindestgröße haben
-            //call pre hooks  --> wie funktioniert das richtig?
+            //call pre hooks
             object cM = uiContent.text as object;
             callAllPreHooks(ref view, ref cM);
             bool[,] boxMatrix;
@@ -80,7 +80,7 @@ namespace BrailleIOGuiElementRenderer
             {
                 if (dropDownMenu.isOpen) { OpenDropDownMenuElementRight(ref viewMatrix); } else { CloseDropDownMenuElementRight(ref viewMatrix); }
             }
-            //call post hooks --> wie funktioniert das richtig?
+            //call post hooks
             callAllPostHooks(view, cM, ref viewMatrix, false);
 
             return viewMatrix;
@@ -88,7 +88,7 @@ namespace BrailleIOGuiElementRenderer
 
         private bool[,] RenderDropDownMenuHorizontal(IViewBoxModel view, UiElement uiContent)
         {//TODO: Element muss eine Mindestgröße haben
-            //call pre hooks  --> wie funktioniert das richtig?
+            //call pre hooks
             object cM = uiContent.text as object;
             callAllPreHooks(ref view, ref cM);
 
@@ -119,7 +119,7 @@ namespace BrailleIOGuiElementRenderer
             {
                 if (dropDownMenu.isOpen) { OpenDropDownMenuElementDown(ref viewMatrix); } else { CloseDropDownMenuElementDown(ref viewMatrix); }
             }
-            //call post hooks --> wie funktioniert das richtig?
+            //call post hooks
             callAllPostHooks(view, cM, ref viewMatrix, false);
 
             return viewMatrix;

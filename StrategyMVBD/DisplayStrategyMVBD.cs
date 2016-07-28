@@ -107,7 +107,7 @@ namespace StrategyMVBD
                                 {
                                     orientation = (OrientationEnum)ba[2];
                                 }
-                                activeDevice = new Device(ba[1], ba[0], orientation, ba[3] + " "+ba[4] + " "+ ba[5] + " "+ ba[6], this.GetType());//TODO: name ordentlich vergeben
+                                activeDevice = new Device(ba[1], ba[0], orientation, "MVBD_" + ba[4], this.GetType());//TODO: name ordentlich vergeben
                                 Debug.Print("--> DeviceInfo {0}x{1}", ba[0], ba[1]);
                             }
                             if (cmd == 26)

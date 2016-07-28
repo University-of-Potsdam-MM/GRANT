@@ -10,12 +10,7 @@ namespace GRANTManager.Interfaces
     public interface IBrailleDisplayStrategy
     {
         /// <summary>
-        /// Erstellt ein Simulator für die Braille-Ausgabe
-        /// </summary>
-        void initializedSimulator();
-
-        /// <summary>
-        /// Initialisiert ein "reales" Ausgabegerät.
+        /// Initialisiert ein Ausgabegerät.
         /// </summary>
         void initializedBrailleDisplay();
 
@@ -53,11 +48,5 @@ namespace GRANTManager.Interfaces
 
         void setStrategyMgr(StrategyManager strategyMgr);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
-
-        StrategyManager getStrategyMgr();
-
-
-
-
     }
 }

@@ -33,20 +33,19 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Ist der Adapter des BrailleDis
         /// </summary>
-        AbstractBrailleIOAdapterBase brailleDisAdapter;
+        AbstractBrailleIOAdapterBase brailleAdapter;
         //GestureRecognizer brailleDisRecognizer; //TODO
 
 
         private StrategyManager strategyMgr;
         private GeneratedGrantTrees grantTrees;
-        public StrategyManager getStrategyMgr() { return strategyMgr; }
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
 
         /// <summary>
         /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
         /// </summary>
-        public void initializedSimulator()
+        private void initializedSimulator()
         {
             if (brailleIOMediator == null )
             {
@@ -121,16 +120,16 @@ namespace StrategyBrailleIO
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                brailleDisAdapter = displayStrategyClassToBrailleIoAdapterClass(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType);
-                brailleIOMediator.AdapterManager.ActiveAdapter = brailleDisAdapter;
-
+                brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType);
+                brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
+               //TODO: bei MVBD ggf. das Ausgabegerät einstellen
                 
            /*     #region BrailleDis events
-                brailleDisAdapter.touchValuesChanged += new EventHandler<BrailleIO_TouchValuesChanged_EventArgs>(_bda_touchValuesChanged);
-                brailleDisAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
+                brailleAdapter.touchValuesChanged += new EventHandler<BrailleIO_TouchValuesChanged_EventArgs>(_bda_touchValuesChanged);
+                brailleAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
                 #endregion
                 */
-                //return brailleDisAdapter;
+                //return brailleAdapter;
             }
             return;
         }
@@ -219,6 +218,7 @@ namespace StrategyBrailleIO
                  if (screen == null)
                  {
                      brailleIOMediator.AddView(screenName, new BrailleIOScreen());
+
                  }
                 // der screen existiert schon -> ok
             }
