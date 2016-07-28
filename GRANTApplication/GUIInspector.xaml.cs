@@ -303,20 +303,22 @@ namespace GRANTApplication
 
         private void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref MenuItem root)
         {
+
             ITreeStrategy<OSMElement.OSMElement> node1;
             
             while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
             {
-                
-                MenuItem child = new MenuItem();
-                node1 = tree.Child;
-                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                child.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
-                String nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
-                if (nameFiltered.Length > 40)
-                {
-                    child.nameFiltered = nameFiltered.Substring(0, 40);
-                }
+
+              
+                    MenuItem child = new MenuItem();
+                    node1 = tree.Child;
+                    child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
+                    child.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
+                    String nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
+                    if (nameFiltered.Length > 40)
+                    {
+                        child.nameFiltered = nameFiltered.Substring(0, 40);
+                    }
 
                 /*  child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
                   child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
@@ -332,22 +334,28 @@ namespace GRANTApplication
   */
 
 
-
-                child.parentMenuItem = root;
-                root.Items.Add(child);
-
-                if (node1.HasChild)
+                if (!tree.IsRoot)
                 {
-                    treeIteration(node1, ref child);
+                    child.parentMenuItem = root;
+
+                    root.Items.Add(child);
                 }
-                else
-                {
-                    if (node1.IsFirst && node1.IsLast)
+                else { root = child; };
+
+                    if (node1.HasChild)
                     {
-                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                        treeIteration(node1, ref child);
                     }
-                    treeIteration(node1, ref root);
-                }
+                    else
+                    {
+                        if (node1.IsFirst && node1.IsLast)
+                        {
+                            root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                        }
+                        treeIteration(node1, ref root);
+                    }
+                
+             
             }
             while (tree.HasNext)
             {
@@ -406,6 +414,7 @@ namespace GRANTApplication
             {
                 tvMain.Items.Add(root);
                 NodeButton.IsEnabled = false;
+                updatePropertiesTable(tree.Child.Data.properties.IdGenerated);
                 return;
             }
             if (!tree.HasChild)
@@ -491,10 +500,18 @@ namespace GRANTApplication
                         //Filtermethode
                         IntPtr points = operationSystemStrategy.getHWND();
                         List<Strategy> possibleFilter = settings.getPossibleFilters();
-                        String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+                       
+                        if (strategyMgr.getSpecifiedFilter() == null)
+                        {
+                            // auslesen aus GUI..... 
+                            String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+                            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
 
-                        strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
-                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+                        }
+
+
+
+                            IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                       //  filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
@@ -507,17 +524,24 @@ namespace GRANTApplication
 
                        // ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
 
+                       
+                            
                         tvMain.Items.Clear();
+                        
                         root.Items.Clear();
 
+                        //tree.DeepCopy();
+                        
+                        
 
                         //TreeViewItem root = new TreeViewItem();
-                        root.controlTypeFiltered = "Filtered-Tree";
-                        
+                        //root.controlTypeFiltered = "Filtered-Tree";
+                        //ITreeStrategy<OSMElement.OSMElement> copy = tree.Child;
                         //
                         treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyMgr auch verändert (nur noch ein Knoten)
-                       // root.Selected += root_Selected;
-                        //
+                                                                    // root.Selected += root_Selected;
+                                                                    //
+                        
 
 
                     }
