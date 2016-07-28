@@ -129,14 +129,6 @@
       <Project>{7765dc51-ff98-42eb-868b-582a0c2ba0aa}</Project>
       <Name>StrategyBrailleIO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\StrategyDisplayBrailleDis\StrategyDisplayBrailleDis.csproj">
-      <Project>{964196dd-a44f-4414-b4c5-de0569016c91}</Project>
-      <Name>StrategyDisplayBrailleDis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyDisplayBrailleIoSimulator\StrategyDisplayBrailleIoSimulator.csproj">
-      <Project>{f151b250-b466-4f74-b0d2-930f1c77a073}</Project>
-      <Name>StrategyDisplayBrailleIoSimulator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
       <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
       <Name>StrategyGenericTree</Name>

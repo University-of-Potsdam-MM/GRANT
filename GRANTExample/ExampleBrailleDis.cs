@@ -76,6 +76,7 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
                         
                     }
+
                 }
             }
             }

@@ -67,7 +67,6 @@ namespace GRANTExample
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTree);
-
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[2].className);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
 

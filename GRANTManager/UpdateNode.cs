@@ -44,6 +44,7 @@ namespace GRANTManager
                             //TODO: prüfen, ob eine Änderung wirklich notwendig ist
                             //Filter kurzzeitig ändern
                             strategyMgr.setSpecifiedFilter((treeElement.Data.properties.grantFilterStrategy as Type).FullName + ", " + (treeElement.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                         }
                     }
                 }
@@ -53,11 +54,13 @@ namespace GRANTManager
                 if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
                 {
                     strategyMgr.setSpecifiedFilter((grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).FullName + ", " + (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                    strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                 }
                 if (interfaceOfNode != null)
                 {
                     //Filter wieder zurücksetzen
                     strategyMgr.setSpecifiedFilter((grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).FullName + ", " + (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                    strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                 }
             }
         }

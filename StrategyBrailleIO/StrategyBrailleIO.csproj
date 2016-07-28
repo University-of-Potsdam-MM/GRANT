@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrailleDisplayStrategyBrailleIO.cs" />
+    <Compile Include="DisplayStrategyBrailleDis.cs" />
+    <Compile Include="DisplayStrategyBrailleIoSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -87,14 +89,6 @@
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
       <Name>OSMElement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyDisplayBrailleDis\StrategyDisplayBrailleDis.csproj">
-      <Project>{964196dd-a44f-4414-b4c5-de0569016c91}</Project>
-      <Name>StrategyDisplayBrailleDis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyDisplayBrailleIoSimulator\StrategyDisplayBrailleIoSimulator.csproj">
-      <Project>{f151b250-b466-4f74-b0d2-930f1c77a073}</Project>
-      <Name>StrategyDisplayBrailleIoSimulator</Name>
     </ProjectReference>
     <ProjectReference Include="..\StrategyMVBD\StrategyMVBD.csproj">
       <Project>{1fe9346f-83a2-4ae3-9c3c-8b77d9dd4a52}</Project>

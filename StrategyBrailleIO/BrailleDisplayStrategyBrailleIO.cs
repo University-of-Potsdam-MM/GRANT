@@ -114,7 +114,7 @@ namespace StrategyBrailleIO
             String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
             String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Namespace;
             //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
-            if (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Equals(typeof(StrategyDisplayBrailleIoSimulator.DisplayStrategyBrailleIoSimulator)))
+            if (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
             {
                 initializedSimulator();
                 return;
@@ -610,11 +610,11 @@ namespace StrategyBrailleIO
             {
                 brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD);
             }
-            if (displayStrategyType.Equals(typeof(StrategyDisplayBrailleDis.DisplayStrategyBrailleDis)))
+            if (displayStrategyType.Equals(typeof(DisplayStrategyBrailleDis)))
             {
                 brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet);
             }
-            if (displayStrategyType.Equals(typeof(StrategyDisplayBrailleIoSimulator.DisplayStrategyBrailleIoSimulator)))
+            if (displayStrategyType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
             {
                 //hier brauchen wir den Type nicht, da der Simulator anders erstellt wird
             }
