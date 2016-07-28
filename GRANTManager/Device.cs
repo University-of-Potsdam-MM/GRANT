@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategyManager
+namespace GRANTManager
 {
     /// <summary>
     /// Enthält Informationen/Beschreibung zu einer Stiftplatte

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Drawing;
 
-namespace StrategyManager.Interfaces
+namespace GRANTManager.Interfaces
 {
     public interface IOperationSystemStrategy
     {

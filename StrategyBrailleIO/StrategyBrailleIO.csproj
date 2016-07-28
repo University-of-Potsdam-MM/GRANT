@@ -80,6 +80,10 @@
       <Project>{8fdc0093-e06d-4116-b182-79eeed0645ab}</Project>
       <Name>BrailleIOGuiElementRenderer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GRANTManager\GRANTManager.csproj">
+      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
+      <Name>GRANTManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
       <Name>OSMElement</Name>
@@ -91,10 +95,6 @@
     <ProjectReference Include="..\StrategyDisplayBrailleIoSimulator\StrategyDisplayBrailleIoSimulator.csproj">
       <Project>{f151b250-b466-4f74-b0d2-930f1c77a073}</Project>
       <Name>StrategyDisplayBrailleIoSimulator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyManager\StrategyManager.csproj">
-      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
-      <Name>StrategyManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\StrategyMVBD\StrategyMVBD.csproj">
       <Project>{1fe9346f-83a2-4ae3-9c3c-8b77d9dd4a52}</Project>

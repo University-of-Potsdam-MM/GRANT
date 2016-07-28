@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 
-namespace StrategyManager.AbstractClasses
+namespace GRANTManager.AbstractClasses
 {
     public abstract class AbstractDisplayStrategy : IDisposable
     {
@@ -72,11 +72,11 @@ namespace StrategyManager.AbstractClasses
                     }
                     catch (InvalidCastException ic)
                     {
-                        throw new InvalidCastException("Fehler bei StrategyManager.AbstractClasses.getAllPosibleDevices(): " + ic.Message);
+                        throw new InvalidCastException("Fehler bei GRANTManager.AbstractClasses.getAllPosibleDevices(): " + ic.Message);
                     }
                     catch (ArgumentNullException e)
                     {
-                        throw new ArgumentNullException("Fehler bei StrategyManager.AbstractClasses.getAllPosibleDevices(): " + e.Message);
+                        throw new ArgumentNullException("Fehler bei GRANTManager.AbstractClasses.getAllPosibleDevices(): " + e.Message);
                     }
                 }
             }

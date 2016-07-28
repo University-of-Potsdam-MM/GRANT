@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Security.Permissions;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 
 
 //entnommen von: http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection (Autor: Nicholas Butler; Lizenz CPOL)

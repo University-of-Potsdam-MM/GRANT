@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager;
+using GRANTManager;
 using System.Drawing;
 
 namespace GRANTExample

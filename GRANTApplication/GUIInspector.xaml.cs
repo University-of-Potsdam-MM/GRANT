@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using StrategyManager;
-using StrategyManager.Interfaces;
+using GRANTManager;
+using GRANTManager.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;

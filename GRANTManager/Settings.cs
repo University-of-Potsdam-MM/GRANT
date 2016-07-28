@@ -3,11 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 
 
 
-namespace StrategyManager
+namespace GRANTManager
 {
     public class Settings
     {

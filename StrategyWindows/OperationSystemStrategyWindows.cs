@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 using System.Windows;
 using System.Drawing;
 using OSMElement;

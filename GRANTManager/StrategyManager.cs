@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager;
-using StrategyManager.Interfaces;
-using StrategyManager.AbstractClasses;
+using GRANTManager;
+using GRANTManager.Interfaces;
+using GRANTManager.AbstractClasses;
 using OSMElement;
 
 
-namespace StrategyManager
+namespace GRANTManager
 {
     public class StrategyMgr
     {

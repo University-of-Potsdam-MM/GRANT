@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using OSMElement;
 
-namespace StrategyManager.Interfaces
+namespace GRANTManager.Interfaces
 {
     public interface ITreeStrategy<T>
     {

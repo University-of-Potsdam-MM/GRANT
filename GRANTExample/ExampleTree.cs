@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRANTApplication;
-using StrategyManager;
-using StrategyManager.Interfaces;
+using GRANTManager;
+using GRANTManager.Interfaces;
 using OSMElement;
 
 namespace GRANTExample

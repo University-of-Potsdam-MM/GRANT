@@ -1,5 +1,5 @@
 ﻿using System;
-namespace StrategyManager.Interfaces
+namespace GRANTManager.Interfaces
 {
     public interface ITreeOperations<T>
     {
@@ -21,7 +21,7 @@ namespace StrategyManager.Interfaces
         /// <param name="generatedId">Gibt die Id an zuder ein zugehöriger Knoten ermittelt werden soll</param>
         /// <param name="tree">gibt den Baum an, in welchem ein zugehöriger Knoten ermittelt werden soll</param>
         /// <returns>Gibt einen Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-       // StrategyManager.Interfaces.ITreeStrategy<T> getAssociatedNode(string idGenerated, StrategyManager.Interfaces.ITreeStrategy<T> tree);
+       // GRANTManager.Interfaces.ITreeStrategy<T> getAssociatedNode(string idGenerated, GRANTManager.Interfaces.ITreeStrategy<T> tree);
 
         OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated);
         OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated);
@@ -32,14 +32,14 @@ namespace StrategyManager.Interfaces
         /// <param name="generatedId">Gibt die Id an zuder die zugehörigen Knoten ermittelt werden sollen</param>
         /// <param name="tree">gibt den Baum an, in welchem die zugehörigen Knoten ermittelt werden sollen </param>
         /// <returns>Gibt eine Liste mit den Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-        System.Collections.Generic.List<StrategyManager.Interfaces.ITreeStrategy<T>> getAssociatedNodeList(string idGenereted, StrategyManager.Interfaces.ITreeStrategy<T> tree);
+        System.Collections.Generic.List<GRANTManager.Interfaces.ITreeStrategy<T>> getAssociatedNodeList(string idGenereted, GRANTManager.Interfaces.ITreeStrategy<T> tree);
 
         /// <summary>
         /// Gibt die (einige) <code>GeneralProperties</code> des angegebenen Baumes aus
         /// </summary>
         /// <param name="tree">Gibt den auszugebenen Baum an</param>
         /// <param name="depth">Gibt die Tiefe der Ausgabe an; Wenn der gesamte Baum ausgegeben werden soll, so muss <value>-1</value> angegeben werden.</param>
-        void printTreeElements(StrategyManager.Interfaces.ITreeStrategy<T> tree, int depth);
+        void printTreeElements(GRANTManager.Interfaces.ITreeStrategy<T> tree, int depth);
 
         /// <summary>
         /// Sucht anhand der angegebenen <code>GeneralProperties</code> alle Knoten die diesen Eigenschaften entsprechen
@@ -48,7 +48,7 @@ namespace StrategyManager.Interfaces
         /// <param name="properties">gibt die zusuchenden Eigenschaften an</param>
         /// <param name="oper">gibt an wie die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste mit allen Knoten auf den die Eigenschaften zutreffen</returns>
-        System.Collections.Generic.List<StrategyManager.Interfaces.ITreeStrategy<T>> searchProperties(StrategyManager.Interfaces.ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, StrategyManager.OperatorEnum oper);
+        System.Collections.Generic.List<GRANTManager.Interfaces.ITreeStrategy<T>> searchProperties(GRANTManager.Interfaces.ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, GRANTManager.OperatorEnum oper);
 
         /// <summary>
         /// Fügt einen Knoten dem Baum der  Braille-Darstellung hinzu;
@@ -78,7 +78,7 @@ namespace StrategyManager.Interfaces
         String getIdOfView(String viewName);
 
 
-        void setStrategyMgr(StrategyManager.StrategyMgr mamager);
-        StrategyManager.StrategyMgr getStrategyMgr();
+        void setStrategyMgr(GRANTManager.StrategyMgr mamager);
+        GRANTManager.StrategyMgr getStrategyMgr();
     }
 }

@@ -9,7 +9,7 @@ using System.Drawing.Imaging;
 // By James Crowley, published on 13 Apr 2004 
 //////////////////////////////////////////////////////////////////////////
 
-namespace StrategyManager
+namespace GRANTManager
 {
     /// <summary>
     /// Provides functions to capture the entire screen, or a particular window, and save it to a file.

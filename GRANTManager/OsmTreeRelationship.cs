@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OSMElement;
 
-namespace StrategyManager
+namespace GRANTManager
 {   
     /* TODO: Brauchen wir hier auch ein Interface?
      * TODO: Die Klasse sollte woanders hin

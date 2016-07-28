@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OSMElement;
 
-namespace StrategyManager.Interfaces
+namespace GRANTManager.Interfaces
 {
     public interface IBrailleDisplayStrategy
     {

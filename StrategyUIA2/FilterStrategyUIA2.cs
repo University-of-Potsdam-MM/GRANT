@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager;
+using GRANTManager;
 using System.Windows.Automation;
 using System.Diagnostics;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows;
 
@@ -72,7 +72,7 @@ namespace StrategyUIA2
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, StrategyManager.TreeScopeEnum treeScope, int depth)
+        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
         {
             AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
             if (mainElement == null)
@@ -173,7 +173,6 @@ namespace StrategyUIA2
             TreeWalker walker = TreeWalker.ControlViewWalker;
             AutomationElement elementParent = walker.GetParent(mainElement);
             filterChildren(elementParent, 1, ref tree);
-            Console.WriteLine();
             //oder             walker.GetPreviousSibling(mainElement);             walker.GetNextSibling(mainElement);
         }
 
@@ -423,7 +422,7 @@ namespace StrategyUIA2
             if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
-                Console.WriteLine("hash = " + elementP.IdGenerated);
+               // Console.WriteLine("hash = " + elementP.IdGenerated);
             }
             //prüfen, ob es jetzt eine andere Filter-Strategy ist
             if (strategyMgr.getFilteredTree() != null && strategyMgr.getFilteredTree().HasChild) //TODO: gleich prüfen, ob es überhaut angegeben ist
@@ -433,8 +432,8 @@ namespace StrategyUIA2
                 Type interfacesOfTree = (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
                 if (interfacesOfTree != null)
                 {
-                    Console.WriteLine("this.GetType() = {0}", this.GetType());
-                    Console.WriteLine("strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type = {0}", strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type);
+                   // Console.WriteLine("this.GetType() = {0}", this.GetType());
+                    //Console.WriteLine("strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type = {0}", strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type);
 
                     if (strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
                     {//wir haben hier nicht die Standard-Filter-Methode

@@ -51,6 +51,10 @@
     <Compile Include="UIA_EventsMonitor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GRANTManager\GRANTManager.csproj">
+      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
+      <Name>GRANTManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OSMElement\OSMElement.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
       <Name>OSMElement</Name>
@@ -58,10 +62,6 @@
     <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
       <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
       <Name>StrategyGenericTree</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyManager\StrategyManager.csproj">
-      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
-      <Name>StrategyManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

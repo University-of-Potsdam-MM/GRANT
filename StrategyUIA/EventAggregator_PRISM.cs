@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using StrategyManager;
+using GRANTManager;
 using System.Windows.Automation;
 using System.Diagnostics;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows;
 

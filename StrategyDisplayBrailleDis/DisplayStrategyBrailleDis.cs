@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager;
-using StrategyManager.AbstractClasses;
+using GRANTManager;
+using GRANTManager.AbstractClasses;
 
 namespace StrategyDisplayBrailleDis
 {

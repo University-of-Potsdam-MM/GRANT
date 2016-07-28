@@ -17,8 +17,8 @@ using System.Windows.Shapes;
 using System.Drawing;
 using GRANTApplication;
 using OSMElement;
-using StrategyManager;
-using StrategyManager.Interfaces;
+using GRANTManager;
+using GRANTManager.Interfaces;
 
 namespace GRANTExample
 {

@@ -7,7 +7,7 @@
     <ProjectGuid>{394E1F1D-B5D0-46E2-B60E-7BEE3A939DE2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StrategyManager</RootNamespace>
+    <RootNamespace>GRANTManager</RootNamespace>
     <AssemblyName>StrategyManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

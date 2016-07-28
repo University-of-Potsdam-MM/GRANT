@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager;
+using GRANTManager;
 using System.Windows.Automation;
 using System.Diagnostics;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows;
 
@@ -70,7 +70,7 @@ namespace StrategyUIA
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, StrategyManager.TreeScopeEnum treeScope, int depth)
+        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
         {
             AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
             if (mainElement == null)

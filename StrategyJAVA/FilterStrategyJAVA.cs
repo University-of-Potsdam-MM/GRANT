@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager;
-using StrategyManager.Interfaces;
+using GRANTManager;
+using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows;
 
@@ -26,7 +26,7 @@ namespace StrategyJAVA
             return tree;
         }
 
-        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, StrategyManager.TreeScopeEnum treeScope, int depth)
+        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
         {
             return specifiedTree;
         }

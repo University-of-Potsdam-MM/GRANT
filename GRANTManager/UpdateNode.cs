@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StrategyManager.Interfaces;
+using GRANTManager.Interfaces;
 
-namespace StrategyManager
+namespace GRANTManager
 {
     /// <summary>
     /// Die Klasse Kapselt update-Methode -> ectl. in ein anderes Paket verschieben
