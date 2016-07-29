@@ -509,6 +509,7 @@ namespace GRANTApplication
                             // auslesen aus GUI..... 
                             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
                             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
 
                         }
 
@@ -758,6 +759,7 @@ namespace GRANTApplication
             this.Title = button.Content.ToString();
             //Console.WriteLine("Filter: " + Title);
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(Title));
+            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 
