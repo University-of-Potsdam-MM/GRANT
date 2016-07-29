@@ -201,6 +201,13 @@ namespace OSMElement
         public String grantFilterStrategyFullName { get; set; }
         public String grantFilterStrategyNamespace { get; set; }
         
+
+        /// <summary>
+        /// Gibt den Namen der Anwendung an -- wird benötigt um die Anwendung später wiederzufinden (modulName != className bzw. nameFiltered)
+        /// (nur für den ersten Knoten wichtig)
+        /// </summary>
+        public String moduleName { get; set; }
+        public String fileName { get; set; }
     }
 }
 

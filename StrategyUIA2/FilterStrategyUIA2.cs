@@ -52,17 +52,7 @@ namespace StrategyUIA2
             ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             //uiaEvents.eventsUIA_withHWND(hwnd);
-            if (tree.HasChild)//Filterart setzen
-            {
-                GeneralProperties prop = tree.Child.Data.properties;
-                prop.grantFilterStrategyFullName = this.GetType().FullName;
-                prop.grantFilterStrategyNamespace = this.GetType().Namespace;
-                OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
-                osm.events = tree.Child.Data.events;
-                osm.properties = prop;
-                tree.Child.Data = osm;
-            }
+            setSpecialPropertiesOfFirstNode(ref tree);
             return tree;
         }
 
@@ -83,8 +73,8 @@ namespace StrategyUIA2
             }
             ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
 
-          //  UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-           // uiaEvents.eventsUIA_withAutomationElement(mainElement);
+            //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+            //uiaEvents.eventsUIA_withAutomationElement(mainElement);
 
             switch (treeScope)
             {
@@ -110,18 +100,8 @@ namespace StrategyUIA2
                     break;
                 case TreeScopeEnum.Application:
                     filterApplication(mainElement, depth, ref tree);
-                    //beim ersten Knoten die Strategy mit ranschreiben
-                    if (tree.HasChild)
-                    {
-                        GeneralProperties prop = tree.Child.Data.properties;
-                        prop.grantFilterStrategyNamespace = this.GetType().Namespace;
-                        prop.grantFilterStrategyFullName = this.GetType().FullName;
-                        OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                        osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
-                        osm.events = tree.Child.Data.events;
-                        osm.properties = prop;
-                        tree.Child.Data = osm;
-                    }
+                    //beim ersten Knoten die Strategy mit ranschreiben + ModulName
+                    setSpecialPropertiesOfFirstNode(ref tree);
                     break;
             }
             return tree;
@@ -428,7 +408,7 @@ namespace StrategyUIA2
             setSupportedPatterns(ref elementP, element);
             if (elementP.IdGenerated == null)
             {
-                elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
+                elementP.IdGenerated = OSMElement.Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
                 //Console.WriteLine("hash = " + elementP.IdGenerated);
             }
             //prüfen, ob es jetzt eine andere Filter-Strategy ist
@@ -500,6 +480,27 @@ namespace StrategyUIA2
         private void setSupportedPatterns(ref GeneralProperties properties, AutomationElement element)
         {
             properties.suportedPatterns = element.GetSupportedPatterns().ToArray();
+        }
+
+        /// <summary>
+        /// Setzt für den ersten Knoten spezielle Eigenschaften
+        /// </summary>
+        /// <param name="tree">gibt eine Referenz auf den bisherigen Baum an</param>
+        private void setSpecialPropertiesOfFirstNode(ref ITreeStrategy<OSMElement.OSMElement> tree)
+        {
+            if (tree.HasChild)
+            {
+                GeneralProperties prop = tree.Child.Data.properties;
+                prop.grantFilterStrategyFullName = this.GetType().FullName;
+                prop.grantFilterStrategyNamespace = this.GetType().Namespace;
+                prop.moduleName = strategyMgr.getSpecifiedOperationSystem().getModulNameOfApplication(prop.nameFiltered);
+                prop.fileName = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplication(prop.nameFiltered);
+                OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
+                osm.events = tree.Child.Data.events;
+                osm.properties = prop;
+                tree.Child.Data = osm;
+            }
         }
 
         /// <summary>

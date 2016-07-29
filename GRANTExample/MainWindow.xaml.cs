@@ -143,6 +143,21 @@ namespace GRANTExample
             {
                 exampleDisplay.setBrailleIoSimulatorDevice();
             }
+            if (e.Key == Key.E)
+            {
+                if (grantTree != null && grantTree.getFilteredTree() != null)
+                {
+                   IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(grantTree.getFilteredTree().Child.Data.properties.moduleName);
+                   Console.WriteLine("App ist gestartet: {0}", appIsRunnuing);
+                   if (appIsRunnuing.Equals(IntPtr.Zero))
+                   {
+                       if (grantTree.getFilteredTree().Child.Data.properties.fileName != null)
+                       {
+                           strategyMgr.getSpecifiedOperationSystem().openApplication(grantTree.getFilteredTree().Child.Data.properties.fileName);
+                       }
+                   }
+                }
+            }
 
 
 
@@ -192,7 +207,7 @@ namespace GRANTExample
                 fs.Close();
                 //Baum setzen
                 grantTree.setFilteredTree(loadedTree);
-                strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getFilteredTree(), 3);
+                strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getFilteredTree(), 1);
                 //TODO: ggf. Anwendung starten
                 //TODO: Baum aktualisieren
             }

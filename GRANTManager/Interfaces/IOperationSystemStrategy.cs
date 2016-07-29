@@ -18,5 +18,10 @@ namespace GRANTManager.Interfaces
         IntPtr deliverDesktopHWND();
         void getCursorPoint(out int x, out int y);
         Rectangle getRect(OSMElement.OSMElement osmElement);
+
+        IntPtr isApplicationRunning(String appName);
+        String getModulNameOfApplication(String name);
+        String getFileNameOfApplication(String name);
+        bool openApplication(String name);
     }
 }
