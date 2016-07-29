@@ -12,6 +12,8 @@
         <TextBox Name= "AnzeigeEigenschaftBox" HorizontalAlignment="Left" Height="23" Margin="363,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="190"/>
         <Label Content="Anzeige-Eigenschaft (F9)" HorizontalAlignment="Left" Margin="363,37,0,0" VerticalAlignment="Top" Width="166" Height="23"/>
         <TextBlock x:Name="NodeBox" HorizontalAlignment="Left" Margin="19,331,0,-166" TextWrapping="Wrap" VerticalAlignment="Top" Height="487" Width="622"/>
+        <Button Content="Speichern" HorizontalAlignment="Left" Height="22" Margin="402,10,0,0" VerticalAlignment="Top" Width="60" Click="Button_Click_Speichern"/>
+        <Button Content="Laden" HorizontalAlignment="Left" Height="22" Margin="467,10,0,0" VerticalAlignment="Top" Width="62" Click="Button_Click_Laden"/>
     </Grid>
 
 </Window>

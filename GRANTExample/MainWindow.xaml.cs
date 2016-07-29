@@ -100,6 +100,14 @@ namespace GRANTExample
             if (e.Key == Key.F5)
             {
                 exampleTree.filterTreeOfApplication();
+              /*  System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test211.xml");
+                StrategyGenericTree.ITree<OSMElement.OSMElement> tree2 = (StrategyGenericTree.ITree<OSMElement.OSMElement>)grantTree.getFilteredTree().Copy();
+                StrategyGenericTree.NodeTree<OSMElement.OSMElement> tree3 = (StrategyGenericTree.NodeTree<OSMElement.OSMElement>)grantTree.getFilteredTree();
+                tree2.XmlSerialize(fs);
+                //tree2.XmlSerialize(fs);
+                //strategyMgr.getSpecifiedTree().XmlSerialize(fs);
+             //   grantTree.getFilteredTree().XmlSerialize(fs);
+                fs.Close();*/
             }
             if (e.Key == Key.F6)
             {
@@ -138,6 +146,56 @@ namespace GRANTExample
 
 
 
+        }
+
+
+        private void Button_Click_Speichern(object sender, RoutedEventArgs e)
+        {
+            if (grantTree.getFilteredTree() == null) { Console.WriteLine("Der Baum muss vor dem Speichern gefiltert werden."); return; }
+
+            // Configure save file dialog box
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "filteredTree_"+grantTree.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
+            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                System.IO.FileStream fs = System.IO.File.Create(dlg.FileName);
+                grantTree.getFilteredTree().XmlSerialize(fs);
+                fs.Close();
+            }
+        }
+
+        private void Button_Click_Laden(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "filteredTree_"; // Default file name
+            dlg.DefaultExt = ".txt"; // Default file extension
+            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                System.IO.FileStream fs = System.IO.File.Open(dlg.FileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);  //grantTree.getFilteredTree().XmlDeserialize(fs);
+                fs.Close();
+                //Baum setzen
+                grantTree.setFilteredTree(loadedTree);
+                strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getFilteredTree(), 3);
+                //TODO: ggf. Anwendung starten
+                //TODO: Baum aktualisieren
+            }
         }
     }
 }
