@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Serialization;
 
 namespace OSMElement
 {
-    //Properties
+    //Propertie
+    [Serializable]
     public struct GeneralProperties
     {
 
@@ -56,7 +58,6 @@ namespace OSMElement
             set;
         }
 
-        // Visibility
 
         public Rect boundingRectangleFiltered
         {
@@ -112,8 +113,7 @@ namespace OSMElement
             set;
         }
 
-        //typ?
-        // Anmerkung: von String zu int geändert
+        [XmlIgnore]
         public IntPtr hWndFiltered
         {
             get;
@@ -180,6 +180,7 @@ namespace OSMElement
 
         public String valueFiltered { get; set; }
 
+
         public RangeValue rangeValue
         {
             get; set; 
@@ -189,13 +190,16 @@ namespace OSMElement
         /// <summary>
         /// Enthält die unterstützten Pattern
         /// </summary>
+        [XmlIgnore]
         public object[] suportedPatterns { get; set; }
 
         /// <summary>
         /// gibt die Filter-Strategy an, sofern dieses bei einem Knoten abweichend ist 
         /// (wird gesetzt beim Update eines Konotens gesetzt, wenn es nicht der selbe Filter wie für die ganze Anwendung ist)
         /// </summary>
-        public object grantFilterStrategy { get; set; }
+      //  public Type grantFilterStrategy { get; set; }
+        public String grantFilterStrategyFullName { get; set; }
+        public String grantFilterStrategyNamespace { get; set; }
         
     }
 }

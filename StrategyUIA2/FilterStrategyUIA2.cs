@@ -27,7 +27,6 @@ namespace StrategyUIA2
     public class FilterStrategyUIA2 : IFilterStrategy
     {
         private StrategyManager strategyMgr;
-
         private GeneratedGrantTrees grantTrees;
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
@@ -56,7 +55,8 @@ namespace StrategyUIA2
             if (tree.HasChild)//Filterart setzen
             {
                 GeneralProperties prop = tree.Child.Data.properties;
-                prop.grantFilterStrategy = this.GetType();
+                prop.grantFilterStrategyFullName = this.GetType().FullName;
+                prop.grantFilterStrategyNamespace = this.GetType().Namespace;
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
                 osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
                 osm.events = tree.Child.Data.events;
@@ -82,6 +82,9 @@ namespace StrategyUIA2
                 throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
             }
             ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+
+          //  UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+           // uiaEvents.eventsUIA_withAutomationElement(mainElement);
 
             switch (treeScope)
             {
@@ -111,7 +114,8 @@ namespace StrategyUIA2
                     if (tree.HasChild)
                     {
                         GeneralProperties prop = tree.Child.Data.properties;
-                        prop.grantFilterStrategy = this.GetType();
+                        prop.grantFilterStrategyNamespace = this.GetType().Namespace;
+                        prop.grantFilterStrategyFullName = this.GetType().FullName;
                         OSMElement.OSMElement osm = new OSMElement.OSMElement();
                         osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
                         osm.events = tree.Child.Data.events;
@@ -175,6 +179,7 @@ namespace StrategyUIA2
             TreeWalker walker = TreeWalker.ControlViewWalker;
             AutomationElement elementParent = walker.GetParent(mainElement);
             filterChildren(elementParent, 1, ref tree);
+            Console.WriteLine();
             //oder             walker.GetPreviousSibling(mainElement);             walker.GetNextSibling(mainElement);
         }
 
@@ -424,22 +429,24 @@ namespace StrategyUIA2
             if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
-               // Console.WriteLine("hash = " + elementP.IdGenerated);
+                //Console.WriteLine("hash = " + elementP.IdGenerated);
             }
             //prüfen, ob es jetzt eine andere Filter-Strategy ist
-            if (grantTrees != null &&  grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild) //TODO: gleich prüfen, ob es überhaut angegeben ist
+            if (grantTrees != null && grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild)
             {
                 Type interfaceOfClass = this.GetType().GetInterfaces()[0]; // das diese Klasse ein interface hat wissen wir hier
                 // wenn das angegebene Interface nicht gefunden wird ist der Wert hier null
-                Type interfacesOfTree = (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
-                if (interfacesOfTree != null)
+                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace != null)
                 {
-                   // Console.WriteLine("this.GetType() = {0}", this.GetType());
-                    //Console.WriteLine("strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type = {0}", strategyMgr.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type);
-
-                    if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
-                    {//wir haben hier nicht die Standard-Filter-Methode
-                        elementP.grantFilterStrategy = this.GetType();
+                    Type filterStrategyTypeTree = getTypeOfStrategy(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName, grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace);
+                    Type interfacesOfTree = filterStrategyTypeTree.GetInterface(interfaceOfClass.Name);
+                    if (interfacesOfTree != null)
+                    {
+                        if (filterStrategyTypeTree != this.GetType())
+                        {//wir haben hier nicht die Standard-Filter-Methode
+                            elementP.grantFilterStrategyFullName = this.GetType().FullName;
+                            elementP.grantFilterStrategyNamespace = this.GetType().Namespace;
+                        }
                     }
                 }
             }
@@ -464,6 +471,7 @@ namespace StrategyUIA2
                     properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
                 }
                 catch (System.NullReferenceException) { }
+
             }
             object rangeValuePattern = null;
             if (element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
@@ -494,6 +502,11 @@ namespace StrategyUIA2
             properties.suportedPatterns = element.GetSupportedPatterns().ToArray();
         }
 
+        /// <summary>
+        /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element an welches aktualisiert werden soll</param>
+        /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
@@ -720,7 +733,10 @@ namespace StrategyUIA2
             //.. 
             return resultCondition;
         }
-
+        private Type getTypeOfStrategy(String fullName, String ns)
+        {
+            return Type.GetType(fullName + ", " + ns);
+        }
 
     }
     #endregion

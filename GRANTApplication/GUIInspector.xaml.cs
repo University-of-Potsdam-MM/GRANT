@@ -252,7 +252,8 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow11);
 
             dataRow12["Property"] = "Filterstrategy";
-            dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
+            //dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
+            dataRow12["Content"] = osmElement.properties.grantFilterStrategyFullName;
             dataTable.Rows.Add(dataRow12);
 
             

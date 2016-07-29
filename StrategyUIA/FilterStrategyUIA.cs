@@ -53,7 +53,8 @@ namespace StrategyUIA
             if (tree.HasChild)//Filterart setzen
             {
                 GeneralProperties prop = tree.Child.Data.properties;
-                prop.grantFilterStrategy = this.GetType();
+                prop.grantFilterStrategyFullName = this.GetType().FullName;
+                prop.grantFilterStrategyNamespace = this.GetType().Namespace;
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
                 osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
                 osm.events = tree.Child.Data.events;
@@ -111,7 +112,8 @@ namespace StrategyUIA
                     if (tree.HasChild)
                     {
                         GeneralProperties prop = tree.Child.Data.properties;
-                        prop.grantFilterStrategy = this.GetType();
+                        prop.grantFilterStrategyNamespace = this.GetType().Namespace;
+                        prop.grantFilterStrategyFullName = this.GetType().FullName;
                         OSMElement.OSMElement osm = new OSMElement.OSMElement();
                         osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
                         osm.events = tree.Child.Data.events;
@@ -415,14 +417,16 @@ namespace StrategyUIA
             {
                 Type interfaceOfClass = this.GetType().GetInterfaces()[0]; // das diese Klasse ein interface hat wissen wir hier
                 // wenn das angegebene Interface nicht gefunden wird ist der Wert hier null
-                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
+                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace != null)
                 {
-                    Type interfacesOfTree = (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterface(interfaceOfClass.Name);
+                    Type filterStrategyTypeTree = getTypeOfStrategy(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName, grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace);
+                    Type interfacesOfTree = filterStrategyTypeTree.GetInterface(interfaceOfClass.Name);
                     if (interfacesOfTree != null)
                     {
-                        if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type != this.GetType())
+                        if (filterStrategyTypeTree != this.GetType())
                         {//wir haben hier nicht die Standard-Filter-Methode
-                            elementP.grantFilterStrategy = this.GetType();
+                            elementP.grantFilterStrategyFullName = this.GetType().FullName;
+                            elementP.grantFilterStrategyNamespace = this.GetType().Namespace;
                         }
                     }
                 }
@@ -709,7 +713,10 @@ namespace StrategyUIA
             //.. 
             return resultCondition;
         }
-
+        private Type getTypeOfStrategy(String fullName, String ns)
+        {
+            return Type.GetType(fullName + ", " + ns);
+        }
 
     }
     #endregion
