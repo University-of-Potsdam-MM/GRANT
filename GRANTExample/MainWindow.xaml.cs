@@ -41,6 +41,8 @@ namespace GRANTExample
         InspectGui exampleInspectGui;
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
+        Load load;
+        Save save;
 
         private void InitializeFilterComponent()
         {
@@ -74,6 +76,9 @@ namespace GRANTExample
             exampleInspectGui = new InspectGui(strategyMgr);
             exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
+
+            load = new Load(strategyMgr, grantTree);
+            save = new Save(grantTree);
         }
 
 
@@ -182,17 +187,15 @@ namespace GRANTExample
             if (result == true)
             {
                 // Save document
-                System.IO.FileStream fs = System.IO.File.Create(dlg.FileName);
-                grantTree.getFilteredTree().XmlSerialize(fs);
-                fs.Close();
+                save.saveFilteredTree(dlg.FileName);
             }
         }
 
         private void Button_Click_Laden(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".txt"; // Default file extension
+           // dlg.FileName = "filteredTree_"; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
             dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show open file dialog box
@@ -201,15 +204,7 @@ namespace GRANTExample
             // Process open file dialog box results
             if (result == true)
             {
-                // Open document
-                System.IO.FileStream fs = System.IO.File.Open(dlg.FileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);  //grantTree.getFilteredTree().XmlDeserialize(fs);
-                fs.Close();
-                //Baum setzen
-                grantTree.setFilteredTree(loadedTree);
-                strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getFilteredTree(), 1);
-                //TODO: ggf. Anwendung starten
-                //TODO: Baum aktualisieren
+                load.loadFilteredTree(dlg.FileName);
             }
         }
     }
