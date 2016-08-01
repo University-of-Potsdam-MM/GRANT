@@ -35,14 +35,14 @@
                     </MenuItem>
 
                 </Menu>
-                <StackPanel Orientation="Horizontal"  Background="Coral" >
-                    <Label VerticalAlignment="Center" Content="Load existing f´-filtered Tree: "/>
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-8,0" >
+                    <Label VerticalAlignment="Center" Content="Load existing Filtered Tree: "/>
                     <Button Content="Load Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="LoadButton_Click" x:Name="LoadButton"/>
 
 
                 </StackPanel>
                 
-                <StackPanel Orientation="Horizontal"  Background="Gray" >
+                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="0,0,-11,0" >
                     <Label Foreground="White" VerticalAlignment="Top" Content="Filterstrategy: "/>
                     <RadioButton Foreground="White" GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
                     <RadioButton Foreground="White"  GroupName="Filter" Content="JAB"  Click="RadioButton_Click"  Height="14" Width="42" />
@@ -50,7 +50,7 @@
 
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,1,0">
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-7,0">
                     <Label VerticalAlignment="Top" Content="Filter marked tree node with choosen Filterstrategy: "/>
                     <Button Content="Filter Node" Click="Node_Click" x:Name="NodeButton" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="100"/>
 

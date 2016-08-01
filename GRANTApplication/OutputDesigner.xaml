@@ -27,14 +27,25 @@
                 </Menu>
                 <StackPanel Orientation="Horizontal"  Background="Gray" Margin="0,0,-11,0">
                     <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
-                    <Button Content="1. Load Filtered Tree" Click="NodeButton1_Click"  x:Name="NodeButton1" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
-                    <Button Content="2. Choose Output Device" Click="NodeButton3_Click"  x:Name="NodeButton3" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
+                    <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
+                    <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-12,0">
                     <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
-                    <Button Content="Load Project" Click="NodeButton2_Click"  x:Name="NodeButton2" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
+                    <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
+               
                 </StackPanel>
             </StackPanel>
+        </StackPanel>
+       
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gold" Height="300" Margin="0,0,0,10">
+            <Label VerticalAlignment="Center" Content="Filter marked tree node with choosen Filterstrategy: "/>
+           
+
+        </StackPanel>
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,10">
+            <Label VerticalAlignment="Center" Content="Filter marked tree node with choosen Filterstrategy: "/>
+            <Button Content="Save Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
         </StackPanel>
         <Grid DockPanel.Dock="Left" Height="335" VerticalAlignment="Top" Margin="5,5,5,5">
             <!-- Left-->
@@ -80,7 +91,11 @@
 
                 </StackPanel>
             </ScrollViewer>
+          
 
         </Grid>
+      
+      
+  
     </DockPanel>
 </Window>
