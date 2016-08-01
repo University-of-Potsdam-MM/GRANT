@@ -8,8 +8,79 @@
         Title="OutputDesigner" 
               WindowStartupLocation="Manual" Left="850" Top="150" MaxHeight="850" Width="Auto" MaxWidth="750" Height="850" Background="GhostWhite">
     <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
-        <Grid>
-        
-    </Grid>
- </DockPanel>
+        <StackPanel Background="GhostWhite" DockPanel.Dock="Top"  Height="Auto" Margin="-4,0,4,0" >
+            <StackPanel VerticalAlignment="Top">
+                <Menu Width="Auto" Height="20" Margin="0,0,-10,0" >
+                    <MenuItem Header="_File">
+                        <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
+                        <!-- Click="AppExit_Click"-->
+                    </MenuItem>
+                    <MenuItem Header="_Tools">
+                        <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
+                    </MenuItem>
+                    <MenuItem Header="_Help">
+                        <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                        <Separator />
+                        <MenuItem x:Name="Autor" Header="&amp;Autor" HorizontalAlignment="Left" Width="140"/>
+                    </MenuItem>
+
+                </Menu>
+                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="0,0,-11,0">
+                    <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
+                    <Button Content="1. Load Filtered Tree" Click="NodeButton1_Click"  x:Name="NodeButton1" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
+                    <Button Content="2. Choose Output Device" Click="NodeButton3_Click"  x:Name="NodeButton3" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-12,0">
+                    <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
+                    <Button Content="Load Project" Click="NodeButton2_Click"  x:Name="NodeButton2" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <Grid DockPanel.Dock="Left" Height="335" VerticalAlignment="Top" Margin="5,5,5,5">
+            <!-- Left-->
+            <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Background="GhostWhite" HorizontalAlignment="Left" Width="240" Margin="0,3" >
+                <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="325">
+                    <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="230"/>
+                    <TreeView Background="White" x:Name="tvMain" BorderThickness="0" Width="230"  Height="290" >
+
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding controlTypeFiltered}" />
+                                    <TextBlock><Run Text="-"/></TextBlock>
+                                    <!-- <TextBlock Visibility="Collapsed" Text="{Binding IdGenerated}"/>-->
+                                    <!-- <TextBlock><Run Text="-"/></TextBlock>-->
+                                    <!--<TextBlock  Text="{Binding IdGenerated}"/>-->
+                                    <!--<TextBlock><Run Text="-"/></TextBlock>-->
+                                    <TextBlock Text="{Binding nameFiltered}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+
+                        </TreeView.ItemTemplate>
+
+                    </TreeView>
+                    <!--<Grid Margin="10" MinWidth="350" MinHeight="700">-->
+                    <!--</Grid>-->
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Width="240"  Height="330" Margin="0,0,7,0" >
+                <StackPanel Background="White" Width="226"   Height="320" HorizontalAlignment="Center">
+                    <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Right"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Width="240"  Height="330"  Margin="0,0,8,0"  >
+
+                <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
+                    <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Events"  HorizontalAlignment="Center" Width="230"/>
+
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+    </DockPanel>
 </Window>

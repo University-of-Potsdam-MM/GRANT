@@ -31,5 +31,20 @@ namespace GRANTApplication
         {
 
         }
+
+        private void NodeButton1_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NodeButton2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NodeButton3_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

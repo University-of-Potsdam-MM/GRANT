@@ -43,7 +43,7 @@
 
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"  Background="Gainsboro" Margin="0,0,1,0">
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,1,0">
                     <Label VerticalAlignment="Top" Content="Filter marked tree node with choosen Filterstrategy: "/>
                     <Button Content="Filter Node" Click="Node_Click" x:Name="NodeButton" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="100"/>
 
@@ -60,7 +60,7 @@
         <!-- Left-->
         <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Width="327" Background="GhostWhite" Margin="0,0,10,36" >
             <StackPanel Background="GhostWhite" DockPanel.Dock="Left" Width="300" VerticalAlignment="Top" Height="569">
-                <Label BorderThickness="0" BorderBrush="Gray" Background="GhostWhite" FontSize="14" FontWeight="Bold" Content="Control View" Height="41" Margin="2,0,0,0" />
+                <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Control View" Margin="7,5,14,0" Height="30" />
                 <TreeView Background="White" x:Name="tvMain" BorderThickness="1" MinHeight="250" MinWidth="250" MaxWidth="280"  Height="507" Margin="-8,0,0,0" >
 
                     <TreeView.ItemTemplate>
@@ -87,8 +87,17 @@
 
         <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Width="400" Background="GhostWhite" HorizontalAlignment="Left" Margin="0,0,0,27" >
             <Grid Background="GhostWhite" DockPanel.Dock="Right" Width="390"  HorizontalAlignment="Left" Height="567">
-                <Label FontSize="14" FontWeight="Bold"  BorderThickness="0" BorderBrush="Gray" Background="GhostWhite" Content="Properties" Margin="2,2,3,533"/>
-                <DataGrid  HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid1" Background="White" Width="370" Margin="8,39,0,20"  >
+                <Label FontSize="14" FontWeight="Bold"  BorderThickness="0" BorderBrush="Gray" Background="Gold" Content="Properties" Margin="7,5,13,530" >
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-0.231"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
+                <DataGrid  HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid1" Background="White" Width="370" Margin="7,35,0,27"  >
 
                 </DataGrid>
             </Grid>
