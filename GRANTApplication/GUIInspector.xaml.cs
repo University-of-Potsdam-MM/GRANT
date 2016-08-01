@@ -64,6 +64,7 @@ namespace GRANTApplication
 
             root = new MenuItem();
             NodeButton.IsEnabled = false;
+            SaveButton.IsEnabled = false;
 
 
             InitializeComponent();
@@ -552,9 +553,9 @@ namespace GRANTApplication
                         //ITreeStrategy<OSMElement.OSMElement> copy = tree.Child;
                         //
                         treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-                                                                    // root.Selected += root_Selected;
-                                                                    //
-                        
+                                                              // root.Selected += root_Selected;
+                                                              //
+                        SaveButton.IsEnabled = true;
 
 
                     }
@@ -795,6 +796,11 @@ namespace GRANTApplication
             treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
 
 
+        }
+
+        private void Button_Save(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
   
