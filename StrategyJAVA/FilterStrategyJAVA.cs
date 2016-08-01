@@ -62,6 +62,12 @@ namespace StrategyJAVA
         }
 
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement) { return new GeneralProperties(); }
+
+
+        public OSMElement.OSMElement filteringMainNode(IntPtr hwnd)
+        {
+            throw new NotImplementedException();
+        }
     }
     
 }

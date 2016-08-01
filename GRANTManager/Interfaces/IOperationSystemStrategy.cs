@@ -46,5 +46,6 @@ namespace GRANTManager.Interfaces
         /// <param name="name">Gibt den Namen (inkl. Pfad) der Anwendung an</param>
         /// <returns><c>true</c> falls die Anwendung gestartet wurde; sonst <c>false</c></returns>
         bool openApplication(String name);
+
     }
 }
