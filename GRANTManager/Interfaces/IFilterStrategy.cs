@@ -43,6 +43,13 @@ namespace GRANTManager.Interfaces
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement);
 
+        /// <summary>
+        /// Filtert nur den Ersten Knoten ausgehend vom angegebenen hwnd
+        /// </summary>
+        /// <param name="hwnd">gibt den Handle der zu filternden Anwendun an</param>
+        /// <returns>gibt den ersten Knoten zurück</returns>
+        OSMElement.OSMElement filteringMainNode(IntPtr hwnd);
+
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         StrategyManager getStrategyMgr();    }

@@ -41,8 +41,7 @@ namespace GRANTExample
         InspectGui exampleInspectGui;
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
-        Load load;
-        Save save;
+        GuiFunctions guiFuctions;
 
         private void InitializeFilterComponent()
         {
@@ -77,8 +76,7 @@ namespace GRANTExample
             exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
-            load = new Load(strategyMgr, grantTree);
-            save = new Save(grantTree);
+            guiFuctions = new GuiFunctions(strategyMgr, grantTree);
         }
 
 
@@ -176,7 +174,7 @@ namespace GRANTExample
             if (result == true)
             {
                 // Save document
-                save.saveFilteredTree(dlg.FileName);
+                guiFuctions.saveFilteredTree(dlg.FileName);
             }
         }
 
@@ -193,8 +191,7 @@ namespace GRANTExample
             // Process open file dialog box results
             if (result == true)
             {
-                load.loadFilteredTree(dlg.FileName);
-                load.openAppOfFilteredTree();
+                guiFuctions.loadFilteredTree(dlg.FileName);
             }
         }
     }

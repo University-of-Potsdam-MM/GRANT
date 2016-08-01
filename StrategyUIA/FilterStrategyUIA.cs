@@ -55,6 +55,22 @@ namespace StrategyUIA
         }
 
         /// <summary>
+        /// Filtert nur den Ersten Knoten ausgehend vom angegebenen hwnd
+        /// </summary>
+        /// <param name="hwnd">gibt den Handle der zu filternden Anwendun an</param>
+        /// <returns>gibt den ersten Knoten zurück</returns>
+        public OSMElement.OSMElement filteringMainNode(IntPtr hwnd)
+        {
+            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+            AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            osmElement.properties = setProperties(mainWindowElement);
+            ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
+            setSpecialPropertiesOfFirstNode(ref top);
+            return top.Child.Data;
+        }
+
+        /// <summary>
         /// Filtert ausgehend vom angegebenen Punkt (<paramref name="pointX"/>, <paramref name="pointY"/>) unter Berücksichtigung des angegebenen <code>StrategyManager.TreeScopeEnum</code> Baum
         /// </summary>
         /// <param name="pointX">gibt die x-koordinate des zu filternden Elements an</param>
