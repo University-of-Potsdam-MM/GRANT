@@ -397,6 +397,7 @@ namespace GRANTManager
                 if (grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace != null)
                 {
                     strategyMgr.setSpecifiedFilter(grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace);
+                    strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
                 }
                 else
                 {
@@ -409,7 +410,7 @@ namespace GRANTManager
             }
             if (openAppOfFilteredTree())
             {
-                //filteredLoadedApplication();
+                filteredLoadedApplication();
             }
         }
 
@@ -421,10 +422,10 @@ namespace GRANTManager
         {
             if (grantTree != null && grantTree.getFilteredTree() != null && grantTree.getFilteredTree().HasChild)
             {
-                if (grantTree.getFilteredTree().Data.properties.Equals(new GeneralProperties()) || grantTree.getFilteredTree().Child.Data.properties.moduleName == null)
+                if (grantTree.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties()) || grantTree.getFilteredTree().Child.Data.properties.moduleName == null)
                 {
-                    Console.WriteLine("Kein Daten im 1. Knoten Vorhanden.");
-                   // return false;
+                    Debug.WriteLine("Kein Daten im 1. Knoten Vorhanden.");
+                    return false;
                 }
                 IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(grantTree.getFilteredTree().Child.Data.properties.moduleName);
                 Debug.WriteLine("App ist gestartet: {0}", appIsRunnuing);
@@ -440,6 +441,7 @@ namespace GRANTManager
                         else { return true; }
                     }
                 }
+                else { return true; }
             }
             return false;
         }
@@ -451,7 +453,7 @@ namespace GRANTManager
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
             OSMElement.OSMElement firstNodeNew = strategyMgr.getSpecifiedFilter().filteringMainNode(hwnd);
-            if (firstNodeNew.properties.hWndFiltered.Equals(loadedTree.Child.Data.properties.hWndFiltered))
+            if (firstNodeNew.properties.hWndFiltered.Equals(loadedTree.Child.Data.properties.hWndFiltered)) //der alte hwnd ist immer null
             {
                 Debug.WriteLine("Die Anwendung wurde zwischendurch nicht geschlossen");
                 if (firstNodeNew.properties.boundingRectangleFiltered.Equals(loadedTree.Child.Data.properties.boundingRectangleFiltered))

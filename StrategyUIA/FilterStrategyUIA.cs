@@ -66,8 +66,8 @@ namespace StrategyUIA
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainWindowElement);
             ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
-            setSpecialPropertiesOfFirstNode(ref top);
-            return top.Child.Data;
+            setSpecialPropertiesOfFirstNode(ref tree);
+            return tree.Child.Data;
         }
 
         /// <summary>
