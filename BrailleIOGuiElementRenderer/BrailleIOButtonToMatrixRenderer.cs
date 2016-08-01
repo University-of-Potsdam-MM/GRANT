@@ -30,7 +30,7 @@ namespace BrailleIOGuiElementRenderer
 
         public bool[,] RenderButton(IViewBoxModel view, UiElement button)
         {
-            //call pre hooks  --> wie funktioniert das richtig?
+            //call pre hooks
             object cM = button.text as object;
            callAllPreHooks(ref view, ref cM);
 
@@ -70,7 +70,7 @@ namespace BrailleIOGuiElementRenderer
             bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (button.text as object == null ? "" : button.text as object), false);
             Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 3);
 
-            //call post hooks --> wie funktioniert das richtig?
+            //call post hooks
             callAllPostHooks(view, cM, ref viewMatrix, false);
 
             return viewMatrix;

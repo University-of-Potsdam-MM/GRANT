@@ -314,7 +314,6 @@ namespace GRANTApplication
                                     grantTrees.setFilteredTree(tree);
                                     // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                                     //  treeStrategy.printTreeElements(tree, -1);
-                                    brailleDisplayStrategy.initializedSimulator();
                                     brailleDisplayStrategy.initializedBrailleDisplay();
 
                                     brailleDisplayStrategy.generatedBrailleUi();
@@ -390,7 +389,6 @@ namespace GRANTApplication
                                 grantTrees.setFilteredTree(tree);
                                 // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
                                 //  treeStrategy.printTreeElements(tree, -1);
-                                brailleDisplayStrategy.initializedSimulator();
                                 brailleDisplayStrategy.initializedBrailleDisplay();
                             }
                             catch (Exception ex)

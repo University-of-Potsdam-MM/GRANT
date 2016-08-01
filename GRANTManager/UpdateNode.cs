@@ -33,17 +33,18 @@ namespace GRANTManager
             {
                 Type interfaceOfNode = null;
                 //prüfen, ob der Knoten nicht mit dem standard-filter gefiltert werden soll und ggf. Filter kurzzeitig wechseln
-                if (treeElement.Data.properties.grantFilterStrategy != null)
+                if (treeElement.Data.properties.grantFilterStrategyFullName != null && treeElement.Data.properties.grantFilterStrategyNamespace != null)
                 {
-                    Type[] interfacesOfTree = (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).GetInterfaces();
+                    Type filterStrategyTypeTree = getTypeOfStrategy(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName, grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace);
+                    Type[] interfacesOfTree = filterStrategyTypeTree.GetInterfaces();
                     if (interfacesOfTree != null)
                     {
-                        interfaceOfNode = (treeElement.Data.properties.grantFilterStrategy as Type).GetInterface(interfacesOfTree[0].Name);
+                        interfaceOfNode = filterStrategyTypeTree.GetInterface(interfacesOfTree[0].Name);
                         if (interfaceOfNode != null)
                         {
                             //TODO: prüfen, ob eine Änderung wirklich notwendig ist
                             //Filter kurzzeitig ändern
-                            strategyMgr.setSpecifiedFilter((treeElement.Data.properties.grantFilterStrategy as Type).FullName + ", " + (treeElement.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                            strategyMgr.setSpecifiedFilter(treeElement.Data.properties.grantFilterStrategyFullName + ", " + treeElement.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                         }
                     }
@@ -51,18 +52,23 @@ namespace GRANTManager
                 //Filtern + Knoten aktualisieren
                 OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(treeElement.Data);
                 strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
-                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy != null)
+                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace != null)
                 {
-                    strategyMgr.setSpecifiedFilter((grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).FullName + ", " + (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                    strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                     strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                 }
                 if (interfaceOfNode != null)
                 {
                     //Filter wieder zurücksetzen
-                    strategyMgr.setSpecifiedFilter((grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).FullName + ", " + (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategy as Type).Namespace); //TODO: methode zum Erhalten des Standard-Filters
+                    strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                     strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                 }
             }
+        }
+
+        private Type getTypeOfStrategy(String fullName, String ns)
+        {
+            return Type.GetType(fullName+", "+ns);
         }
 
 

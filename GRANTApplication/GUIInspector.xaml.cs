@@ -252,7 +252,8 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow11);
 
             dataRow12["Property"] = "Filterstrategy";
-            dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
+            //dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
+            dataRow12["Content"] = osmElement.properties.grantFilterStrategyFullName;
             dataTable.Rows.Add(dataRow12);
 
             
@@ -517,6 +518,7 @@ namespace GRANTApplication
                             // auslesen aus GUI..... 
                             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
                             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
 
                         }
 
@@ -766,6 +768,7 @@ namespace GRANTApplication
             this.Title = button.Content.ToString();
             //Console.WriteLine("Filter: " + Title);
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(Title));
+            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 

@@ -43,10 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrailleRepresentation.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="UiElements\DropDownMenu.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="GeneralProperties.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="OSMElement.cs" />
     <Compile Include="OsmRelationship.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

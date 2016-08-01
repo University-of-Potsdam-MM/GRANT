@@ -10,6 +10,7 @@ using System.Windows;
 using System.Drawing;
 using OSMElement;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace StrategyWindows
 {
@@ -35,6 +36,9 @@ namespace StrategyWindows
             [System.Runtime.InteropServices.DllImport("user32.dll")]
             public static extern bool InvalidateRect(IntPtr hwnd, IntPtr lpRect, bool
             bErase);
+
+            [DllImport("User32.dll")]
+            public static extern Int32 SetForegroundWindow(int hWnd);
         }
 
         private CursorPoint cp = new CursorPoint();
@@ -259,6 +263,87 @@ namespace StrategyWindows
             // Dispose of new graphics.
             newGraphics.Dispose();
 
+        }
+
+
+        /// <summary>
+        /// Ermittelt ob eine Anwendung geöffnet ist
+        /// </summary>
+        /// <param name="appMainModulName">gibt den MainModulName der gewünschten Anwendung an</param>
+        /// <returns> Handle der Anwendung, falls die Anwendung geöffnet ist; sonst <c>IntPtr.Zero</c></returns>
+        public IntPtr isApplicationRunning(string appMainModulName)
+        {
+            if (appMainModulName == null) { return IntPtr.Zero; }
+            foreach (Process clsProcess in Process.GetProcesses())
+            {
+                try
+                {
+                    if (clsProcess.MainModule.ModuleName.Equals(appMainModulName))
+                    {
+                        return clsProcess.MainWindowHandle;
+                    }
+                }
+                catch (System.ComponentModel.Win32Exception) {  }
+            }
+            return IntPtr.Zero;
+        }
+
+      //  public bool isApplicationInForeground(String appMainModulName){
+
+
+      //  }
+
+        /// <summary>
+        /// Ermittelt den Namen der Anwendung zurück
+        /// </summary>
+        /// <param name="name">Titel der Anwendung</param>
+        /// <returns></returns>
+        public String getModulNameOfApplication(String name)
+        {
+            foreach (Process clsProcess in Process.GetProcesses())
+            {
+                if (clsProcess.MainWindowTitle.Contains(name))
+                {
+                    return clsProcess.MainModule.ModuleName;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
+        /// </summary>
+        /// <param name="name">gibt den Titel der Anwendung an</param>
+        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
+        public String getFileNameOfApplication(String name)
+        {
+            foreach (Process clsProcess in Process.GetProcesses())
+            {
+                if (clsProcess.MainWindowTitle.Contains(name))
+                {
+                    return clsProcess.MainModule.FileName;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Startete eine Anwendung
+        /// </summary>
+        /// <param name="name">Gibt den Namen (inkl. Pfad) der Anwendung an</param>
+        /// <returns><c>true</c> falls die Anwendung gestartet wurde; sonst <c>false</c></returns>
+        public bool openApplication(string name)
+        {
+            if (name == null || name.Equals("")) { Console.WriteLine("Kein Name vorhanden!"); return false; }
+            try
+            {
+                Process p = Process.Start(@name);
+                if (p != null) { return true; }
+            }
+            catch (ObjectDisposedException) { }
+            catch (FileNotFoundException) { }
+
+            return false;
         }
     }
     

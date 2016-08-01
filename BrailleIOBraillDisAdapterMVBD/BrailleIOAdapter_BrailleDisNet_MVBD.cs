@@ -20,12 +20,12 @@ namespace BrailleIOBraillDisAdapter
         protected TcpClient         _tcpClient;
 
 
-
         public BrailleIOAdapter_BrailleDisNet_MVBD(IBrailleIOAdapterManager manager) : base(manager)
         {
             _ep         = new IPEndPoint(IPAddress.Loopback, 2017);
 
             ThreadPool.QueueUserWorkItem( new WaitCallback( Thread_Callback ) );
+            while (this.Device == null) { }//warten bis DeviceInfos abgerufen wurden
 
         }
 
@@ -126,7 +126,7 @@ namespace BrailleIOBraillDisAdapter
                                     //_graphicDisplay.PinCountX = ba[1];
                                     //_graphicDisplay.PinCountY = ba[0];
                                 }
-
+                                this.Device = new BrailleIODevice(ba[0], ba[1], "MVBD_" + ba[4], true, true, 30); //TODO: Ausrichtung beachten; ab Name einträge dynamisch bestimmen
                                 //_formMain.Draw();
 
                                 Debug.Print ("--> DeviceInfo {0}x{1}", ba[0], ba[1]);
@@ -270,8 +270,8 @@ namespace BrailleIOBraillDisAdapter
         {
             if ( ( _tcpClient == null ) || ( _tcpClient.Connected == false ) )    return; // -->
 
-            Rectangle rect = new Rectangle(0,0, 120, 60);
-
+            //Rectangle rect = new Rectangle(0,0, 120, 60);
+            Rectangle rect = new Rectangle(0, 0, this.Device.DeviceSizeX, this.Device.DeviceSizeY);
             byte[] ba = new byte[ 7 + (rect.Width * rect.Height / 8) + 1 ]; // 7 + 104 * 60 / 8 + 1 = 788 Bytes
 
             int lenData = ba.Length-3;        // Gesamtlänge - 3 Header
@@ -288,11 +288,9 @@ namespace BrailleIOBraillDisAdapter
 
             int cnt = (7 << 3); // Start bei Index 7
 
-            //bool[,] pins = _graphicDisplay.Pins;
-
-            for(int y = rect.Top; y < rect.Bottom; y++) // 0...59
+            for(int y = rect.Top; y < rect.Bottom && y < pins.GetLength(0); y++) // 0...59
             { 
-                for (int x = rect.Left; x < rect.Right; x++)    // 0...104
+                for (int x = rect.Left; x < rect.Right && x < (pins.Length /pins.GetLength(0)); x++)    // 0...104
                 {
                     if ( pins[y,x] == true )
                     {
