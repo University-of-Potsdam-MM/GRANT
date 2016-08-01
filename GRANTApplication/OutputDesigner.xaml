@@ -43,13 +43,13 @@
            
 
         </StackPanel>
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,10">
-            <Label VerticalAlignment="Center" Content="Filter marked tree node with choosen Filterstrategy: "/>
-            <Button Content="Save Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,25">
+            <Label VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
+            <Button Content="Save Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
         </StackPanel>
         <Grid DockPanel.Dock="Left" Height="335" VerticalAlignment="Top" Margin="5,5,5,5">
             <!-- Left-->
-            <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Background="GhostWhite" HorizontalAlignment="Left" Width="240" Margin="0,3" >
+            <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="240" Margin="0,7" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="325">
                     <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="230"/>
                     <TreeView Background="White" x:Name="tvMain" BorderThickness="0" Width="230"  Height="290" >
@@ -76,14 +76,14 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Width="240"  Height="330" Margin="0,0,7,0" >
+            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >
                 <StackPanel Background="White" Width="226"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
 
                 </StackPanel>
             </ScrollViewer>
 
-            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Right"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Width="240"  Height="330"  Margin="0,0,8,0"  >
+            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Right"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330"  Margin="0,0,8,0"  >
 
                 <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Events"  HorizontalAlignment="Center" Width="230"/>
