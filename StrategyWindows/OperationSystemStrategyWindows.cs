@@ -294,7 +294,7 @@ namespace StrategyWindows
       //  }
 
         /// <summary>
-        /// Gibt den Namen der Anwendung zurück
+        /// Ermittelt den Namen der Anwendung zurück
         /// </summary>
         /// <param name="name">Titel der Anwendung</param>
         /// <returns></returns>
@@ -310,6 +310,11 @@ namespace StrategyWindows
             return null;
         }
 
+        /// <summary>
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
+        /// </summary>
+        /// <param name="name">gibt den Titel der Anwendung an</param>
+        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
         public String getFileNameOfApplication(String name)
         {
             foreach (Process clsProcess in Process.GetProcesses())
@@ -322,9 +327,14 @@ namespace StrategyWindows
             return null;
         }
 
-
+        /// <summary>
+        /// Startete eine Anwendung
+        /// </summary>
+        /// <param name="name">Gibt den Namen (inkl. Pfad) der Anwendung an</param>
+        /// <returns><c>true</c> falls die Anwendung gestartet wurde; sonst <c>false</c></returns>
         public bool openApplication(string name)
         {
+            if (name == null || name.Equals("")) { Console.WriteLine("Kein Name vorhanden!"); return false; }
             try
             {
                 Process p = Process.Start(@name);

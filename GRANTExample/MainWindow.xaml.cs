@@ -150,18 +150,7 @@ namespace GRANTExample
             }
             if (e.Key == Key.E)
             {
-                if (grantTree != null && grantTree.getFilteredTree() != null)
-                {
-                   IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(grantTree.getFilteredTree().Child.Data.properties.moduleName);
-                   Console.WriteLine("App ist gestartet: {0}", appIsRunnuing);
-                   if (appIsRunnuing.Equals(IntPtr.Zero))
-                   {
-                       if (grantTree.getFilteredTree().Child.Data.properties.fileName != null)
-                       {
-                           strategyMgr.getSpecifiedOperationSystem().openApplication(grantTree.getFilteredTree().Child.Data.properties.fileName);
-                       }
-                   }
-                }
+                
             }
 
 
@@ -205,6 +194,7 @@ namespace GRANTExample
             if (result == true)
             {
                 load.loadFilteredTree(dlg.FileName);
+                load.openAppOfFilteredTree();
             }
         }
     }
