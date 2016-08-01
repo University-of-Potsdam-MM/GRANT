@@ -35,6 +35,13 @@
                     </MenuItem>
 
                 </Menu>
+                <StackPanel Orientation="Horizontal"  Background="Coral" >
+                    <Label VerticalAlignment="Center" Content="Load existing f´-filtered Tree: "/>
+                    <Button Content="Load Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="LoadButton_Click" x:Name="LoadButton"/>
+
+
+                </StackPanel>
+                
                 <StackPanel Orientation="Horizontal"  Background="Gray" >
                     <Label Foreground="White" VerticalAlignment="Top" Content="Filterstrategy: "/>
                     <RadioButton Foreground="White" GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
@@ -57,9 +64,9 @@
 
         </StackPanel>
 
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,25">
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,10">
             <Label VerticalAlignment="Center" Content="Filter marked tree node with choosen Filterstrategy: "/>
-            <Button Content="Save Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="Button_Save" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
+            <Button Content="Save Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveButton_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
 
         </StackPanel>
 

@@ -19,7 +19,7 @@ namespace GRANTApplication
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         MenuItem root;
-
+        GuiFunctions guiFuctions;
 
 
         public GUIInspector()
@@ -61,6 +61,8 @@ namespace GRANTApplication
             root.Items.Add(new MenuItem() { ID = "Child item #2" });
             tvMain.Items.Add(root);
            */
+
+            guiFuctions = new GuiFunctions(strategyMgr, grantTrees);
 
             root = new MenuItem();
             NodeButton.IsEnabled = false;
@@ -278,6 +280,7 @@ namespace GRANTApplication
         RoutedPropertyChangedEventArgs<object> e)
         {
             NodeButton.IsEnabled = true;
+            
             var tree = sender as TreeView;
 
             // ... Determine type of SelectedItem.
@@ -795,12 +798,59 @@ namespace GRANTApplication
             //
             treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
 
+            //SaveButton.IsEnabled = true;
 
         }
 
-        private void Button_Save(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (grantTrees.getFilteredTree() == null) { Console.WriteLine("Der Baum muss vor dem Speichern gefiltert werden."); return; }
+
+            // Configure save file dialog box
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "filteredTree_" + grantTrees.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
+            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                guiFuctions.saveFilteredTree(dlg.FileName);
+            }
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            // dlg.FileName = "filteredTree_"; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
+            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                guiFuctions.loadFilteredTree(dlg.FileName);
+            }
+
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+
+            tvMain.Items.Clear();
+            root.Items.Clear();
+
+            //TreeViewItem root = new TreeViewItem();
+            root.controlTypeFiltered = "Filtered- Updated- Tree";
+
+            //
+            treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+            SaveButton.IsEnabled = true;
         }
     }
   
