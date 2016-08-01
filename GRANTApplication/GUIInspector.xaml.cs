@@ -322,6 +322,10 @@ namespace GRANTApplication
                     {
                         child.nameFiltered = nameFiltered.Substring(0, 40);
                     }
+                    else
+                    {
+                    child.nameFiltered = nameFiltered;
+                    }
 
                 /*  child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
                   child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
@@ -373,6 +377,10 @@ namespace GRANTApplication
                 if (nameFiltered.Length > 40)
                 {
                     sibling.nameFiltered = nameFiltered.Substring(0, 20);
+                }
+                else
+                {
+                    sibling.nameFiltered = nameFiltered;
                 }
                 /*       sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
                        sibling.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;

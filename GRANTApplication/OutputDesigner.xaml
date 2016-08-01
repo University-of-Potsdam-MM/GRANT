@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GRANTApplication"
         mc:Ignorable="d"
-        Title="OutputDesigner" Height="300" Width="300">
-    <Grid>
+        Title="OutputDesigner" 
+              WindowStartupLocation="Manual" Left="850" Top="150" MaxHeight="850" Width="Auto" MaxWidth="750" Height="850" Background="GhostWhite">
+    <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
+        <Grid>
         
     </Grid>
+ </DockPanel>
 </Window>
