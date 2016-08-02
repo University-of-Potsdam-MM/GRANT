@@ -26,6 +26,7 @@ namespace GRANTApplication
         GeneratedGrantTrees grantTrees;
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
+      
 
         public OutputDesigner()
         {
@@ -60,9 +61,9 @@ namespace GRANTApplication
             
             //NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
-         
 
-         
+           
+
         }
 
    
@@ -178,6 +179,44 @@ namespace GRANTApplication
             tvMain.Items.Add(root);
            
            
+        }
+        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
+            
+            // ... A List.
+            List<string> Combobox2items = new List<string>();
+          
+            // ... Get the ComboBox reference.
+            var comboBox = sender as ComboBox;
+
+            Combobox2items.Add("Item1");
+            
+
+            // ... Assign the ItemsSource to the List.
+            //comboBox.ItemsSource = Combobox2items;
+
+            // ... Make the first item selected.
+    
+            List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
+             foreach (Device d in devices)
+            {
+                Combobox2items.Add(d.ToString());
+             
+            }
+            comboBox.ItemsSource = Combobox2items;
+            comboBox.SelectedIndex = 0;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // ... Get the ComboBox.
+            var comboBox = sender as ComboBox;
+
+            // ... Set SelectedItem as Window Title.
+            string value = comboBox.SelectedItem as string;
+            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
+            this.Title = "Selected: " + value;
         }
     }
 

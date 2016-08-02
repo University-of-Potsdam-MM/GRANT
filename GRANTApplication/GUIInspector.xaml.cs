@@ -21,7 +21,8 @@ namespace GRANTApplication
         GeneratedGrantTrees grantTrees;
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
-
+        bool filterWindowOpen = false;
+        bool outputDesignerWindowOpen = false;
 
         public GUIInspector()
         {
@@ -55,7 +56,8 @@ namespace GRANTApplication
             root = new GuiFunctions.MenuItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
-       }
+            SaveStartButton.IsEnabled = false;
+        }
 
         void updatePropertiesTable(String IdGenerated)
         {
@@ -180,8 +182,8 @@ namespace GRANTApplication
             dataRow19["Content"] = osmElement.properties.isContentElementFiltered == null ? " " : osmElement.properties.isContentElementFiltered.ToString();
             dataTable.Rows.Add(dataRow19);
 
-            dataRow20["Property"] = "isControlElementFiltered";
-            dataRow20["Content"] = osmElement.properties.isControlElementFiltered == null ? " " : osmElement.properties.isControlElementFiltered.ToString();
+            dataRow20["Property"] = "hasKeyboardFocusFiltered";
+            dataRow20["Content"] = osmElement.properties.hasKeyboardFocusFiltered == null ? " " : osmElement.properties.hasKeyboardFocusFiltered.ToString();
             dataTable.Rows.Add(dataRow20);
 
             dataRow21["Property"] = "isPasswordFiltered";
@@ -205,10 +207,9 @@ namespace GRANTApplication
             dataRow25["Property"] = "boundingRectangleFiltered";
             dataRow25["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
             dataTable.Rows.Add(dataRow25);
+            dataTable.Rows.Add();
 
-            //    Rect boundingRectangleFiltered
-
-
+            
 
             dataTable.Rows.Add();
 
@@ -358,6 +359,7 @@ namespace GRANTApplication
                                                               // root.Selected += root_Selected;
                                                               //
                         SaveButton.IsEnabled = true;
+                        SaveStartButton.IsEnabled = true;
                         tvMain.Items.Add(root);
                         NodeButton.IsEnabled = false;
                         updatePropertiesTable(tree.Child.Data.properties.IdGenerated);
@@ -382,9 +384,9 @@ namespace GRANTApplication
             var button = sender as RadioButton;
 
             // ... Display button content as title.
-            this.Title = button.Content.ToString();
+            String titleName = button.Content.ToString();
             //Console.WriteLine("Filter: " + Title);
-            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(Title));
+            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(titleName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
@@ -470,7 +472,34 @@ namespace GRANTApplication
             NodeButton.IsEnabled = false;
             updatePropertiesTable(tree.Child.Data.properties.IdGenerated);
             SaveButton.IsEnabled = true;
+            SaveStartButton.IsEnabled = true;
         }
+    
+
+   
+    private void SaveStartButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (outputDesignerWindowOpen == false)
+        {
+            var aboutOutputDesigner = new OutputDesigner();
+            aboutOutputDesigner.Closed += new EventHandler(aboutOutputDesignerWindow_Closed);
+            aboutOutputDesigner.Topmost = true;
+            aboutOutputDesigner.Show();
+            bool TreeLoad = true;
+            SaveStartButton.CommandParameter = TreeLoad;
+            
+            outputDesignerWindowOpen = true;
+
+        }
+
+        //e.Handled = true;
+        // this.Close();
+
     }
-  
+
+    void aboutOutputDesignerWindow_Closed(object sender, EventArgs e)
+    {
+        outputDesignerWindowOpen = false;
+    }
+}
 }

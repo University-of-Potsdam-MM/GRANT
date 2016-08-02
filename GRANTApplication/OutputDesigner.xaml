@@ -27,8 +27,15 @@
                 </Menu>
                 <StackPanel Orientation="Horizontal"  Background="Gray" Margin="0,0,-11,0">
                     <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
+                  
                     <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
                     <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
+                    <Grid>
+
+                        <ComboBox  Name="comboBox2" ItemsSource="{Binding Combobox2items}"  VerticalAlignment="Center" HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged">
+                          
+                        </ComboBox>
+                    </Grid>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-12,0">
                     <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
@@ -51,8 +58,8 @@
             <!-- Left-->
             <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="240" Margin="0,7" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="325">
-                    <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="230"/>
-                    <TreeView Background="White" x:Name="tvMain" BorderThickness="0" Width="230"  Height="290" >
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="235"/>
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvMain" Width="235"  Height="290" >
 
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
@@ -77,16 +84,16 @@
             </ScrollViewer>
 
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >
-                <StackPanel Background="White" Width="226"   Height="320" HorizontalAlignment="Center">
-                    <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
-
+                <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
+                   
                 </StackPanel>
             </ScrollViewer>
 
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Right"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330"  Margin="0,0,8,0"  >
 
                 <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
-                    <Label BorderThickness="0" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Events"  HorizontalAlignment="Center" Width="230"/>
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Events"  HorizontalAlignment="Center" Width="230"/>
 
 
                 </StackPanel>
