@@ -85,6 +85,25 @@ namespace GRANTManager.AbstractClasses
             
         }
 
+        /// <summary>
+        /// Ermittelt von einem Device-String das zugehörige Decice-Objekt
+        /// </summary>
+        /// <param name="deviceString">gibt den String des Devices an</param>
+        /// <returns>ein Device-Objekt</returns>
+        public Device getDeviceByName(String deviceString)
+        {
+            List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
+
+            foreach (Device d in devices)
+            {
+                if (d.ToString().Equals(deviceString))
+                {
+                    return d;
+                }
+            }
+            return new Device();
+        }
+
 
         public abstract void Dispose();
     }
