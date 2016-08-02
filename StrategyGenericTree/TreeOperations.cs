@@ -393,6 +393,28 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
+        /// Ändert in einem Baum die Properties; dabei wird die <c>IdGenerated</c> mit aktualisiert
+        /// </summary>
+        /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
+        /// <param name="idGeneratedOld">gibt die alte <c>IdGenerated</c> an</param>
+        public void changePropertiesOfFilteredNode(GeneralProperties properties, String idGeneratedOld)
+        {
+          //  ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idGeneratedOld))
+                {
+                    OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                    osm.brailleRepresentation = node.Data.brailleRepresentation;
+                    osm.events = node.Data.events;
+                    osm.properties = properties;
+                    node.Data = osm;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Ändert in der Braille-Darstellung das angegebene Element
         /// </summary>
         /// <param name="element">das geänderte Element für die Braille-Darstellung</param>
@@ -542,6 +564,60 @@ namespace StrategyGenericTree
             }
             grantTrees.getBrailleTree().Remove(nodeToRemove);
             
+        }
+
+        /// <summary>
+        /// Aktualisiert den ganzen Baum (nach dem Laden)
+        /// </summary>
+        /// <param name="hwndNew"></param>
+        public void updateTree(IntPtr hwndNew)
+        {
+           // ITreeStrategy<OSMElement.OSMElement> loadedTree = grantTrees.getFilteredTree().Copy();
+            OSMElement.OSMElement firstNodeNew = strategyMgr.getSpecifiedFilter().filteringMainNode(hwndNew);
+            //hwnd beim ersten Knoten setzen
+            GeneralProperties prop = grantTrees.getFilteredTree().Child.Data.properties;
+            prop.hWndFiltered = hwndNew;
+            strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(prop);
+
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
+            {
+                if (!node.Data.Equals(new OSMElement.OSMElement()))
+                {
+                    if (node.Data.properties.grantFilterStrategyFullName != null && !node.Data.properties.grantFilterStrategyFullName.Equals(strategyMgr.getSpecifiedFilter().GetType().FullName))
+                    {
+                        //Filter ändern
+                        strategyMgr.setSpecifiedFilter(node.Data.properties.grantFilterStrategyFullName + ", " + node.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
+                        strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+                    }
+                    //filtern + aktualisieren
+                    OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(node.Data);
+                    //prüfen, ob es der erste Knoten war
+                    if (node.IsTop)
+                    {
+                        properties.grantFilterStrategyFullName = strategyMgr.getSpecifiedFilter().GetType().FullName;
+                        properties.grantFilterStrategyNamespace = strategyMgr.getSpecifiedFilter().GetType().Namespace;
+                        properties.moduleName = strategyMgr.getSpecifiedOperationSystem().getModulNameOfApplication(properties.nameFiltered);
+                        properties.fileName = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplication(properties.nameFiltered);
+                    }
+
+                    changePropertiesOfFilteredNode(properties, node.Data.properties.IdGenerated);
+                    if (node.Data.properties.grantFilterStrategyFullName != null && !node.Data.properties.grantFilterStrategyFullName.Equals(grantTrees.getFilteredTree().Child.GetType().FullName))
+                    {
+                        //Filter zurückstellen ändern
+                        strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
+                        strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+                    }
+                }
+            }
+
+
+            //ggf. Filterstrategie wieder zurücksetzen
+            if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && !grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName.Equals(strategyMgr.getSpecifiedFilter().GetType().FullName))
+            {
+                //ggf. Filter ändern
+                strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
+                strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+            }
         }
     }
 }

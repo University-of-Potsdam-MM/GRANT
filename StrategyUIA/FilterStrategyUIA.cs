@@ -516,7 +516,8 @@ namespace StrategyUIA
                 //ist der Weg wirklich schneller?
                 IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(osmElement.properties.hWndFiltered));
                 AutomationElement mainWindowElement = deliverAutomationElementFromHWND(pointer);
-                au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                //au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                au = mainWindowElement.FindFirst(TreeScope.Subtree, cond);
             }
             else
             {
@@ -724,12 +725,13 @@ namespace StrategyUIA
             }
             if (properties.boundingRectangleFiltered != null)
             {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.BoundingRectangleProperty, properties.boundingRectangleFiltered), resultCondition);
+              //  resultCondition = new AndCondition(new PropertyCondition(AutomationElement.BoundingRectangleProperty, properties.boundingRectangleFiltered), resultCondition);
             }
 
             //.. 
             return resultCondition;
         }
+
         private Type getTypeOfStrategy(String fullName, String ns)
         {
             return Type.GetType(fullName + ", " + ns);

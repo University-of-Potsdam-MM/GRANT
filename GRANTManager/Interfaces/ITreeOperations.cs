@@ -77,6 +77,12 @@ namespace GRANTManager.Interfaces
         /// <returns>falls der Knoten gefunden wurde, die generierte Id des Knotens; sonst <code>null</code> </returns>
         String getIdOfView(String viewName);
 
+        /// <summary>
+        /// Aktualisiert den ganzen Baum (nach dem Laden)
+        /// </summary>
+        /// <param name="hwndNew"></param>
+        void updateTree(IntPtr hwndNew);
+
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
