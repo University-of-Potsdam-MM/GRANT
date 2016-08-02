@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Data;
+using System.Linq;
 
 namespace GRANTApplication
 {
@@ -54,17 +55,7 @@ namespace GRANTApplication
             root = new GuiFunctions.MenuItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
-
-
-        
-           
-
-
-        }
-
-        
-
-
+       }
 
         void updatePropertiesTable(String IdGenerated)
         {
@@ -92,6 +83,19 @@ namespace GRANTApplication
             DataRow dataRow11 = dataTable.NewRow();
             DataRow dataRow12 = dataTable.NewRow();
 
+            DataRow dataRow13 = dataTable.NewRow();
+            DataRow dataRow14 = dataTable.NewRow();
+            DataRow dataRow15 = dataTable.NewRow();
+            DataRow dataRow16 = dataTable.NewRow();
+            DataRow dataRow17 = dataTable.NewRow();
+            DataRow dataRow18 = dataTable.NewRow();
+            DataRow dataRow19 = dataTable.NewRow();
+            DataRow dataRow20 = dataTable.NewRow();
+            DataRow dataRow21 = dataTable.NewRow();
+            DataRow dataRow22 = dataTable.NewRow();
+            DataRow dataRow23 = dataTable.NewRow();
+            DataRow dataRow24 = dataTable.NewRow();
+            DataRow dataRow25 = dataTable.NewRow();
 
             dataRow[0] = "IdGenerated";
             if (osmElement.properties.IdGenerated == null) { return; }
@@ -148,7 +152,63 @@ namespace GRANTApplication
             dataRow12["Content"] = osmElement.properties.grantFilterStrategyFullName;
             dataTable.Rows.Add(dataRow12);
 
-            
+            dataRow13["Property"] = "labeledbyFiltered";
+            dataRow13["Content"] = osmElement.properties.labeledbyFiltered == null ? " " : osmElement.properties.labeledbyFiltered.ToString();
+            dataTable.Rows.Add(dataRow13);
+
+            dataRow14["Property"] = "localizedControlTypeFiltered";
+            dataRow14["Content"] = osmElement.properties.localizedControlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow14);
+
+            dataRow15["Property"] = "processIdFiltered";
+            dataRow15["Content"] = osmElement.properties.processIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow15);
+
+            dataRow16["Property"] = "isKeyboardFocusableFiltered";
+            dataRow16["Content"] = osmElement.properties.isKeyboardFocusableFiltered == null ? " " : osmElement.properties.isKeyboardFocusableFiltered.ToString();
+            dataTable.Rows.Add(dataRow16);
+
+            dataRow17["Property"] = "isEnabledFiltered";
+            dataRow17["Content"] = osmElement.properties.isEnabledFiltered == null ? " " : osmElement.properties.isEnabledFiltered.ToString();
+            dataTable.Rows.Add(dataRow17);
+
+            dataRow18["Property"] = "isOffscreenFiltered";
+            dataRow18["Content"] = osmElement.properties.isOffscreenFiltered == null ? " " : osmElement.properties.isOffscreenFiltered.ToString();
+            dataTable.Rows.Add(dataRow18);
+
+            dataRow19["Property"] = "isContentElementFiltered";
+            dataRow19["Content"] = osmElement.properties.isContentElementFiltered == null ? " " : osmElement.properties.isContentElementFiltered.ToString();
+            dataTable.Rows.Add(dataRow19);
+
+            dataRow20["Property"] = "isControlElementFiltered";
+            dataRow20["Content"] = osmElement.properties.isControlElementFiltered == null ? " " : osmElement.properties.isControlElementFiltered.ToString();
+            dataTable.Rows.Add(dataRow20);
+
+            dataRow21["Property"] = "isPasswordFiltered";
+            dataRow21["Content"] = osmElement.properties.isPasswordFiltered == null ? " " : osmElement.properties.isPasswordFiltered.ToString();
+            dataTable.Rows.Add(dataRow21);
+
+            dataRow22["Property"] = "isRequiredForFormFiltered";
+            dataRow22["Content"] = osmElement.properties.isRequiredForFormFiltered == null ? " " : osmElement.properties.isRequiredForFormFiltered.ToString();
+            dataTable.Rows.Add(dataRow22);
+
+            dataRow23["Property"] = "hWndFiltered";
+            dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
+            dataTable.Rows.Add(dataRow23);
+
+            String ids = String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
+
+            dataRow24["Property"] = "runtimeIDFiltered";
+            dataRow24["Content"] = ids;
+            dataTable.Rows.Add(dataRow24);
+
+            dataRow25["Property"] = "boundingRectangleFiltered";
+            dataRow25["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
+            dataTable.Rows.Add(dataRow25);
+
+            //    Rect boundingRectangleFiltered
+
+
 
             dataTable.Rows.Add();
 
@@ -180,7 +240,7 @@ namespace GRANTApplication
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
                 if (item.IdGenerated != null)
                 {
-                    Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+                    //Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
 
                     //root = root.parentMenuItem == null ? root : root.parentMenuItem;
                     //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
@@ -193,8 +253,9 @@ namespace GRANTApplication
             else if (tree.SelectedItem is string)
             {
                 // ... Handle a string.
-                this.Name = "Selected: " + tree.SelectedItem.ToString();
-                
+                //this.Name = "Selected: " + tree.SelectedItem.ToString();
+                Console.WriteLine("Fehler: ");
+
             }
         }
 
