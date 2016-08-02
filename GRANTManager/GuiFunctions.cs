@@ -452,15 +452,8 @@ namespace GRANTManager
             ITreeStrategy<OSMElement.OSMElement> loadedTree = grantTree.getFilteredTree();
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
-            OSMElement.OSMElement firstNodeNew = strategyMgr.getSpecifiedFilter().filteringMainNode(hwnd);
-            if (firstNodeNew.properties.hWndFiltered.Equals(loadedTree.Child.Data.properties.hWndFiltered)) //der alte hwnd ist immer null
-            {
-                Debug.WriteLine("Die Anwendung wurde zwischendurch nicht geschlossen");
-                if (firstNodeNew.properties.boundingRectangleFiltered.Equals(loadedTree.Child.Data.properties.boundingRectangleFiltered))
-                {
-                    Debug.WriteLine("Die Anwendung befindet sich an der selben stelle und muss nicht neu gefiltert werden.");
-                }
-            }
+
+            strategyMgr.getSpecifiedTreeOperations().updateTree(hwnd);
 
         }
     }

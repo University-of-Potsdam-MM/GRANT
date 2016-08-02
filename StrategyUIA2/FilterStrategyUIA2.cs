@@ -56,7 +56,6 @@ namespace StrategyUIA2
             return tree;
         }
 
-
         /// <summary>
         /// Filtert nur den Ersten Knoten ausgehend vom angegebenen hwnd
         /// </summary>
@@ -90,8 +89,8 @@ namespace StrategyUIA2
             }
             ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
 
-            //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-            //uiaEvents.eventsUIA_withAutomationElement(mainElement);
+           //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+           // uiaEvents.eventsUIA_withAutomationElement(mainElement);
 
             switch (treeScope)
             {
@@ -536,7 +535,8 @@ namespace StrategyUIA2
                 //ist der Weg wirklich schneller?
                 IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(osmElement.properties.hWndFiltered));
                 AutomationElement mainWindowElement = deliverAutomationElementFromHWND(pointer);
-                au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                //au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                au = mainWindowElement.FindFirst(TreeScope.Subtree, cond);
             }
             else
             {
@@ -745,12 +745,13 @@ namespace StrategyUIA2
             }
             if (properties.boundingRectangleFiltered != null)
             {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.BoundingRectangleProperty, properties.boundingRectangleFiltered), resultCondition);
+                //  resultCondition = new AndCondition(new PropertyCondition(AutomationElement.BoundingRectangleProperty, properties.boundingRectangleFiltered), resultCondition);
             }
 
             //.. 
             return resultCondition;
         }
+
         private Type getTypeOfStrategy(String fullName, String ns)
         {
             return Type.GetType(fullName + ", " + ns);
