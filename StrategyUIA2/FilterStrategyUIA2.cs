@@ -57,19 +57,59 @@ namespace StrategyUIA2
         }
 
         /// <summary>
-        /// Filtert nur den Ersten Knoten ausgehend vom angegebenen hwnd
+        /// Filtert eine Anwendung/Teilanwendung ausgehend vom hwnd
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der zu filternden Anwendun an</param>
-        /// <returns>gibt den ersten Knoten zurück</returns>
-        public OSMElement.OSMElement filteringMainNode(IntPtr hwnd)
+        /// <param name="hwnd">gibt den Handle der zu filternden Anwendung/Element an<</param>
+        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
+        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
+        /// <returns>der gefilterte (Teil-)Baum</returns>
+        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
         {
             ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
-            AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
-            osmElement.properties = setProperties(mainWindowElement);
-            ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
-            setSpecialPropertiesOfFirstNode(ref tree);
-            return tree.Child.Data;
+            AutomationElement mainElement = deliverAutomationElementFromHWND(hwnd);
+            /* OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+             osmElement.properties = setProperties(mainElement);
+             ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
+             setSpecialPropertiesOfFirstNode(ref tree);
+            return tree.Child.Data; */
+
+            if (mainElement == null)
+            {
+                throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
+            }
+            // ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+
+            switch (treeScope)
+            {
+                case TreeScopeEnum.Parent:
+                    filterParents(mainElement, depth, ref tree);
+                    setSpecialPropertiesOfFirstNode(ref tree);
+                    break;
+                case TreeScopeEnum.Sibling:
+                    filterSibling(mainElement, ref tree);
+                    break;
+                case TreeScopeEnum.Children:
+                    filterChildren(mainElement, depth, ref tree);
+                    break;
+                case TreeScopeEnum.Descendants:
+                    // selbe wie Children bloß alle Kindeskinder
+                    filterChildren(mainElement, -1, ref tree);
+                    break;
+                case TreeScopeEnum.Element:
+                    filterElement(mainElement, ref tree);
+                    setSpecialPropertiesOfFirstNode(ref tree);
+                    break;
+                case TreeScopeEnum.Ancestors:
+                    //selbe wie Parent bloß alle Vorfahren
+                    filterParents(mainElement, -1, ref tree);
+                    break;
+                case TreeScopeEnum.Application:
+                    filterApplication(mainElement, depth, ref tree);
+                    //beim ersten Knoten die Strategy mit ranschreiben + ModulName
+                    setSpecialPropertiesOfFirstNode(ref tree);
+                    break;
+            }
+            return tree;
         }
 
         /// <summary>
@@ -278,7 +318,9 @@ namespace StrategyUIA2
             }
             try
             {
-                elementP.controlTypeFiltered = element.Current.ControlType.LocalizedControlType;
+                String tmp = element.Current.ControlType.ProgrammaticName;
+                String[] t = tmp.Split(new String[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+                elementP.controlTypeFiltered = t[1];
             }
             catch (Exception a)
             {
@@ -731,9 +773,9 @@ namespace StrategyUIA2
 
             // ...
             #endregion
-            if (properties.controlTypeFiltered != null)
+            if (properties.localizedControlTypeFiltered != null)
             {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.controlTypeFiltered), resultCondition);
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.localizedControlTypeFiltered), resultCondition);
             }
             if (properties.acceleratorKeyFiltered != null)
             {

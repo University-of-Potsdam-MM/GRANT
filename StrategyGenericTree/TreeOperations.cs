@@ -525,7 +525,7 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
         public void addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
-        {//TODO: muss an der Stelle die 'IdGenerated' eneriert werden oder passiert das vorher?
+        {//TODO: muss an der Stelle die 'IdGenerated' generiert werden oder passiert das vorher?
             if (grantTrees.getBrailleTree() == null)
             {
                 grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewNodeTree());
@@ -572,16 +572,17 @@ namespace StrategyGenericTree
         /// <param name="hwndNew"></param>
         public void updateTree(IntPtr hwndNew)
         {
-           // ITreeStrategy<OSMElement.OSMElement> loadedTree = grantTrees.getFilteredTree().Copy();
-            OSMElement.OSMElement firstNodeNew = strategyMgr.getSpecifiedFilter().filteringMainNode(hwndNew);
+            ITreeStrategy<OSMElement.OSMElement> treeFirstNode = strategyMgr.getSpecifiedFilter().filtering(hwndNew, TreeScopeEnum.Element, 1);
+            if (treeFirstNode.Equals(strategyMgr.getSpecifiedTree().NewNodeTree()) || !treeFirstNode.HasChild) { throw new Exception("Anwendung kann nicht neu gefiltert werden."); }
+            OSMElement.OSMElement firstNodeNew = treeFirstNode.Child.Data;
             //hwnd beim ersten Knoten setzen
             GeneralProperties prop = grantTrees.getFilteredTree().Child.Data.properties;
             prop.hWndFiltered = hwndNew;
             strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(prop);
-
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
+            ITreeStrategy<OSMElement.OSMElement> treeCopy = grantTrees.getFilteredTree().Copy();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)treeCopy).All.Nodes)
             {
-                if (!node.Data.Equals(new OSMElement.OSMElement()))
+                if (!node.Data.Equals(new OSMElement.OSMElement()) && !node.Data.properties.Equals(new GeneralProperties()))
                 {
                     if (node.Data.properties.grantFilterStrategyFullName != null && !node.Data.properties.grantFilterStrategyFullName.Equals(strategyMgr.getSpecifiedFilter().GetType().FullName))
                     {
@@ -589,6 +590,7 @@ namespace StrategyGenericTree
                         strategyMgr.setSpecifiedFilter(node.Data.properties.grantFilterStrategyFullName + ", " + node.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                         strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                     }
+
                     //filtern + aktualisieren
                     OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(node.Data);
                     //prüfen, ob es der erste Knoten war
@@ -600,23 +602,63 @@ namespace StrategyGenericTree
                         properties.fileName = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplication(properties.nameFiltered);
                     }
 
-                    changePropertiesOfFilteredNode(properties, node.Data.properties.IdGenerated);
+                    
                     if (node.Data.properties.grantFilterStrategyFullName != null && !node.Data.properties.grantFilterStrategyFullName.Equals(grantTrees.getFilteredTree().Child.GetType().FullName))
                     {
                         //Filter zurückstellen ändern
                         strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                         strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                     }
+
+                    if (node.Data.properties.controlTypeFiltered != null && node.Data.properties.controlTypeFiltered.Equals("Tab"))
+                    {
+                        /* Die Item-Anzahl könnte sich geändert haben, also alles nochmal neu filtern --> was passiert, wenn FilterStrategyn gesetzt wurden bzw. bei den Beziehungen -> auf das x-Element beziehen
+                         * => Alle Kinder Filtern und im Baum zum nächsten (und nicht zum Kind springen)
+                         */
+                        ITreeStrategy<OSMElement.OSMElement> childrenOfTab  = strategyMgr.getSpecifiedFilter().filtering(properties.hWndFiltered, TreeScopeEnum.Children, 1);
+                        changeChildrenOfNode(node.Data.properties.IdGenerated, childrenOfTab);
+                    }
+                    changePropertiesOfFilteredNode(properties, node.Data.properties.IdGenerated);
                 }
             }
-
-
             //ggf. Filterstrategie wieder zurücksetzen
             if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && !grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName.Equals(strategyMgr.getSpecifiedFilter().GetType().FullName))
             {
                 //ggf. Filter ändern
                 strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                 strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+            }
+        }
+            
+
+        private void changeChildrenOfNode(string idGeneratedOfParentNode, ITreeStrategy<OSMElement.OSMElement> childrenOfTab)
+        {
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idGeneratedOfParentNode))
+                {// Parent-Knoten gefunden
+                    // 1. alten Kinder entfernen
+                    IEnumerableCollectionPair<OSMElement.OSMElement> p = node.AllChildren;
+                    Debug.WriteLine("");
+                    if (!node.HasChild)
+                    {
+                        Debug.WriteLine("Keine Kinder vorhanden");
+                        return;
+                    }
+                    INode<OSMElement.OSMElement> child = (INode<OSMElement.OSMElement>)node.Child;
+                    while (child.HasNext)
+                    {
+                        node.Remove(child.Next.Data);
+                    }
+                    node.Remove(child.Data);
+                     //Debug.WriteLine("");
+                    // 2. neue Kinder hinzufügen
+                   foreach (INode<OSMElement.OSMElement> childNew in ((ITree<OSMElement.OSMElement>)childrenOfTab).All.Nodes)
+                    {
+                        node.AddChild(childNew.Data);
+                    }
+                    return;
+                }
             }
         }
     }

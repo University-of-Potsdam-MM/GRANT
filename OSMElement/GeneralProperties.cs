@@ -100,7 +100,7 @@ namespace OSMElement
             set;
         }
 
-        //Anmerkung: ich habe den LocalizedControlType genommen
+        //Anmerkung: ProgrammaticName
         public String controlTypeFiltered
         {
             get;
