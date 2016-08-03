@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Xml.Serialization;
+using System.IO;
 
 using System.Drawing;
 using GRANTApplication;
@@ -160,11 +161,7 @@ namespace GRANTExample
                 //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
                 NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
             }
-
-
-
-
-        }
+       }
 
 
         private void Button_Click_Speichern(object sender, RoutedEventArgs e)

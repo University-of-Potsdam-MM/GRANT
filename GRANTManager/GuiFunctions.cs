@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Diagnostics;
-using GRANTManager.Interfaces;
-using OSMElement;
-
+using System.Xml.Serialization;
+using System.IO;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Collections.Generic;
+
+using GRANTManager.Interfaces;
+using OSMElement;
 
 namespace GRANTManager
 {
@@ -374,9 +377,66 @@ namespace GRANTManager
         public void saveFilteredTree(String filePath)
         {
             if (grantTree == null || grantTree.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
-            System.IO.FileStream fs = System.IO.File.Create(filePath);
-            grantTree.getFilteredTree().XmlSerialize(fs);
-            fs.Close();
+            using (System.IO.FileStream fs = System.IO.File.Create(filePath))
+            {
+                grantTree.getFilteredTree().XmlSerialize(fs);
+                fs.Close();
+            }
+        }
+
+        /// <summary>
+        /// Speichert den Braille Baum aus dem <c>GeneratedGrantTrees</c>
+        /// </summary>
+        /// <param name="filePath">gibt den Dateipfad + Namen an</param>
+        private void saveBrailleTree(String filePath)
+        {
+            if (grantTree == null || grantTree.getBrailleTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
+            using (System.IO.FileStream fs = System.IO.File.Create(filePath))
+            {
+                grantTree.getBrailleTree().XmlSerialize(fs);
+                fs.Close();
+            }
+        }
+
+        /// <summary>
+        /// Speichert das Projekt
+        /// </summary>
+        /// <param name="projectFilePath">gibt den Pfad + Dateinamen des Projektes an</param>
+        public void saveProject(String projectFilePath)
+        {
+            if (!System.IO.Path.GetExtension(@projectFilePath).Equals("grant", StringComparison.OrdinalIgnoreCase))
+            {
+                // .grant hinzufügen
+                projectFilePath = @projectFilePath + ".grant";
+            }
+             String directoryPath = System.IO.Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + System.IO.Path.GetFileNameWithoutExtension(@projectFilePath); //TODO: Prüfen, ob es ein Datei war
+             Debug.WriteLine(directoryPath);
+            GrantProjectObject projectObject = new GrantProjectObject();
+            projectObject.grantBrailleStrategyFullName =  strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().FullName;
+            projectObject.grantBrailleStrategyNamespace = strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().Namespace;
+            projectObject.grantDisplayStrategyFullName = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().FullName;
+            projectObject.grantDisplayStrategyNamespace = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().Namespace;
+            projectObject.pathBrailleTree = "";
+            projectObject.pathFilteredTree = "";
+            projectObject.relationshipOfTrees = grantTree.getOsmRelationship();
+            
+
+            //ordner für das Projekt erstellen
+            DirectoryInfo di = Directory.CreateDirectory(directoryPath);
+            if (di.Exists)
+            {
+                saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + "filteredTree.xml");
+                if (grantTree.getBrailleTree() != null)
+                {
+                    saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + "brailleTree.xml");
+                }
+                //XmlSerializer serializer;
+                XmlSerializer serializer = new XmlSerializer(typeof(GrantProjectObject));
+                using (StreamWriter writer = new StreamWriter(projectFilePath))
+                {
+                    serializer.Serialize(writer, projectObject);
+                }
+            }            
         }
 
         /// <summary>
