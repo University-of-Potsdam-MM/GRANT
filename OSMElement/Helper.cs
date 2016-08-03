@@ -34,9 +34,8 @@ namespace OSMElement
              * http://stackoverflow.com/questions/12979212/md5-hash-from-string
              * http://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
              */
-            String result = "filterdTree" + properties.autoamtionIdFiltered + properties.classNameFiltered + properties.controlTypeFiltered + properties.itemTypeFiltered + properties.boundingRectangleFiltered.ToString() + properties.accessKeyFiltered; //Achtung noch nicht eindeutig
+            String result = "filterdTree" + properties.autoamtionIdFiltered + properties.classNameFiltered + properties.controlTypeFiltered + properties.itemTypeFiltered + properties.accessKeyFiltered + String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()); ; //Achtung noch nicht eindeutig
             // String result = "filterdTree" + properties.autoamtionIdFiltered + properties.classNameFiltered + properties.controlTypeFiltered + properties.itemTypeFiltered + properties.accessKeyFiltered; //Achtung noch nicht eindeutig
-
             byte[] hash;
             using (var md5 = MD5.Create())
             {

@@ -43,12 +43,15 @@ namespace GRANTManager.Interfaces
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement);
 
+
         /// <summary>
-        /// Filtert nur den Ersten Knoten ausgehend vom angegebenen hwnd
+        /// Filtert eine Anwendung/Teilanwendung ausgehend vom hwnd
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der zu filternden Anwendun an</param>
-        /// <returns>gibt den ersten Knoten zurück</returns>
-        OSMElement.OSMElement filteringMainNode(IntPtr hwnd);
+        /// <param name="hwnd">gibt den Handle der zu filternden Anwendung/Element an</param>
+        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
+        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
+        /// <returns>der gefilterte (Teil-)Baum</returns>
+        ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth);
 
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

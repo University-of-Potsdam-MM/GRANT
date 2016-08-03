@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Threading;
 using System.Diagnostics;
 using GRANTManager.Interfaces;
 using OSMElement;
@@ -450,6 +450,7 @@ namespace GRANTManager
         {
             //ist nur notwendig, wenn die Anwendung zwischendurch zu war (--> hwnd's vergleichen) oder die Anwendung verschoben wurde (--> Rect's vergleichen)
             ITreeStrategy<OSMElement.OSMElement> loadedTree = grantTree.getFilteredTree();
+            Thread.Sleep(100); //Damit ggf. die Anwendung gestartet ist, bevor der hwnd ermittelt werden kann
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
 

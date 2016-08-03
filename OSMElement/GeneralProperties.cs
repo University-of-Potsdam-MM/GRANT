@@ -37,6 +37,7 @@ namespace OSMElement
             set;
         }
 
+        [XmlIgnore] //ist beim neuladen veraltet
         public int[] runtimeIDFiltered
         {
             get;
@@ -58,7 +59,7 @@ namespace OSMElement
             set;
         }
 
-
+        [XmlIgnore] //ist beim neuladen veraltet
         public Rect boundingRectangleFiltered
         {
             get;
@@ -100,7 +101,7 @@ namespace OSMElement
             set;
         }
 
-        //Anmerkung: ich habe den LocalizedControlType genommen
+        //Anmerkung: ProgrammaticName
         public String controlTypeFiltered
         {
             get;
