@@ -59,7 +59,7 @@ namespace OSMElement
             set;
         }
 
-
+        [XmlIgnore] //ist beim neuladen veraltet
         public Rect boundingRectangleFiltered
         {
             get;
