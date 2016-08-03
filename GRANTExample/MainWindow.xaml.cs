@@ -148,8 +148,19 @@ namespace GRANTExample
             }
             if (e.Key == Key.E)
             {
-                
+                exampleBrailleDis.getRendererExample();
             }
+            if (e.Key == Key.F)
+            {
+                exampleBrailleDis.getRendererExample(itemNameTextBox.Text);
+            }
+            if (e.Key == Key.G)
+            {
+                List<String> result = exampleBrailleDis.getRendererList();
+                //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
+                NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
+            }
+
 
 
 

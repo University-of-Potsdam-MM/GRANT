@@ -124,10 +124,35 @@ namespace GRANTExample
             Settings settings = new Settings();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
    //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
-            OSMElement.OSMElement osmElement = grantTrees.getBrailleTree().Child.Data;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
-            return strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
+            OSMElement.OSMElement osmElement = grantTrees.getBrailleTree().Child.Next.Next.Data;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
+            bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
+            return result;
+        }
+
+        public bool[,] getRendererExample(String uiElementName)
+        {
+            if (uiElementName == null || uiElementName.Equals(""))
+            {
+                Console.WriteLine("kein Name angegeben");
+                return null;
+            }
+            Settings settings = new Settings();
+            strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
+            strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
+            bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(uiElementName);
+            return result;
+        }
+
+        public List<String> getRendererList()
+        {
+            Settings settings = new Settings();
+            strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
+            strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            return strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer();
         }
 
         #region Beispielobjekte
