@@ -186,26 +186,23 @@ namespace GRANTApplication
             
             // ... A List.
             List<string> Combobox2items = new List<string>();
-          
+            List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
             // ... Get the ComboBox reference.
             var comboBox = sender as ComboBox;
+            comboBox.SelectedIndex = 1;
 
-            Combobox2items.Add("Item1");
-            
-
-            // ... Assign the ItemsSource to the List.
-            //comboBox.ItemsSource = Combobox2items;
-
-            // ... Make the first item selected.
-    
-            List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
-             foreach (Device d in devices)
+            //Combobox2items.Add("Choose");
+            foreach (Device d in devices)
             {
                 Combobox2items.Add(d.ToString());
-             
+
             }
+           
+            // ... Assign the ItemsSource to the List.
             comboBox.ItemsSource = Combobox2items;
-            comboBox.SelectedIndex = 0;
+
+       
+           
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -215,8 +212,9 @@ namespace GRANTApplication
 
             // ... Set SelectedItem as Window Title.
             string value = comboBox.SelectedItem as string;
-            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
-            this.Title = "Selected: " + value;
+            Device d = strategyMgr.getSpecifiedDisplayStrategy().getDeviceByName(value);
+            strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
+           // this.Title = "Selected: " + value;
         }
     }
 
