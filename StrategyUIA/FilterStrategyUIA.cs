@@ -769,6 +769,10 @@ namespace StrategyUIA
             {
               //  resultCondition = new AndCondition(new PropertyCondition(AutomationElement.BoundingRectangleProperty, properties.boundingRectangleFiltered), resultCondition);
             }
+            if (properties.runtimeIDFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.RuntimeIdProperty, properties.runtimeIDFiltered), resultCondition);
+            }
 
             //.. 
             return resultCondition;

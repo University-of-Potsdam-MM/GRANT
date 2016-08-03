@@ -37,6 +37,7 @@ namespace OSMElement
             set;
         }
 
+        [XmlIgnore] //ist beim neuladen veraltet
         public int[] runtimeIDFiltered
         {
             get;
