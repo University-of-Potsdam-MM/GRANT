@@ -404,7 +404,7 @@ namespace GRANTManager
         /// <param name="projectFilePath">gibt den Pfad + Dateinamen des Projektes an</param>
         public void saveProject(String projectFilePath)
         {
-            if (!System.IO.Path.GetExtension(@projectFilePath).Equals("grant", StringComparison.OrdinalIgnoreCase))
+            if (!System.IO.Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
             {
                 // .grant hinzufügen
                 projectFilePath = @projectFilePath + ".grant";
@@ -416,10 +416,8 @@ namespace GRANTManager
             projectObject.grantBrailleStrategyNamespace = strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().Namespace;
             projectObject.grantDisplayStrategyFullName = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().FullName;
             projectObject.grantDisplayStrategyNamespace = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().Namespace;
-            projectObject.pathBrailleTree = "";
-            projectObject.pathFilteredTree = "";
             projectObject.relationshipOfTrees = grantTree.getOsmRelationship();
-            
+            projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
 
             //ordner für das Projekt erstellen
             DirectoryInfo di = Directory.CreateDirectory(directoryPath);

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using GRANTManager;
 using GRANTManager.Interfaces;
+using OSMElement;
 
 namespace GRANTApplication
 {

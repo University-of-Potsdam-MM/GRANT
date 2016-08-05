@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GRANTManager;
 using GRANTManager.AbstractClasses;
+using OSMElement;
 
 namespace StrategyBrailleIO
 {

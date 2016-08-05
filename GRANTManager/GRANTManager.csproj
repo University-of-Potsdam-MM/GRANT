@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractClasses\AOutputManager.cs" />
-    <Compile Include="Device.cs" />
     <Compile Include="EnumClass.cs" />
     <Compile Include="GeneratedGrantTrees.cs" />
     <Compile Include="GuiFunctions.cs" />

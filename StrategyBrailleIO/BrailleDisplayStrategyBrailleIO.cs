@@ -110,17 +110,19 @@ namespace StrategyBrailleIO
 
         private void createBrailleDis()
         {
-            String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
-            String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Namespace;
+            Type activeDeviceType = Type.GetType(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeFullName + ", " + strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace);
+               
+            //String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
+            //String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace;
             //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
-            if (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
+            if (activeDeviceType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
             {
                 initializedSimulator();
                 return;
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType);
+                 brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
                //TODO: bei MVBD ggf. das Ausgabegerät einstellen
                 

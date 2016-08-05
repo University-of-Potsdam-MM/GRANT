@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRANTManager
+namespace OSMElement
 {
     /// <summary>
     /// Enthält Informationen/Beschreibung zu einer Stiftplatte
@@ -15,7 +15,8 @@ namespace GRANTManager
         public int width {get; set; }
         public OrientationEnum orientation{ get; set; }
         public String name { get; set; }
-        public Type deviceClassType { get; set; }
+        public String deviceClassTypeFullName { get; set; }
+        public String deviceClassTypeNamespace { get; set; }
         //TODO: + Toche, Hardwaretasten
 
         public Device(int height, int width, OrientationEnum orientation, String name, Type deviceClassType)
@@ -25,7 +26,8 @@ namespace GRANTManager
             this.width = width;
             this.orientation = orientation;
             this.name = name;
-            this.deviceClassType = deviceClassType;
+            this.deviceClassTypeFullName = deviceClassType.FullName;
+            this.deviceClassTypeNamespace = deviceClassType.Namespace;
         }
 
         public override string ToString()
