@@ -10,6 +10,11 @@ namespace GRANTManager.Interfaces
     public interface IBrailleDisplayStrategy
     {
         /// <summary>
+        /// Gibt an, ob die GUI und das Gerät initial erstellt wurde
+        /// </summary>
+        Boolean isInitialized();
+
+        /// <summary>
         /// Initialisiert ein Ausgabegerät.
         /// </summary>
         void initializedBrailleDisplay();

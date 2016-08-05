@@ -22,8 +22,8 @@ namespace StrategyBrailleIO
     public class BrailleDisplayStrategyBrailleIO : IBrailleDisplayStrategy
     {
        IBrailleIOShowOffMonitor monitor;
-        BrailleIOMediator brailleIOMediator {get; set;}
-
+       BrailleIOMediator brailleIOMediator {get; set;}
+        private Boolean isInitialized = false;
         /// <summary>
         /// Ist der Adapter des Simulators
         /// </summary>
@@ -103,7 +103,7 @@ namespace StrategyBrailleIO
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
-
+            isInitialized = true;
             createBrailleDis();
 
         }
@@ -203,6 +203,7 @@ namespace StrategyBrailleIO
         /// </summary>
         public void generatedBrailleUi()
         {
+            if (!isInitialized) { initializedBrailleDisplay(); }
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViews(osm);
             brailleIOMediator.RenderDisplay();
@@ -719,5 +720,10 @@ namespace StrategyBrailleIO
         }
         #endregion
 
+
+        bool IBrailleDisplayStrategy.isInitialized()
+        {
+            return isInitialized;
+        }
     }
 }

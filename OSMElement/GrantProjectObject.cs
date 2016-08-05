@@ -10,13 +10,21 @@ namespace OSMElement
     public struct GrantProjectObject
     {
         public List<OsmRelationship<String, String>> relationshipOfTrees;
-      //  public String pathFilteredTree { get; set; }
-      //  public String pathBrailleTree { get; set; }
         public String grantBrailleStrategyFullName { get; set; }
         public String grantBrailleStrategyNamespace { get; set; }
         public String grantDisplayStrategyFullName { get; set; }
         public String grantDisplayStrategyNamespace { get; set; }
+        public String grantTreeStrategyFullName { get; set; }
+        public String grantTreeStrategyNamespace { get; set; }
+        public String grantTreeOperationsFullName { get; set; }
+        public String grantTreeOperationsNamespace { get; set; }
+        //public String grantFilterStrategyFullName { get; set; } -> ist im gefilterten Baum
+        //public String grantFilterStrategyNamespace { get; set; } -> ist im gefilterten Baum
+        public String grantOperationSystemStrategyFullName { get; set; }
+        public String grantOperationSystemStrategyNamespace { get; set; }
+
         public Device device { get; set; }
-        //+ Device
+
+        //+ Betriebssystem (bei Baum schon), specifiedTree
     }
 }

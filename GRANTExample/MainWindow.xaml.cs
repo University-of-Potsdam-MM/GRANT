@@ -170,9 +170,9 @@ namespace GRANTExample
 
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "filteredTree_"+grantTree.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.FileName = "filteredProject_" + grantTree.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
+            dlg.DefaultExt = ".grant"; // Default file extension
+            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show save file dialog box
@@ -182,16 +182,17 @@ namespace GRANTExample
             if (result == true)
             {
                 // Save document
-                guiFuctions.saveFilteredTree(dlg.FileName);
+                // guiFunctions.saveFilteredTree(dlg.FileName);
+                guiFuctions.saveProject(dlg.FileName);
             }
         }
 
         private void Button_Click_Laden(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-           // dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+           // dlg.FileName = "filteredProject_" + grantTree.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
+            dlg.DefaultExt = ".grant"; // Default file extension
+            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
@@ -199,7 +200,7 @@ namespace GRANTExample
             // Process open file dialog box results
             if (result == true)
             {
-                guiFuctions.loadFilteredTree(dlg.FileName);
+                guiFuctions.loadGrantProject(dlg.FileName);
             }
         }
     }

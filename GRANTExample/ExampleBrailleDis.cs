@@ -48,6 +48,14 @@ namespace GRANTExample
                     strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 }
+                else
+                {
+                    if (!strategyMgr.getSpecifiedBrailleDisplay().isInitialized())
+                    {
+                        strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
+                        strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+                    }
+                }
 
                 if (grantTrees.getOsmRelationship() == null)
                 {                    

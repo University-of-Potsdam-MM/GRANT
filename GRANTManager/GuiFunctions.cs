@@ -17,6 +17,8 @@ namespace GRANTManager
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTree;
+        private String filteredTreeSavedName = "filteredTree.xml";
+        private String brailleTreeSavedName = "brailleTree.xml";
 
         public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree)
         {
@@ -404,31 +406,38 @@ namespace GRANTManager
         /// <param name="projectFilePath">gibt den Pfad + Dateinamen des Projektes an</param>
         public void saveProject(String projectFilePath)
         {
-            if (!System.IO.Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
+            if (!Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
             {
                 // .grant hinzufügen
                 projectFilePath = @projectFilePath + ".grant";
             }
-             String directoryPath = System.IO.Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + System.IO.Path.GetFileNameWithoutExtension(@projectFilePath); //TODO: Prüfen, ob es ein Datei war
+             String directoryPath = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath); //TODO: Prüfen, ob es ein Datei war
              Debug.WriteLine(directoryPath);
             GrantProjectObject projectObject = new GrantProjectObject();
+            #region Speichern der Strategyn
             projectObject.grantBrailleStrategyFullName =  strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().FullName;
             projectObject.grantBrailleStrategyNamespace = strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().Namespace;
             projectObject.grantDisplayStrategyFullName = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().FullName;
             projectObject.grantDisplayStrategyNamespace = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().Namespace;
+            Type treeT = strategyMgr.getSpecifiedTree().GetType();
+            projectObject.grantTreeStrategyFullName = strategyMgr.getSpecifiedTree() == null ? null : strategyMgr.getSpecifiedTree().GetType().Namespace + "." + strategyMgr.getSpecifiedTree().GetType().Name;
+            projectObject.grantTreeStrategyNamespace = strategyMgr.getSpecifiedTree() == null ? null : strategyMgr.getSpecifiedTree().GetType().Namespace;
+            projectObject.grantTreeOperationsFullName = strategyMgr.getSpecifiedTreeOperations() == null ? null : strategyMgr.getSpecifiedTreeOperations().GetType().Namespace + "." + strategyMgr.getSpecifiedTreeOperations().GetType().Name;
+            projectObject.grantTreeOperationsNamespace = strategyMgr.getSpecifiedTreeOperations() == null ? null : strategyMgr.getSpecifiedTreeOperations().GetType().Namespace;
+            projectObject.grantOperationSystemStrategyFullName = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().FullName;
+            projectObject.grantOperationSystemStrategyNamespace = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().Namespace;
             projectObject.relationshipOfTrees = grantTree.getOsmRelationship();
             projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
-
-            //ordner für das Projekt erstellen
+            #endregion
+            //Ordner für das Projekt erstellen
             DirectoryInfo di = Directory.CreateDirectory(directoryPath);
             if (di.Exists)
             {
-                saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + "filteredTree.xml");
+                saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + filteredTreeSavedName);
                 if (grantTree.getBrailleTree() != null)
                 {
-                    saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + "brailleTree.xml");
+                    saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + brailleTreeSavedName);
                 }
-                //XmlSerializer serializer;
                 XmlSerializer serializer = new XmlSerializer(typeof(GrantProjectObject));
                 using (StreamWriter writer = new StreamWriter(projectFilePath))
                 {
@@ -437,12 +446,85 @@ namespace GRANTManager
             }            
         }
 
+        public void loadGrantProject(String projectFilePath)
+        {
+            if (!Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.WriteLine("Falsche Dateiendung!");
+                return;
+            }
+            if (!File.Exists(@projectFilePath))
+            {
+                Debug.WriteLine("Die Datei Existiert nicht");
+                return;
+            }
+            System.IO.FileStream fs = System.IO.File.Open(projectFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            XmlSerializer serializer = new XmlSerializer(typeof(GrantProjectObject));
+            GrantProjectObject grantProjectObject;
+            using (StreamReader reader = new StreamReader(fs))
+            {
+                grantProjectObject = (GrantProjectObject) serializer.Deserialize(reader);
+            }
+            //setze OSM-Beziehungen
+            grantTree.setOsmRelationship(grantProjectObject.relationshipOfTrees);
+            #region Laden der Strategyn
+            if (grantProjectObject.grantBrailleStrategyFullName != null && grantProjectObject.grantBrailleStrategyNamespace != null)
+            {
+                strategyMgr.setSpecifiedBrailleDisplay(grantProjectObject.grantBrailleStrategyFullName + ", " + grantProjectObject.grantBrailleStrategyNamespace);
+                strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTree);
+                strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            }
+            if (grantProjectObject.grantDisplayStrategyFullName != null && grantProjectObject.grantDisplayStrategyNamespace != null)
+            {
+                strategyMgr.setSpecifiedDisplayStrategy(grantProjectObject.grantDisplayStrategyFullName + ", " + grantProjectObject.grantDisplayStrategyNamespace);
+            }
+            if (grantProjectObject.grantTreeStrategyFullName != null && grantProjectObject.grantTreeStrategyNamespace != null)
+            {
+                strategyMgr.setSpecifiedTree(grantProjectObject.grantTreeStrategyFullName + ", " + grantProjectObject.grantTreeStrategyNamespace);
+            }
+            if (grantProjectObject.grantTreeOperationsFullName!= null && grantProjectObject.grantTreeOperationsNamespace != null)
+            {
+                strategyMgr.setSpecifiedTreeOperations(grantProjectObject.grantTreeOperationsFullName + ", " + grantProjectObject.grantTreeOperationsNamespace);
+                strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTree);
+                strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
+            }
+            if (grantProjectObject.grantOperationSystemStrategyFullName != null && grantProjectObject.grantOperationSystemStrategyNamespace != null)
+            {
+                strategyMgr.setSpecifiedOperationSystem(grantProjectObject.grantOperationSystemStrategyFullName + ", " + grantProjectObject.grantOperationSystemStrategyNamespace);
+            }
+            #endregion
+            //lade FilteredTree + brailleTree -> ist im Unterordner welcher den Projektnamen trägt
+            String projectDirectory = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
+            loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
+            loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
+            Debug.WriteLine("");
+        }
+
+        private void loadBrailleTree(String filePath)
+        {
+            if (!File.Exists(@filePath))
+            {
+                Debug.WriteLine("Die Datei Existiert nicht");
+                return;
+            }
+            System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
+            fs.Close();
+            //Baum setzen
+            grantTree.setBrailleTree(loadedTree);
+        }
+
         /// <summary>
         /// Lädt eine gefilterten Baum und speichert das Ergebnis im <c>GeneratedGrantTrees</c>
         /// </summary>
         /// <param name="filePath">gibt den Dateipfad + Name an</param>
         public void loadFilteredTree(String filePath)
         {
+            if (!File.Exists(@filePath))
+            {
+                Debug.WriteLine("Die Datei Existiert nicht");
+                return;
+            }
             System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
             fs.Close();
