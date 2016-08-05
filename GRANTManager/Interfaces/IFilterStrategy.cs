@@ -55,5 +55,5 @@ namespace GRANTManager.Interfaces
 
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
-        StrategyManager getStrategyMgr();    }
+        StrategyManager getStrategyMgr();    };
 }

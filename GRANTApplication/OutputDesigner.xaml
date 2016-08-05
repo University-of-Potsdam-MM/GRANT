@@ -82,10 +82,27 @@
             </ScrollViewer>
 
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >
-                <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
+                <StackPanel Grid.Row="2" DataContext="{Binding MyGroups}" Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
-                   
+                    <ListBox Margin="10,10,0,13" Name="listBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="194" Height="200" />
                 </StackPanel>
+                    <!--   <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
+                    <ListBox Name="listBoxForSelection" ItemsSource="{Binding}"  IsSynchronizedWithCurrentItem="True" SelectionMode="Single"  >
+
+                        SelectionChanged="listBoxForSelection_SelectionChanged"  
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <RadioButton IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsSelected}">
+                                    <RadioButton.Content>
+                                        <TextBlock Text="{Binding}" Margin="5">
+                                        </TextBlock>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>-->
             </ScrollViewer>
 
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Right"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330"  Margin="0,0,8,0"  >

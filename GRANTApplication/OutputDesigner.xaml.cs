@@ -205,6 +205,20 @@ namespace GRANTApplication
            
         }
 
+        private void listGuiElements() {
+           List<string> guiElements = strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer();
+
+            foreach (String s in guiElements)
+            {
+
+                listBox1.Items.Add(s);
+
+            }
+       
+            ;
+        }
+
+
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // ... Get the ComboBox.
@@ -214,6 +228,8 @@ namespace GRANTApplication
             string value = comboBox.SelectedItem as string;
             Device d = strategyMgr.getSpecifiedDisplayStrategy().getDeviceByName(value);
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
+            // methode aufrufen
+            listGuiElements();
            // this.Title = "Selected: " + value;
         }
     }
