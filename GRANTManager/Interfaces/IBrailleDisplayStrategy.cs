@@ -45,6 +45,14 @@ namespace GRANTManager.Interfaces
         /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
         bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElement);
 
+        /// <summary>
+        /// Gibt zu einem Renderer beispielhaft die Darstellung an
+        /// Es wird eine Standardgröße genutzt
+        /// </summary>
+        /// <param name="uiElementType">gibt den Namen des Gui-Elements an</param>
+        /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
+        bool[,] getRendererExampleRepresentation(String uiElementType);
+
 
         void setStrategyMgr(StrategyManager strategyMgr);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

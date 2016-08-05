@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-
+using OSMElement;
 
 namespace GRANTManager.AbstractClasses
 {
@@ -31,9 +31,9 @@ namespace GRANTManager.AbstractClasses
         {
             //prüfen, ob es nötig ist
            // Console.WriteLine("this = {0}\n neu = {1}", this.GetType().AssemblyQualifiedName.ToString(), device.deviceClassType.AssemblyQualifiedName);
-            if (!this.GetType().AssemblyQualifiedName.Equals(device.deviceClassType.AssemblyQualifiedName))
+            if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
             {
-                strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassType.AssemblyQualifiedName);
+                strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassTypeFullName + ", " + device.deviceClassTypeNamespace);
             }            
             //TODO: bei MVDB Gerät setzen
         }

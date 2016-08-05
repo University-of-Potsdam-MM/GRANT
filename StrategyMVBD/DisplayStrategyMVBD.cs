@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
+using OSMElement;
 
 namespace StrategyMVBD
 {
@@ -48,8 +49,13 @@ namespace StrategyMVBD
 
         public override List<Device> getPosibleDevices()
         {
-            //warten bis die TCPIP-Verbindung aufgebaut ist
-            while (_tcpClient == null || !_tcpClient.Connected) { Task.Delay(10).Wait(); }
+            //warten bis die TCPIP-Verbindung aufgebaut ist --> nicht unendlich lange warten, evtl. wird mvbd nicht verwendet
+            for (int i = 0; i < 10 && (_tcpClient == null || !_tcpClient.Connected); i++)
+            {
+                Task.Delay(10).Wait(); 
+            }
+            if (_tcpClient == null || !_tcpClient.Connected) { return new List<Device>(); }
+           // while (_tcpClient == null || !_tcpClient.Connected) { Task.Delay(10).Wait(); }
             SendGetPosibleDevices();
             //warten bis Antwort kommt
             while (deviceList == null) { Task.Delay(10).Wait(); }

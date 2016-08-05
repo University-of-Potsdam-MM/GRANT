@@ -110,17 +110,19 @@ namespace StrategyBrailleIO
 
         private void createBrailleDis()
         {
-            String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
-            String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Namespace;
+            Type activeDeviceType = Type.GetType(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeFullName + ", " + strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace);
+               
+            //String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
+            //String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace;
             //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
-            if (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
+            if (activeDeviceType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
             {
                 initializedSimulator();
                 return;
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType);
+                 brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
                //TODO: bei MVBD ggf. das Ausgabegerät einstellen
                 
@@ -501,6 +503,18 @@ namespace StrategyBrailleIO
             createScreen(osmElement.brailleRepresentation.screenName);
             createView(osmElement);
             BrailleIOViewRange tmpView = (brailleIOMediator.GetView(osmElement.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElement.brailleRepresentation.viewName);
+            if (tmpView == null && !osmElement.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())) { return new bool[0, 0]; }
+            if(osmElement.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())){
+                //Screenshot muss extra erstellt werden
+                Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElement.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElement.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
+                if (img == null) { return new bool[0, 0]; }
+                createViewImage(brailleIOMediator.GetView(brailleUiElement.screenName) as BrailleIOScreen, osmElement, img);
+                tmpView = (brailleIOMediator.GetView(osmElement.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElement.brailleRepresentation.viewName);
+            }
+            if (tmpView.IsText())
+            {
+                tmpView.SetText(tmpView.GetText() == null ? "" : tmpView.GetText());
+            }
             String uiElementType = osmElement.properties.controlTypeFiltered;
             bool[,] matrix;
             if (!(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase) ||
@@ -528,6 +542,85 @@ namespace StrategyBrailleIO
             brailleIOMediator.RemoveView(osmElement.brailleRepresentation.screenName);
             return matrix;
         }
+
+        /// <summary>
+        /// Gibt zu einem Renderer beispielhaft die Darstellung an
+        /// Es wird eine Standardgröße genutzt
+        /// </summary>
+        /// <param name="uiElementType">gibt den Namen des Gui-Elements an</param>
+        /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
+        public bool[,] getRendererExampleRepresentation(String uiElementType)
+        {
+            return getRendererExampleRepresentation(getExampleOsmElement(uiElementType));
+        }
+
+        #region beispielOsmElemente
+        private OSMElement.OSMElement getExampleOsmElement(String uiElementType)
+        {
+            #region gemeinsame Eigenschaften
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            GeneralProperties properties = new GeneralProperties();
+            BrailleRepresentation brailleR = new BrailleRepresentation();
+            properties.controlTypeFiltered = uiElementType;
+            brailleR.screenName = "_tmp_screen_name_";
+            brailleR.viewName = "_tmp_view_name_";
+            brailleR.isVisible = true;
+            Rect rect = new Rect();
+            properties.isEnabledFiltered = true;
+            properties.IdGenerated = "_tmp_id_";
+            brailleR.text = "Beispiel";
+            #endregion
+            #region unterschiedliche Eigenschaften
+
+            if (uiElementeTypesBrailleIoEnum.Button.ToString().Equals(uiElementType))
+            {
+               rect  = new Rect(0, 0, 50, 30);               
+            }
+            if (uiElementeTypesBrailleIoEnum.DropDownMenu.ToString().Equals(uiElementType))
+            {
+                rect = new Rect(0,0,25,10);
+                DropDownMenu dropDownMenu = new DropDownMenu();
+                dropDownMenu.hasChild = true;
+                dropDownMenu.hasNext = true;
+                dropDownMenu.hasPrevious = false;
+                dropDownMenu.isChild = false;
+                dropDownMenu.isOpen = true;
+                dropDownMenu.isVertical = true;
+                brailleR.uiElementSpecialContent = dropDownMenu;
+            }
+            if (uiElementeTypesBrailleIoEnum.Matrix.ToString().Equals(uiElementType))
+            {
+                rect = new Rect(0, 0, 6, 3);
+                brailleR.matrix = new bool[,] { 
+                    {false, false, true, true, false, false},
+                    {false, true, false, false, false, false},
+                    {true, false, false, false, false, false}
+                };
+            }
+            if (uiElementeTypesBrailleIoEnum.Screenshot.ToString().Equals(uiElementType))
+            {
+                rect = new Rect(0, 0, 20, 10);
+                brailleR.zoom = 1;
+                brailleR.contrast = 120;
+            }
+            if (uiElementeTypesBrailleIoEnum.Text.ToString().Equals(uiElementType))
+            {
+                rect = new Rect(0, 0, 25, 5);
+            }
+            if (uiElementeTypesBrailleIoEnum.TextBox.ToString().Equals(uiElementType))
+            {
+                brailleR.text = "Beispiel Beispieltext Beispieltext";
+                rect = new Rect(0, 0, 25, 10);
+                brailleR.showScrollbar = true;
+            }
+            #endregion
+            properties.boundingRectangleFiltered = rect;
+            osmElement.brailleRepresentation = brailleR;
+            osmElement.properties = properties;
+            return osmElement;
+        }
+
+        #endregion
 
         #region Konvertieren von Elementen
         /// <summary>

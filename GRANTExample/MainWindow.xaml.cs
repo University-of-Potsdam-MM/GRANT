@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Xml.Serialization;
+using System.IO;
 
 using System.Drawing;
 using GRANTApplication;
@@ -148,12 +149,19 @@ namespace GRANTExample
             }
             if (e.Key == Key.E)
             {
-                
+                exampleBrailleDis.getRendererExample();
             }
-
-
-
-        }
+            if (e.Key == Key.F)
+            {
+                exampleBrailleDis.getRendererExample(itemNameTextBox.Text);
+            }
+            if (e.Key == Key.G)
+            {
+                List<String> result = exampleBrailleDis.getRendererList();
+                //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
+                NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
+            }
+       }
 
 
         private void Button_Click_Speichern(object sender, RoutedEventArgs e)

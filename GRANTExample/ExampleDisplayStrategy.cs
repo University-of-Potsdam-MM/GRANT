@@ -7,6 +7,7 @@ using GRANTManager;
 using GRANTManager.Interfaces;
 using GRANTManager.AbstractClasses;
 using StrategyMVBD;
+using OSMElement;
 
 namespace GRANTExample
 {
