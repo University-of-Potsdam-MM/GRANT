@@ -283,7 +283,8 @@ namespace StrategyWindows
                         return clsProcess.MainWindowHandle;
                     }
                 }
-                catch (System.ComponentModel.Win32Exception) {  }
+                catch (System.ComponentModel.Win32Exception) { }
+                catch (InvalidOperationException) { }
             }
             return IntPtr.Zero;
         }
