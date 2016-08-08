@@ -9,7 +9,6 @@ namespace OSMElement
     [Serializable]
     public struct GrantProjectObject
     {
-        public List<OsmRelationship<String, String>> relationshipOfTrees;
         public String grantBrailleStrategyFullName { get; set; }
         public String grantBrailleStrategyNamespace { get; set; }
         public String grantDisplayStrategyFullName { get; set; }
