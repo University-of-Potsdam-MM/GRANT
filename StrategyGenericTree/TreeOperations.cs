@@ -620,7 +620,7 @@ namespace StrategyGenericTree
                         strategyMgr.setSpecifiedFilter(node.Data.properties.grantFilterStrategyFullName + ", " + node.Data.properties.grantFilterStrategyNamespace);
                         strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                             // Knoten in neuen Baum suchen + filtern und aktualisieren
-                        OSMElement.OSMElement foundNewNode = getAssociadetNodeOfOldNode(treeLoaded, (ITreeStrategy<OSMElement.OSMElement>) node);
+                        OSMElement.OSMElement foundNewNode = getAssociatedNodeOfOldNode(treeLoaded, (ITreeStrategy<OSMElement.OSMElement>) node);
                         if (!foundNewNode.Equals(new OSMElement.OSMElement()))
                         {
                             OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(foundNewNode);
@@ -664,7 +664,7 @@ namespace StrategyGenericTree
         /// <param name="oldTree">gibt den alten (geladenen) Baum an</param>
         /// <param name="oldNode">gibt des gesuchten Knoten des alten Baums an</param>
         /// <returns>das <c>OSMElement</c> des neuen Baumes von dem zugehörigen Knoten</returns>
-        private OSMElement.OSMElement getAssociadetNodeOfOldNode(ITreeStrategy<OSMElement.OSMElement> oldTree, ITreeStrategy<OSMElement.OSMElement> oldNode)
+        private OSMElement.OSMElement getAssociatedNodeOfOldNode(ITreeStrategy<OSMElement.OSMElement> oldTree, ITreeStrategy<OSMElement.OSMElement> oldNode)
         {
             // 1. überflüssige Daten aus Properties löschen
             GeneralProperties searchProperties = oldNode.Data.properties;
@@ -675,16 +675,16 @@ namespace StrategyGenericTree
             searchProperties.valueFiltered = null;
             searchProperties.IdGenerated = null;
             // 2. Knoten in neuen Baum suchen
-            List<ITreeStrategy<OSMElement.OSMElement>> treeNewAssociadedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), searchProperties, OperatorEnum.and);
-            List<ITreeStrategy<OSMElement.OSMElement>> treeLoadedAssociadedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(oldTree, searchProperties, OperatorEnum.and);
-            if (treeNewAssociadedNodes.Count == 1 && treeLoadedAssociadedNodes.Count == 1)
+            List<ITreeStrategy<OSMElement.OSMElement>> treeNewAssociatedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), searchProperties, OperatorEnum.and);
+            List<ITreeStrategy<OSMElement.OSMElement>> treeLoadedAssociatedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(oldTree, searchProperties, OperatorEnum.and);
+            if (treeNewAssociatedNodes.Count == 1 && treeLoadedAssociatedNodes.Count == 1)
             {
-                return treeNewAssociadedNodes[0].Data;
+                return treeNewAssociatedNodes[0].Data;
             }
             else
             {
                 //prüfen, ob die Tiefe, BranchCount + BranchIndex bei einem stimmen
-                foreach (ITreeStrategy<OSMElement.OSMElement> nodeFound in treeNewAssociadedNodes)
+                foreach (ITreeStrategy<OSMElement.OSMElement> nodeFound in treeNewAssociatedNodes)
                 {
                     if (oldNode.BranchCount == nodeFound.BranchCount && oldNode.BranchIndex == nodeFound.BranchIndex && oldNode.Depth == nodeFound.Depth)
                     {
@@ -709,7 +709,7 @@ namespace StrategyGenericTree
             ITreeStrategy<OSMElement.OSMElement> associatedNodeOldTree = getAssociatedNode(relationship.FilteredTree, oldTree);
             if (associatedNodeOldTree == null || associatedNodeOldTree.Equals(default(ITreeStrategy<OSMElement.OSMElement>))) { Debug.WriteLine("Kein alten Knoten gefunden!"); return null; }
 
-            OSMElement.OSMElement osmElementOfNewNode = getAssociadetNodeOfOldNode(oldTree, associatedNodeOldTree);
+            OSMElement.OSMElement osmElementOfNewNode = getAssociatedNodeOfOldNode(oldTree, associatedNodeOldTree);
             if (osmElementOfNewNode.Equals(new OSMElement.OSMElement())) { Debug.WriteLine("Kein neuen Knoten gefunden!"); return null; }
             return osmElementOfNewNode.properties.IdGenerated;
         }
