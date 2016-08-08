@@ -45,7 +45,7 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTrees);
 
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
-
+            tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
 
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees);
 
@@ -101,7 +101,7 @@ namespace GRANTApplication
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            tvMain.Items.Clear();
+            tvOutput.Items.Clear();
             root.Items.Clear();
 
             //TreeViewItem root = new TreeViewItem();
@@ -111,14 +111,14 @@ namespace GRANTApplication
             //
             guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
             SaveButton.IsEnabled = true;
-            tvMain.Items.Add(root);
+            tvOutput.Items.Add(root);
         }
         private void LoadTree_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             // dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.DefaultExt = ".grant"; // Default file extension
+            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
@@ -127,11 +127,11 @@ namespace GRANTApplication
             if (result == true)
             {
                 guiFunctions.loadFilteredTree(dlg.FileName);
-            }
+            
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            tvMain.Items.Clear();
+            tvOutput.Items.Clear();
             root.Items.Clear();
 
             //TreeViewItem root = new TreeViewItem();
@@ -140,9 +140,9 @@ namespace GRANTApplication
             //
             guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
             SaveButton.IsEnabled = true;
-            tvMain.Items.Add(root);
+            tvOutput.Items.Add(root);
+         }
         }
-
         private void LoadDevice_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -161,7 +161,7 @@ namespace GRANTApplication
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            tvMain.Items.Clear();
+            tvOutput.Items.Clear();
             root.Items.Clear();
 
             //TreeViewItem root = new TreeViewItem();
@@ -170,7 +170,7 @@ namespace GRANTApplication
             //
             guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
             SaveButton.IsEnabled = true;
-            tvMain.Items.Add(root);
+            tvOutput.Items.Add(root);
 
 
         }
@@ -227,7 +227,28 @@ namespace GRANTApplication
             listGuiElements();
             // this.Title = "Selected: " + value;
         }
+
+
+        void tvOutput_SelectedItemChanged(object sender,
+      RoutedPropertyChangedEventArgs<object> e)
+        {
+         
+            var tree = sender as TreeView;
+            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            {
+                // ... Handle a TreeViewItem.
+                GuiFunctions.MenuItem item = tree.SelectedItem as GuiFunctions.MenuItem;
+                //this.Title = "Selected header: " + item.IdGenerated.ToString();
+                if (item.IdGenerated != null)
+                {
+                    OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(item.IdGenerated);
+                    System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+                    strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                }
+              
+            }
+     
+
+        }
     }
-
-
 }

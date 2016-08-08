@@ -37,7 +37,7 @@
                 </Menu>
                 <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-8,0" >
                     <Label VerticalAlignment="Center" Content="Load existing Filtered Tree: "/>
-                    <Button Content="Load Filtered Tree" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="LoadButton_Click" x:Name="LoadButton"/>
+                    <Button Content="Load Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="LoadButton_Click" x:Name="LoadButton"/>
 
 
                 </StackPanel>
@@ -66,7 +66,7 @@
 
         <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,10">
             <Label  HorizontalAlignment="Left" VerticalAlignment="Center" Content="Save Filtered Tree and start Output Design:"/>
-            <Button Content="1. Save Filtered Tree" HorizontalAlignment="Right" Height="22" VerticalAlignment="Center" Width="140" Click="SaveButton_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}" Margin="80,9"/>
+            <Button Content="1. Save Project" HorizontalAlignment="Right" Height="22" VerticalAlignment="Center" Width="140" Click="SaveButton_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}" Margin="80,9"/>
             <Button Content="2. Start Output Design" CommandParameter="{Binding TreeLoad}" HorizontalAlignment="Right" Height="22" VerticalAlignment="Center" Width="170" Click="SaveStartButton_Click" x:Name="SaveStartButton" IsEnabled="{Binding SEnabled}" />
             
         </StackPanel>

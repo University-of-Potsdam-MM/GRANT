@@ -10,7 +10,7 @@
     <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
         <StackPanel Background="GhostWhite" DockPanel.Dock="Top"  Height="Auto" Margin="-4,0,4,0" >
             <StackPanel VerticalAlignment="Top">
-                <Menu Width="Auto" Height="20" Margin="0,0,-10,0" >
+                <Menu Width="Auto" Height="20" Margin="-1,0,-9,0" >
                     <MenuItem Header="_File">
                         <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
                         <!-- Click="AppExit_Click"-->
@@ -25,30 +25,36 @@
                     </MenuItem>
 
                 </Menu>
-                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="0,0,-11,0">
+                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="-1,0,-10,0">
                     <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
                   
-                    <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>
+                  <!--  <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
+                    <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
                    <!-- <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
-                    <Label  Margin="30,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
+                  <!--  <Label  Margin="30,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
                     <Grid>
                         <ComboBox Name="comboBox2" ItemsSource="{Binding Combobox2items}"  VerticalAlignment="Center" HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
-                    </Grid>
+                    </Grid>-->
                 </StackPanel>
-                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,-12,0">
-                    <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-1,0,-11,0">
+             <!--       <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
                     <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
-               
+             -->
+                    <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
+                    <Grid>
+                        <ComboBox  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Center"  Name="comboBox2" ItemsSource="{Binding Combobox2items}"   HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
+                    </Grid>
+                
                 </StackPanel>
             </StackPanel>
         </StackPanel>
        
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gold" Height="300" Margin="0,0,0,10">
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gold" Height="300" Margin="-1,0,1,10">
             <Label VerticalAlignment="Center" Content="Filter marked tree node with choosen Filterstrategy: "/>
            
 
         </StackPanel>
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="0,0,0,25">
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="-1,0,1,25">
             <Label VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
             <Button Content="Save Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
         </StackPanel>
@@ -57,7 +63,7 @@
             <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="240" Margin="0,7" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="325">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="235"/>
-                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvMain" Width="235"  Height="290" >
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvOutput" Width="235"  Height="290" >
 
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
@@ -82,9 +88,9 @@
             </ScrollViewer>
 
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >
-                <StackPanel Grid.Row="2" DataContext="{Binding MyGroups}" Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
+                <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" DataContext="{Binding MyGroups}" Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
-                    <ListBox Margin="10,10,0,13" Name="listBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="194" Height="200" />
+                    <ListBox Margin="0,0,0,0" Name="listBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="230" Height="185" />
                 </StackPanel>
                     <!--   <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />

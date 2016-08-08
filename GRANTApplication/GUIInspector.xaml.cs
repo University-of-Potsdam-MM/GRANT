@@ -258,6 +258,11 @@ namespace GRANTApplication
                 Console.WriteLine("Fehler: ");
 
             }
+            //OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
+            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+
+
+            //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
         }
 
        
@@ -427,8 +432,8 @@ namespace GRANTApplication
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.FileName = "filteredTree_" + grantTrees.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.DefaultExt = ".grant"; // Default file extension
+            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show save file dialog box
@@ -438,7 +443,7 @@ namespace GRANTApplication
             if (result == true)
             {
                 // Save document
-                guiFunctions.saveFilteredTree(dlg.FileName);
+                guiFunctions.saveProject(dlg.FileName);
             }
         }
 
@@ -456,7 +461,7 @@ namespace GRANTApplication
             if (result == true)
             {
                 guiFunctions.loadFilteredTree(dlg.FileName);
-            }
+           
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
@@ -473,11 +478,11 @@ namespace GRANTApplication
             updatePropertiesTable(tree.Child.Data.properties.IdGenerated);
             SaveButton.IsEnabled = true;
             SaveStartButton.IsEnabled = true;
+            }
         }
-    
 
-   
-    private void SaveStartButton_Click(object sender, RoutedEventArgs e)
+
+        private void SaveStartButton_Click(object sender, RoutedEventArgs e)
     {
         if (outputDesignerWindowOpen == false)
         {
