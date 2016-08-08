@@ -24,6 +24,5 @@ namespace OSMElement
 
         public Device device { get; set; }
 
-        //+ Betriebssystem (bei Baum schon), specifiedTree
     }
 }

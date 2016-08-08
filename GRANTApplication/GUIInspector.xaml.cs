@@ -451,8 +451,8 @@ namespace GRANTApplication
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             // dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dlg.DefaultExt = ".grant"; // Default file extension
+            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
@@ -460,7 +460,7 @@ namespace GRANTApplication
             // Process open file dialog box results
             if (result == true)
             {
-                guiFunctions.loadFilteredTree(dlg.FileName);
+                guiFunctions.loadGrantProject(dlg.FileName);
            
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
