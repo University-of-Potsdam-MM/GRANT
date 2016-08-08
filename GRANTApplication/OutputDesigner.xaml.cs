@@ -39,6 +39,8 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
+            strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
 
             strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);

@@ -178,10 +178,6 @@ namespace GRANTExample
             e1.showScrollbar = true;
             e1.isVisible = true;
             Rect p1 = new Rect(70,0,50,30);
-           /* p1.Height = 30;
-            p1.Width = 50;
-            p1.Left = 70;
-            p1.Top = 0;*/
             proper1.boundingRectangleFiltered = p1;
             
             proper1.IdGenerated = "braille123_1";
@@ -202,10 +198,6 @@ namespace GRANTExample
             e2.viewName = "v2";
             e2.isVisible = false;
             Rect p2 = new Rect(90, 42, 29,15);
-           /* p2.Height = 15;
-            p2.Width = 29;
-            p2.Left = 90;
-            p2.Top = 42;*/
             proper2.boundingRectangleFiltered = p2;
             Padding padding = new Padding(1, 1, 1, 1);
             e2.padding = padding;
@@ -233,10 +225,6 @@ namespace GRANTExample
             e3.viewName = "v3";
             e3.isVisible = false;
             Rect p3 = new Rect(70,30,30,20);
-            /*p3.Height = 20;
-            p3.Width = 30;
-            p3.Left = 70;
-            p3.Top = 30;*/
             proper3.boundingRectangleFiltered = p3;
             
             proper3.IdGenerated = "braille123_3";
@@ -262,10 +250,6 @@ namespace GRANTExample
             };
             e4.viewName = "v4";
             Rect p4 = new Rect(40,50,20,7);
-         /*   p4.Height = 7;
-            p4.Width = 20;
-            p4.Left = 40;
-            p4.Top = 50;*/
             proper4.boundingRectangleFiltered = p4;
             proper4.IdGenerated = "braille123_4";
             proper4.controlTypeFiltered = "Matrix";
@@ -285,10 +269,6 @@ namespace GRANTExample
             e5.viewName = "v5";
             e5.isVisible = true;
             Rect p5 = new Rect(55,30,24,9);
-          /*  p5.Height = 9;
-            p5.Width = 24;
-            p5.Left = 55;
-            p5.Top = 30;*/
             proper5.boundingRectangleFiltered = p5;
             proper5.IdGenerated = "braille123_5";
             proper5.controlTypeFiltered = "Button";
@@ -312,10 +292,6 @@ namespace GRANTExample
             e6.viewName = "v6";
             e6.isVisible = true;            
             Rect p6 = new Rect(0, 29,50,28);
-           /* p6.Height = 28;
-            p6.Width = 50;
-            p6.Left = 0;
-            p6.Top = 29;*/
            proper6.boundingRectangleFiltered = p6;
             proper6.IdGenerated = "braille123_6";
             proper6.controlTypeFiltered = "TextBox";
@@ -345,10 +321,6 @@ namespace GRANTExample
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e7.viewName = "v7";
             Rect p7 = new Rect(0,0,25,10);
-           /* p7.Height = 10;
-            p7.Width = 25;
-            p7.Left = 0;
-            p7.Top = 0;*/
             proper7.boundingRectangleFiltered = p7;
             proper7.isEnabledFiltered = true;
             proper7.IdGenerated = "braille123_7";
@@ -377,10 +349,6 @@ namespace GRANTExample
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e8.viewName = "v8";
             Rect p8 = new Rect(25, 0,35,10);
-          /*  p8.Height = 10;
-            p8.Width = 35;
-            p8.Left = 25;
-            p8.Top = 0;*/
             proper8.boundingRectangleFiltered = p8;
             proper8.IdGenerated = "braille123_8";
             proper8.controlTypeFiltered = "DropDownMenu";
@@ -409,10 +377,6 @@ namespace GRANTExample
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e9.viewName = "v9";
             Rect p9 = new Rect(0, 11, 30 , 8);
-            /*p9.height = 8;
-            p9.width = 30;
-            p9.left = 0;
-            p9.top = 11;*/
             proper9.boundingRectangleFiltered = p9;
             proper9.isEnabledFiltered = true;
             proper9.IdGenerated = "braille123_9";
@@ -442,10 +406,6 @@ namespace GRANTExample
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e10.viewName = "v10";
             Rect p10 = new Rect( 0, 19, 30, 8);
-            /*p10.height = 8;
-            p10.width = 30;
-            p10.left = 0;
-            p10.top = 19;*/
             proper10.boundingRectangleFiltered = p10;
             
             proper10.IdGenerated = "braille123_10";
@@ -465,10 +425,6 @@ namespace GRANTExample
             e11.viewName = "v11";
             e11.isVisible = true;
             Rect p11 = new Rect(81,30, 30, 9);
-            /* p11.height = 9;
-            p11.width = 30;
-            p11.left = 81;
-            p11.top = 30; */
             proper11.boundingRectangleFiltered = p11;
             proper11.isEnabledFiltered = false;
             proper11.IdGenerated = "braille123_11";
