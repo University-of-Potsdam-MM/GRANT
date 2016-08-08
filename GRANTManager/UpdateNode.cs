@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using GRANTManager.Interfaces;
+using OSMElement;
 
 namespace GRANTManager
 {
@@ -71,6 +73,20 @@ namespace GRANTManager
             return Type.GetType(fullName+", "+ns);
         }
 
-
+        /// <summary>
+        /// Vergleicht, ob der gespeicherte Anwendungspfad und der neu ermittelte Pfad übereinstimmen und passt den Pfad ggf. an
+        /// </summary>
+        public void compareAndChangeFileName()
+        {
+            if (!grantTrees.getFilteredTree().HasChild || grantTrees.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties())) { return; }
+            String fileNameNew = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByModulName(grantTrees.getFilteredTree().Child.Data.properties.moduleName);
+            if (!fileNameNew.Equals(grantTrees.getFilteredTree().Child.Data.properties.fileName))
+            {
+                Debug.WriteLine("Der Pfad der Anwendung muss amgepasst werden.");
+                GeneralProperties properties = grantTrees.getFilteredTree().Child.Data.properties;
+                properties.fileName = fileNameNew;
+                strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
+            }
+        }
     }
 }

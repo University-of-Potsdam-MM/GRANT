@@ -399,7 +399,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Ändert von einem Knoten die <code>GeneralProperties</code> ausgehend von der <code>IdGenerated</code>
         /// </summary>
-        /// <param name="properties">gibt die neuen <code>Generalproperties an</code></param>
+        /// <param name="properties">gibt die neuen <code>GeneralProperties</code> an</param>
         public void changePropertiesOfFilteredNode(GeneralProperties properties)
         {
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
@@ -647,7 +647,7 @@ namespace StrategyGenericTree
                 List<OsmRelationship<String, String>> relationshipNew = new List<OsmRelationship<string, string>>();
                 foreach (OsmRelationship<String, String> relationship in grantTrees.getOsmRelationship())
                 {
-                    String filteredTreeIdNew = getnewOsmRelationshipOfLoadedTreeId(treeLoaded, relationship);
+                    String filteredTreeIdNew = getNewOsmRelationshipOfLoadedTreeId(treeLoaded, relationship);
                     OsmRelationship<String, String> r = new OsmRelationship<string, string>();
                     r.FilteredTree = filteredTreeIdNew;
                     r.BrailleTree = relationship.BrailleTree;
@@ -703,11 +703,11 @@ namespace StrategyGenericTree
         /// <param name="oldTree">gibt den alten (geladenen) Baum an</param>
         /// <param name="relationship">gibt die alte Beziehung an</param>
         /// <returns>die Id des zugehörigen Knotens aus dem neuen Baum</returns>
-        private String getnewOsmRelationshipOfLoadedTreeId(ITreeStrategy<OSMElement.OSMElement> oldTree, OsmRelationship<String, String> relationship)
+        private String getNewOsmRelationshipOfLoadedTreeId(ITreeStrategy<OSMElement.OSMElement> oldTree, OsmRelationship<String, String> relationship)
         {
             if (relationship.FilteredTree == null) { Debug.WriteLine("keine Beziehung vorhanden!"); return null; }
             ITreeStrategy<OSMElement.OSMElement> associatedNodeOldTree = getAssociatedNode(relationship.FilteredTree, oldTree);
-            if (associatedNodeOldTree.Equals(default(ITreeStrategy<OSMElement.OSMElement>))) { Debug.WriteLine("Kein alten Knoten gefunden!"); return null; }
+            if (associatedNodeOldTree == null || associatedNodeOldTree.Equals(default(ITreeStrategy<OSMElement.OSMElement>))) { Debug.WriteLine("Kein alten Knoten gefunden!"); return null; }
 
             OSMElement.OSMElement osmElementOfNewNode = getAssociadetNodeOfOldNode(oldTree, associatedNodeOldTree);
             if (osmElementOfNewNode.Equals(new OSMElement.OSMElement())) { Debug.WriteLine("Kein neuen Knoten gefunden!"); return null; }

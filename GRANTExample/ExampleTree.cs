@@ -109,7 +109,7 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
-                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                   // strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                     grantTree.setFilteredTree(tree);
                     Console.WriteLine();
                   //  baumSchleife(tree);

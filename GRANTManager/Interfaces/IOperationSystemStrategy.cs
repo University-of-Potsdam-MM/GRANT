@@ -38,7 +38,14 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="name">gibt den Titel der Anwendung an</param>
         /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
-        String getFileNameOfApplication(String name);
+        String getFileNameOfApplicationByMainWindowTitle(String name);
+
+        /// <summary>
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
+        /// </summary>
+        /// <param name="name">gibt den Modul-Namen der Anwendung an</param>
+        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
+        String getFileNameOfApplicationByModulName(String modulName);
 
         /// <summary>
         /// Startete eine Anwendung

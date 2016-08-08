@@ -552,7 +552,7 @@ namespace StrategyUIA2
                 prop.grantFilterStrategyFullName = this.GetType().FullName;
                 prop.grantFilterStrategyNamespace = this.GetType().Namespace;
                 prop.moduleName = strategyMgr.getSpecifiedOperationSystem().getModulNameOfApplication(prop.nameFiltered);
-                prop.fileName = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplication(prop.nameFiltered);
+                prop.fileName = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByMainWindowTitle(prop.nameFiltered);
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
                 osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
                 osm.events = tree.Child.Data.events;

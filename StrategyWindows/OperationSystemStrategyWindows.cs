@@ -316,7 +316,7 @@ namespace StrategyWindows
         /// </summary>
         /// <param name="name">gibt den Titel der Anwendung an</param>
         /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
-        public String getFileNameOfApplication(String name)
+        public String getFileNameOfApplicationByMainWindowTitle(String name)
         {
             foreach (Process clsProcess in Process.GetProcesses())
             {
@@ -324,6 +324,27 @@ namespace StrategyWindows
                 {
                     return clsProcess.MainModule.FileName;
                 }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
+        /// </summary>
+        /// <param name="name">gibt den Modul-Namen der Anwendung an</param>
+        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
+        public String getFileNameOfApplicationByModulName(String modulName)
+        {
+            foreach (Process clsProcess in Process.GetProcesses())
+            {
+                try
+                {
+                    if (clsProcess.MainModule.ModuleName.Contains(modulName))
+                    {
+                        return clsProcess.MainModule.FileName;
+                    }
+                }
+                catch (System.ComponentModel.Win32Exception){}
             }
             return null;
         }

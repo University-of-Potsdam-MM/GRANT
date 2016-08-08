@@ -581,10 +581,16 @@ namespace GRANTManager
                         else { return true; }
                     }
                 }
-                else { return true; }
+                else
+                {
+                    UpdateNode updateNodes = new UpdateNode(strategyMgr, grantTree);
+                    updateNodes.compareAndChangeFileName();
+                    return true;
+                }
             }
             return false;
         }
+
 
         public void filteredLoadedApplication()
         {
