@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 using BrailleIO;
 using BrailleIO.Structs;
@@ -24,6 +25,7 @@ namespace StrategyBrailleIO
        IBrailleIOShowOffMonitor monitor;
        BrailleIOMediator brailleIOMediator {get; set;}
         private Boolean isInitialized = false;
+        private List<uiElementsTypeStruct> uiElementList;
         /// <summary>
         /// Ist der Adapter des Simulators
         /// </summary>
@@ -41,6 +43,8 @@ namespace StrategyBrailleIO
         private GeneratedGrantTrees grantTrees;
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
+
+        public BrailleDisplayStrategyBrailleIO() { uiElementList = getUiElements(); }
 
         /// <summary>
         /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
@@ -473,18 +477,82 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
         /// </summary>
-        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox } //TODO: hier sollte es ein Interface zu geben
+        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox }
+
+        private struct uiElementsTypeStruct
+        {
+            public String uiElementType { get; set; }
+            public int heightMin { get; set; }
+            public int widthMin { get; set; }
+        }
 
         /// <summary>
-        /// Gibt eine Liste mit möglichen Renderen für BrailleIO zurück
+        /// Erstellt eine Liste mit möglichen Ui-Elementen (Renderen) und deren minimale Größe
+        /// </summary>
+        /// <returns></returns>
+        private List<uiElementsTypeStruct> getUiElements()
+        {
+            List<uiElementsTypeStruct> uiElementList = new List<uiElementsTypeStruct>();
+            uiElementsTypeStruct uiElement = new uiElementsTypeStruct();
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Button.ToString();
+            uiElement.heightMin = 7; // Rahmen (2) + Höhe kleiner Buchstabe (3) + Freizeile (2)
+            uiElement.widthMin = 6; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2)
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.DropDownMenu.ToString();
+            uiElement.heightMin = 9; // Rahmen (4) + Höhe kleiner Buchstabe (3) + Freizeile (2)
+            uiElement.widthMin = 9; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2) + Bubel (3)
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Matrix.ToString();
+            uiElement.heightMin = 1;
+            uiElement.widthMin = 1;
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Screenshot.ToString();
+            uiElement.heightMin = 1; // macht das Sinn bei einem Screenshot?
+            uiElement.widthMin = 1; // macht das Sinn bei einem Screenshot?
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Text.ToString();
+            uiElement.heightMin = 3; // Höhe kleiner Buchstabe (3) 
+            uiElement.widthMin = 2; // Breite Buchstabe (2) 
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.TextBox.ToString();
+            uiElement.heightMin = 7; // Rahmen (2) + Höhe kleiner Buchstabe (3) + Freizeile (2)
+            uiElement.widthMin = 6; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2)
+            uiElementList.Add(uiElement);
+
+            if (uiElementList.Count != Enum.GetNames(typeof( uiElementeTypesBrailleIoEnum)).Length)
+            {
+                throw new Exception("Achtung es wurden nicht gleichviele Elemente im Enum wie in der Liste alle Ui-Elemente angegeben!");
+            }
+            return uiElementList;
+        }
+
+        /// <summary>
+        /// Gibt eine Liste mit möglichen Renderen für BrailleIO zurück, welche für die Ausgabegerätgröße sinnvoll sind
+        /// Achtung: alle neuerstellten Renderer müssen sowohl der Renderer-Liste (getUiElements) als auch dem -Enum (uiElementeTypesBrailleIoEnum) hinzugefügt werden
         /// </summary>
         /// <returns>Liste der BrailleIO-Renderer</returns>
         public List<String> getUiElementRenderer()
         {
             List<String> uiElementRenderer = new List<String>();
-            foreach(uiElementeTypesBrailleIoEnum uiEnum in Enum.GetValues(typeof(uiElementeTypesBrailleIoEnum)))
-            {
+           /* foreach(uiElementeTypesBrailleIoEnum uiEnum in Enum.GetValues(typeof(uiElementeTypesBrailleIoEnum)))
+            { 
                 uiElementRenderer.Add(uiEnum.ToString());
+            }*/
+
+            foreach (uiElementsTypeStruct element in uiElementList)
+            {
+                //Angaben zur min. Größe prüfen
+                Device activeDevice = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+                if (activeDevice.height >= element.heightMin && activeDevice.width >= element.widthMin)
+                {
+                    uiElementRenderer.Add(element.uiElementType);
+                }
             }
             return uiElementRenderer;
         }

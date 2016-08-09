@@ -460,7 +460,7 @@ namespace GRANTApplication
             // Process open file dialog box results
             if (result == true)
             {
-                guiFunctions.loadFilteredTree(dlg.FileName);
+                guiFunctions.loadGrantProject(dlg.FileName);
            
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();

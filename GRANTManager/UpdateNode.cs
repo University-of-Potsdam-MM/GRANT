@@ -83,10 +83,20 @@ namespace GRANTManager
             if (!fileNameNew.Equals(grantTrees.getFilteredTree().Child.Data.properties.fileName))
             {
                 Debug.WriteLine("Der Pfad der Anwendung muss amgepasst werden.");
-                GeneralProperties properties = grantTrees.getFilteredTree().Child.Data.properties;
-                properties.fileName = fileNameNew;
-                strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
+                changeFileName(fileNameNew);
             }
+        }
+
+        /// <summary>
+        /// Ändert den Dateipfad der gefilterten Anwendung
+        /// </summary>
+        /// <param name="fileNameNew">gibt den neuen Dateipfad an</param>
+        public void changeFileName(String fileNameNew)
+        {
+            if (!grantTrees.getFilteredTree().HasChild || grantTrees.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties())) { return; }
+            GeneralProperties properties = grantTrees.getFilteredTree().Child.Data.properties;
+            properties.fileName = fileNameNew;
+            strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
         }
     }
 }

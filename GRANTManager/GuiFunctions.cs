@@ -19,6 +19,7 @@ namespace GRANTManager
         GeneratedGrantTrees grantTree;
         private String filteredTreeSavedName = "filteredTree.xml";
         private String brailleTreeSavedName = "brailleTree.xml";
+        private String osmConectorName = "osmConector.xml";
 
         public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree)
         {
@@ -411,22 +412,21 @@ namespace GRANTManager
                 // .grant hinzufügen
                 projectFilePath = @projectFilePath + ".grant";
             }
-             String directoryPath = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath); //TODO: Prüfen, ob es ein Datei war
-             Debug.WriteLine(directoryPath);
+            String directoryPath = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
+
+            Debug.WriteLine(directoryPath);
             GrantProjectObject projectObject = new GrantProjectObject();
             #region Speichern der Strategyn
             projectObject.grantBrailleStrategyFullName =  strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().FullName;
             projectObject.grantBrailleStrategyNamespace = strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().Namespace;
             projectObject.grantDisplayStrategyFullName = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().FullName;
             projectObject.grantDisplayStrategyNamespace = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().Namespace;
-            Type treeT = strategyMgr.getSpecifiedTree().GetType();
             projectObject.grantTreeStrategyFullName = strategyMgr.getSpecifiedTree() == null ? null : strategyMgr.getSpecifiedTree().GetType().Namespace + "." + strategyMgr.getSpecifiedTree().GetType().Name;
             projectObject.grantTreeStrategyNamespace = strategyMgr.getSpecifiedTree() == null ? null : strategyMgr.getSpecifiedTree().GetType().Namespace;
             projectObject.grantTreeOperationsFullName = strategyMgr.getSpecifiedTreeOperations() == null ? null : strategyMgr.getSpecifiedTreeOperations().GetType().Namespace + "." + strategyMgr.getSpecifiedTreeOperations().GetType().Name;
             projectObject.grantTreeOperationsNamespace = strategyMgr.getSpecifiedTreeOperations() == null ? null : strategyMgr.getSpecifiedTreeOperations().GetType().Namespace;
             projectObject.grantOperationSystemStrategyFullName = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().FullName;
             projectObject.grantOperationSystemStrategyNamespace = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().Namespace;
-            projectObject.relationshipOfTrees = grantTree.getOsmRelationship();
             projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
             #endregion
             //Ordner für das Projekt erstellen
@@ -438,9 +438,18 @@ namespace GRANTManager
                 {
                     saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + brailleTreeSavedName);
                 }
-                XmlSerializer serializer = new XmlSerializer(typeof(GrantProjectObject));
+                XmlSerializer serializer;
+                if (grantTree.getOsmRelationship() != null && !grantTree.getOsmRelationship().Equals(new OsmRelationship<String, String>()) && grantTree.getOsmRelationship().Count > 0)
+                {
+                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + osmConectorName))
+                    {
+                        serializer = new XmlSerializer(typeof(List<OsmRelationship<String, String>>));
+                        serializer.Serialize(writer, grantTree.getOsmRelationship());
+                    }
+                }
                 using (StreamWriter writer = new StreamWriter(projectFilePath))
                 {
+                    serializer = new XmlSerializer(typeof(GrantProjectObject));
                     serializer.Serialize(writer, projectObject);
                 }
             }            
@@ -458,15 +467,27 @@ namespace GRANTManager
                 Debug.WriteLine("Die Datei Existiert nicht");
                 return;
             }
+            String projectDirectory = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
+
             System.IO.FileStream fs = System.IO.File.Open(projectFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-            XmlSerializer serializer = new XmlSerializer(typeof(GrantProjectObject));
+            XmlSerializer serializer;
             GrantProjectObject grantProjectObject;
             using (StreamReader reader = new StreamReader(fs))
             {
+                serializer = new XmlSerializer(typeof(GrantProjectObject));
                 grantProjectObject = (GrantProjectObject) serializer.Deserialize(reader);
             }
             //setze OSM-Beziehungen
-            grantTree.setOsmRelationship(grantProjectObject.relationshipOfTrees);
+            if (File.Exists(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName))
+            {
+                fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                serializer = new XmlSerializer(typeof(List<OsmRelationship<String, String>>));
+                using (StreamReader reader = new StreamReader(fs))
+                {
+                    List<OsmRelationship<String, String>> osmConector = (List<OsmRelationship<String, String>>)serializer.Deserialize(reader);
+                    grantTree.setOsmRelationship(osmConector);
+                }
+            }
             #region Laden der Strategyn
             if (grantProjectObject.grantBrailleStrategyFullName != null && grantProjectObject.grantBrailleStrategyNamespace != null)
             {
@@ -494,7 +515,7 @@ namespace GRANTManager
             }
             #endregion
             //lade FilteredTree + brailleTree -> ist im Unterordner welcher den Projektnamen trägt
-            String projectDirectory = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
+            
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
             loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
             Debug.WriteLine("");

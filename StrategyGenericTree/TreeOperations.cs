@@ -620,7 +620,7 @@ namespace StrategyGenericTree
                         strategyMgr.setSpecifiedFilter(node.Data.properties.grantFilterStrategyFullName + ", " + node.Data.properties.grantFilterStrategyNamespace);
                         strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                             // Knoten in neuen Baum suchen + filtern und aktualisieren
-                        OSMElement.OSMElement foundNewNode = getAssociadetNodeOfOldNode(treeLoaded, (ITreeStrategy<OSMElement.OSMElement>) node);
+                        OSMElement.OSMElement foundNewNode = getAssociatedNodeOfOldNode(treeLoaded, (ITreeStrategy<OSMElement.OSMElement>) node);
                         if (!foundNewNode.Equals(new OSMElement.OSMElement()))
                         {
                             OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(foundNewNode);
@@ -664,27 +664,44 @@ namespace StrategyGenericTree
         /// <param name="oldTree">gibt den alten (geladenen) Baum an</param>
         /// <param name="oldNode">gibt des gesuchten Knoten des alten Baums an</param>
         /// <returns>das <c>OSMElement</c> des neuen Baumes von dem zugehörigen Knoten</returns>
-        private OSMElement.OSMElement getAssociadetNodeOfOldNode(ITreeStrategy<OSMElement.OSMElement> oldTree, ITreeStrategy<OSMElement.OSMElement> oldNode)
+        private OSMElement.OSMElement getAssociatedNodeOfOldNode(ITreeStrategy<OSMElement.OSMElement> oldTree, ITreeStrategy<OSMElement.OSMElement> oldNode)
         {
-            // 1. überflüssige Daten aus Properties löschen
-            GeneralProperties searchProperties = oldNode.Data.properties;
-            searchProperties.grantFilterStrategyFullName = null;
-            searchProperties.grantFilterStrategyNamespace = null;
-            searchProperties.hasKeyboardFocusFiltered = null;
-            searchProperties.nameFiltered = null;
-            searchProperties.valueFiltered = null;
-            searchProperties.IdGenerated = null;
-            // 2. Knoten in neuen Baum suchen
-            List<ITreeStrategy<OSMElement.OSMElement>> treeNewAssociadedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), searchProperties, OperatorEnum.and);
-            List<ITreeStrategy<OSMElement.OSMElement>> treeLoadedAssociadedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(oldTree, searchProperties, OperatorEnum.and);
-            if (treeNewAssociadedNodes.Count == 1 && treeLoadedAssociadedNodes.Count == 1)
+            #region 1. festlegen der Eigenschaften, welche für die Suche berücksichtigt werden sollen
+            GeneralProperties searchProperties = new GeneralProperties();
+            searchProperties.acceleratorKeyFiltered = oldNode.Data.properties.acceleratorKeyFiltered;
+            searchProperties.accessKeyFiltered = oldNode.Data.properties.accessKeyFiltered;
+            searchProperties.autoamtionIdFiltered = oldNode.Data.properties.autoamtionIdFiltered;
+            searchProperties.classNameFiltered = oldNode.Data.properties.classNameFiltered;
+            searchProperties.controlTypeFiltered = oldNode.Data.properties.controlTypeFiltered;
+            searchProperties.fileName = oldNode.Data.properties.fileName;
+            searchProperties.frameWorkIdFiltered = oldNode.Data.properties.frameWorkIdFiltered;
+            searchProperties.helpTextFiltered = oldNode.Data.properties.helpTextFiltered;
+            searchProperties.isContentElementFiltered = oldNode.Data.properties.isContentElementFiltered;
+            searchProperties.isControlElementFiltered = oldNode.Data.properties.isControlElementFiltered;
+            //searchProperties.isEnabledFiltered = oldNode.Data.properties.isEnabledFiltered;
+            searchProperties.isKeyboardFocusableFiltered = oldNode.Data.properties.isKeyboardFocusableFiltered;
+            searchProperties.isOffscreenFiltered = oldNode.Data.properties.isOffscreenFiltered;
+            searchProperties.isPasswordFiltered = oldNode.Data.properties.isPasswordFiltered;
+            searchProperties.isRequiredForFormFiltered = oldNode.Data.properties.isRequiredForFormFiltered;
+            searchProperties.itemStatusFiltered = oldNode.Data.properties.itemStatusFiltered;
+            searchProperties.itemTypeFiltered = oldNode.Data.properties.itemTypeFiltered;
+            searchProperties.labeledbyFiltered = oldNode.Data.properties.labeledbyFiltered;
+            searchProperties.localizedControlTypeFiltered = oldNode.Data.properties.localizedControlTypeFiltered;
+            searchProperties.moduleName = oldNode.Data.properties.moduleName;
+            searchProperties.suportedPatterns = oldNode.Data.properties.suportedPatterns;
+            #endregion
+
+            #region 2. Knoten in neuen Baum suchen
+            List<ITreeStrategy<OSMElement.OSMElement>> treeNewAssociatedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), searchProperties, OperatorEnum.and);
+            List<ITreeStrategy<OSMElement.OSMElement>> treeLoadedAssociatedNodes = strategyMgr.getSpecifiedTreeOperations().searchProperties(oldTree, searchProperties, OperatorEnum.and);
+            if (treeNewAssociatedNodes.Count == 1 && treeLoadedAssociatedNodes.Count == 1)
             {
-                return treeNewAssociadedNodes[0].Data;
+                return treeNewAssociatedNodes[0].Data;
             }
             else
             {
                 //prüfen, ob die Tiefe, BranchCount + BranchIndex bei einem stimmen
-                foreach (ITreeStrategy<OSMElement.OSMElement> nodeFound in treeNewAssociadedNodes)
+                foreach (ITreeStrategy<OSMElement.OSMElement> nodeFound in treeNewAssociatedNodes)
                 {
                     if (oldNode.BranchCount == nodeFound.BranchCount && oldNode.BranchIndex == nodeFound.BranchIndex && oldNode.Depth == nodeFound.Depth)
                     {
@@ -693,8 +710,9 @@ namespace StrategyGenericTree
                     }
                 }
                     Debug.WriteLine("Es könnte mehrer 'richtige' Knoten geben -> genauer Untersuchen -> TODO");
-                    return new OSMElement.OSMElement();                
+                    return new OSMElement.OSMElement();
             }
+            #endregion
         }
 
         /// <summary>
@@ -709,7 +727,7 @@ namespace StrategyGenericTree
             ITreeStrategy<OSMElement.OSMElement> associatedNodeOldTree = getAssociatedNode(relationship.FilteredTree, oldTree);
             if (associatedNodeOldTree == null || associatedNodeOldTree.Equals(default(ITreeStrategy<OSMElement.OSMElement>))) { Debug.WriteLine("Kein alten Knoten gefunden!"); return null; }
 
-            OSMElement.OSMElement osmElementOfNewNode = getAssociadetNodeOfOldNode(oldTree, associatedNodeOldTree);
+            OSMElement.OSMElement osmElementOfNewNode = getAssociatedNodeOfOldNode(oldTree, associatedNodeOldTree);
             if (osmElementOfNewNode.Equals(new OSMElement.OSMElement())) { Debug.WriteLine("Kein neuen Knoten gefunden!"); return null; }
             return osmElementOfNewNode.properties.IdGenerated;
         }
