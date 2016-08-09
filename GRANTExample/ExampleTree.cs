@@ -52,6 +52,38 @@ namespace GRANTExample
             return "";
         }
 
+        public String filterSubtreeOfApplicatione()
+        {
+            if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
+            {
+                try
+                {
+                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWND();
+                    IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+                    int pointX;
+                    int pointY;
+                    strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
+                    ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
+                    if (grantTree.getFilteredTree() != null)
+                    {
+                        strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(tree);
+                    }
+                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                    if (tree.HasChild == true)
+                    {
+                        return printProperties(tree.Child.Data.properties);
+                    }
+                    return "";
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: '{0}'", ex);
+                }
+            }
+            return "";
+        }
+
 
 
         private String printProperties(GeneralProperties properties)
@@ -264,11 +296,13 @@ namespace GRANTExample
             if (currentFilter == Type.GetType(possibleFilter[0].className))
             {
                 strategyMgr.setSpecifiedFilter(possibleFilter[2].className);
+                strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
                 Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", possibleFilter[2].userName);
             }
             else
             {
                 strategyMgr.setSpecifiedFilter(possibleFilter[0].className);
+                strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
                 Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", possibleFilter[0].userName);
             }
 

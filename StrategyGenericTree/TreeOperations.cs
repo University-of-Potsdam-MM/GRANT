@@ -58,7 +58,7 @@ namespace StrategyGenericTree
                     {
                         OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Data, typeof(OSMElement.OSMElement));
                         GeneralProperties data = osmElement.properties;
-                        printProperties(data);
+                        //printProperties(data);
                     }
                     Console.WriteLine();
                 }
@@ -90,7 +90,7 @@ namespace StrategyGenericTree
                 {
                     OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(r.Parent.Data, typeof(OSMElement.OSMElement));
                     GeneralProperties data = osmElement.properties;
-                    printProperties(data);
+                    //printProperties(data);
                 }
                 Console.WriteLine();
             }
@@ -223,7 +223,7 @@ namespace StrategyGenericTree
                 throw new InvalidOperationException("Falscher Baum-Type!");
             }
             GeneralProperties generalProperties = (GeneralProperties)Convert.ChangeType(properties, typeof(GeneralProperties));
-            printProperties(generalProperties);
+            //printProperties(generalProperties);
             List<INode<OSMElement.OSMElement>> result = new List<INode<OSMElement.OSMElement>>();
 
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
@@ -258,7 +258,7 @@ namespace StrategyGenericTree
                 }
             }
             List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
-            printNodeList(result2);
+            //printNodeList(result2);
             return result2;
         }
 
@@ -331,7 +331,7 @@ namespace StrategyGenericTree
                     result.Add((ITreeStrategy<T>)node);
                 }
             }
-            printNodeList(result);
+            //printNodeList(result);
             return result;
         }
 
@@ -416,7 +416,6 @@ namespace StrategyGenericTree
                     break;
                 }
             }
-            System.Console.WriteLine();
         }
 
         /// <summary>
@@ -733,6 +732,44 @@ namespace StrategyGenericTree
             if (osmElementOfNewNode.Equals(new OSMElement.OSMElement())) { Debug.WriteLine("Kein neuen Knoten gefunden!"); return null; }
             return osmElementOfNewNode.properties.IdGenerated;
         }
-            
+
+
+        /// <summary>
+        /// Ändert einen Teilbaum des gefilterten Baums
+        /// Achtung die Methode sollte nur genutzt werden, wenn von einem Element alle Kindelemente neu gefiltert wurden
+        /// </summary>
+        /// <param name="subTree">gibt den Teilbaum an</param>
+        /// <remarks><c>true</c>, falls der Teilbaum geändert wurde; sonst <c> false</c></remarks>
+        public bool changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree)
+        {
+            if (subTree == strategyMgr.getSpecifiedTree().NewNodeTree() || subTree.HasChild == false) { Debug.WriteLine("Keine Elemente im Teilbaum!"); return false; }
+            if (grantTrees.getFilteredTree() == null) { Debug.WriteLine("Kein Baum Vorhanden!"); return false; }
+            String idFirstSubtreeNode = subTree.Child.Data.properties.IdGenerated;
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
+            {
+                if (idFirstSubtreeNode.Equals(node.Data.properties.IdGenerated))
+                {
+                    Debug.WriteLine("Teilbum gefunden");
+                    //unterscheiden, ob der Knoten Geschwister (1.) oder Kinder (2.)  hat
+                    if (subTree.Child.HasNext || subTree.Child.HasChild)
+                    {
+                        /*hat (auch) Geschwister
+                         * zum Elternknoten gehen
+                         *  - alte Kinder löschen
+                         *  - neue Kinder hinzufügen
+                         */
+                        ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
+                        while (parentNode.HasChild)
+                        {
+                            grantTrees.getFilteredTree().Remove(parentNode.Child.Data);
+                        }
+                        parentNode.AddChild(subTree);
+                    }
+                    return true;
+                }
+            }
+            Debug.WriteLine("Knoten im Teilbaum nicht gefunden!");
+            return false;
+        }
     }
 }

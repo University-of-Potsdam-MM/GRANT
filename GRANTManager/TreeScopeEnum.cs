@@ -8,7 +8,7 @@ namespace GRANTManager
 {
     /// <summary>
     /// Enum für die Filterung im Baum;
-    /// orientiert an UIA (https://msdn.microsoft.com/en-us/library/ms752331(v=vs.110).aspx)
+    /// orientiert an UIA ( https://msdn.microsoft.com/en-us/library/ms752331(v=vs.110).aspx)
     /// </summary>
     public enum TreeScopeEnum { Parent, Ancestors, Element, Children, Descendants, Sibling, Application }
 }

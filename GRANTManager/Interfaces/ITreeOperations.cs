@@ -16,6 +16,13 @@ namespace GRANTManager.Interfaces
         void changePropertiesOfFilteredNode(OSMElement.GeneralProperties properties);
 
         /// <summary>
+        /// Ändert einen Teilbaum des gefilterten Baumes
+        /// </summary>
+        /// <param name="subTree">gibt den Teilbaum an</param>
+        /// <remarks><c>true</c>, falls der Teilbaum geändert wurde; sonst <c> false</c></remarks>
+        bool changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree);
+
+        /// <summary>
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum einen zugehörigen Knoten an
         /// </summary>
         /// <param name="generatedId">Gibt die Id an zuder ein zugehöriger Knoten ermittelt werden soll</param>

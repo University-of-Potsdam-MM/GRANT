@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 using System.IO;
+using System.Diagnostics;
 
 using System.Drawing;
 using GRANTApplication;
@@ -112,6 +113,7 @@ namespace GRANTExample
                 //strategyMgr.getSpecifiedTree().XmlSerialize(fs);
              //   grantTree.getFilteredTree().XmlSerialize(fs);
                 fs.Close();*/
+                Debug.WriteLine("F5");
             }
             if (e.Key == Key.F6)
             {
@@ -160,6 +162,11 @@ namespace GRANTExample
                 List<String> result = exampleBrailleDis.getRendererList();
                 //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
                 NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
+            }
+            if (e.Key == Key.F11)
+            {
+                exampleTree.filterSubtreeOfApplicatione();
+                Debug.WriteLine("F11");
             }
        }
 
