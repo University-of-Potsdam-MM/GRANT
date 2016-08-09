@@ -120,6 +120,7 @@ namespace GRANTApplication
             int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
 
             comboBox2.SelectedIndex = var3;
+                listGuiElements();
 
             }// Load Project wirft Fehler
         }
