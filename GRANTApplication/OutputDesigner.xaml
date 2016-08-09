@@ -29,7 +29,7 @@
                     <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
                   
                   <!--  <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
-                    <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
+                    <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140"/>
                    <!-- <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
                   <!--  <Label  Margin="30,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
                     <Grid>
@@ -90,7 +90,8 @@
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >
                 <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" DataContext="{Binding MyGroups}" Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
-                    <ListBox Margin="0,0,0,0" Name="listBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="230" Height="185" />
+                    <ListBox Margin="0,0,0,0" Name="listBox1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="230" Height="185" Foreground="{Binding color}" SelectedItem="{Binding selected}">
+                    </ListBox>
                 </StackPanel>
                     <!--   <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />

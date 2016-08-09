@@ -18,7 +18,7 @@ namespace GRANTApplication
         GeneratedGrantTrees grantTrees;
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
-
+        int var2;
 
         public OutputDesigner()
         {
@@ -112,7 +112,8 @@ namespace GRANTApplication
             guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
             SaveButton.IsEnabled = true;
             tvOutput.Items.Add(root);
-        }
+        }// Load Project wirft Fehler
+
         private void LoadTree_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -179,10 +180,12 @@ namespace GRANTApplication
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
             // ... A List.
+            
             List<string> Combobox2items = new List<string>();
             List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
             // ... Get the ComboBox reference.
             var comboBox = sender as ComboBox;
+           
             comboBox.SelectedIndex = 1;
 
             //Combobox2items.Add("Choose");
@@ -202,10 +205,9 @@ namespace GRANTApplication
         private void listGuiElements()
         {
             List<string> guiElements = strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer();
-
+            listBox1.Items.Clear();
             foreach (String s in guiElements)
             {
-
                 listBox1.Items.Add(s);
 
             }
@@ -244,8 +246,29 @@ namespace GRANTApplication
                     OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(item.IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    //System.Drawing.Color MessageColor = System.Drawing.Color.Red;
+                    //System.Windows.Media.Brush Red = null;
+                    //listBox1.Foreground = Red;
+                    //listBox1.M
+
+
+                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
+                    if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
+                    listBox1.SelectedIndex = var1;
+                    
+
+
+                    System.Console.WriteLine(" INDEX: " + var1);
+
+                    listBox1.Foreground = System.Windows.Media.Brushes.DarkRed;
+                    // int index = listBox1.(item.controlTypeFiltered, -1);
+                    //listBox1.SelectedIndex(item.controlTypeFiltered);
+                    //ItemColor = c; 
+                    //listGuiElements();
+
+
                 }
-              
+
             }
      
 
