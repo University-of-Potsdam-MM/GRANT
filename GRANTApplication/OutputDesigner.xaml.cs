@@ -99,37 +99,6 @@ namespace GRANTApplication
             {
                // guiFunctions.loadFilteredTree(dlg.FileName);
                 guiFunctions.loadGrantProject(dlg.FileName);
-            }
-
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
-
-            tvOutput.Items.Clear();
-            root.Items.Clear();
-
-            //TreeViewItem root = new TreeViewItem();
-
-            root.controlTypeFiltered = "Filtered- Updated- Tree";
-
-            //
-            guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-            SaveButton.IsEnabled = true;
-            tvOutput.Items.Add(root);
-        }// Load Project wirft Fehler
-
-        private void LoadTree_Click(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            // dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".grant"; // Default file extension
-            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-
-            // Process open file dialog box results
-            if (result == true)
-            {
-                guiFunctions.loadFilteredTree(dlg.FileName);
             
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
@@ -138,36 +107,7 @@ namespace GRANTApplication
             root.Items.Clear();
 
             //TreeViewItem root = new TreeViewItem();
-            root.controlTypeFiltered = "Filtered- Updated- Tree";
 
-            //
-            guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-            SaveButton.IsEnabled = true;
-            tvOutput.Items.Add(root);
-         }
-        }
-        private void LoadDevice_Click(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            // dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".xml"; // Default file extension
-            dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-
-            // Process open file dialog box results
-            if (result == true)
-            {
-                guiFunctions.loadFilteredTree(dlg.FileName);
-            }
-
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
-
-            tvOutput.Items.Clear();
-            root.Items.Clear();
-
-            //TreeViewItem root = new TreeViewItem();
             root.controlTypeFiltered = "Filtered- Updated- Tree";
 
             //
@@ -175,21 +115,40 @@ namespace GRANTApplication
             SaveButton.IsEnabled = true;
             tvOutput.Items.Add(root);
 
+           
 
+            int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
+
+            comboBox2.SelectedIndex = var3;
+
+            }// Load Project wirft Fehler
         }
+       
         private void ComboBox_Loaded(object sender, RoutedEventArgs e)
         {
-            strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
+            if (strategyMgr.getSpecifiedDisplayStrategy() == null)
+            {
+                strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
+            }
+           
             // ... A List.
-            
+
+            //strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
+
             List<string> Combobox2items = new List<string>();
             List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
             // ... Get the ComboBox reference.
-            var comboBox = sender as ComboBox;
-           
-            comboBox.SelectedIndex = 1;
 
+
+            var comboBox = sender as ComboBox;
+
+
+            //strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice()
+            int var3 = comboBox.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
+
+            comboBox.SelectedIndex = var3;
+            //comboBox.SelectedIndex = 1;
             //Combobox2items.Add("Choose");
             foreach (Device d in devices)
             {
@@ -277,3 +236,65 @@ namespace GRANTApplication
         }
     }
 }
+//wird im  moment nicht aufgerufen
+/*  private void LoadTree_Click(object sender, RoutedEventArgs e)
+  {
+      Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+      // dlg.FileName = "filteredTree_"; // Default file name
+      dlg.DefaultExt = ".grant"; // Default file extension
+      dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
+      dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+      // Show open file dialog box
+      Nullable<bool> result = dlg.ShowDialog();
+
+      // Process open file dialog box results
+      if (result == true)
+      {
+          guiFunctions.loadFilteredTree(dlg.FileName);
+
+
+      ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+
+      tvOutput.Items.Clear();
+      root.Items.Clear();
+
+      //TreeViewItem root = new TreeViewItem();
+      root.controlTypeFiltered = "Filtered- Updated- Tree";
+
+      //
+      guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+      SaveButton.IsEnabled = true;
+      tvOutput.Items.Add(root);
+   }
+  }*/
+/*    private void LoadDevice_Click(object sender, RoutedEventArgs e)
+    {
+        Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+        // dlg.FileName = "filteredTree_"; // Default file name
+        dlg.DefaultExt = ".xml"; // Default file extension
+        dlg.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+        dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        // Show open file dialog box
+        Nullable<bool> result = dlg.ShowDialog();
+
+        // Process open file dialog box results
+        if (result == true)
+        {
+            guiFunctions.loadFilteredTree(dlg.FileName);
+        }
+
+        ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+
+        tvOutput.Items.Clear();
+        root.Items.Clear();
+
+        //TreeViewItem root = new TreeViewItem();
+        root.controlTypeFiltered = "Filtered- Updated- Tree";
+
+        //
+        guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+        SaveButton.IsEnabled = true;
+        tvOutput.Items.Add(root);
+
+
+    }*/
