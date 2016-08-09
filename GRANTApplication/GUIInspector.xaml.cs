@@ -56,7 +56,7 @@ namespace GRANTApplication
             root = new GuiFunctions.MenuItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
-            SaveStartButton.IsEnabled = false;
+            //SaveStartButton.IsEnabled = false;
         }
 
         void updatePropertiesTable(String IdGenerated)
@@ -364,7 +364,7 @@ namespace GRANTApplication
                                                               // root.Selected += root_Selected;
                                                               //
                         SaveButton.IsEnabled = true;
-                        SaveStartButton.IsEnabled = true;
+                        //SaveStartButton.IsEnabled = true;
                         tvMain.Items.Add(root);
                         NodeButton.IsEnabled = false;
                         updatePropertiesTable(tree.Child.Data.properties.IdGenerated);
@@ -477,7 +477,7 @@ namespace GRANTApplication
             NodeButton.IsEnabled = false;
             updatePropertiesTable(tree.Child.Data.properties.IdGenerated);
             SaveButton.IsEnabled = true;
-            SaveStartButton.IsEnabled = true;
+            //SaveStartButton.IsEnabled = true;
             }
         }
 
