@@ -439,7 +439,7 @@ namespace GRANTApplication
             GeneralProperties proper2 = new GeneralProperties();
             BrailleRepresentation e2 = new BrailleRepresentation();
             e2.screenName = "screen1";
-            e2.text = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
+            proper2.valueFiltered = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
             //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e2.showScrollbar = true;
             e2.viewName = "v2";
@@ -522,7 +522,7 @@ namespace GRANTApplication
             BrailleRepresentation e5 = new BrailleRepresentation();
             GeneralProperties proper5 = new GeneralProperties();
             e5.screenName = "screen1";
-            e5.text = "Button";
+            proper5.valueFiltered = "Button";
             // c5.uiElementContent = "Hallo - Button";
             // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";

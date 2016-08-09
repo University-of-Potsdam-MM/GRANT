@@ -469,15 +469,17 @@ namespace StrategyGenericTree
             GeneralProperties updatetContentGP = element.properties;
             String updatedText = getTextForView(element);
 
-            updatedContentBR.text = updatedText;
+           // updatedContentBR.text = updatedText;
+            updatetContentGP.valueFiltered = updatedText;
             bool? isEnable = isUiElementEnable(element);
             if (isEnable != null)
             {
                 updatetContentGP.isEnabledFiltered = (bool)isEnable;
             }
-            updatedContentBR.text = updatedText;
+           // updatedContentBR.text = updatedText;
 
             element.brailleRepresentation = updatedContentBR;
+            element.properties = updatetContentGP;
             changeBrailleRepresentation(ref element);//hier ist das Element schon geändert  
 
         }

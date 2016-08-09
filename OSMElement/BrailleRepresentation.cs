@@ -41,7 +41,7 @@ namespace OSMElement
         /// <summary>
         /// Enthält den darzustellenden Text eines UI-Elements
         /// </summary>
-        public String text { get; set; }
+     //   public String text { get; set; }
 
         /// <summary>
         /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat (falls nicht gesetzt, wird von true ausgegangen)
