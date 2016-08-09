@@ -518,7 +518,6 @@ namespace GRANTManager
             
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
             loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
-            Debug.WriteLine("");
         }
 
         private void loadBrailleTree(String filePath)
@@ -606,6 +605,8 @@ namespace GRANTManager
                 {
                     UpdateNode updateNodes = new UpdateNode(strategyMgr, grantTree);
                     updateNodes.compareAndChangeFileName();
+                    //aktiviert die Anwendung (nötig falls es minimiert war)
+                    strategyMgr.getSpecifiedOperationSystem().showWindow(appIsRunnuing);
                     return true;
                 }
             }

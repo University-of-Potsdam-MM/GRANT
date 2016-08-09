@@ -54,5 +54,13 @@ namespace GRANTManager.Interfaces
         /// <returns><c>true</c> falls die Anwendung gestartet wurde; sonst <c>false</c></returns>
         bool openApplication(String name);
 
+        /// <summary>
+        /// Aktiviert eine Anwendung
+        /// -> wird benötigt beim Filtern, falls die Anwendung minimiert ist
+        /// </summary>
+        /// <param name="hwnd">gibt den Handle der anwendung an</param>
+        /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
+        bool showWindow(IntPtr hwnd);
+
     }
 }

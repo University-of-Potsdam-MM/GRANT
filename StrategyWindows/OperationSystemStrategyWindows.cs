@@ -39,6 +39,9 @@ namespace StrategyWindows
 
             [DllImport("User32.dll")]
             public static extern Int32 SetForegroundWindow(int hWnd);
+
+            [DllImport("User32.dll")]
+            public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         }
 
         private CursorPoint cp = new CursorPoint();
@@ -366,6 +369,17 @@ namespace StrategyWindows
             catch (FileNotFoundException) { }
 
             return false;
+        }
+
+        /// <summary>
+        /// Aktiviert eine Anwendung
+        /// -> wird benötigt beim Filtern, falls die Anwendung minimiert ist
+        /// </summary>
+        /// <param name="hwnd">gibt den Handle der anwendung an</param>
+        /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
+        public bool showWindow(IntPtr hwnd)
+        {
+            return NativeMethods.ShowWindow(hwnd, 9); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
         }
     }
     
