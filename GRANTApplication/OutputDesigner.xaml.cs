@@ -184,6 +184,7 @@ namespace GRANTApplication
 
             // ... Set SelectedItem as Window Title.
             string value = comboBox.SelectedItem as string;
+            if (value == null) { return; }
             Device d = strategyMgr.getSpecifiedDisplayStrategy().getDeviceByName(value);
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
             // methode aufrufen
