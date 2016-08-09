@@ -6,6 +6,17 @@
        Title="GUIInspector" 
         KeyDown="Window_KeyDown"
          WindowStartupLocation="Manual" Left="40" Top="150" MaxHeight="850" Width="Auto" MaxWidth="750" Height="850" Background="GhostWhite">
+    <Window.Resources>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Yellow"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Blue"/>
+        <Style TargetType="ListViewItem">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="25,5" />
+        </Style>
+    </Window.Resources>
     <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
         <!-- Status Bar-->
 

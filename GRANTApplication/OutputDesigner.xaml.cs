@@ -221,7 +221,7 @@ namespace GRANTApplication
 
                     System.Console.WriteLine(" INDEX: " + var1);
 
-                    listBox1.Foreground = System.Windows.Media.Brushes.DarkRed;
+                    //listBox1.Foreground = System.Windows.Media.Brushes.DarkRed;
                     // int index = listBox1.(item.controlTypeFiltered, -1);
                     //listBox1.SelectedIndex(item.controlTypeFiltered);
                     //ItemColor = c; 
