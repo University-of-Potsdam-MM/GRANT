@@ -196,7 +196,7 @@ namespace StrategyBrailleIO
             }
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString()))
             {
-                view.SetText(element.brailleRepresentation.text);
+                view.SetText(element.properties.valueFiltered);
                 brailleIOMediator.RenderDisplay();
                 return;
             }
@@ -637,7 +637,7 @@ namespace StrategyBrailleIO
             Rect rect = new Rect();
             properties.isEnabledFiltered = true;
             properties.IdGenerated = "_tmp_id_";
-            brailleR.text = "Beispiel";
+            properties.valueFiltered = "Beispiel";
             #endregion
             #region unterschiedliche Eigenschaften
 
@@ -678,7 +678,7 @@ namespace StrategyBrailleIO
             }
             if (uiElementeTypesBrailleIoEnum.TextBox.ToString().Equals(uiElementType))
             {
-                brailleR.text = "Beispiel Beispieltext Beispieltext";
+                properties.valueFiltered = "Beispiel Beispieltext Beispieltext";
                 rect = new Rect(0, 0, 25, 10);
                 brailleR.showScrollbar = true;
             }
@@ -755,7 +755,7 @@ namespace StrategyBrailleIO
             brailleIOElement.matrix = osmElement.brailleRepresentation.matrix;
             brailleIOElement.screenName = osmElement.brailleRepresentation.screenName;
             brailleIOElement.showScrollbar = osmElement.brailleRepresentation.showScrollbar;
-            brailleIOElement.text = osmElement.brailleRepresentation.text;
+            brailleIOElement.text = osmElement.properties.valueFiltered;
             brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement.brailleRepresentation.uiElementSpecialContent);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;

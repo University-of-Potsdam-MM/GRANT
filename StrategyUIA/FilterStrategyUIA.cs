@@ -239,30 +239,10 @@ namespace StrategyUIA
             }
         }
 
-        //public OSMElement.OSMElement filterElement(IntPtr hwnd)
-        //{
-        //    //ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree.NewNodeTree();
-
-        //    AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
-
-        //    OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
-
-        //    //ITreeStrategy<OSMElement.OSMElement> osmElement = new ITreeStrategy<OSMElement.OSMElement>;
-            
-        //    osmElement.properties = setProperties(mainWindowElement);
-            
-        //    //ITreeStrategy<OSMElement.OSMElement> top = tree.AddChild(osmElement);
-        //    //AutomationElementCollection collection = mainWindowElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-        //    //findChildrenOfNode(top, collection, -1);
-
-        //    return osmElement;
-        //}
-
 
         /// <summary>
         /// todo
         /// Ordnet die Eigenschaften eines AutomationElements dem <typeparamref name="GeneralProperties"/>-Objekt zu
-        /// Hier sollte noch überall ein try/Catch um jede Abfrage der Properties herum, da einge properties von einigen anwendungen bei der abfrage fehler werfen!
         /// Desweiteren stellt sich die frage, ob cached abgefragt wird, oder current, wegen geschwindigekti der abfrage
         /// </summary>
         /// <param name="element">gibt das AutomationElement an</param>
@@ -745,13 +725,10 @@ namespace StrategyUIA
                 return  new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
             }
 
-            //TODO: Achtung einige Eigenschaften vonrscheinlich GeneralProperties sollten wahrscheinlich nicht genutzt werden
             Condition resultCondition;
             #region von allen auslesbar
-            //resultCondition = new PropertyCondition(AutomationElement.NameProperty, properties.nameFiltered);
-                resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
-            
-            // ...
+            resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
+            // ... ?
             #endregion
             if (properties.localizedControlTypeFiltered != null)
             {
@@ -765,15 +742,42 @@ namespace StrategyUIA
             {
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AccessKeyProperty, properties.accessKeyFiltered), resultCondition);
             }
-            if (properties.boundingRectangleFiltered != null)
-            {
-              //  resultCondition = new AndCondition(new PropertyCondition(AutomationElement.BoundingRectangleProperty, properties.boundingRectangleFiltered), resultCondition);
-            }
             if (properties.runtimeIDFiltered != null)
             {
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.RuntimeIdProperty, properties.runtimeIDFiltered), resultCondition);
             }
-
+            if (properties.frameWorkIdFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.FrameworkIdProperty, properties.frameWorkIdFiltered), resultCondition);
+            }
+            if (properties.isContentElementFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsContentElementProperty, properties.isContentElementFiltered), resultCondition);
+            }
+            if (properties.labeledbyFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledbyFiltered), resultCondition);
+            }
+            if (properties.isControlElementFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsControlElementProperty, properties.isControlElementFiltered), resultCondition);
+            }
+            if (properties.isPasswordFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsPasswordProperty, properties.isPasswordFiltered), resultCondition);
+            }
+            if (properties.itemTypeFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.ItemTypeProperty, properties.itemTypeFiltered), resultCondition);
+            }
+            if (properties.itemStatusFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.ItemStatusProperty, properties.itemStatusFiltered), resultCondition);
+            }
+            if (properties.isRequiredForFormFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsRequiredForFormProperty, properties.isRequiredForFormFiltered), resultCondition);
+            }
             //.. 
             return resultCondition;
         }

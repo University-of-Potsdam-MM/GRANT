@@ -469,15 +469,17 @@ namespace StrategyGenericTree
             GeneralProperties updatetContentGP = element.properties;
             String updatedText = getTextForView(element);
 
-            updatedContentBR.text = updatedText;
+           // updatedContentBR.text = updatedText;
+            updatetContentGP.valueFiltered = updatedText;
             bool? isEnable = isUiElementEnable(element);
             if (isEnable != null)
             {
                 updatetContentGP.isEnabledFiltered = (bool)isEnable;
             }
-            updatedContentBR.text = updatedText;
+           // updatedContentBR.text = updatedText;
 
             element.brailleRepresentation = updatedContentBR;
+            element.properties = updatetContentGP;
             changeBrailleRepresentation(ref element);//hier ist das Element schon geändert  
 
         }
@@ -675,20 +677,20 @@ namespace StrategyGenericTree
             searchProperties.controlTypeFiltered = oldNode.Data.properties.controlTypeFiltered;
             searchProperties.fileName = oldNode.Data.properties.fileName;
             searchProperties.frameWorkIdFiltered = oldNode.Data.properties.frameWorkIdFiltered;
-            searchProperties.helpTextFiltered = oldNode.Data.properties.helpTextFiltered;
+          //  searchProperties.helpTextFiltered = oldNode.Data.properties.helpTextFiltered;
             searchProperties.isContentElementFiltered = oldNode.Data.properties.isContentElementFiltered;
             searchProperties.isControlElementFiltered = oldNode.Data.properties.isControlElementFiltered;
             //searchProperties.isEnabledFiltered = oldNode.Data.properties.isEnabledFiltered;
             searchProperties.isKeyboardFocusableFiltered = oldNode.Data.properties.isKeyboardFocusableFiltered;
-            searchProperties.isOffscreenFiltered = oldNode.Data.properties.isOffscreenFiltered;
+           // searchProperties.isOffscreenFiltered = oldNode.Data.properties.isOffscreenFiltered;
             searchProperties.isPasswordFiltered = oldNode.Data.properties.isPasswordFiltered;
             searchProperties.isRequiredForFormFiltered = oldNode.Data.properties.isRequiredForFormFiltered;
             searchProperties.itemStatusFiltered = oldNode.Data.properties.itemStatusFiltered;
             searchProperties.itemTypeFiltered = oldNode.Data.properties.itemTypeFiltered;
             searchProperties.labeledbyFiltered = oldNode.Data.properties.labeledbyFiltered;
-            searchProperties.localizedControlTypeFiltered = oldNode.Data.properties.localizedControlTypeFiltered;
+            //searchProperties.localizedControlTypeFiltered = oldNode.Data.properties.localizedControlTypeFiltered;
             searchProperties.moduleName = oldNode.Data.properties.moduleName;
-            searchProperties.suportedPatterns = oldNode.Data.properties.suportedPatterns;
+           // searchProperties.suportedPatterns = oldNode.Data.properties.suportedPatterns;
             #endregion
 
             #region 2. Knoten in neuen Baum suchen

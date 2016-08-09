@@ -12,6 +12,7 @@ namespace OSMElement
     [Serializable]
     public struct GeneralProperties
     {
+        //Link properties uia: https://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx
 
         //General Accessibility / Interaction
 

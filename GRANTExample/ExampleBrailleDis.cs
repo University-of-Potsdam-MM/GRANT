@@ -192,7 +192,7 @@ namespace GRANTExample
             GeneralProperties proper2 = new GeneralProperties();
             BrailleRepresentation e2 = new BrailleRepresentation();
             e2.screenName = "screen1";
-            e2.text = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
+            proper2.valueFiltered = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
           //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e2.showScrollbar = true;
             e2.viewName = "v2";
@@ -263,7 +263,7 @@ namespace GRANTExample
             BrailleRepresentation e5 = new BrailleRepresentation();
             GeneralProperties proper5 = new GeneralProperties();
             e5.screenName = "screen1";
-            e5.text = "Button";
+            proper5.valueFiltered = "Button";
            // c5.uiElementContent = "Hallo - Button";
            // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";
@@ -307,7 +307,7 @@ namespace GRANTExample
             BrailleRepresentation e7 = new BrailleRepresentation();
             e7.isVisible = true;
             e7.screenName = "screen1";
-            e7.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
+            proper7.valueFiltered = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
             DropDownMenu dropDownMenu = new DropDownMenu();
             dropDownMenu.hasChild = true;
             dropDownMenu.hasNext = true;
@@ -315,7 +315,7 @@ namespace GRANTExample
             dropDownMenu.isChild = false;
             dropDownMenu.isOpen = true;
             dropDownMenu.isVertical = true;
-            e7.text = "Datei";
+            proper7.valueFiltered = "Datei";
             // object[] otherContent7 = {UiObjectsEnum.DropDownMenu, uiElement};
             e7.uiElementSpecialContent = dropDownMenu;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
@@ -343,7 +343,7 @@ namespace GRANTExample
             dropDownMenu8.isChild = false;
             dropDownMenu8.isOpen = false;
             dropDownMenu8.isVertical = true;
-            e8.text = "Bearbeiten";
+            proper8.valueFiltered = "Bearbeiten";
            // object[] otherContent8 = { UiObjectsEnum.DropDownMenu, dropDownMenu8 };
             e8.uiElementSpecialContent = dropDownMenu8;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
@@ -371,7 +371,7 @@ namespace GRANTExample
             dropDownMenu9.isChild = true;
             dropDownMenu9.isOpen = false;
             dropDownMenu9.isVertical = true;
-            e9.text = "Neu";
+            proper9.valueFiltered = "Neu";
            // object[] otherContent9 = { UiObjectsEnum.DropDownMenu, dropDownMenu9 };
             e9.uiElementSpecialContent = dropDownMenu9;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
@@ -400,7 +400,7 @@ namespace GRANTExample
             proper10.isEnabledFiltered = false;
             dropDownMenu10.isOpen = false;
             dropDownMenu10.isVertical = true;
-            e10.text = "Beenden";
+            proper10.valueFiltered = "Beenden";
           //  object[] otherContent10 = { UiObjectsEnum.DropDownMenu, dropDownMenu10 };
             e10.uiElementSpecialContent = dropDownMenu10;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
@@ -420,8 +420,8 @@ namespace GRANTExample
             BrailleRepresentation e11 = new BrailleRepresentation();
             GeneralProperties proper11 = new GeneralProperties();
             e11.screenName = "screen1";
-            
-            e11.text = "Button 2";
+
+            proper11.valueFiltered = "Button 2";
             e11.viewName = "v11";
             e11.isVisible = true;
             Rect p11 = new Rect(81,30, 30, 9);
