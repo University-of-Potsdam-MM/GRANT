@@ -101,23 +101,14 @@ namespace StrategyBrailleIO
             }
         }
 
-        public void initializedBrailleDisplay()
+        public void setActiveAdapter()
         {
             if (brailleIOMediator == null)
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
             isInitialized = true;
-            createBrailleDis();
-
-        }
-
-        private void createBrailleDis()
-        {
             Type activeDeviceType = Type.GetType(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeFullName + ", " + strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace);
-               
-            //String name = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassType.Name;
-            //String ns = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace;
             //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
             if (activeDeviceType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
             {
@@ -126,19 +117,13 @@ namespace StrategyBrailleIO
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                 brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
+                brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
-               //TODO: bei MVBD ggf. das Ausgabegerät einstellen
-                
-           /*     #region BrailleDis events
-                brailleAdapter.touchValuesChanged += new EventHandler<BrailleIO_TouchValuesChanged_EventArgs>(_bda_touchValuesChanged);
-                brailleAdapter.keyStateChanged += new EventHandler<BrailleIO_KeyStateChanged_EventArgs>(_bda_keyStateChanged);
-                #endregion
-                */
-                //return brailleAdapter;
             }
             return;
+
         }
+
 
         /// <summary>
         /// Ändert den Inhalt einer View
@@ -207,7 +192,7 @@ namespace StrategyBrailleIO
         /// </summary>
         public void generatedBrailleUi()
         {
-            if (!isInitialized) { initializedBrailleDisplay(); }
+            if (!isInitialized) { setActiveAdapter(); }
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViews(osm);
             brailleIOMediator.RenderDisplay();

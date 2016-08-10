@@ -45,14 +45,14 @@ namespace GRANTExample
                     strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
                     strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
                    // strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
-                    strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
+                    strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 }
                 else
                 {
                     if (!strategyMgr.getSpecifiedBrailleDisplay().isInitialized())
                     {
-                        strategyMgr.getSpecifiedBrailleDisplay().initializedBrailleDisplay();
+                        strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
                         strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                     }
                 }
