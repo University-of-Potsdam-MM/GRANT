@@ -361,6 +361,7 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
+            vr.SetZIndex(osmElement.brailleRepresentation.zIntex);
             screen.AddViewRange(brailleUiElement.viewName, vr);
             vr.SetVisibility(brailleUiElement.isVisible);
         }
@@ -379,6 +380,7 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
+            vr.SetZIndex(osmElement.brailleRepresentation.zIntex);
             screen.AddViewRange(brailleUiElement.viewName, vr);
             vr.SetVisibility(brailleUiElement.isVisible);
         }
@@ -400,6 +402,7 @@ namespace StrategyBrailleIO
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
             vr.SetContrastThreshold(brailleUiElement.contrast);
             vr.SetZoom(brailleUiElement.zoom);
+            vr.SetZIndex(osmElement.brailleRepresentation.zIntex);
             screen.AddViewRange(brailleUiElement.viewName, vr);
             vr.SetVisibility(brailleUiElement.isVisible);
         }
@@ -419,6 +422,7 @@ namespace StrategyBrailleIO
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
+            vr.SetZIndex(osmElement.brailleRepresentation.zIntex);
             screen.AddViewRange(brailleUiElement.viewName, vr);
             vr.SetVisibility(brailleUiElement.isVisible);
         }
