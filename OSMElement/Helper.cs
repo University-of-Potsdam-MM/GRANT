@@ -28,13 +28,13 @@ namespace OSMElement
         }
 
         //Generiert eine ID --> richtiger Algorithmus muss noch gewählt werden
-        public static String generatedId(GeneralProperties properties)
+        /*public static String generatedId(GeneralProperties properties)
         {
             /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
              * http://stackoverflow.com/questions/12979212/md5-hash-from-string
              * http://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
              */
-            String result = "filterdTree" + properties.autoamtionIdFiltered + properties.classNameFiltered + properties.controlTypeFiltered + properties.itemTypeFiltered + properties.accessKeyFiltered + String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
+        /*    String result = "filterdTree" + properties.autoamtionIdFiltered + properties.classNameFiltered + properties.controlTypeFiltered + properties.itemTypeFiltered + properties.accessKeyFiltered + String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
             // String result = "filterdTree" + properties.autoamtionIdFiltered + properties.classNameFiltered + properties.controlTypeFiltered + properties.itemTypeFiltered + properties.accessKeyFiltered; //Achtung noch nicht eindeutig
             byte[] hash;
             using (var md5 = MD5.Create())
@@ -47,8 +47,7 @@ namespace OSMElement
                 sb.Append(b.ToString("X2"));
             }
             return sb.ToString();
-        }
-
+        }*/
 
     }
 }

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OSMElement.UiElements;
+using System.Security.Cryptography;
 
 namespace StrategyGenericTree
 {
@@ -215,14 +216,14 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
         /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
-        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, OperatorEnum oper) //TODO: properties sollten generisch sein
+        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper) //TODO: properties sollten generisch sein
         {//TODO: hier fehlen noch viele Eigenschaften
             //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
             if (!(tree is ITreeStrategy<OSMElement.OSMElement>))
             {
                 throw new InvalidOperationException("Falscher Baum-Type!");
             }
-            GeneralProperties generalProperties = (GeneralProperties)Convert.ChangeType(properties, typeof(GeneralProperties));
+           // GeneralProperties generalProperties = (GeneralProperties)Convert.ChangeType(properties, typeof(GeneralProperties));
             //printProperties(generalProperties);
             List<INode<OSMElement.OSMElement>> result = new List<INode<OSMElement.OSMElement>>();
 
@@ -234,17 +235,19 @@ namespace StrategyGenericTree
                 Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || node.Data.properties.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
                 Boolean propertieIdGenerated = generalProperties.IdGenerated == null || generalProperties.IdGenerated.Equals(node.Data.properties.IdGenerated);
                 Boolean propertieAccessKey = generalProperties.accessKeyFiltered == null || generalProperties.accessKeyFiltered.Equals(node.Data.properties.accessKeyFiltered);
-
-
+                Boolean acceleratorKey = generalProperties.acceleratorKeyFiltered == null || generalProperties.acceleratorKeyFiltered.Equals(node.Data.properties.acceleratorKeyFiltered);
+                Boolean runtimeId = generalProperties.runtimeIDFiltered == null || Enumerable.SequenceEqual(generalProperties.runtimeIDFiltered, node.Data.properties.runtimeIDFiltered);
+                Boolean automationId = generalProperties.autoamtionIdFiltered == null || generalProperties.autoamtionIdFiltered.Equals(node.Data.properties.autoamtionIdFiltered);
+                Boolean controlType = generalProperties.controlTypeFiltered == null || generalProperties.controlTypeFiltered.Equals(node.Data.properties.controlTypeFiltered);
                 if (OperatorEnum.Equals(oper, OperatorEnum.and))
                 {
-                    if (propertieBoundingRectangle && propertieIsEnabled && propertieLocalizedControlType && propertieName && propertieIdGenerated & propertieAccessKey)
+                    if (propertieBoundingRectangle && propertieLocalizedControlType &&  propertieIdGenerated && propertieAccessKey && acceleratorKey  && automationId && runtimeId && controlType)
                     {
                         result.Add(node);
                     }
                 }
                 if (OperatorEnum.Equals(oper, OperatorEnum.or))
-                {
+                {//TODO: ergänzen
                     if ((generalProperties.localizedControlTypeFiltered != null && propertieLocalizedControlType) ||
                         (generalProperties.nameFiltered != null && propertieName) ||
                         (generalProperties.isEnabledFiltered != null && propertieIsEnabled) ||
@@ -402,7 +405,7 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt die neuen <code>GeneralProperties</code> an</param>
         public void changePropertiesOfFilteredNode(GeneralProperties properties)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+           /* ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(properties.IdGenerated))
@@ -415,7 +418,19 @@ namespace StrategyGenericTree
 
                     break;
                 }
+            }*/
+            List<ITreeStrategy<OSMElement.OSMElement>> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
+            if (node.Count == 1)
+            {
+                OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                osm.brailleRepresentation = node[0].Data.brailleRepresentation;
+                osm.events = node[0].Data.events;
+                properties.IdGenerated = node[0].Data.properties.IdGenerated;
+                osm.properties = properties;
+                node[0].Data = osm;
+                return;
             }
+            Debug.WriteLine("TODO");
         }
 
         /// <summary>
@@ -642,6 +657,7 @@ namespace StrategyGenericTree
                 strategyMgr.setSpecifiedFilter(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace); //TODO: methode zum Erhalten des Standard-Filters
                 strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             }
+            /*
             #region Id in OSM-Beziehung neu setzen
             if (grantTrees.getOsmRelationship() != null)
             {
@@ -657,6 +673,7 @@ namespace StrategyGenericTree
                 grantTrees.setOsmRelationship(relationshipNew);
             }
             #endregion
+             * */
         }
 
         /// <summary>
@@ -770,6 +787,58 @@ namespace StrategyGenericTree
             }
             Debug.WriteLine("Knoten im Teilbaum nicht gefunden!");
             return false;
+        }
+
+
+        public void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
+        {
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated == null)
+                {
+                   OSMElement.OSMElement osm = node.Data;
+                   GeneralProperties properties = node.Data.properties;
+                   properties.IdGenerated =  generatedId(node);
+                   osm.properties = properties;
+                   node.Data = osm;
+                }
+            }
+        }
+
+        private static String generatedId(INode<OSMElement.OSMElement> node)
+        {
+            /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
+             * http://stackoverflow.com/questions/12979212/md5-hash-from-string
+             * http://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
+             */
+            GeneralProperties properties = node.Data.properties;
+            String result = properties.controlTypeFiltered +
+                properties.itemTypeFiltered +
+                properties.accessKeyFiltered +
+                properties.acceleratorKeyFiltered +
+                properties.frameWorkIdFiltered +
+                properties.isContentElementFiltered +
+                properties.isControlElementFiltered +
+                properties.isKeyboardFocusableFiltered +
+                properties.isPasswordFiltered +
+                properties.isRequiredForFormFiltered +
+                properties.itemStatusFiltered +
+                properties.itemTypeFiltered +
+                properties.labeledbyFiltered +
+                node.BranchCount +
+                node.BranchIndex +
+                node.Depth;
+            byte[] hash;
+            using (var md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(Encoding.UTF8.GetBytes(result));
+            }
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            return sb.ToString();
         }
     }
 }

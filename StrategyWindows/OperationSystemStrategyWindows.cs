@@ -296,10 +296,7 @@ namespace StrategyWindows
             return IntPtr.Zero;
         }
 
-      //  public bool isApplicationInForeground(String appMainModulName){
 
-
-      //  }
 
         /// <summary>
         /// Ermittelt den Namen der Anwendung zurück
@@ -310,10 +307,14 @@ namespace StrategyWindows
         {
             foreach (Process clsProcess in Process.GetProcesses())
             {
-                if (clsProcess.MainWindowTitle.Contains(name))
+                try
                 {
-                    return clsProcess.MainModule.ModuleName;
+                    if (!clsProcess.Handle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
+                    {
+                        return clsProcess.MainModule.ModuleName;
+                    }
                 }
+                catch (System.ComponentModel.Win32Exception) { }
             }
             return null;
         }
@@ -327,10 +328,14 @@ namespace StrategyWindows
         {
             foreach (Process clsProcess in Process.GetProcesses())
             {
-                if (clsProcess.MainWindowTitle.Contains(name))
+                try
                 {
-                    return clsProcess.MainModule.FileName;
+                    if (clsProcess.MainWindowTitle.Contains(name))
+                    {
+                        return clsProcess.MainModule.FileName;
+                    }
                 }
+                catch (System.ComponentModel.Win32Exception) { }
             }
             return null;
         }

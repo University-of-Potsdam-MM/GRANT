@@ -90,6 +90,8 @@ namespace GRANTManager.Interfaces
         /// <param name="hwndNew"></param>
         void updateTree(IntPtr hwndNew);
 
+        void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
+
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

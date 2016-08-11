@@ -39,7 +39,7 @@ namespace StrategyUIA
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
         {
 
-            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+          /*  ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
             AutomationElement mainWindowElement = deliverAutomationElementFromHWND(hwnd);
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainWindowElement);
@@ -51,7 +51,8 @@ namespace StrategyUIA
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             //uiaEvents.eventsUIA_withHWND(hwnd);
             setSpecialPropertiesOfFirstNode(ref tree);
-            return tree;
+            return tree;*/
+            return filtering(hwnd, TreeScopeEnum.Application, -1);
         }
 
         /// <summary>
@@ -79,10 +80,6 @@ namespace StrategyUIA
 
             switch (treeScope)
             {
-                case TreeScopeEnum.Parent:
-                    filterParents(mainElement, depth, ref tree);
-                    setSpecialPropertiesOfFirstNode(ref tree);
-                    break;
                 case TreeScopeEnum.Sibling:
                     filterSibling(mainElement, ref tree);
                     break;
@@ -98,8 +95,8 @@ namespace StrategyUIA
                     setSpecialPropertiesOfFirstNode(ref tree);
                     break;
                 case TreeScopeEnum.Ancestors:
-                    //selbe wie Parent bloß alle Vorfahren
-                    filterParents(mainElement, -1, ref tree);
+                    //selbe wie Parent
+                    filterParents(mainElement, ref tree);
                     break;
                 case TreeScopeEnum.Application:
                     filterApplication(mainElement, depth, ref tree);
@@ -107,6 +104,7 @@ namespace StrategyUIA
                     setSpecialPropertiesOfFirstNode(ref tree);
                     break;
             }
+            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfTree(ref tree);
             return tree;
         }
 
@@ -132,9 +130,6 @@ namespace StrategyUIA
 
             switch (treeScope)
             {
-                case TreeScopeEnum.Parent:
-                    filterParents(mainElement, depth, ref tree);
-                    break;
                 case TreeScopeEnum.Sibling:
                     filterSibling(mainElement, ref tree);
                     break;
@@ -149,8 +144,8 @@ namespace StrategyUIA
                     filterElement(mainElement, ref tree);
                     break;
                 case TreeScopeEnum.Ancestors:
-                    //selbe wie Parent bloß alle Vorfahren
-                    filterParents(mainElement, -1, ref tree);
+                    //selbe wie Parent
+                    filterParents(mainElement, ref tree);
                     break;
                 case TreeScopeEnum.Application:
                     filterApplication(mainElement, depth, ref tree);
@@ -158,6 +153,7 @@ namespace StrategyUIA
                     setSpecialPropertiesOfFirstNode(ref tree);
                     break;
             }
+            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfTree(ref tree);
             return tree;
         }
 
@@ -221,21 +217,16 @@ namespace StrategyUIA
         /// Filtert die Eltern des angegebenen <code>AutomationElements</code>
         /// </summary>
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Eltern ermittelt werden sollen</param>
-        /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <param name="tree">referenziert den gefilterten Baum</param>
-        private void filterParents(AutomationElement mainElement, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterParents(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             if (!(mainElement.Current.ControlType.LocalizedControlType).Equals("Fenster"))// TODO: Root bestimmen
             {
                 TreeWalker walker = TreeWalker.ControlViewWalker;
                 AutomationElement elementParent = walker.GetParent(mainElement);
                 addParentOfNode(elementParent, ref tree);
-
-                if (depth != 0)
-                {
-                    depth--;
-                    filterParents(elementParent, depth, ref  tree);
-                }
+                filterParents(elementParent, ref  tree);
+                
             }
         }
 
@@ -425,11 +416,11 @@ namespace StrategyUIA
             }
             setPropertiesOfPattern(ref elementP, element);
             setSupportedPatterns(ref elementP, element);
-            if (elementP.IdGenerated == null)
+            /*if (elementP.IdGenerated == null)
             {
                 elementP.IdGenerated = OSMElement.Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
                 //Console.WriteLine("hash = " + elementP.IdGenerated);
-            }
+            }*/
             //prüfen, ob es jetzt eine andere Filter-Strategy ist
             if (grantTrees != null && grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild)
             {
@@ -643,8 +634,19 @@ namespace StrategyUIA
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
 
             osmElement.properties = setProperties(mouseElement);
-
-            return osmElement;
+            
+            //Id setzen
+            List<ITreeStrategy<OSMElement.OSMElement>> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), osmElement.properties, OperatorEnum.and);
+            if (node.Count == 1)
+            {
+                return node[0].Data;
+            }
+            else
+            {
+                Debug.WriteLine("Element im Baum nicht gefunden");
+                return osmElement;
+            }
+            
         }
 
        /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
