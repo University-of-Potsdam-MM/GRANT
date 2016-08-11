@@ -11,6 +11,7 @@ using System.Drawing;
 using OSMElement;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 
 namespace StrategyWindows
 {
@@ -42,6 +43,9 @@ namespace StrategyWindows
 
             [DllImport("User32.dll")]
             public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+            [DllImport("User32.dll")]
+            public static extern bool IsIconic(IntPtr hWnd);
         }
 
         private CursorPoint cp = new CursorPoint();
@@ -281,7 +285,7 @@ namespace StrategyWindows
             {
                 try
                 {
-                    if (clsProcess.MainModule.ModuleName.Equals(appMainModulName))
+                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainModule.ModuleName.Equals(appMainModulName))
                     {
                         return clsProcess.MainWindowHandle;
                     }
@@ -342,7 +346,7 @@ namespace StrategyWindows
             {
                 try
                 {
-                    if (clsProcess.MainModule.ModuleName.Contains(modulName))
+                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainModule.ModuleName.Contains(modulName))
                     {
                         return clsProcess.MainModule.FileName;
                     }
@@ -363,7 +367,11 @@ namespace StrategyWindows
             try
             {
                 Process p = Process.Start(@name);
-                if (p != null) { return true; }
+                if (p != null) 
+                {
+                    Thread.Sleep(250);
+                    return true;
+                }
             }
             catch (ObjectDisposedException) { }
             catch (FileNotFoundException) { }
@@ -379,7 +387,11 @@ namespace StrategyWindows
         /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
         public bool showWindow(IntPtr hwnd)
         {
-            return NativeMethods.ShowWindow(hwnd, 9); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
+            if (NativeMethods.IsIconic(hwnd))
+            {
+                return NativeMethods.ShowWindow(hwnd, 9); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
+            }
+            return true;
         }
     }
     
