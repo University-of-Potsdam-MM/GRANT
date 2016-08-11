@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Xml.Linq;
+using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
@@ -759,18 +760,17 @@ namespace StrategyBrailleIO
         private AbstractBrailleIOAdapterBase displayStrategyClassToBrailleIoAdapterClass(Type displayStrategyType)
         {
             Type brailleAdapterType = null;
-            //if (displayStrategyClass.namespaceString.Equals("StrategyMVBD") && displayStrategyClass.name.Equals("DisplayStrategyMVBD"))
-            if(displayStrategyType.Equals(typeof(StrategyMVBD.DisplayStrategyMVBD)))
+
+            XElement xmlDoc = XElement.Load(@"displayStrategyType.xml");
+            IEnumerable<XElement> elements = xmlDoc.Elements("Strategy");
+            foreach (XElement strategy in elements)
             {
-                brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD);
-            }
-            if (displayStrategyType.Equals(typeof(DisplayStrategyBrailleDis)))
-            {
-                brailleAdapterType = typeof(BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet);
-            }
-            if (displayStrategyType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
-            {
-                //hier brauchen wir den Type nicht, da der Simulator anders erstellt wird
+                Debug.WriteLine("DeviceClassTypeFullName: {0}; DeviceClassTypeDllName: {1}", strategy.Element("DeviceClassTypeFullName").FirstNode, strategy.Element("DeviceClassTypeDllName").Value);
+                if (strategy.Element("DeviceClassTypeFullName").Value.Equals(displayStrategyType.FullName) && strategy.Element("DeviceClassTypeDllName").Value.Equals(displayStrategyType.Namespace))
+                {
+                    brailleAdapterType = Type.GetType(strategy.Element("AdaptClassTypeFullName").Value + ", " + strategy.Element("AdapterClassTypeDllName").Value);
+                    break;
+                }
             }
             if (brailleAdapterType != null) { return (AbstractBrailleIOAdapterBase)Activator.CreateInstance(brailleAdapterType, brailleIOMediator.AdapterManager); }
             return null;

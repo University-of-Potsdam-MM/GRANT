@@ -93,7 +93,6 @@ namespace GRANTManager.AbstractClasses
         public Device getDeviceByName(String deviceString)
         {
             List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
-
             foreach (Device d in devices)
             {
                 if (d.ToString().Equals(deviceString))
