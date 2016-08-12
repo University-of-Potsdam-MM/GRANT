@@ -237,11 +237,11 @@ namespace StrategyGenericTree
                 Boolean propertieAccessKey = generalProperties.accessKeyFiltered == null || generalProperties.accessKeyFiltered.Equals(node.Data.properties.accessKeyFiltered);
                 Boolean acceleratorKey = generalProperties.acceleratorKeyFiltered == null || generalProperties.acceleratorKeyFiltered.Equals(node.Data.properties.acceleratorKeyFiltered);
                 Boolean runtimeId = generalProperties.runtimeIDFiltered == null || Enumerable.SequenceEqual(generalProperties.runtimeIDFiltered, node.Data.properties.runtimeIDFiltered);
-                Boolean automationId = generalProperties.autoamtionIdFiltered == null || generalProperties.autoamtionIdFiltered.Equals(node.Data.properties.autoamtionIdFiltered);
+                Boolean automationId = generalProperties.autoamtionIdFiltered == null || generalProperties.autoamtionIdFiltered.Equals(node.Data.properties.autoamtionIdFiltered); //ist zumindest bei Skype für ein UI-Element nicht immer gleich
                 Boolean controlType = generalProperties.controlTypeFiltered == null || generalProperties.controlTypeFiltered.Equals(node.Data.properties.controlTypeFiltered);
                 if (OperatorEnum.Equals(oper, OperatorEnum.and))
                 {
-                    if (propertieBoundingRectangle && propertieLocalizedControlType &&  propertieIdGenerated && propertieAccessKey && acceleratorKey  && automationId && runtimeId && controlType)
+                    if (propertieBoundingRectangle && propertieLocalizedControlType &&  propertieIdGenerated && propertieAccessKey && acceleratorKey  &&  runtimeId && controlType)
                     {
                         result.Add(node);
                     }
@@ -262,6 +262,10 @@ namespace StrategyGenericTree
             }
             List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
             //printNodeList(result2);
+            if (result2.Count == 0)
+            {
+                Debug.WriteLine("");
+            }
             return result2;
         }
 
