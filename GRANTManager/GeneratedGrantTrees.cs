@@ -21,6 +21,12 @@ namespace GRANTManager
         private List<OsmRelationship<String, String>> osmRelationship = new List<OsmRelationship<string, string>>();
 
         /// <summary>
+        /// Gibt die Filterstrategien an;
+        /// dabei wird diese nur für den Root-Knoten und für alle Knoten bei dennen die Strategy von Standardfilter abweicht angegeben
+        /// </summary>
+        private List<FilterstrategyOfNode<String, String, String>> filterstrategiesOfNodes = new List<FilterstrategyOfNode<string, string, string>>();
+
+        /// <summary>
         /// Setzt den aktuell gefilterten Baum
         /// </summary>
         /// <param name="tree">gibt den gefilterten Baum an</param>
@@ -72,6 +78,25 @@ namespace GRANTManager
         public void setOsmRelationship(List<OsmRelationship<String, String>> relationship)
         {
             osmRelationship = relationship;
+        }
+
+        /// <summary>
+        /// Gibt die FilterStrategien für die Knoten zurück;
+        /// dabei wird diese nur für den Root-Knoten und für alle Knoten bei dennen die Strategy von Standardfilter abweicht angegeben
+        /// </summary>
+        /// <returns>Liste der Filterstrategien</returns>
+        public List<FilterstrategyOfNode<String, String, String>> getFilterstrategiesOfNodes()
+        {
+            return filterstrategiesOfNodes;
+        }
+
+        /// <summary>
+        /// Setzt die Filterstrategien für die Knoten
+        /// </summary>
+        /// <param name="filterstrategiesOfNodes">eine Liste von Filterstrategien</param>
+        public void setFilterstrategiesOfNodes(List<FilterstrategyOfNode<String, String, String>> filterstrategiesOfNodes)
+        {
+            this.filterstrategiesOfNodes = filterstrategiesOfNodes;
         }
     }
 }

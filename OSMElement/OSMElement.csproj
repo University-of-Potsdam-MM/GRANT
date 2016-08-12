@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="BrailleRepresentation.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="FilterstrategyOfNode.cs" />
     <Compile Include="GrantProjectObject.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="UiElements\DropDownMenu.cs" />

@@ -92,6 +92,13 @@ namespace GRANTManager.Interfaces
 
         void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
 
+        /// <summary>
+        /// setzt bei allen Element im Baum die angegebene Filterstrategie
+        /// </summary>
+        /// <param name="strategyType">gibt die zusetzende Strategie an</param>
+        /// <param name="subtree">gibt den (Teil-)Baum an, bei welchem die Strategie gesetzt werden soll</param>
+        void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> subtree);
+
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
