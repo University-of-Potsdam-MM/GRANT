@@ -374,13 +374,30 @@ namespace StrategyWindows
                 Process p = Process.Start(@name);
                 if (p != null) 
                 {
-                    Thread.Sleep(250);
-                    return true;
+                    int i = 20; // nur 20 mal testen ob die Anwendung läuft
+                    IntPtr hwnd;
+                    do
+                    {
+                        Thread.Sleep(500);
+                        hwnd = isApplicationRunning(p.MainModule.ModuleName);
+                        i--;
+                    }
+                    while ((hwnd == null || hwnd.Equals(IntPtr.Zero)) && i> 0);
+                    if (i > 0)
+                    {
+                        Debug.WriteLine("Geöffnet; hwnd = "+ hwnd+" i= "+ i);
+                        Thread.Sleep(500);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             catch (ObjectDisposedException) { }
             catch (FileNotFoundException) { }
-
+            catch (System.ComponentModel.Win32Exception) { }
             return false;
         }
 

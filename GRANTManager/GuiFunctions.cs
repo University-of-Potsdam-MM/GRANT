@@ -597,6 +597,7 @@ namespace GRANTManager
                         if (!openApp)
                         {
                             Debug.WriteLine("Anwendung konnte nicht geöffnet werden! Ggf. Pfad der Anwendung anpassen."); //TODO
+                            return false;
                         }
                         else { return true; }
                     }
