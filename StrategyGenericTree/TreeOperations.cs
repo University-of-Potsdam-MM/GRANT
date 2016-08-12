@@ -448,6 +448,7 @@ namespace StrategyGenericTree
                     OSMElement.OSMElement osm = new OSMElement.OSMElement();
                     osm.brailleRepresentation = node.Data.brailleRepresentation;
                     osm.events = node.Data.events;
+                    properties.IdGenerated = idGeneratedOld;
                     osm.properties = properties;
                     node.Data = osm;
                     break;
@@ -801,6 +802,10 @@ namespace StrategyGenericTree
                    properties.IdGenerated =  generatedId(node);
                    osm.properties = properties;
                    node.Data = osm;
+                   if (properties.IdGenerated.Trim().Equals(""))
+                   {
+                       Debug.WriteLine("");
+                   }
                 }
             }
         }

@@ -309,7 +309,7 @@ namespace StrategyWindows
             {
                 try
                 {
-                    if (!clsProcess.Handle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
+                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
                     {
                         return clsProcess.MainModule.ModuleName;
                     }
@@ -330,7 +330,7 @@ namespace StrategyWindows
             {
                 try
                 {
-                    if (clsProcess.MainWindowTitle.Contains(name))
+                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
                     {
                         return clsProcess.MainModule.FileName;
                     }

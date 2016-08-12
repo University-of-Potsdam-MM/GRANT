@@ -225,6 +225,7 @@ namespace GRANTManager
         /// <param name="parentNode">gibt den vorgängert Knoten (linker Geschwisterknoten) an</param>
         private void rootMenuItemCheckSibling(ref MenuItem root, ITreeStrategy<OSMElement.OSMElement> siblingNode)
         {
+            if (root.IdGenerated.Trim().Equals("")) { return; }
             if (siblingNode.HasParent && !siblingNode.Parent.Data.properties.IdGenerated.Equals(root.IdGenerated))
             {
                 Console.WriteLine();
