@@ -62,6 +62,7 @@ namespace GRANTExample
         {
 
             Device device = getDeviceByName("BrailleDisSimulator");
+            //Device device = getDeviceByName("BrailleDis");
             if (!device.Equals(new Device()))
             {
                 strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(device);
@@ -71,7 +72,7 @@ namespace GRANTExample
             {
                 // strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(new Device(64, 30, OrientationEnum.Front, "BrailleDisSimulator", this.GetType()));
                 Settings s = new Settings();
-                strategyMgr.setSpecifiedDisplayStrategy(s.getPosibleDisplayStrategies()[2].className);
+                strategyMgr.setSpecifiedDisplayStrategy(s.getPosibleDisplayStrategies()[0].className);
                 Console.WriteLine("Ausgabegerät auf 'Simulator-BrailleIO' geändert.");
             }
         }

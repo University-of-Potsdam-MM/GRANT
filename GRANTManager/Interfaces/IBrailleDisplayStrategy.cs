@@ -17,7 +17,7 @@ namespace GRANTManager.Interfaces
         /// <summary>
         /// Initialisiert ein Ausgabegerät.
         /// </summary>
-        void initializedBrailleDisplay();
+        void setActiveAdapter();
 
         /// <summary>
         /// Erstellt initial die Braille-UI

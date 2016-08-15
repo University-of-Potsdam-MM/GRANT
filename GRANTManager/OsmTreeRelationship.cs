@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using OSMElement;
 
 namespace GRANTManager
@@ -20,7 +21,7 @@ namespace GRANTManager
         /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
         public static void addOsmRelationship(String idFilteredTree, String idBrailleTree, ref List<OsmRelationship<String, String>> osmRelationship)
         {   //TODO: evtl. noch prüfen, ob die Ids existieren
-
+            if (idFilteredTree == null || idBrailleTree == null) { Debug.WriteLine("Eine der Ids ist nicht angebene, die OSM-Beziehung wurde nicht erstellt!"); return; }
             //prüfen, ob die Beziehung schon vorhanden ist
             if (!osmRelationship.Exists(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree)))
             {
@@ -39,6 +40,7 @@ namespace GRANTManager
         /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
         public static void setOsmRelationship(String idFilteredTree, String idBrailleTree, ref List<OsmRelationship<String, String>> osmRelationship)
         {
+            if (idFilteredTree == null || idBrailleTree == null) { Debug.WriteLine("Eine der Ids ist nicht angebene, die OSM-Beziehung wurde nicht erstellt!"); return; }
                 //alte Beziehungen löschen
             osmRelationship.Clear();
 

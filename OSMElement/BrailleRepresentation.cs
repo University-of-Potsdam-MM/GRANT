@@ -56,5 +56,10 @@ namespace OSMElement
         public Padding padding { get; set; }
         public Padding margin { get; set; }
         public Padding boarder { get; set; }
+
+        /// <summary>
+        /// Gibt den Z-Index an. Ein Element mit einem größeren z-Index liegt weiter oben.
+        /// </summary>
+        public int zIntex { get; set; }
     }
 }

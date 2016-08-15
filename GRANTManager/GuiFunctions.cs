@@ -597,6 +597,7 @@ namespace GRANTManager
                         if (!openApp)
                         {
                             Debug.WriteLine("Anwendung konnte nicht geöffnet werden! Ggf. Pfad der Anwendung anpassen."); //TODO
+                            return false;
                         }
                         else { return true; }
                     }
@@ -606,6 +607,7 @@ namespace GRANTManager
                     UpdateNode updateNodes = new UpdateNode(strategyMgr, grantTree);
                     updateNodes.compareAndChangeFileName();
                     //aktiviert die Anwendung (nötig falls es minimiert war)
+                   
                     strategyMgr.getSpecifiedOperationSystem().showWindow(appIsRunnuing);
                     return true;
                 }
@@ -618,7 +620,6 @@ namespace GRANTManager
         {
             //ist nur notwendig, wenn die Anwendung zwischendurch zu war (--> hwnd's vergleichen) oder die Anwendung verschoben wurde (--> Rect's vergleichen)
             ITreeStrategy<OSMElement.OSMElement> loadedTree = grantTree.getFilteredTree();
-            Thread.Sleep(100); //Damit ggf. die Anwendung gestartet ist, bevor der hwnd ermittelt werden kann
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
 
