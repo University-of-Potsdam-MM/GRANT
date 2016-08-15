@@ -683,7 +683,7 @@ namespace GRANTManager
             ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
             String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtree, osmElementOfFirstNodeOfSubtree.properties.IdGenerated);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTree.getFilteredTree();
-            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfSubTree(ref tree, idParent);
+            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredSubtree(ref tree, idParent);
             strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), ref tree, idParent);
         }
     }

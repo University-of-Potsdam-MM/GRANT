@@ -571,22 +571,28 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
         public void addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
-        {//TODO: muss an der Stelle die 'IdGenerated' generiert werden oder passiert das vorher?
+        {
             if (grantTrees.getBrailleTree() == null)
             {
                 grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewNodeTree());
             }
+            //TODO: prüfen, ob es die View auf dem Screen schon gibt
           
             //prüfen, ob der Knoten schon vorhanden ist
-            OSMElement.OSMElement nodeToRemove = getBrailleTreeOsmElementById(brailleNode.properties.IdGenerated);
-            if (nodeToRemove.Equals(new OSMElement.OSMElement()))
+            if (brailleNode.properties.IdGenerated != null && !brailleNode.properties.IdGenerated.Equals(""))
             {
-                grantTrees.getBrailleTree().AddChild(brailleNode);
+                OSMElement.OSMElement nodeToRemove = getBrailleTreeOsmElementById(brailleNode.properties.IdGenerated);
+                if (!nodeToRemove.Equals(new OSMElement.OSMElement()))
+                {
+                    changeBrailleRepresentation(ref brailleNode);
+                    return;
+                }
             }
-            else
-            {
-                changeBrailleRepresentation(ref brailleNode);
-            }            
+            OSMElement.OSMElement brailleNodeWithId = brailleNode;
+            GeneralProperties prop = brailleNode.properties;
+            prop.IdGenerated = generatedIdBrailleNode(brailleNode);
+            brailleNodeWithId.properties = prop;
+            grantTrees.getBrailleTree().AddChild(brailleNodeWithId);         
         }
 
         /// <summary>
@@ -705,7 +711,7 @@ namespace StrategyGenericTree
                 {
                    OSMElement.OSMElement osm = node.Data;
                    GeneralProperties properties = node.Data.properties;
-                   properties.IdGenerated =  generatedId(node);
+                   properties.IdGenerated =  generatedIdFilteredNode(node);
                    osm.properties = properties;
                    node.Data = osm;
                    if (properties.IdGenerated.Trim().Equals(""))
@@ -721,7 +727,7 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
-        public void generatedIdsOfSubTree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
+        public void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
         {
             //getFilteredTreeOsmElementById(idOfParent);
             ITreeStrategy<OSMElement.OSMElement> subtree =getAssociatedNode(idOfParent, tree);
@@ -731,7 +737,7 @@ namespace StrategyGenericTree
                 {
                     OSMElement.OSMElement osm = node.Data;
                     GeneralProperties properties = node.Data.properties;
-                    properties.IdGenerated = generatedId(node);
+                    properties.IdGenerated = generatedIdFilteredNode(node);
                     osm.properties = properties;
                     node.Data = osm;
                 }
@@ -739,7 +745,12 @@ namespace StrategyGenericTree
             tree = subtree.Root;
         }
 
-        private static String generatedId(INode<OSMElement.OSMElement> node)
+        /// <summary>
+        /// Erstellt eine Id für ein Knoten des gefilterten Baums
+        /// </summary>
+        /// <param name="node">gibt den Knoten des gefilterten Baums an</param>
+        /// <returns>die generierte Id</returns>
+        private static String generatedIdFilteredNode(INode<OSMElement.OSMElement> node)
         {
             /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
              * http://stackoverflow.com/questions/12979212/md5-hash-from-string
@@ -762,6 +773,36 @@ namespace StrategyGenericTree
                 node.BranchCount +
                 node.BranchIndex +
                 node.Depth;
+            byte[] hash;
+            using (var md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(Encoding.UTF8.GetBytes(result));
+            }
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Erstellt die Id für einen Knoten des Braille-Baums
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private static String generatedIdBrailleNode(OSMElement.OSMElement osmElement)
+        {
+            /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
+             * http://stackoverflow.com/questions/12979212/md5-hash-from-string
+             * http://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
+             */
+            GeneralProperties properties = osmElement.properties;
+            BrailleRepresentation braille = osmElement.brailleRepresentation;
+            String result = properties.controlTypeFiltered +
+                braille.fromGuiElement +
+                braille.screenName +
+                braille.viewName;
             byte[] hash;
             using (var md5 = MD5.Create())
             {

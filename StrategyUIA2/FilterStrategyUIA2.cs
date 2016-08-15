@@ -427,7 +427,7 @@ namespace StrategyUIA2
             setSupportedPatterns(ref elementP, element);
             /*if (elementP.IdGenerated == null)
             {
-                elementP.IdGenerated = OSMElement.Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
+                elementP.IdGenerated = OSMElement.Helper.generatedIdFilteredNode(elementP); //TODO: bessere Stelle für den Aufruf?
                 //Console.WriteLine("hash = " + elementP.IdGenerated);
             }*/
             //prüfen, ob es jetzt eine andere Filter-Strategy ist

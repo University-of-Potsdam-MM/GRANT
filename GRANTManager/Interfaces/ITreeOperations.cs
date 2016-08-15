@@ -108,7 +108,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
-        void generatedIdsOfSubTree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
+        void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
