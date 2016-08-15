@@ -39,34 +39,63 @@
                 </Menu>
                 <StackPanel Orientation="Horizontal"  Background="Gray" Margin="-1,0,-10,0">
                     <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
-                  
-                  <!--  <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
+
+                    <!--  <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
                     <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140"/>
-                   <!-- <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
-                  <!--  <Label  Margin="30,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
+                    <!-- <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
+                    <!--  <Label  Margin="30,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
                     <Grid>
                         <ComboBox Name="comboBox2" ItemsSource="{Binding Combobox2items}"  VerticalAlignment="Center" HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
                     </Grid>-->
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-1,0,-11,0">
-             <!--       <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
+                    <!--       <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
                     <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
              -->
                     <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
                     <Grid>
                         <ComboBox  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Center"  Name="comboBox2" ItemsSource="{Binding Combobox2items}"   HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
                     </Grid>
-                
+
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-       
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gold" Height="300" Margin="-1,0,1,10">
-            <Label VerticalAlignment="Center" Content="Filter marked tree node with choosen Filterstrategy: "/>
-           
 
-        </StackPanel>
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="-1,0,1,25">
+      <!--  <ScrollViewer  DockPanel.Dock="Bottom" Margin="2,0,9,10"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Top" Height="300">
+            <StackPanel Background="Gold" Height="290" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,0,10,0">
+            <DataGrid  HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White"  RowHeight="10" ColumnWidth="10"/>
+            </StackPanel>
+       </ScrollViewer>-->
+        <Grid DockPanel.Dock="Bottom" Background="Gold" Height="300" VerticalAlignment="Top">
+            <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
+          CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None"
+          SelectionUnit="Cell" HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White"  RowHeight="3" ColumnWidth="1">
+                <DataGrid.Style>
+                    <Style TargetType="DataGrid">
+                        <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
+                    </Style>
+                </DataGrid.Style>
+              
+                <!--   <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                       
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.RowHeaderStyle>
+                    <Style TargetType="{x:Type DataGridRowHeader}">
+                        <Setter Property="Content" Value="{Binding}" />
+                    </Style>
+                </DataGrid.RowHeaderStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="IsSelected" Value="{Binding IsRowSelected}" />
+                        <Setter Property="Header" Value="{Binding Content}" />
+                    </Style>
+                </DataGrid.RowStyle>-->
+            </DataGrid>
+        </Grid>
+
+            <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="-1,0,1,25">
             <Label VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
             <Button Content="Save Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
         </StackPanel>
@@ -124,7 +153,7 @@
                         </ListBox.Resources>
                     </ListBox>
                 </StackPanel>
-                    <!--   <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
+                <!--   <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
                     <ListBox Name="listBoxForSelection" ItemsSource="{Binding}"  IsSynchronizedWithCurrentItem="True" SelectionMode="Single"  >
 
@@ -151,11 +180,11 @@
 
                 </StackPanel>
             </ScrollViewer>
-          
+
 
         </Grid>
-      
-      
-  
+
+
+
     </DockPanel>
 </Window>

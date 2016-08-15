@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using OSMElement;
+using System.Windows.Media;
+using System.Data;
 
 namespace GRANTApplication
 {
@@ -120,7 +122,8 @@ namespace GRANTApplication
             int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
 
             comboBox2.SelectedIndex = var3;
-                listGuiElements();
+            listGuiElements();
+                createBrailleDisplay();
 
             }// Load Project wirft Fehler
         }
@@ -159,7 +162,7 @@ namespace GRANTApplication
 
             // ... Assign the ItemsSource to the List.
             comboBox.ItemsSource = Combobox2items;
-
+            //createBrailleDisplay();
 
 
         }
@@ -174,9 +177,44 @@ namespace GRANTApplication
 
             }
 
-            ;
+            
         }
 
+        private void createBrailleDisplay()
+        {
+
+            int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            // Add 10 Rows
+            DataTable dataTable = new DataTable();
+            
+
+
+            
+
+            // Add 7 Columns
+            for (int i = 0; i < dWidth; i++)
+            {
+
+                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+                dataTable.Columns.Add(dCol1);
+            }
+
+            //dataGrid2.ItemsSource = dataTable.DefaultView;
+            for (int i = 0; i < dHeight; i++)
+            {
+                DataRow row1 = dataTable.NewRow();
+                dataTable.Rows.Add(row1);
+                
+            }
+       
+            dataGrid2.ItemsSource = dataTable.DefaultView;
+            //dataGrid.ItemsSource = dataTable.AsDataView();
+        }
+        
+
+
+        
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -190,7 +228,9 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
             // methode aufrufen
             listGuiElements();
+            createBrailleDisplay();
             // this.Title = "Selected: " + value;
+            
         }
 
 

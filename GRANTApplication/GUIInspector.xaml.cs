@@ -211,7 +211,7 @@ namespace GRANTApplication
 
             
 
-            dataTable.Rows.Add();
+            //dataTable.Rows.Add();
 
             //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
