@@ -152,7 +152,16 @@ namespace GRANTExample
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
             bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(uiElementName);
-            return result;
+            Console.WriteLine("Beispiel für " + uiElementName);
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for(int j = 0; j < (result.Length / result.GetLength(0)); j++)
+                {
+                    Console.Write(result[i,j]+ "\t");
+                }
+                Console.WriteLine("");
+            }
+                return result;
         }
 
         public List<String> getRendererList()

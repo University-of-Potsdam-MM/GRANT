@@ -16,11 +16,13 @@ namespace GRANTManager.Interfaces
         void changePropertiesOfFilteredNode(OSMElement.GeneralProperties properties);
 
         /// <summary>
-        /// Ändert einen Teilbaum des gefilterten Baumes
+        /// Ändert einen Teilbaum des gefilterten Baums;
+        /// Achtung die Methode sollte nur genutzt werden, wenn von einem Element alle Kindelemente neu gefiltert wurden
         /// </summary>
         /// <param name="subTree">gibt den Teilbaum an</param>
-        /// <remarks><c>true</c>, falls der Teilbaum geändert wurde; sonst <c> false</c></remarks>
-        bool changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree);
+        /// <param name="idOfFirstNode">gibt die Id des esten Knotens des Teilbaumes an</param>
+        /// <returns>die Id des Elternknotens des Teilbaumes oder <c>null</c></returns>
+        String changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree, String idOfFirstNode);
 
         /// <summary>
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum einen zugehörigen Knoten an
@@ -92,13 +94,21 @@ namespace GRANTManager.Interfaces
 
         void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
 
+
         /// <summary>
-        /// setzt bei allen Element im Baum die angegebene Filterstrategie
+        /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
-        /// <param name="subtree">gibt den (Teil-)Baum an, bei welchem die Strategie gesetzt werden soll</param>
-        void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> subtree);
+        /// <param name="tree">gibt den (kompletten) Baum an</param>
+        /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
+        void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
 
+        /// <summary>
+        /// Ermittelt und setzt die Ids in einem Teilbaum
+        /// </summary>
+        /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
+        /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
+        void generatedIdsOfSubTree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

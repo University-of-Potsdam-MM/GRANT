@@ -33,12 +33,6 @@ namespace StrategyJAVA
             return specifiedTree;
         }
 
-        //public OSMElement.OSMElement filterElement(IntPtr hwnd)
-        //{
-        //    OSMElement.OSMElement tree = new OSMElement.OSMElement();
-        //    return tree;
-        //}
-
         public int deliverElementID(IntPtr hwnd)
         {            
             return -1;
@@ -49,13 +43,6 @@ namespace StrategyJAVA
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
-        /*public void getMouseRect(IntPtr hwnd, int pointx, int pointY, out int x, out int y, out int width, out int height)
-        {
-            x = 0;
-            y = 0;
-            width = 0;
-            height = 0;
-        }*/
 
         public OSMElement.OSMElement setOSMElement(int pointX, int pointY) {
             return new OSMElement.OSMElement();
@@ -64,9 +51,13 @@ namespace StrategyJAVA
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement) { return new GeneralProperties(); }
 
 
-
-
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public ITreeStrategy<OSMElement.OSMElement> updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
         {
             throw new NotImplementedException();
         }

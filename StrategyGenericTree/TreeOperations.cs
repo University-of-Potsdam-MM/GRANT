@@ -14,8 +14,6 @@ using GRANTManager.Interfaces;
 using GRANTManager;
 using OSMElement;
 using BrailleIOGuiElementRenderer;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -652,45 +650,53 @@ namespace StrategyGenericTree
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
         }
 
+
         /// <summary>
-        /// Ändert einen Teilbaum des gefilterten Baums
+        /// Ändert einen Teilbaum des gefilterten Baums;
         /// Achtung die Methode sollte nur genutzt werden, wenn von einem Element alle Kindelemente neu gefiltert wurden
         /// </summary>
         /// <param name="subTree">gibt den Teilbaum an</param>
-        /// <remarks><c>true</c>, falls der Teilbaum geändert wurde; sonst <c> false</c></remarks>
-        public bool changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree)
+        /// <param name="idOfFirstNode">gibt die Id des esten Knotens des Teilbaumes an</param>
+        /// <returns>die Id des Elternknotens des Teilbaumes oder <c>null</c></returns>
+        public String changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree, String idOfFirstNode)
         {
-            if (subTree == strategyMgr.getSpecifiedTree().NewNodeTree() || subTree.HasChild == false) { Debug.WriteLine("Keine Elemente im Teilbaum!"); return false; }
-            if (grantTrees.getFilteredTree() == null) { Debug.WriteLine("Kein Baum Vorhanden!"); return false; }
-            String idFirstSubtreeNode = subTree.Child.Data.properties.IdGenerated;
+            if (subTree == strategyMgr.getSpecifiedTree().NewNodeTree() || subTree.HasChild == false) { Debug.WriteLine("Keine Elemente im Teilbaum!"); return null; }
+            if (grantTrees.getFilteredTree() == null) { Debug.WriteLine("Kein Baum Vorhanden!"); return null; }
+            if (idOfFirstNode == null || idOfFirstNode.Equals("")) { Debug.WriteLine("Keine Id des ersten Knotens im Teilbaum vorhanden!"); return null; }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
             {
-                if (idFirstSubtreeNode.Equals(node.Data.properties.IdGenerated))
-                {
+                if (idOfFirstNode.Equals(node.Data.properties.IdGenerated))
+                {                    
                     Debug.WriteLine("Teilbum gefunden");
-                    //unterscheiden, ob der Knoten Geschwister (1.) oder Kinder (2.)  hat
-                    if (subTree.Child.HasNext || subTree.Child.HasChild)
+                    if (node.HasParent)
                     {
-                        /*hat (auch) Geschwister
-                         * zum Elternknoten gehen
-                         *  - alte Kinder löschen
-                         *  - neue Kinder hinzufügen
-                         */
-                        ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
-                        while (parentNode.HasChild)
+                        //unterscheiden, ob der Knoten Geschwister (1.) oder Kinder (2.)  hat
+                        if (subTree.Child.HasNext || subTree.Child.HasChild)
                         {
-                            grantTrees.getFilteredTree().Remove(parentNode.Child.Data);
+                            /*hat (auch) Geschwister
+                             * zum Elternknoten gehen
+                             *  - alte Kinder löschen
+                             *  - neue Kinder hinzufügen
+                             */
+                            ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
+                            while (parentNode.HasChild)
+                            {
+                                grantTrees.getFilteredTree().Remove(parentNode.Child.Data);
+                            }
+                            parentNode.AddChild(subTree);
+                            return parentNode.Data.properties.IdGenerated;
                         }
-                        parentNode.AddChild(subTree);
                     }
-                    return true;
                 }
             }
             Debug.WriteLine("Knoten im Teilbaum nicht gefunden!");
-            return false;
+            return null;
         }
 
-
+        /// <summary>
+        /// Generiert für den kompletten Baum die Ids
+        /// </summary>
+        /// <param name="tree">gibt eine referenz zu dem Baum an</param>
         public void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
@@ -708,6 +714,29 @@ namespace StrategyGenericTree
                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Ermittelt und setzt die Ids in einem Teilbaum
+        /// </summary>
+        /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
+        /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
+        public void generatedIdsOfSubTree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
+        {
+            //getFilteredTreeOsmElementById(idOfParent);
+            ITreeStrategy<OSMElement.OSMElement> subtree =getAssociatedNode(idOfParent, tree);
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree).All.Nodes)
+            {
+                if (node.Data.properties.IdGenerated == null)
+                {
+                    OSMElement.OSMElement osm = node.Data;
+                    GeneralProperties properties = node.Data.properties;
+                    properties.IdGenerated = generatedId(node);
+                    osm.properties = properties;
+                    node.Data = osm;
+                }
+            }
+            tree = subtree.Root;
         }
 
         private static String generatedId(INode<OSMElement.OSMElement> node)
@@ -748,15 +777,18 @@ namespace StrategyGenericTree
 
 
         /// <summary>
-        /// setzt bei allen Element im Baum die angegebene Filterstrategie
+        /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
-        /// <param name="subtree">gibt den (Teil-)Baum an, bei welchem die Strategie gesetzt werden soll</param>
-        public void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> subtree)
+        /// <param name="tree">gibt den (kompletten) Baum an</param>
+        /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
+        public void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
         {
             Settings settings = new Settings();
             List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree).All.Nodes)
+            ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
+            if (!subtree.HasChild) { return; }
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree.Child).All.Nodes)
             {
                 FilterstrategyOfNode<String, String, String> mainFilterstrategy =  FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), filterstrategies);
                 bool isAdded = FilterstrategiesOfTree.addFilterstrategyOfNode(node.Data.properties.IdGenerated, strategyType, ref filterstrategies);
@@ -767,6 +799,7 @@ namespace StrategyGenericTree
                     strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
                 }
             }
+            tree = subtree.Root;
         }
 
     }

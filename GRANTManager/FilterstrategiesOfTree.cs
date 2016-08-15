@@ -23,6 +23,7 @@ namespace GRANTManager
 
         public static bool addFilterstrategyOfNode(String idGeneratedOfNode, Type filterstrategyType, ref List<FilterstrategyOfNode<String, String, String>> filterstrategies)
         {
+            //TODO: prüfen, ob der Standardfilter genutzt wird
             if (idGeneratedOfNode == null || idGeneratedOfNode.Equals("")) { Debug.WriteLine("Keine Id vorhanden - Strategy konnte nicht gesetzt werden!"); return false; }
             FilterstrategyOfNode<String, String, String> filterstrategyNew = new FilterstrategyOfNode<string, string, string>();
             filterstrategyNew.IdGenerated = idGeneratedOfNode;

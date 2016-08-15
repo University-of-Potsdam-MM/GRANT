@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using GRANTApplication;
 using GRANTManager;
 using GRANTManager.Interfaces;
@@ -52,7 +53,7 @@ namespace GRANTExample
             return "";
         }
 
-        public String filterSubtreeOfApplicatione()
+        public String filterSubtreeOfApplication()
         {
             if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
             {
@@ -66,15 +67,16 @@ namespace GRANTExample
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
                     if (grantTree.getFilteredTree() != null)
                     {
-                        strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(tree);
-                    }
-                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
-                    if (tree.HasChild == true)
-                    {
-                        return printProperties(tree.Child.Data.properties);
-                    }
-                    return "";
+                        List<ITreeStrategy<OSMElement.OSMElement>> result = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), tree.Child.Data.properties, OperatorEnum.and);
+                        if (result.Count == 1)
+                        {
+                            GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree);
+                            guiFunctions.filterAndAddSubtreeOfApplication(result[0].Data);
 
+                          // guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById("7CA0B5B9845D7906E3BD235A600F3546"));
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {

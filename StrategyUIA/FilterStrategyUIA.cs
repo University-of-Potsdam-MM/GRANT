@@ -44,9 +44,10 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Filtert eine Anwendung/Teilanwendung ausgehend vom AutomationElement
+        /// Filtert eine Anwendung/Teilanwendung ausgehend vom AutomationElement;
+        /// nur wenn der ganze Baum gefiltert wird (TreeScopeEnum.Application) werden die IdGenerated gesetzt
         /// </summary>
-        /// <param name="automationElement">gibt das AutomationElement an von dem ddie Filterung ausgeht</param>
+        /// <param name="automationElement">gibt das AutomationElement an von dem die Filterung ausgeht</param>
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
@@ -68,7 +69,10 @@ namespace StrategyUIA
                 case TreeScopeEnum.Descendants:
                     // selbe wie Children bloß alle Kindeskinder
                     filterChildren(automationElement, -1, ref tree);
-                    strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref tree);
+                   // strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref tree);
+                    break;
+                case TreeScopeEnum.Subtree:
+                    filterSubtree(automationElement, ref tree);
                     break;
                 case TreeScopeEnum.Element:
                     filterElement(automationElement, ref tree);
@@ -84,8 +88,8 @@ namespace StrategyUIA
                     setSpecialPropertiesOfFirstNode(ref tree);
                     strategyMgr.getSpecifiedTreeOperations().generatedIdsOfTree(ref tree);
                     List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
-                FilterstrategiesOfTree.addFilterstrategyOfNode(tree.Child.Data.properties.IdGenerated, this.GetType(), ref filterstrategies);
-                grantTrees.setFilterstrategiesOfNodes(filterstrategies);
+                    FilterstrategiesOfTree.addFilterstrategyOfNode(tree.Child.Data.properties.IdGenerated, this.GetType(), ref filterstrategies);
+                    grantTrees.setFilterstrategiesOfNodes(filterstrategies);
                     break;
             }
              
@@ -144,6 +148,20 @@ namespace StrategyUIA
             osmElement.properties = setProperties(mainAppAutomationelement);
             ITreeStrategy<OSMElement.OSMElement> top  = tree.AddChild(osmElement);
             filterChildren(mainAppAutomationelement, -1, ref top);
+        }
+
+        private void filterSubtree(AutomationElement element, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        {
+            //ITreeStrategy<OSMElement.OSMElement> treeTop = tree.Copy();
+            //filterElement(element, ref tree);
+            //treeTop = tree.Root;
+
+            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            osmElement.properties = setProperties(element);
+            ITreeStrategy<OSMElement.OSMElement> treeTop = tree.AddChild(osmElement);
+
+            filterChildren(element, -1, ref treeTop);
+            tree = treeTop.Root;
         }
 
         /// <summary>
@@ -388,30 +406,6 @@ namespace StrategyUIA
             }
             setPropertiesOfPattern(ref elementP, element);
             setSupportedPatterns(ref elementP, element);
-            /*if (elementP.IdGenerated == null)
-            {
-                elementP.IdGenerated = OSMElement.Helper.generatedId(elementP); //TODO: bessere Stelle für den Aufruf?
-                //Console.WriteLine("hash = " + elementP.IdGenerated);
-            }*/
-            //prüfen, ob es jetzt eine andere Filter-Strategy ist
-            /*if (grantTrees != null && grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild)
-            {
-                Type interfaceOfClass = this.GetType().GetInterfaces()[0]; // das diese Klasse ein interface hat wissen wir hier
-                // wenn das angegebene Interface nicht gefunden wird ist der Wert hier null
-                if (grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace != null)
-                {
-                    Type filterStrategyTypeTree = getTypeOfStrategy(grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName, grantTrees.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace);
-                    Type interfacesOfTree = filterStrategyTypeTree.GetInterface(interfaceOfClass.Name);
-                    if (interfacesOfTree != null)
-                    {
-                        if (filterStrategyTypeTree != this.GetType())
-                        {//wir haben hier nicht die Standard-Filter-Methode
-                            elementP.grantFilterStrategyFullName = this.GetType().FullName;
-                            elementP.grantFilterStrategyNamespace = this.GetType().Namespace;
-                        }
-                    }
-                }
-            }*/
             return elementP;
         }
 
@@ -495,6 +489,21 @@ namespace StrategyUIA
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
+            AutomationElement au = getAutomationelementOfOsmElement(osmElement);
+            if (au != null)
+            {
+                propertiesUpdated = setProperties(au);
+            }
+            return propertiesUpdated;
+        }
+
+        /// <summary>
+        /// Ermittelt zu einem OSM-Element das zugehörige Automationelement
+        /// </summary>
+        /// <param name="osmElement">gibt das OSM-Element an</param>
+        /// <returns>ein AutomationElement, welches zu dem OSM-Element 'gehört'</returns>
+        private AutomationElement getAutomationelementOfOsmElement(OSMElement.OSMElement osmElement)
+        {
             AutomationElement au;
             Condition cond = setPropertiesCondition(osmElement.properties);
 
@@ -520,11 +529,23 @@ namespace StrategyUIA
                     au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond); //Achtung hier könnte auch ein anderes Element gefunden werden
                 }
             }
+            return au;
+        }
+
+        /// <summary>
+        /// Filtert ausgehend vom angegebenen OSMElement
+        /// </summary>
+        /// <param name="osmElementOfFirstNodeOfSubtree">gibt das (alt) OSM-Element an, von dem die neue Filterung ausgeht</param>
+        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
+        /// <returns>der gefilterte (Teil-)Baum</returns>
+        public ITreeStrategy<OSMElement.OSMElement> updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
+        {
+            AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
             if (au != null)
             {
-                propertiesUpdated = setProperties(au);
+                return filtering(au, treeScope, -1);
             }
-            return propertiesUpdated;
+            return null;
         }
 
         /// <summary>
@@ -685,7 +706,6 @@ namespace StrategyUIA
             node.AddChild(tree);
             tree.Clear();
             tree.AddChild(tree2);
-            Console.WriteLine();
         }
 
         /// <summary>
