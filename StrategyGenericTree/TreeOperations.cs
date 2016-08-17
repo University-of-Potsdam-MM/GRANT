@@ -588,12 +588,48 @@ namespace StrategyGenericTree
                     return;
                 }
             }
-            OSMElement.OSMElement brailleNodeWithId = brailleNode;
-            GeneralProperties prop = brailleNode.properties;
-            prop.IdGenerated = generatedIdBrailleNode(brailleNode);
-            brailleNodeWithId.properties = prop;
-            grantTrees.getBrailleTree().AddChild(brailleNodeWithId);         
+
+            if (brailleNode.brailleRepresentation.screenName == null || brailleNode.brailleRepresentation.screenName.Equals(""))
+            {
+                Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!");
+                return;
+            }
+
+            addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes)
+            {
+                if (node.Data.brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
+                {
+                    OSMElement.OSMElement brailleNodeWithId = brailleNode;
+                    GeneralProperties prop = brailleNode.properties;
+                    prop.IdGenerated = generatedIdBrailleNode(brailleNode);
+                    brailleNodeWithId.properties = prop;
+                    node.AddChild(brailleNodeWithId);
+                    return;
+                }
+            }
+
+        
         }
+
+        private void addSubtreeOfScreen(String screenName)
+        {
+            if (screenName == null || screenName.Equals(""))
+            {
+                Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!");
+                return; 
+            }
+            OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
+            BrailleRepresentation brailleScreen = new BrailleRepresentation();
+            brailleScreen.screenName = screenName;
+            osmScreen.brailleRepresentation = brailleScreen;
+            if (!grantTrees.getBrailleTree().Contains(osmScreen))
+            {
+                grantTrees.getBrailleTree().AddChild(osmScreen);
+            }
+        }
+
 
         /// <summary>
         /// entfernt einen Knoten vom Baum der Braille-Darstellung
@@ -843,5 +879,32 @@ namespace StrategyGenericTree
             tree = subtree.Root;
         }
 
+        /// <summary>
+        /// Gibt einen Teilbaum zurück, welcher nur die Views eines Screens enthält
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
+        /// <returns>Teilbaum des Screens oder <c>null</c></returns>
+        public ITreeStrategy<OSMElement.OSMElement> getSubtreeOfScreen(String screenName)
+        {
+            if (screenName == null || screenName.Equals("")) { Debug.WriteLine("Kein Name des Screens angegeben"); return null; }
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree().Copy();
+            if (tree == null || !tree.HasChild) { return null; }
+            tree = tree.Child;
+
+            if (tree.Data.brailleRepresentation.screenName.Equals(screenName))
+            {
+                return tree;
+            }
+ 
+            while (tree.HasNext)
+            {
+                if (tree.Next.Data.brailleRepresentation.screenName.Equals(screenName))
+                {
+                    return tree.Next;
+                }
+                tree = tree.Next;
+            }
+            return null;
+        }
     }
 }

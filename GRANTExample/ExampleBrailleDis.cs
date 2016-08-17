@@ -11,6 +11,7 @@ using GRANTApplication;
 using BrailleIOGuiElementRenderer;
 using OSMElement.UiElements;
 using System.Windows;
+using System.Diagnostics;
 
 namespace GRANTExample
 {
@@ -70,8 +71,16 @@ namespace GRANTExample
                         Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                         return;
                     }
-                    String brailleId = "braille123_6";
-                    OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                    GeneralProperties propertiesForSearch = new GeneralProperties();
+                        propertiesForSearch.controlTypeFiltered = "TextBox";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        String brailleId = "";
+                        if (treeElement.Count > 0)
+                        {
+                            brailleId = treeElement[0].Data.properties.IdGenerated;
+                        }
+                        if (brailleId.Equals("")) { return; }
+                    OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -102,7 +111,15 @@ namespace GRANTExample
                 Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                 return;
             }
-            String brailleId = "braille123_1";
+            String brailleId = "";
+            GeneralProperties propertiesForSearch = new GeneralProperties();
+            propertiesForSearch.controlTypeFiltered = "Screenshot";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        if (treeElement.Count > 0)
+                        {
+                            brailleId = treeElement[0].Data.properties.IdGenerated;
+                        }
+                        if (brailleId.Equals("")) { return; }
             OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -200,12 +217,12 @@ namespace GRANTExample
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             GeneralProperties proper2 = new GeneralProperties();
             BrailleRepresentation e2 = new BrailleRepresentation();
-            e2.screenName = "screen1";
+            e2.screenName = "screen2";
             proper2.valueFiltered = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
           //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e2.showScrollbar = true;
             e2.viewName = "v2";
-            e2.isVisible = false;
+            e2.isVisible = true;
             Rect p2 = new Rect(90, 42, 29,15);
             proper2.boundingRectangleFiltered = p2;
             Padding padding = new Padding(1, 1, 1, 1);
@@ -444,11 +461,24 @@ namespace GRANTExample
             #endregion
 
         }
-
-
-
-
-
         #endregion
+
+        /// <summary>
+        /// Wechselt zwischen screen1 und screen2
+        /// </summary>
+        public void changeScreen()
+        {
+            if (strategyMgr.getSpecifiedBrailleDisplay() == null) { return; }
+            String visibleScreen = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
+            if(visibleScreen.Equals("screen1"))
+            {
+                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("screen2");
+            }
+            else
+            {
+                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("screen1");
+            }
+           // ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(visibleScreen);
+        }
     }
 }

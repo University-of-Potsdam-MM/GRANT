@@ -168,6 +168,11 @@ namespace GRANTExample
                 exampleTree.filterSubtreeOfApplication();
                 Debug.WriteLine("F11");
             }
+            if (e.Key == Key.F12)
+            {
+                exampleBrailleDis.changeScreen();
+                Debug.WriteLine("F12");
+            }
        }
 
 

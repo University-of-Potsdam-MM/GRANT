@@ -232,10 +232,15 @@ namespace GRANTExample
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
-
-                        List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                        OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_1", ref relationshipList);
-                        grantTree.setOsmRelationship(relationshipList);
+                        GeneralProperties propertiesForSearch = new GeneralProperties();
+                        propertiesForSearch.controlTypeFiltered = "Screenshot";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        if (treeElement.Count > 0)
+                        {
+                            List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            grantTree.setOsmRelationship(relationshipList);
+                        }
                     }
 
                 }
@@ -252,6 +257,7 @@ namespace GRANTExample
         /// </summary>
         public void setOSMRelationship()
         {
+            if (grantTree.getBrailleTree() == null) { return; }
             if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
             {
                 try
@@ -269,13 +275,19 @@ namespace GRANTExample
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        GeneralProperties propertiesForSearch = new GeneralProperties();
+                        propertiesForSearch.controlTypeFiltered = "TextBox";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        if (treeElement.Count > 0)
+                        { //für Testzwecke wird einfach das erste Element genutzt
+                            List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
+                            //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
+                            OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            //  OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_11", ref relationshipList);
+                            grantTree.setOsmRelationship(relationshipList);
+                        }
 
-                        List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                     //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
-                      //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
-                        OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_6", ref relationshipList);
-                      //  OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_11", ref relationshipList);
-                        grantTree.setOsmRelationship(relationshipList);
                       
                     }
 

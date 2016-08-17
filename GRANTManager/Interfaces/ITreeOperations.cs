@@ -110,6 +110,13 @@ namespace GRANTManager.Interfaces
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
         void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
 
+                /// <summary>
+        /// Gibt einen Teilbaum zurück, welcher nur die Views eines Screens enthält
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
+        /// <returns>Teilbaum des Screens oder <c>null</c></returns>
+        ITreeStrategy<OSMElement.OSMElement> getSubtreeOfScreen(String screenName);
+
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         StrategyManager getStrategyMgr();

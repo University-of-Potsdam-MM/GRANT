@@ -195,14 +195,14 @@ namespace StrategyBrailleIO
         {
             if (!isInitialized) { setActiveAdapter(); }
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
-            createViews(osm);
+            createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
         }
 
         /// <summary>
         /// Erstellt einen neuen Screen, falls dieser noch nicht existiert
         /// </summary>
-        /// <param name="screens">gibt den Namen des Screens an</param>
+        /// <param name="screenAvtive">gibt den Namen des Screens an</param>
         private void createScreen(String screenName)
         {
             try
@@ -210,8 +210,13 @@ namespace StrategyBrailleIO
                  object screen = brailleIOMediator.GetView(screenName);
                  if (screen == null)
                  {
-                     brailleIOMediator.AddView(screenName, new BrailleIOScreen());
-
+                     brailleIOMediator.AddView(screenName, new BrailleIOScreen(screenName));
+                     //der erste erstellte Screen wird sichtbar gemacht, alle anderen nicht
+                     if (brailleIOMediator.Count() > 1)
+                     {
+                         BrailleIOScreen screenNew =  brailleIOMediator.GetView(screenName) as BrailleIOScreen;
+                         screenNew.SetVisibility(false);
+                     }
                  }
                 // der screen existiert schon -> ok
             }
@@ -245,55 +250,78 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Geht rekursive durch alle Baumelemente und erstellt die einzelnen Views
         /// </summary>
-        /// <param name="osm">gibt das Baum-Objekt der Oberflaeche an</param>
-        private void createViews(ITreeStrategy<OSMElement.OSMElement> osm)
+        /// <param name="tree">gibt das Baum-Objekt der Oberflaeche an</param>
+        private void createViewsFromTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
             //Falls die Baumelemente Kinder des jeweiligen Elements sind
-            while (osm.HasChild && !(osm.Count == 1 && osm.Depth == -1))
+            while ((tree.HasChild || tree.HasNext )&& !(tree.Count == 1 && tree.Depth == -1))
             {
-                if (osm.HasChild)
+                if (tree.HasChild)
                 {
-                    node1 = osm.Child;
-                    if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+                    node1 = tree.Child;
+                    if (node1.IsTop && !node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.brailleRepresentation.screenName.Equals(""))
                     {
                         createScreen(node1.Data.brailleRepresentation.screenName);
-                        createView(node1.Data);
                     }
-                    createViews(node1);
+                    else
+                    {
+                        if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && !node1.Data.brailleRepresentation.viewName.Equals(""))
+                        {
+                            createView(node1.Data);
+                        }
+                    }
+                    createViewsFromTree(node1);
                 }
-            }
-            //falls die Baumelemente (alle) am obersten Knoten hängen
-            while (osm.HasNext)
-            {
-                node1 = osm.Next;
-                if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+                else
                 {
-                    createScreen(node1.Data.brailleRepresentation.screenName);
-                    createView(node1.Data);
+                    node1 = tree.Next;
+                    if (tree.HasNext)
+                    {
+                        if (node1.IsTop && !node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.brailleRepresentation.screenName.Equals(""))
+                        {
+                            createScreen(node1.Data.brailleRepresentation.screenName);
+                        }
+                        else
+                        {
+                            if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && !node1.Data.brailleRepresentation.viewName.Equals(""))
+                            {
+                                createView(node1.Data);
+                            }
+                        }
+                    }
+                    createViewsFromTree(node1);
                 }
-                createViews(node1);
             }
-            if(osm.Count == 1 && osm.Depth == -1){
-                if (!osm.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+            if(tree.Count == 1 && tree.Depth == -1){
+                if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
                 {
-                    createScreen(osm.Data.brailleRepresentation.screenName);
-                    createView(osm.Data);
+                    if (tree.IsTop && !tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.brailleRepresentation.screenName.Equals(""))
+                    {
+                        createScreen(tree.Data.brailleRepresentation.screenName);
+                    }
+                    else
+                    {
+                        if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.properties.Equals(new GeneralProperties()) && !tree.Data.brailleRepresentation.viewName.Equals(""))
+                        {
+                            createView(tree.Data);
+                        }
+                    }
                 }
             }
-            if (!osm.HasChild)
+            if (!tree.HasChild)
             {
-                node1 = osm;
-                if (osm.HasParent)
+                node1 = tree;
+                if (tree.HasParent)
                 {
                     node1.Remove();
                 }
             }
-            if (!osm.HasNext && !osm.HasParent)
+            if (!tree.HasNext && !tree.HasParent)
             {
-                if (osm.HasPrevious)
+                if (tree.HasPrevious)
                 {
-                    node1 = osm;
+                    node1 = tree;
                     node1.Remove();
                 }
             }
@@ -782,5 +810,69 @@ namespace StrategyBrailleIO
         {
             return isInitialized;
         }
+
+        /// <summary>
+        /// Setzt den angegeben Screen auf Visible und den aktuell sichtbaren Screen auf invisible
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens an, der sichtbar sein soll</param>
+        public void setVisibleScreen(String screenName)
+        {
+           /* List<Object> allScreens = brailleIOMediator.GetViews();
+            foreach (BrailleIOScreen screen in allScreens)
+            {
+                if (screen.Name.Equals(screenName))
+                {
+                    screen.SetVisibility(true);
+                }
+                else
+                {
+                    screen.SetVisibility(false);
+                }
+            }*/
+            object screens = brailleIOMediator.GetActiveViews();
+            if (screens == null || !screens.GetType().Equals(typeof(List<Object>))) { return; }
+            List<Object> screenObjectList = (List<Object>) screens;
+            if (screenObjectList.Count == 1)
+            {
+                BrailleIOScreen screenAvtive = screenObjectList[0] as BrailleIOScreen;
+                if (screenAvtive != null)
+                {
+                    screenAvtive.SetVisibility(false);
+                    screenAvtive = brailleIOMediator.GetView(screenName) as BrailleIOScreen;
+                    screenAvtive.SetVisibility(true);
+                    brailleIOMediator.RenderDisplay();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gibt den Namen des gerade sichtbaren Screens zurück;
+        /// es sollte nur immer ein Screen sichtbar sein
+        /// </summary>
+        /// <returns>den Namen des Sichtbaren Screens oder <c>null</c></returns>
+        public String getVisibleScreen()
+        {
+            object screens = brailleIOMediator.GetActiveViews();
+            if (screens == null || !screens.GetType().Equals(typeof(List<Object>))) { return null; }
+            List<Object> screenObjectList = (List<Object>) screens;
+            if (screenObjectList.Count == 1)
+            {
+                BrailleIOScreen screenAvtive = screenObjectList[0] as BrailleIOScreen;
+                if (screenAvtive != null)
+                {
+                      return screenAvtive.Name;
+                }
+            }
+           /* List<Object> allScreens = brailleIOMediator.GetViews();
+            foreach (BrailleIOScreen screen in allScreens)
+            {
+                if (screen.IsVisible())
+                {
+                    return screen.Name;
+                }
+            }*/
+            return null;
+        }
+
     }
 }
