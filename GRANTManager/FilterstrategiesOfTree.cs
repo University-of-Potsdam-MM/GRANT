@@ -45,13 +45,15 @@ namespace GRANTManager
         }
 
 
-        public static void removeFilterstrategyOfNode(String idGeneratedOfNode, Type filterstrategyType, ref List<FilterstrategyOfNode<String, String, String>> filterstrategies)
+        public static bool removeFilterstrategyOfNode(String idGeneratedOfNode, Type filterstrategyType, ref List<FilterstrategyOfNode<String, String, String>> filterstrategies)
         {
             FilterstrategyOfNode<String, String, String> filterstrategyOld = getFilterstrategyOfNode(idGeneratedOfNode, filterstrategies);
             if (filterstrategyOld != null)
             {
                 filterstrategies.Remove(filterstrategyOld);
+                return true;
             }
+            return false;
         }
 
         public static FilterstrategyOfNode<String, String, String> getFilterstrategyOfNode(String idGeneratedOfNode, List<FilterstrategyOfNode<String, String, String>> filterstrategies)

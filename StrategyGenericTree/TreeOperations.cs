@@ -920,13 +920,19 @@ namespace StrategyGenericTree
         /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
         public void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
         {
+            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes());
+            if (mainFilterstrategy.FilterstrategyFullName.Equals(strategyType.FullName) && mainFilterstrategy.FilterstrategyDll.Equals(strategyType.Namespace)) 
+            {
+                removeFilterStrategyofSubtree(strategyType, ref tree, idOfParent);
+                Debug.WriteLine("Die Strategy muss nicht ergänzt werden!"); 
+                return; 
+            }
             Settings settings = new Settings();
             List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
             ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
             if (!subtree.HasChild) { return; }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree.Child).All.Nodes)
             {
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy =  FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), filterstrategies);
                 bool isAdded = FilterstrategiesOfTree.addFilterstrategyOfNode(node.Data.properties.IdGenerated, strategyType, ref filterstrategies);
                 if (isAdded)
                 {
@@ -936,6 +942,24 @@ namespace StrategyGenericTree
                 }
             }
             tree = subtree.Root;
+        }
+
+        private void removeFilterStrategyofSubtree(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, string idOfParent)
+        {
+            Settings settings = new Settings();
+            List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
+            ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
+            if (!subtree.HasChild) { return; }
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree.Child).All.Nodes)
+            {
+                bool isRemoved = FilterstrategiesOfTree.removeFilterstrategyOfNode(node.Data.properties.IdGenerated, strategyType, ref filterstrategies);
+                if (isRemoved)
+                {
+                    GeneralProperties properties = node.Data.properties;
+                    properties.grantFilterStrategy = "";
+                    strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
+                }
+            }
         }
 
         /// <summary>
