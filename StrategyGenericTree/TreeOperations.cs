@@ -570,7 +570,8 @@ namespace StrategyGenericTree
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
-        public void addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
+        /// <returns><c>true</c> falls der knoten hinzugefügt oder geupdatet wurde, sonst <c>false</c></returns>
+        public bool addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
         {
             if (grantTrees.getBrailleTree() == null)
             {
@@ -584,19 +585,19 @@ namespace StrategyGenericTree
                 if (!nodeToRemove.Equals(new OSMElement.OSMElement()))
                 {
                     changeBrailleRepresentation(ref brailleNode);
-                    return;
+                    return true;
                 }
             }
 
             if (brailleNode.brailleRepresentation.screenName == null || brailleNode.brailleRepresentation.screenName.Equals(""))
             {
                 Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!");
-                return;
+                return false;
             }
             // prüfen, ob es die View auf dem Screen schon gibt
             if (existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName))
             {
-                return;
+                return false;
             }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
@@ -609,9 +610,10 @@ namespace StrategyGenericTree
                     prop.IdGenerated = generatedIdBrailleNode(brailleNode);
                     brailleNodeWithId.properties = prop;
                     node.AddChild(brailleNodeWithId);
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         /// <summary>
