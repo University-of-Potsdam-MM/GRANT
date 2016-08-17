@@ -660,7 +660,7 @@ namespace GRANTManager
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
 
-            strategyMgr.getSpecifiedTreeOperations().updateTree(hwnd);
+            strategyMgr.getSpecifiedTreeOperations().updateFilteredTree(hwnd);
 
         }
 

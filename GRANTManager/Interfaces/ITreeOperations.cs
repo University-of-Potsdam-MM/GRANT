@@ -90,7 +90,7 @@ namespace GRANTManager.Interfaces
         /// Aktualisiert den ganzen Baum (nach dem Laden)
         /// </summary>
         /// <param name="hwndNew"></param>
-        void updateTree(IntPtr hwndNew);
+        void updateFilteredTree(IntPtr hwndNew);
 
         void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
 

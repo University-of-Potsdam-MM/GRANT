@@ -576,7 +576,6 @@ namespace StrategyGenericTree
             {
                 grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewNodeTree());
             }
-            //TODO: prüfen, ob es die View auf dem Screen schon gibt
           
             //prüfen, ob der Knoten schon vorhanden ist
             if (brailleNode.properties.IdGenerated != null && !brailleNode.properties.IdGenerated.Equals(""))
@@ -594,11 +593,15 @@ namespace StrategyGenericTree
                 Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!");
                 return;
             }
-
+            // prüfen, ob es die View auf dem Screen schon gibt
+            if (existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName))
+            {
+                return;
+            }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes)
-            {
+            {   //ermittelt an welchen Screen-Knoten die View angehangen werden soll
                 if (node.Data.brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
                 {
                     OSMElement.OSMElement brailleNodeWithId = brailleNode;
@@ -609,10 +612,64 @@ namespace StrategyGenericTree
                     return;
                 }
             }
-
-        
         }
 
+        /// <summary>
+        /// Prüft, ob die Angegebene View für den angegebenen Screen schon existiert
+        /// </summary>
+        /// <param name="screenName"></param>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
+        private bool existViewInScreen(String screenName, String viewName)
+        {
+            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("")) { return false; }
+            OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
+            BrailleRepresentation brailleScreen = new BrailleRepresentation();
+            brailleScreen.screenName = screenName;
+            osmScreen.brailleRepresentation = brailleScreen;
+            if (!grantTrees.getBrailleTree().Contains(osmScreen)) { return false; }
+            ITreeStrategy<OSMElement.OSMElement> treeCopy = grantTrees.getBrailleTree().Copy();
+            if (!treeCopy.HasChild) { return false; }
+            treeCopy = treeCopy.Child;
+            bool hasNext = true;
+            do
+            {
+                if (treeCopy.Data.brailleRepresentation.screenName.Equals(screenName))
+                {
+                    
+                    //TODO: alle Kinder untersuchen
+                    if (treeCopy.HasChild)
+                    {
+                        treeCopy = treeCopy.Child;
+                        if (treeCopy.Data.brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
+                        while (treeCopy.HasNext)
+                        {
+                            treeCopy = treeCopy.Next;
+                            if (treeCopy.Data.brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
+                        }
+                    }
+                    return false;
+                }
+                if (treeCopy.HasNext)
+                {
+                    treeCopy = treeCopy.Next;
+                    hasNext = true;
+                }
+                else
+                {
+                    hasNext = false;
+                }
+
+            } while (hasNext);
+
+            return false;
+
+        }
+
+        /// <summary>
+        /// Fügt einen 'Zweig' für den Screen an den Root-Knoten an, falls der Screen im Baum noch nicht existiert
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens an</param>
         private void addSubtreeOfScreen(String screenName)
         {
             if (screenName == null || screenName.Equals(""))
@@ -659,7 +716,7 @@ namespace StrategyGenericTree
         /// Dabei wird erst mit dem Hauptfilter alles gefiltert und anschließend geprüft, bei welchem Knoten der Filter gewechselt werden muss, dann wird dieser Knoten gesucht und neu gefiltert
         /// </summary>
         /// <param name="hwndNew"></param>
-        public void updateTree(IntPtr hwndNew)
+        public void updateFilteredTree(IntPtr hwndNew)
         {
             ITreeStrategy<OSMElement.OSMElement> treeLoaded = grantTrees.getFilteredTree().Copy();
 
