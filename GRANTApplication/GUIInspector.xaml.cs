@@ -150,8 +150,8 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow11);
 
             dataRow12["Property"] = "Filterstrategy";
-            //dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
-            //dataRow12["Content"] =  osmElement.properties.grantFilterStrategyFullName;
+            //dataRow12["Content"] = osmElementFilteredNode.properties.grantFilterStrategy == null ? " " : osmElementFilteredNode.properties.grantFilterStrategy.ToString();
+            //dataRow12["Content"] =  osmElementFilteredNode.properties.grantFilterStrategyFullName;
             dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
             dataTable.Rows.Add(dataRow12);
 
@@ -234,7 +234,7 @@ namespace GRANTApplication
             
             var tree = sender as TreeView;
 
-            // ... Determine type of SelectedItem.
+            // ... Determine typeOfTemplate of SelectedItem.
             if (tree.SelectedItem is GuiFunctions.MenuItem)
             {
                 // ... Handle a TreeViewItem.
@@ -259,8 +259,8 @@ namespace GRANTApplication
                 Console.WriteLine("Fehler: ");
 
             }
-            //OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
-            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+            //OSMElement.OSMElement osmElementFilteredNode = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
+            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElementFilteredNode);
 
 
             //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);

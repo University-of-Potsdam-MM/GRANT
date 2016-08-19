@@ -21,6 +21,7 @@ using GRANTApplication;
 using OSMElement;
 using GRANTManager;
 using GRANTManager.Interfaces;
+using GRANTManager.Templates;
 
 namespace GRANTExample
 {
@@ -44,6 +45,7 @@ namespace GRANTExample
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
+        GernaralUI ui;
 
         private void InitializeFilterComponent()
         {
@@ -79,6 +81,7 @@ namespace GRANTExample
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
             guiFuctions = new GuiFunctions(strategyMgr, grantTree);
+            ui = new GernaralUI(strategyMgr, grantTree);
         }
 
 
@@ -133,27 +136,27 @@ namespace GRANTExample
             {
                 exampleTree.setOSMRelationship();
             }
-           /* if (e.Key == Key.A)
+            if (e.Key == Key.D1)
             {
                 NodeBox.Text = exampleDisplay.deviceInfo();
             }
-            if (e.Key == Key.B)
+            if (e.Key == Key.D2)
             {
                 NodeBox.Text = exampleDisplay.allDevices();
             }
-            if (e.Key == Key.C)
+            if (e.Key == Key.D3)
             {
                 exampleDisplay.setMVBDDevice();
             }
-            if (e.Key == Key.D)
+            if (e.Key == Key.D4)
             {
                 exampleDisplay.setBrailleIoSimulatorDevice();
             }
-            if (e.Key == Key.E)
+            if (e.Key == Key.D5)
             {
                 exampleBrailleDis.getRendererExample();
-            }*/
-            if (e.Key == Key.F)
+            }
+            if (e.Key == Key.D6)
             {
                 exampleBrailleDis.getRendererExample(itemNameTextBox.Text);
             }
@@ -173,6 +176,7 @@ namespace GRANTExample
                 exampleBrailleDis.changeScreen();
                 Debug.WriteLine("F12");
             }
+
        }
 
 
@@ -214,6 +218,12 @@ namespace GRANTExample
             {
                 guiFuctions.loadGrantProject(dlg.FileName);
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ui.generatedUiFromTemplate();
+            Debug.WriteLine("");
         }
     }
 }

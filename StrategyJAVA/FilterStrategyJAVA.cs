@@ -48,7 +48,7 @@ namespace StrategyJAVA
             return new OSMElement.OSMElement();
         }
 
-        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement) { return new GeneralProperties(); }
+        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode) { return new GeneralProperties(); }
 
 
         public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
