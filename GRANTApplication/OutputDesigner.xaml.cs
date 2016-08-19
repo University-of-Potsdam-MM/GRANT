@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using OSMElement;
+using System.Windows.Media;
+using System.Data;
 
 namespace GRANTApplication
 {
@@ -48,6 +50,7 @@ namespace GRANTApplication
 
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
+           // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);
 
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees);
 
@@ -60,6 +63,179 @@ namespace GRANTApplication
 
         }
 
+        /*    private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            {
+                if (((ListBox)sender).SelectedItem != null)
+                {
+                    String element = (sender as ListBox).SelectedItem.ToString();
+
+                    // tb.Text = "   You selected " + lbi.Content.ToString() + ".";
+
+                    bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(element);
+
+
+                    // createBrailleDisplayMatrix((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3, guiElementRep);
+                    //dataGrid3.
+                    System.Console.WriteLine("WIDTH MAt:" + (guiElementRep.Length / guiElementRep.GetLength(0)).ToString());
+                    System.Console.WriteLine("HEIGHT MAt:" + guiElementRep.GetLength(0).ToString());
+                    DataTable dataTable4 = new DataTable();
+
+                    for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite 
+                    {
+                        //System.Console.WriteLine(a.ToString());
+                        System.Console.WriteLine("a:" + a.ToString());
+                        // DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
+                        //                         .ContainerFromIndex(i);
+                        //  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
+                        //  .ContainerFromIndex(i);
+                        // row.Background = Brushes.Red;
+                        //DataRow dr = (DataRow)row.DataContext;
+                        DataColumn dCol1 = new DataColumn(a.ToString()); // string FirstC=”column1″
+                       dataTable4.Columns.Add(dCol1);
+
+
+                        for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
+                        {
+                            System.Console.WriteLine("i: " + i.ToString());
+
+                            System.Console.WriteLine(guiElementRep[i, a].ToString());
+                           // DataRow row1 = dataTable4.NewRow();
+
+                            //dataTable4.Rows.Add(row1);
+                           // dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+
+                        //System.Console.WriteLine(i.ToString());
+                            //DataGridCell cell = new DataGridCell();
+                            // string s = (dataGrid3.Items[i] as DataRowView).Row.ItemArray[a].ToString();
+                            // dataGrid3.CurrentCell = new DataGridCellInfo(dataGrid3.Items[i], dataGrid3.Columns[a]);
+
+                        }
+                        DataRow row1 = dataTable4.NewRow();
+
+                        dataTable4.Rows.Add(row1);
+                        //dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+
+                    }
+                    dataGrid3.ItemsSource = dataTable4.AsDataView();
+                }
+            }*/
+
+        private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ListBox)sender).SelectedItem != null)
+            {
+                String element = (sender as ListBox).SelectedItem.ToString();
+                 bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(element);
+
+
+                DataTable dataTable4 = createBrailleDisplay3((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3);
+             
+             
+                for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite 
+                {
+                    //System.Console.WriteLine(a.ToString());
+                    System.Console.WriteLine("a:" + a.ToString());
+                    // DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
+                    //                         .ContainerFromIndex(i);
+                    //  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
+                    //  .ContainerFromIndex(i);
+                    // row.Background = Brushes.Red;
+                    //DataRow dr = (DataRow)row.DataContext;
+                  
+
+
+                    for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
+                    {
+                        System.Console.WriteLine("i: " + i.ToString());
+
+                        System.Console.WriteLine(guiElementRep[i, a].ToString());
+                        // DataRow row1 = dataTable4.NewRow();
+
+                        //dataTable4.Rows.Add(row1);
+                       dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+                
+                       
+
+                        //System.Console.WriteLine(i.ToString());
+                        //DataGridCell cell = new DataGridCell();
+                        // string s = (dataGrid3.Items[i] as DataRowView).Row.ItemArray[a].ToString();
+                        // dataGrid3.CurrentCell = new DataGridCellInfo(dataGrid3.Items[i], dataGrid3.Columns[a]);
+
+                    }
+                   
+
+                }
+                dataGrid3.ItemsSource = dataTable4.AsDataView();
+            }
+        }
+
+        private DataTable createBrailleDisplay3(int dWidth, int dHeight, DataGrid dataGrid)
+        {
+            //var dataGrid = sender as DataGrid;
+            System.Console.WriteLine(" DWIDTH: " + dWidth);
+
+            System.Console.WriteLine(" DHEIGHT: " + dHeight);
+            // Add 10 Rows
+            DataTable dataTable = new DataTable();
+
+            // Add 7 Columns
+            for (int i = 1; i <= dWidth; i++)
+            {
+
+                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+                dataTable.Columns.Add(dCol1);
+
+            }
+
+            //dataGrid2.ItemsSource = dataTable.DefaultView;
+            for (int i = 1; i <= dHeight; i++)
+            {
+                DataRow row1 = dataTable.NewRow();
+                dataTable.Rows.Add(row1);
+
+            }
+
+            //dataGrid.ItemsSource = dataTable.DefaultView;
+
+
+            dataGrid.ItemsSource = dataTable.AsDataView();
+            return dataTable;
+
+        }
+
+        private void createBrailleDisplayMatrix(int dWidth, int dHeight, DataGrid dataGrid, bool[,] guiElementRep)
+        {
+            //var dataGrid = sender as DataGrid;
+            System.Console.WriteLine(" DWIDTH: " + dWidth);
+
+            System.Console.WriteLine(" DHEIGHT: " + dHeight);
+            // Add 10 Rows
+            DataTable dataTable = new DataTable();
+
+            // Add 7 Columns
+            for (int i = 0; i < dWidth; i++)
+            {
+
+                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+                dataTable.Columns.Add(dCol1);
+
+            }
+
+            //dataGrid2.ItemsSource = dataTable.DefaultView;
+            for (int i = 0; i < dHeight; i++)
+            {
+                DataRow row1 = dataTable.NewRow();
+                dataTable.Rows.Add(row1);
+
+            }
+
+            //dataGrid.ItemsSource = dataTable.DefaultView;
+
+
+            dataGrid.ItemsSource = dataTable.AsDataView();
+          
+
+        }
 
         private void SaveProject_Click(object sender, RoutedEventArgs e)
         {
@@ -97,34 +273,37 @@ namespace GRANTApplication
             // Process open file dialog box results
             if (result == true)
             {
-               // guiFunctions.loadFilteredTree(dlg.FileName);
+                // guiFunctions.loadFilteredTree(dlg.FileName);
                 guiFunctions.loadGrantProject(dlg.FileName);
-            
 
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            tvOutput.Items.Clear();
-            root.Items.Clear();
+                ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            //TreeViewItem root = new TreeViewItem();
+                tvOutput.Items.Clear();
+                root.Items.Clear();
 
-            root.controlTypeFiltered = "Filtered- Updated- Tree";
+                //TreeViewItem root = new TreeViewItem();
 
-            //
-            guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-            SaveButton.IsEnabled = true;
-            tvOutput.Items.Add(root);
+                root.controlTypeFiltered = "Filtered- Updated- Tree";
 
-           
+                //
+                guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                SaveButton.IsEnabled = true;
+                tvOutput.Items.Add(root);
 
-            int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
 
-            comboBox2.SelectedIndex = var3;
+
+                int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
+
+                comboBox2.SelectedIndex = var3;
                 listGuiElements();
+                int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+                int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+                createBrailleDisplay(dWidth, dHeight, dataGrid2);
 
             }// Load Project wirft Fehler
         }
-       
+
         private void ComboBox_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -132,7 +311,7 @@ namespace GRANTApplication
             {
                 strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
             }
-           
+
             // ... A List.
 
             //strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
@@ -159,7 +338,7 @@ namespace GRANTApplication
 
             // ... Assign the ItemsSource to the List.
             comboBox.ItemsSource = Combobox2items;
-
+            //createBrailleDisplay();
 
 
         }
@@ -174,8 +353,44 @@ namespace GRANTApplication
 
             }
 
-            ;
+
         }
+
+        private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
+        {
+            //var dataGrid = sender as DataGrid;
+            System.Console.WriteLine(" DWIDTH: " + dWidth);
+
+            System.Console.WriteLine(" DHEIGHT: " + dHeight);
+            // Add 10 Rows
+            DataTable dataTable = new DataTable();
+
+            // Add 7 Columns
+            for (int i = 0; i < dWidth; i++)
+            {
+
+                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+                dataTable.Columns.Add(dCol1);
+                
+            }
+
+            //dataGrid2.ItemsSource = dataTable.DefaultView;
+            for (int i = 0; i < dHeight; i++)
+            {
+                DataRow row1 = dataTable.NewRow();
+                dataTable.Rows.Add(row1);
+
+            }
+
+            //dataGrid.ItemsSource = dataTable.DefaultView;
+            
+            
+            dataGrid.ItemsSource = dataTable.AsDataView();
+        }
+
+
+      
+
 
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -190,14 +405,20 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
             // methode aufrufen
             listGuiElements();
+            int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            //dataGrid2.ItemsSource = null;
+           
+            createBrailleDisplay(dWidth, dHeight, dataGrid2);
             // this.Title = "Selected: " + value;
+
         }
 
 
         void tvOutput_SelectedItemChanged(object sender,
       RoutedPropertyChangedEventArgs<object> e)
         {
-         
+
             var tree = sender as TreeView;
             if (tree.SelectedItem is GuiFunctions.MenuItem)
             {
@@ -208,7 +429,9 @@ namespace GRANTApplication
                 {
                     OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(item.IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+                    if (osmElement.properties.isOffscreenFiltered == false) { 
                     strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    }
                     //System.Drawing.Color MessageColor = System.Drawing.Color.Red;
                     //System.Windows.Media.Brush Red = null;
                     //listBox1.Foreground = Red;
@@ -218,7 +441,7 @@ namespace GRANTApplication
                     int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
                     listBox1.SelectedIndex = var1;
-                    
+
 
 
                     System.Console.WriteLine(" INDEX: " + var1);
@@ -233,9 +456,11 @@ namespace GRANTApplication
                 }
 
             }
-     
+
 
         }
+
+     
     }
 }
 //wird im  moment nicht aufgerufen

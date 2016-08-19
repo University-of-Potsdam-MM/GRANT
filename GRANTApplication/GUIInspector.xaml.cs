@@ -212,7 +212,7 @@ namespace GRANTApplication
 
             
 
-            dataTable.Rows.Add();
+            //dataTable.Rows.Add();
 
             //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
@@ -297,10 +297,10 @@ namespace GRANTApplication
 
                     OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                     System.Drawing.Rectangle rect = operationSystemStrategy.getRect(osmElement);
-                    
 
-                    // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
-                    operationSystemStrategy.paintRect(rect);
+
+                        // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
+                        if (osmElement.properties.isOffscreenFiltered == false) { operationSystemStrategy.paintRect(rect); }
                 }
                 catch (Exception ex)
                 {
