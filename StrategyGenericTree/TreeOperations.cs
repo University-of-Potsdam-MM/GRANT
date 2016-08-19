@@ -505,7 +505,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns>den anzuzeigenden Text</returns>
         private String getTextForView(OSMElement.OSMElement osmElement)
         {
@@ -529,7 +529,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen, ob das UI-Element aktiviert ist
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns><code>true</code> fals das UI-Element aktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>
         private bool? isUiElementEnable(OSMElement.OSMElement osmElement)
         {
@@ -570,8 +570,8 @@ namespace StrategyGenericTree
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
-        /// <returns><c>true</c> falls der knoten hinzugefügt oder geupdatet wurde, sonst <c>false</c></returns>
-        public bool addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
+        /// <returns> die generierte Id, falls der Knoten hinzugefügt oder geupdatet wurde, sonst <c>null</c></returns>
+        public String addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
         {
             if (grantTrees.getBrailleTree() == null)
             {
@@ -585,19 +585,19 @@ namespace StrategyGenericTree
                 if (!nodeToRemove.Equals(new OSMElement.OSMElement()))
                 {
                     changeBrailleRepresentation(ref brailleNode);
-                    return true;
+                    return brailleNode.properties.IdGenerated;
                 }
             }
 
             if (brailleNode.brailleRepresentation.screenName == null || brailleNode.brailleRepresentation.screenName.Equals(""))
             {
                 Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!");
-                return false;
+                return null;
             }
             // prüfen, ob es die View auf dem Screen schon gibt
             if (existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName))
             {
-                return false;
+                return null;
             }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
@@ -610,10 +610,10 @@ namespace StrategyGenericTree
                     prop.IdGenerated = generatedIdBrailleNode(brailleNode);
                     brailleNodeWithId.properties = prop;
                     node.AddChild(brailleNodeWithId);
-                    return true;
+                    return prop.IdGenerated;
                 }
             }
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -798,7 +798,7 @@ namespace StrategyGenericTree
         /// Generiert für den kompletten Baum die Ids
         /// </summary>
         /// <param name="tree">gibt eine referenz zu dem Baum an</param>
-        public void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
+        public void generatedIdsOfFilteredTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {

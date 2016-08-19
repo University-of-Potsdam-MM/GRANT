@@ -88,7 +88,7 @@ namespace StrategyUIA2
                     filterApplication(automationElement, depth, ref tree);
                     //beim ersten Knoten die Strategy mit ranschreiben + ModulName
                     setSpecialPropertiesOfFirstNode(ref tree);
-                    strategyMgr.getSpecifiedTreeOperations().generatedIdsOfTree(ref tree);
+                    strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredTree(ref tree);
                     List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
                     FilterstrategiesOfTree.addFilterstrategyOfNode(tree.Child.Data.properties.IdGenerated, this.GetType(), ref filterstrategies);
                     grantTrees.setFilterstrategiesOfNodes(filterstrategies);
@@ -527,18 +527,18 @@ namespace StrategyUIA2
         /// <summary>
         /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element an welches aktualisiert werden soll</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element an welches aktualisiert werden soll</param>
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
-        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement)
+        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
             AutomationElement au;
-            Condition cond = setPropertiesCondition(osmElement.properties);
+            Condition cond = setPropertiesCondition(osmElementFilteredNode.properties);
 
-            if (osmElement.properties.hWndFiltered != IntPtr.Zero)
+            if (osmElementFilteredNode.properties.hWndFiltered != IntPtr.Zero)
             {
                 //ist der Weg wirklich schneller?
-                IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(osmElement.properties.hWndFiltered));
+                IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(osmElementFilteredNode.properties.hWndFiltered));
                 AutomationElement mainWindowElement = deliverAutomationElementFromHWND(pointer);
                 //au = mainWindowElement.FindFirst(TreeScope.Children, cond);
                 au = mainWindowElement.FindFirst(TreeScope.Subtree, cond);
@@ -707,12 +707,12 @@ namespace StrategyUIA2
              //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
              AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
-             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+             OSMElement.OSMElement osmElementFilteredNode = new OSMElement.OSMElement();
 
-             osmElement.properties = setProperties(mouseElement);
+             osmElementFilteredNode.properties = setProperties(mouseElement);
             
              //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-             x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
+             x = (int)osmElementFilteredNode.properties.boundingRectangleFiltered.TopLeft.X;
              y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
              int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
              int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;

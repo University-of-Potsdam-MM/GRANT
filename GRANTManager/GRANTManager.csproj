@@ -79,6 +79,9 @@
     <Compile Include="Interfaces\IFilterStrategy.cs" />
     <Compile Include="Interfaces\IOperationSystemStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\ATemplateUi.cs" />
+    <Compile Include="Templates\GernaralUI.cs" />
+    <Compile Include="Templates\TemplateTitleBar.cs" />
     <Compile Include="TreeScopeEnum.cs" />
     <Compile Include="UpdateNode.cs" />
   </ItemGroup>
@@ -90,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\TemplateUi.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

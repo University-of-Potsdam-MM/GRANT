@@ -64,8 +64,8 @@ namespace GRANTManager.Interfaces
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
-        /// <returns><c>true</c> falls der knoten hinzugefügt oder geupdatet wurde, sonst <c>false</c></returns>
-        bool addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
+        /// <returns> die generierte Id, falls der Knoten hinzugefügt oder geupdatet wurde, sonst <c>null</c></returns>
+        String addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
 
         /// <summary>
         /// entfernt einen Knoten vom Baum der Braille-Darstellung
@@ -93,7 +93,7 @@ namespace GRANTManager.Interfaces
         /// <param name="hwndNew"></param>
         void updateFilteredTree(IntPtr hwndNew);
 
-        void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
+        void generatedIdsOfFilteredTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
 
 
         /// <summary>

@@ -46,9 +46,9 @@ namespace GRANTManager.Interfaces
         /// <summary>
         /// Gibt zu einem Renderer beispielhaft die Darstellung an
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
         /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
-        bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElement);
+        bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElementFilteredNode);
 
         /// <summary>
         /// Gibt zu einem Renderer beispielhaft die Darstellung an

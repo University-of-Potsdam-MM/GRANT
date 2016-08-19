@@ -380,7 +380,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einem Text
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElement">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
         private void createViewText(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -399,7 +399,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einer Bool-Matrix
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElement">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
         private void createViewMatrix(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -418,7 +418,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einem Bild
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElement">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
         /// <param name="image">gibt das Bild an</param>
         private void createViewImage(BrailleIOScreen screen,  OSMElement.OSMElement osmElement, System.Drawing.Image image)
         {
@@ -440,7 +440,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View die keinen standard-Renderer verwendet
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElement">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
         /// <param name="renderer">gibt den Renderer für diese View an</param>
         private void createViewOtherContent(BrailleIOScreen screen, OSMElement.OSMElement osmElement, IBrailleIOContentRenderer renderer)
         {
@@ -578,31 +578,31 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Gibt zu einem Renderer beispielhaft die Darstellung an
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
         /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
-        public bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElement)
+        public bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElementFilteredNode)
         {
             if (brailleIOMediator == null)
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
-            UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
-            createScreen(osmElement.brailleRepresentation.screenName);
-            createView(osmElement);
-            BrailleIOViewRange tmpView = (brailleIOMediator.GetView(osmElement.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElement.brailleRepresentation.viewName);
-            if (tmpView == null && !osmElement.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())) { return new bool[0, 0]; }
-            if(osmElement.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())){
+            UiElement brailleUiElement = convertToBrailleIOUiElement(osmElementFilteredNode);
+            createScreen(osmElementFilteredNode.brailleRepresentation.screenName);
+            createView(osmElementFilteredNode);
+            BrailleIOViewRange tmpView = (brailleIOMediator.GetView(osmElementFilteredNode.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElementFilteredNode.brailleRepresentation.viewName);
+            if (tmpView == null && !osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())) { return new bool[0, 0]; }
+            if(osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())){
                 //Screenshot muss extra erstellt werden
-                Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElement.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElement.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
+                Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
                 if (img == null) { return new bool[0, 0]; }
-                createViewImage(brailleIOMediator.GetView(brailleUiElement.screenName) as BrailleIOScreen, osmElement, img);
-                tmpView = (brailleIOMediator.GetView(osmElement.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElement.brailleRepresentation.viewName);
+                createViewImage(brailleIOMediator.GetView(brailleUiElement.screenName) as BrailleIOScreen, osmElementFilteredNode, img);
+                tmpView = (brailleIOMediator.GetView(osmElementFilteredNode.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElementFilteredNode.brailleRepresentation.viewName);
             }
             if (tmpView.IsText())
             {
                 tmpView.SetText(tmpView.GetText() == null ? "" : tmpView.GetText());
             }
-            String uiElementType = osmElement.properties.controlTypeFiltered;
+            String uiElementType = osmElementFilteredNode.properties.controlTypeFiltered;
             bool[,] matrix;
             if (!(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase) ||
                 uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase) ||
@@ -626,7 +626,7 @@ namespace StrategyBrailleIO
             else { throw new Exception("Kein passenden Renderer gefunden!"); }
             
             //löschen den temporär erstellten Screens inkl aller temporär erstellten Views
-            brailleIOMediator.RemoveView(osmElement.brailleRepresentation.screenName);
+            brailleIOMediator.RemoveView(osmElementFilteredNode.brailleRepresentation.screenName);
             return matrix;
         }
 
@@ -745,7 +745,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Konvertiert den <code>uiElementSpecialContent</code> des <code>OSMElement</code>s zu einem entsprechenden Objekt, welches BrailleIO bekannt ist
         /// </summary>
-        /// <param name="osmElement">gibt das osmElement an</param>
+        /// <param name="osmElementFilteredNode">gibt das osmElementFilteredNode an</param>
         /// <returns>ein Objekt mit dem konvertierten Inhalt</returns>
         private object convertUiElementSpecialContent(object osmElement)
         {
@@ -762,7 +762,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Konvertiert Inhalte des <code>OSMElement</code>s zu einer entsprechendend Darstellung vom <code>BrailleIOGuiElementRenderer.UiElement</code> um das Element einem Renderer zu übergeben
         /// </summary>
-        /// <param name="osmElement">gibt das <code>OSMElement</code> an</param>
+        /// <param name="osmElementFilteredNode">gibt das <code>OSMElement</code> an</param>
         /// <returns>ein <code>BrailleIOGuiElementRenderer.UiElement</code></returns>
         private BrailleIOGuiElementRenderer.UiElement convertToBrailleIOUiElement(OSMElement.OSMElement osmElement)
         {

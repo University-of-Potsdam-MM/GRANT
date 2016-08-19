@@ -281,10 +281,10 @@ namespace GRANTExample
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
                             List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                            //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
-                            //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
+                            //   OsmTreeRelationship.addOsmRelationship(osmElementFilteredNode.properties.IdGenerated, "braille123_3", ref relationship);
+                            //  OsmTreeRelationship.addOsmRelationship(osmElementFilteredNode.properties.IdGenerated, "braille123_5", ref relationship);
                             OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
-                            //  OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_11", ref relationshipList);
+                            //  OsmTreeRelationship.setOsmRelationship(osmElementFilteredNode.properties.IdGenerated, "braille123_11", ref relationshipList);
                             grantTree.setOsmRelationship(relationshipList);
                         }
 

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TemplateUi>
+  <UiElement name="TitleBar">
+    <Renderer>Text</Renderer>
+    <MinDeviceHeight>10</MinDeviceHeight>
+    <MinDeviceWidth>15</MinDeviceWidth>
+    <TextFromUIElement>nameFiltered</TextFromUIElement>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateTitleBar</ImplementedClassTypeFullName>
+    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+  </UiElement>
+</TemplateUi>

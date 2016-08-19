@@ -86,7 +86,7 @@ namespace StrategyUIA
                     filterApplication(automationElement, depth, ref tree);
                     //beim ersten Knoten die Strategy mit ranschreiben + ModulName
                     setSpecialPropertiesOfFirstNode(ref tree);
-                    strategyMgr.getSpecifiedTreeOperations().generatedIdsOfTree(ref tree);
+                    strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredTree(ref tree);
                     List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
                     FilterstrategiesOfTree.addFilterstrategyOfNode(tree.Child.Data.properties.IdGenerated, this.GetType(), ref filterstrategies);
                     grantTrees.setFilterstrategiesOfNodes(filterstrategies);
@@ -484,12 +484,12 @@ namespace StrategyUIA
         /// <summary>
         /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element an welches aktualisiert werden soll</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element an welches aktualisiert werden soll</param>
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
-        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElement)
+        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
-            AutomationElement au = getAutomationelementOfOsmElement(osmElement);
+            AutomationElement au = getAutomationelementOfOsmElement(osmElementFilteredNode);
             if (au != null)
             {
                 propertiesUpdated = setProperties(au);
@@ -500,7 +500,7 @@ namespace StrategyUIA
         /// <summary>
         /// Ermittelt zu einem OSM-Element das zugehörige Automationelement
         /// </summary>
-        /// <param name="osmElement">gibt das OSM-Element an</param>
+        /// <param name="osmElementFilteredNode">gibt das OSM-Element an</param>
         /// <returns>ein AutomationElement, welches zu dem OSM-Element 'gehört'</returns>
         private AutomationElement getAutomationelementOfOsmElement(OSMElement.OSMElement osmElement)
         {
@@ -649,12 +649,12 @@ namespace StrategyUIA
             //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElement.OSMElement osmElementFilteredNode = new OSMElement.OSMElement();
 
-            osmElement.properties = setProperties(mouseElement);
+            osmElementFilteredNode.properties = setProperties(mouseElement);
             
             //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
+            x = (int)osmElementFilteredNode.properties.boundingRectangleFiltered.TopLeft.X;
             y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
             int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
             int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
