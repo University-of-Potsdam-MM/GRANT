@@ -50,6 +50,7 @@ namespace GRANTApplication
 
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
+           // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);
 
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees);
 
@@ -62,6 +63,39 @@ namespace GRANTApplication
 
         }
 
+            private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            {
+                System.Console.WriteLine(" jetzt drin ");
+
+                ListBoxItem lbi = ((sender as ListBox).SelectedItem as ListBoxItem);
+
+                // tb.Text = "   You selected " + lbi.Content.ToString() + ".";
+                //lbi.Content.ToString()
+                bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation("Button");
+
+           
+            createBrailleDisplay(guiElementRep.GetLength(0), (guiElementRep.Length / guiElementRep.GetLength(0)), dataGrid3);
+
+             /*   for (int i = 0; i <= guiElementRep.GetLength(0); i++)
+                {
+                    DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+
+                    dataTable2.Columns.Add(dCol1);
+
+                    for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)
+                    {
+                        DataRow row1 = dataTable2.NewRow();
+                        dataTable2.Rows.Add(row1);
+                     //   System.Console.WriteLine(guiElementRep[i,a].ToString());
+
+                    }
+
+                }
+                dataGrid3.ItemsSource = dataTable2.DefaultView;*/
+
+
+
+            }
 
         private void SaveProject_Click(object sender, RoutedEventArgs e)
         {
@@ -99,35 +133,37 @@ namespace GRANTApplication
             // Process open file dialog box results
             if (result == true)
             {
-               // guiFunctions.loadFilteredTree(dlg.FileName);
+                // guiFunctions.loadFilteredTree(dlg.FileName);
                 guiFunctions.loadGrantProject(dlg.FileName);
-            
 
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            tvOutput.Items.Clear();
-            root.Items.Clear();
+                ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-            //TreeViewItem root = new TreeViewItem();
+                tvOutput.Items.Clear();
+                root.Items.Clear();
 
-            root.controlTypeFiltered = "Filtered- Updated- Tree";
+                //TreeViewItem root = new TreeViewItem();
 
-            //
-            guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-            SaveButton.IsEnabled = true;
-            tvOutput.Items.Add(root);
+                root.controlTypeFiltered = "Filtered- Updated- Tree";
 
-           
+                //
+                guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                SaveButton.IsEnabled = true;
+                tvOutput.Items.Add(root);
 
-            int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
 
-            comboBox2.SelectedIndex = var3;
-            listGuiElements();
-                createBrailleDisplay();
+
+                int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
+
+                comboBox2.SelectedIndex = var3;
+                listGuiElements();
+                int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+                int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+                createBrailleDisplay(dWidth, dHeight, dataGrid2);
 
             }// Load Project wirft Fehler
         }
-       
+
         private void ComboBox_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -135,7 +171,7 @@ namespace GRANTApplication
             {
                 strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
             }
-           
+
             // ... A List.
 
             //strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
@@ -177,20 +213,17 @@ namespace GRANTApplication
 
             }
 
-            
+
         }
 
-        private void createBrailleDisplay()
+        private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
         {
+            //var dataGrid = sender as DataGrid;
+            System.Console.WriteLine(" DWIDTH: " + dWidth);
 
-            int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
-            int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            System.Console.WriteLine(" DHEIGHT: " + dHeight);
             // Add 10 Rows
             DataTable dataTable = new DataTable();
-            
-
-
-            
 
             // Add 7 Columns
             for (int i = 0; i < dWidth; i++)
@@ -205,16 +238,17 @@ namespace GRANTApplication
             {
                 DataRow row1 = dataTable.NewRow();
                 dataTable.Rows.Add(row1);
-                
+
             }
-       
-            dataGrid2.ItemsSource = dataTable.DefaultView;
+
+            dataGrid.ItemsSource = dataTable.DefaultView;
+            
             //dataGrid.ItemsSource = dataTable.AsDataView();
         }
-        
 
 
-        
+
+
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -228,16 +262,20 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
             // methode aufrufen
             listGuiElements();
-            createBrailleDisplay();
+            int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            //dataGrid2.ItemsSource = null;
+           
+            createBrailleDisplay(dWidth, dHeight, dataGrid2);
             // this.Title = "Selected: " + value;
-            
+
         }
 
 
         void tvOutput_SelectedItemChanged(object sender,
       RoutedPropertyChangedEventArgs<object> e)
         {
-         
+
             var tree = sender as TreeView;
             if (tree.SelectedItem is GuiFunctions.MenuItem)
             {
@@ -258,7 +296,7 @@ namespace GRANTApplication
                     int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
                     listBox1.SelectedIndex = var1;
-                    
+
 
 
                     System.Console.WriteLine(" INDEX: " + var1);
@@ -273,9 +311,11 @@ namespace GRANTApplication
                 }
 
             }
-     
+
 
         }
+
+     
     }
 }
 //wird im  moment nicht aufgerufen
