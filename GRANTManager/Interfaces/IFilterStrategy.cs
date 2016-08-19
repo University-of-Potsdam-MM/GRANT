@@ -39,7 +39,7 @@ namespace GRANTManager.Interfaces
         /// <summary>
         /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das OSM-Element an welches aktualisiert werden soll</param>
+        /// <param name="filteredSubtree">gibt das OSM-Element an welches aktualisiert werden soll</param>
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode);
 

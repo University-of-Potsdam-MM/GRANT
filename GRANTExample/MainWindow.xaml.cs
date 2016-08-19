@@ -45,7 +45,7 @@ namespace GRANTExample
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
-        GernaralUI ui;
+        GenaralUI ui;
 
         private void InitializeFilterComponent()
         {
@@ -81,7 +81,7 @@ namespace GRANTExample
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
             guiFuctions = new GuiFunctions(strategyMgr, grantTree);
-            ui = new GernaralUI(strategyMgr, grantTree);
+            ui = new GenaralUI(strategyMgr, grantTree);
         }
 
 

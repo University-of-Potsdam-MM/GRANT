@@ -25,9 +25,9 @@ namespace GRANTManager.Templates
             this.grantTrees = grantTrees;
         }
 
-        public void createUiElementFromTemplate(OSMElement.OSMElement osmElementFilteredNode, GernaralUI.TempletUiObject templateObject) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public virtual void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
-            OSMElement.OSMElement brailleNode = createSpecialUiElement(osmElementFilteredNode, templateObject);
+            OSMElement.OSMElement brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }
             GeneralProperties prop = brailleNode.properties;
@@ -35,12 +35,12 @@ namespace GRANTManager.Templates
             brailleNode.properties = prop;
 
             List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
-            OsmTreeRelationship.addOsmRelationship(osmElementFilteredNode.properties.IdGenerated, idGenerated, ref relationship);
+            OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
             strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
 
         }
 
-        protected abstract OSMElement.OSMElement createSpecialUiElement(OSMElement.OSMElement osmElementFilteredNode, GernaralUI.TempletUiObject templateObject);
+        protected abstract OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject);
 
 
         

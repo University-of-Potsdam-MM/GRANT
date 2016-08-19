@@ -484,7 +484,7 @@ namespace StrategyUIA
         /// <summary>
         /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das OSM-Element an welches aktualisiert werden soll</param>
+        /// <param name="filteredSubtree">gibt das OSM-Element an welches aktualisiert werden soll</param>
         /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode)
         {
@@ -500,7 +500,7 @@ namespace StrategyUIA
         /// <summary>
         /// Ermittelt zu einem OSM-Element das zugehörige Automationelement
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das OSM-Element an</param>
+        /// <param name="filteredSubtree">gibt das OSM-Element an</param>
         /// <returns>ein AutomationElement, welches zu dem OSM-Element 'gehört'</returns>
         private AutomationElement getAutomationelementOfOsmElement(OSMElement.OSMElement osmElement)
         {
@@ -649,12 +649,12 @@ namespace StrategyUIA
             //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
-            OSMElement.OSMElement osmElementFilteredNode = new OSMElement.OSMElement();
+            OSMElement.OSMElement filteredSubtree = new OSMElement.OSMElement();
 
-            osmElementFilteredNode.properties = setProperties(mouseElement);
+            filteredSubtree.properties = setProperties(mouseElement);
             
             //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)osmElementFilteredNode.properties.boundingRectangleFiltered.TopLeft.X;
+            x = (int)filteredSubtree.properties.boundingRectangleFiltered.TopLeft.X;
             y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
             int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
             int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;

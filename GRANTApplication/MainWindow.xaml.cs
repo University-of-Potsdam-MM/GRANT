@@ -229,8 +229,8 @@ namespace GRANTApplication
                         Console.WriteLine("Pointx: " + pointX);
                         Console.WriteLine("Pointy: " + pointY);
                        
-                        OSMElement.OSMElement osmElementFilteredNode = filterStrategy.setOSMElement(pointX, pointY);
-                        Rectangle rect = operationSystemStrategy.getRect(osmElementFilteredNode);
+                        OSMElement.OSMElement filteredSubtree = filterStrategy.setOSMElement(pointX, pointY);
+                        Rectangle rect = operationSystemStrategy.getRect(filteredSubtree);
 
                         // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
                         operationSystemStrategy.paintRect(rect);

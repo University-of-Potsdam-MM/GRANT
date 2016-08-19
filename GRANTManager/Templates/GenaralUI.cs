@@ -13,12 +13,12 @@ using System.IO;
 
 namespace GRANTManager.Templates
 {
-    public class GernaralUI
+    public class GenaralUI
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
 
-        public GernaralUI(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) { this.strategyMgr = strategyMgr; this.grantTrees = grantTrees; }
+        public GenaralUI(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) { this.strategyMgr = strategyMgr; this.grantTrees = grantTrees; }
 
         /// <summary>
         /// Ausgehend vom gefilterten Baum wird für einige UI-Elemente ein Template (<see cref="TemplateUi"/>) angewendet aus dem eine Standard UI erstellt wird.
@@ -52,7 +52,8 @@ namespace GRANTManager.Templates
                     node1 = tree.Next;
                     if (tree.HasNext)
                     {
-                        createElementType(ref tree);
+                        //createElementType(ref tree);
+                        createElementType(ref node1);
                     }
                     iteratedTree(ref node1);
                 }
@@ -104,7 +105,8 @@ namespace GRANTManager.Templates
             if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
             ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             //AGeneralUi template = new TemplateTitleBar(strategyMgr, grantTrees);
-            generalUiInstance.createUiElementFromTemplate(subtree.Data, xmlUiElementToTemplateUiobject(firstElement));
+            generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiobject(firstElement));
+            //Debug.WriteLine("");
         }
 
         public struct TempletUiObject

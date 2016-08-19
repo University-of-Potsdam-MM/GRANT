@@ -505,7 +505,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <param name="filteredSubtree">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns>den anzuzeigenden Text</returns>
         private String getTextForView(OSMElement.OSMElement osmElement)
         {
@@ -529,7 +529,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen, ob das UI-Element aktiviert ist
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <param name="filteredSubtree">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns><code>true</code> fals das UI-Element aktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>
         private bool? isUiElementEnable(OSMElement.OSMElement osmElement)
         {

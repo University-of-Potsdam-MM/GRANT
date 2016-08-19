@@ -380,7 +380,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einem Text
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
         private void createViewText(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -399,7 +399,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einer Bool-Matrix
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
         private void createViewMatrix(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -418,7 +418,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View mit einem Bild
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
         /// <param name="image">gibt das Bild an</param>
         private void createViewImage(BrailleIOScreen screen,  OSMElement.OSMElement osmElement, System.Drawing.Image image)
         {
@@ -440,7 +440,7 @@ namespace StrategyBrailleIO
         /// Erstellt eine View die keinen standard-Renderer verwendet
         /// </summary>
         /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="osmElementFilteredNode">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
         /// <param name="renderer">gibt den Renderer für diese View an</param>
         private void createViewOtherContent(BrailleIOScreen screen, OSMElement.OSMElement osmElement, IBrailleIOContentRenderer renderer)
         {
@@ -578,7 +578,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Gibt zu einem Renderer beispielhaft die Darstellung an
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
+        /// <param name="filteredSubtree">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
         /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
         public bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElementFilteredNode)
         {
@@ -745,7 +745,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Konvertiert den <code>uiElementSpecialContent</code> des <code>OSMElement</code>s zu einem entsprechenden Objekt, welches BrailleIO bekannt ist
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das osmElementFilteredNode an</param>
+        /// <param name="filteredSubtree">gibt das filteredSubtree an</param>
         /// <returns>ein Objekt mit dem konvertierten Inhalt</returns>
         private object convertUiElementSpecialContent(object osmElement)
         {
@@ -762,7 +762,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Konvertiert Inhalte des <code>OSMElement</code>s zu einer entsprechendend Darstellung vom <code>BrailleIOGuiElementRenderer.UiElement</code> um das Element einem Renderer zu übergeben
         /// </summary>
-        /// <param name="osmElementFilteredNode">gibt das <code>OSMElement</code> an</param>
+        /// <param name="filteredSubtree">gibt das <code>OSMElement</code> an</param>
         /// <returns>ein <code>BrailleIOGuiElementRenderer.UiElement</code></returns>
         private BrailleIOGuiElementRenderer.UiElement convertToBrailleIOUiElement(OSMElement.OSMElement osmElement)
         {

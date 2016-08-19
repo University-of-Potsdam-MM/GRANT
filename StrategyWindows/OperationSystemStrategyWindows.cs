@@ -195,17 +195,17 @@ namespace StrategyWindows
         {
             //System.Windows//.Automation.Automationelement screenHWND = NativeMethods.GetDesktopWindow();
 
-              //              OSMElement.OSMElement osmElementFilteredNode = new OSMElement.OSMElement();
+              //              OSMElement.OSMElement filteredSubtree = new OSMElement.OSMElement();
 
             IntPtr screen = NativeMethods.GetDesktopWindow();
             
 
-            //osmElementFilteredNode.properties = setProperties(mouseElement);
+            //filteredSubtree.properties = setProperties(mouseElement);
 
             Graphics desktop = Graphics.FromHwnd(screen);
             Graphics newGraphics = desktop;
 
-            //Rectangle rect = operationSystemStrategy.getRect(osmElementFilteredNode);
+            //Rectangle rect = operationSystemStrategy.getRect(filteredSubtree);
         }
 
 
@@ -249,7 +249,7 @@ namespace StrategyWindows
             ///newGraphics.ResetClip();
 
            
-//Console.WriteLine("x: " + osmElementFilteredNode.properties.boundingRectangleFiltered.TopLeft.X);
+//Console.WriteLine("x: " + filteredSubtree.properties.boundingRectangleFiltered.TopLeft.X);
 
             //IntPtr points = operationSystemStrategy.getHWND();
             //IntPtr MainHWND = operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points));

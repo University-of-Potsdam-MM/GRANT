@@ -20,7 +20,7 @@ namespace GRANTManager.Templates
             this.grantTrees = grantTrees;
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
         }
-        protected override OSMElement.OSMElement createSpecialUiElement(OSMElement.OSMElement osmElementFilteredNode, GernaralUI.TempletUiObject templateObject)
+        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = new GeneralProperties();
@@ -28,7 +28,7 @@ namespace GRANTManager.Templates
 
             prop.isEnabledFiltered = false;
             prop.boundingRectangleFiltered = new System.Windows.Rect(0, 0, deviceWidth, 6); //TODO
-            prop.controlTypeFiltered = "Text"; //TODO: TitleBar?
+            prop.controlTypeFiltered = templateObject.renderer;
 
             braille.boarder = new System.Windows.Forms.Padding(0, 0, 0, 1);
             braille.fromGuiElement = templateObject.TextFromUIElement;

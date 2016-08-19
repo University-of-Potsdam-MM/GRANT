@@ -150,8 +150,8 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow11);
 
             dataRow12["Property"] = "Filterstrategy";
-            //dataRow12["Content"] = osmElementFilteredNode.properties.grantFilterStrategy == null ? " " : osmElementFilteredNode.properties.grantFilterStrategy.ToString();
-            //dataRow12["Content"] =  osmElementFilteredNode.properties.grantFilterStrategyFullName;
+            //dataRow12["Content"] = filteredSubtree.properties.grantFilterStrategy == null ? " " : filteredSubtree.properties.grantFilterStrategy.ToString();
+            //dataRow12["Content"] =  filteredSubtree.properties.grantFilterStrategyFullName;
             dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
             dataTable.Rows.Add(dataRow12);
 
@@ -259,8 +259,8 @@ namespace GRANTApplication
                 Console.WriteLine("Fehler: ");
 
             }
-            //OSMElement.OSMElement osmElementFilteredNode = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
-            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElementFilteredNode);
+            //OSMElement.OSMElement filteredSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
+            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(filteredSubtree);
 
 
             //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
