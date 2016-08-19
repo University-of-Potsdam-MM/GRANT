@@ -66,10 +66,10 @@
             <DataGrid  HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White"  RowHeight="10" ColumnWidth="10"/>
             </StackPanel>
        </ScrollViewer>-->
-        <Grid DockPanel.Dock="Bottom" Background="Gold" Height="300" VerticalAlignment="Top">
+        <Grid DockPanel.Dock="Bottom" Background="Gold" Height="300" VerticalAlignment="Top" Width="750">
             <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
-          CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None"
-          SelectionUnit="Cell" HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White" ColumnWidth="2">
+          CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" 
+          SelectionUnit="Cell" HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White">
                <!-- <DataGrid.Style>
                     <Style TargetType="DataGrid">
                         <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
@@ -173,19 +173,19 @@
                                 <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
                             </Style>
                         </DataGrid.Style>
-                        <!--     <DataGrid.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
 
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Matrix}" Value="True" >
-                                            <Setter Property="Background" Value="Black" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Matrix}" Value="False" >
-                                            <Setter Property="Background" Value="White" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.CellStyle>-->
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Matrix}" Value="True" >
+                                        <Setter Property="Background" Value="Black" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Matrix}" Value="False" >
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
 
                         <!--   <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
