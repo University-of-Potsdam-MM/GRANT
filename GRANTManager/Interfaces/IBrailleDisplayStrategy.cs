@@ -58,6 +58,19 @@ namespace GRANTManager.Interfaces
         /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
         bool[,] getRendererExampleRepresentation(String uiElementType);
 
+        /// <summary>
+        /// Setzt den angegeben Screen auf Visible und alle anderen auf invisible
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens an, der sichtbar sein soll</param>
+        void setVisibleScreen(String screenName);
+
+        /// <summary>
+        /// Gibt den Namen des gerade sichtbaren Screens zurück;
+        /// es sollte nur immer ein Screen sichtbar sein
+        /// </summary>
+        /// <returns>den Namen des Sichtbaren Screens oder <c>null</c></returns>
+        String getVisibleScreen();
+
 
         void setStrategyMgr(StrategyManager strategyMgr);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

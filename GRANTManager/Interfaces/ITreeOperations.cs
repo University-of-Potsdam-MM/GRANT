@@ -16,11 +16,13 @@ namespace GRANTManager.Interfaces
         void changePropertiesOfFilteredNode(OSMElement.GeneralProperties properties);
 
         /// <summary>
-        /// Ändert einen Teilbaum des gefilterten Baumes
+        /// Ändert einen Teilbaum des gefilterten Baums;
+        /// Achtung die Methode sollte nur genutzt werden, wenn von einem Element alle Kindelemente neu gefiltert wurden
         /// </summary>
         /// <param name="subTree">gibt den Teilbaum an</param>
-        /// <remarks><c>true</c>, falls der Teilbaum geändert wurde; sonst <c> false</c></remarks>
-        bool changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree);
+        /// <param name="idOfFirstNode">gibt die Id des esten Knotens des Teilbaumes an</param>
+        /// <returns>die Id des Elternknotens des Teilbaumes oder <c>null</c></returns>
+        String changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree, String idOfFirstNode);
 
         /// <summary>
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum einen zugehörigen Knoten an
@@ -62,7 +64,8 @@ namespace GRANTManager.Interfaces
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
-        void addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
+        /// <returns><c>true</c> falls der knoten hinzugefügt oder geupdatet wurde, sonst <c>false</c></returns>
+        bool addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
 
         /// <summary>
         /// entfernt einen Knoten vom Baum der Braille-Darstellung
@@ -88,10 +91,32 @@ namespace GRANTManager.Interfaces
         /// Aktualisiert den ganzen Baum (nach dem Laden)
         /// </summary>
         /// <param name="hwndNew"></param>
-        void updateTree(IntPtr hwndNew);
+        void updateFilteredTree(IntPtr hwndNew);
 
         void generatedIdsOfTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
 
+
+        /// <summary>
+        /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
+        /// </summary>
+        /// <param name="strategyType">gibt die zusetzende Strategie an</param>
+        /// <param name="tree">gibt den (kompletten) Baum an</param>
+        /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
+        void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
+
+        /// <summary>
+        /// Ermittelt und setzt die Ids in einem Teilbaum
+        /// </summary>
+        /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
+        /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
+        void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
+
+                /// <summary>
+        /// Gibt einen Teilbaum zurück, welcher nur die Views eines Screens enthält
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
+        /// <returns>Teilbaum des Screens oder <c>null</c></returns>
+        ITreeStrategy<OSMElement.OSMElement> getSubtreeOfScreen(String screenName);
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

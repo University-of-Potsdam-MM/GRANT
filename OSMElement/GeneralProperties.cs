@@ -199,9 +199,9 @@ namespace OSMElement
         /// gibt die Filter-Strategy an, sofern dieses bei einem Knoten abweichend ist 
         /// (wird gesetzt beim Update eines Konotens gesetzt, wenn es nicht der selbe Filter wie für die ganze Anwendung ist)
         /// </summary>
-      //  public Type grantFilterStrategy { get; set; }
-        public String grantFilterStrategyFullName { get; set; }
-        public String grantFilterStrategyNamespace { get; set; }
+         public String grantFilterStrategy { get; set; }
+      //  public String grantFilterStrategyFullName { get; set; }
+      //  public String grantFilterStrategyNamespace { get; set; }
         
 
         /// <summary>

@@ -20,6 +20,7 @@ namespace GRANTManager
         private String filteredTreeSavedName = "filteredTree.xml";
         private String brailleTreeSavedName = "brailleTree.xml";
         private String osmConectorName = "osmConector.xml";
+        private String filterstrategyFileName = "filterstrategies.xml";
 
         public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree)
         {
@@ -225,6 +226,7 @@ namespace GRANTManager
         /// <param name="parentNode">gibt den vorgängert Knoten (linker Geschwisterknoten) an</param>
         private void rootMenuItemCheckSibling(ref MenuItem root, ITreeStrategy<OSMElement.OSMElement> siblingNode)
         {
+            if (root.IdGenerated.Trim().Equals("")) { return; }
             if (siblingNode.HasParent && !siblingNode.Parent.Data.properties.IdGenerated.Equals(root.IdGenerated))
             {
                 Console.WriteLine();
@@ -379,7 +381,7 @@ namespace GRANTManager
         /// <param name="filePath">gibt den Dateipfad + Namen an</param>
         public void saveFilteredTree(String filePath)
         {
-            if (grantTree == null || grantTree.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
+            if (grantTree == null || grantTree.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
                 grantTree.getFilteredTree().XmlSerialize(fs);
@@ -407,6 +409,7 @@ namespace GRANTManager
         /// <param name="projectFilePath">gibt den Pfad + Dateinamen des Projektes an</param>
         public void saveProject(String projectFilePath)
         {
+            if (grantTree == null) { Debug.WriteLine("Grant-Tree ist null -- Projekt kann nicht gespeichert werden!"); return; }
             if (!Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
             {
                 // .grant hinzufügen
@@ -447,6 +450,14 @@ namespace GRANTManager
                         serializer.Serialize(writer, grantTree.getOsmRelationship());
                     }
                 }
+                if (grantTree.getFilterstrategiesOfNodes() != null)
+                {
+                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + filterstrategyFileName))
+                    {
+                        serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
+                        serializer.Serialize(writer, grantTree.getFilterstrategiesOfNodes());
+                    }
+                }
                 using (StreamWriter writer = new StreamWriter(projectFilePath))
                 {
                     serializer = new XmlSerializer(typeof(GrantProjectObject));
@@ -467,6 +478,7 @@ namespace GRANTManager
                 Debug.WriteLine("Die Datei Existiert nicht");
                 return;
             }
+            deleteGrantTrees();
             String projectDirectory = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
 
             System.IO.FileStream fs = System.IO.File.Open(projectFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -488,6 +500,7 @@ namespace GRANTManager
                     grantTree.setOsmRelationship(osmConector);
                 }
             }
+            fs.Close();
             #region Laden der Strategyn
             if (grantProjectObject.grantBrailleStrategyFullName != null && grantProjectObject.grantBrailleStrategyNamespace != null)
             {
@@ -515,7 +528,7 @@ namespace GRANTManager
             }
             #endregion
             //lade FilteredTree + brailleTree -> ist im Unterordner welcher den Projektnamen trägt
-            
+            loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + filterstrategyFileName);
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
             loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
         }
@@ -535,10 +548,33 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Lädt eine gefilterten Baum und speichert das Ergebnis im <c>GeneratedGrantTrees</c>
+        /// Lädt die Filterstrategien für die Knoten
         /// </summary>
         /// <param name="filePath">gibt den Dateipfad + Name an</param>
-        public void loadFilteredTree(String filePath)
+        private void loadFilterstrategies(String filePath)
+        {
+            if (File.Exists(@filePath))
+            {
+                System.IO.FileStream fs = System.IO.File.Open(@filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                XmlSerializer serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
+                using (StreamReader reader = new StreamReader(fs))
+                {
+                    List<FilterstrategyOfNode<String, String, String>> filterstrategies = (List<FilterstrategyOfNode<String, String, String>>)serializer.Deserialize(reader);
+                    grantTree.setFilterstrategiesOfNodes(filterstrategies);
+                }
+                fs.Close();
+            }
+            else
+            {
+                Debug.WriteLine("Die Datei mit den FIlterstrategien exisitert nicht!");
+            }
+        }
+
+        /// <summary>
+        /// Lädt eine gefilterten Baum und speichert das Ergebnis
+        /// </summary>
+        /// <param name="filePath">gibt den Dateipfad + Name an</param>
+        private void loadFilteredTree(String filePath)
         {
             if (!File.Exists(@filePath))
             {
@@ -554,9 +590,10 @@ namespace GRANTManager
             //Filter-Strategy setzen
             if (grantTree.getFilteredTree() != null && grantTree.getFilteredTree().HasChild && !grantTree.getFilteredTree().Child.Data.Equals(new OSMElement.OSMElement()) && !grantTree.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties()))
             {
-                if (grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName != null && grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace != null)
+                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTree.getFilteredTree(), grantTree.getFilterstrategiesOfNodes());
+                if ( mainFilterstrategy != null)
                 {
-                    strategyMgr.setSpecifiedFilter(grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyFullName + ", " + grantTree.getFilteredTree().Child.Data.properties.grantFilterStrategyNamespace);
+                    strategyMgr.setSpecifiedFilter(mainFilterstrategy.FilterstrategyFullName+ ", " + mainFilterstrategy.FilterstrategyDll);
                     strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
                 }
                 else
@@ -623,8 +660,31 @@ namespace GRANTManager
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
 
-            strategyMgr.getSpecifiedTreeOperations().updateTree(hwnd);
+            strategyMgr.getSpecifiedTreeOperations().updateFilteredTree(hwnd);
 
+        }
+
+        public void deleteGrantTrees()
+        {
+            //grantTree = new GeneratedGrantTrees();
+            grantTree.setOsmRelationship(new List<OsmRelationship<String, String>>());
+            grantTree.setFilterstrategiesOfNodes(new List<FilterstrategyOfNode<String, String, String>>());
+            ITreeStrategy<OSMElement.OSMElement> treeNew = strategyMgr.getSpecifiedTree().NewNodeTree();
+            grantTree.setFilteredTree(null);
+            grantTree.setBrailleTree(null);
+        }
+
+        /// <summary>
+        /// Filtert einen Teilbaum und aktualisiert das Baumobjekt
+        /// </summary>
+        /// <param name="osmElementOfFirstNodeOfSubtree">gibt das OSM-Element an, ab welchen Knoten der Teilbaum aktualisiert werden soll (inkl. diesem Knoten)</param>
+        public void filterAndAddSubtreeOfApplication(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree)
+        {
+            ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
+            String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtree, osmElementOfFirstNodeOfSubtree.properties.IdGenerated);
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTree.getFilteredTree();
+            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredSubtree(ref tree, idParent);
+            strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), ref tree, idParent);
         }
     }
 }

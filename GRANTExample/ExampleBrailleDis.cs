@@ -11,6 +11,7 @@ using GRANTApplication;
 using BrailleIOGuiElementRenderer;
 using OSMElement.UiElements;
 using System.Windows;
+using System.Diagnostics;
 
 namespace GRANTExample
 {
@@ -70,8 +71,16 @@ namespace GRANTExample
                         Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                         return;
                     }
-                    String brailleId = "braille123_6";
-                    OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                    GeneralProperties propertiesForSearch = new GeneralProperties();
+                        propertiesForSearch.controlTypeFiltered = "TextBox";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        String brailleId = "";
+                        if (treeElement.Count > 0)
+                        {
+                            brailleId = treeElement[0].Data.properties.IdGenerated;
+                        }
+                        if (brailleId.Equals("")) { return; }
+                    OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -102,7 +111,15 @@ namespace GRANTExample
                 Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                 return;
             }
-            String brailleId = "braille123_1";
+            String brailleId = "";
+            GeneralProperties propertiesForSearch = new GeneralProperties();
+            propertiesForSearch.controlTypeFiltered = "Screenshot";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        if (treeElement.Count > 0)
+                        {
+                            brailleId = treeElement[0].Data.properties.IdGenerated;
+                        }
+                        if (brailleId.Equals("")) { return; }
             OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -152,7 +169,16 @@ namespace GRANTExample
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
             bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(uiElementName);
-            return result;
+            Console.WriteLine("Beispiel für " + uiElementName);
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for(int j = 0; j < (result.Length / result.GetLength(0)); j++)
+                {
+                    Console.Write(result[i,j]+ "\t");
+                }
+                Console.WriteLine("");
+            }
+                return result;
         }
 
         public List<String> getRendererList()
@@ -180,7 +206,7 @@ namespace GRANTExample
             Rect p1 = new Rect(70,0,50,30);
             proper1.boundingRectangleFiltered = p1;
             
-            proper1.IdGenerated = "braille123_1";
+         //   proper1.IdGenerated = "braille123_1";
             proper1.controlTypeFiltered = "Screenshot";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
@@ -191,12 +217,12 @@ namespace GRANTExample
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             GeneralProperties proper2 = new GeneralProperties();
             BrailleRepresentation e2 = new BrailleRepresentation();
-            e2.screenName = "screen1";
+            e2.screenName = "screen2";
             proper2.valueFiltered = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
           //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e2.showScrollbar = true;
             e2.viewName = "v2";
-            e2.isVisible = false;
+            e2.isVisible = true;
             Rect p2 = new Rect(90, 42, 29,15);
             proper2.boundingRectangleFiltered = p2;
             Padding padding = new Padding(1, 1, 1, 1);
@@ -206,7 +232,7 @@ namespace GRANTExample
             Padding boarder = new Padding(1, 1, 2, 1);
             e2.boarder = boarder;            
             
-            proper2.IdGenerated = "braille123_2";
+        //    proper2.IdGenerated = "braille123_2";
             proper2.controlTypeFiltered = "Text";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
@@ -227,7 +253,7 @@ namespace GRANTExample
             Rect p3 = new Rect(70,30,30,20);
             proper3.boundingRectangleFiltered = p3;
             
-            proper3.IdGenerated = "braille123_3";
+        //    proper3.IdGenerated = "braille123_3";
             proper3.controlTypeFiltered = "Text";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
@@ -251,7 +277,7 @@ namespace GRANTExample
             e4.viewName = "v4";
             Rect p4 = new Rect(40,50,20,7);
             proper4.boundingRectangleFiltered = p4;
-            proper4.IdGenerated = "braille123_4";
+       //     proper4.IdGenerated = "braille123_4";
             proper4.controlTypeFiltered = "Matrix";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
@@ -270,7 +296,7 @@ namespace GRANTExample
             e5.isVisible = true;
             Rect p5 = new Rect(55,30,24,9);
             proper5.boundingRectangleFiltered = p5;
-            proper5.IdGenerated = "braille123_5";
+         //   proper5.IdGenerated = "braille123_5";
             proper5.controlTypeFiltered = "Button";
             proper5.isEnabledFiltered = true;
             osm5.brailleRepresentation = e5;
@@ -293,7 +319,7 @@ namespace GRANTExample
             e6.isVisible = true;            
             Rect p6 = new Rect(0, 29,50,28);
            proper6.boundingRectangleFiltered = p6;
-            proper6.IdGenerated = "braille123_6";
+    //        proper6.IdGenerated = "braille123_6";
             proper6.controlTypeFiltered = "TextBox";
             proper6.isEnabledFiltered = true;
             osm6.brailleRepresentation = e6;
@@ -323,7 +349,7 @@ namespace GRANTExample
             Rect p7 = new Rect(0,0,25,10);
             proper7.boundingRectangleFiltered = p7;
             proper7.isEnabledFiltered = true;
-            proper7.IdGenerated = "braille123_7";
+     //       proper7.IdGenerated = "braille123_7";
             proper7.controlTypeFiltered = "DropDownMenu";
             osm7.brailleRepresentation = e7;
             osm7.properties = proper7;
@@ -350,7 +376,7 @@ namespace GRANTExample
             e8.viewName = "v8";
             Rect p8 = new Rect(25, 0,35,10);
             proper8.boundingRectangleFiltered = p8;
-            proper8.IdGenerated = "braille123_8";
+    //        proper8.IdGenerated = "braille123_8";
             proper8.controlTypeFiltered = "DropDownMenu";
             proper8.isEnabledFiltered = true;
             osm8.brailleRepresentation = e8;
@@ -379,7 +405,7 @@ namespace GRANTExample
             Rect p9 = new Rect(0, 11, 30 , 8);
             proper9.boundingRectangleFiltered = p9;
             proper9.isEnabledFiltered = true;
-            proper9.IdGenerated = "braille123_9";
+ //           proper9.IdGenerated = "braille123_9";
             proper9.controlTypeFiltered = "DropDownMenu";
             osm9.brailleRepresentation = e9;
             osm9.properties = proper9;
@@ -408,7 +434,7 @@ namespace GRANTExample
             Rect p10 = new Rect( 0, 19, 30, 8);
             proper10.boundingRectangleFiltered = p10;
             
-            proper10.IdGenerated = "braille123_10";
+ //           proper10.IdGenerated = "braille123_10";
             proper10.controlTypeFiltered = "DropDownMenu";
             osm10.brailleRepresentation = e10;
             osm10.properties = proper10;
@@ -427,7 +453,7 @@ namespace GRANTExample
             Rect p11 = new Rect(81,30, 30, 9);
             proper11.boundingRectangleFiltered = p11;
             proper11.isEnabledFiltered = false;
-            proper11.IdGenerated = "braille123_11";
+    //        proper11.IdGenerated = "braille123_11";
             proper11.controlTypeFiltered = "Button";
             osm11.brailleRepresentation = e11;
             osm11.properties = proper11;
@@ -435,11 +461,24 @@ namespace GRANTExample
             #endregion
 
         }
-
-
-
-
-
         #endregion
+
+        /// <summary>
+        /// Wechselt zwischen screen1 und screen2
+        /// </summary>
+        public void changeScreen()
+        {
+            if (strategyMgr.getSpecifiedBrailleDisplay() == null) { return; }
+            String visibleScreen = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
+            if(visibleScreen.Equals("screen1"))
+            {
+                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("screen2");
+            }
+            else
+            {
+                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("screen1");
+            }
+           // ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(visibleScreen);
+        }
     }
 }

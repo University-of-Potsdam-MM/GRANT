@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using GRANTApplication;
 using GRANTManager;
 using GRANTManager.Interfaces;
@@ -52,7 +53,7 @@ namespace GRANTExample
             return "";
         }
 
-        public String filterSubtreeOfApplicatione()
+        public String filterSubtreeOfApplication()
         {
             if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
             {
@@ -66,15 +67,16 @@ namespace GRANTExample
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
                     if (grantTree.getFilteredTree() != null)
                     {
-                        strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(tree);
-                    }
-                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
-                    if (tree.HasChild == true)
-                    {
-                        return printProperties(tree.Child.Data.properties);
-                    }
-                    return "";
+                        List<ITreeStrategy<OSMElement.OSMElement>> result = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), tree.Child.Data.properties, OperatorEnum.and);
+                        if (result.Count == 1)
+                        {
+                            GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree);
+                            guiFunctions.filterAndAddSubtreeOfApplication(result[0].Data);
 
+                          // guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById("7CA0B5B9845D7906E3BD235A600F3546"));
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -230,10 +232,15 @@ namespace GRANTExample
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
-
-                        List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                        OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_1", ref relationshipList);
-                        grantTree.setOsmRelationship(relationshipList);
+                        GeneralProperties propertiesForSearch = new GeneralProperties();
+                        propertiesForSearch.controlTypeFiltered = "Screenshot";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        if (treeElement.Count > 0)
+                        {
+                            List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            grantTree.setOsmRelationship(relationshipList);
+                        }
                     }
 
                 }
@@ -250,6 +257,7 @@ namespace GRANTExample
         /// </summary>
         public void setOSMRelationship()
         {
+            if (grantTree.getBrailleTree() == null) { return; }
             if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
             {
                 try
@@ -267,13 +275,19 @@ namespace GRANTExample
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        GeneralProperties propertiesForSearch = new GeneralProperties();
+                        propertiesForSearch.controlTypeFiltered = "TextBox";
+                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        if (treeElement.Count > 0)
+                        { //für Testzwecke wird einfach das erste Element genutzt
+                            List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
+                            //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
+                            OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            //  OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_11", ref relationshipList);
+                            grantTree.setOsmRelationship(relationshipList);
+                        }
 
-                        List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                     //   OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_3", ref relationship);
-                      //  OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, "braille123_5", ref relationship);
-                        OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_6", ref relationshipList);
-                      //  OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, "braille123_11", ref relationshipList);
-                        grantTree.setOsmRelationship(relationshipList);
                       
                     }
 

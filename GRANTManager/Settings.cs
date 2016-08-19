@@ -43,6 +43,14 @@ namespace GRANTManager
             return classStrategyName;
         }
 
+        public String filterStrategyTypeToUserName(Type strategyType)
+        {
+            List<Strategy> filterStrategies = getPossibleFilters();
+            Strategy filterFind = filterStrategies.Find(f => f.className.Equals(strategyType.FullName+", "+strategyType.Namespace));
+            return filterFind.Equals(new Strategy()) ? strategyType.Name : filterFind.userName;
+
+        }
+
         public List<Strategy> getPossibleFilters()
         {
             List<Strategy> filter = new List<Strategy>();

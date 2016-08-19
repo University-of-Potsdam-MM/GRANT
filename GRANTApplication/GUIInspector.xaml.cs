@@ -151,7 +151,8 @@ namespace GRANTApplication
 
             dataRow12["Property"] = "Filterstrategy";
             //dataRow12["Content"] = osmElement.properties.grantFilterStrategy == null ? " " : osmElement.properties.grantFilterStrategy.ToString();
-            dataRow12["Content"] = osmElement.properties.grantFilterStrategyFullName;
+            //dataRow12["Content"] =  osmElement.properties.grantFilterStrategyFullName;
+            dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
             dataTable.Rows.Add(dataRow12);
 
             dataRow13["Property"] = "labeledbyFiltered";
@@ -329,7 +330,7 @@ namespace GRANTApplication
 
                         }
 
-
+                        guiFunctions.deleteGrantTrees();
 
                             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                       //  filterStrategy.setStrategyMgr(strategyMgr);
@@ -405,7 +406,7 @@ namespace GRANTApplication
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
             UpdateNode node = new UpdateNode(strategyMgr, grantTrees);
-            node.updateNodeOfFilteredTree(((Button)sender).CommandParameter.ToString());
+            node.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
 
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 

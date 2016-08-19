@@ -133,7 +133,7 @@ namespace GRANTExample
             {
                 exampleTree.setOSMRelationship();
             }
-            if (e.Key == Key.A)
+           /* if (e.Key == Key.A)
             {
                 NodeBox.Text = exampleDisplay.deviceInfo();
             }
@@ -152,21 +152,26 @@ namespace GRANTExample
             if (e.Key == Key.E)
             {
                 exampleBrailleDis.getRendererExample();
-            }
+            }*/
             if (e.Key == Key.F)
             {
                 exampleBrailleDis.getRendererExample(itemNameTextBox.Text);
             }
-            if (e.Key == Key.G)
-            {
+          /*  if (e.Key == Key.G)
+           {
                 List<String> result = exampleBrailleDis.getRendererList();
                 //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
                 NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
-            }
+            }*/
             if (e.Key == Key.F11)
             {
-                exampleTree.filterSubtreeOfApplicatione();
+                exampleTree.filterSubtreeOfApplication();
                 Debug.WriteLine("F11");
+            }
+            if (e.Key == Key.F12)
+            {
+                exampleBrailleDis.changeScreen();
+                Debug.WriteLine("F12");
             }
        }
 

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AbstractClasses\AOutputManager.cs" />
     <Compile Include="EnumClass.cs" />
+    <Compile Include="FilterstrategiesOfTree.cs" />
     <Compile Include="GeneratedGrantTrees.cs" />
     <Compile Include="GuiFunctions.cs" />
     <Compile Include="Interfaces\IBrailleDisplayStrategy.cs" />
