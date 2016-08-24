@@ -104,7 +104,6 @@ namespace StrategyGenericTree
         /// Gibt allr gesetzten Properties auf der Konsole aus.
         /// </summary>
         /// <param name="properties">gibt fie Properies an</param>
-        /// TODO: Die Methode könnte eigentlich für alle Baumklassen genutzt werden
         private void printProperties(GeneralProperties properties)
         {
             Console.WriteLine("\nProperties:");
@@ -218,7 +217,7 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
         /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
-        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper) //TODO: properties sollten generisch sein
+        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper)
         {//TODO: hier fehlen noch viele Eigenschaften
             //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
             if (!(tree is ITreeStrategy<OSMElement.OSMElement>))
@@ -513,7 +512,7 @@ namespace StrategyGenericTree
         /// <returns>den anzuzeigenden Text</returns>
         private String getTextForView(OSMElement.OSMElement osmElement)
         {
-            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated));
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -537,7 +536,7 @@ namespace StrategyGenericTree
         /// <returns><code>true</code> fals das UI-Element aktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>
         private bool? isUiElementEnable(OSMElement.OSMElement osmElement)
         {
-            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated) || r.FilteredTree.Equals(osmElement.properties.IdGenerated)); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated)); 
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -606,7 +605,8 @@ namespace StrategyGenericTree
             }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes) //TODO: umschreiben => hier nur die direkten Kinder untersuchen
+          //  foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes)
+            foreach(INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).DirectChildren.Nodes)
             {   //ermittelt an welchen Screen-Knoten die View angehangen werden soll
                 if (!node.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && node.Data.brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
                 {
