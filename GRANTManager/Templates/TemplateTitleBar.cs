@@ -27,11 +27,11 @@ namespace GRANTManager.Templates
             BrailleRepresentation braille = new BrailleRepresentation();
 
             prop.isEnabledFiltered = false;
-            prop.boundingRectangleFiltered = new System.Windows.Rect(0, 0, deviceWidth, 6); //TODO
+            prop.boundingRectangleFiltered = new System.Windows.Rect(0, 0, templateObject.width, templateObject.height); //TODO
             prop.controlTypeFiltered = templateObject.renderer;
 
             braille.boarder = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            braille.fromGuiElement = templateObject.TextFromUIElement;
+            braille.fromGuiElement = templateObject.textFromUIElement;
             braille.isVisible = true;
             braille.padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
             braille.screenName = "mainScreen"; //?

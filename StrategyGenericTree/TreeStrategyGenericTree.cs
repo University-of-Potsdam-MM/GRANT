@@ -416,7 +416,7 @@ namespace StrategyGenericTree
         [ReflectionPermission(SecurityAction.Demand, Unrestricted = true)]
         protected virtual T DeepCopyData(T data)
         {
-            //if ( ! Root.IsTree ) throw new InvalidOperationException( "This is not a tree" );
+            //if ( ! Root.IsTree ) throw new InvalidOperationException( "This is not a parentNode" );
 
             if (data == null) { Debug.Assert(true); return default(T); }
 
@@ -871,7 +871,7 @@ namespace StrategyGenericTree
         {
             get
             {
-                if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+                if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
                 //if ( this.IsRoot ) throw new InvalidOperationException( "This is a Root" );
                 if (this.IsRoot) return null;
 
@@ -978,7 +978,7 @@ namespace StrategyGenericTree
         {
             get
             {
-                if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+                if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
                 IEqualityComparer<T> comparer = DataComparer;
 
@@ -992,14 +992,14 @@ namespace StrategyGenericTree
 
         public virtual bool Contains(ITreeStrategy<T> item)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             return All.Nodes.Contains((INode<T>) item);
         }
 
         public virtual bool Contains(T item)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             return All.Values.Contains(item);
         }
@@ -1009,7 +1009,7 @@ namespace StrategyGenericTree
         public ITreeStrategy<T> InsertPrevious(T o)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> newNode = CreateNode();
             newNode._Data = o;
@@ -1022,7 +1022,7 @@ namespace StrategyGenericTree
         public ITreeStrategy<T> InsertNext(T o)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> newNode = CreateNode();
             newNode._Data = o;
@@ -1034,7 +1034,7 @@ namespace StrategyGenericTree
 
         public ITreeStrategy<T> InsertChild(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> newNode = CreateNode();
             newNode._Data = o;
@@ -1047,14 +1047,14 @@ namespace StrategyGenericTree
         public ITreeStrategy<T> Add(T o)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             return this.Last.InsertNext(o);
         }
 
         public ITreeStrategy<T> AddChild(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             if (Child == null)
                 return InsertChild(o);
@@ -1067,12 +1067,12 @@ namespace StrategyGenericTree
         public void InsertPrevious(ITreeStrategy<T> tree)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> newTree = GetNodeTree(tree);
 
             if (!newTree.IsRoot) throw new ArgumentException("Tree is not a Root");
-            if (!newTree.IsTree) throw new ArgumentException("Tree is not a tree");
+            if (!newTree.IsTree) throw new ArgumentException("Tree is not a parentNode");
 
             for (INode<T> n = (INode<T>) newTree.Child; n != null; n = (INode<T>) n.Next)
             {
@@ -1085,12 +1085,12 @@ namespace StrategyGenericTree
         public void InsertNext(ITreeStrategy<T> tree)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> newTree = GetNodeTree(tree);
 
             if (!newTree.IsRoot) throw new ArgumentException("Tree is not a Root");
-            if (!newTree.IsTree) throw new ArgumentException("Tree is not a tree");
+            if (!newTree.IsTree) throw new ArgumentException("Tree is not a parentNode");
 
             for (INode<T> n = (INode<T>)newTree.LastChild; n != null; n = (INode<T>)n.Previous)
             {
@@ -1102,12 +1102,12 @@ namespace StrategyGenericTree
 
         public void InsertChild(ITreeStrategy<T> tree)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> newTree = GetNodeTree(tree);
 
             if (!newTree.IsRoot) throw new ArgumentException("Tree is not a Root");
-            if (!newTree.IsTree) throw new ArgumentException("Tree is not a tree");
+            if (!newTree.IsTree) throw new ArgumentException("Tree is not a parentNode");
 
             for (INode<T> n = (INode<T>)newTree.LastChild; n != null; n = (INode<T>)n.Previous)
             {
@@ -1120,14 +1120,14 @@ namespace StrategyGenericTree
         public void Add(ITreeStrategy<T> tree)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             this.Last.InsertNext(tree);
         }
 
         public void AddChild(ITreeStrategy<T> tree)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             if (this.Child == null)
                 this.InsertChild(tree);
@@ -1141,7 +1141,7 @@ namespace StrategyGenericTree
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
             if (!newINode.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (newINode.IsTree) throw new ArgumentException("Node is a tree");
+            if (newINode.IsTree) throw new ArgumentException("Node is a parentNode");
 
             IncrementVersion();
 
@@ -1172,7 +1172,7 @@ namespace StrategyGenericTree
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
             if (!newINode.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (newINode.IsTree) throw new ArgumentException("Node is a tree");
+            if (newINode.IsTree) throw new ArgumentException("Node is a parentNode");
 
             IncrementVersion();
 
@@ -1197,7 +1197,7 @@ namespace StrategyGenericTree
         protected virtual void InsertChildCore(ITreeStrategy<T> newINode)
         {
             if (!newINode.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (newINode.IsTree) throw new ArgumentException("Node is a tree");
+            if (newINode.IsTree) throw new ArgumentException("Node is a parentNode");
 
             IncrementVersion();
 
@@ -1243,7 +1243,7 @@ namespace StrategyGenericTree
 
         public ITreeStrategy<T> Cut(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             INode<T> n = (INode<T>) this[o];
             if (n == null) return null;
@@ -1252,7 +1252,7 @@ namespace StrategyGenericTree
 
         public ITreeStrategy<T> Copy(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             INode<T> n = (INode<T>)this[o];
             if (n == null) return null;
@@ -1261,7 +1261,7 @@ namespace StrategyGenericTree
 
         public ITreeStrategy<T> DeepCopy(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             INode<T> n = (INode<T>)this[o];
             if (n == null) return null;
@@ -1270,7 +1270,7 @@ namespace StrategyGenericTree
 
         public bool Remove(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             INode<T> n = (INode<T>)this[o];
             if (n == null) return false;
@@ -1284,7 +1284,7 @@ namespace StrategyGenericTree
         private NodeTree<T> BoxInTree(NodeTree<T> node)
         {
             if (!node.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (node.IsTree) throw new ArgumentException("Node is a tree");
+            if (node.IsTree) throw new ArgumentException("Node is a parentNode");
 
             NodeTree<T> tree = CreateTree();
 
@@ -1296,7 +1296,7 @@ namespace StrategyGenericTree
         public ITreeStrategy<T> Cut()
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             NodeTree<T> node = CutCore();
 
@@ -1305,7 +1305,7 @@ namespace StrategyGenericTree
 
         public ITreeStrategy<T> Copy()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             if (IsTree)
             {
@@ -1323,7 +1323,7 @@ namespace StrategyGenericTree
 
         public ITreeStrategy<T> DeepCopy()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             if (IsTree)
             {
@@ -1342,7 +1342,7 @@ namespace StrategyGenericTree
         public void Remove()
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             RemoveCore();
         }
@@ -1382,7 +1382,7 @@ namespace StrategyGenericTree
 
         protected virtual NodeTree<T> CopyCore()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
             if (IsRoot && !IsTree) throw new InvalidOperationException("This is a Root");
 
             if (IsTree)
@@ -1415,7 +1415,7 @@ namespace StrategyGenericTree
 
         protected virtual NodeTree<T> DeepCopyCore()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
             if (IsRoot && !IsTree) throw new InvalidOperationException("This is a Root");
 
             if (IsTree)
@@ -2228,7 +2228,7 @@ namespace StrategyGenericTree
         public void Clear()
         {
             if (!this.IsRoot) throw new InvalidOperationException("This is not a Root");
-            if (!this.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!this.IsTree) throw new InvalidOperationException("This is not a parentNode");
 
             OnClearing(this);
 
@@ -2497,7 +2497,7 @@ namespace StrategyGenericTree
 
         protected virtual void OnValidate(INode<T> node, T data)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
             if (data is INode<T>) throw new ArgumentException("Object is a node");
 
             if ((!typeof(T).IsClass) || ((object)data) != null)

@@ -101,7 +101,7 @@ namespace BrailleIOGuiElementRenderer
             {
                 boxMatrix = Helper.createBox(view.ViewBox.Height-2, view.ViewBox.Width); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
             }
-            DropDownMenu dropDownMenu = (DropDownMenu)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde
+            DropDownMenu dropDownMenu = (DropDownMenu)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde#
             if (dropDownMenu.hasPrevious)
             {
                 Helper.RemoveLeftBoarder(ref boxMatrix);
@@ -187,7 +187,7 @@ namespace BrailleIOGuiElementRenderer
         }
 
         private void SeparatorNextDropDownMenuElementDown(ref bool[,] viewMatrix)
-        {//gestrichelte Linie rechts
+        {//gestrichelte Linie unten
             int x = (viewMatrix.Length / viewMatrix.GetLength(0)) ;
             for (int i = 2; i < x - 1; i = i + 2)
             {

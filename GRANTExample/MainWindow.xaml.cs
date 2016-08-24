@@ -171,10 +171,16 @@ namespace GRANTExample
                 exampleTree.filterSubtreeOfApplication();
                 Debug.WriteLine("F11");
             }
-            if (e.Key == Key.F12)
+            if (e.Key == Key.D7)
             {
-                exampleBrailleDis.changeScreen();
-                Debug.WriteLine("F12");
+                exampleBrailleDis.changeScreen(Screen.Text);
+                Debug.WriteLine("D7");
+            }
+            if (e.Key == Key.D8)
+            {
+                List<String> result = exampleBrailleDis.getPosibleScreens();
+                NodeBox.Text = "MöglichenScreens: \n";
+                NodeBox.Text = NodeBox.Text + String.Join(", " ,result.Select(p => p.ToString()).ToArray());
             }
 
        }
@@ -223,7 +229,8 @@ namespace GRANTExample
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ui.generatedUiFromTemplate();
-            Debug.WriteLine("");
+            Debug.WriteLine("Baum-Elemente Anzahl: " + grantTree.getBrailleTree().Count); ;
+            //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);
         }
     }
 }

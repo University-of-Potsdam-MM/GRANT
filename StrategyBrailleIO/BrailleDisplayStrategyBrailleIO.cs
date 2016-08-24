@@ -219,6 +219,7 @@ namespace StrategyBrailleIO
                      }
                  }
                 // der screen existiert schon -> ok
+                 Debug.WriteLine("");
             }
             catch
             {
@@ -250,7 +251,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Geht rekursive durch alle Baumelemente und erstellt die einzelnen Views
         /// </summary>
-        /// <param name="tree">gibt das Baum-Objekt der Oberflaeche an</param>
+        /// <param name="parentNode">gibt das Baum-Objekt der Oberflaeche an</param>
         private void createViewsFromTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
@@ -284,7 +285,7 @@ namespace StrategyBrailleIO
                         }
                         else
                         {
-                            if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && !node1.Data.brailleRepresentation.viewName.Equals(""))
+                            if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && node1.Data.brailleRepresentation.viewName != null && !node1.Data.brailleRepresentation.viewName.Equals(""))
                             {
                                 createView(node1.Data);
                             }
@@ -302,7 +303,7 @@ namespace StrategyBrailleIO
                     }
                     else
                     {
-                        if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.properties.Equals(new GeneralProperties()) && !tree.Data.brailleRepresentation.viewName.Equals(""))
+                        if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.properties.Equals(new GeneralProperties()) && tree.Data.brailleRepresentation.viewName != null && !tree.Data.brailleRepresentation.viewName.Equals(""))
                         {
                             createView(tree.Data);
                         }
@@ -336,7 +337,7 @@ namespace StrategyBrailleIO
             /* je nach UI-Element sind für die Views verschiedene Eigenschaften wichtig
              * die Angabe des 'UI-Element'-Typs steht bei den Propertys in controlTypeFiltered
              */
-
+            if (osmElement.properties.isControlElementFiltered == false || osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
             String uiElementType = osmElement.properties.controlTypeFiltered;
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -838,9 +839,21 @@ namespace StrategyBrailleIO
                 if (screenAvtive != null)
                 {
                     screenAvtive.SetVisibility(false);
-                    screenAvtive = brailleIOMediator.GetView(screenName) as BrailleIOScreen;
-                    screenAvtive.SetVisibility(true);
-                    brailleIOMediator.RenderDisplay();
+                    BrailleIOScreen screenAvtiveNew = brailleIOMediator.GetView(screenName) as BrailleIOScreen;
+                    if (screenAvtiveNew != null)
+                    {
+                        screenAvtiveNew.SetVisibility(true);
+                        brailleIOMediator.RenderDisplay();
+                    }
+                    else
+                    {
+                        screenAvtive.SetVisibility(true);
+                        brailleIOMediator.RenderDisplay();
+                        if (strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames().Contains(screenName))
+                        {
+                            Debug.WriteLine("TODO");
+                        }
+                    }
                 }
             }
         }

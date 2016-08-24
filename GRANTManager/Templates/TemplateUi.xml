@@ -1,19 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TemplateUi>
+    <MinDeviceHeight>30</MinDeviceHeight>
+    <MinDeviceWidth>40</MinDeviceWidth>
   <UiElement name="TitleBar">
+    <IsGroup />
     <Renderer>Text</Renderer>
-    <MinDeviceHeight>10</MinDeviceHeight>
-    <MinDeviceWidth>15</MinDeviceWidth>
+    <Height>6</Height>
+    <Width></Width><!-- Freilassen entspricht der Bereite des Gerätes -->
     <TextFromUIElement>nameFiltered</TextFromUIElement>
     <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateTitleBar</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
-  <UiElement name="MenuBar"> <!-- inkl. MenuItems-->
+  <UiElement name="MenuBar">
+    <IsGroup>
+        <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+        <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+    </IsGroup>
     <Renderer>DropDownMenu</Renderer>
-    <MinDeviceHeight>19</MinDeviceHeight>
-    <MinDeviceWidth>9</MinDeviceWidth>
+    <Height>10</Height>
+    <Width>17</Width>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateMenuBar</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
+    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+  </UiElement>
+    <UiElement name="Menu">
+    <IsGroup>
+        <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+        <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+    </IsGroup>
+    <Renderer>DropDownMenu</Renderer>
+    <Height>10</Height>
+    <Width>17</Width>
+    <TextFromUIElement>nameFiltered</TextFromUIElement>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
 </TemplateUi>

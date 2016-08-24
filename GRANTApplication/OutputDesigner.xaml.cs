@@ -480,7 +480,7 @@ namespace GRANTApplication
           guiFunctions.loadFilteredTree(dlg.FileName);
 
 
-      ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+      ITreeStrategy<OSMElement.OSMElement> parentNode = grantTrees.getFilteredTree();
 
       tvOutput.Items.Clear();
       root.Items.Clear();
@@ -489,7 +489,7 @@ namespace GRANTApplication
       root.controlTypeFiltered = "Filtered- Updated- Tree";
 
       //
-      guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+      guiFunctions.treeIteration(parentNode.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
       SaveButton.IsEnabled = true;
       tvOutput.Items.Add(root);
    }
@@ -510,7 +510,7 @@ namespace GRANTApplication
             guiFunctions.loadFilteredTree(dlg.FileName);
         }
 
-        ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+        ITreeStrategy<OSMElement.OSMElement> parentNode = grantTrees.getFilteredTree();
 
         tvOutput.Items.Clear();
         root.Items.Clear();
@@ -519,7 +519,7 @@ namespace GRANTApplication
         root.controlTypeFiltered = "Filtered- Updated- Tree";
 
         //
-        guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+        guiFunctions.treeIteration(parentNode.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
         SaveButton.IsEnabled = true;
         tvOutput.Items.Add(root);
 

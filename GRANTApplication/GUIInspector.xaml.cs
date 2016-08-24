@@ -255,7 +255,7 @@ namespace GRANTApplication
             else if (tree.SelectedItem is string)
             {
                 // ... Handle a string.
-                //this.Name = "Selected: " + tree.SelectedItem.ToString();
+                //this.Name = "Selected: " + parentNode.SelectedItem.ToString();
                 Console.WriteLine("Fehler: ");
 
             }
@@ -335,15 +335,15 @@ namespace GRANTApplication
                             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                       //  filterStrategy.setStrategyMgr(strategyMgr);
                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
-                        //strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                        // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
+                        //strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentNode, -1);
                         grantTrees.setFilteredTree(tree);
 
 
                         // TreeViewItem treeItem = null;
                         // treeItem = new TreeViewItem();
 
-                       // ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getFilteredTree();
+                       // ITreeStrategy<OSMElement.OSMElement> parentNode = strategyMgr.getFilteredTree();
 
                        
                             
@@ -351,13 +351,13 @@ namespace GRANTApplication
                         
                         root.Items.Clear();
 
-                        //tree.DeepCopy();
+                        //parentNode.DeepCopy();
 
 
 
                         //TreeViewItem root = new TreeViewItem();
                         //root.controlTypeFiltered = "Filtered-Tree";
-                        //ITreeStrategy<OSMElement.OSMElement> copy = tree.Child;
+                        //ITreeStrategy<OSMElement.OSMElement> copy = parentNode.Child;
                         //
        
 

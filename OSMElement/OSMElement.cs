@@ -14,7 +14,7 @@ namespace OSMElement
         public GeneralProperties properties { get; set; }
 
         public Events events { get; set; }
-        [XmlIgnore]
         public BrailleRepresentation brailleRepresentation { get; set; }
+
     }
 }

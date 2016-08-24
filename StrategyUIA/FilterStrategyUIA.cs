@@ -69,7 +69,7 @@ namespace StrategyUIA
                 case TreeScopeEnum.Descendants:
                     // selbe wie Children bloß alle Kindeskinder
                     filterChildren(automationElement, -1, ref tree);
-                   // strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref tree);
+                   // strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref parentNode);
                     break;
                 case TreeScopeEnum.Subtree:
                     filterSubtree(automationElement, ref tree);
@@ -138,7 +138,7 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="element">gibt ein <code>AutomationElement</code> der zu filternden Anwendung an</param>
         /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe </param>
-        /// <param name="tree">referenziert den gefilterten Baum</param>
+        /// <param name="parentNode">referenziert den gefilterten Baum</param>
         private void filterApplication(AutomationElement element, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             IntPtr mainAppHwdn = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(element.Current.ProcessId);
@@ -152,9 +152,9 @@ namespace StrategyUIA
 
         private void filterSubtree(AutomationElement element, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
-            //ITreeStrategy<OSMElement.OSMElement> treeTop = tree.Copy();
-            //filterElement(element, ref tree);
-            //treeTop = tree.Root;
+            //ITreeStrategy<OSMElement.OSMElement> treeTop = parentNode.Copy();
+            //filterElement(element, ref parentNode);
+            //treeTop = parentNode.Root;
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(element);
@@ -168,7 +168,7 @@ namespace StrategyUIA
         /// Filtert/Ermittelt die Daten des angegeben Elements
         /// </summary>
         /// <param name="mainElement">gibt das gewünschte <code>AutomationElement</code> an</param>
-        /// <param name="tree">referenziert den gefilterten Baum</param>
+        /// <param name="parentNode">referenziert den gefilterten Baum</param>
         private void filterElement(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
@@ -181,7 +181,7 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Kinder gefiltert werden sollen</param>
         /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <param name="tree">referenziert den gefilterten Baum</param>
+        /// <param name="parentNode">referenziert den gefilterten Baum</param>
         private void filterChildren(AutomationElement mainElement, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
            //TODO: oder auch über TreeWalker?
@@ -193,10 +193,11 @@ namespace StrategyUIA
         /// Filtert die Geschwister des angegebenen <code>AutomationElements</code>
         /// </summary>
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die geschwister gefiltert werden sollen</param>
-        /// <param name="tree">referenziert den gefilterten Baum</param>
+        /// <param name="parentNode">referenziert den gefilterten Baum</param>
         private void filterSibling(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
-            TreeWalker walker = TreeWalker.ControlViewWalker;
+            //TreeWalker walker = TreeWalker.ControlViewWalker;
+            TreeWalker walker = TreeWalker.ContentViewWalker;
             AutomationElement elementParent = walker.GetParent(mainElement);
             filterChildren(elementParent, 1, ref tree);
             Console.WriteLine();
@@ -207,12 +208,13 @@ namespace StrategyUIA
         /// Filtert die Eltern des angegebenen <code>AutomationElements</code>
         /// </summary>
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Eltern ermittelt werden sollen</param>
-        /// <param name="tree">referenziert den gefilterten Baum</param>
+        /// <param name="parentNode">referenziert den gefilterten Baum</param>
         private void filterParents(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             if (!(mainElement.Current.ControlType.LocalizedControlType).Equals("Fenster"))// TODO: Root bestimmen
             {
-                TreeWalker walker = TreeWalker.ControlViewWalker;
+               // TreeWalker walker = TreeWalker.ControlViewWalker;
+                TreeWalker walker = TreeWalker.ContentViewWalker;
                 AutomationElement elementParent = walker.GetParent(mainElement);
                 addParentOfNode(elementParent, ref tree);
                 filterParents(elementParent, ref  tree);
@@ -461,7 +463,7 @@ namespace StrategyUIA
         /// <summary>
         /// Setzt für den ersten Knoten spezielle Eigenschaften
         /// </summary>
-        /// <param name="tree">gibt eine Referenz auf den bisherigen Baum an</param>
+        /// <param name="parentNode">gibt eine Referenz auf den bisherigen Baum an</param>
         private void setSpecialPropertiesOfFirstNode(ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             if (tree.HasChild)
@@ -696,7 +698,7 @@ namespace StrategyUIA
         /// Fügt ein neues Elternelement einen Baum hinzu.
         /// </summary>
         /// <param name="parentElement">gibt das neue Elternelement an</param>
-        /// <param name="tree">gibt den "alten" Baum an</param>
+        /// <param name="parentNode">gibt den "alten" Baum an</param>
         private void addParentOfNode(AutomationElement parentElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             ITreeStrategy<OSMElement.OSMElement> tree2 = getStrategyMgr().getSpecifiedTree().NewNodeTree();

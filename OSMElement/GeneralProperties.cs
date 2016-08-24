@@ -60,7 +60,7 @@ namespace OSMElement
             set;
         }
 
-        [XmlIgnore] //ist beim neuladen veraltet
+        //[XmlIgnore] //ist beim neuladen veraltet im gefilterten Baum, aber wird für den Braille Baum  benötigt
         public Rect boundingRectangleFiltered
         {
             get;
@@ -158,6 +158,7 @@ namespace OSMElement
             set;
         }
 
+        [XmlIgnore]
         public int processIdFiltered
         {
             get;
@@ -210,6 +211,11 @@ namespace OSMElement
         /// </summary>
         public String moduleName { get; set; }
         public String fileName { get; set; }
+
+        public override string ToString()
+        {//Achtung nur einige Eigenschaften berücksichtigt
+            return String.Format("nameFiltered = {0}, valueFiltered = {1}, controlTypeFiltered = {2},  boundingRectangleFiltered = {3} ", nameFiltered, valueFiltered, controlTypeFiltered, boundingRectangleFiltered.ToString());
+        }
     }
 }
 

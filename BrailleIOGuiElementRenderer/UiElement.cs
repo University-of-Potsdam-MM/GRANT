@@ -53,5 +53,10 @@ namespace BrailleIOGuiElementRenderer
         /// </summary>
         public object uiElementSpecialContent { get; set; }
 
+        public override string ToString()
+        {   //hier sind nicht alle Eigenschaften Berücksichtigt
+            return String.Format("screenName = {0}, viewName = {1}, text = {2}, uiElementSpecialContent = {3}", screenName, viewName, text, uiElementSpecialContent.ToString());
+        }
+
     }
 }

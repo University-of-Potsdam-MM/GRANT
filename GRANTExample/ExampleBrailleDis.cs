@@ -121,6 +121,7 @@ namespace GRANTExample
                         }
                         if (brailleId.Equals("")) { return; }
             OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
+            if(osmRelationships != null)
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                 updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -466,19 +467,19 @@ namespace GRANTExample
         /// <summary>
         /// Wechselt zwischen screen1 und screen2
         /// </summary>
-        public void changeScreen()
+        public void changeScreen(String name)
         {
+            if (name.Equals("")) { return; }
             if (strategyMgr.getSpecifiedBrailleDisplay() == null) { return; }
-            String visibleScreen = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
-            if(visibleScreen.Equals("screen1"))
-            {
-                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("screen2");
+           if( getPosibleScreens().Contains(name)){
+               strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen(name);
             }
-            else
-            {
-                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("screen1");
-            }
-           // ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(visibleScreen);
+           // ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(visibleScreen);
+        }
+
+        public List<String> getPosibleScreens()
+        {
+            return strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
         }
     }
 }

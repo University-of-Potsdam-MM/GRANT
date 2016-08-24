@@ -81,7 +81,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\ATemplateUi.cs" />
     <Compile Include="Templates\GenaralUI.cs" />
-    <Compile Include="Templates\TemplateMenuBar.cs" />
+    <Compile Include="Templates\TemplateGroup.cs" />
+    <Compile Include="Templates\TemplateDropDownMenu.cs" />
     <Compile Include="Templates\TemplateTitleBar.cs" />
     <Compile Include="TreeScopeEnum.cs" />
     <Compile Include="UpdateNode.cs" />

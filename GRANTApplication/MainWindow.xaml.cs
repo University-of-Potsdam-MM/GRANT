@@ -201,8 +201,8 @@ namespace GRANTApplication
                          int pointX;
                          int pointY;
                          operationSystemStrategy.getCursorPoint(out pointX, out pointY);
-                         ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
-                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                         ITreeStrategy<OSMElement.OSMElement> parentNode = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
+                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentNode, -1);
                     }
                     catch (Exception ex)
                     {
@@ -312,8 +312,8 @@ namespace GRANTApplication
 
                                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                                     grantTrees.setFilteredTree(tree);
-                                    // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
-                                    //  treeStrategy.printTreeElements(tree, -1);
+                                    // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
+                                    //  treeStrategy.printTreeElements(parentNode, -1);
                                     brailleDisplayStrategy.setActiveAdapter();
 
                                     brailleDisplayStrategy.generatedBrailleUi();
@@ -387,8 +387,8 @@ namespace GRANTApplication
 
                                 ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                                 grantTrees.setFilteredTree(tree);
-                                // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(tree, -1);
-                                //  treeStrategy.printTreeElements(tree, -1);
+                                // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
+                                //  treeStrategy.printTreeElements(parentNode, -1);
                                 brailleDisplayStrategy.setActiveAdapter();
                             }
                             catch (Exception ex)

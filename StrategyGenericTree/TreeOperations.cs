@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OSMElement.UiElements;
 using System.Security.Cryptography;
+using GRANTManager.Templates;
 
 namespace StrategyGenericTree
 {
@@ -35,9 +36,9 @@ namespace StrategyGenericTree
         /// <summary>
         /// Gibt alle Knoten eines Baumes auf der Konsole aus.
         /// </summary>
-        /// <param name="tree">gibt den Baum an</param>
+        /// <param name="parentNode">gibt den Baum an</param>
         /// <param name="depth">gibt an bis in welche Tiefe die Knoten ausgegeben werden sollen; <code>-1</code> für den ganzen Baum</param>
-        public void printTreeElements(ITreeStrategy<T> tree, int depth)
+        public void printTreeElements(ITreeStrategy<T> tree, int depth = -1)
         {
             foreach (ITreeStrategy<T> node in ((ITree<T>)tree).All.Nodes)
             {
@@ -57,13 +58,16 @@ namespace StrategyGenericTree
                     {
                         OSMElement.OSMElement osmElement = (OSMElement.OSMElement)Convert.ChangeType(node.Data, typeof(OSMElement.OSMElement));
                         GeneralProperties data = osmElement.properties;
-                        //printProperties(data);
+                        printProperties(data);
+                        Console.WriteLine( osmElement.brailleRepresentation.ToString());
                     }
                     Console.WriteLine();
                 }
             }
             Console.WriteLine();
         }
+
+
 
         /// <summary>
         /// Gibt eine Liste von Knoten auf der Konsole aus.
@@ -210,7 +214,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Sucht anhand der angegebenen Eigenschaften alle Knoten, welche der Bedingung entsprechen (Tiefensuche). Debei werden nur Eigenschften berücksichtigt, welche angegeben wurden.
         /// </summary>
-        /// <param name="tree">gibt den Baum in welchem gesucht werden soll an</param>
+        /// <param name="parentNode">gibt den Baum in welchem gesucht werden soll an</param>
         /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
         /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
@@ -317,7 +321,7 @@ namespace StrategyGenericTree
         /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated
         /// </summary>
         /// <param name="idGenereted">gibt die generierte Id des Knotens an</param>
-        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
+        /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
         public List<ITreeStrategy<T>> getAssociatedNodeList(String idGenereted, ITreeStrategy<T> tree)
         {
@@ -326,11 +330,11 @@ namespace StrategyGenericTree
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
-
+            Console.WriteLine("Gesuchte ID: {0}", idGenereted);
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
                 Boolean propertieIdGenerated = idGenereted == null || idGenereted.Equals(node.Data.properties.IdGenerated);
-
+                Console.WriteLine("ID = {0}", node.Data.properties.IdGenerated);
                 if (propertieIdGenerated)
                 {
                     result.Add((ITreeStrategy<T>)node);
@@ -355,7 +359,7 @@ namespace StrategyGenericTree
         /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated 
         /// </summary>
         /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
-        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
+        /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>zugehöriger Knoten</returns>
         private OSMElement.OSMElement getAssociatedNodeElement(String idGenerated, ITreeStrategy<OSMElement.OSMElement> tree)
         {
@@ -379,7 +383,7 @@ namespace StrategyGenericTree
         /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated 
         /// </summary>
         /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
-        /// <param name="tree">gibt den Baum an, in dem gesucht werden soll</param>
+        /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>zugehöriger Knoten</returns>
         private ITreeStrategy<OSMElement.OSMElement> getAssociatedNode(String idGenerated, ITreeStrategy<OSMElement.OSMElement> tree)
         {
@@ -407,8 +411,8 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt die neuen <code>GeneralProperties</code> an</param>
         public void changePropertiesOfFilteredNode(GeneralProperties properties)
         {
-           /* ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
+           /* ITreeStrategy<OSMElement.OSMElement> parentNode = grantTrees.getFilteredTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)parentNode).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(properties.IdGenerated))
                 {
@@ -442,7 +446,7 @@ namespace StrategyGenericTree
         /// <param name="idGeneratedOld">gibt die alte <c>IdGenerated</c> an</param>
         public void changePropertiesOfFilteredNode(GeneralProperties properties, String idGeneratedOld)
         {
-          //  ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+          //  ITreeStrategy<OSMElement.OSMElement> parentNode = grantTrees.getFilteredTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idGeneratedOld))
@@ -570,8 +574,9 @@ namespace StrategyGenericTree
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
+        /// <param name="parentId">falls diese gesetzt ist, so soll der Knoten als Kindknoten an diesem angehangen werden</param>
         /// <returns> die generierte Id, falls der Knoten hinzugefügt oder geupdatet wurde, sonst <c>null</c></returns>
-        public String addNodeInBrailleTree(OSMElement.OSMElement brailleNode)
+        public String addNodeInBrailleTree(OSMElement.OSMElement brailleNode, String parentId = null)
         {
             if (grantTrees.getBrailleTree() == null)
             {
@@ -601,16 +606,43 @@ namespace StrategyGenericTree
             }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes)
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes) //TODO: umschreiben => hier nur die direkten Kinder untersuchen
             {   //ermittelt an welchen Screen-Knoten die View angehangen werden soll
-                if (node.Data.brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
+                if (!node.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && node.Data.brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
                 {
                     OSMElement.OSMElement brailleNodeWithId = brailleNode;
                     GeneralProperties prop = brailleNode.properties;
                     prop.IdGenerated = generatedIdBrailleNode(brailleNode);
                     brailleNodeWithId.properties = prop;
-                    node.AddChild(brailleNodeWithId);
-                    return prop.IdGenerated;
+                    if (parentId == null)
+                    {
+                        node.AddChild(brailleNodeWithId);
+                        return prop.IdGenerated;
+                    }
+                    else
+                    {
+                        // es müssen von diesem Screen-Zweig alle Kinder durchsucht werden um die view mit der parentId zu finden
+                        if (node.HasChild)
+                        {
+                            ITreeStrategy<OSMElement.OSMElement>  nodeScreen = node.Child;
+                            if (nodeScreen.Data.properties.IdGenerated.Equals(parentId))
+                            {
+                                nodeScreen.AddChild(brailleNodeWithId);
+                                return prop.IdGenerated;
+                            }
+                            while (nodeScreen.HasNext)
+                            {
+                                nodeScreen = nodeScreen.Next;
+                                if (nodeScreen.Data.properties.IdGenerated.Equals(parentId))
+                                {
+                                    nodeScreen.AddChild(brailleNodeWithId);
+                                    return prop.IdGenerated;
+                                }
+                            }
+                            return null;
+                        }
+                        return null;
+                    }
                 }
             }
             return null;
@@ -797,7 +829,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Generiert für den kompletten Baum die Ids
         /// </summary>
-        /// <param name="tree">gibt eine referenz zu dem Baum an</param>
+        /// <param name="parentNode">gibt eine referenz zu dem Baum an</param>
         public void generatedIdsOfFilteredTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
@@ -820,7 +852,7 @@ namespace StrategyGenericTree
         /// <summary>
         /// Ermittelt und setzt die Ids in einem Teilbaum
         /// </summary>
-        /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
+        /// <param name="parentNode">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
         public void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
         {
@@ -916,7 +948,7 @@ namespace StrategyGenericTree
         /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
-        /// <param name="tree">gibt den (kompletten) Baum an</param>
+        /// <param name="parentNode">gibt den (kompletten) Baum an</param>
         /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
         public void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
         {
@@ -988,6 +1020,88 @@ namespace StrategyGenericTree
                 tree = tree.Next;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gibt die Namen der vorhandenen Screens im Braille-Baum an
+        /// </summary>
+        /// <returns>Eine Liste der Namen der Screens im Braille-Baum</returns>
+        public List<String> getPosibleScreenNames()
+        {
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !grantTrees.getBrailleTree().HasChild) { return null; }
+            List<String> screens = new List<string>();
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree().Copy();
+            tree = tree.Child;
+            screens.Add(tree.Data.brailleRepresentation.screenName);
+            while (tree.HasNext)
+            {
+                tree = tree.Next;
+                screens.Add(tree.Data.brailleRepresentation.screenName);
+            }
+            return screens;
+        }
+
+        /// <summary>
+        /// Erstellt, aktuallisiert alle Gruppen im Braille-Baum
+        /// </summary>
+        public void updateBrailleGroups()
+        {
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !grantTrees.getBrailleTree().HasChild) { return; }
+            ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree().Copy();
+            foreach (INode<OSMElement.OSMElement> node in copyOfBrailleTree.All.Nodes)
+            {
+                if (node.Data.properties.isContentElementFiltered == false)
+                {
+                    Type typeOfTemplate = Type.GetType(node.Data.brailleRepresentation.templateFullName + ", " + node.Data.brailleRepresentation.templateNamspace);
+                    if (typeOfTemplate != null)
+                    {
+                        ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                        GenaralUI.TempletUiObject templateobject = new GenaralUI.TempletUiObject();
+                        templateobject.height = (int) node.Data.properties.boundingRectangleFiltered.Height;
+                        templateobject.renderer = node.Data.properties.controlTypeFiltered;
+                        templateobject.textFromUIElement = node.Data.brailleRepresentation.fromGuiElement;
+                        templateobject.width = (int) node.Data.properties.boundingRectangleFiltered.Width;
+                        OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
+                        if (osmRelationships != null)
+                        {
+                            ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationships.FilteredTree, grantTrees.getFilteredTree());
+                            if (subtreeFiltered != null)
+                            {
+                                template.createUiElementFromTemplate(ref subtreeFiltered, templateobject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Löscht alle Kindelemente und deren OSM-Beziehungen von Gruppen im Braille-Baum
+        /// </summary>
+        public void deleteChildsOfBrailleGroups()
+        {
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !grantTrees.getBrailleTree().HasChild) { return; }
+            ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree().Copy();
+            foreach (INode<OSMElement.OSMElement> node in copyOfBrailleTree.All.Nodes)
+            {
+                /*if (node.Data.properties.isContentElementFiltered == false)
+                {
+                   //für alle KinElemente
+                    //strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree()
+                    //OsmTreeRelationship.removeOsmRelationship()
+                }*/
+                if (node.HasParent && node.Parent.Data.properties.isContentElementFiltered == false)
+                {
+                    OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated));
+                    if(osmRelationship != null)
+                    {
+                        Debug.WriteLine("Lösche Element ({0}, {1}) mit der ID {2} --> filteredTree-Id {3}", node.Data.properties.nameFiltered, node.Data.properties.controlTypeFiltered, node.Data.properties.IdGenerated, osmRelationship.FilteredTree);
+                        List<OsmRelationship<String, String>> conector = grantTrees.getOsmRelationship();
+                        OsmTreeRelationship.removeOsmRelationship(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
+                        strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(node.Data);
+                    }
+                }
+            }
         }
     }
 }

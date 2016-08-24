@@ -229,7 +229,6 @@ namespace GRANTManager
             if (root.IdGenerated.Trim().Equals("")) { return; }
             if (siblingNode.HasParent && !siblingNode.Parent.Data.properties.IdGenerated.Equals(root.IdGenerated))
             {
-                Console.WriteLine();
                 if (root.parentMenuItem.IdGenerated.Equals(siblingNode.Parent.Data.properties.IdGenerated))
                 {
                     root = root.parentMenuItem;
@@ -436,6 +435,8 @@ namespace GRANTManager
             DirectoryInfo di = Directory.CreateDirectory(directoryPath);
             if (di.Exists)
             {
+                //löscht temporär alle kindelemente von Gruppen und deren Beziehungen im Braille-Baum
+                strategyMgr.getSpecifiedTreeOperations().deleteChildsOfBrailleGroups();
                 saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + filteredTreeSavedName);
                 if (grantTree.getBrailleTree() != null)
                 {
@@ -463,6 +464,8 @@ namespace GRANTManager
                     serializer = new XmlSerializer(typeof(GrantProjectObject));
                     serializer.Serialize(writer, projectObject);
                 }
+                // erstellt wieder die Kinelemente von Gruppen und deren Beziehungen im Braille-Baum
+                strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
             }            
         }
 
@@ -545,6 +548,7 @@ namespace GRANTManager
             fs.Close();
             //Baum setzen
             grantTree.setBrailleTree(loadedTree);
+            strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace GRANTManager.Interfaces
 {
     public interface ITreeOperations<T>
@@ -28,9 +29,9 @@ namespace GRANTManager.Interfaces
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum einen zugehörigen Knoten an
         /// </summary>
         /// <param name="generatedId">Gibt die Id an zuder ein zugehöriger Knoten ermittelt werden soll</param>
-        /// <param name="tree">gibt den Baum an, in welchem ein zugehöriger Knoten ermittelt werden soll</param>
+        /// <param name="parentNode">gibt den Baum an, in welchem ein zugehöriger Knoten ermittelt werden soll</param>
         /// <returns>Gibt einen Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-       // GRANTManager.Interfaces.ITreeStrategy<T> getAssociatedNode(string idGenerated, GRANTManager.Interfaces.ITreeStrategy<T> tree);
+       // GRANTManager.Interfaces.ITreeStrategy<T> getAssociatedNode(string idGenerated, GRANTManager.Interfaces.ITreeStrategy<T> parentNode);
 
         OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated);
         OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated);
@@ -39,21 +40,21 @@ namespace GRANTManager.Interfaces
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum alle zugehörigen Knoten an
         /// </summary>
         /// <param name="generatedId">Gibt die Id an zuder die zugehörigen Knoten ermittelt werden sollen</param>
-        /// <param name="tree">gibt den Baum an, in welchem die zugehörigen Knoten ermittelt werden sollen </param>
+        /// <param name="parentNode">gibt den Baum an, in welchem die zugehörigen Knoten ermittelt werden sollen </param>
         /// <returns>Gibt eine Liste mit den Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
         System.Collections.Generic.List<GRANTManager.Interfaces.ITreeStrategy<T>> getAssociatedNodeList(string idGenereted, GRANTManager.Interfaces.ITreeStrategy<T> tree);
 
         /// <summary>
         /// Gibt die (einige) <code>GeneralProperties</code> des angegebenen Baumes aus
         /// </summary>
-        /// <param name="tree">Gibt den auszugebenen Baum an</param>
+        /// <param name="parentNode">Gibt den auszugebenen Baum an</param>
         /// <param name="depth">Gibt die Tiefe der Ausgabe an; Wenn der gesamte Baum ausgegeben werden soll, so muss <value>-1</value> angegeben werden.</param>
         void printTreeElements(GRANTManager.Interfaces.ITreeStrategy<T> tree, int depth);
 
         /// <summary>
         /// Sucht anhand der angegebenen <code>GeneralProperties</code> alle Knoten die diesen Eigenschaften entsprechen
         /// </summary>
-        /// <param name="tree">Gibt den Baum an, in welchem gesucht werden soll</param>
+        /// <param name="parentNode">Gibt den Baum an, in welchem gesucht werden soll</param>
         /// <param name="properties">gibt die zusuchenden Eigenschaften an</param>
         /// <param name="oper">gibt an wie die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste mit allen Knoten auf den die Eigenschaften zutreffen</returns>
@@ -64,8 +65,9 @@ namespace GRANTManager.Interfaces
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
+        /// <param name="parentId">falls diese gesetzt ist, so soll der Knoten als Kindknoten an diesem angehangen werden</param>
         /// <returns> die generierte Id, falls der Knoten hinzugefügt oder geupdatet wurde, sonst <c>null</c></returns>
-        String addNodeInBrailleTree(OSMElement.OSMElement brailleNode);
+        String addNodeInBrailleTree(OSMElement.OSMElement brailleNode, String parentId = null);
 
         /// <summary>
         /// entfernt einen Knoten vom Baum der Braille-Darstellung
@@ -100,14 +102,14 @@ namespace GRANTManager.Interfaces
         /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
-        /// <param name="tree">gibt den (kompletten) Baum an</param>
+        /// <param name="parentNode">gibt den (kompletten) Baum an</param>
         /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
         void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
 
         /// <summary>
         /// Ermittelt und setzt die Ids in einem Teilbaum
         /// </summary>
-        /// <param name="tree">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
+        /// <param name="parentNode">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
         void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
 
@@ -117,6 +119,22 @@ namespace GRANTManager.Interfaces
         /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
         /// <returns>Teilbaum des Screens oder <c>null</c></returns>
         ITreeStrategy<OSMElement.OSMElement> getSubtreeOfScreen(String screenName);
+
+        /// <summary>
+        /// Gibt die Namen der vorhandenen Screens im Braille-Baum an
+        /// </summary>
+        /// <returns>Eine Liste der Namen der Screens im Braille-Baum</returns>
+        List<String> getPosibleScreenNames();
+
+        /// <summary>
+        /// Erstellt, aktuallisiert alle Gruppen im Braille-Baum
+        /// </summary>
+        void updateBrailleGroups();
+
+        /// <summary>
+        /// Löscht alle Kindelemente und deren OSM-Beziehungen von Gruppen im Braille-Baum
+        /// </summary>
+        void deleteChildsOfBrailleGroups();
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

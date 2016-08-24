@@ -29,7 +29,7 @@ namespace GRANTManager
         /// <summary>
         /// Setzt den aktuell gefilterten Baum
         /// </summary>
-        /// <param name="tree">gibt den gefilterten Baum an</param>
+        /// <param name="parentNode">gibt den gefilterten Baum an</param>
         public void setFilteredTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             filteredTree = tree;
@@ -47,7 +47,7 @@ namespace GRANTManager
         /// <summary>
         /// Setzt die aktuelle Barille-UI-Darstellung.
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="parentNode"></param>
         public void setBrailleTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             brailleTree = tree;

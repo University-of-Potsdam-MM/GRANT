@@ -29,12 +29,13 @@ namespace GRANTManager.Templates
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
             ITreeStrategy<OSMElement.OSMElement> filteredTreeCopy = grantTrees.getFilteredTree().Copy();
             iteratedTree(ref filteredTreeCopy);
+            strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
 
         /// <summary>
         /// Iterriert über den gefilterten Baum und ruft für jedes UI-Element die Methode <see cref="createElementType"/> auf
         /// </summary>
-        /// <param name="tree">gibt den gefilterten Baum an</param>
+        /// <param name="parentNode">gibt den gefilterten Baum an</param>
         private void iteratedTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
@@ -52,7 +53,7 @@ namespace GRANTManager.Templates
                     node1 = tree.Next;
                     if (tree.HasNext)
                     {
-                        //createElementType(ref tree);
+                        //createElementType(ref parentNode);
                         createElementType(ref node1);
                     }
                     iteratedTree(ref node1);
@@ -86,7 +87,7 @@ namespace GRANTManager.Templates
 
         private void createElementType(ref ITreeStrategy<OSMElement.OSMElement> subtree)
         {
-            //falls zu einem UI-Elemente ein Teilbaum gehört, so wird der Baum entsprechend gekürzt
+            //falls zu einem UI-Elemente ein Teilbaum gehört, so wird der Baum entsprechend gekürzt => TODO
             String controlType = subtree.Data.properties.controlTypeFiltered;
             XElement xmlDoc = XElement.Load(@"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xml");
             IEnumerable<XElement> uiElement =
@@ -106,28 +107,35 @@ namespace GRANTManager.Templates
             ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             //AGeneralUi template = new TemplateTitleBar(strategyMgr, grantTrees);
             generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiobject(firstElement));
-            //Debug.WriteLine("");
         }
 
         public struct TempletUiObject
         {
             public String renderer { get; set; }
-            public int minDeviceHeight { get; set; }
-            public int minDeviceWidth { get; set; }
-            public String TextFromUIElement { get; set; }
+            public int height { get; set; }
+            public int width { get; set; }
+            public String textFromUIElement { get; set; }
+            public String groupImplementedClassTypeFullName { get; set; }
+            public String groupImplementedClassTypeDllName { get; set; }
         }
 
         private TempletUiObject xmlUiElementToTemplateUiobject(XElement xmlElement)
         {
             TempletUiObject templetObject = new TempletUiObject();
             Int32 result;
-            bool isConvert = Int32.TryParse(xmlElement.Element("MinDeviceHeight").Value, out result);
-            templetObject.minDeviceHeight = isConvert ? result : 0;
             result = 0;
-            isConvert = Int32.TryParse(xmlElement.Element("MinDeviceWidth").Value, out result);
-            templetObject.minDeviceWidth = isConvert ? result : 0;
             templetObject.renderer = xmlElement.Element("Renderer").Value;
-            templetObject.TextFromUIElement = xmlElement.Element("TextFromUIElement").Value;
+            templetObject.textFromUIElement = xmlElement.Element("TextFromUIElement").Value;
+            bool isConvert = Int32.TryParse(xmlElement.Element("Height").Value, out result);
+            templetObject.height = isConvert ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            isConvert = Int32.TryParse(xmlElement.Element("Width").Value, out result);
+            templetObject.width = isConvert ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            if (xmlElement.Element("IsGroup").HasElements)
+            {
+                templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
+                templetObject.groupImplementedClassTypeDllName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeDllName").Value;
+            }
+
             return templetObject;
         }
     }
