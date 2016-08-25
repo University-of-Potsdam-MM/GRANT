@@ -803,22 +803,34 @@ namespace StrategyGenericTree
                     Debug.WriteLine("Teilbum gefunden");
                     if (node.HasParent)
                     {
-                        //unterscheiden, ob der Knoten Geschwister (1.) oder Kinder (2.)  hat
-                        if (subTree.Child.HasNext || subTree.Child.HasChild)
+                      //  if (subTree.Child.HasNext || subTree.Child.HasChild)
                         {
-                            /*hat (auch) Geschwister
-                             * zum Elternknoten gehen
-                             *  - alte Kinder löschen
-                             *  - neue Kinder hinzufügen
-                             */
                             ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
-                            while (parentNode.HasChild)
+
+                            if (node.BranchIndex == 0)
                             {
-                                grantTrees.getFilteredTree().Remove(parentNode.Child.Data);
+                                
+                                grantTrees.getFilteredTree().Remove(node.Data);
+                                parentNode.InsertChild(subTree);
                             }
-                            parentNode.AddChild(subTree);
+                            else
+                            {
+                                if (node.BranchIndex + 1 == node.BranchCount)
+                                {
+                                    //ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
+                                    grantTrees.getFilteredTree().Remove(node.Data);
+                                    parentNode.AddChild(subTree);
+                                }
+                                else
+                                {
+                                    ITreeStrategy<OSMElement.OSMElement> previousNode = node.Previous;
+                                    grantTrees.getFilteredTree().Remove(node.Data);
+                                    previousNode.InsertNext(subTree);
+                                }
+                            }
                             return parentNode.Data.properties.IdGenerated;
                         }
+                        
                     }
                 }
             }
@@ -858,6 +870,7 @@ namespace StrategyGenericTree
         {
             //getFilteredTreeOsmElementById(idOfParent);
             ITreeStrategy<OSMElement.OSMElement> subtree =getAssociatedNode(idOfParent, tree);
+            if (subtree == null) { return; }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated == null)
@@ -948,22 +961,23 @@ namespace StrategyGenericTree
         /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
-        /// <param name="parentNode">gibt den (kompletten) Baum an</param>
-        /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
-        public void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
+        /// <param name="subtree">gibt den Teilbaum an, bei dem die Strategy gesetzt werden soll</param>
+        public void setFilterstrategyInPropertiesAndObject(Type strategyType, ITreeStrategy<OSMElement.OSMElement> subtree)
         {
             FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes());
+
             if (mainFilterstrategy.FilterstrategyFullName.Equals(strategyType.FullName) && mainFilterstrategy.FilterstrategyDll.Equals(strategyType.Namespace)) 
             {
-                removeFilterStrategyofSubtree(strategyType, ref tree, idOfParent);
-                Debug.WriteLine("Die Strategy muss nicht ergänzt werden!"); 
+                removeFilterStrategyofSubtree(strategyType, ref subtree);
+                Debug.WriteLine("Die Strategy muss nicht ergänzt werden!");
+                grantTrees.setFilteredTree(subtree.Root);
                 return; 
             }
             Settings settings = new Settings();
             List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
-            ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
-            if (!subtree.HasChild) { return; }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree.Child).All.Nodes)
+           // ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
+           // if (!subtree.HasChild) { return; }
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree).All.Nodes)
             {
                 bool isAdded = FilterstrategiesOfTree.addFilterstrategyOfNode(node.Data.properties.IdGenerated, strategyType, ref filterstrategies);
                 if (isAdded)
@@ -973,14 +987,14 @@ namespace StrategyGenericTree
                     strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
                 }
             }
-            tree = subtree.Root;
+            grantTrees.setFilteredTree( subtree.Root);
         }
 
-        private void removeFilterStrategyofSubtree(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, string idOfParent)
+        private void removeFilterStrategyofSubtree(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> subtree)
         {
             Settings settings = new Settings();
             List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
-            ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
+            //ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
             if (!subtree.HasChild) { return; }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree.Child).All.Nodes)
             {

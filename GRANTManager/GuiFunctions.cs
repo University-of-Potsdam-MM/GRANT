@@ -681,14 +681,23 @@ namespace GRANTManager
         /// <summary>
         /// Filtert einen Teilbaum und aktualisiert das Baumobjekt
         /// </summary>
-        /// <param name="osmElementOfFirstNodeOfSubtree">gibt das OSM-Element an, ab welchen Knoten der Teilbaum aktualisiert werden soll (inkl. diesem Knoten)</param>
-        public void filterAndAddSubtreeOfApplication(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree)
+        /// <param name="idGeneratedOfFirstNodeOfSubtree">gibt die Id des Knotens an, ab welcher der Teilbaum aktualisiert werden soll (inkl. diesem Knoten)</param>
+        public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
         {
+            OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
             ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
-            String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtree, osmElementOfFirstNodeOfSubtree.properties.IdGenerated);
+            String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
             ITreeStrategy<OSMElement.OSMElement> tree = grantTree.getFilteredTree();
             strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredSubtree(ref tree, idParent);
-            strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), ref tree, idParent);
+            List<ITreeStrategy<OSMElement.OSMElement>> searchResultTrees = strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, subtree.Child.Data.properties, OperatorEnum.and);
+            if (searchResultTrees != null && searchResultTrees.Count == 1)
+            {
+                strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), searchResultTrees[0]);
+            }
+            else
+            {
+                Debug.WriteLine("TODO");
+            }
         }
     }
 }

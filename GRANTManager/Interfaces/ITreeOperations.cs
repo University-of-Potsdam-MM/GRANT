@@ -42,7 +42,7 @@ namespace GRANTManager.Interfaces
         /// <param name="generatedId">Gibt die Id an zuder die zugehörigen Knoten ermittelt werden sollen</param>
         /// <param name="parentNode">gibt den Baum an, in welchem die zugehörigen Knoten ermittelt werden sollen </param>
         /// <returns>Gibt eine Liste mit den Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-        System.Collections.Generic.List<GRANTManager.Interfaces.ITreeStrategy<T>> getAssociatedNodeList(string idGenereted, GRANTManager.Interfaces.ITreeStrategy<T> tree);
+        List<GRANTManager.Interfaces.ITreeStrategy<T>> getAssociatedNodeList(string idGenereted, GRANTManager.Interfaces.ITreeStrategy<T> tree);
 
         /// <summary>
         /// Gibt die (einige) <code>GeneralProperties</code> des angegebenen Baumes aus
@@ -58,7 +58,7 @@ namespace GRANTManager.Interfaces
         /// <param name="properties">gibt die zusuchenden Eigenschaften an</param>
         /// <param name="oper">gibt an wie die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste mit allen Knoten auf den die Eigenschaften zutreffen</returns>
-        System.Collections.Generic.List<GRANTManager.Interfaces.ITreeStrategy<T>> searchProperties(GRANTManager.Interfaces.ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, GRANTManager.OperatorEnum oper);
+        List<GRANTManager.Interfaces.ITreeStrategy<T>> searchProperties(GRANTManager.Interfaces.ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, GRANTManager.OperatorEnum oper);
 
         /// <summary>
         /// Fügt einen Knoten dem Baum der  Braille-Darstellung hinzu;
@@ -102,9 +102,8 @@ namespace GRANTManager.Interfaces
         /// setzt bei allen Element ausgehend von der IdGenerated im Baum die angegebene Filterstrategie
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
-        /// <param name="parentNode">gibt den (kompletten) Baum an</param>
-        /// <param name="idOfParent">gibt die Id des Elternknotens, von denen die Kindknoten eine Filterstrategy gesetzt bekommen sollen</param>
-        void setFilterstrategyInPropertiesAndObject(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
+        /// <param name="subtree">gibt den Teilbaum an, bei dem die Strategy gesetzt werden soll</param>
+        void setFilterstrategyInPropertiesAndObject(Type strategyType, ITreeStrategy<OSMElement.OSMElement> subtree);
 
         /// <summary>
         /// Ermittelt und setzt die Ids in einem Teilbaum

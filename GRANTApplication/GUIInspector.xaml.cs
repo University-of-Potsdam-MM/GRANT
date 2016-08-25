@@ -406,8 +406,8 @@ namespace GRANTApplication
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
             UpdateNode node = new UpdateNode(strategyMgr, grantTrees);
-            node.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
-
+            //node.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
+            guiFunctions.filterAndAddSubtreeOfApplication(((Button)sender).CommandParameter.ToString());
             ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
             tvMain.Items.Clear();

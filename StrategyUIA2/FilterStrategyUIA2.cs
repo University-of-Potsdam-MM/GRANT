@@ -774,12 +774,6 @@ namespace StrategyUIA2
         /// <returns>Eine Condition</returns>
         private Condition setPropertiesCondition(GeneralProperties properties)
         {
-            //Falls die "AutomationId" gesetzt wurde, so ist diese Eigenschaft ausreichend um das Element eindeutig zu identifizieren
-            if (properties.autoamtionIdFiltered != null && !properties.autoamtionIdFiltered.Equals(""))
-            {
-                return new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered);
-            }
-
             Condition resultCondition;
             #region von allen auslesbar
             resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
@@ -832,6 +826,10 @@ namespace StrategyUIA2
             if (properties.isRequiredForFormFiltered != null)
             {
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsRequiredForFormProperty, properties.isRequiredForFormFiltered), resultCondition);
+            }
+            if (properties.autoamtionIdFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered), resultCondition);
             }
             //.. 
             return resultCondition;
