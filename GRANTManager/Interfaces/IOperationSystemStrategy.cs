@@ -62,5 +62,8 @@ namespace GRANTManager.Interfaces
         /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
         bool showWindow(IntPtr hwnd);
 
+        void InitializeWindows_EventsMonitor();
+
+
     }
 }
