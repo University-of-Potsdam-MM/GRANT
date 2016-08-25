@@ -228,8 +228,10 @@ namespace GRANTExample
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
             ui.generatedUiFromTemplate();
-            Debug.WriteLine("Baum-Elemente Anzahl: " + grantTree.getBrailleTree().Count); ;
+
+            Debug.WriteLine("Baum-Elemente Anzahl: " + grantTree.getBrailleTree().Count); 
             //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);
         }
     }

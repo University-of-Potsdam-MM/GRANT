@@ -6,6 +6,10 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+
 
 using GRANTManager.Interfaces;
 using OSMElement;
@@ -699,5 +703,42 @@ namespace GRANTManager
                 Debug.WriteLine("TODO");
             }
         }
+
+        /// <summary>
+        /// Prüft, ob eine Angegebene XML-Datei valide zu dem Schema TemplateUi.xsd ist
+        /// </summary>
+        /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
+        /// <returns><c>true</c> falls die Datei valide ist; sonst <c>false</c></returns>
+        public bool isTemplateValid(String pathToXml)
+        {
+            XDocument xDoc = XDocument.Load(@pathToXml);
+
+            bool isValid = true;
+            String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
+            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD-Exisitert nicht"); return false; }
+            FileStream fs = new FileStream(pathToXsd, FileMode.Open);
+            XmlSchema xsd = XmlSchema.Read(fs, ValidationCallback);
+            // xsd.Write(Console.Out);
+            XmlSchemaSet xsdSet = new XmlSchemaSet();
+            xsdSet.Add(xsd);
+            xDoc.Validate(xsdSet, (o, e) =>
+            {
+                Console.WriteLine("{0}", e.Message);
+                isValid = false;
+            });
+            System.Xml.Serialization.XmlSerializerNamespaces a = xsd.Namespaces;
+            return isValid;
+        }
+
+        static void ValidationCallback(object sender, ValidationEventArgs args)
+        { // https://msdn.microsoft.com/de-de/library/04x694fe(v=vs.110).aspx
+            if (args.Severity == XmlSeverityType.Warning)
+                Console.Write("WARNING: ");
+            else if (args.Severity == XmlSeverityType.Error)
+                Console.Write("ERROR: ");
+
+            Console.WriteLine(args.Message);
+        }
+
     }
 }

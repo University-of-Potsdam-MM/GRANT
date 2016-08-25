@@ -51,8 +51,7 @@ namespace OSMElement
                     return resultmatrix;
                 }else{
                     return new bool[0][];
-                }
-                
+                }                
             }
             set
             {
