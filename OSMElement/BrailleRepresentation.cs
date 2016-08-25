@@ -23,10 +23,53 @@ namespace OSMElement
         public bool isVisible { get; set; }
 
         /// <summary>
-        /// Gibt eine Matrix die Dargestellt werden soll an.
+        /// Gibt eine Matrix die dargestellt werden soll an.
         /// </summary>
         [XmlIgnore]
         public bool[,] matrix { get; set; }
+
+        /// <summary>
+        /// Wandelt die mehrdimensionale Matrix in eine Jagged-Matrix um um diese zu speichern bzw. zu laden
+        /// </summary>
+        public bool[][] jaggedMatrix {
+            get 
+            {
+                
+                if (matrix != null)
+                {
+                    bool[][] resultmatrix = new bool[matrix.GetLength(0)][];
+                    int width = matrix.Length / matrix.GetLength(0);
+                    System.Diagnostics.Debug.WriteLine("getLengt(0) = " + matrix.GetLength(0));
+                    for (int i = 0; i < matrix.GetLength(0); i++)
+                    {
+                        resultmatrix[i] = new bool[width];
+                        for (int j = 0; j < width; j++)
+                        {
+                            resultmatrix[i][j] = matrix[i, j];
+                        }
+                    }
+                    return resultmatrix;
+                }else{
+                    return new bool[0][];
+                }
+                
+            }
+            set
+            {
+                if (value != null && value.Count() > 0)
+                {
+                    bool[,] resultmatrix = new bool[value.GetLength(0), value[0].Length];
+                    for (int i = 0; i < value.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < value[0].Length ; j++)
+                        {
+                            resultmatrix[i, j] = value[i][j];
+                        }
+                    }
+                    matrix = resultmatrix;
+                }
+            } 
+        }
 
         /// <summary>
         /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden. Der Wert dieser Eigenschaft soll angezeigt werden

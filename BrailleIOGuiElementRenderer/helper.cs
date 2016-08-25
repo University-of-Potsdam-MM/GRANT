@@ -18,9 +18,9 @@ namespace BrailleIOGuiElementRenderer
         public static void copyTextMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int spaceLeft)
         {
             //Console.WriteLine("GetLength = {0},  GetUpperBound = {1}", bigMatrix.GetLength(0), bigMatrix.GetUpperBound(0));
-            // getLength ^= Anzahl der Zeilen
+            // getLength(0) ^= Anzahl der Zeilen
             // Length ^= Anzahl der Elemente insgesamt
-            // Length / getLength ^= Pins pro Zeile
+            // Length / getLength ^= Pins pro Zeile (.GetLength(1) for the number of column)
             for (int i = spaceLeft; (i < (bigMatrix.Length / bigMatrix.GetLength(0)) - 2) && (i < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)//ab Pinreihe 'spaceLeft' soll der Text erscheinen
             {
                 for (int j = 2; (j < bigMatrix.GetLength(0) - 2) && (j < smallMatrix.GetLength(0) + 2); j++)
