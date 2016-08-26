@@ -244,7 +244,21 @@ namespace StrategyBrailleIO
             bmp = ScreenCapture.CaptureWindow(nodeFilteredTree.Data.properties.hWndFiltered, h, w, 0, 0, 0, 0);*/
             Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree);
           //  Console.WriteLine("Braille -- Rect: x = {0}, y = {1}, höhe = {2}, breite= {3}", rect.X, rect.Y, rect.Height, rect.Width);
-            bmp = ScreenCapture.CaptureScreenPos(rect);
+            if (!nodeFilteredTree.properties.hWndFiltered.Equals(IntPtr.Zero))
+            {
+                bmp = ScreenCapture.CaptureWindowPartAtScreenpos(nodeFilteredTree.properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
+            }
+            else
+            {
+                if(grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild && !grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered.Equals(IntPtr.Zero))
+                {
+                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
+                }
+                else
+                {
+                    bmp = ScreenCapture.CaptureScreenPos(rect); // Wenn eine andere Anwendung die gefilterte Anwendung überdeckt, wird der falsche Screenshot erstellt
+                }                
+            }
             return bmp;
         }
 
@@ -363,6 +377,7 @@ namespace StrategyBrailleIO
             {
                 Image img = captureScreen(osmElement.properties.IdGenerated);
                 if (img == null) { return; }
+                ScreenCapture.SaveImageToFile(@"C:\Users\mkarlapp\Desktop" + System.IO.Path.DirectorySeparatorChar + "t1" + System.IO.Path.DirectorySeparatorChar + osmElement.properties.IdGenerated + ".png", img);
                 createViewImage(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, osmElement, img);
                 return;
             }
