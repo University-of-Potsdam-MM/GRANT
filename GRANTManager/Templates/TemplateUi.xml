@@ -1,32 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TemplateUi>
-    <MinDeviceHeight>30</MinDeviceHeight>
-    <MinDeviceWidth>40</MinDeviceWidth>
+<TemplateUi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <MinDeviceHeight>30</MinDeviceHeight>
+  <MinDeviceWidth>40</MinDeviceWidth>
   <UiElement name="TitleBar">
     <IsGroup />
     <Renderer>Text</Renderer>
     <Height>6</Height>
-    <Width></Width><!-- Freilassen entspricht der Bereite des Gerätes -->
+    <Width xsi:nil="true" />    <!-- entspricht der Bereite des Gerätes -->
     <TextFromUIElement>nameFiltered</TextFromUIElement>
     <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateTitleBar</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="MenuBar">
     <IsGroup>
-        <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
-        <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Height>10</Height>
+    <!-- <Height xsi:nil="true"  />-->
     <Width>17</Width>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
     <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
-    <UiElement name="Menu">
+  <UiElement name="Menu">
     <IsGroup>
-        <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
-        <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Height>10</Height>

@@ -709,13 +709,13 @@ namespace GRANTManager
         /// </summary>
         /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
         /// <returns><c>true</c> falls die Datei valide ist; sonst <c>false</c></returns>
-        public bool isTemplateValid(String pathToXml)
+        public static bool isTemplateValid(String pathToXml)
         {
             XDocument xDoc = XDocument.Load(@pathToXml);
 
             bool isValid = true;
             String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
-            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD-Exisitert nicht"); return false; }
+            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
             FileStream fs = new FileStream(pathToXsd, FileMode.Open);
             XmlSchema xsd = XmlSchema.Read(fs, ValidationCallback);
             // xsd.Write(Console.Out);
