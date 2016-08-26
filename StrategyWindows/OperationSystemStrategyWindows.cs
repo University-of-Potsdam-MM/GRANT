@@ -48,9 +48,7 @@ namespace StrategyWindows
             public static extern bool IsIconic(IntPtr hWnd);
         }
 
-        private CursorPoint cp = new CursorPoint();
-        
-        
+        private CursorPoint cp = new CursorPoint();          
 
         public CursorPoint Cp
         {
@@ -415,6 +413,16 @@ namespace StrategyWindows
             }
             return true;
         }
+
+        //in interface nehmen
+        public void InitializeWindows_EventsMonitor()
+        {
+            Windows_EventsMonitor wem = new Windows_EventsMonitor();
+            wem.Subscribe();
+            //mouseKeyHookClass mk = new mouseKeyHookClass();
+            //mk.Subscribe();
+        }
+
     }
     
 }

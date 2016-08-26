@@ -34,6 +34,8 @@ namespace GRANTExample
         {
             InitializeComponent();
             InitializeFilterComponent();
+
+            InitializeStrategyWindows_Windows_EventsMonitor();
         }
 
         Settings settings;
@@ -46,6 +48,20 @@ namespace GRANTExample
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
         GenaralUI ui;
+        
+        /// <summary>
+        /// Initialisierung der Eventverfolgung des NuGet-Package MousekeyHook
+        /// diese muss in diesem Projekt und in StrategyWindows eingebunden sein
+        /// </summary>
+        private void InitializeStrategyWindows_Windows_EventsMonitor()
+        {
+            //Benutzung der Methode InitializeWindows_EventsMonitor() aus StrategyWindows über Interface in Grantmanager/Interfaces/IOperationSystemStrategy
+            strategyMgr.getSpecifiedOperationSystem().InitializeWindows_EventsMonitor();
+
+            //oder, da methode und die klasse public ist objekt erstellen und aufrufen
+            //StrategyWindows.Windows_EventsMonitor me = new StrategyWindows.Windows_EventsMonitor();
+            //me.Subscribe();
+        }
 
         private void InitializeFilterComponent()
         {
