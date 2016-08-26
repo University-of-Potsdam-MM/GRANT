@@ -193,7 +193,7 @@ namespace GRANTExample
         #region Beispielobjekte
         private void setDauGui(String fromGuiElement3)
         {
-            #region Element 1
+            #region Element 1 Screenshot
             OSMElement.OSMElement osm1 = new OSMElement.OSMElement();
             BrailleRepresentation e1 = new BrailleRepresentation();
             GeneralProperties proper1 = new GeneralProperties();
@@ -214,7 +214,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
             #endregion
 
-            #region Element 2
+            #region Element 2 Text
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             GeneralProperties proper2 = new GeneralProperties();
             BrailleRepresentation e2 = new BrailleRepresentation();
@@ -240,7 +240,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
             #endregion
 
-            #region Element 3
+            #region Element 3 Text
             OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
             BrailleRepresentation e3 = new BrailleRepresentation();
             GeneralProperties proper3 = new GeneralProperties();
@@ -261,7 +261,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm3);
             #endregion
 
-            #region Element 4
+            #region Element 4 Matrix
             OSMElement.OSMElement osm4 = new OSMElement.OSMElement();
             BrailleRepresentation e4 = new BrailleRepresentation();
             GeneralProperties proper4 = new GeneralProperties();            
@@ -285,7 +285,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm4);
             #endregion
 
-            #region Element 5
+            #region Element 5 Button
             OSMElement.OSMElement osm5 = new OSMElement.OSMElement();
             BrailleRepresentation e5 = new BrailleRepresentation();
             GeneralProperties proper5 = new GeneralProperties();
@@ -305,7 +305,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm5);
             #endregion
 
-            #region Element 6
+            #region Element 6 TextBox
             OSMElement.OSMElement osm6 = new OSMElement.OSMElement();
             BrailleRepresentation e6 = new BrailleRepresentation();
             GeneralProperties proper6 = new GeneralProperties();
@@ -328,7 +328,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm6);
             #endregion
 
-            #region Element 7
+            #region Element 7 DropDownMenu
             OSMElement.OSMElement osm7 = new OSMElement.OSMElement();
             GeneralProperties proper7 = new GeneralProperties();
             BrailleRepresentation e7 = new BrailleRepresentation();
@@ -357,7 +357,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm7);
             #endregion
 
-            #region Element 8
+            #region Element 8 DropDownMenu
             OSMElement.OSMElement osm8 = new OSMElement.OSMElement();
             BrailleRepresentation e8 = new BrailleRepresentation();
             GeneralProperties proper8 = new GeneralProperties();
@@ -385,7 +385,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm8);
             #endregion
 
-            #region Element 9
+            #region Element 9 DropDownMenu
             OSMElement.OSMElement osm9 = new OSMElement.OSMElement();
             BrailleRepresentation e9 = new BrailleRepresentation();
             GeneralProperties proper9 = new GeneralProperties();
@@ -413,7 +413,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm9);
             #endregion
 
-            #region Element 10
+            #region Element 10 DropDownMenu
             OSMElement.OSMElement osm10 = new OSMElement.OSMElement();
             BrailleRepresentation e10 = new BrailleRepresentation();
             GeneralProperties proper10 = new GeneralProperties();
@@ -442,7 +442,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm10);
             #endregion
 
-            #region Element 11
+            #region Element 11 Button
             OSMElement.OSMElement osm11 = new OSMElement.OSMElement();
             BrailleRepresentation e11 = new BrailleRepresentation();
             GeneralProperties proper11 = new GeneralProperties();

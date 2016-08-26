@@ -33,10 +33,13 @@ namespace GRANTManager.Templates
             GeneralProperties prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
-
-            List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
-            OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
-            strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+            if (templateObject.textFromUIElement != null && !templateObject.textFromUIElement.Trim().Equals(""))
+            {
+                List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
+                OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+                strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+            }
+            
 
         }
 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.IO;
+using System.Windows;
 
 namespace GRANTManager.Templates
 {
@@ -29,9 +30,10 @@ namespace GRANTManager.Templates
             if (grantTrees == null || grantTrees.getFilteredTree() == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
             if (pathToXml.Equals("")) { Debug.WriteLine("Keine Xml angegeben!"); return; }
             if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
+            createUiElementsWitheNoDependency(@pathToXml);
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
             ITreeStrategy<OSMElement.OSMElement> filteredTreeCopy = grantTrees.getFilteredTree().Copy();
-            iteratedTree(ref filteredTreeCopy, pathToXml);
+            iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
 
@@ -39,7 +41,7 @@ namespace GRANTManager.Templates
         /// Iterriert über den gefilterten Baum und ruft für jedes UI-Element die Methode <see cref="createElementType"/> auf
         /// </summary>
         /// <param name="parentNode">gibt den gefilterten Baum an</param>
-        private void iteratedTree(ref ITreeStrategy<OSMElement.OSMElement> tree, String pathToXml)
+        private void iteratedTreeForTemplate(ref ITreeStrategy<OSMElement.OSMElement> tree, String pathToXml)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
             //Falls die Baumelemente Kinder des jeweiligen Elements sind
@@ -49,7 +51,7 @@ namespace GRANTManager.Templates
                 {
                     node1 = tree.Child;
                     createElementType(ref node1, pathToXml);
-                    iteratedTree(ref node1, pathToXml);
+                    iteratedTreeForTemplate(ref node1, pathToXml);
                 }
                 else
                 {
@@ -59,7 +61,7 @@ namespace GRANTManager.Templates
                         //createElementType(ref parentNode);
                         createElementType(ref node1, pathToXml);
                     }
-                    iteratedTree(ref node1, pathToXml);
+                    iteratedTreeForTemplate(ref node1, pathToXml);
                 }
             }
             if (tree.Count == 1 && tree.Depth == -1)
@@ -88,6 +90,11 @@ namespace GRANTManager.Templates
             }
         }
 
+        /// <summary>
+        /// Sofern für das angegebene UI-element ein template vorhanden ist wird dieses angewendet
+        /// </summary>
+        /// <param name="subtree">gibt den Teilbaum mit dem element, auf welches das Template angewendet werden soll an</param>
+        /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
         private void createElementType(ref ITreeStrategy<OSMElement.OSMElement> subtree, String pathToXml)
         {
             //falls zu einem UI-Elemente ein Teilbaum gehört, so wird der Baum entsprechend gekürzt => TODO
@@ -95,13 +102,13 @@ namespace GRANTManager.Templates
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Elements("UiElement")
-                where (string)el.Attribute("name") == controlType
+                where (string)el.Attribute("name") == controlType && (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") != ""
                 select el;
-            /* foreach (XElement x in uiElement)
-             {
-                 Debug.WriteLine(x);
-             }*/
             if (uiElement == null || !uiElement.Any()) { return; }
+            /* foreach (XElement element in uiElement)
+             {
+                 Debug.WriteLine(element);
+             }*/            
             XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
             //Debug.WriteLine("First = " + firstElement);
 
@@ -115,8 +122,7 @@ namespace GRANTManager.Templates
         public struct TempletUiObject
         {
             public String renderer { get; set; }
-            public int height { get; set; }
-            public int width { get; set; }
+            public Rect rect { get; set; }
             public String textFromUIElement { get; set; }
             public String groupImplementedClassTypeFullName { get; set; }
             public String groupImplementedClassTypeDllName { get; set; }
@@ -129,10 +135,19 @@ namespace GRANTManager.Templates
             result = 0;
             templetObject.renderer = xmlElement.Element("Renderer").Value;
             templetObject.textFromUIElement = xmlElement.Element("TextFromUIElement").Value;
-            bool isConvert = Int32.TryParse(xmlElement.Element("Height").Value, out result);
-            templetObject.height = isConvert ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
-            isConvert = Int32.TryParse(xmlElement.Element("Width").Value, out result);
-            templetObject.width = isConvert ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            XElement position = xmlElement.Element("Position");
+            bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
+            Rect rect = new Rect();
+            rect.Height = isConvertHeight ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            bool isConvertWidth = Int32.TryParse(position.Element("Width").Value, out result);
+            rect.Width = isConvertWidth ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            bool isConvert = Int32.TryParse(position.Element("StartX").Value, out result);
+            rect.X = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width - rect.Width);
+            isConvert = Int32.TryParse(position.Element("StartY").Value, out result);
+            rect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - rect.Height);
+            if (!isConvertHeight) { rect.Height -= rect.Y; }
+            if (!isConvertWidth) { rect.Width -= rect.X; }
+            templetObject.rect = rect;
             if (xmlElement.Element("IsGroup").HasElements)
             {
                 templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
@@ -140,6 +155,25 @@ namespace GRANTManager.Templates
             }
 
             return templetObject;
+        }
+
+        private void createUiElementsWitheNoDependency(String pathToXml)
+        {
+            XElement xmlDoc = XElement.Load(@pathToXml);
+            IEnumerable<XElement> uiElement =
+                from el in xmlDoc.Elements("UiElement")
+                where (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") == ""
+                select el;
+            if (uiElement == null || !uiElement.Any()) { return; }
+            foreach (XElement element in uiElement)
+            {
+                //Debug.WriteLine(element);
+                Type typeOfTemplate = Type.GetType(element.Element("ImplementedClassTypeFullName").Value + ", " + element.Element("ImplementedClassTypeDllName").Value);
+                if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
+                ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
+                generalUiInstance.createUiElementFromTemplate(ref tree, xmlUiElementToTemplateUiobject(element));
+            }
         }
     }
 

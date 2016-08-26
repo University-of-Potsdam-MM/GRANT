@@ -11,14 +11,14 @@ namespace GRANTManager.Templates
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
-        int deviceHeight;
+        int? boxStartX;
+        int? boxStartY;
         int deviceWidth;
         public TemplateDropDownMenu(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
             : base(strategyMgr, grantTrees)
         {
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
-            deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
         }
 
@@ -72,18 +72,26 @@ namespace GRANTManager.Templates
             {
                 dropDownMenu.hasNext = true;
             }
-            int lengthBox = templateObject.width;
-            int heightBox = templateObject.height;
-            int boxStartY = 7;
-            int boxStartX = filteredSubtree.BranchIndex;
+            int lengthBox = Convert.ToInt32( templateObject.rect.Width);
+            int heightBox = Convert.ToInt32( templateObject.rect.Height);
+            //int line = filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
+            if (boxStartY == null)
+            { 
+                boxStartY = Convert.ToInt32(templateObject.rect.Y); 
+            }
+            if (boxStartX == null)
+            {
+                boxStartX = Convert.ToInt32(templateObject.rect.X);
+            }
+            else
+            {
+                boxStartX = boxStartX + lengthBox;
+            } 
 
-           //Console.WriteLine(filteredSubtree.Data.properties.nameFiltered);
-           int line = 0;// filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert
-          //  boxStartY = boxStartY + (line * (heightBox + 1)); // würde dafür sorgen, dass ein neue Zeile genutzt wird, wenn die erste voll ist
-            boxStartX = filteredSubtree.BranchIndex - ((deviceWidth / lengthBox) * line); // 
-
-            System.Windows.Rect rect = new System.Windows.Rect(lengthBox * boxStartX, boxStartY, lengthBox, heightBox);
-            if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Equals("MenuItem"))
+          // System.Windows.Rect rect = new System.Windows.Rect(lengthBox * Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
+           System.Windows.Rect rect = new System.Windows.Rect( Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
+           
+           if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Equals("MenuItem"))
             {
                 dropDownMenu.hasPrevious = true;
             }

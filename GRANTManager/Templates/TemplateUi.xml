@@ -5,8 +5,12 @@
   <UiElement name="TitleBar">
     <IsGroup />
     <Renderer>Text</Renderer>
-    <Height>6</Height>
-    <Width xsi:nil="true" />    <!-- entspricht der Bereite des Gerätes -->
+    <Position>
+      <Height>6</Height>
+      <Width xsi:nil="true" />    <!-- entspricht der Bereite des Gerätes -->
+      <StartX>0</StartX>
+      <StartY>0</StartY>
+    </Position>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
     <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateTitleBar</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
@@ -17,9 +21,12 @@
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
-    <Height>10</Height>
-    <!-- <Height xsi:nil="true"  />-->
-    <Width>17</Width>
+    <Position>
+      <Height>10</Height>
+      <Width>17</Width>
+      <StartX>0</StartX>
+      <StartY>20</StartY>
+    </Position>    
     <TextFromUIElement>nameFiltered</TextFromUIElement>
     <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
@@ -30,10 +37,30 @@
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
-    <Height>10</Height>
-    <Width>17</Width>
+      <Position>
+        <Height>10</Height>
+        <Width>17</Width>
+        <StartX>0</StartX>
+        <StartY>8</StartY>
+    </Position>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
     <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
+    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+  </UiElement>
+  <UiElement name="StatusBar" >
+    <IsGroup>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+    </IsGroup>
+    <Renderer>Text</Renderer>
+        <Position>
+          <Height>6</Height>
+          <Width xsi:nil="true" />    <!-- entspricht der Bereite des Gerätes -->
+          <StartX>0</StartX>
+          <StartY xsi:nil="true" /> 
+        </Position>
+    <TextFromUIElement />
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateStatusBar</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
 </TemplateUi>
