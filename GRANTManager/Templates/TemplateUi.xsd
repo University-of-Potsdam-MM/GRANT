@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
   <xs:element name="TemplateUi">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="MinDeviceHeight" type="xs:unsignedByte" />
-        <xs:element name="MinDeviceWidth" type="xs:unsignedByte" />
+        <xs:element name="MinDeviceHeight" type="xs:positiveInteger" />
+        <xs:element name="MinDeviceWidth" type="xs:positiveInteger" />
         <xs:element maxOccurs="unbounded" name="UiElement">
           <xs:complexType>
             <xs:sequence>
@@ -16,10 +16,28 @@
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="Renderer" type="xs:string" />
-              <xs:element name="Height" type="xs:unsignedByte" />
-              <xs:element name="Width" type="xs:string" />
-              <xs:element name="TextFromUIElement" type="xs:string" />
+              <xs:element name="Renderer">
+                <xs:simpleType> <!-- je nach genuzter IBrailleDisplayStrategy sind anderer Renderer möglich eine Liste der aktuell Möglichen Renderer gibt die Methode getUiElementRenderer()-->
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="Text"/>
+                    <xs:enumeration value="Button"/>
+                    <xs:enumeration value="DropDownMenu"/>
+                    <xs:enumeration value="Screenshot"/>
+                    <xs:enumeration value="TextBox"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Position">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Height"  type="xs:positiveInteger" nillable="true"/> <!-- xsi:nil="true"  entspricht der Höhe des Gerätes (Abzüglich StartY) -->
+                    <xs:element name="Width" type="xs:positiveInteger" nillable="true" /><!-- xsi:nil="true"  entspricht der Bereite des Gerätes (Abzüglich StartX) -->
+                    <xs:element name="StartX" type="xs:int" nillable="true" /> <!-- xsi:nil="true"  entspricht ganz rechts abzüglich Width -->
+                    <xs:element name="StartY" type="xs:int" nillable="true" /> <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>             
+              <xs:element name="TextFromUIElement" type="xs:string" /> <!-- Gibt den Namen einer GeneralProperties an, von welcher der Text angezeigt werden soll; wenn es leer ist, bezieht sich dieses Objekt auf kein Element des gefilterten Baumes-->
               <xs:element name="ImplementedClassTypeFullName" type="xs:string" />
               <xs:element name="ImplementedClassTypeDllName" type="xs:string" />
             </xs:sequence>
@@ -27,6 +45,7 @@
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+     <xsd:attribute name="Version" type="xsd:unsignedByte" use="required" />
     </xs:complexType>
   </xs:element>
 </xs:schema>

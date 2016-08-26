@@ -11,15 +11,11 @@ namespace GRANTManager.Templates
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
-        int deviceHeight;
-        int deviceWidth;
         public TemplateGroup(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
             : base(strategyMgr, grantTrees)
         {
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
-            deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
-            deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
         }
 
 
@@ -33,7 +29,7 @@ namespace GRANTManager.Templates
             prop.isEnabledFiltered = false;
             prop.controlTypeFiltered = templateObject.renderer;
             prop.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
-            prop.boundingRectangleFiltered = new System.Windows.Rect(0, 0, templateObject.width, templateObject.height); //TODO. x, y
+            prop.boundingRectangleFiltered = templateObject.rect;
 
             braille.fromGuiElement = templateObject.textFromUIElement;
             braille.isVisible = true;

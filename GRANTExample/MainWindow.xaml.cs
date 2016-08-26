@@ -244,8 +244,15 @@ namespace GRANTExample
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
-            ui.generatedUiFromTemplate();
+           if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
+            String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+
+            if (!GuiFunctions.isTemplateValid(path))
+            {
+                Debug.WriteLine("Template ist nicht valide!");
+                return;
+            }
+            ui.generatedUiFromTemplate(path);
 
             Debug.WriteLine("Baum-Elemente Anzahl: " + grantTree.getBrailleTree().Count); 
             //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);

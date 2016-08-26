@@ -521,7 +521,7 @@ namespace StrategyGenericTree
             OSMElement.OSMElement associatedNode = getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
             //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeElement(osmRelationship.FilteredTree, strategyMgr.getFilteredTree());
             String text = "";
-            if (!associatedNode.Equals(new OSMElement.OSMElement()))
+            if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElement.brailleRepresentation.fromGuiElement.Trim().Equals(""))
             {
                 object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.fromGuiElement, associatedNode.properties);
                 text = (objectText != null ? objectText.ToString() : "");
@@ -1071,10 +1071,12 @@ namespace StrategyGenericTree
                     {
                         ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
                         GenaralUI.TempletUiObject templateobject = new GenaralUI.TempletUiObject();
-                        templateobject.height = (int) node.Data.properties.boundingRectangleFiltered.Height;
+                        //System.Windows.Rect rect = new System.Windows.Rect();
+                        //rect.Height = node.Data.properties.boundingRectangleFiltered.Height;
                         templateobject.renderer = node.Data.properties.controlTypeFiltered;
                         templateobject.textFromUIElement = node.Data.brailleRepresentation.fromGuiElement;
-                        templateobject.width = (int) node.Data.properties.boundingRectangleFiltered.Width;
+                        //rect.Width = node.Data.properties.boundingRectangleFiltered.Width;
+                        templateobject.rect = node.Data.properties.boundingRectangleFiltered;
                         OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationships != null)
                         {
