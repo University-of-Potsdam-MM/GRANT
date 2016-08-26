@@ -913,6 +913,7 @@ namespace StrategyGenericTree
                 node.BranchCount +
                 node.BranchIndex +
                 node.Depth;
+            if (node.HasParent) { result += node.Parent.Data.properties.IdGenerated; }
             byte[] hash;
             using (var md5 = MD5.Create())
             {
