@@ -12,6 +12,8 @@ using BrailleIOGuiElementRenderer;
 using OSMElement.UiElements;
 using System.Windows;
 using System.Diagnostics;
+using GRANTManager.Templates;
+
 
 namespace GRANTExample
 {
@@ -20,12 +22,14 @@ namespace GRANTExample
         StrategyManager strategyMgr;
         UpdateNode updateNode;
         GeneratedGrantTrees grantTrees;
+        GenaralUI ui;
 
-        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees)
+        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees, GenaralUI ui)
         {
             strategyMgr = mgr;
             this.grantTrees = grantTrees;
             updateNode = new UpdateNode(strategyMgr, grantTrees);
+            this.ui = ui;
         }
 
         /// <summary>
@@ -40,6 +44,8 @@ namespace GRANTExample
                 setDauGui(fromGuiElement);
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
                 {
+                    String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+                    ui.createUiElementsAllScreens(path);
                     Settings settings = new Settings();
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
@@ -224,7 +230,7 @@ namespace GRANTExample
             e2.showScrollbar = true;
             e2.viewName = "v2";
             e2.isVisible = true;
-            Rect p2 = new Rect(90, 42, 29,15);
+            Rect p2 = new Rect(90, 32, 29,15);
             proper2.boundingRectangleFiltered = p2;
             Padding padding = new Padding(1, 1, 1, 1);
             e2.padding = padding;
@@ -295,7 +301,7 @@ namespace GRANTExample
            // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";
             e5.isVisible = true;
-            Rect p5 = new Rect(55,30,24,9);
+            Rect p5 = new Rect(63,12,24,9);
             proper5.boundingRectangleFiltered = p5;
          //   proper5.IdGenerated = "braille123_5";
             proper5.controlTypeFiltered = "Button";
@@ -318,7 +324,7 @@ namespace GRANTExample
             
             e6.viewName = "v6";
             e6.isVisible = true;            
-            Rect p6 = new Rect(0, 29,50,28);
+            Rect p6 = new Rect(40, 23,50,28);
            proper6.boundingRectangleFiltered = p6;
     //        proper6.IdGenerated = "braille123_6";
             proper6.controlTypeFiltered = "TextBox";
@@ -334,7 +340,7 @@ namespace GRANTExample
             BrailleRepresentation e7 = new BrailleRepresentation();
             e7.isVisible = true;
             e7.screenName = "screen1";
-            proper7.valueFiltered = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
+            //proper7.valueFiltered = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
             DropDownMenu dropDownMenu = new DropDownMenu();
             dropDownMenu.hasChild = true;
             dropDownMenu.hasNext = true;
@@ -347,7 +353,7 @@ namespace GRANTExample
             e7.uiElementSpecialContent = dropDownMenu;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e7.viewName = "v7";
-            Rect p7 = new Rect(0,0,25,10);
+            Rect p7 = new Rect(0,10,25,10);
             proper7.boundingRectangleFiltered = p7;
             proper7.isEnabledFiltered = true;
      //       proper7.IdGenerated = "braille123_7";
@@ -375,7 +381,7 @@ namespace GRANTExample
             e8.uiElementSpecialContent = dropDownMenu8;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e8.viewName = "v8";
-            Rect p8 = new Rect(25, 0,35,10);
+            Rect p8 = new Rect(25, 10,35,10);
             proper8.boundingRectangleFiltered = p8;
     //        proper8.IdGenerated = "braille123_8";
             proper8.controlTypeFiltered = "DropDownMenu";
@@ -403,7 +409,7 @@ namespace GRANTExample
             e9.uiElementSpecialContent = dropDownMenu9;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e9.viewName = "v9";
-            Rect p9 = new Rect(0, 11, 30 , 8);
+            Rect p9 = new Rect(0, 21, 30 , 8);
             proper9.boundingRectangleFiltered = p9;
             proper9.isEnabledFiltered = true;
  //           proper9.IdGenerated = "braille123_9";
@@ -432,7 +438,7 @@ namespace GRANTExample
             e10.uiElementSpecialContent = dropDownMenu10;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e10.viewName = "v10";
-            Rect p10 = new Rect( 0, 19, 30, 8);
+            Rect p10 = new Rect( 0, 29, 30, 8);
             proper10.boundingRectangleFiltered = p10;
             
  //           proper10.IdGenerated = "braille123_10";
@@ -451,7 +457,7 @@ namespace GRANTExample
             proper11.valueFiltered = "Button 2";
             e11.viewName = "v11";
             e11.isVisible = true;
-            Rect p11 = new Rect(81,30, 30, 9);
+            Rect p11 = new Rect(89,12, 30, 9);
             proper11.boundingRectangleFiltered = p11;
             proper11.isEnabledFiltered = false;
     //        proper11.IdGenerated = "braille123_11";

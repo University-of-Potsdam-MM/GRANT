@@ -2,7 +2,7 @@
 <xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
   <xs:element name="TemplateUi">
     <xs:complexType>
-      <xs:sequence>
+      <xs:sequence>   
         <xs:element name="MinDeviceHeight" type="xs:positiveInteger" />
         <xs:element name="MinDeviceWidth" type="xs:positiveInteger" />
         <xs:element maxOccurs="unbounded" name="UiElement">
@@ -36,7 +36,14 @@
                     <xs:element name="StartY" type="xs:int" nillable="true" /> <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
                   </xs:sequence>
                 </xs:complexType>
-              </xs:element>             
+              </xs:element>
+              <xsd:element name="Screens"> <!-- Wenn die Liste leer ist, soll das entsprechende element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
+                <xsd:complexType>
+                  <xsd:sequence minOccurs="0">
+                    <xsd:element maxOccurs="unbounded" name="Screen" type="xsd:string" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
               <xs:element name="TextFromUIElement" type="xs:string" /> <!-- Gibt den Namen einer GeneralProperties an, von welcher der Text angezeigt werden soll; wenn es leer ist, bezieht sich dieses Objekt auf kein Element des gefilterten Baumes-->
               <xs:element name="ImplementedClassTypeFullName" type="xs:string" />
               <xs:element name="ImplementedClassTypeDllName" type="xs:string" />

@@ -22,7 +22,7 @@ namespace GRANTManager.Templates
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
         }
 
-        public override void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
+        public override void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
             //Bei der MenuBar wird für alle Kind-Elemente ein DropDownMenu angezeigt
             if (!(filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Equals("MenuItem"))) { return; }
@@ -37,7 +37,7 @@ namespace GRANTManager.Templates
                 if (filteredSubtreeCopy.HasChild)
                 {
                     filteredSubtreeCopy = filteredSubtreeCopy.Child;
-                    iteratedChildreen(filteredSubtreeCopy, templateObject);
+                    iteratedChildreen(filteredSubtreeCopy, templateObject, brailleNodeId);
                 }
                /* if (filteredSubtree.HasParent)
                 {
@@ -49,7 +49,7 @@ namespace GRANTManager.Templates
             }
         }
 
-        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
+        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
             if ((filteredSubtree.Data.properties.Equals(new GeneralProperties()) || !filteredSubtree.Data.properties.controlTypeFiltered.Equals("MenuItem"))) { return new OSMElement.OSMElement(); }
 
@@ -63,7 +63,8 @@ namespace GRANTManager.Templates
 
             braille.fromGuiElement = templateObject.textFromUIElement;
             braille.isVisible = true;
-            braille.screenName = "mainScreen"; //?
+            if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
+            braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
 
             OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
@@ -104,8 +105,8 @@ namespace GRANTManager.Templates
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
             if (!filteredSubtree.HasParent) { return new OSMElement.OSMElement(); }
-            OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.FilteredTree.Equals(filteredSubtree.Parent.Data.properties.IdGenerated));
-            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode, osmRelationships != null ? osmRelationships.BrailleTree : null); //<<-- hier als KindElement der Gruppe hinzufügen
+           // OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.FilteredTree.Equals(filteredSubtree.Parent.Data.properties.IdGenerated));
+            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode, brailleNodeId);
 //            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             
             if (idGenerated == null)
@@ -127,12 +128,12 @@ namespace GRANTManager.Templates
         /// </summary>
         /// <param name="parentNode">gibt den Elternknoten an</param>
         /// <param name="templateObject">gibt das zu nutzende Template an</param>
-        private void iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentNode, GenaralUI.TempletUiObject templateObject)
+        private void iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentNode, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {            
             if (parentNode.HasChild)
             {
                 parentNode = parentNode.Child;
-                createSpecialUiElement(parentNode, templateObject);
+                createSpecialUiElement(parentNode, templateObject, brailleNodeId);
             }
             else
             {
@@ -141,7 +142,7 @@ namespace GRANTManager.Templates
             while (parentNode.HasNext)
             {
                 parentNode = parentNode.Next;
-                createSpecialUiElement(parentNode, templateObject);
+                createSpecialUiElement(parentNode, templateObject, brailleNodeId);
             }           
             return;
        

@@ -1078,13 +1078,15 @@ namespace StrategyGenericTree
                         templateobject.textFromUIElement = node.Data.brailleRepresentation.fromGuiElement;
                         //rect.Width = node.Data.properties.boundingRectangleFiltered.Width;
                         templateobject.rect = node.Data.properties.boundingRectangleFiltered;
+                        templateobject.Screens = new List<string>();
+                        templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
                         OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationships != null)
                         {
                             ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationships.FilteredTree, grantTrees.getFilteredTree());
                             if (subtreeFiltered != null)
                             {
-                                template.createUiElementFromTemplate(ref subtreeFiltered, templateobject);
+                                template.createUiElementFromTemplate(ref subtreeFiltered, templateobject, node.Data.properties.IdGenerated);
                             }
                         }
                     }
