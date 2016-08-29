@@ -844,6 +844,7 @@ namespace StrategyGenericTree
         /// <param name="parentNode">gibt eine referenz zu dem Baum an</param>
         public void generatedIdsOfFilteredTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
         {
+            Console.WriteLine("===== DEBUG BEGINN - HASH ======");
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated == null)
@@ -859,6 +860,7 @@ namespace StrategyGenericTree
                    }
                 }
             }
+            Console.WriteLine("===== DEBUG ENDE - HASH ======");
         }
 
         /// <summary>
@@ -908,11 +910,12 @@ namespace StrategyGenericTree
                 properties.isPasswordFiltered +
                 properties.isRequiredForFormFiltered +
                 properties.itemStatusFiltered +
-                properties.itemTypeFiltered +
+                properties.itemTypeFiltered +   //doppelt
                 properties.labeledbyFiltered +
                 node.BranchCount +
                 node.BranchIndex +
                 node.Depth;
+            
             if (node.HasParent) { result += node.Parent.Data.properties.IdGenerated; }
             byte[] hash;
             using (var md5 = MD5.Create())
@@ -924,6 +927,8 @@ namespace StrategyGenericTree
             {
                 sb.Append(b.ToString("X2"));
             }
+            String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
+            Console.WriteLine("Node: name = {0}, \t controltype = {1}, \t hash[] = {2}, \t hashString = {3}, \t resultString = {4}", node.Data.properties.nameFiltered, node.Data.properties.controlTypeFiltered, tmpHash, sb.ToString(), result);
             return sb.ToString();
         }
 
