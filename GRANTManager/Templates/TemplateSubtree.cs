@@ -7,14 +7,14 @@ using System.Diagnostics;
 
 namespace GRANTManager.Templates
 {
-    public class TemplateDropDownMenu : ATemplateUi
+    public class TemplateSubtree : ATemplateUi
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         int? boxStartX;
         int? boxStartY;
         int deviceWidth;
-        public TemplateDropDownMenu(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
+        public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
             : base(strategyMgr, grantTrees)
         {
             this.strategyMgr = strategyMgr;
@@ -78,16 +78,32 @@ namespace GRANTManager.Templates
             {
                 braille.margin = templateObject.margin;
             }
-
-            OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
-            if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
-            if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Contains("Item"))
+            if (templateObject.renderer.Equals("DropDownMenu"))
             {
-                dropDownMenu.hasNext = true;
+                OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
+                if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
+                if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Contains("Item"))
+                {
+                    dropDownMenu.hasNext = true;
+                }
+                if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Contains("Item"))
+                {
+                    dropDownMenu.hasPrevious = true;
+                }
+                if (filteredSubtree.HasParent && filteredSubtree.Parent.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
+                dropDownMenu.isOpen = false;
+                dropDownMenu.isVertical = false;
+                braille.uiElementSpecialContent = dropDownMenu;
             }
+            braille.linebreak = templateObject.linebreak;
             int lengthBox = Convert.ToInt32( templateObject.rect.Width);
             int heightBox = Convert.ToInt32( templateObject.rect.Height);
-            //int line = filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
+            int line = 0;
+            int elementsProLine = (deviceWidth - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
+            if (braille.linebreak == true)
+            {
+                line = filteredSubtree.BranchIndex / elementsProLine; //filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
+            }
             if (boxStartY == null)
             { 
                 boxStartY = Convert.ToInt32(templateObject.rect.Y); 
@@ -99,19 +115,19 @@ namespace GRANTManager.Templates
             else
             {
                 boxStartX = boxStartX + lengthBox;
-            } 
-
+            }
+            if (templateObject.linebreak == true)
+            {
+                boxStartY = Convert.ToInt32(templateObject.rect.Y) + line * Convert.ToInt32(templateObject.rect.Height);
+                if(line > 0)
+                {
+                    boxStartX = Convert.ToInt32(templateObject.rect.X) * (filteredSubtree.BranchIndex - elementsProLine +1);
+                }
+            }
           // System.Windows.Rect rect = new System.Windows.Rect(lengthBox * Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
            System.Windows.Rect rect = new System.Windows.Rect( Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
 
-           if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Contains("Item"))
-            {
-                dropDownMenu.hasPrevious = true;
-            }
-           if (filteredSubtree.HasParent && filteredSubtree.Parent.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
-            dropDownMenu.isOpen = false;
-            dropDownMenu.isVertical = false;
-            braille.uiElementSpecialContent = dropDownMenu;
+
             prop.boundingRectangleFiltered = rect;
 
             brailleNode.properties = prop;

@@ -135,6 +135,7 @@ namespace GRANTManager.Templates
             public Padding margin { get; set; }
             public Padding boarder { get; set; }
             public String name { get; set; }
+            public Boolean linebreak { get; set; }
             //TODO. evtl. auch hier BrailleRepresentaion (oder gleich OSMelement) verwenden
         }
 
@@ -167,6 +168,8 @@ namespace GRANTManager.Templates
             {
                 templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
                 templetObject.groupImplementedClassTypeDllName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeDllName").Value;
+                templetObject.linebreak = Convert.ToBoolean( xmlElement.Element("IsGroup").Element("Linebreak").Value);
+                Debug.WriteLine("");
             }
             if (!xmlElement.Element("Screens").IsEmpty)
             {
@@ -176,7 +179,7 @@ namespace GRANTManager.Templates
                 {
                     templetObject.Screens.Add(s.Value);
                 }
-                Debug.WriteLine("");
+
             }
             if (!xmlElement.Element("BoxModel").IsEmpty)
             {

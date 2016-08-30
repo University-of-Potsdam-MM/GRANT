@@ -33,13 +33,14 @@
     </BoxModel>
     <Screens />
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateText</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateNode</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="MenuBar">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <Linebreak>false</Linebreak>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -59,8 +60,9 @@
   </UiElement>
   <UiElement name="Menu">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.Templatesubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <Linebreak>false</Linebreak>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
       <Position>
@@ -98,13 +100,14 @@
     </BoxModel>
     <Screens />
     <TextFromUIElement />
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateText</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateNode</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="Tab">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <Linebreak>true</Linebreak>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>

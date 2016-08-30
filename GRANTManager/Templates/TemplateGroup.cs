@@ -40,6 +40,7 @@ namespace GRANTManager.Templates
             braille.viewName = filteredSubtree.Data.properties.IdGenerated;
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
+            braille.linebreak = templateObject.linebreak;
             if (templateObject.boarder != null)
             {
                 braille.boarder = templateObject.boarder;

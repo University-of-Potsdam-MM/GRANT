@@ -122,5 +122,10 @@ namespace OSMElement
         {
             return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString());
         }
+
+        /// <summary>
+        /// Bei Gruppen-elementen gibt der Wert an, ob am Ende des sichtbaren Bereiches ein Zeilenumbruch (<c>true</c>) erfolgen soll; bei allen anderen Elementen ist der Wert <c>null</c>
+        /// </summary>
+        public Boolean? linebreak { get; set; }
     }
 }

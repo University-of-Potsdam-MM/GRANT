@@ -899,7 +899,8 @@ namespace StrategyGenericTree
              * http://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
              */
             GeneralProperties properties = node.Data.properties;
-            String result = properties.controlTypeFiltered +
+            String result = 
+                properties.controlTypeFiltered +
                 properties.itemTypeFiltered +
                 properties.accessKeyFiltered +
                 properties.acceleratorKeyFiltered +
@@ -910,10 +911,9 @@ namespace StrategyGenericTree
                 properties.isPasswordFiltered +
                 properties.isRequiredForFormFiltered +
                 properties.itemStatusFiltered +
-                properties.itemTypeFiltered +   //doppelt
                 properties.labeledbyFiltered +
-                node.BranchCount +
-                node.BranchIndex +
+                // node.BranchCount +
+                node.BranchIndex *
                 node.Depth;
             
             if (node.HasParent) { result += node.Parent.Data.properties.IdGenerated; }
@@ -1085,6 +1085,7 @@ namespace StrategyGenericTree
                         templateobject.rect = node.Data.properties.boundingRectangleFiltered;
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
+                        templateobject.linebreak = node.Data.brailleRepresentation.linebreak == null ? false : (bool) node.Data.brailleRepresentation.linebreak;
                         OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationships != null)
                         {

@@ -13,6 +13,7 @@
                   <xs:sequence minOccurs="0">
                     <xs:element name="ImplementedClassTypeFullName" type="xs:string" />
                     <xs:element name="ImplementedClassTypeDllName" type="xs:string" />
+                    <xs:element name="Linebreak" type="xs:boolean" />
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
