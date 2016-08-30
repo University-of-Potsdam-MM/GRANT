@@ -20,7 +20,7 @@ namespace GRANTManager.Templates
 
 
 
-        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
+        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = new GeneralProperties();
@@ -33,10 +33,25 @@ namespace GRANTManager.Templates
 
             braille.fromGuiElement = templateObject.textFromUIElement;
             braille.isVisible = true;
-            braille.screenName = "mainScreen"; //?
+            if (templateObject.Screens == null) { 
+                Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); 
+            }
+            braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = filteredSubtree.Data.properties.IdGenerated;
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
-            braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;            
+            braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
+            if (templateObject.boarder != null)
+            {
+                braille.boarder = templateObject.boarder;
+            }
+            if (templateObject.padding != null)
+            {
+                braille.padding = templateObject.padding;
+            }
+            if (templateObject.margin != null)
+            {
+                braille.margin = templateObject.margin;
+            }
  
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;

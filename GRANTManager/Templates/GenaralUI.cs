@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace GRANTManager.Templates
 {
@@ -34,6 +35,7 @@ namespace GRANTManager.Templates
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
             ITreeStrategy<OSMElement.OSMElement> filteredTreeCopy = grantTrees.getFilteredTree().Copy();
             iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
+            createUiElementsAllScreens(pathToXml);
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
 
@@ -102,7 +104,9 @@ namespace GRANTManager.Templates
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Elements("UiElement")
-                where (string)el.Attribute("name") == controlType && (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") != ""
+                where (string)el.Attribute("name") == controlType && 
+                (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") != "" &&
+                (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
             /* foreach (XElement element in uiElement)
@@ -116,7 +120,7 @@ namespace GRANTManager.Templates
             if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
             ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             //AGeneralUi template = new TemplateTitleBar(strategyMgr, grantTrees);
-            generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiobject(firstElement));
+            generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiObject(firstElement));
         }
 
         public struct TempletUiObject
@@ -126,9 +130,20 @@ namespace GRANTManager.Templates
             public String textFromUIElement { get; set; }
             public String groupImplementedClassTypeFullName { get; set; }
             public String groupImplementedClassTypeDllName { get; set; }
+            public List<String> Screens { get; set; }
+            public Padding padding { get; set; }
+            public Padding margin { get; set; }
+            public Padding boarder { get; set; }
+            public String name { get; set; }
+            //TODO. evtl. auch hier BrailleRepresentaion (oder gleich OSMelement) verwenden
         }
 
-        private TempletUiObject xmlUiElementToTemplateUiobject(XElement xmlElement)
+        /// <summary>
+        /// Wandelt ein XElement in ein <c>TempletUiObject</c> um
+        /// </summary>
+        /// <param name="xmlElement">gibt ein XElement aus der TemplateUi.xml an</param>
+        /// <returns>ein <c>TempletUiObject</c></returns>
+        private TempletUiObject xmlUiElementToTemplateUiObject(XElement xmlElement)
         {
             TempletUiObject templetObject = new TempletUiObject();
             Int32 result;
@@ -153,16 +168,51 @@ namespace GRANTManager.Templates
                 templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
                 templetObject.groupImplementedClassTypeDllName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeDllName").Value;
             }
+            if (!xmlElement.Element("Screens").IsEmpty)
+            {
+                XElement screens = xmlElement.Element("Screens");
+                templetObject.Screens = new List<string>();
+                foreach (XElement s in screens.Elements("Screen"))
+                {
+                    templetObject.Screens.Add(s.Value);
+                }
+                Debug.WriteLine("");
+            }
+            if (!xmlElement.Element("BoxModel").IsEmpty)
+            {
+                XElement boxModel = xmlElement.Element("BoxModel");
+                if (!boxModel.Element("Padding").IsEmpty)
+                {
+                    XElement padding = boxModel.Element("Padding");
+                    templetObject.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Margin").IsEmpty)
+                {
+                    XElement margin = boxModel.Element("Margin");
+                    templetObject.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Boarder").IsEmpty)
+                {
+                    XElement boarder = boxModel.Element("Boarder");
+                    templetObject.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                }
+            }
+            templetObject.name = xmlElement.Attribute("name").Value;
 
             return templetObject;
         }
 
+        /// <summary>
+        /// Erstellt Ui-elemente die keine Verbindung zum gefilterten Baum haben
+        /// </summary>
+        /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
         private void createUiElementsWitheNoDependency(String pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Elements("UiElement")
-                where (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") == ""
+                where (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") == "" &&
+                (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
             foreach (XElement element in uiElement)
@@ -172,7 +222,67 @@ namespace GRANTManager.Templates
                 if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
                 ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
                 ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
-                generalUiInstance.createUiElementFromTemplate(ref tree, xmlUiElementToTemplateUiobject(element));
+                generalUiInstance.createUiElementFromTemplate(ref tree, xmlUiElementToTemplateUiObject(element));
+            }
+        }
+
+        /// <summary>
+        /// Erstellt die Ui-Elemente, welche auf jedem Screen vorhanden sein sollen
+        /// </summary>
+        /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
+        public void createUiElementsAllScreens(String pathToXml)
+        {
+            XElement xmlDoc = XElement.Load(@pathToXml);
+            IEnumerable<XElement> uiElement =
+                from el in xmlDoc.Elements("UiElement")
+                where (string)el.Element("Screens") != null && (string)el.Element("Screens") == ""
+                select el;
+            if (uiElement == null || !uiElement.Any()) { return; }
+            List<String> screenList = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            foreach (XElement e in uiElement)
+            {
+                TempletUiObject templateObject = xmlUiElementToTemplateUiObject(e);
+                ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
+                if (templateObject.textFromUIElement != null && !templateObject.textFromUIElement.Equals(""))
+                {
+                    // elementE im gefilterten Baum suchen
+                    GeneralProperties properties = new GeneralProperties();
+                    properties.controlTypeFiltered = e.Attribute("name").Value;
+                    List<ITreeStrategy<OSMElement.OSMElement>> treefilteredElements = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
+                    foreach (ITreeStrategy<OSMElement.OSMElement> t in treefilteredElements)
+                    {
+                        tree = t;
+                        Type typeOfTemplate = Type.GetType(e.Element("ImplementedClassTypeFullName").Value + ", " + e.Element("ImplementedClassTypeDllName").Value);
+                        if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
+                        iterateScreensForTemplate(screenList, ref tree, templateObject, typeOfTemplate);
+                    }
+                }
+                else
+                {
+                    Type typeOfTemplate = Type.GetType(e.Element("ImplementedClassTypeFullName").Value + ", " + e.Element("ImplementedClassTypeDllName").Value);
+                    if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
+                    iterateScreensForTemplate(screenList, ref tree, templateObject, typeOfTemplate);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Iterriert über alle angegebenen Screens und fügt das Ui-element ggf. hinzu
+        /// </summary>
+        /// <param name="screenList">gibt die Liste der Screens an, auf die das Ui-Objekt soll</param>
+        /// <param name="tree">gibt den gefilterten Baum an</param>
+        /// <param name="templateObject">gibt das Template-Objekt an</param>
+        /// <param name="typeOfTemplate">gibt den Typ des zu nutzenden Templates an</param>
+        private void iterateScreensForTemplate(List<String> screenList, ref ITreeStrategy<OSMElement.OSMElement> tree, TempletUiObject templateObject, Type typeOfTemplate)
+        {
+            ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+            foreach (String screen in screenList)
+            {
+                templateObject.Screens = new List<string>();
+                templateObject.Screens.Add(screen);
+
+                generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
             }
         }
     }

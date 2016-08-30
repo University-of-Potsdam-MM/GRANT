@@ -89,15 +89,17 @@ namespace GRANTExample
             strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTree);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
+
+            ui = new GenaralUI(strategyMgr, grantTree);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
 
             exampleTree = new ExampleTree(strategyMgr, grantTree);
             exampleInspectGui = new InspectGui(strategyMgr);
-            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree);
+            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, ui);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
             guiFuctions = new GuiFunctions(strategyMgr, grantTree);
-            ui = new GenaralUI(strategyMgr, grantTree);
+            
         }
 
 
@@ -253,6 +255,7 @@ namespace GRANTExample
                 return;
             }
             ui.generatedUiFromTemplate(path);
+            
 
             Debug.WriteLine("Baum-Elemente Anzahl: " + grantTree.getBrailleTree().Count); 
             //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);
