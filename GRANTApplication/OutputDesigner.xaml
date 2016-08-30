@@ -184,7 +184,14 @@
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
                                 </Style.Triggers>
+                                <Setter Property="Width" Value="10"/>
+                                <Setter Property="Height" Value="10"/>
                             </Style>
+                          
+                              
+                                   
+                             
+         
                         </DataGrid.CellStyle>
 
                         <!--   <DataGrid.ColumnHeaderStyle>
