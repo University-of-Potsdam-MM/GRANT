@@ -83,7 +83,6 @@
     <Compile Include="Templates\GenaralUI.cs" />
     <Compile Include="Templates\TemplateGroup.cs" />
     <Compile Include="Templates\TemplateDropDownMenu.cs" />
-    <Compile Include="Templates\TemplateStatusBar.cs" />
     <Compile Include="Templates\TemplateText.cs" />
     <Compile Include="TreeScopeEnum.cs" />
     <Compile Include="UpdateNode.cs" />
