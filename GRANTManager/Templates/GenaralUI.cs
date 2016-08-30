@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace GRANTManager.Templates
 {
@@ -130,6 +131,11 @@ namespace GRANTManager.Templates
             public String groupImplementedClassTypeFullName { get; set; }
             public String groupImplementedClassTypeDllName { get; set; }
             public List<String> Screens { get; set; }
+            public Padding padding { get; set; }
+            public Padding margin { get; set; }
+            public Padding boarder { get; set; }
+            public String name { get; set; }
+            //TODO. evtl. auch hier BrailleRepresentaion (oder gleich OSMelement) verwenden
         }
 
         /// <summary>
@@ -172,6 +178,26 @@ namespace GRANTManager.Templates
                 }
                 Debug.WriteLine("");
             }
+            if (!xmlElement.Element("BoxModel").IsEmpty)
+            {
+                XElement boxModel = xmlElement.Element("BoxModel");
+                if (!boxModel.Element("Padding").IsEmpty)
+                {
+                    XElement padding = boxModel.Element("Padding");
+                    templetObject.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Margin").IsEmpty)
+                {
+                    XElement margin = boxModel.Element("Margin");
+                    templetObject.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Boarder").IsEmpty)
+                {
+                    XElement boarder = boxModel.Element("Boarder");
+                    templetObject.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                }
+            }
+            templetObject.name = xmlElement.Attribute("name").Value;
 
             return templetObject;
         }

@@ -39,7 +39,19 @@ namespace GRANTManager.Templates
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = filteredSubtree.Data.properties.IdGenerated;
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
-            braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;            
+            braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
+            if (templateObject.boarder != null)
+            {
+                braille.boarder = templateObject.boarder;
+            }
+            if (templateObject.padding != null)
+            {
+                braille.padding = templateObject.padding;
+            }
+            if (templateObject.margin != null)
+            {
+                braille.margin = templateObject.margin;
+            }
  
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;

@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using GRANTManager;
+using GRANTManager.Interfaces;
 using OSMElement;
 
 namespace GRANTManager.Templates
 {
-    public class TemplateStatusBar : ATemplateUi
+    public class TemplateText : ATemplateUi
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
-
-        public TemplateStatusBar(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees)
+        public TemplateText(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees)
         {
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
         }
-
-        protected override OSMElement.OSMElement createSpecialUiElement(Interfaces.ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
+        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = new GeneralProperties();
@@ -28,16 +28,27 @@ namespace GRANTManager.Templates
             prop.isEnabledFiltered = false;
             prop.boundingRectangleFiltered = templateObject.rect;
             prop.controlTypeFiltered = templateObject.renderer;
-            prop.valueFiltered = "Statusleiste";
-
-            braille.boarder = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            //braille.fromGuiElement = templateObject.textFromUIElement;
+            if (templateObject.boarder != null)
+            {
+                braille.boarder = templateObject.boarder;
+            }
+            if (templateObject.padding != null)
+            {
+                braille.padding = templateObject.padding;
+            }
+            if (templateObject.margin != null)
+            {
+                braille.margin = templateObject.margin;
+            }
+            if (templateObject.textFromUIElement != null && !templateObject.textFromUIElement.Equals(""))
+            {
+                braille.fromGuiElement = templateObject.textFromUIElement;
+            }
             braille.isVisible = true;
-            braille.padding = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = "statusBar";
-
+            braille.viewName = templateObject.name;
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 

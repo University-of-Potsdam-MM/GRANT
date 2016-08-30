@@ -711,8 +711,16 @@ namespace GRANTManager
         /// <returns><c>true</c> falls die Datei valide ist; sonst <c>false</c></returns>
         public static bool isTemplateValid(String pathToXml)
         {
-            XDocument xDoc = XDocument.Load(@pathToXml);
-
+            XDocument xDoc;
+            try
+            {
+                xDoc = XDocument.Load(@pathToXml);
+            }
+            catch (XmlException e)
+            {
+                Debug.WriteLine("die XML ("+pathToXml+") ist nicht korrekt: " + e);
+                return false;
+            }
             bool isValid = true;
             String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
             if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }

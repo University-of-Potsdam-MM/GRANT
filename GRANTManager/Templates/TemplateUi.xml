@@ -11,9 +11,29 @@
       <StartX>0</StartX>
       <StartY>0</StartY>
     </Position>
+    <BoxModel>
+      <Margin>
+        <Left>0</Left>
+        <Top>0</Top>
+        <Right>0</Right>
+        <Buttom>1</Buttom>
+      </Margin>
+      <Padding>
+        <Left>0</Left>
+        <Top>0</Top>
+        <Right>0</Right>
+        <Buttom>1</Buttom>
+      </Padding>
+      <Boarder>
+        <Left>0</Left>
+        <Top>0</Top>
+        <Right>0</Right>
+        <Buttom>1</Buttom>
+      </Boarder>
+    </BoxModel>
     <Screens />
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateTitleBar</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateText</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="MenuBar">
@@ -28,6 +48,7 @@
       <StartX>0</StartX>
       <StartY>20</StartY>
     </Position>
+    <BoxModel />
     <Screens>
       <Screen>screen10</Screen>
       <Screen>screen20</Screen>
@@ -48,6 +69,7 @@
         <StartX>0</StartX>
         <StartY>8</StartY>
     </Position>
+    <BoxModel />
     <Screens>
       <Screen>screen20</Screen>
       <Screen>screen30</Screen>
@@ -65,9 +87,38 @@
       <StartX>0</StartX>
       <StartY xsi:nil="true" /> 
     </Position>
+    <BoxModel>
+      <Margin />
+      <Padding>
+        <Top>1</Top>
+      </Padding>
+      <Boarder>
+        <Top>1</Top>
+      </Boarder>
+    </BoxModel>
     <Screens />
     <TextFromUIElement />
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateStatusBar</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateText</ImplementedClassTypeFullName>
+    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+  </UiElement>
+  <UiElement name="Tab">
+    <IsGroup>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+    </IsGroup>
+    <Renderer>DropDownMenu</Renderer>
+    <Position>
+      <Height>9</Height>
+      <Width>12</Width>
+      <StartX>0</StartX>
+      <StartY>20</StartY>
+    </Position>
+    <BoxModel />
+    <Screens>
+      <Screen>screen40</Screen>
+    </Screens>
+    <TextFromUIElement>nameFiltered</TextFromUIElement>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
 </TemplateUi>

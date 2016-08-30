@@ -37,6 +37,42 @@
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
+              <xsd:element name="BoxModel">
+                <xsd:complexType>
+                  <xsd:sequence minOccurs="0">
+                    <xsd:element name="Margin">
+                      <xsd:complexType>
+                        <xsd:sequence minOccurs="0">
+                          <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0" />
+                          <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Padding">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Boarder">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>              
               <xsd:element name="Screens"> <!-- Wenn die Liste leer ist, soll das entsprechende element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
                 <xsd:complexType>
                   <xsd:sequence minOccurs="0">

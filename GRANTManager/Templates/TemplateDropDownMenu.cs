@@ -25,7 +25,7 @@ namespace GRANTManager.Templates
         public override void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
             //Bei der MenuBar wird für alle Kind-Elemente ein DropDownMenu angezeigt
-            if (!(filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Equals("MenuItem"))) { return; }
+            if (!(filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item"))) { return; }
 
             // OSMElement.OSMElement brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
             if (filteredSubtree.HasChild)
@@ -51,7 +51,7 @@ namespace GRANTManager.Templates
 
         protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
-            if ((filteredSubtree.Data.properties.Equals(new GeneralProperties()) || !filteredSubtree.Data.properties.controlTypeFiltered.Equals("MenuItem"))) { return new OSMElement.OSMElement(); }
+            if ((filteredSubtree.Data.properties.Equals(new GeneralProperties()) || !filteredSubtree.Data.properties.controlTypeFiltered.Contains("Item"))) { return new OSMElement.OSMElement(); }
 
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = new GeneralProperties();
@@ -66,10 +66,22 @@ namespace GRANTManager.Templates
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
+            if (templateObject.boarder != null)
+            {
+                braille.boarder = templateObject.boarder;
+            }
+            if (templateObject.padding != null)
+            {
+                braille.padding = templateObject.padding;
+            }
+            if (templateObject.margin != null)
+            {
+                braille.margin = templateObject.margin;
+            }
 
             OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
-            if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Equals("MenuItem")) { dropDownMenu.hasChild = true; }
-            if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Equals("MenuItem"))
+            if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
+            if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Contains("Item"))
             {
                 dropDownMenu.hasNext = true;
             }
@@ -91,12 +103,12 @@ namespace GRANTManager.Templates
 
           // System.Windows.Rect rect = new System.Windows.Rect(lengthBox * Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
            System.Windows.Rect rect = new System.Windows.Rect( Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
-           
-           if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Equals("MenuItem"))
+
+           if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Contains("Item"))
             {
                 dropDownMenu.hasPrevious = true;
             }
-            if (filteredSubtree.HasParent && filteredSubtree.Parent.Data.properties.controlTypeFiltered.Equals("MenuItem")) { dropDownMenu.isChild = true; }
+           if (filteredSubtree.HasParent && filteredSubtree.Parent.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
             dropDownMenu.isOpen = false;
             dropDownMenu.isVertical = false;
             braille.uiElementSpecialContent = dropDownMenu;
