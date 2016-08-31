@@ -41,6 +41,7 @@
       <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>false</Linebreak>
+      <Vertical>false</Vertical>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -63,6 +64,7 @@
       <ImplementedClassTypeFullName>GRANTManager.Templates.Templatesubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>false</Linebreak>
+      <Vertical>false</Vertical>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
       <Position>
@@ -108,8 +110,10 @@
       <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>true</Linebreak>
+      <Vertical>false</Vertical>
+      <Max>25</Max>
     </IsGroup>
-    <Renderer>DropDownMenu</Renderer>
+    <Renderer>Button</Renderer>
     <Position>
       <Height>9</Height>
       <Width>12</Width>

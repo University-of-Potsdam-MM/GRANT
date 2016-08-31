@@ -1086,6 +1086,8 @@ namespace StrategyGenericTree
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
                         templateobject.linebreak = node.Data.brailleRepresentation.linebreak == null ? false : (bool) node.Data.brailleRepresentation.linebreak;
+                        templateobject.vertical = node.Data.brailleRepresentation.vertical;
+                        templateobject.max = node.Data.brailleRepresentation.max;
                         OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationships != null)
                         {

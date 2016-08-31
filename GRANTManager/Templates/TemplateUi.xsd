@@ -14,6 +14,8 @@
                     <xs:element name="ImplementedClassTypeFullName" type="xs:string" />
                     <xs:element name="ImplementedClassTypeDllName" type="xs:string" />
                     <xs:element name="Linebreak" type="xs:boolean" />
+                    <xs:element name="Vertical" type="xs:boolean" />
+                    <xs:element name="Max" type="xs:int" minOccurs="0" /> <!-- wird nur benötigt, wenn Linebreak == true; Gibt abhängig davon ob Vertical == true  oder Vertical == false die max. Höhe bzw. Breite an; falls Lienbreak == true und der Wert ist nicht gesetzt wird die deviceWidth bzw. DeviceHeight genutzt -->                    
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>

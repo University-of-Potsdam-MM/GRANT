@@ -41,6 +41,8 @@ namespace GRANTManager.Templates
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
             braille.linebreak = templateObject.linebreak;
+            braille.vertical = templateObject.vertical;
+            braille.max = templateObject.max == null ? (braille.vertical ? strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width) : templateObject.max;
             if (templateObject.boarder != null)
             {
                 braille.boarder = templateObject.boarder;

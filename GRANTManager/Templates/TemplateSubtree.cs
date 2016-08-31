@@ -14,12 +14,14 @@ namespace GRANTManager.Templates
         int? boxStartX;
         int? boxStartY;
         int deviceWidth;
+        int deviceHeight;
         public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
             : base(strategyMgr, grantTrees)
         {
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         }
 
         public override void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
@@ -96,36 +98,68 @@ namespace GRANTManager.Templates
                 braille.uiElementSpecialContent = dropDownMenu;
             }
             braille.linebreak = templateObject.linebreak;
-            int lengthBox = Convert.ToInt32( templateObject.rect.Width);
-            int heightBox = Convert.ToInt32( templateObject.rect.Height);
-            int line = 0;
-            int elementsProLine = (deviceWidth - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
-            if (braille.linebreak == true)
+            if (templateObject.vertical)
             {
-                line = filteredSubtree.BranchIndex / elementsProLine; //filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
-            }
-            if (boxStartY == null)
-            { 
-                boxStartY = Convert.ToInt32(templateObject.rect.Y); 
-            }
-            if (boxStartX == null)
-            {
-                boxStartX = Convert.ToInt32(templateObject.rect.X);
+                int column = 0;
+                int max = templateObject.max == null ? deviceHeight : (int) templateObject.max;
+                int elementsProColumn = max / Convert.ToInt32(templateObject.rect.Height); //(max - Convert.ToInt32(templateObject.rect.Y)) / Convert.ToInt32(templateObject.rect.Height);
+                if (braille.linebreak == true)
+                {
+                    column = filteredSubtree.BranchIndex / elementsProColumn;
+                }
+                if (boxStartY == null)
+                {
+                    boxStartY = Convert.ToInt32(templateObject.rect.Y);
+                }
+                else
+                {
+                  //  boxStartY = boxStartY + Convert.ToInt32(templateObject.rect.Height);
+                }
+                if (boxStartX == null)
+                {
+                    boxStartX = Convert.ToInt32(templateObject.rect.X);
+                }
+                if (templateObject.linebreak == true)
+                {
+                    boxStartY = Convert.ToInt32(templateObject.rect.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.rect.Height));
+                   // if (column > 0)
+                    {
+                        boxStartX = Convert.ToInt32(templateObject.rect.X) + (column * Convert.ToInt32(templateObject.rect.Width));
+                    }
+                }
             }
             else
-            {
-                boxStartX = boxStartX + lengthBox;
-            }
-            if (templateObject.linebreak == true)
-            {
-                boxStartY = Convert.ToInt32(templateObject.rect.Y) + line * Convert.ToInt32(templateObject.rect.Height);
-                if(line > 0)
+            { //horizontal
+                int line = 0;
+                int max = templateObject.max == null ? deviceWidth : (int)templateObject.max;
+                int elementsProLine = max / Convert.ToInt32(templateObject.rect.Width); // (max - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
+                if (braille.linebreak == true)
                 {
-                    boxStartX = Convert.ToInt32(templateObject.rect.X) * (filteredSubtree.BranchIndex - elementsProLine +1);
+                    line = filteredSubtree.BranchIndex / elementsProLine; //filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
+                }
+                if (boxStartY == null)
+                {
+                    boxStartY = Convert.ToInt32(templateObject.rect.Y);
+                }
+                if (boxStartX == null)
+                {
+                    boxStartX = Convert.ToInt32(templateObject.rect.X);
+                }
+                else
+                {
+                    boxStartX = boxStartX + Convert.ToInt32(templateObject.rect.Width);
+                }
+                if (templateObject.linebreak == true)
+                {
+                    boxStartY = Convert.ToInt32(templateObject.rect.Y) + line * Convert.ToInt32(templateObject.rect.Height);
+                    if (line > 0)
+                    {
+                        boxStartX = Convert.ToInt32(templateObject.rect.X) + ((filteredSubtree.BranchIndex - (elementsProLine * line))) * Convert.ToInt32(templateObject.rect.Width);
+                    }
                 }
             }
           // System.Windows.Rect rect = new System.Windows.Rect(lengthBox * Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
-           System.Windows.Rect rect = new System.Windows.Rect( Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
+            System.Windows.Rect rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.rect.Width), Convert.ToInt32(templateObject.rect.Height));
 
 
             prop.boundingRectangleFiltered = rect;

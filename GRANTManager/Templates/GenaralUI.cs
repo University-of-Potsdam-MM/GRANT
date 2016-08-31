@@ -136,6 +136,8 @@ namespace GRANTManager.Templates
             public Padding boarder { get; set; }
             public String name { get; set; }
             public Boolean linebreak { get; set; }
+            public Boolean vertical { get; set; } //bei DropDownMenus bezieht sich der wert erst auf die 2. Ebene
+            public int? max { get; set; }
             //TODO. evtl. auch hier BrailleRepresentaion (oder gleich OSMelement) verwenden
         }
 
@@ -169,7 +171,11 @@ namespace GRANTManager.Templates
                 templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
                 templetObject.groupImplementedClassTypeDllName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeDllName").Value;
                 templetObject.linebreak = Convert.ToBoolean( xmlElement.Element("IsGroup").Element("Linebreak").Value);
-                Debug.WriteLine("");
+                templetObject.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
+                if (xmlElement.Element("IsGroup").Element("Max") != null)
+                {
+                    templetObject.max = Convert.ToInt32(xmlElement.Element("IsGroup").Element("Max").Value);
+                }
             }
             if (!xmlElement.Element("Screens").IsEmpty)
             {

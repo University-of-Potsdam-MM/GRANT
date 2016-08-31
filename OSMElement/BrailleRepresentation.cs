@@ -127,5 +127,8 @@ namespace OSMElement
         /// Bei Gruppen-elementen gibt der Wert an, ob am Ende des sichtbaren Bereiches ein Zeilenumbruch (<c>true</c>) erfolgen soll; bei allen anderen Elementen ist der Wert <c>null</c>
         /// </summary>
         public Boolean? linebreak { get; set; }
+
+        public Boolean vertical { get; set; }
+        public int? max { get; set; }
     }
 }
