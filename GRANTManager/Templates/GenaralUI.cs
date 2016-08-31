@@ -178,10 +178,40 @@ namespace GRANTManager.Templates
                 Groupelements group = new Groupelements();
                 group.linebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
                 group.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
-                if (xmlElement.Element("IsGroup").Element("Max") != null)
+                position = xmlElement.Element("IsGroup").Element("childBoundingRectangle");
+                Rect childRect = new Rect();
+                isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
+                childRect.Height = isConvertHeight ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+                isConvertWidth = Int32.TryParse(position.Element("Width").Value, out result);
+                childRect.Width = isConvertWidth ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+                isConvert = Int32.TryParse(position.Element("StartX").Value, out result);
+                childRect.X = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width - childRect.Width);
+                isConvert = Int32.TryParse(position.Element("StartY").Value, out result);
+                childRect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - childRect.Height);
+                if (!isConvertHeight) { childRect.Height -= childRect.Y; }
+                if (!isConvertWidth) { childRect.Width -= childRect.X; }
+                group.childBoundingRectangle = childRect;
+
+                if (!xmlElement.Element("IsGroup").Element("BoxModel").IsEmpty)
                 {
-                    group.max = Convert.ToInt32(xmlElement.Element("IsGroup").Element("Max").Value);
+                    XElement boxModel = xmlElement.Element("IsGroup").Element("BoxModel");
+                    if (!boxModel.Element("Padding").IsEmpty)
+                    {
+                        XElement padding = boxModel.Element("Padding");
+                        group.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                    }
+                    if (!boxModel.Element("Margin").IsEmpty)
+                    {
+                        XElement margin = boxModel.Element("Margin");
+                        group.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                    }
+                    if (!boxModel.Element("Boarder").IsEmpty)
+                    {
+                        XElement boarder = boxModel.Element("Boarder");
+                        group.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                    }
                 }
+                group.renderer = xmlElement.Element("Renderer").Value;
                 braille.groupelements = group;
             }
             if (!xmlElement.Element("Screens").IsEmpty)

@@ -48,8 +48,12 @@ namespace GRANTManager.Templates
             GeneralProperties prop = templateObject.osm.properties;
             BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
             prop.IdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
+            prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelements.renderer; // den Renderer der Kindelemente setzen
             prop.isEnabledFiltered = false;
             braille.isVisible = true;
+            braille.padding = templateObject.osm.brailleRepresentation.groupelements.padding;
+            braille.margin = templateObject.osm.brailleRepresentation.groupelements.padding;
+            braille.boarder = templateObject.osm.brailleRepresentation.groupelements.boarder;
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
@@ -75,56 +79,56 @@ namespace GRANTManager.Templates
             if (templateObject.osm.brailleRepresentation.groupelements.vertical)
             {
                 int column = 0;
-                int max = templateObject.osm.brailleRepresentation.groupelements.max == null ? deviceHeight : (int)templateObject.osm.brailleRepresentation.groupelements.max;
-                int elementsProColumn = max / Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height); //(max - Convert.ToInt32(templateObject.rect.Y)) / Convert.ToInt32(templateObject.rect.Height);
+                int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height);
+                int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Height); //(max - Convert.ToInt32(templateObject.rect.Y)) / Convert.ToInt32(templateObject.rect.Height);
                 if (braille.groupelements.linebreak == true)
                 {
                     column = filteredSubtree.BranchIndex / elementsProColumn;
                 }
                 if (boxStartY == null)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y);
+                    boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Y);
                 }
                 if (boxStartX == null)
                 {
-                    boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X);
+                    boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.X);
                 }
-              
-                boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
-                boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + (column * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width));
+
+                boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Height));
+                boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.X) + (column * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width));
                 
             }
             else
             { //horizontal
                 int line = 0;
-                int max = templateObject.osm.brailleRepresentation.groupelements.max == null ? deviceWidth : (int)templateObject.osm.brailleRepresentation.groupelements.max;
-                int elementsProLine = max / Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width); // (max - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
+                int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
+                int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width); // (max - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
                 if (braille.groupelements.linebreak == true)
                 {
                     line = filteredSubtree.BranchIndex / elementsProLine; //filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
                 }
                 if (boxStartY == null)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y);
+                    boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Y);
                 }
                 if (boxStartX == null)
                 {
-                    boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X);
+                    boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.X);
                 }
                 else
                 {
-                    boxStartX = boxStartX + Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
+                    boxStartX = boxStartX + Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width);
                 }
                 if (templateObject.osm.brailleRepresentation.groupelements.linebreak == true)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + line * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height);
+                    boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Y) + line * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Height);
                     if (line > 0)
                     {
-                        boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + ((filteredSubtree.BranchIndex - (elementsProLine * line))) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
+                        boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.X) + ((filteredSubtree.BranchIndex - (elementsProLine * line))) * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width);
                     }
                 }
             }
-            System.Windows.Rect rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width), Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
+            System.Windows.Rect rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width), Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Height));
 
 
             prop.boundingRectangleFiltered = rect;

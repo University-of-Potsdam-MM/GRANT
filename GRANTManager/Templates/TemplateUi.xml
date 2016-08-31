@@ -42,6 +42,13 @@
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>true</Linebreak>
       <Vertical>false</Vertical>
+      <childBoundingRectangle>
+        <Height>9</Height>
+        <Width>15</Width>
+        <StartX>1</StartX>
+        <StartY>21</StartY>
+      </childBoundingRectangle>
+      <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -65,6 +72,13 @@
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>false</Linebreak>
       <Vertical>false</Vertical>
+      <childBoundingRectangle>
+        <Height>10</Height>
+        <Width>17</Width>
+        <StartX>2</StartX>
+        <StartY>10</StartY>
+      </childBoundingRectangle>
+      <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
       <Position>
@@ -111,16 +125,32 @@
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>true</Linebreak>
       <Vertical>true</Vertical>
-      <Max>27</Max>
+      <childBoundingRectangle>
+        <Height>9</Height>
+        <Width>15</Width>
+        <StartX>2</StartX>
+        <StartY>20</StartY>
+      </childBoundingRectangle>
+      <BoxModel />
     </IsGroup>
     <Renderer>Button</Renderer>
     <Position>
-      <Height>9</Height>
-      <Width>15</Width>
+      <Height>27</Height>
+      <Width>60</Width>
       <StartX>0</StartX>
-      <StartY>20</StartY>
+      <StartY>18</StartY>
     </Position>
-    <BoxModel />
+    <BoxModel>
+      <Margin />
+      <Padding>
+        <Left>1</Left>
+        <Top>1</Top>
+      </Padding>
+      <Boarder>
+        <Left>1</Left>
+        <Top>1</Top>
+      </Boarder>
+    </BoxModel>
     <Screens>
       <Screen>screen40</Screen>
     </Screens>

@@ -15,11 +15,60 @@
                     <xs:element name="ImplementedClassTypeDllName" type="xs:string" />
                     <xs:element name="Linebreak" type="xs:boolean" />
                     <xs:element name="Vertical" type="xs:boolean" />
-                    <xs:element name="Max" type="xs:int" minOccurs="0" /> <!-- wird nur benötigt, wenn Linebreak == true; Gibt abhängig davon ob Vertical == true  oder Vertical == false die max. Höhe bzw. Breite an; falls Lienbreak == true und der Wert ist nicht gesetzt wird die deviceWidth bzw. DeviceHeight genutzt -->                    
+                    <xs:element name="childBoundingRectangle">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Height"  type="xs:positiveInteger" nillable="true"/>
+                          <!-- xsi:nil="true"  entspricht der Höhe des Gerätes (Abzüglich StartY) -->
+                          <xs:element name="Width" type="xs:positiveInteger" nillable="true" />
+                          <!-- xsi:nil="true"  entspricht der Bereite des Gerätes (Abzüglich StartX) -->
+                          <xs:element name="StartX" type="xs:int" nillable="true" />
+                          <!-- xsi:nil="true"  entspricht ganz rechts abzüglich Width -->
+                          <xs:element name="StartY" type="xs:int" nillable="true" />
+                          <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xsd:element name="BoxModel">
+                      <xsd:complexType>
+                        <xsd:sequence minOccurs="0">
+                          <xsd:element name="Margin">
+                            <xsd:complexType>
+                              <xsd:sequence minOccurs="0">
+                                <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0" />
+                                <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0"/>
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                          <xsd:element name="Padding">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0"/>
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                          <xsd:element name="Boarder">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                                <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="Renderer">
+              <xs:element name="Renderer"> <!-- Bei gruppen-Elementen bezieht sich diese Angabe auf die KindElemente-->
                 <xs:simpleType> <!-- je nach genuzter IBrailleDisplayStrategy sind anderer Renderer möglich eine Liste der aktuell Möglichen Renderer gibt die Methode getUiElementRenderer()-->
                   <xs:restriction base="xs:string">
                     <xs:enumeration value="Text"/>

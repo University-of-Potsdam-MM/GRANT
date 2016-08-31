@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using OSMElement.UiElements;
 using System.Xml.Serialization;
+using System.Windows;
 
 namespace OSMElement
 {
@@ -134,6 +135,10 @@ namespace OSMElement
         public Boolean? linebreak { get; set; }
 
         public Boolean vertical { get; set; }
-        public int? max { get; set; }
+        public Padding padding { get; set; }
+        public Padding margin { get; set; }
+        public Padding boarder { get; set; }
+        public Rect childBoundingRectangle { get; set; }
+        public String renderer { get; set; }
     }
 }
