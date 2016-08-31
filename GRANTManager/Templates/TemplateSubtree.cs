@@ -33,53 +33,27 @@ namespace GRANTManager.Templates
             if (filteredSubtree.HasChild)
             {
                 ITreeStrategy<OSMElement.OSMElement> filteredSubtreeCopy = filteredSubtree.Copy();
-                //ersten Knoten
-                // createSpecialUiElement(filteredSubtreeCopy, templateObject);
-                // filteredSubtreeCopy = filteredSubtreeCopy.Child;
                 if (filteredSubtreeCopy.HasChild)
                 {
                     filteredSubtreeCopy = filteredSubtreeCopy.Child;
                     iteratedChildreen(filteredSubtreeCopy, templateObject, brailleNodeId);
                 }
-               /* if (filteredSubtree.HasParent)
-                {
-                    filteredSubtreeCopy = filteredSubtree.Copy();
-                    filteredSubtree = filteredSubtree.Parent;
-                    filteredSubtree.Remove(filteredSubtreeCopy.Child.Data);
-                }*/
-                //   Debug.WriteLine("");
             }
         }
 
         protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
             if ((filteredSubtree.Data.properties.Equals(new GeneralProperties()) || !filteredSubtree.Data.properties.controlTypeFiltered.Contains("Item"))) { return new OSMElement.OSMElement(); }
-
-            OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
-            GeneralProperties prop = new GeneralProperties();
-            BrailleRepresentation braille = new BrailleRepresentation();
-
+            OSMElement.OSMElement brailleNode = templateObject.osm;
+            GeneralProperties prop = templateObject.osm.properties;
+            BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
+            prop.IdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
             prop.isEnabledFiltered = false;
-            prop.controlTypeFiltered = templateObject.osm.properties.controlTypeFiltered;
-            //      prop.valueFiltered = filteredSubtree.properties.valueFiltered;
-
-            braille.fromGuiElement = templateObject.osm.brailleRepresentation.fromGuiElement;
             braille.isVisible = true;
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
-            if (templateObject.osm.brailleRepresentation.boarder != null)
-            {
-                braille.boarder = templateObject.osm.brailleRepresentation.boarder;
-            }
-            if (templateObject.osm.brailleRepresentation.padding != null)
-            {
-                braille.padding = templateObject.osm.brailleRepresentation.padding;
-            }
-            if (templateObject.osm.brailleRepresentation.margin != null)
-            {
-                braille.margin = templateObject.osm.brailleRepresentation.margin;
-            }
+
             if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
             {
                 OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
@@ -97,9 +71,7 @@ namespace GRANTManager.Templates
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
-            Groupelements group = braille.groupelements;
-            group.linebreak = templateObject.osm.brailleRepresentation.groupelements.linebreak;
-            braille.groupelements = group;
+
             if (templateObject.osm.brailleRepresentation.groupelements.vertical)
             {
                 int column = 0;
@@ -113,10 +85,6 @@ namespace GRANTManager.Templates
                 {
                     boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y);
                 }
-                else
-                {
-                  //  boxStartY = boxStartY + Convert.ToInt32(templateObject.rect.Height);
-                }
                 if (boxStartX == null)
                 {
                     boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X);
@@ -124,10 +92,7 @@ namespace GRANTManager.Templates
                 if (templateObject.osm.brailleRepresentation.groupelements.linebreak == true)
                 {
                     boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
-                   // if (column > 0)
-                    {
-                        boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + (column * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width));
-                    }
+                    boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + (column * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width));
                 }
             }
             else
@@ -160,7 +125,6 @@ namespace GRANTManager.Templates
                     }
                 }
             }
-          // System.Windows.Rect rect = new System.Windows.Rect(lengthBox * Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
             System.Windows.Rect rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width), Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
 
 
@@ -169,9 +133,7 @@ namespace GRANTManager.Templates
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
             if (!filteredSubtree.HasParent) { return new OSMElement.OSMElement(); }
-           // OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.FilteredTree.Equals(filteredSubtree.Parent.Data.properties.IdGenerated));
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode, brailleNodeId);
-//            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             
             if (idGenerated == null)
             {

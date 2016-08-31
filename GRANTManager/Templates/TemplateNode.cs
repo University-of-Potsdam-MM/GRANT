@@ -26,24 +26,6 @@ namespace GRANTManager.Templates
             BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
 
             prop.isEnabledFiltered = false;
-           /* prop.boundingRectangleFiltered = templateObject.rect;
-            prop.controlTypeFiltered = templateObject.renderer;
-            if (templateObject.boarder != null)
-            {
-                braille.boarder = templateObject.boarder;
-            }
-            if (templateObject.padding != null)
-            {
-                braille.padding = templateObject.padding;
-            }
-            if (templateObject.margin != null)
-            {
-                braille.margin = templateObject.margin;
-            }
-            if (templateObject.textFromUIElement != null && !templateObject.textFromUIElement.Equals(""))
-            {
-                braille.fromGuiElement = templateObject.textFromUIElement;
-            }*/
             braille.isVisible = true;
             if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
             {
