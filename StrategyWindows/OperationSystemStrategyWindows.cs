@@ -418,6 +418,9 @@ namespace StrategyWindows
         public void InitializeWindows_EventsMonitor()
         {
             Windows_EventsMonitor wem = new Windows_EventsMonitor();
+            
+            //wem.Unsubscribe();
+            
             wem.Subscribe();
             //mouseKeyHookClass mk = new mouseKeyHookClass();
             //mk.Subscribe();
