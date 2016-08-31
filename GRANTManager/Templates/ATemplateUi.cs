@@ -47,7 +47,7 @@ namespace GRANTManager.Templates
             GeneralProperties prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
-            if (templateObject.textFromUIElement != null && !templateObject.textFromUIElement.Trim().Equals(""))
+            if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
             {
                 List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
                 OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);

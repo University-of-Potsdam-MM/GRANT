@@ -1079,15 +1079,16 @@ namespace StrategyGenericTree
                         GenaralUI.TempletUiObject templateobject = new GenaralUI.TempletUiObject();
                         //System.Windows.Rect rect = new System.Windows.Rect();
                         //rect.Height = node.Data.properties.boundingRectangleFiltered.Height;
-                        templateobject.renderer = node.Data.properties.controlTypeFiltered;
-                        templateobject.textFromUIElement = node.Data.brailleRepresentation.fromGuiElement;
+                        templateobject.osm = node.Data;
+                        //templateobject.renderer = node.Data.properties.controlTypeFiltered;
+                        //templateobject.textFromUIElement = node.Data.brailleRepresentation.fromGuiElement;
                         //rect.Width = node.Data.properties.boundingRectangleFiltered.Width;
-                        templateobject.rect = node.Data.properties.boundingRectangleFiltered;
+                        //templateobject.rect = node.Data.properties.boundingRectangleFiltered;
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
-                        templateobject.linebreak = node.Data.brailleRepresentation.linebreak == null ? false : (bool) node.Data.brailleRepresentation.linebreak;
-                        templateobject.vertical = node.Data.brailleRepresentation.vertical;
-                        templateobject.max = node.Data.brailleRepresentation.max;
+                        //templateobject.linebreak = node.Data.brailleRepresentation.groupelements.linebreak == null ? false : (bool) node.Data.brailleRepresentation.groupelements.linebreak;
+                        //templateobject.vertical = node.Data.brailleRepresentation.groupelements.vertical;
+                        //templateobject.max = node.Data.brailleRepresentation.groupelements.max;
                         OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationships != null)
                         {

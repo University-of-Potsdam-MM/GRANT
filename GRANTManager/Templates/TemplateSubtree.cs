@@ -60,27 +60,27 @@ namespace GRANTManager.Templates
             BrailleRepresentation braille = new BrailleRepresentation();
 
             prop.isEnabledFiltered = false;
-            prop.controlTypeFiltered = templateObject.renderer;
+            prop.controlTypeFiltered = templateObject.osm.properties.controlTypeFiltered;
             //      prop.valueFiltered = filteredSubtree.properties.valueFiltered;
 
-            braille.fromGuiElement = templateObject.textFromUIElement;
+            braille.fromGuiElement = templateObject.osm.brailleRepresentation.fromGuiElement;
             braille.isVisible = true;
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
-            if (templateObject.boarder != null)
+            if (templateObject.osm.brailleRepresentation.boarder != null)
             {
-                braille.boarder = templateObject.boarder;
+                braille.boarder = templateObject.osm.brailleRepresentation.boarder;
             }
-            if (templateObject.padding != null)
+            if (templateObject.osm.brailleRepresentation.padding != null)
             {
-                braille.padding = templateObject.padding;
+                braille.padding = templateObject.osm.brailleRepresentation.padding;
             }
-            if (templateObject.margin != null)
+            if (templateObject.osm.brailleRepresentation.margin != null)
             {
-                braille.margin = templateObject.margin;
+                braille.margin = templateObject.osm.brailleRepresentation.margin;
             }
-            if (templateObject.renderer.Equals("DropDownMenu"))
+            if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
             {
                 OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
                 if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
@@ -97,19 +97,21 @@ namespace GRANTManager.Templates
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
-            braille.linebreak = templateObject.linebreak;
-            if (templateObject.vertical)
+            Groupelements group = braille.groupelements;
+            group.linebreak = templateObject.osm.brailleRepresentation.groupelements.linebreak;
+            braille.groupelements = group;
+            if (templateObject.osm.brailleRepresentation.groupelements.vertical)
             {
                 int column = 0;
-                int max = templateObject.max == null ? deviceHeight : (int) templateObject.max;
-                int elementsProColumn = max / Convert.ToInt32(templateObject.rect.Height); //(max - Convert.ToInt32(templateObject.rect.Y)) / Convert.ToInt32(templateObject.rect.Height);
-                if (braille.linebreak == true)
+                int max = templateObject.osm.brailleRepresentation.groupelements.max == null ? deviceHeight : (int)templateObject.osm.brailleRepresentation.groupelements.max;
+                int elementsProColumn = max / Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height); //(max - Convert.ToInt32(templateObject.rect.Y)) / Convert.ToInt32(templateObject.rect.Height);
+                if (braille.groupelements.linebreak == true)
                 {
                     column = filteredSubtree.BranchIndex / elementsProColumn;
                 }
                 if (boxStartY == null)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.rect.Y);
+                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y);
                 }
                 else
                 {
@@ -117,49 +119,49 @@ namespace GRANTManager.Templates
                 }
                 if (boxStartX == null)
                 {
-                    boxStartX = Convert.ToInt32(templateObject.rect.X);
+                    boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X);
                 }
-                if (templateObject.linebreak == true)
+                if (templateObject.osm.brailleRepresentation.groupelements.linebreak == true)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.rect.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.rect.Height));
+                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
                    // if (column > 0)
                     {
-                        boxStartX = Convert.ToInt32(templateObject.rect.X) + (column * Convert.ToInt32(templateObject.rect.Width));
+                        boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + (column * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width));
                     }
                 }
             }
             else
             { //horizontal
                 int line = 0;
-                int max = templateObject.max == null ? deviceWidth : (int)templateObject.max;
-                int elementsProLine = max / Convert.ToInt32(templateObject.rect.Width); // (max - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
-                if (braille.linebreak == true)
+                int max = templateObject.osm.brailleRepresentation.groupelements.max == null ? deviceWidth : (int)templateObject.osm.brailleRepresentation.groupelements.max;
+                int elementsProLine = max / Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width); // (max - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
+                if (braille.groupelements.linebreak == true)
                 {
                     line = filteredSubtree.BranchIndex / elementsProLine; //filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
                 }
                 if (boxStartY == null)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.rect.Y);
+                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y);
                 }
                 if (boxStartX == null)
                 {
-                    boxStartX = Convert.ToInt32(templateObject.rect.X);
+                    boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X);
                 }
                 else
                 {
-                    boxStartX = boxStartX + Convert.ToInt32(templateObject.rect.Width);
+                    boxStartX = boxStartX + Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
                 }
-                if (templateObject.linebreak == true)
+                if (templateObject.osm.brailleRepresentation.groupelements.linebreak == true)
                 {
-                    boxStartY = Convert.ToInt32(templateObject.rect.Y) + line * Convert.ToInt32(templateObject.rect.Height);
+                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + line * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height);
                     if (line > 0)
                     {
-                        boxStartX = Convert.ToInt32(templateObject.rect.X) + ((filteredSubtree.BranchIndex - (elementsProLine * line))) * Convert.ToInt32(templateObject.rect.Width);
+                        boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + ((filteredSubtree.BranchIndex - (elementsProLine * line))) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
                     }
                 }
             }
           // System.Windows.Rect rect = new System.Windows.Rect(lengthBox * Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), lengthBox, heightBox);
-            System.Windows.Rect rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.rect.Width), Convert.ToInt32(templateObject.rect.Height));
+            System.Windows.Rect rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width), Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
 
 
             prop.boundingRectangleFiltered = rect;

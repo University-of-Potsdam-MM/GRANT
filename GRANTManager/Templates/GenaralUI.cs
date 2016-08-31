@@ -125,19 +125,22 @@ namespace GRANTManager.Templates
 
         public struct TempletUiObject
         {
-            public String renderer { get; set; }
-            public Rect rect { get; set; }
-            public String textFromUIElement { get; set; }
-            public String groupImplementedClassTypeFullName { get; set; }
-            public String groupImplementedClassTypeDllName { get; set; }
-            public List<String> Screens { get; set; }
-            public Padding padding { get; set; }
-            public Padding margin { get; set; }
-            public Padding boarder { get; set; }
-            public String name { get; set; }
-            public Boolean linebreak { get; set; }
-            public Boolean vertical { get; set; } //bei DropDownMenus bezieht sich der wert erst auf die 2. Ebene
-            public int? max { get; set; }
+            public OSMElement.OSMElement osm { get; set; }
+           // public String renderer { get; set; } // --> // -> OSM (GP - controltype) 
+            //public Rect rect { get; set; } // -> Osm (GP)
+            //public String textFromUIElement { get; set; } // -> Osm (GP)
+            public String groupImplementedClassTypeFullName { get; set; } //nötig?
+            public String groupImplementedClassTypeDllName { get; set; } //nötig?
+            public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
+            //public Padding padding { get; set; } // -> OSM (BR)
+            //public Padding margin { get; set; }// -> OSM (BR)
+            //public Padding boarder { get; set; }// -> OSM (BR)
+            public String name { get; set; } 
+
+            //Gruppenspezifisch
+            //public Boolean linebreak { get; set; } 
+            //public Boolean vertical { get; set; } //bei DropDownMenus bezieht sich der wert erst auf die 2. Ebene
+            //public int? max { get; set; }
             //TODO. evtl. auch hier BrailleRepresentaion (oder gleich OSMelement) verwenden
         }
 
@@ -151,8 +154,10 @@ namespace GRANTManager.Templates
             TempletUiObject templetObject = new TempletUiObject();
             Int32 result;
             result = 0;
-            templetObject.renderer = xmlElement.Element("Renderer").Value;
-            templetObject.textFromUIElement = xmlElement.Element("TextFromUIElement").Value;
+            GeneralProperties properties = new GeneralProperties();
+            BrailleRepresentation braille = new BrailleRepresentation();
+            properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
+            braille.fromGuiElement = xmlElement.Element("TextFromUIElement").Value;
             XElement position = xmlElement.Element("Position");
             bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
             Rect rect = new Rect();
@@ -165,17 +170,19 @@ namespace GRANTManager.Templates
             rect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - rect.Height);
             if (!isConvertHeight) { rect.Height -= rect.Y; }
             if (!isConvertWidth) { rect.Width -= rect.X; }
-            templetObject.rect = rect;
+            properties.boundingRectangleFiltered = rect;
             if (xmlElement.Element("IsGroup").HasElements)
             {
                 templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
                 templetObject.groupImplementedClassTypeDllName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeDllName").Value;
-                templetObject.linebreak = Convert.ToBoolean( xmlElement.Element("IsGroup").Element("Linebreak").Value);
-                templetObject.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
+                Groupelements group = new Groupelements();
+                group.linebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
+                group.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
                 if (xmlElement.Element("IsGroup").Element("Max") != null)
                 {
-                    templetObject.max = Convert.ToInt32(xmlElement.Element("IsGroup").Element("Max").Value);
+                    group.max = Convert.ToInt32(xmlElement.Element("IsGroup").Element("Max").Value);
                 }
+                braille.groupelements = group;
             }
             if (!xmlElement.Element("Screens").IsEmpty)
             {
@@ -193,20 +200,24 @@ namespace GRANTManager.Templates
                 if (!boxModel.Element("Padding").IsEmpty)
                 {
                     XElement padding = boxModel.Element("Padding");
-                    templetObject.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
                 }
                 if (!boxModel.Element("Margin").IsEmpty)
                 {
                     XElement margin = boxModel.Element("Margin");
-                    templetObject.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
                 }
                 if (!boxModel.Element("Boarder").IsEmpty)
                 {
                     XElement boarder = boxModel.Element("Boarder");
-                    templetObject.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
                 }
             }
             templetObject.name = xmlElement.Attribute("name").Value;
+            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            osm.brailleRepresentation = braille;
+            osm.properties = properties;
+            templetObject.osm = osm;
 
             return templetObject;
         }
@@ -252,7 +263,7 @@ namespace GRANTManager.Templates
             {
                 TempletUiObject templateObject = xmlUiElementToTemplateUiObject(e);
                 ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
-                if (templateObject.textFromUIElement != null && !templateObject.textFromUIElement.Equals(""))
+                if (templateObject.osm.brailleRepresentation.fromGuiElement!= null && !templateObject.osm.brailleRepresentation.fromGuiElement.Equals(""))
                 {
                     // elementE im gefilterten Baum suchen
                     GeneralProperties properties = new GeneralProperties();
