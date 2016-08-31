@@ -89,11 +89,10 @@ namespace GRANTManager.Templates
                 {
                     boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X);
                 }
-                if (templateObject.osm.brailleRepresentation.groupelements.linebreak == true)
-                {
-                    boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
-                    boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + (column * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width));
-                }
+              
+                boxStartY = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height));
+                boxStartX = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.X) + (column * Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width));
+                
             }
             else
             { //horizontal

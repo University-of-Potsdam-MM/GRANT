@@ -602,6 +602,7 @@ namespace StrategyBrailleIO
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
+            if (osmElementFilteredNode.brailleRepresentation.viewName == null) { return new bool[0, 0]; }
             UiElement brailleUiElement = convertToBrailleIOUiElement(osmElementFilteredNode);
             createScreen(osmElementFilteredNode.brailleRepresentation.screenName);
             createView(osmElementFilteredNode);
