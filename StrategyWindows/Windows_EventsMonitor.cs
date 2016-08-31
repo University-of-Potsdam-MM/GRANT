@@ -31,11 +31,14 @@ namespace StrategyWindows
         /// ToDo: Nutzung des Paket Screna: https://github.com/MathewSachin/Screna
         /// Capturing des Screen/Audio/Video/...
         /// </summary>
-        private IKeyboardMouseEvents m_GlobalHook;
+        private static IKeyboardMouseEvents m_GlobalHook;
 
         //Anmeldung der verschiedenen events, welche MouseKeyHook unterstützt
         public void Subscribe()
         {
+            //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
+            //if (m_GlobalHook != null) throw new InvalidOperationException("Can't hook more than once");
+
             // Note: for the application hook, use the Hook.AppEvents() instead
             m_GlobalHook = Hook.GlobalEvents();
 
@@ -43,6 +46,8 @@ namespace StrategyWindows
             // keypress wirft kein event bei pfeiltasten
             //m_GlobalHook.KeyPress += GlobalHookKeyPress; 
             m_GlobalHook.KeyUp += OnKeyUp;
+
+            Console.WriteLine("Subscribe des Hook");
         }
 
         private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
@@ -81,6 +86,9 @@ namespace StrategyWindows
 
         public void Unsubscribe()
         {
+            //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
+            //if (m_GlobalHook == null) return;
+
             m_GlobalHook.MouseDownExt -= GlobalHookMouseDownExt;
             //m_GlobalHook.KeyPress -= GlobalHookKeyPress;
             m_GlobalHook.KeyUp -= OnKeyUp;
