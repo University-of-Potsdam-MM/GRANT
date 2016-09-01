@@ -7,6 +7,9 @@ using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows.Media;
 using System.Data;
+using System.Windows.Data;
+using System.Globalization;
+using System.Collections;
 
 namespace GRANTApplication
 {
@@ -21,6 +24,10 @@ namespace GRANTApplication
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
         int var2;
+        String matrix;
+
+        [System.ComponentModel.BrowsableAttribute(false)]
+        public DataGridCell CurrentCell { get; set; }
 
         public OutputDesigner()
         {
@@ -58,9 +65,19 @@ namespace GRANTApplication
 
             //NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
+            //dataGrid3.Visibility = false;
 
 
 
+        }
+        public class CellContent
+        {
+
+            public String cellinput
+            {
+                get;
+                set;
+            }
         }
 
         /*    private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -120,61 +137,143 @@ namespace GRANTApplication
                 }
             }*/
 
+
+        //Variante datagrid
         private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            dataGrid3.ItemsSource = null;
+            // CellContent cellContent = new CellContent();
             if (((ListBox)sender).SelectedItem != null)
             {
                 String element = (sender as ListBox).SelectedItem.ToString();
-                 bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(element);
+                bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(element);
 
 
                 DataTable dataTable4 = createBrailleDisplay3((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3);
-             
-             
-                for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite 
+
+
+                for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite / Column
                 {
                     //System.Console.WriteLine(a.ToString());
-                    System.Console.WriteLine("a:" + a.ToString());
+                   // System.Console.WriteLine("a:" + a.ToString());
                     // DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
                     //                         .ContainerFromIndex(i);
                     //  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
                     //  .ContainerFromIndex(i);
                     // row.Background = Brushes.Red;
                     //DataRow dr = (DataRow)row.DataContext;
-                  
+
+
+
+                    //  DataColumn dc = new DataColumn();
+                    //   dataTable4.Columns.Add(new DataColumn(a.ToString()));
 
 
                     for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
                     {
-                        System.Console.WriteLine("i: " + i.ToString());
+                        //System.Console.WriteLine("i: " + i.ToString());
 
-                        System.Console.WriteLine(guiElementRep[i, a].ToString());
+                        // cellContent.cellinput = guiElementRep[i, a].ToString();
+                        //System.Console.WriteLine(guiElementRep[i, a].ToString());
                         // DataRow row1 = dataTable4.NewRow();
 
                         //dataTable4.Rows.Add(row1);
-                       dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
-                
-                       
 
-                        //System.Console.WriteLine(i.ToString());
-                        //DataGridCell cell = new DataGridCell();
-                        // string s = (dataGrid3.Items[i] as DataRowView).Row.ItemArray[a].ToString();
-                        // dataGrid3.CurrentCell = new DataGridCellInfo(dataGrid3.Items[i], dataGrid3.Columns[a]);
+                        //leer
+                          dataTable4.Rows[i][a] = "";
+                        //dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+                        
 
+                        //dataGrid3.RowBackground = Brushes.Black;
+                        /* if (dataTable4.Rows[i][a].ToString() == "True")
+                         {
+                             //dataGrid3.RowBackground = Brushes.Black;
+                             DataGridCell firstColumnInFirstRow = dataGrid3.Columns[1].GetCellContent(dataGrid3.Items[1]).Parent as DataGridCell;
+                             firstColumnInFirstRow.Background = Brushes.Black;
+
+                         }*/
+                        // else { dataGrid3.RowBackground = Brushes.White; }
+                        // DataGridRow firstRow = dataGrid3.ItemContainerGenerator.ContainerFromItem(dataGrid3.Items[1]) as DataGridRow;
+
+                        /*   DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(i);
+                           if (row == null)
+                           {
+                               dataGrid3.UpdateLayout();
+                               dataGrid3.ScrollIntoView(dataGrid3.Items[i]);
+                               row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(i);
+                           }
+                           //System.Console.WriteLine("first: " + row.ToString());
+                           DataGridCell firstColumnInFirstRow = dataGrid3.Columns[a].GetCellContent(row).Parent as DataGridCell;
+                           //set background
+                           firstColumnInFirstRow.Background = Brushes.Black;
+                       }*/
+                        // dataGrid3.ItemsSource = "xxx";
                     }
-                   
 
                 }
+
                 dataGrid3.ItemsSource = dataTable4.AsDataView();
+                malemal(dataGrid3, guiElementRep);
+            }
+           
+            
+        }
+
+        public void malemal(DataGrid datagrid, bool[,] guiElementRep)
+        {
+           
+         
+           for (int h = 0; h < dataGrid3.Items.Count; h++)
+           // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+            {
+               DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+                if (row == null)
+                     {
+                         dataGrid3.UpdateLayout();
+                         dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
+                         row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+             
+                     }
+                     
+               
+               
+                for (int w = 0; w < dataGrid3.Columns.Count; w++)
+                {
+                   
+                      
+                    if (dataGrid3.Columns[w].GetCellContent(row) == null)
+                    {
+                        dataGrid3.UpdateLayout();
+                        
+                    }
+                    DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
+                    //set background
+                                                                                                                         //  DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
+                 
+                    //TextBlock tb = firstColumnInFirstRow.Content as TextBlock;
+                    //System.Console.WriteLine("first: " + firstColumnInFirstRow.ToString());
+                    //System.Console.WriteLine("second: " + );
+                    if (guiElementRep[h, w].ToString() == "True") { 
+                        firstColumnInFirstRow.Background = Brushes.Black; }
+                    else {  firstColumnInFirstRow.Background = Brushes.White; }
+
+                    //guiElementRep[i, a].ToString();
+
+                    //firstColumnInFirstRow.Background = Brushes.Black;
+                }
+               
             }
         }
+
+
+
 
         private DataTable createBrailleDisplay3(int dWidth, int dHeight, DataGrid dataGrid)
         {
             //var dataGrid = sender as DataGrid;
-            System.Console.WriteLine(" DWIDTH: " + dWidth);
+          //  System.Console.WriteLine(" DWIDTH: " + dWidth);
 
-            System.Console.WriteLine(" DHEIGHT: " + dHeight);
+           // System.Console.WriteLine(" DHEIGHT: " + dHeight);
             // Add 10 Rows
             DataTable dataTable = new DataTable();
 
@@ -379,7 +478,7 @@ namespace GRANTApplication
             {
                 DataRow row1 = dataTable.NewRow();
                 dataTable.Rows.Add(row1);
-
+                System.Console.WriteLine(" ROW: " + row1);
             }
 
             //dataGrid.ItemsSource = dataTable.DefaultView;
@@ -525,3 +624,133 @@ namespace GRANTApplication
 
 
     }*/
+
+/*         dataGrid3.Columns.Add(new DataGridTextColumn());
+         ((DataGridTextColumn)dataGrid3.Columns[a]).Binding = new Binding(".");
+         DataGridTextColumn col1 = new DataGridTextColumn();
+         dataGrid3.Columns.Add(col1);
+         col1.Binding = new Binding(".");
+      dataGrid3.ItemsSource = guiElementRep[i, a].ToString();
+
+         if (guiElementRep[i, a].ToString() == "True")
+         {
+        System.Console.WriteLine("HIER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:" + i);
+
+        //dataGrid3.CurrentCell = new DataGridCellInfo(dataGrid3.Items[i], dataGrid3.Columns[a]);
+
+
+        DataGridRow firstRow = dataGrid3.ItemContainerGenerator.ContainerFromItem(dataGrid3.Items[1]) as DataGridRow;
+        System.Console.WriteLine("first: " + firstRow.ToString());
+        DataGridCell firstColumnInFirstRow = dataGrid3.Columns[1].GetCellContent(firstRow).Parent as DataGridCell;
+        //set background
+        firstColumnInFirstRow.Background = Brushes.Black;
+    }
+
+
+    //dataGrid3.ItemsSource = guiElementRep[i, a].ToString();
+
+    //System.Windows.Media.Brush Red = null;
+    //dataGrid3.Background = Red;
+
+
+    // dataTable4.Rows.Add(dataRow);
+
+    // string cellValue;
+    // cellValue = dataGrid3.GetRowCellValue(2, "ID").ToString();
+
+    //System.Console.WriteLine(i.ToString());
+    // DataGridCell cell = new DataGridCell();
+    //  string s = (dataGrid3.Items[i] as DataRowView).Row.ItemArray[a].ToString();
+  //  dataGrid3.CurrentCell = new DataGridCellInfo(dataGrid3.Items[i], dataGrid3.Columns[a]);
+    //System.Console.WriteLine("Current: " + dataGrid3.CurrentCell.ToString());
+    //dataGrid3.Style.TargetType.DeclaringType.
+    //dataGrid3.CurrentCell.Column.CellStyle =
+
+}
+
+
+     }
+ // dv = dataTable4.DefaultView;
+
+
+// System.Windows.Forms.DataGridTableStyle style = new System.Windows.Forms.DataGridTableStyle();
+//   style.MappingName = "TblName";
+//  dataGrid3.D.Add(style);
+}
+}
+
+//andere verison zusätzliche spalten und zeilen
+
+/*  private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+// CellContent cellContent = new CellContent();
+if (((ListBox)sender).SelectedItem != null)
+{
+String element = (sender as ListBox).SelectedItem.ToString();
+bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(element);
+
+
+DataTable dataTable4 = createBrailleDisplay3((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3);
+
+
+for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
+{
+  //System.Console.WriteLine(a.ToString());
+  System.Console.WriteLine("i:" + i.ToString());
+  // DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
+  //                         .ContainerFromIndex(i);
+  //  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
+  //  .ContainerFromIndex(i);
+  // row.Background = Brushes.Red;
+  //DataRow dr = (DataRow)row.DataContext;
+
+  DataRow dataRow = dataTable4.NewRow();
+
+  for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite / Column
+  {
+
+      DataColumn dc = new DataColumn();
+      //  dataTable4.Columns.Add(new DataColumn(guiElementRep[i, a].ToString()));
+      System.Console.WriteLine("a: " + a.ToString());
+
+      // cellContent.cellinput = guiElementRep[i, a].ToString();
+      System.Console.WriteLine(guiElementRep[i, a].ToString());
+      // DataRow row1 = dataTable4.NewRow();
+
+      //dataTable4.Rows.Add(row1);
+
+      //leer
+      dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+      // dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+
+
+      //System.Windows.Media.Brush Red = null;
+      //dataGrid3.Background = Red;
+
+
+
+
+
+
+
+
+      //System.Console.WriteLine(i.ToString());
+      //DataGridCell cell = new DataGridCell();
+      // string s = (dataGrid3.Items[i] as DataRowView).Row.ItemArray[a].ToString();
+      // dataGrid3.CurrentCell = new DataGridCellInfo(dataGrid3.Items[i], dataGrid3.Columns[a]);
+      //dataGrid3.Style.TargetType.DeclaringType.
+      //dataGrid3.CurrentCell.Column.CellStyle =
+
+  }
+
+  dataTable4.Rows.Add(dataRow);
+}
+
+// dv = dataTable4.DefaultView;
+
+dataGrid3.ItemsSource = dataTable4.AsDataView();
+// System.Windows.Forms.DataGridTableStyle style = new System.Windows.Forms.DataGridTableStyle();
+//   style.MappingName = "TblName";
+//  dataGrid3.D.Add(style);
+}
+}*/

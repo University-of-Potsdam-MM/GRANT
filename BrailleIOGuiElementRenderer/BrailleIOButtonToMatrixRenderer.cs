@@ -64,6 +64,7 @@ namespace BrailleIOGuiElementRenderer
             viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 1] = false;
             viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 2] = false;
             viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 2] = true;
+          //  viewMatrix[0, 7] = false;
 
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();

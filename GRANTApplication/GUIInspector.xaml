@@ -17,6 +17,7 @@
             <Setter Property="Padding" Value="25,5" />
         </Style>
     </Window.Resources>
+   
     <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
         <!-- Status Bar-->
 
