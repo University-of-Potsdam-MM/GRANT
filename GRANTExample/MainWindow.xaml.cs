@@ -126,14 +126,14 @@ namespace GRANTExample
             if (e.Key == Key.F5)
             {
                 exampleTree.filterTreeOfApplication();
-              /*  System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test211.xml");
-                StrategyGenericTree.ITree<OSMElement.OSMElement> tree2 = (StrategyGenericTree.ITree<OSMElement.OSMElement>)grantTree.getFilteredTree().Copy();
-                StrategyGenericTree.NodeTree<OSMElement.OSMElement> tree3 = (StrategyGenericTree.NodeTree<OSMElement.OSMElement>)grantTree.getFilteredTree();
-                tree2.XmlSerialize(fs);
-                //tree2.XmlSerialize(fs);
-                //strategyMgr.getSpecifiedTree().XmlSerialize(fs);
-             //   grantTree.getFilteredTree().XmlSerialize(fs);
-                fs.Close();*/
+                /*  System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test211.xml");
+                  StrategyGenericTree.ITree<OSMElement.OSMElement> tree2 = (StrategyGenericTree.ITree<OSMElement.OSMElement>)grantTree.getFilteredTree().Copy();
+                  StrategyGenericTree.NodeTree<OSMElement.OSMElement> tree3 = (StrategyGenericTree.NodeTree<OSMElement.OSMElement>)grantTree.getFilteredTree();
+                  tree2.XmlSerialize(fs);
+                  tree2.XmlSerialize(fs);
+                  strategyMgr.getSpecifiedTree().XmlSerialize(fs);
+                  grantTree.getFilteredTree().XmlSerialize(fs);
+                  fs.Close();*/
                 Debug.WriteLine("F5");
             }
             if (e.Key == Key.F6)
@@ -178,12 +178,12 @@ namespace GRANTExample
             {
                 exampleBrailleDis.getRendererExample(itemNameTextBox.Text);
             }
-          /*  if (e.Key == Key.G)
-           {
-                List<String> result = exampleBrailleDis.getRendererList();
-                //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
-                NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
-            }*/
+            /*  if (e.Key == Key.G)
+             {
+                  List<String> result = exampleBrailleDis.getRendererList();
+                  //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
+                  NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
+              }*/
             if (e.Key == Key.F11)
             {
                 exampleTree.filterSubtreeOfApplication();
@@ -198,7 +198,7 @@ namespace GRANTExample
             {
                 List<String> result = exampleBrailleDis.getPosibleScreens();
                 NodeBox.Text = "MöglichenScreens: \n";
-                NodeBox.Text = NodeBox.Text + String.Join(", " ,result.Select(p => p.ToString()).ToArray());
+                NodeBox.Text = NodeBox.Text + String.Join(", ", result.Select(p => p.ToString()).ToArray());
             }
 
        }

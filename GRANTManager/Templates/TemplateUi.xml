@@ -33,13 +33,22 @@
     </BoxModel>
     <Screens />
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateText</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateNode</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="MenuBar">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <Linebreak>true</Linebreak>
+      <Vertical>false</Vertical>
+      <childBoundingRectangle>
+        <Height>9</Height>
+        <Width>15</Width>
+        <StartX>1</StartX>
+        <StartY>21</StartY>
+      </childBoundingRectangle>
+      <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -59,8 +68,17 @@
   </UiElement>
   <UiElement name="Menu">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.Templatesubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <Linebreak>false</Linebreak>
+      <Vertical>false</Vertical>
+      <childBoundingRectangle>
+        <Height>10</Height>
+        <Width>17</Width>
+        <StartX>2</StartX>
+        <StartY>10</StartY>
+      </childBoundingRectangle>
+      <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
       <Position>
@@ -98,22 +116,41 @@
     </BoxModel>
     <Screens />
     <TextFromUIElement />
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateText</ImplementedClassTypeFullName>
+    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateNode</ImplementedClassTypeFullName>
     <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="Tab">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateDropDownMenu</ImplementedClassTypeFullName>
+      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
       <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
+      <Linebreak>true</Linebreak>
+      <Vertical>true</Vertical>
+      <childBoundingRectangle>
+        <Height>9</Height>
+        <Width>15</Width>
+        <StartX>2</StartX>
+        <StartY>20</StartY>
+      </childBoundingRectangle>
+      <BoxModel />
     </IsGroup>
-    <Renderer>DropDownMenu</Renderer>
+    <Renderer>Button</Renderer>
     <Position>
-      <Height>9</Height>
-      <Width>12</Width>
+      <Height>27</Height>
+      <Width>60</Width>
       <StartX>0</StartX>
-      <StartY>20</StartY>
+      <StartY>18</StartY>
     </Position>
-    <BoxModel />
+    <BoxModel>
+      <Margin />
+      <Padding>
+        <Left>1</Left>
+        <Top>1</Top>
+      </Padding>
+      <Boarder>
+        <Left>1</Left>
+        <Top>1</Top>
+      </Boarder>
+    </BoxModel>
     <Screens>
       <Screen>screen40</Screen>
     </Screens>

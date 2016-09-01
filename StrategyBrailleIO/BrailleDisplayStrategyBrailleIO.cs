@@ -197,8 +197,9 @@ namespace StrategyBrailleIO
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
+            Debug.WriteLine("");
         }
-
+        
         /// <summary>
         /// Erstellt einen neuen Screen, falls dieser noch nicht existiert
         /// </summary>
@@ -478,7 +479,7 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
         /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
-        /// <returns>falls eine passende View gefunden wurde dessen Name; sonst <code>null</code></returns>
+        /// <returns>falls eine passende View gefunden wurde dessen Name, dieser bezieht sich auf den aktuellen Screen; sonst <code>null</code></returns>
         public String getBrailleUiElementViewNameAtPoint(int x, int y)
         {
             BrailleIOViewRange viewAtPoint = brailleIOMediator.GetViewAtPosition(x, y);
@@ -602,6 +603,7 @@ namespace StrategyBrailleIO
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
+            if (osmElementFilteredNode.brailleRepresentation.viewName == null) { return new bool[0, 0]; }
             UiElement brailleUiElement = convertToBrailleIOUiElement(osmElementFilteredNode);
             createScreen(osmElementFilteredNode.brailleRepresentation.screenName);
             createView(osmElementFilteredNode);

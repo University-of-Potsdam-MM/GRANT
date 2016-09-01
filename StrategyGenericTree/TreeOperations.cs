@@ -899,7 +899,8 @@ namespace StrategyGenericTree
              * http://stackoverflow.com/questions/10520048/calculate-md5-checksum-for-a-file
              */
             GeneralProperties properties = node.Data.properties;
-            String result = properties.controlTypeFiltered +
+            String result = 
+                properties.controlTypeFiltered +
                 properties.itemTypeFiltered +
                 properties.accessKeyFiltered +
                 properties.acceleratorKeyFiltered +
@@ -910,10 +911,9 @@ namespace StrategyGenericTree
                 properties.isPasswordFiltered +
                 properties.isRequiredForFormFiltered +
                 properties.itemStatusFiltered +
-                properties.itemTypeFiltered +   //doppelt
                 properties.labeledbyFiltered +
-                node.BranchCount +
-                node.BranchIndex +
+                // node.BranchCount +
+                node.BranchIndex *
                 node.Depth;
             
             if (node.HasParent) { result += node.Parent.Data.properties.IdGenerated; }
@@ -1077,12 +1077,7 @@ namespace StrategyGenericTree
                     {
                         ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
                         GenaralUI.TempletUiObject templateobject = new GenaralUI.TempletUiObject();
-                        //System.Windows.Rect rect = new System.Windows.Rect();
-                        //rect.Height = node.Data.properties.boundingRectangleFiltered.Height;
-                        templateobject.renderer = node.Data.properties.controlTypeFiltered;
-                        templateobject.textFromUIElement = node.Data.brailleRepresentation.fromGuiElement;
-                        //rect.Width = node.Data.properties.boundingRectangleFiltered.Width;
-                        templateobject.rect = node.Data.properties.boundingRectangleFiltered;
+                        templateobject.osm = node.Data;
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
                         OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
