@@ -18,6 +18,8 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="25,5" />
         </Style>
+      
+        
     </Window.Resources>
     <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
         <StackPanel Background="GhostWhite" DockPanel.Dock="Top"  Height="Auto" Margin="-4,0,4,0" >
@@ -70,13 +72,17 @@
             <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
           CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" 
           SelectionUnit="Cell" HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White">
-               <!-- <DataGrid.Style>
+
+
+
+             <!--   <TextBox Name="textBox" Background="{Binding ElementName=textBox, Path=Text, Converter={StaticResource SignedUnsigned}}"/>-->
+                <!-- <DataGrid.Style>
                     <Style TargetType="DataGrid">
                         <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
                     </Style>
                 </DataGrid.Style>-->
 
-               <!-- <DataGrid.CellStyle>
+                <!-- <DataGrid.CellStyle>
                     <Style TargetType="{x:Type DataGridCell}">
 
                         <Style.Triggers>
@@ -164,45 +170,62 @@
                         </Style>
                     </ListBox.Resources>
                 </ListBox>
-                <Grid VerticalAlignment="Bottom" Height="114" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,5,1,0">
-                    <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
-                		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None"
-                		SelectionUnit="Cell" HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid3" Background="White" Width="229" Height="Auto" >
-                        <DataGrid.Style>
-                            <Style TargetType="{x:Type DataGrid}">
+                <Grid VerticalAlignment="Top" Height="114" HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,5,1,0">
+                    <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
+                		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" 
+                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3"  Width="Auto" Height="Auto" >
+                
+                        
+                        
+                        
+                        
+                        
+                        
+                        <!--   <DataGrid.Style>
+                               <Style TargetType="{x:Type DataGrid}">
                                 <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
-                            </Style>
-                        </DataGrid.Style>
-                        <DataGrid.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
+                            
+                        </DataGrid.Style>-->
+                      
+                        <!--    <DataGridTextColumn Header="SimpleHeader"                                    
+                    Width="1.5*" 
+                    Binding="{Binding Path=NumberValue}">
 
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=NumberValue, Converter={StaticResource MyConverter}}" Value="True">
+                                            <Setter Property="Background" Value="Yellow" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Path=NumberValue, Converter={StaticResource MyConverter}}" Value="False">
+                                            <Setter Property="Background" Value="Red" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>-->
+                     <!--   <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Matrix}" Value="True" >
+                                    <DataTrigger Binding="{Binding Path=CellContent.cellinput}" Value="True" >
                                         <Setter Property="Background" Value="Black" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Matrix}" Value="False" >
+                                    <DataTrigger Binding="{Binding Path=CellContent.cellinput}" Value="False" >
                                         <Setter Property="Background" Value="White" />
                                     </DataTrigger>
                                 </Style.Triggers>
-                            </Style>
-                        </DataGrid.CellStyle>
+                                <Setter Property="Width" Value="20"/>
+                                <Setter Property="Height" Value="20"/>
+                                <Setter Property="Background" Value="Red"/>
 
-                        <!--   <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="{x:Type DataGridColumnHeader}">
-                       
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
-                <DataGrid.RowHeaderStyle>
-                    <Style TargetType="{x:Type DataGridRowHeader}">
-                        <Setter Property="Content" Value="{Binding}" />
-                    </Style>
-                </DataGrid.RowHeaderStyle>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="IsSelected" Value="{Binding IsRowSelected}" />
-                        <Setter Property="Header" Value="{Binding Content}" />
-                    </Style>
-                </DataGrid.RowStyle>-->
+                            </Style>
+                        </DataGrid.CellStyle>-->
+
+
+
                     </DataGrid>
 
                 </Grid>
