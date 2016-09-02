@@ -18,14 +18,10 @@
                     <xs:element name="childBoundingRectangle">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="Height"  type="xs:positiveInteger" nillable="true"/>
-                          <!-- xsi:nil="true"  entspricht der Höhe des Gerätes (Abzüglich StartY) -->
-                          <xs:element name="Width" type="xs:positiveInteger" nillable="true" />
-                          <!-- xsi:nil="true"  entspricht der Bereite des Gerätes (Abzüglich StartX) -->
-                          <xs:element name="StartX" type="xs:int" nillable="true" />
-                          <!-- xsi:nil="true"  entspricht ganz rechts abzüglich Width -->
-                          <xs:element name="StartY" type="xs:int" nillable="true" />
-                          <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
+                          <xs:element name="Height"  type="xs:positiveInteger" nillable="true"/> <!-- xsi:nil="true"  entspricht der Höhe des Gerätes (Abzüglich StartY) -->
+                          <xs:element name="Width" type="xs:positiveInteger" nillable="true" /> <!-- xsi:nil="true"  entspricht der Bereite des Gerätes (Abzüglich StartX) -->
+                          <!-- xs:element name="StartX" type="xs:int" nillable="true" / --> <!-- xsi:nil="true"  entspricht ganz rechts abzüglich Width -->
+                          <!-- xs:element name="StartY" type="xs:int" nillable="true" /--> <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>

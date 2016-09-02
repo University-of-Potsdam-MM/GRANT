@@ -205,7 +205,7 @@ namespace GRANTExample
                 List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("40044FA340D03A60B6C7822FF3B174BC", grantTree.getBrailleTree());
                 if(nodeList != null && nodeList.Count > 0) 
                 {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveGroupViewRangHoricontal(nodeList[0], -2);
+                    strategyMgr.getSpecifiedBrailleDisplay().moveGroupViewRangHoricontal(nodeList[0], true);
                     Debug.WriteLine("View ("+nodeList[0].Data.brailleRepresentation.viewName+") verschoben!");
                 }
             }
@@ -214,7 +214,7 @@ namespace GRANTExample
                 List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("40044FA340D03A60B6C7822FF3B174BC", grantTree.getBrailleTree());
                 if (nodeList != null && nodeList.Count > 0)
                 {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveGroupViewRangHoricontal(nodeList[0], 2);
+                    strategyMgr.getSpecifiedBrailleDisplay().moveGroupViewRangHoricontal(nodeList[0], false);
                     Debug.WriteLine("View (" + nodeList[0].Data.brailleRepresentation.viewName + ") verschoben!");
                 }
             }

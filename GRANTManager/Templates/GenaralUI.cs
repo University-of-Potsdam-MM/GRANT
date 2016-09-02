@@ -171,6 +171,27 @@ namespace GRANTManager.Templates
             if (!isConvertHeight) { rect.Height -= rect.Y; }
             if (!isConvertWidth) { rect.Width -= rect.X; }
             properties.boundingRectangleFiltered = rect;
+
+            if (!xmlElement.Element("BoxModel").IsEmpty)
+            {
+                XElement boxModel = xmlElement.Element("BoxModel");
+                if (!boxModel.Element("Padding").IsEmpty)
+                {
+                    XElement padding = boxModel.Element("Padding");
+                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Margin").IsEmpty)
+                {
+                    XElement margin = boxModel.Element("Margin");
+                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Boarder").IsEmpty)
+                {
+                    XElement boarder = boxModel.Element("Boarder");
+                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                }
+            }
+
             if (xmlElement.Element("IsGroup").HasElements)
             {
                 templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
@@ -184,10 +205,12 @@ namespace GRANTManager.Templates
                 childRect.Height = isConvertHeight ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 isConvertWidth = Int32.TryParse(position.Element("Width").Value, out result);
                 childRect.Width = isConvertWidth ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
-                isConvert = Int32.TryParse(position.Element("StartX").Value, out result);
-                childRect.X = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width - childRect.Width);
-                isConvert = Int32.TryParse(position.Element("StartY").Value, out result);
-                childRect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - childRect.Height);
+                //isConvert = Int32.TryParse(position.Element("StartX").Value, out result);
+               // childRect.X = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width - childRect.Width);
+                childRect.X = rect.X + braille.padding.Left + braille.margin.Left + braille.boarder.Left;
+               // isConvert = Int32.TryParse(position.Element("StartY").Value, out result);
+               // childRect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - childRect.Height);
+                childRect.Y = rect.Y + braille.padding.Top + braille.margin.Top + braille.boarder.Top;
                 if (!isConvertHeight) { childRect.Height -= childRect.Y; }
                 if (!isConvertWidth) { childRect.Width -= childRect.X; }
                 group.childBoundingRectangle = childRect;
@@ -224,25 +247,7 @@ namespace GRANTManager.Templates
                 }
 
             }
-            if (!xmlElement.Element("BoxModel").IsEmpty)
-            {
-                XElement boxModel = xmlElement.Element("BoxModel");
-                if (!boxModel.Element("Padding").IsEmpty)
-                {
-                    XElement padding = boxModel.Element("Padding");
-                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
-                }
-                if (!boxModel.Element("Margin").IsEmpty)
-                {
-                    XElement margin = boxModel.Element("Margin");
-                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
-                }
-                if (!boxModel.Element("Boarder").IsEmpty)
-                {
-                    XElement boarder = boxModel.Element("Boarder");
-                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
-                }
-            }
+
             templetObject.name = xmlElement.Attribute("name").Value;
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;

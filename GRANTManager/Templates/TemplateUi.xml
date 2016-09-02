@@ -45,8 +45,8 @@
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-        <StartX>1</StartX>
-        <StartY>21</StartY>
+        <!--StartX>1</StartX>
+        <StartY>21</StartY-->
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
@@ -75,8 +75,8 @@
       <childBoundingRectangle>
         <Height>10</Height>
         <Width>17</Width>
-        <StartX>2</StartX>
-        <StartY>10</StartY>
+        <!--StartX>2</StartX>
+        <StartY>10</StartY-->
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
@@ -128,15 +128,15 @@
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-        <StartX>5</StartX>
-        <StartY>20</StartY>
+        <!--StartX>5</StartX>
+        <StartY>20</StartY-->
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
     <Renderer>Button</Renderer>
     <Position>
       <Height>29</Height>
-      <Width>65</Width>
+      <Width>62</Width>
       <StartX>0</StartX>
       <StartY>18</StartY>
     </Position>

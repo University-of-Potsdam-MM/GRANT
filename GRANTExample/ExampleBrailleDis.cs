@@ -181,7 +181,12 @@ namespace GRANTExample
             {
                 for(int j = 0; j < (result.Length / result.GetLength(0)); j++)
                 {
-                    Console.Write(result[i,j]+ "\t");
+                 //   Console.Write(result[i,j]+ "\t");
+                    if (result[i, j]) { Console.Write("x"); }
+                    else
+                    {
+                        Console.Write(" ");
+                    }
                 }
                 Console.WriteLine("");
             }
