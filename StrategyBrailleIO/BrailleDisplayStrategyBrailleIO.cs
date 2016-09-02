@@ -949,7 +949,7 @@ namespace StrategyBrailleIO
         }
 
         private void moveGroupX(ref BrailleIOViewRange v, BrailleIOViewRange groupView, int mx, BrailleIOScreen screen)
-        {
+        {//TODO: evtl. isVisible = false setzen, wenn Elemente rausgeschoben wurden und nur bei Elementen die halb draußen sind mit Offset arbeiten
             Rectangle viewbox = v.ViewBox;
             int groupViewContentWidth = groupView.ContentBox.Width;
             int groupViewContentX = groupView.ContentBox.X;

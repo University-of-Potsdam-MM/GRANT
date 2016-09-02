@@ -11,8 +11,6 @@
               <xs:element name="IsGroup">
                 <xs:complexType>
                   <xs:sequence minOccurs="0">
-                    <xs:element name="ImplementedClassTypeFullName" type="xs:string" />
-                    <xs:element name="ImplementedClassTypeDllName" type="xs:string" />
                     <xs:element name="Linebreak" type="xs:boolean" />
                     <xs:element name="Vertical" type="xs:boolean" />
                     <xs:element name="childBoundingRectangle">
@@ -129,8 +127,6 @@
                 </xsd:complexType>
               </xsd:element>
               <xs:element name="TextFromUIElement" type="xs:string" /> <!-- Gibt den Namen einer GeneralProperties an, von welcher der Text angezeigt werden soll; wenn es leer ist, bezieht sich dieses Objekt auf kein Element des gefilterten Baumes-->
-              <xs:element name="ImplementedClassTypeFullName" type="xs:string" />
-              <xs:element name="ImplementedClassTypeDllName" type="xs:string" />
             </xs:sequence>
             <xs:attribute name="name" type="xs:string" use="required" />
           </xs:complexType>

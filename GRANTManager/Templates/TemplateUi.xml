@@ -33,20 +33,14 @@
     </BoxModel>
     <Screens />
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateNode</ImplementedClassTypeFullName>
-    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="MenuBar">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
-      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
-      <Linebreak>true</Linebreak>
+      <Linebreak>false</Linebreak>
       <Vertical>false</Vertical>
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-        <!--StartX>1</StartX>
-        <StartY>21</StartY-->
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
@@ -63,20 +57,14 @@
       <Screen>screen20</Screen>
     </Screens>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
-    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="Menu">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.Templatesubtree</ImplementedClassTypeFullName>
-      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>false</Linebreak>
       <Vertical>false</Vertical>
       <childBoundingRectangle>
         <Height>10</Height>
         <Width>17</Width>
-        <!--StartX>2</StartX>
-        <StartY>10</StartY-->
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
@@ -93,8 +81,6 @@
       <Screen>screen30</Screen>
     </Screens>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
-    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="StatusBar" >
     <IsGroup />
@@ -116,20 +102,14 @@
     </BoxModel>
     <Screens />
     <TextFromUIElement />
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateNode</ImplementedClassTypeFullName>
-    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
   <UiElement name="Tab">
     <IsGroup>
-      <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateSubtree</ImplementedClassTypeFullName>
-      <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
       <Linebreak>true</Linebreak>
       <Vertical>true</Vertical>
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-        <!--StartX>5</StartX>
-        <StartY>20</StartY-->
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
@@ -155,7 +135,5 @@
       <Screen>screen40</Screen>
     </Screens>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
-    <ImplementedClassTypeFullName>GRANTManager.Templates.TemplateGroup</ImplementedClassTypeFullName>
-    <ImplementedClassTypeDllName>StrategyManager</ImplementedClassTypeDllName>
   </UiElement>
 </TemplateUi>

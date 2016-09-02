@@ -26,11 +26,7 @@ namespace GRANTManager.Templates
 
         public override void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
-            
-            //if (!(filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item"))) { return; }
             if (!filteredSubtree.HasChild ) { return; }
-
-            // OSMElement.OSMElement brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
             if (filteredSubtree.HasChild)
             {
                 ITreeStrategy<OSMElement.OSMElement> filteredSubtreeCopy = filteredSubtree.Copy();
@@ -44,7 +40,6 @@ namespace GRANTManager.Templates
 
         protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
         {
-           // if ((filteredSubtree.Data.properties.Equals(new GeneralProperties()) || !filteredSubtree.Data.properties.controlTypeFiltered.Contains("Item"))) { return new OSMElement.OSMElement(); }
             if (filteredSubtree.Data.properties.Equals(new GeneralProperties())) { return new OSMElement.OSMElement(); }
             OSMElement.OSMElement brailleNode = templateObject.osm;
             GeneralProperties prop = templateObject.osm.properties;
@@ -60,7 +55,7 @@ namespace GRANTManager.Templates
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
 
-            if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
+            if (prop.controlTypeFiltered.Equals("DropDownMenu"))
             {
                 OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
                 if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
@@ -104,10 +99,10 @@ namespace GRANTManager.Templates
             { //horizontal
                 int line = 0;
                 int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
-                int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width); // (max - Convert.ToInt32(templateObject.rect.X)) / Convert.ToInt32(templateObject.rect.Width);
+                int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelements.childBoundingRectangle.Width);
                 if (braille.groupelements.linebreak == true)
                 {
-                    line = filteredSubtree.BranchIndex / elementsProLine; //filteredSubtree.BranchIndex / (deviceWidth / lengthBox); // beim nutzen von mehreren Zeilen, wird dadurch boxStartX korrigiert <------- 0
+                    line = filteredSubtree.BranchIndex / elementsProLine;
                 }
                 if (boxStartY == null)
                 {
@@ -165,10 +160,7 @@ namespace GRANTManager.Templates
             if (parentNode.HasChild)
             {
                 parentNode = parentNode.Child;
-              //  if (parentNode.Data.properties.controlTypeFiltered.Contains("Item"))
-                {
-                    createSpecialUiElement(parentNode, templateObject, brailleNodeId);
-                }
+                createSpecialUiElement(parentNode, templateObject, brailleNodeId);
             }
             else
             {
@@ -177,15 +169,10 @@ namespace GRANTManager.Templates
             while (parentNode.HasNext)
             {
                 parentNode = parentNode.Next;
-                //if (parentNode.Data.properties.controlTypeFiltered.Contains("Item"))
-                {
-                    createSpecialUiElement(parentNode, templateObject, brailleNodeId);
-                }
+                createSpecialUiElement(parentNode, templateObject, brailleNodeId);
             }           
-            return;
-       
+            return;       
         }
-
 
     }
 }
