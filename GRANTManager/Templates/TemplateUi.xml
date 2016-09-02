@@ -128,15 +128,15 @@
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-        <StartX>2</StartX>
+        <StartX>5</StartX>
         <StartY>20</StartY>
       </childBoundingRectangle>
       <BoxModel />
     </IsGroup>
     <Renderer>Button</Renderer>
     <Position>
-      <Height>27</Height>
-      <Width>60</Width>
+      <Height>29</Height>
+      <Width>65</Width>
       <StartX>0</StartX>
       <StartY>18</StartY>
     </Position>
