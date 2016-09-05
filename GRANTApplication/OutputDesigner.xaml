@@ -146,7 +146,7 @@
             </ScrollViewer>
 
             <!-- <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >-->
-            <StackPanel DockPanel.Dock="Left"  DataContext="{Binding MyGroups}" Background="White" Width="230"   Height="320" HorizontalAlignment="Center" >
+            <StackPanel DockPanel.Dock="Left"   Background="White" Width="230"   Height="320" HorizontalAlignment="Center" >
                 <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="229" Margin="0,0,1,0" />
 
 
@@ -172,15 +172,25 @@
                 </ListBox>
                 <Grid VerticalAlignment="Top" Height="114" HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,5,1,0">
                     <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
-                		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" 
+                		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" EnableRowVirtualization="False" EnableColumnVirtualization="False"
                 		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3"  Width="Auto" Height="Auto" >
-                
-                        
-                        
-                        
-                        
-                        
-                        
+                       <!-- <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=ParentColumn.FieldName}" Value="PaperProfit">
+                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Content,Converter={StaticResource myConverterForeground}}"/>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+
+                            </Style>
+                        </DataGrid.CellStyle>-->
+
+
+
+
                         <!--   <DataGrid.Style>
                                <Style TargetType="{x:Type DataGrid}">
                                 <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
