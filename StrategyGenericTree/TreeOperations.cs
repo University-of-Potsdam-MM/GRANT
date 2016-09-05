@@ -329,11 +329,11 @@ namespace StrategyGenericTree
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
             }
-            Console.WriteLine("Gesuchte ID: {0}", idGenereted);
+           // Console.WriteLine("Gesuchte ID: {0}", idGenereted);
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
                 Boolean propertieIdGenerated = idGenereted == null || idGenereted.Equals(node.Data.properties.IdGenerated);
-                Console.WriteLine("ID = {0}", node.Data.properties.IdGenerated);
+                //Console.WriteLine("ID = {0}", node.Data.properties.IdGenerated);
                 if (propertieIdGenerated)
                 {
                     result.Add((ITreeStrategy<T>)node);
@@ -928,7 +928,7 @@ namespace StrategyGenericTree
                 sb.Append(b.ToString("X2"));
             }
             String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
-            Console.WriteLine("Node: name = {0}, \t controltype = {1}, \t hash[] = {2}, \t hashString = {3}, \t resultString = {4}", node.Data.properties.nameFiltered, node.Data.properties.controlTypeFiltered, tmpHash, sb.ToString(), result);
+           // Console.WriteLine("Node: name = {0}, \t controltype = {1}, \t hash[] = {2}, \t hashString = {3}, \t resultString = {4}", node.Data.properties.nameFiltered, node.Data.properties.controlTypeFiltered, tmpHash, sb.ToString(), result);
             return sb.ToString();
         }
 

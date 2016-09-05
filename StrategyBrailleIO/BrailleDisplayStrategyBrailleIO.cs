@@ -679,7 +679,7 @@ namespace StrategyBrailleIO
 
             if (uiElementeTypesBrailleIoEnum.Button.ToString().Equals(uiElementType))
             {
-               rect  = new Rect(0, 0, 50, 30);               
+               rect  = new Rect(0, 0, 30, 8);               
             }
             if (uiElementeTypesBrailleIoEnum.DropDownMenu.ToString().Equals(uiElementType))
             {
@@ -695,14 +695,15 @@ namespace StrategyBrailleIO
             }
             if (uiElementeTypesBrailleIoEnum.Matrix.ToString().Equals(uiElementType))
             {
-                rect = new Rect(0, 0, 3, 6);
+                rect = new Rect(0, 0, 3, 7);
                 brailleR.matrix = new bool[,] { 
-                    {false, false, true, true, false, false},
-                    {false, true, false, false, false, false},
-                    {true, false, false, false, false, false}
-                     
-
-                   
+                    {false, false, true},
+                    {true, false, false},
+                    {false, true, false},
+                    {false, false, false},
+                    {true, false, false},
+                    {false, false, false},
+                    {false, true, false},
                 };
             }
             if (uiElementeTypesBrailleIoEnum.Screenshot.ToString().Equals(uiElementType))
@@ -905,6 +906,134 @@ namespace StrategyBrailleIO
                 }
             }*/
             return null;
+        }
+
+        /// <summary>
+        /// Verschiebt eine Gruppen von Views horizontal um den angegebenen Werte
+        /// </summary>
+        /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
+        /// <param name="mx">positiv entspricht verschiebung nach rechts</param>
+        public void moveGroupViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, bool isLeft)
+        {
+            //es muss aufgepasst werden, dass
+            BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
+            BrailleIOViewRange groupView = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            int groupViewContentWidth = groupView.ContentBox.Width;
+            int groupViewContentX = groupView.ContentBox.X;
+            BrailleIOViewRange v;             
+            if (viewNode.HasChild)
+            {
+                ITreeStrategy<OSMElement.OSMElement> node = viewNode.Child;
+                Debug.WriteLine("Node: " + node.Data.brailleRepresentation.viewName);
+                v = screen.GetViewRange(node.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+                //v.MoveHorizontal(mx);//Achtung: bezieht sich nur auf den Inhalt einer Box
+                //v.SetXOffset(mx);
+                int mx = isLeft ?  -v.ViewBox.Width: v.ViewBox.Width;
+                moveGroupX(ref v, groupView, mx, screen);
+                Console.WriteLine("Nachher v.GetXOffset() = {0}, v.ViewBox.X = {1}", v.GetXOffset(), v.ViewBox.X);
+                while (node.HasNext)
+                {
+                    node = node.Next;
+                    v = screen.GetViewRange(node.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+                    //v.MoveHorizontal(mx); //Achtung: bezieht sich nur auf den Inhalt einer Box
+                    //v.SetXOffset(mx); // schiebt nur in dem Bereich der View -> es ist nicht mehr alles sichtbar
+                   /* viewbox = v.ViewBox;
+                    viewbox.X = viewbox.X + mx;
+                    v.ViewBox = viewbox;*/
+                    
+                    moveGroupX(ref v, groupView, mx, screen);                    
+                }
+            }
+            brailleIOMediator.RenderDisplay();
+
+        }
+
+        private void moveGroupX(ref BrailleIOViewRange v, BrailleIOViewRange groupView, int mx, BrailleIOScreen screen)
+        {//TODO: evtl. isVisible = false setzen, wenn Elemente rausgeschoben wurden und nur bei Elementen die halb draußen sind mit Offset arbeiten
+            Rectangle viewbox = v.ViewBox;
+            int groupViewContentWidth = groupView.ContentBox.Width;
+            int groupViewContentX = groupView.ContentBox.X;
+            if (v.GetXOffset() + viewbox.X + mx < groupViewContentX && mx < 0)
+            { //links raus
+                v.SetZIndex(v.GetZIndex() - 1);
+                Console.WriteLine("groupView.GetXOffset() = {0}, groupView.ViewBox.X = {1}, groupView.ContentBox.X = {2}", groupView.GetXOffset(), groupView.ViewBox.X, groupView.ContentBox.X);
+                Console.WriteLine("Vorher: v.GetXOffset() = {0}, v.ViewBox.X = {1}", v.GetXOffset(), v.ViewBox.X);
+                
+                v.SetXOffset(v.GetXOffset() + (viewbox.X + mx) - groupViewContentX);
+                viewbox.X = groupViewContentX;
+                v.ViewBox = viewbox;
+                return;
+            }
+           // if (v.GetXOffset() + viewbox.X + mx < groupViewContentX && mx > 0)
+            if (v.GetXOffset() < 0 && mx > 0)
+            {//links draußen (zurück)
+                v.SetZIndex(v.GetZIndex() + 1);
+                v.SetXOffset(v.GetXOffset() + mx);
+                if (v.GetXOffset() > 0)
+                {
+                    viewbox.X = viewbox.X + mx - v.GetXOffset();
+                    v.SetXOffset(0);
+                }
+                v.ViewBox = viewbox;
+                return;
+
+            }
+            if (v.GetXOffset() + viewbox.X + mx > groupViewContentX && v.GetXOffset() + viewbox.X + mx + viewbox.Width >= groupViewContentX + groupViewContentWidth && mx > 0)
+            { //rechts raus
+                Console.WriteLine("Vorher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
+                v.SetZIndex(v.GetZIndex()-1);                
+                v.SetXOffset(v.GetXOffset() + (viewbox.X + mx) - (groupViewContentX + groupViewContentWidth - viewbox.Width));
+                viewbox.X = groupViewContentX + groupViewContentWidth - viewbox.Width;
+                v.ViewBox = viewbox;
+                Console.WriteLine("Nachher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
+                return;
+            }
+            //if (v.GetXOffset() + viewbox.X + mx > groupViewContentX && v.GetXOffset() + viewbox.X + mx + viewbox.Width >= groupViewContentX + groupViewContentWidth && mx < 0)
+            if (v.GetXOffset() > 0 && mx < 0)
+            { //rechts draußen (zurück)
+                Console.WriteLine("Vorher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
+                v.SetZIndex(v.GetZIndex() + 1);
+                v.SetXOffset(v.GetXOffset() + mx);
+                if (v.GetXOffset() == 0)
+                {
+                    v.SetZIndex(60);
+                }
+                if (v.GetXOffset() < 0)
+                {
+                    v.SetZIndex(60);
+                    viewbox.X = viewbox.X + mx -v.GetXOffset();
+                    v.SetXOffset(0);
+                }
+                else
+                {
+                    Debug.WriteLine("");
+                }
+                v.ViewBox = viewbox;
+                Console.WriteLine("Nachher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
+                return;
+            }
+            if (v.GetXOffset() + viewbox.X + mx >= groupViewContentX && mx < 0)
+            {
+                if (v.GetXOffset() != 0)
+                {
+                    v.SetXOffset(0);
+                    v.SetZIndex(60);
+                }
+                viewbox.X = viewbox.X + mx;
+                v.ViewBox = viewbox;
+                return;
+            }
+            if (v.GetXOffset() + viewbox.X + mx >= groupViewContentX && mx > 0)
+            {
+                if (v.GetXOffset() != 0)
+                {
+                    v.SetXOffset(0);
+                    v.SetZIndex(60);
+                }
+                viewbox.X = viewbox.X + mx;
+                v.ViewBox = viewbox;
+                return;
+            }
         }
 
     }

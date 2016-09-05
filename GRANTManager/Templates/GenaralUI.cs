@@ -114,12 +114,16 @@ namespace GRANTManager.Templates
                  Debug.WriteLine(element);
              }*/            
             XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
-            //Debug.WriteLine("First = " + firstElement);
-
-            Type typeOfTemplate = Type.GetType(firstElement.Element("ImplementedClassTypeFullName").Value + ", " + firstElement.Element("ImplementedClassTypeDllName").Value);
-            if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
-            ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
-            //AGeneralUi template = new TemplateTitleBar(strategyMgr, grantTrees);
+            ATemplateUi generalUiInstance;
+            TempletUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
+            if (templateObject.osm.brailleRepresentation.groupelements.Equals(new Groupelements()))
+            {
+                generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+            }
+            else
+            {
+                generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
+            }
             generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiObject(firstElement));
         }
 
@@ -171,10 +175,31 @@ namespace GRANTManager.Templates
             if (!isConvertHeight) { rect.Height -= rect.Y; }
             if (!isConvertWidth) { rect.Width -= rect.X; }
             properties.boundingRectangleFiltered = rect;
+
+            if (!xmlElement.Element("BoxModel").IsEmpty)
+            {
+                XElement boxModel = xmlElement.Element("BoxModel");
+                if (!boxModel.Element("Padding").IsEmpty)
+                {
+                    XElement padding = boxModel.Element("Padding");
+                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Margin").IsEmpty)
+                {
+                    XElement margin = boxModel.Element("Margin");
+                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                }
+                if (!boxModel.Element("Boarder").IsEmpty)
+                {
+                    XElement boarder = boxModel.Element("Boarder");
+                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                }
+            }
+
             if (xmlElement.Element("IsGroup").HasElements)
             {
-                templetObject.groupImplementedClassTypeFullName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeFullName").Value;
-                templetObject.groupImplementedClassTypeDllName = xmlElement.Element("IsGroup").Element("ImplementedClassTypeDllName").Value;
+                templetObject.groupImplementedClassTypeFullName = typeof(TemplateSubtree).FullName;
+                templetObject.groupImplementedClassTypeDllName = typeof(TemplateSubtree).Module.Assembly.GetName().Name; // == Dll-Name
                 Groupelements group = new Groupelements();
                 group.linebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
                 group.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
@@ -184,10 +209,8 @@ namespace GRANTManager.Templates
                 childRect.Height = isConvertHeight ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 isConvertWidth = Int32.TryParse(position.Element("Width").Value, out result);
                 childRect.Width = isConvertWidth ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
-                isConvert = Int32.TryParse(position.Element("StartX").Value, out result);
-                childRect.X = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width - childRect.Width);
-                isConvert = Int32.TryParse(position.Element("StartY").Value, out result);
-                childRect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - childRect.Height);
+                childRect.X = rect.X + braille.padding.Left + braille.margin.Left + braille.boarder.Left;
+                childRect.Y = rect.Y + braille.padding.Top + braille.margin.Top + braille.boarder.Top;
                 if (!isConvertHeight) { childRect.Height -= childRect.Y; }
                 if (!isConvertWidth) { childRect.Width -= childRect.X; }
                 group.childBoundingRectangle = childRect;
@@ -224,25 +247,7 @@ namespace GRANTManager.Templates
                 }
 
             }
-            if (!xmlElement.Element("BoxModel").IsEmpty)
-            {
-                XElement boxModel = xmlElement.Element("BoxModel");
-                if (!boxModel.Element("Padding").IsEmpty)
-                {
-                    XElement padding = boxModel.Element("Padding");
-                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
-                }
-                if (!boxModel.Element("Margin").IsEmpty)
-                {
-                    XElement margin = boxModel.Element("Margin");
-                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
-                }
-                if (!boxModel.Element("Boarder").IsEmpty)
-                {
-                    XElement boarder = boxModel.Element("Boarder");
-                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
-                }
-            }
+
             templetObject.name = xmlElement.Attribute("name").Value;
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
@@ -268,11 +273,19 @@ namespace GRANTManager.Templates
             foreach (XElement element in uiElement)
             {
                 //Debug.WriteLine(element);
-                Type typeOfTemplate = Type.GetType(element.Element("ImplementedClassTypeFullName").Value + ", " + element.Element("ImplementedClassTypeDllName").Value);
-                if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
-                ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                ATemplateUi generalUiInstance;
+                TempletUiObject templateObject = xmlUiElementToTemplateUiObject(element);
+                if (templateObject.osm.brailleRepresentation.groupelements.Equals(new Groupelements()))
+                {
+                    generalUiInstance = new  TemplateNode(strategyMgr, grantTrees);
+                }
+                else
+                {
+                    generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
+                }
+
                 ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
-                generalUiInstance.createUiElementFromTemplate(ref tree, xmlUiElementToTemplateUiObject(element));
+                generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
             }
         }
 
@@ -302,16 +315,12 @@ namespace GRANTManager.Templates
                     foreach (ITreeStrategy<OSMElement.OSMElement> t in treefilteredElements)
                     {
                         tree = t;
-                        Type typeOfTemplate = Type.GetType(e.Element("ImplementedClassTypeFullName").Value + ", " + e.Element("ImplementedClassTypeDllName").Value);
-                        if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
-                        iterateScreensForTemplate(screenList, ref tree, templateObject, typeOfTemplate);
+                        iterateScreensForTemplate(screenList, ref tree, templateObject);
                     }
                 }
                 else
                 {
-                    Type typeOfTemplate = Type.GetType(e.Element("ImplementedClassTypeFullName").Value + ", " + e.Element("ImplementedClassTypeDllName").Value);
-                    if (typeOfTemplate == null) { Debug.WriteLine("Es konnte kein Typ ermittelt werden um das Template für ein UI-Element zu nutzen!"); return; }
-                    iterateScreensForTemplate(screenList, ref tree, templateObject, typeOfTemplate);
+                    iterateScreensForTemplate(screenList, ref tree, templateObject);
                 }
 
             }
@@ -324,9 +333,18 @@ namespace GRANTManager.Templates
         /// <param name="tree">gibt den gefilterten Baum an</param>
         /// <param name="templateObject">gibt das Template-Objekt an</param>
         /// <param name="typeOfTemplate">gibt den Typ des zu nutzenden Templates an</param>
-        private void iterateScreensForTemplate(List<String> screenList, ref ITreeStrategy<OSMElement.OSMElement> tree, TempletUiObject templateObject, Type typeOfTemplate)
+        private void iterateScreensForTemplate(List<String> screenList, ref ITreeStrategy<OSMElement.OSMElement> tree, TempletUiObject templateObject)
         {
-            ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+            ATemplateUi generalUiInstance;
+            if (templateObject.osm.brailleRepresentation.groupelements.Equals(new Groupelements()))
+            {
+                generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+            }
+            else
+            {
+                generalUiInstance = new TemplateSubtree(strategyMgr, grantTrees);
+            }
+           // ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             foreach (String screen in screenList)
             {
                 templateObject.Screens = new List<string>();

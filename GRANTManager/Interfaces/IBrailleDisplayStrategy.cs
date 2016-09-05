@@ -71,6 +71,8 @@ namespace GRANTManager.Interfaces
         /// <returns>den Namen des Sichtbaren Screens oder <c>null</c></returns>
         String getVisibleScreen();
 
+        void moveGroupViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, bool isLeft);
+
 
         void setStrategyMgr(StrategyManager strategyMgr);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

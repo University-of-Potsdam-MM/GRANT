@@ -29,7 +29,9 @@ namespace BrailleIOGuiElementRenderer
             if(typeof(DropDownMenu).Equals(typetypeSpecialContent)){
                 dropDownMenu = (DropDownMenu)uiElement.uiElementSpecialContent;
             }
-            else { throw new InvalidCastException("Can't cast uiElementSpecialContent to DropDownMenu! {0}"); }
+            else { 
+                throw new InvalidCastException("Can't cast uiElementSpecialContent to DropDownMenu! {0}"); 
+            }
             if (!dropDownMenu.isChild) 
             {//bei der obersten "Leiste" im DropDownMenu muss bei der Ausrichtung nichts unterschieden werden
                 return RenderDropDownMenuHorizontal(view, uiElement);
