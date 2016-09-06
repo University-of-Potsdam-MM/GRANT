@@ -748,5 +748,18 @@ namespace GRANTManager
             Console.WriteLine(args.Message);
         }
 
+        /// <summary>
+        /// Ermittelt zu einem Punkt den entsprechenden Braille-Knoten
+        /// </summary>
+        /// <param name="x">gibt die x-Koordinate des Punktes an</param>
+        /// <param name="y">gibt die y-Koordinate des Punktes an</param>
+        /// <returns></returns>
+        public ITreeStrategy<OSMElement.OSMElement> getBrailleNodeAtPoint(int x, int y)
+        {
+            int offsetX, offsetY;
+            String viewAtPoint = strategyMgr.getSpecifiedBrailleDisplay().getBrailleUiElementViewNameAtPoint(x, y, out offsetX, out offsetY);
+            return strategyMgr.getSpecifiedTreeOperations().getTreeElementOfViewAtPoint(x, y, viewAtPoint, offsetX, offsetY);
+        }
+
     }
 }

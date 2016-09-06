@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 namespace GRANTManager.Interfaces
 {
     public interface ITreeOperations<T>
@@ -134,6 +135,18 @@ namespace GRANTManager.Interfaces
         /// Löscht alle Kindelemente und deren OSM-Beziehungen von Gruppen im Braille-Baum
         /// </summary>
         void deleteChildsOfBrailleGroups();
+
+        /// <summary>
+        /// Ermittelt den Knoten des BrailleBaums zu einem Punkt
+        /// bei Gruppenknoten wird "versucht" das entsprechende Kind zu ermitteln 
+        /// </summary>
+        /// <param name="pointX">gibt die x-Position des Punktes an</param>
+        /// <param name="pointY">gibt die y-Position des Punktes an</param>
+        /// <param name="groupViewName">gibt den View-Namen der Gruppen-View an</param>
+        /// <param name="offsetX">gibt den x-Offset der Gruppen-View an</param>
+        /// <param name="offsetY">ibt den x-Offset der Gruppen-View an</param>
+        /// <returns>den knoten, welcher dem Element entspricht, welches auf der Stifftplatte geklickt wurde oder null</returns>
+        ITreeStrategy<OSMElement.OSMElement> getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY);
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

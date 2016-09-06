@@ -64,9 +64,6 @@ namespace BrailleIOGuiElementRenderer
 
     public struct Groupelements
     {
-       // public Padding padding { get; set; }
-       // public Padding margin { get; set; }
-       // public Padding boarder { get; set; }
         public Rect childBoundingRectangle { get; set; }
         public IBrailleIOContentRenderer renderer { get; set; }
         public UiElement childUiElement { get; set; }

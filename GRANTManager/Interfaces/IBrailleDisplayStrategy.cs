@@ -35,7 +35,7 @@ namespace GRANTManager.Interfaces
         /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
         /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
         /// <returns>falls eine passende View gefunden wurde dessen Name; sonst <code>null</code></returns>
-        String getBrailleUiElementViewNameAtPoint(int x, int y);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
+        String getBrailleUiElementViewNameAtPoint(int x, int y, out int offsetX, out int offsetY);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
 
         /// <summary>
         /// Gibt eine Liste mit möglichen Renderen zurück

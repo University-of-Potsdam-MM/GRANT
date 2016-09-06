@@ -45,7 +45,7 @@ namespace GRANTExample
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
                 {
                     String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-                   // String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+                    //String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
                     ui.createUiElementsAllScreens(path);
                     Settings settings = new Settings();
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
@@ -182,7 +182,7 @@ namespace GRANTExample
             {
                 for(int j = 0; j < (result.Length / result.GetLength(0)); j++)
                 {
-                 //   Console.Write(result[i,j]+ "\t");
+                 //   Console.Write(viewAtPoint[i,j]+ "\t");
                     if (result[i, j]) { Console.Write("x"); }
                     else
                     {

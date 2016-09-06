@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using OSMElement.UiElements;
 using System.Security.Cryptography;
 using GRANTManager.Templates;
+using System.Windows;
+using System.Diagnostics;
 
 namespace StrategyGenericTree
 {
@@ -1122,5 +1124,63 @@ namespace StrategyGenericTree
                 }
             }
         }
+
+        /// <summary>
+        /// Ermittelt den Knoten des BrailleBaums zu einem Punkt
+        /// bei Gruppenknoten wird "versucht" das entsprechende Kind zu ermitteln 
+        /// </summary>
+        /// <param name="pointX">gibt die x-Position des Punktes an</param>
+        /// <param name="pointY">gibt die y-Position des Punktes an</param>
+        /// <param name="groupViewName">gibt den View-Namen der Gruppen-View an</param>
+        /// <param name="offsetX">gibt den x-Offset der Gruppen-View an</param>
+        /// <param name="offsetY">ibt den x-Offset der Gruppen-View an</param>
+        /// <returns>den knoten, welcher dem Element entspricht, welches auf der Stifftplatte geklickt wurde oder null</returns>
+        public ITreeStrategy<OSMElement.OSMElement> getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY)
+        {
+            if (grantTrees == null || groupViewName == null || groupViewName.Equals("")) { return null; }
+            String visibleScreen = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
+            ITreeStrategy<OSMElement.OSMElement> screenTree = getSubtreeOfScreen(visibleScreen);
+            screenTree = getSubtreeOfView(groupViewName, screenTree);
+            if (screenTree == null || screenTree.Equals(strategyMgr.getSpecifiedTree().NewNodeTree())) { return null; }
+           // screenTree = screenTree.Child;
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)screenTree).AllChildren.Nodes)
+            {
+               Rect rect = node.Data.properties.boundingRectangleFiltered;
+               if (rect.Contains(pointX - offsetX, pointY - offsetY))
+               {
+                   return (ITreeStrategy<OSMElement.OSMElement>)node;
+               }
+               /*if ((rect.X + offsetX <= pointX && rect.X + offsetX + rect.Width >= pointX) && (rect.Y + offsetY <= pointY && rect.Y + offsetY + rect.Height >= pointY))
+               {
+                   Debug.WriteLine("");
+               }
+               Debug.WriteLine("");*/
+            }
+            return (ITreeStrategy<OSMElement.OSMElement>)screenTree; 
+        }
+
+        private ITreeStrategy<OSMElement.OSMElement> getSubtreeOfView(String viewName, ITreeStrategy<OSMElement.OSMElement> subtree)
+        {
+            if (subtree == null) { return null; }
+            if (subtree.HasChild)
+            {
+                subtree = subtree.Child;
+                if (subtree.Data.brailleRepresentation.viewName.Equals(viewName))
+                {
+                    return subtree;
+                }
+            }
+            else { return null; }
+            while (subtree.HasNext)
+            {
+                subtree = subtree.Next;
+                if (subtree.Data.brailleRepresentation.viewName.Equals(viewName))
+                {
+                    return subtree;
+                }
+            }
+            return null;
+        }
+
     }
 }

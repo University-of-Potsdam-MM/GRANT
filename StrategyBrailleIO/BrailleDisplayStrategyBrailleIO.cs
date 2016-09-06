@@ -480,13 +480,17 @@ namespace StrategyBrailleIO
         /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
         /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
         /// <returns>falls eine passende View gefunden wurde dessen Name, dieser bezieht sich auf den aktuellen Screen; sonst <code>null</code></returns>
-        public String getBrailleUiElementViewNameAtPoint(int x, int y)
+        public String getBrailleUiElementViewNameAtPoint(int x, int y, out int offsetX, out int offsetY)
         {
             BrailleIOViewRange viewAtPoint = brailleIOMediator.GetViewAtPosition(x, y);
             if(viewAtPoint == null){
                 Console.WriteLine("zu dem Punkt wurde keine passende View gefunden.");
+                offsetX = 0;
+                offsetY = 0;
                 return null;
             }
+            offsetX = viewAtPoint.GetXOffset();
+            offsetY = viewAtPoint.GetYOffset();
             return viewAtPoint.Name;
         }
 

@@ -42,7 +42,6 @@
         <Height>9</Height>
         <Width>15</Width>
       </childBoundingRectangle>
-      <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -66,7 +65,6 @@
         <Height>10</Height>
         <Width>17</Width>
       </childBoundingRectangle>
-      <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -111,7 +109,6 @@
         <Height>9</Height>
         <Width>15</Width>
       </childBoundingRectangle>
-      <BoxModel />
     </IsGroup>
     <Renderer>Button</Renderer>
     <Position>

@@ -238,8 +238,8 @@ namespace GRANTExample
             }
             if (e.Key == Key.NumPad5)
             {
-                String result = strategyMgr.getSpecifiedBrailleDisplay().getBrailleUiElementViewNameAtPoint(9, 23);
-                Debug.WriteLine("View: " + result);
+                ITreeStrategy<OSMElement.OSMElement> node = guiFuctions.getBrailleNodeAtPoint(9, 23);
+                Debug.WriteLine("Braille-Node: " + node != null ? node.Data.properties.valueFiltered : "null");
             }
 
        }
@@ -288,8 +288,8 @@ namespace GRANTExample
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
-           String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-         //  String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+         //  String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+           String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
 
             if (!GuiFunctions.isTemplateValid(path))
             {
