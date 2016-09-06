@@ -143,10 +143,10 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
-                   // strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentNode, -1);
+                   // strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentBrailleTreeNode, -1);
                     grantTree.setFilteredTree(tree);
                     Console.WriteLine();
-                  //  baumSchleife(parentNode);
+                  //  baumSchleife(parentBrailleTreeNode);
                 }
                 catch (Exception ex)
                 {
@@ -173,7 +173,7 @@ namespace GRANTExample
             }
             if (tree.Count == 1 && tree.Depth == -1)
             {
-                //baumSchleife(parentNode);
+                //baumSchleife(parentBrailleTreeNode);
                 return;
             }
             if (!tree.HasChild)

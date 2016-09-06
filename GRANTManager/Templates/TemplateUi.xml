@@ -7,7 +7,7 @@
     <Renderer>Text</Renderer>
     <Position>
       <Height>6</Height>
-      <Width xsi:nil="true" />    <!-- entspricht der Bereite des Gerätes -->
+      <Width xsi:nil="true" />
       <StartX>0</StartX>
       <StartY>0</StartY>
     </Position>
@@ -47,7 +47,7 @@
     <Renderer>DropDownMenu</Renderer>
     <Position>
       <Height>10</Height>
-      <Width>17</Width>
+      <Width xsi:nil="true" />
       <StartX>0</StartX>
       <StartY>20</StartY>
     </Position>
@@ -69,11 +69,11 @@
       <BoxModel />
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
-      <Position>
-        <Height>10</Height>
-        <Width>17</Width>
-        <StartX>0</StartX>
-        <StartY>8</StartY>
+    <Position>
+      <Height>10</Height>
+      <Width>60</Width>
+      <StartX>0</StartX>
+      <StartY>8</StartY>
     </Position>
     <BoxModel />
     <Screens>
@@ -87,9 +87,9 @@
     <Renderer>Text</Renderer>
     <Position>
       <Height>6</Height>
-      <Width xsi:nil="true" />    <!-- entspricht der Bereite des Gerätes -->
+      <Width xsi:nil="true" />
       <StartX>0</StartX>
-      <StartY xsi:nil="true" /> 
+      <StartY xsi:nil="true" />
     </Position>
     <BoxModel>
       <Margin />
@@ -115,12 +115,12 @@
     </IsGroup>
     <Renderer>Button</Renderer>
     <Position>
-      <Height>29</Height>
-      <Width>62</Width>
+      <Height>31</Height>
+      <Width>64</Width>
       <StartX>0</StartX>
       <StartY>18</StartY>
     </Position>
-    <BoxModel>
+    <BoxModel >
       <Margin />
       <Padding>
         <Left>1</Left>

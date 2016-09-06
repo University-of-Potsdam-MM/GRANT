@@ -57,8 +57,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrailleIOGroupViewRangeToMatrixRenderer.cs" />
     <Compile Include="BrailleIOButtonToMatrixRenderer.cs" />
     <Compile Include="BrailleIODropDownMenuToMatrixRenderer.cs" />
     <Compile Include="BrailleIOTextBoxToMatrixRenderer.cs" />

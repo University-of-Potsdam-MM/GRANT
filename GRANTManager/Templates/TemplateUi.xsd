@@ -70,6 +70,7 @@
                     <xs:enumeration value="DropDownMenu"/>
                     <xs:enumeration value="Screenshot"/>
                     <xs:enumeration value="TextBox"/>
+                    <xs:enumeration value="GroupElement"/>
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>

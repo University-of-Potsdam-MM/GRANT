@@ -116,7 +116,7 @@ namespace GRANTManager.Templates
             XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
             ATemplateUi generalUiInstance;
             TempletUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
-            if (templateObject.osm.brailleRepresentation.groupelements.Equals(new Groupelements()))
+            if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
             {
                 generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
             }
@@ -130,22 +130,11 @@ namespace GRANTManager.Templates
         public struct TempletUiObject
         {
             public OSMElement.OSMElement osm { get; set; }
-           // public String renderer { get; set; } // --> // -> OSM (GP - controltype) 
-            //public Rect rect { get; set; } // -> Osm (GP)
-            //public String textFromUIElement { get; set; } // -> Osm (GP)
             public String groupImplementedClassTypeFullName { get; set; } //nötig?
             public String groupImplementedClassTypeDllName { get; set; } //nötig?
             public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
-            //public Padding padding { get; set; } // -> OSM (BR)
-            //public Padding margin { get; set; }// -> OSM (BR)
-            //public Padding boarder { get; set; }// -> OSM (BR)
             public String name { get; set; } 
 
-            //Gruppenspezifisch
-            //public Boolean linebreak { get; set; } 
-            //public Boolean vertical { get; set; } //bei DropDownMenus bezieht sich der wert erst auf die 2. Ebene
-            //public int? max { get; set; }
-            //TODO. evtl. auch hier BrailleRepresentaion (oder gleich OSMelement) verwenden
         }
 
         /// <summary>
@@ -200,7 +189,7 @@ namespace GRANTManager.Templates
             {
                 templetObject.groupImplementedClassTypeFullName = typeof(TemplateSubtree).FullName;
                 templetObject.groupImplementedClassTypeDllName = typeof(TemplateSubtree).Module.Assembly.GetName().Name; // == Dll-Name
-                Groupelements group = new Groupelements();
+                GroupelementsOfSameType group = new GroupelementsOfSameType();
                 group.linebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
                 group.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
                 position = xmlElement.Element("IsGroup").Element("childBoundingRectangle");
@@ -235,7 +224,7 @@ namespace GRANTManager.Templates
                     }
                 }
                 group.renderer = xmlElement.Element("Renderer").Value;
-                braille.groupelements = group;
+                braille.groupelementsOfSameType = group;
             }
             if (!xmlElement.Element("Screens").IsEmpty)
             {
@@ -275,7 +264,7 @@ namespace GRANTManager.Templates
                 //Debug.WriteLine(element);
                 ATemplateUi generalUiInstance;
                 TempletUiObject templateObject = xmlUiElementToTemplateUiObject(element);
-                if (templateObject.osm.brailleRepresentation.groupelements.Equals(new Groupelements()))
+                if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
                 {
                     generalUiInstance = new  TemplateNode(strategyMgr, grantTrees);
                 }
@@ -336,7 +325,7 @@ namespace GRANTManager.Templates
         private void iterateScreensForTemplate(List<String> screenList, ref ITreeStrategy<OSMElement.OSMElement> tree, TempletUiObject templateObject)
         {
             ATemplateUi generalUiInstance;
-            if (templateObject.osm.brailleRepresentation.groupelements.Equals(new Groupelements()))
+            if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
             {
                 generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
             }

@@ -202,21 +202,44 @@ namespace GRANTExample
             }
             if (e.Key == Key.Left || e.Key == Key.NumPad4)
             {
-                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("40044FA340D03A60B6C7822FF3B174BC", grantTree.getBrailleTree());
+                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree());
                 if(nodeList != null && nodeList.Count > 0) 
                 {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveGroupViewRangHoricontal(nodeList[0], true);
+                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangHoricontal(nodeList[0], -15);
                     Debug.WriteLine("View ("+nodeList[0].Data.brailleRepresentation.viewName+") verschoben!");
                 }
             }
             if (e.Key == Key.Right || e.Key == Key.NumPad6)
             {
-                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("40044FA340D03A60B6C7822FF3B174BC", grantTree.getBrailleTree());
+                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree());
                 if (nodeList != null && nodeList.Count > 0)
                 {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveGroupViewRangHoricontal(nodeList[0], false);
+                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangHoricontal(nodeList[0], 15);
                     Debug.WriteLine("View (" + nodeList[0].Data.brailleRepresentation.viewName + ") verschoben!");
                 }
+            }
+            if (e.Key == Key.Up || e.Key == Key.NumPad8)
+            {
+                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree());
+                if (nodeList != null && nodeList.Count > 0)
+                {
+                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangVertical(nodeList[0], -15);
+                    Debug.WriteLine("View (" + nodeList[0].Data.brailleRepresentation.viewName + ") verschoben!");
+                }
+            }
+            if (e.Key == Key.Down || e.Key == Key.NumPad2)
+            {
+                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree());
+                if (nodeList != null && nodeList.Count > 0)
+                {
+                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangVertical(nodeList[0], 15);
+                    Debug.WriteLine("View (" + nodeList[0].Data.brailleRepresentation.viewName + ") verschoben!");
+                }
+            }
+            if (e.Key == Key.NumPad5)
+            {
+                String result = strategyMgr.getSpecifiedBrailleDisplay().getBrailleUiElementViewNameAtPoint(9, 23);
+                Debug.WriteLine("View: " + result);
             }
 
        }
@@ -265,7 +288,8 @@ namespace GRANTExample
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
-            String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+           String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+         //  String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
 
             if (!GuiFunctions.isTemplateValid(path))
             {

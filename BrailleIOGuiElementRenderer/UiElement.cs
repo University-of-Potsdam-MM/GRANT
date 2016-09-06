@@ -1,8 +1,10 @@
-﻿using System;
+﻿using BrailleIO.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BrailleIOGuiElementRenderer
 {
@@ -57,6 +59,16 @@ namespace BrailleIOGuiElementRenderer
         {   //hier sind nicht alle Eigenschaften Berücksichtigt
             return String.Format("screenName = {0}, viewName = {1}, text = {2}, uiElementSpecialContent = {3}", screenName, viewName, text, uiElementSpecialContent.ToString());
         }
+        public List<Groupelements> child { get; set; }
+    }
 
+    public struct Groupelements
+    {
+       // public Padding padding { get; set; }
+       // public Padding margin { get; set; }
+       // public Padding boarder { get; set; }
+        public Rect childBoundingRectangle { get; set; }
+        public IBrailleIOContentRenderer renderer { get; set; }
+        public UiElement childUiElement { get; set; }
     }
 }

@@ -35,13 +35,25 @@ namespace BrailleIOGuiElementRenderer
         /// </summary>
         /// <param name="smallMatrix">ibt die kleinere Matrix an</param>
         /// <param name="bigMatrix">ibt die größere Matrix an</param>
-        public static void copyMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix)
+        /// <param name="spaceLeft">gibt an wieviele pins nach Links (und  Rechts) frei bleiben sollen</param>
+       /* public static void copyMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int spaceLeft = 0)
         {
-            for (int i = 0; (i < (bigMatrix.Length / bigMatrix.GetLength(0))) && (i < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)
+            for (int i = spaceLeft; (i < (bigMatrix.Length / bigMatrix.GetLength(0))) && (i-spaceLeft < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)
             {
-                for (int j = 0; (j < bigMatrix.GetLength(0) ) && (j < smallMatrix.GetLength(0) ); j++)
+                for (int j = 0; (j < bigMatrix.GetLength(0)) && (j < smallMatrix.GetLength(0)); j++)
                 {
-                    bigMatrix[j, i] = smallMatrix[j, i ];
+                    bigMatrix[j, i] = smallMatrix[j, i-spaceLeft];
+                }
+            }
+        }*/
+
+        public static void copyMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int startX = 0, int startY = 0)
+        {
+            for (int i = startX; (i < (bigMatrix.Length / bigMatrix.GetLength(0))) && (i - startX < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)
+            {
+                for (int j = startY; (j < bigMatrix.GetLength(0)) && (j - startY < smallMatrix.GetLength(0)); j++)
+                {
+                    bigMatrix[j, i] = smallMatrix[j - startY, i - startX];
                 }
             }
         }

@@ -27,12 +27,8 @@ namespace GRANTManager.Templates
             BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
 
             prop.isEnabledFiltered = false;
-            prop.controlTypeFiltered = "Matrix";
-           // prop.controlTypeFiltered = templateObject.osm.properties.controlTypeFiltered;
+            prop.controlTypeFiltered = "GroupElement";
             prop.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
-          //  prop.boundingRectangleFiltered = templateObject.osm.properties.boundingRectangleFiltered;
-
-         //   braille.fromGuiElement = templateObject.osm.brailleRepresentation.fromGuiElement;
             braille.isVisible = true;
             if (templateObject.Screens == null) { 
                 Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); 
@@ -41,11 +37,7 @@ namespace GRANTManager.Templates
             braille.viewName = "-------------"+ filteredSubtree.Data.properties.IdGenerated;
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
-           /* Groupelements group = new Groupelements();
-            group.linebreak = templateObject.osm.brailleRepresentation.groupelements.linebreak;
-            group.vertical = templateObject.osm.brailleRepresentation.groupelements.vertical;
-            group.max = templateObject.osm.brailleRepresentation.groupelements.max == null ? (group.vertical ? strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width) : templateObject.osm.brailleRepresentation.groupelements.max;
-            braille.groupelements = group;*/
+
             /*if (templateObject.osm.brailleRepresentation.boarder != null)
             {
                 braille.boarder = templateObject.osm.brailleRepresentation.boarder;

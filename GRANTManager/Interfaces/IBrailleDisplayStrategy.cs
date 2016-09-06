@@ -71,7 +71,19 @@ namespace GRANTManager.Interfaces
         /// <returns>den Namen des Sichtbaren Screens oder <c>null</c></returns>
         String getVisibleScreen();
 
-        void moveGroupViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, bool isLeft);
+        /// <summary>
+        /// Verschiebt eine Gruppen von Views horizontal um den angegebenen Werte
+        /// </summary>
+        /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
+        /// <param name="steps">positiv entspricht Verschiebung nach rechts</param>
+        void moveViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps);
+
+        /// <summary>
+        /// Verschiebt eine Gruppen von Views vertical um den angegebenen Werte
+        /// </summary>
+        /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
+        /// <param name="steps">positiv entspricht Verschiebung nach unten</param>
+        void moveViewRangVertical(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps);
 
 
         void setStrategyMgr(StrategyManager strategyMgr);

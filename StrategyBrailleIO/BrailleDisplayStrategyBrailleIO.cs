@@ -266,7 +266,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Geht rekursive durch alle Baumelemente und erstellt die einzelnen Views
         /// </summary>
-        /// <param name="parentNode">gibt das Baum-Objekt der Oberflaeche an</param>
+        /// <param name="tree">gibt das Baum-Objekt der Oberflaeche an</param>
         private void createViewsFromTree(ITreeStrategy<OSMElement.OSMElement> tree)
         {
             ITreeStrategy<OSMElement.OSMElement> node1;
@@ -282,7 +282,7 @@ namespace StrategyBrailleIO
                     }
                     else
                     {
-                        if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && !node1.Data.brailleRepresentation.viewName.Equals(""))
+                        if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && !node1.Data.brailleRepresentation.viewName.Equals("") && !node1.Data.brailleRepresentation.isGroupChild)
                         {
                             createView(node1.Data);
                         }
@@ -300,7 +300,7 @@ namespace StrategyBrailleIO
                         }
                         else
                         {
-                            if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && node1.Data.brailleRepresentation.viewName != null && !node1.Data.brailleRepresentation.viewName.Equals(""))
+                            if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && node1.Data.brailleRepresentation.viewName != null && !node1.Data.brailleRepresentation.viewName.Equals("") && !node1.Data.brailleRepresentation.isGroupChild)
                             {
                                 createView(node1.Data);
                             }
@@ -318,7 +318,7 @@ namespace StrategyBrailleIO
                     }
                     else
                     {
-                        if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.properties.Equals(new GeneralProperties()) && tree.Data.brailleRepresentation.viewName != null && !tree.Data.brailleRepresentation.viewName.Equals(""))
+                        if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.properties.Equals(new GeneralProperties()) && tree.Data.brailleRepresentation.viewName != null && !tree.Data.brailleRepresentation.viewName.Equals("") && !tree.Data.brailleRepresentation.isGroupChild)
                         {
                             createView(tree.Data);
                         }
@@ -505,6 +505,8 @@ namespace StrategyBrailleIO
                     return new BrailleIOTextBoxToMatrixRenderer();
                 case "DropDownMenu":
                     return new BrailleIODropDownMenuToMatrixRenderer();
+                case "GroupElement":
+                    return new BrailleIOGroupViewRangeToMatrixRenderer();
             }
             return null;
         }
@@ -512,7 +514,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
         /// </summary>
-        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox }
+        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox, GroupElement }
 
         private struct uiElementsTypeStruct
         {
@@ -558,6 +560,11 @@ namespace StrategyBrailleIO
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.TextBox.ToString();
             uiElement.heightMin = 7; // Rahmen (2) + Höhe kleiner Buchstabe (3) + Freizeile (2)
             uiElement.widthMin = 6; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2)
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.GroupElement.ToString();
+            uiElement.heightMin = 7; 
+            uiElement.widthMin = 7;
             uiElementList.Add(uiElement);
 
             if (uiElementList.Count != Enum.GetNames(typeof( uiElementeTypesBrailleIoEnum)).Length)
@@ -656,6 +663,7 @@ namespace StrategyBrailleIO
         /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
         public bool[,] getRendererExampleRepresentation(String uiElementType)
         {
+            if (uiElementType.Equals("GroupElement")) { return new bool[1, 1]; }
             return getRendererExampleRepresentation(getExampleOsmElement(uiElementType));
         }
 
@@ -722,6 +730,26 @@ namespace StrategyBrailleIO
                 rect = new Rect(0, 0, 25, 10);
                 brailleR.showScrollbar = true;
             }
+            /*if (uiElementeTypesBrailleIoEnum.GroupElement.ToString().Equals(uiElementType))
+            {
+                properties.valueFiltered = "Beispiel Beispieltext Beispieltext";//TODO
+                rect = new Rect(0, 0, 25, 10);
+
+                OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
+                BrailleRepresentation childBraille = new BrailleRepresentation();
+                GroupelementsOfSameType group = new GroupelementsOfSameType();
+                group.childBoundingRectangle = new Rect(rect.X + 2, rect.Y + 2, rect.Width - 4, rect.Height - 4);
+                group.renderer = "Button";
+                childBraille.isGroupChild = true; 
+                childBraille.groupelementsOfSameType = group;
+                GeneralProperties childProp = new GeneralProperties();
+                
+                childOsm.properties = childProp;
+                childOsm.brailleRepresentation = childBraille;
+                
+                brailleR.groupelementsOfSameType = group;
+                
+            }*/
             #endregion
             properties.boundingRectangleFiltered = rect;
             osmElement.brailleRepresentation = brailleR;
@@ -799,7 +827,65 @@ namespace StrategyBrailleIO
             brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement.brailleRepresentation.uiElementSpecialContent);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
+            if (grantTrees.getBrailleTree() != null)
+            {
+                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
+                if (nodeList != null && nodeList.Count == 1 && nodeList[0].HasChild)
+                //if (osmElement.brailleRepresentation.groupelementsOfDiffrentTypes  != null)
+                {
+                    List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
+
+                    brailleIOElement.showScrollbar = true;
+
+                    childList = iteratedChildreen(nodeList[0]);
+                    brailleIOElement.child = childList;
+                }
+            }
             return brailleIOElement;
+        }
+
+        private BrailleIOGuiElementRenderer.Groupelements osmSubelementToGroupelement(OSMElement.OSMElement brailleTreeNode)
+        {
+            BrailleIOGuiElementRenderer.Groupelements groupelement = new BrailleIOGuiElementRenderer.Groupelements();
+            groupelement.childBoundingRectangle = brailleTreeNode.properties.boundingRectangleFiltered;
+            groupelement.renderer = getRenderer( brailleTreeNode.brailleRepresentation.groupelementsOfSameType.renderer);
+            UiElement childUi = new UiElement();
+            childUi.text = brailleTreeNode.properties.valueFiltered;
+            childUi.viewName = brailleTreeNode.brailleRepresentation.viewName;
+            childUi.isVisible = true;
+            childUi.screenName = brailleTreeNode.brailleRepresentation.screenName;
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.DropDownMenu).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            {
+                childUi.uiElementSpecialContent = convertDropDownMenu((OSMElement.UiElements.DropDownMenu)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);
+            }
+            groupelement.childUiElement = childUi;
+            
+            return groupelement;
+        }
+
+        /// <summary>
+        /// Iterriert über die Kinder eines Knotens und erstellt für jedes Kind ein Ui-Element
+        /// </summary>
+        /// <param name="parentBrailleTreeNode">gibt den Elternknoten an</param>
+        /// <param name="templateObject">gibt das zu nutzende Template an</param>
+        private List<BrailleIOGuiElementRenderer.Groupelements> iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentBrailleTreeNode)
+        {
+            List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
+            if (parentBrailleTreeNode.HasChild)
+            {
+                parentBrailleTreeNode = parentBrailleTreeNode.Child;
+                childList.Add(osmSubelementToGroupelement(parentBrailleTreeNode.Data));
+            }
+            else
+            {
+                return null;
+            }
+            while (parentBrailleTreeNode.HasNext)
+            {
+                parentBrailleTreeNode = parentBrailleTreeNode.Next;
+                childList.Add(osmSubelementToGroupelement(parentBrailleTreeNode.Data));
+            }
+            return childList;
         }
 
         /// <summary>
@@ -912,129 +998,32 @@ namespace StrategyBrailleIO
         /// Verschiebt eine Gruppen von Views horizontal um den angegebenen Werte
         /// </summary>
         /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
-        /// <param name="mx">positiv entspricht verschiebung nach rechts</param>
-        public void moveGroupViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, bool isLeft)
+        /// <param name="steps">positiv entspricht Verschiebung nach rechts</param>
+        public void moveViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps)
         {
             //es muss aufgepasst werden, dass
             BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
             BrailleIOViewRange groupView = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
-            int groupViewContentWidth = groupView.ContentBox.Width;
-            int groupViewContentX = groupView.ContentBox.X;
-            BrailleIOViewRange v;             
-            if (viewNode.HasChild)
-            {
-                ITreeStrategy<OSMElement.OSMElement> node = viewNode.Child;
-                Debug.WriteLine("Node: " + node.Data.brailleRepresentation.viewName);
-                v = screen.GetViewRange(node.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
-                //v.MoveHorizontal(mx);//Achtung: bezieht sich nur auf den Inhalt einer Box
-                //v.SetXOffset(mx);
-                int mx = isLeft ?  -v.ViewBox.Width: v.ViewBox.Width;
-                moveGroupX(ref v, groupView, mx, screen);
-                Console.WriteLine("Nachher v.GetXOffset() = {0}, v.ViewBox.X = {1}", v.GetXOffset(), v.ViewBox.X);
-                while (node.HasNext)
-                {
-                    node = node.Next;
-                    v = screen.GetViewRange(node.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
-                    //v.MoveHorizontal(mx); //Achtung: bezieht sich nur auf den Inhalt einer Box
-                    //v.SetXOffset(mx); // schiebt nur in dem Bereich der View -> es ist nicht mehr alles sichtbar
-                   /* viewbox = v.ViewBox;
-                    viewbox.X = viewbox.X + mx;
-                    v.ViewBox = viewbox;*/
-                    
-                    moveGroupX(ref v, groupView, mx, screen);                    
-                }
-            }
+            //groupView.SetXOffset(mx + groupView.GetXOffset()); 
+            groupView.MoveHorizontal(steps);
             brailleIOMediator.RenderDisplay();
-
         }
 
-        private void moveGroupX(ref BrailleIOViewRange v, BrailleIOViewRange groupView, int mx, BrailleIOScreen screen)
-        {//TODO: evtl. isVisible = false setzen, wenn Elemente rausgeschoben wurden und nur bei Elementen die halb draußen sind mit Offset arbeiten
-            Rectangle viewbox = v.ViewBox;
-            int groupViewContentWidth = groupView.ContentBox.Width;
-            int groupViewContentX = groupView.ContentBox.X;
-            if (v.GetXOffset() + viewbox.X + mx < groupViewContentX && mx < 0)
-            { //links raus
-                v.SetZIndex(v.GetZIndex() - 1);
-                Console.WriteLine("groupView.GetXOffset() = {0}, groupView.ViewBox.X = {1}, groupView.ContentBox.X = {2}", groupView.GetXOffset(), groupView.ViewBox.X, groupView.ContentBox.X);
-                Console.WriteLine("Vorher: v.GetXOffset() = {0}, v.ViewBox.X = {1}", v.GetXOffset(), v.ViewBox.X);
-                
-                v.SetXOffset(v.GetXOffset() + (viewbox.X + mx) - groupViewContentX);
-                viewbox.X = groupViewContentX;
-                v.ViewBox = viewbox;
-                return;
-            }
-           // if (v.GetXOffset() + viewbox.X + mx < groupViewContentX && mx > 0)
-            if (v.GetXOffset() < 0 && mx > 0)
-            {//links draußen (zurück)
-                v.SetZIndex(v.GetZIndex() + 1);
-                v.SetXOffset(v.GetXOffset() + mx);
-                if (v.GetXOffset() > 0)
-                {
-                    viewbox.X = viewbox.X + mx - v.GetXOffset();
-                    v.SetXOffset(0);
-                }
-                v.ViewBox = viewbox;
-                return;
-
-            }
-            if (v.GetXOffset() + viewbox.X + mx > groupViewContentX && v.GetXOffset() + viewbox.X + mx + viewbox.Width >= groupViewContentX + groupViewContentWidth && mx > 0)
-            { //rechts raus
-                Console.WriteLine("Vorher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
-                v.SetZIndex(v.GetZIndex()-1);                
-                v.SetXOffset(v.GetXOffset() + (viewbox.X + mx) - (groupViewContentX + groupViewContentWidth - viewbox.Width));
-                viewbox.X = groupViewContentX + groupViewContentWidth - viewbox.Width;
-                v.ViewBox = viewbox;
-                Console.WriteLine("Nachher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
-                return;
-            }
-            //if (v.GetXOffset() + viewbox.X + mx > groupViewContentX && v.GetXOffset() + viewbox.X + mx + viewbox.Width >= groupViewContentX + groupViewContentWidth && mx < 0)
-            if (v.GetXOffset() > 0 && mx < 0)
-            { //rechts draußen (zurück)
-                Console.WriteLine("Vorher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
-                v.SetZIndex(v.GetZIndex() + 1);
-                v.SetXOffset(v.GetXOffset() + mx);
-                if (v.GetXOffset() == 0)
-                {
-                    v.SetZIndex(60);
-                }
-                if (v.GetXOffset() < 0)
-                {
-                    v.SetZIndex(60);
-                    viewbox.X = viewbox.X + mx -v.GetXOffset();
-                    v.SetXOffset(0);
-                }
-                else
-                {
-                    Debug.WriteLine("");
-                }
-                v.ViewBox = viewbox;
-                Console.WriteLine("Nachher: v.GetXOffset() = {0}, v.ViewBox.X = {1}, v.GetZIndex() = {2}", v.GetXOffset(), v.ViewBox.X, v.GetZIndex());
-                return;
-            }
-            if (v.GetXOffset() + viewbox.X + mx >= groupViewContentX && mx < 0)
-            {
-                if (v.GetXOffset() != 0)
-                {
-                    v.SetXOffset(0);
-                    v.SetZIndex(60);
-                }
-                viewbox.X = viewbox.X + mx;
-                v.ViewBox = viewbox;
-                return;
-            }
-            if (v.GetXOffset() + viewbox.X + mx >= groupViewContentX && mx > 0)
-            {
-                if (v.GetXOffset() != 0)
-                {
-                    v.SetXOffset(0);
-                    v.SetZIndex(60);
-                }
-                viewbox.X = viewbox.X + mx;
-                v.ViewBox = viewbox;
-                return;
-            }
+        /// <summary>
+        /// Verschiebt eine Gruppen von Views vertical um den angegebenen Werte
+        /// </summary>
+        /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
+        /// <param name="steps">positiv entspricht Verschiebung nach unten</param>
+        public void moveViewRangVertical(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps)
+        {
+            //es muss aufgepasst werden, dass
+            BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
+            BrailleIOViewRange groupView = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            //groupView.SetXOffset(mx + groupView.GetXOffset()); 
+            groupView.MoveVertical(steps);
+            brailleIOMediator.RenderDisplay();
         }
+
 
     }
 }
