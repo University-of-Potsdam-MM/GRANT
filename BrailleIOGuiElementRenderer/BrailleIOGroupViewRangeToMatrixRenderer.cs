@@ -43,14 +43,14 @@ namespace BrailleIOGuiElementRenderer
                getMax(ref maxHeight, ref maxWidth, groupViewRange.child);
                viewMatrix = new bool[maxHeight, maxWidth]; 
                int i = 0;
-               Console.WriteLine("groupViewRange.viewName = {0}", groupViewRange.viewName);
+              // Console.WriteLine("groupViewRange.viewName = {0}", groupViewRange.viewName);
                foreach (Groupelements child in groupViewRange.child)
                {
                    BrailleIOViewRange tmpChildView = new BrailleIOViewRange(Convert.ToInt32(child.childBoundingRectangle.Left), Convert.ToInt32(child.childBoundingRectangle.Top), Convert.ToInt32(child.childBoundingRectangle.Width), Convert.ToInt32(child.childBoundingRectangle.Height));
                    tmpChildView.Name = "_"+child.childBoundingRectangle.ToString(); //child.childUiElement.viewName;
                    tmpChildView.SetText(child.childUiElement.text);
                    tmpChildView.ShowScrollbars = child.childUiElement.showScrollbar;
-                   ((BrailleIOViewRange)view).GetYOffset();
+                  // ((BrailleIOViewRange)view).GetYOffset();
                    bool[,] childMatrix;
                    if (child.renderer != null)
                    {
@@ -61,7 +61,7 @@ namespace BrailleIOGuiElementRenderer
                        MatrixBrailleRenderer m = new MatrixBrailleRenderer();
                        childMatrix = m.RenderMatrix(tmpChildView, child.childUiElement.text as object);
                    }
-                   Console.WriteLine("i = "+i);
+                  // Console.WriteLine("i = "+i);
                    //Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix,1+ i * Convert.ToInt32(child.childBoundingRectangle.Width));
                    //Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - Convert.ToInt32(view.ViewBox.X), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - Convert.ToInt32(view.ViewBox.Y));
                    Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - (Convert.ToInt32(view.ContentBox.Y) + Convert.ToInt32(view.ViewBox.Y)));

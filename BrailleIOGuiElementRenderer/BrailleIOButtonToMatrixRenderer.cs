@@ -43,32 +43,46 @@ namespace BrailleIOGuiElementRenderer
            {
                viewMatrix =   Helper.createBox(view.ViewBox.Height, view.ViewBox.Width); //erstmal ein eckiger Button
            }
-            //Ecken abrunden
-            //links oben
-            viewMatrix[0, 0] = false;
-            viewMatrix[1, 0] = false;
-            viewMatrix[0, 1] = false;
-            viewMatrix[1, 1] = true;
-            //links unten
-            viewMatrix[view.ViewBox.Height - 1, 0] = false;
-            viewMatrix[view.ViewBox.Height - 1, 1] = false;
-            viewMatrix[view.ViewBox.Height - 2, 0] = false;
-            viewMatrix[view.ViewBox.Height - 2, 1] = true;
-            //rechts oben
-            viewMatrix[1, view.ViewBox.Width - 1] = false;
-            viewMatrix[0, view.ViewBox.Width - 2] = false;
-            viewMatrix[0, view.ViewBox.Width - 1] = false;
-            viewMatrix[1, view.ViewBox.Width - 2] = true;
-            //rechts unten
-            viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 1] = false;
-            viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 1] = false;
-            viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 2] = false;
-            viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 2] = true;
-          //  viewMatrix[0, 7] = false;
-
-            //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (button.text as object == null ? "" : button.text as object), false);
+            bool[,] textMatrix;
+           if (view.ViewBox.Height >= 2 && view.ViewBox.Width >= 2)
+           {
+               //Ecken abrunden
+               //links oben
+               viewMatrix[0, 0] = false;
+               viewMatrix[1, 0] = false;
+               viewMatrix[0, 1] = false;
+               viewMatrix[1, 1] = true;
+               //links unten
+               viewMatrix[view.ViewBox.Height - 1, 0] = false;
+               viewMatrix[view.ViewBox.Height - 1, 1] = false;
+               viewMatrix[view.ViewBox.Height - 2, 0] = false;
+               viewMatrix[view.ViewBox.Height - 2, 1] = true;
+               //rechts oben
+               viewMatrix[1, view.ViewBox.Width - 1] = false;
+               viewMatrix[0, view.ViewBox.Width - 2] = false;
+               viewMatrix[0, view.ViewBox.Width - 1] = false;
+               viewMatrix[1, view.ViewBox.Width - 2] = true;
+               //rechts unten
+               viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 1] = false;
+               viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 1] = false;
+               viewMatrix[view.ViewBox.Height - 1, view.ViewBox.Width - 2] = false;
+               viewMatrix[view.ViewBox.Height - 2, view.ViewBox.Width - 2] = true;
+
+               //String to Braille/Matrix
+               textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (button.text as object == null ? "" : button.text as object), false);
+               //view.ContentHeight = view.ViewBox.Height - 4;
+               //view.ContentWidth = view.ViewBox.Width - 4;
+           }
+           else
+           {
+               //String to Braille/Matrix
+               textMatrix = m.RenderMatrix(view.ViewBox.Width, (button.text as object == null ? "" : button.text as object), false);
+               //view.ContentHeight = view.ViewBox.Height;
+               //view.ContentWidth = view.ViewBox.Width;
+           }
+           view.ContentHeight = textMatrix.GetLength(0);
+           view.ContentWidth = textMatrix.GetLength(1);
             Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 3);
 
             //call post hooks
