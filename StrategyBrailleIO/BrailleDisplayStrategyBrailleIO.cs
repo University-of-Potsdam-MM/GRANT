@@ -1007,9 +1007,18 @@ namespace StrategyBrailleIO
         {
             //es muss aufgepasst werden, dass
             BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
-            BrailleIOViewRange groupView = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+
+            BrailleIOViewRange viewRange;
+            if (viewNode.Data.properties.controlTypeFiltered.Equals("TextBox"))
+            {
+                viewRange = screen.GetViewRange("_TextBoxText_" + viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            }
+            else
+            {
+                viewRange = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            }
             //groupView.SetXOffset(mx + groupView.GetXOffset()); 
-            groupView.MoveHorizontal(steps);
+            viewRange.MoveHorizontal(steps);
             brailleIOMediator.RenderDisplay();
         }
 
@@ -1022,9 +1031,17 @@ namespace StrategyBrailleIO
         {
             //es muss aufgepasst werden, dass
             BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
-            BrailleIOViewRange groupView = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            BrailleIOViewRange viewRange;
+            if (viewNode.Data.properties.controlTypeFiltered.Equals("TextBox"))
+            {
+                viewRange = screen.GetViewRange("_TextBoxText_" + viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            }
+            else
+            {
+                viewRange = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+            }
             //groupView.SetXOffset(mx + groupView.GetXOffset()); 
-            groupView.MoveVertical(steps);
+            viewRange.MoveVertical(steps);
             brailleIOMediator.RenderDisplay();
         }
 

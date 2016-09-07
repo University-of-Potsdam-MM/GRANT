@@ -31,31 +31,32 @@ namespace BrailleIOGuiElementRenderer
         private bool[,] RenderTextBoxTextView(IViewBoxModel view, UiElement textBoxContent)
         {
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
-            BrailleIOViewRange tmpTextBoxView = new BrailleIOViewRange(view.ViewBox.Left + 2, view.ViewBox.Top + 2, view.ViewBox.Width - 4, view.ViewBox.Height - 4);
-            tmpTextBoxView.Name = "_T_" +textBoxContent.screenName + view.ViewBox.Left + view.ViewBox.Top + view.ViewBox.Width + view.ViewBox.Height;
-            tmpTextBoxView.SetText(textBoxContent.text);
-            tmpTextBoxView.ShowScrollbars = textBoxContent.showScrollbar;
-            ((BrailleIOViewRange)view).GetYOffset();
-            tmpTextBoxView.SetXOffset(((BrailleIOViewRange)view).GetXOffset());
-            tmpTextBoxView.SetYOffset(((BrailleIOViewRange)view).GetYOffset());
+            BrailleIOViewRange tmpTextBoxView;
+            BrailleIOMediator brailleIOMediator = BrailleIOMediator.Instance;
+            BrailleIOScreen screen = brailleIOMediator.GetView(textBoxContent.screenName) as BrailleIOScreen;
+            if (screen.GetViewRange("_TextBoxText_" + textBoxContent.viewName) as BrailleIOViewRange != null)
+            {
+                tmpTextBoxView = screen.GetViewRange("_TextBoxText_" + textBoxContent.viewName) as BrailleIOViewRange;
+            }else
+            {
+                tmpTextBoxView = new BrailleIOViewRange(view.ViewBox.Left + 3, view.ViewBox.Top + 2, view.ViewBox.Width - 5, view.ViewBox.Height - 4);
+                tmpTextBoxView.Name = "_TextBoxText_" + textBoxContent.viewName;
+                tmpTextBoxView.SetText(textBoxContent.text);
+                tmpTextBoxView.ShowScrollbars = textBoxContent.showScrollbar;
+            }
+            
             tmpTextBoxView.SetZIndex(3);
             bool[,] textMatrix = m.RenderMatrix(tmpTextBoxView, (textBoxContent.text as object == null ? "" : textBoxContent.text as object));
 
-            BrailleIOMediator brailleIOMediator = BrailleIOMediator.Instance;
-            BrailleIOScreen screen = (BrailleIOScreen)brailleIOMediator.GetView(textBoxContent.screenName);
             if (screen != null)
             {
                 BrailleIOViewRange viewRange = screen.GetViewRange(tmpTextBoxView.Name);
                 if (viewRange == null)
                 {
                     ((BrailleIOScreen)brailleIOMediator.GetView(textBoxContent.screenName)).AddViewRange(tmpTextBoxView.Name, tmpTextBoxView);
+                    viewRange = screen.GetViewRange(tmpTextBoxView.Name);
                 }
-                else
-                {
-                    viewRange.SetXOffset(((BrailleIOViewRange)view).GetXOffset());
-                    viewRange.SetYOffset(((BrailleIOViewRange)view).GetYOffset());
-                    viewRange.SetText(textBoxContent.text);
-                }
+                viewRange.SetText(textBoxContent.text);
             }
 
             return textMatrix;
