@@ -12,8 +12,8 @@ namespace GRANTManager.Templates
 {
     public abstract class ATemplateUi
     {
-        StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTrees;
+        protected StrategyManager strategyMgr { get; private set; }
+        protected GeneratedGrantTrees grantTrees { get; private set; }
         public ATemplateUi()
         {
 

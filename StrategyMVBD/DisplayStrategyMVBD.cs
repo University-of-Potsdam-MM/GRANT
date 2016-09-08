@@ -17,14 +17,12 @@ namespace StrategyMVBD
     {
         protected IPEndPoint _endPoint;
         protected TcpClient _tcpClient;
-        private StrategyManager strategyMgr;
         protected bool isDisposed = false;
         private Device activeDevice { get; set; }
         private List<Device> deviceList;
 
         public DisplayStrategyMVBD(StrategyManager strategyMgr) : base(strategyMgr) 
         {
-            this.strategyMgr = strategyMgr;
             if (!isMvbdRunning()) { Debug.WriteLine("MVBD ist nicht gestartet!"); return; }
             _endPoint = new IPEndPoint(IPAddress.Loopback, 2017); //TODO: auslesen
             ThreadPool.QueueUserWorkItem(new WaitCallback(Thread_Callback));
@@ -34,7 +32,7 @@ namespace StrategyMVBD
 
         private bool isMvbdRunning()
         {
-            return strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD.exe") == IntPtr.Zero ? false : true ;
+            return base.strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD.exe") == IntPtr.Zero ? false : true ;
         }
 
         #region Implementierung der Abstrakten Klasse

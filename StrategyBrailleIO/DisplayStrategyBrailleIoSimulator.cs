@@ -11,12 +11,10 @@ namespace StrategyBrailleIO
 {
     public class DisplayStrategyBrailleIoSimulator : AOutputManager
     {
-        private StrategyManager strategyMgr;
         Device activeDevice;
 
         public DisplayStrategyBrailleIoSimulator(StrategyManager strategyMgr) : base(strategyMgr)
         {
-            this.strategyMgr = strategyMgr;
             activeDevice = new Device(60, 120, OrientationEnum.Front, "BrailleDisSimulator", this.GetType());
         }
 

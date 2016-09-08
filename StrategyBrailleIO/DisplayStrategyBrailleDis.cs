@@ -11,12 +11,10 @@ namespace StrategyBrailleIO
 {
     public class DisplayStrategyBrailleDis : AOutputManager
     {
-        private StrategyManager strategyMgr;
         Device activeDevice;
 
         public DisplayStrategyBrailleDis(StrategyManager strategyMgr) : base(strategyMgr)
         {
-            this.strategyMgr = strategyMgr;
             activeDevice = new Device(60, 120, OrientationEnum.Front, "BrailleDis", this.GetType());
         }
 

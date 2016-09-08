@@ -10,7 +10,7 @@ namespace GRANTManager.AbstractClasses
 {
     public abstract class AOutputManager : IDisposable
     {
-        private StrategyManager strategyMgr;
+        protected StrategyManager strategyMgr{get; private set;}
 
         public AOutputManager(StrategyManager strategyMgr) { this.strategyMgr = strategyMgr; }
 

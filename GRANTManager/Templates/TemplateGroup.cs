@@ -9,16 +9,7 @@ namespace GRANTManager.Templates
 {
     public class TemplateGroup : ATemplateUi
     {
-        StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTrees;
-        public TemplateGroup(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
-            : base(strategyMgr, grantTrees)
-        {
-            this.strategyMgr = strategyMgr;
-            this.grantTrees = grantTrees;
-        }
-
-
+        public TemplateGroup(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
         protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
         {

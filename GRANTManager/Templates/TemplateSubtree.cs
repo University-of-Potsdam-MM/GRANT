@@ -9,17 +9,12 @@ namespace GRANTManager.Templates
 {
     public class TemplateSubtree : ATemplateUi
     {
-        StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTrees;
         int? boxStartX;
         int? boxStartY;
         int deviceWidth;
         int deviceHeight;
-        public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
-            : base(strategyMgr, grantTrees)
+        public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees)
         {
-            this.strategyMgr = strategyMgr;
-            this.grantTrees = grantTrees;
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
             deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         }
