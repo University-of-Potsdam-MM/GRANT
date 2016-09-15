@@ -942,8 +942,8 @@ namespace StrategyBrailleIO
                 }
             }*/
             object screens = brailleIOMediator.GetActiveViews();
-            if (screens == null || !screens.GetType().Equals(typeof(List<Object>))) { return; }
-            List<Object> screenObjectList = (List<Object>) screens;
+            if (screens == null || !screens.GetType().Equals(typeof(List<AbstractViewBoxModelBase>))) { return; }
+            List<AbstractViewBoxModelBase> screenObjectList = (List<AbstractViewBoxModelBase>)screens;
             if (screenObjectList.Count == 1)
             {
                 BrailleIOScreen screenAvtive = screenObjectList[0] as BrailleIOScreen;
@@ -1018,8 +1018,11 @@ namespace StrategyBrailleIO
                 viewRange = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
             }
             //groupView.SetXOffset(mx + groupView.GetXOffset()); 
-            viewRange.MoveHorizontal(steps);
-            brailleIOMediator.RenderDisplay();
+            if (viewRange != null)
+            {
+                viewRange.MoveHorizontal(steps);
+                brailleIOMediator.RenderDisplay();
+            }
         }
 
         /// <summary>
