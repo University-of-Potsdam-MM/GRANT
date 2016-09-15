@@ -67,12 +67,19 @@ namespace GRANTManager.Templates
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
-
+             OSMElement.OSMElement brailleGroupNode =  strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(brailleNodeId);
+             bool groupViewWithScrollbars = false;
+             if (!brailleGroupNode.Equals(new OSMElement.OSMElement()))
+             {
+                 groupViewWithScrollbars = brailleGroupNode.brailleRepresentation.showScrollbar;
+             }
+            
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.vertical)
             {
                 int column = 0;
-                int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height);
-                int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height); //(max - Convert.ToInt32(templateObject.rect.Y)) / Convert.ToInt32(templateObject.rect.Height);
+                int subBoxModel = brailleGroupNode.brailleRepresentation.boarder.Top + brailleGroupNode.brailleRepresentation.boarder.Bottom + brailleGroupNode.brailleRepresentation.margin.Top + brailleGroupNode.brailleRepresentation.margin.Bottom + brailleGroupNode.brailleRepresentation.padding.Top + brailleGroupNode.brailleRepresentation.padding.Bottom;
+                int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
+                int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height); 
                 if (braille.groupelementsOfSameType.linebreak == true)
                 {
                     column = filteredSubtree.BranchIndex / elementsProColumn;
@@ -93,7 +100,8 @@ namespace GRANTManager.Templates
             else
             { //horizontal
                 int line = 0;
-                int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width);
+                int subBoxModel = brailleGroupNode.brailleRepresentation.boarder.Left + brailleGroupNode.brailleRepresentation.boarder.Right + brailleGroupNode.brailleRepresentation.margin.Left + brailleGroupNode.brailleRepresentation.margin.Right+ brailleGroupNode.brailleRepresentation.padding.Left + brailleGroupNode.brailleRepresentation.padding.Right;
+                int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                 int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
                 if (braille.groupelementsOfSameType.linebreak == true)
                 {

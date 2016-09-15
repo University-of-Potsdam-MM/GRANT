@@ -83,7 +83,8 @@
                     </xsd:element>
                   </xsd:sequence>
                 </xsd:complexType>
-              </xsd:element>              
+              </xsd:element>
+              <xs:element name="ShowScrollbar" type="xs:boolean"/> <!--true, falls Scrollbar angezeit werden soll-->
               <xsd:element name="Screens"> <!-- Wenn die Liste leer ist, soll das entsprechende element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
                 <xsd:complexType>
                   <xsd:sequence minOccurs="0">

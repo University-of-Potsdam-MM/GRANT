@@ -77,20 +77,6 @@ namespace GRANTManager.Interfaces
         void removeNodeInBrailleTree(OSMElement.OSMElement brailleNode);
 
         /// <summary>
-        /// Ermittelt zu einer View den zugehörigen Knoten
-        /// </summary>
-        /// <param name="viewName">gibt den Namen der View an</param>
-        /// <returns></returns>
-        OSMElement.OSMElement getNodeOfView(String viewName);
-
-        /// <summary>
-        /// Ermittelt zu einer View die Id des zugehörigen Knotens
-        /// </summary>
-        /// <param name="viewName">gibt den Namen der View an</param>
-        /// <returns>falls der Knoten gefunden wurde, die generierte Id des Knotens; sonst <code>null</code> </returns>
-        String getIdOfView(String viewName);
-
-        /// <summary>
         /// Aktualisiert den ganzen Baum (nach dem Laden)
         /// </summary>
         /// <param name="hwndNew"></param>

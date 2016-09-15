@@ -465,6 +465,7 @@ namespace StrategyBrailleIO
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             BrailleIOButtonToMatrixRenderer buttonRenderer = new BrailleIOButtonToMatrixRenderer();
             vr.SetOtherContent(brailleUiElement, renderer);
+            vr.ShowScrollbars = brailleUiElement.showScrollbar;
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
@@ -839,7 +840,7 @@ namespace StrategyBrailleIO
                 {
                     List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
 
-                    brailleIOElement.showScrollbar = true;
+                   // brailleIOElement.showScrollbar = true;
 
                     childList = iteratedChildreen(nodeList[0]);
                     brailleIOElement.child = childList;
@@ -977,8 +978,8 @@ namespace StrategyBrailleIO
         public String getVisibleScreen()
         {
             object screens = brailleIOMediator.GetActiveViews();
-            if (screens == null || !screens.GetType().Equals(typeof(List<Object>))) { return null; }
-            List<Object> screenObjectList = (List<Object>) screens;
+            if (screens == null || !screens.GetType().Equals(typeof(List<AbstractViewBoxModelBase>))) { return null; }
+            List<AbstractViewBoxModelBase> screenObjectList = (List<AbstractViewBoxModelBase>)screens;
             if (screenObjectList.Count == 1)
             {
                 BrailleIOScreen screenAvtive = screenObjectList[0] as BrailleIOScreen;

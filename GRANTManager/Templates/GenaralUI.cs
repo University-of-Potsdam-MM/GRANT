@@ -216,7 +216,7 @@ namespace GRANTManager.Templates
                 }
 
             }
-
+            braille.showScrollbar = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
             templetObject.name = xmlElement.Attribute("name").Value;
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;

@@ -31,6 +31,7 @@
         <Buttom>1</Buttom>
       </Boarder>
     </BoxModel>
+    <ShowScrollbar>false</ShowScrollbar>
     <Screens />
     <TextFromUIElement>nameFiltered</TextFromUIElement>
   </UiElement>
@@ -51,6 +52,7 @@
       <StartY>20</StartY>
     </Position>
     <BoxModel />
+    <ShowScrollbar>false</ShowScrollbar>
     <Screens>
       <Screen>screen10</Screen>
       <Screen>screen20</Screen>
@@ -74,6 +76,7 @@
       <StartY>8</StartY>
     </Position>
     <BoxModel />
+    <ShowScrollbar>false</ShowScrollbar>
     <Screens>
       <Screen>screen20</Screen>
       <Screen>screen30</Screen>
@@ -98,6 +101,7 @@
         <Top>1</Top>
       </Boarder>
     </BoxModel>
+    <ShowScrollbar>false</ShowScrollbar>
     <Screens />
     <TextFromUIElement />
   </UiElement>
@@ -128,6 +132,7 @@
         <Top>1</Top>
       </Boarder>
     </BoxModel>
+    <ShowScrollbar>false</ShowScrollbar>
     <Screens>
       <Screen>screen40</Screen>
     </Screens>

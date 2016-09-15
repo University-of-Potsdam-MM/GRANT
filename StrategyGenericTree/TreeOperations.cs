@@ -273,52 +273,6 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Ermittelt zu einer View die Id des zugehörigen Knotens
-        /// </summary>
-        /// <param name="viewName">gibt den Namen der View an</param>
-        /// <returns>falls der Knoten gefunden wurde, die generierte Id des Knotens; sonst <code>null</code> </returns>
-        public String getIdOfView(String viewName)
-        {
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
-            if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
-            {
-                throw new InvalidOperationException("Falscher Baum-Typ");
-            }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
-            {
-                if (node.Data.properties.IdGenerated != null && node.Data.brailleRepresentation.viewName.Equals(viewName))
-                {
-                    return node.Data.properties.IdGenerated;
-                }
-            }
-            return null;
-            
-        }
-
-        /// <summary>
-        /// Ermittelt zu einer View den zugehörigen Knoten
-        /// </summary>
-        /// <param name="viewName">gibt den Namen der View an</param>
-        /// <returns></returns>
-        public OSMElement.OSMElement getNodeOfView(String viewName)
-        {
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
-            if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
-            {
-                throw new InvalidOperationException("Falscher Baum-Typ");
-            }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
-            {
-                if (node.Data.properties.IdGenerated != null && node.Data.brailleRepresentation.viewName.Equals(viewName))
-                {
-                    return node.Data;
-                }
-            }
-            return default(OSMElement.OSMElement);
-
-        }
-
-        /// <summary>
         /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated
         /// </summary>
         /// <param name="idGenereted">gibt die generierte Id des Knotens an</param>
