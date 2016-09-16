@@ -304,6 +304,7 @@ namespace GRANTManager.Templates
         /// <param name="typeOfTemplate">gibt den Typ des zu nutzenden Templates an</param>
         private void iterateScreensForTemplate(List<String> screenList, ref ITreeStrategy<OSMElement.OSMElement> tree, TempletUiObject templateObject)
         {
+            if (screenList == null) { return; }
             ATemplateUi generalUiInstance;
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
             {

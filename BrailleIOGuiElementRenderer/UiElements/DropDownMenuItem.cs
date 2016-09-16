@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BrailleIOGuiElementRenderer.UiElements
 {
 
-    public struct DropDownMenu
+    public struct DropDownMenuItem
     {
         public bool isOpen { get; set; }
         public bool hasChild { get; set; }

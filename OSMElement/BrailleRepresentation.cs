@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace OSMElement
 {
-    [XmlInclude(typeof(DropDownMenu))]  //Achtung, jeder Type der bei <c>uiElementSpecialContent</c> verwendet wird muss mittels xmlInclude hinzugefügt werde, damit das Objekt gespeichert werden kann
+    [XmlInclude(typeof(DropDownMenuItem))]  //Achtung, jeder Type der bei <c>uiElementSpecialContent</c> verwendet wird muss mittels xmlInclude hinzugefügt werde, damit das Objekt gespeichert werden kann
     public struct BrailleRepresentation
     {
         /// <summary>

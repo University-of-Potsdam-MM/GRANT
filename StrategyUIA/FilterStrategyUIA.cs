@@ -446,7 +446,16 @@ namespace StrategyUIA
                 rangeValue.currentValue = (rangeValuePattern as RangeValuePattern).Current.Value;
                 properties.rangeValue = rangeValue;
             }
-
+            object togglePattern;
+            if(element.TryGetCurrentPattern(TogglePattern.Pattern, out togglePattern))
+            {
+                ToggleState state = (togglePattern as TogglePattern).Current.ToggleState;
+                if (state == ToggleState.On) { properties.isToggleStateOn = true; }
+                else
+                {
+                    if (state == ToggleState.Off) { properties.isToggleStateOn = false; }
+                }
+            }
         }
 
         /// <summary>

@@ -189,6 +189,7 @@ namespace OSMElement
             get; set; 
         }
 
+        public Boolean? isToggleStateOn { get; set; }
 
         /// <summary>
         /// Enthält die unterstützten Pattern

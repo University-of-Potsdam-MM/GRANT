@@ -138,4 +138,39 @@
     </Screens>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
   </UiElement>
+    <UiElement name="List">
+    <IsGroup>
+      <Linebreak>false</Linebreak>
+      <Vertical>true</Vertical>
+      <childBoundingRectangle>
+        <Height>7</Height>
+        <Width>32</Width>
+      </childBoundingRectangle>
+    </IsGroup>
+    <Renderer>ListItem</Renderer>
+    <Position>
+      <Height>31</Height>
+      <Width>46</Width>
+      <StartX>66</StartX>
+      <StartY>18</StartY>
+    </Position>
+    <BoxModel >
+      <Margin />
+      <Padding>
+        <Left>1</Left>
+        <Buttom>1</Buttom>
+      </Padding>
+      <Boarder>
+        <Left>1</Left>
+        <Top>1</Top>
+		<Right>1</Right>
+        <Buttom>1</Buttom>
+      </Boarder>
+    </BoxModel>
+    <ShowScrollbar>true</ShowScrollbar>
+    <Screens>
+      <Screen>screen40</Screen>
+    </Screens>
+    <TextFromUIElement>nameFiltered</TextFromUIElement>
+  </UiElement>
 </TemplateUi>

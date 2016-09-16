@@ -10,7 +10,7 @@ using BrailleIOGuiElementRenderer.UiElements;
 
 namespace BrailleIOGuiElementRenderer
 {
-    public class BrailleIODropDownMenuToMatrixRenderer : BrailleIOHookableRendererBase, IBrailleIOContentRenderer
+    public class BrailleIODropDownMenuItemToMatrixRenderer : BrailleIOHookableRendererBase, IBrailleIOContentRenderer
     {
         public bool[,] RenderMatrix(IViewBoxModel view, object otherContent)
         {
@@ -22,12 +22,12 @@ namespace BrailleIOGuiElementRenderer
             }
             else
             {
-                throw new InvalidCastException("Can't cast otherContent to BrailleRepresentation! {0}");
+                throw new InvalidCastException("Can't cast otherContent to UiElement! {0}");
             }
-            Type typetypeSpecialContent = uiElement.uiElementSpecialContent.GetType();
-            DropDownMenu dropDownMenu;
-            if(typeof(DropDownMenu).Equals(typetypeSpecialContent)){
-                dropDownMenu = (DropDownMenu)uiElement.uiElementSpecialContent;
+            Type typeSpecialContent = uiElement.uiElementSpecialContent.GetType();
+            DropDownMenuItem dropDownMenu;
+            if(typeof(DropDownMenuItem).Equals(typeSpecialContent)){
+                dropDownMenu = (DropDownMenuItem)uiElement.uiElementSpecialContent;
             }
             else { 
                 throw new InvalidCastException("Can't cast uiElementSpecialContent to DropDownMenu! {0}"); 
@@ -63,7 +63,7 @@ namespace BrailleIOGuiElementRenderer
             {
                 boxMatrix = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width-2); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
             }
-            DropDownMenu dropDownMenu = (DropDownMenu)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde
+            DropDownMenuItem dropDownMenu = (DropDownMenuItem)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde
             if (dropDownMenu.hasPrevious)
             {
                 //Helper.RemoveDownBoarder(ref boxMatrix);
@@ -103,7 +103,7 @@ namespace BrailleIOGuiElementRenderer
             {
                 boxMatrix = Helper.createBox(view.ViewBox.Height-2, view.ViewBox.Width); //erstmal eine eckige Matrix // view.ViewBox.Width -2 => da open/close noch angezeigt werden muss
             }
-            DropDownMenu dropDownMenu = (DropDownMenu)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde#
+            DropDownMenuItem dropDownMenu = (DropDownMenuItem)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde#
             if (dropDownMenu.hasPrevious)
             {
                 Helper.RemoveLeftBoarder(ref boxMatrix);

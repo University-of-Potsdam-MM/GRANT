@@ -35,6 +35,7 @@
                     <xs:enumeration value="Screenshot"/>
                     <xs:enumeration value="TextBox"/>
                     <xs:enumeration value="GroupElement"/>
+                    <xs:enumeration value="ListItem" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
@@ -85,7 +86,7 @@
                 </xsd:complexType>
               </xsd:element>
               <xs:element name="ShowScrollbar" type="xs:boolean"/> <!--true, falls Scrollbar angezeit werden soll-->
-              <xsd:element name="Screens"> <!-- Wenn die Liste leer ist, soll das entsprechende element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
+              <xsd:element name="Screens"> <!-- Wenn die Liste leer ist, soll das entsprechende Element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
                 <xsd:complexType>
                   <xsd:sequence minOccurs="0">
                     <xsd:element maxOccurs="unbounded" name="Screen" type="xsd:string" />

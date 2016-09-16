@@ -509,9 +509,11 @@ namespace StrategyBrailleIO
                 case "TextBox":
                     return new BrailleIOTextBoxToMatrixRenderer();
                 case "DropDownMenu":
-                    return new BrailleIODropDownMenuToMatrixRenderer();
+                    return new BrailleIODropDownMenuItemToMatrixRenderer();
                 case "GroupElement":
                     return new BrailleIOGroupViewRangeToMatrixRenderer();
+                case "ListItem":
+                    return new BrailleIOListItemToMatrixRenderer();
             }
             return null;
         }
@@ -519,7 +521,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
         /// </summary>
-        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox, GroupElement }
+        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox, ListItem, GroupElement }
 
         private struct uiElementsTypeStruct
         {
@@ -570,6 +572,11 @@ namespace StrategyBrailleIO
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.GroupElement.ToString();
             uiElement.heightMin = 7; 
             uiElement.widthMin = 7;
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.ListItem.ToString();
+            uiElement.heightMin = 6;
+            uiElement.widthMin = 15;
             uiElementList.Add(uiElement);
 
             if (uiElementList.Count != Enum.GetNames(typeof( uiElementeTypesBrailleIoEnum)).Length)
@@ -697,7 +704,7 @@ namespace StrategyBrailleIO
             if (uiElementeTypesBrailleIoEnum.DropDownMenu.ToString().Equals(uiElementType))
             {
                 rect = new Rect(0,0,25,10);
-                DropDownMenu dropDownMenu = new DropDownMenu();
+                DropDownMenuItem dropDownMenu = new DropDownMenuItem();
                 dropDownMenu.hasChild = true;
                 dropDownMenu.hasNext = true;
                 dropDownMenu.hasPrevious = false;
@@ -734,6 +741,16 @@ namespace StrategyBrailleIO
                 properties.valueFiltered = "Beispiel Beispieltext Beispieltext";
                 rect = new Rect(0, 0, 25, 10);
                 brailleR.showScrollbar = true;
+            }
+            if (uiElementeTypesBrailleIoEnum.ListItem.ToString().Equals(uiElementType))
+            {
+                properties.valueFiltered = "Item 1";
+                rect = new Rect(0, 0, 30, 7);
+                OSMElement.UiElements.ListMenuItem listMenuItem = new ListMenuItem();
+                listMenuItem.hasNext = true;
+                listMenuItem.isMultipleSelection = true;
+                properties.isToggleStateOn = false;
+                brailleR.uiElementSpecialContent = listMenuItem;
             }
             /*if (uiElementeTypesBrailleIoEnum.GroupElement.ToString().Equals(uiElementType))
             {
@@ -785,9 +802,9 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmMenu"></param>
         /// <returns></returns>
-        private BrailleIOGuiElementRenderer.UiElements.DropDownMenu convertDropDownMenu(OSMElement.UiElements.DropDownMenu osmMenu)
+        private BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem convertDropDownMenu(OSMElement.UiElements.DropDownMenuItem osmMenu)
         {
-            BrailleIOGuiElementRenderer.UiElements.DropDownMenu brailleIOMenu = new BrailleIOGuiElementRenderer.UiElements.DropDownMenu();
+            BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem brailleIOMenu = new BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem();
             brailleIOMenu.hasChild = osmMenu.hasChild;
             brailleIOMenu.hasNext = osmMenu.hasNext;
             brailleIOMenu.hasPrevious = osmMenu.hasPrevious;
@@ -797,19 +814,38 @@ namespace StrategyBrailleIO
             return brailleIOMenu;
         }
 
+        private BrailleIOGuiElementRenderer.UiElements.ListMenuItem convertToListItem(OSMElement.OSMElement osmElement)
+        {
+            BrailleIOGuiElementRenderer.UiElements.ListMenuItem brailleListItem = new BrailleIOGuiElementRenderer.UiElements.ListMenuItem();
+            if(osmElement.Equals(new OSMElement.OSMElement())){return  brailleListItem;}
+            if (!osmElement.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.ListMenuItem)))
+            {
+                return brailleListItem;
+            }
+            OSMElement.UiElements.ListMenuItem listItem = (OSMElement.UiElements.ListMenuItem)osmElement.brailleRepresentation.uiElementSpecialContent;
+            brailleListItem.hasNext = listItem.hasNext;
+            brailleListItem.isMultipleSelection = listItem.isMultipleSelection;
+            brailleListItem.isSelected = osmElement.properties.isToggleStateOn != null ? (bool)osmElement.properties.isToggleStateOn : false;
+            return brailleListItem;
+        }
+
         /// <summary>
         /// Konvertiert den <code>uiElementSpecialContent</code> des <code>OSMElement</code>s zu einem entsprechenden Objekt, welches BrailleIO bekannt ist
         /// </summary>
         /// <param name="filteredSubtree">gibt das filteredSubtree an</param>
         /// <returns>ein Objekt mit dem konvertierten Inhalt</returns>
-        private object convertUiElementSpecialContent(object osmElement)
+        private object convertUiElementSpecialContent(OSMElement.OSMElement osmElement)
         {
             object brailleIOElement = new object();
-            if (osmElement == null) { return brailleIOElement; }
-            Type osmElementType = osmElement.GetType();
-            if (osmElementType.Equals(typeof(OSMElement.UiElements.DropDownMenu)))
+            if (osmElement.Equals(new OSMElement.OSMElement()) || osmElement.brailleRepresentation.uiElementSpecialContent == null) { return brailleIOElement; }
+            Type osmElementspecialcontentType = osmElement.brailleRepresentation.uiElementSpecialContent.GetType();
+            if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.DropDownMenuItem)))
             {
-                brailleIOElement = convertDropDownMenu((OSMElement.UiElements.DropDownMenu)osmElement);
+                brailleIOElement = convertDropDownMenu((OSMElement.UiElements.DropDownMenuItem)osmElement.brailleRepresentation.uiElementSpecialContent);
+            }
+            if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.ListMenuItem)))
+            {
+                brailleIOElement = convertToListItem(osmElement);
             }
             return brailleIOElement;
         }
@@ -829,7 +865,7 @@ namespace StrategyBrailleIO
             brailleIOElement.screenName = osmElement.brailleRepresentation.screenName;
             brailleIOElement.showScrollbar = osmElement.brailleRepresentation.showScrollbar;
             brailleIOElement.text = osmElement.properties.valueFiltered;
-            brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement.brailleRepresentation.uiElementSpecialContent);
+            brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
             if (grantTrees.getBrailleTree() != null)
@@ -859,9 +895,13 @@ namespace StrategyBrailleIO
             childUi.viewName = brailleTreeNode.brailleRepresentation.viewName;
             childUi.isVisible = true;
             childUi.screenName = brailleTreeNode.brailleRepresentation.screenName;
-            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.DropDownMenu).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.DropDownMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
-                childUi.uiElementSpecialContent = convertDropDownMenu((OSMElement.UiElements.DropDownMenu)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);
+                childUi.uiElementSpecialContent = convertDropDownMenu((OSMElement.UiElements.DropDownMenuItem)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);
+            }
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.ListMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            {
+                childUi.uiElementSpecialContent = convertToListItem(brailleTreeNode);
             }
             groupelement.childUiElement = childUi;
             

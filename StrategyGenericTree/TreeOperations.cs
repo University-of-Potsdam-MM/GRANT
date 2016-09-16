@@ -442,22 +442,47 @@ namespace StrategyGenericTree
         public void updateNodeOfBrailleUi(ref OSMElement.OSMElement element)
         {
             BrailleRepresentation updatedContentBR = element.brailleRepresentation;
-            GeneralProperties updatetContentGP = element.properties;
+            GeneralProperties updatedContentGP = element.properties;
             String updatedText = getTextForView(element);
+            if (element.brailleRepresentation.uiElementSpecialContent != null && element.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.ListMenuItem)))
+            {
+                OSMElement.UiElements.ListMenuItem listMenuItem = (ListMenuItem)element.brailleRepresentation.uiElementSpecialContent;
+                updatedContentGP.isToggleStateOn = isCheckboxOfAssociatedElementSelected(element);
+            }
 
            // updatedContentBR.text = updatedText;
-            updatetContentGP.valueFiltered = updatedText;
+            updatedContentGP.valueFiltered = updatedText;
             bool? isEnable = isUiElementEnable(element);
             if (isEnable != null)
             {
-                updatetContentGP.isEnabledFiltered = (bool)isEnable;
+                updatedContentGP.isEnabledFiltered = (bool)isEnable;
             }
            // updatedContentBR.text = updatedText;
 
             element.brailleRepresentation = updatedContentBR;
-            element.properties = updatetContentGP;
+            element.properties = updatedContentGP;
             changeBrailleRepresentation(ref element);//hier ist das Element schon geändert  
 
+        }
+
+        private bool isCheckboxOfAssociatedElementSelected(OSMElement.OSMElement element)
+        {
+            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(element.properties.IdGenerated));
+            if (osmRelationship == null)
+            {
+                Console.WriteLine("kein passendes objekt gefunden");
+                return false;
+            }
+            //OSMElement.OSMElement associatedNode = getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
+
+            List<ITreeStrategy<OSMElement.OSMElement>> associatedNodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
+            if (associatedNodeList != null && associatedNodeList.Count == 1 && associatedNodeList[0].HasChild)
+            {
+                //die Infos ob eine Checkbox ausgewählt ist stehen (zumindest bei meiner Beispielanwendung) im Kindelement
+                return associatedNodeList[0].Child.Data.properties.isToggleStateOn != null ? (bool) associatedNodeList[0].Child.Data.properties.isToggleStateOn : false;
+            }
+            //return associatedNode.properties.isToggleStateOn != null ? (bool)associatedNode.properties.isToggleStateOn : false ;
+            return false;
         }
 
 

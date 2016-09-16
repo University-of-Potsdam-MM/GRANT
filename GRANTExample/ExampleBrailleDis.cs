@@ -347,7 +347,7 @@ namespace GRANTExample
             e7.isVisible = true;
             e7.screenName = "screen1";
             //proper7.valueFiltered = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
-            DropDownMenu dropDownMenu = new DropDownMenu();
+            DropDownMenuItem dropDownMenu = new DropDownMenuItem();
             dropDownMenu.hasChild = true;
             dropDownMenu.hasNext = true;
             dropDownMenu.hasPrevious = false;
@@ -375,7 +375,7 @@ namespace GRANTExample
             GeneralProperties proper8 = new GeneralProperties();
             e8.isVisible = true;
             e8.screenName = "screen1";
-            DropDownMenu dropDownMenu8 = new DropDownMenu();
+            DropDownMenuItem dropDownMenu8 = new DropDownMenuItem();
             dropDownMenu8.hasChild = false;
             dropDownMenu8.hasNext = false;
             dropDownMenu8.hasPrevious = true;
@@ -403,7 +403,7 @@ namespace GRANTExample
             GeneralProperties proper9 = new GeneralProperties();
             e9.isVisible = true;
             e9.screenName = "screen1";
-            DropDownMenu dropDownMenu9 = new DropDownMenu();
+            DropDownMenuItem dropDownMenu9 = new DropDownMenuItem();
             dropDownMenu9.hasChild = true;
             dropDownMenu9.hasNext = true;
             dropDownMenu9.hasPrevious = false;
@@ -431,7 +431,7 @@ namespace GRANTExample
             GeneralProperties proper10 = new GeneralProperties();
             e10.isVisible = true;            
             e10.screenName = "screen1";
-            DropDownMenu dropDownMenu10 = new DropDownMenu();
+            DropDownMenuItem dropDownMenu10 = new DropDownMenuItem();
             dropDownMenu10.hasChild = false;
             dropDownMenu10.hasNext = false;
             dropDownMenu10.hasPrevious = true;

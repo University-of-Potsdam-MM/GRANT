@@ -62,12 +62,14 @@
   <ItemGroup>
     <Compile Include="BrailleIOGroupViewRangeToMatrixRenderer.cs" />
     <Compile Include="BrailleIOButtonToMatrixRenderer.cs" />
-    <Compile Include="BrailleIODropDownMenuToMatrixRenderer.cs" />
+    <Compile Include="BrailleIODropDownMenuItemToMatrixRenderer.cs" />
+    <Compile Include="BrailleIOListItemToMatrixRenderer.cs" />
     <Compile Include="BrailleIOTextBoxToMatrixRenderer.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UiElement.cs" />
-    <Compile Include="UiElements\DropDownMenu.cs" />
+    <Compile Include="UiElements\DropDownMenuItem.cs" />
+    <Compile Include="UiElements\ListMenuItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO\BrailleIO.csproj">

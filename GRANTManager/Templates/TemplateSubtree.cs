@@ -52,7 +52,7 @@ namespace GRANTManager.Templates
             braille.isGroupChild = true;
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("DropDownMenu"))
             {
-                OSMElement.UiElements.DropDownMenu dropDownMenu = new OSMElement.UiElements.DropDownMenu();
+                OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
                 if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
                 if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Contains("Item"))
                 {
@@ -67,6 +67,21 @@ namespace GRANTManager.Templates
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
+            if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("ListItem"))
+            {
+                OSMElement.UiElements.ListMenuItem litItem = new ListMenuItem();
+                if (filteredSubtree.HasNext) { litItem.hasNext = true; }
+                //TODO: multi
+                if (filteredSubtree.HasChild)
+                {
+                    if (filteredSubtree.Child.Data.properties.controlTypeFiltered.Equals("CheckBox"))
+                    {
+                        litItem.isMultipleSelection = true;
+                    }
+                }
+                braille.uiElementSpecialContent = litItem;
+            }
+            
              OSMElement.OSMElement brailleGroupNode =  strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(brailleNodeId);
              bool groupViewWithScrollbars = false;
              if (!brailleGroupNode.Equals(new OSMElement.OSMElement()))
