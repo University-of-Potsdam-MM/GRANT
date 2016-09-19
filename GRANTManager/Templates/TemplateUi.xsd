@@ -27,7 +27,7 @@
                 </xs:complexType>
               </xs:element>
               <xs:element name="Renderer"> <!-- Bei gruppen-Elementen bezieht sich diese Angabe auf die KindElemente-->
-                <xs:simpleType> <!-- je nach genuzter IBrailleDisplayStrategy sind anderer Renderer möglich eine Liste der aktuell Möglichen Renderer gibt die Methode getUiElementRenderer()-->
+                <xs:simpleType> <!-- je nach genuzter IBrailleDisplayStrategy sind anderer Renderer möglich eine Liste der aktuell Möglichen Renderer gibt die Methode getUiElementRenderer(), Es sollten hier alle Renderer aller implementierten IBrailleDisplayStrategy auftauchen -->
                   <xs:restriction base="xs:string">
                     <xs:enumeration value="Text"/>
                     <xs:enumeration value="Button"/>

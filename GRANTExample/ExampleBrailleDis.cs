@@ -46,7 +46,11 @@ namespace GRANTExample
                 {
                     String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                     //String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
-                    ui.createUiElementsAllScreens(path);
+                    GuiFunctions guiFuctions = new GuiFunctions(strategyMgr, grantTrees);
+                    if (guiFuctions.isTemplateUsableForDevice(path))
+                    {
+                        ui.createUiElementsAllScreens(path);
+                    }
                     Settings settings = new Settings();
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 

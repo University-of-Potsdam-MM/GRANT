@@ -761,5 +761,49 @@ namespace GRANTManager
             return strategyMgr.getSpecifiedTreeOperations().getTreeElementOfViewAtPoint(x, y, viewAtPoint, offsetX, offsetY);
         }
 
+        /// <summary>
+        /// Prüft, ob das angegebene Template für die gewählte Stiftplatte von der Größe her passend ist
+        /// </summary>
+        /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
+        /// <returns><c>true</c> falls das Template passend ist; sonst <c> false</c></returns>
+        public bool isTemplateUsableForDevice(String pathToXml)
+        {
+            int tmpHeight, tmpWidth;
+            return isTemplateUsableForDevice(@pathToXml, out tmpHeight, out tmpWidth);
+        }
+
+        /// <summary>
+        /// Prüft, ob das angegebene Template für die gewählte Stiftplatte von der Größe her passend ist
+        /// </summary>
+        /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
+        /// <param name="minDeviceHeight">gibt die mindest Devicehöhe der Stiftplatte zurück</param>
+        /// <param name="minDeviceWidth">gibt die mindest Devicebreite der Stiftplatte zurück</param>
+        /// <returns><c>true</c> falls das Template passend ist; sonst <c> false</c></returns>
+        public bool isTemplateUsableForDevice(String pathToXml, out int minDeviceHeight, out int minDeviceWidth)
+        {
+            minDeviceHeight = -1;
+            minDeviceWidth = -1;
+            XElement xElement;
+            try
+            {
+                xElement = XElement.Load(@pathToXml);
+            }
+            catch (XmlException e)
+            {
+                Debug.WriteLine("die XML (" + pathToXml + ") ist nicht korrekt: " + e);
+                return false;
+            }
+            String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
+            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
+            minDeviceHeight = Convert.ToInt32( xElement.Element("MinDeviceHeight").Value);
+            minDeviceWidth = Convert.ToInt32(xElement.Element("MinDeviceWidth").Value);
+            Device activeDevice = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+            if (activeDevice.height >= minDeviceHeight && activeDevice.width >= minDeviceWidth)
+            {
+                return true;
+            }
+            return false;
+        }
+
     }
 }

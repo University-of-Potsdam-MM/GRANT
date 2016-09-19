@@ -305,6 +305,13 @@ namespace GRANTExample
                 Debug.WriteLine("Template ist nicht valide!");
                 return;
             }
+            int minDeviceHeight;
+            int minDeviceWidth;
+            if (!guiFuctions.isTemplateUsableForDevice(path, out minDeviceHeight, out minDeviceWidth))
+            {
+                Debug.WriteLine("Das Template ist für eine größere Stifftplatte (min Height = " + minDeviceHeight + " Width = "+minDeviceWidth+") vorgesehen.");
+                return;
+            }
             ui.generatedUiFromTemplate(path);
 
             if (grantTree.getBrailleTree() != null)
