@@ -81,7 +81,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\ATemplateUi.cs" />
     <Compile Include="Templates\GenaralUI.cs" />
-    <Compile Include="Templates\TemplateGroup.cs" />
+    <Compile Include="Templates\TemplateGroupAutomatic.cs" />
+    <Compile Include="Templates\TemplateGroupStatic.cs" />
     <Compile Include="Templates\TemplateSubtree.cs" />
     <Compile Include="Templates\TemplateNode.cs" />
     <Compile Include="TreeScopeEnum.cs" />

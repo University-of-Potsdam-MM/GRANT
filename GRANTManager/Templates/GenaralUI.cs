@@ -36,7 +36,80 @@ namespace GRANTManager.Templates
             ITreeStrategy<OSMElement.OSMElement> filteredTreeCopy = grantTrees.getFilteredTree().Copy();
             iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
             createUiElementsAllScreens(pathToXml);
+            createUiElementsNavigationbarScreens(pathToXml);
+
+            //createUiElementsNavigationbarScreens(pathToXml);
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+        }
+
+        public void createUiElementsNavigationbarScreens(string pathToXml)
+        {
+            XElement xmlDoc = XElement.Load(@pathToXml);
+            //TODO: diese Elemente müssen wahrscheinlich bei createUiElementsNavigationbarScreens ausgeschlossen oder extra beachtet werden
+            IEnumerable<XElement> uiElement =
+                from el in xmlDoc.Elements("UiElement")
+                where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
+                    && (string)el.Attribute("name") == "NavigationBarScreens"
+                select el;
+            Debug.WriteLine("uiElement: " + uiElement.Count());
+            //TODO: mit Events verknüpfen
+            /*
+             * (Namen) aller Screens holen
+             * für jeden (in der xml angegebenen) Screen die Navigationsbar zeichnen
+             */
+            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            ATemplateUi generalUiInstance;
+            TempletUiObject templateObject = xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
+            if (templateObject.Screens == null)
+            {
+                //wir wollen alle verfügbaren Screens
+                templateObject.Screens = screens;
+            }
+            List<OSMElement.OSMElement> groupElementsStatic = new List<OSMElement.OSMElement>();
+            int index = 1;
+            if (screens == null) { return; }
+            foreach (String s in screens)
+            {
+                OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
+                GeneralProperties childProp = new GeneralProperties();
+                Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle; //TODO: richtig machen
+                rect.Y = rect.Y * index;
+                childProp.boundingRectangleFiltered = rect;
+
+                childProp.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer;
+                childProp.valueFiltered = s;
+                childOsm.properties = childProp;
+                BrailleRepresentation childBraille = new BrailleRepresentation();
+                //  childBraille.contrast = templateObject.osm.brailleRepresentation.contrast;
+                //childBraille.fromGuiElement = templateObject.osm.brailleRepresentation.fromGuiElement;
+                childBraille.isGroupChild = true;
+                childBraille.isVisible = true;
+                //childBraille.screenName = 
+                //childBraille.uiElementSpecialContent = ?
+                childBraille.viewName = "_" + s;//TODO
+
+                childOsm.brailleRepresentation = childBraille;
+                groupElementsStatic.Add(childOsm);
+                index++;
+            }
+
+                templateObject.groupElementsStatic = groupElementsStatic;
+
+                ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+                /*if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
+                {
+                    generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+                }
+                else
+                {
+                    generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
+                }*/
+
+                generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            
+            generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);//
+            
+
         }
 
         /// <summary>
@@ -122,7 +195,7 @@ namespace GRANTManager.Templates
             }
             else
             {
-                generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
+                generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
             }
             generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiObject(firstElement));
         }
@@ -133,7 +206,14 @@ namespace GRANTManager.Templates
             public String groupImplementedClassTypeFullName { get; set; } //nötig?
             public String groupImplementedClassTypeDllName { get; set; } //nötig?
             public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
-            public String name { get; set; } 
+            public String name { get; set; }
+
+            /// <summary>
+            /// enthält Elemente, welche einem (OSM-)Element  als Gruppe zugeordnet sind
+            /// die Elemente (Anzahl) dieser Gruppe verändern sich nicht (die inhalte dürfen sich aber ändern)
+            /// </summary>
+            /// [XmlIgnore]
+            public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
 
         }
 
@@ -144,6 +224,9 @@ namespace GRANTManager.Templates
         /// <returns>ein <c>TempletUiObject</c></returns>
         private TempletUiObject xmlUiElementToTemplateUiObject(XElement xmlElement)
         {
+
+            Debug.WriteLine(xmlElement);
+ 
             TempletUiObject templetObject = new TempletUiObject();
             Int32 result;
             result = 0;
@@ -250,7 +333,7 @@ namespace GRANTManager.Templates
                 }
                 else
                 {
-                    generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
+                    generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
                 }
 
                 ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
@@ -267,7 +350,7 @@ namespace GRANTManager.Templates
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Elements("UiElement")
-                where (string)el.Element("Screens") != null && (string)el.Element("Screens") == ""
+                where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != "NavigationBarScreens"
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
             List<String> screenList = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();

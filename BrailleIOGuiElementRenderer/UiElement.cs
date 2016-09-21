@@ -1,4 +1,5 @@
 ﻿using BrailleIO.Interface;
+using BrailleIO.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

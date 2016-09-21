@@ -353,6 +353,10 @@ namespace StrategyBrailleIO
              * die Angabe des 'UI-Element'-Typs steht bei den Propertys in controlTypeFiltered
              */
             if (osmElement.properties.isControlElementFiltered == false || osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
+            if (osmElement.brailleRepresentation.viewName.Equals(1) || osmElement.brailleRepresentation.viewName.Equals("-------------navigationBar2"))
+            {
+                Debug.WriteLine("");
+            }
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
             String uiElementType = osmElement.properties.controlTypeFiltered;
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -889,12 +893,21 @@ namespace StrategyBrailleIO
         {
             BrailleIOGuiElementRenderer.Groupelements groupelement = new BrailleIOGuiElementRenderer.Groupelements();
             groupelement.childBoundingRectangle = brailleTreeNode.properties.boundingRectangleFiltered;
-            groupelement.renderer = getRenderer( brailleTreeNode.brailleRepresentation.groupelementsOfSameType.renderer);
+            if (brailleTreeNode.brailleRepresentation.groupelementsOfSameType.renderer != null)
+            {
+                groupelement.renderer = getRenderer(brailleTreeNode.brailleRepresentation.groupelementsOfSameType.renderer);
+            }
+            else
+            {
+                groupelement.renderer = getRenderer(brailleTreeNode.properties.controlTypeFiltered);
+            }
+
             UiElement childUi = new UiElement();
             childUi.text = brailleTreeNode.properties.valueFiltered;
             childUi.viewName = brailleTreeNode.brailleRepresentation.viewName;
             childUi.isVisible = true;
             childUi.screenName = brailleTreeNode.brailleRepresentation.screenName;
+            
             if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.DropDownMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
                 childUi.uiElementSpecialContent = convertDropDownMenu((OSMElement.UiElements.DropDownMenuItem)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);

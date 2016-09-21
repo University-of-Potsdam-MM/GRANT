@@ -727,6 +727,24 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
+        /// Entfernt alle Kinder des Knotens, aber nicht den Knoten selbst
+        /// </summary>
+        /// <param name="parentSubtree">gibt den Teilbaum an, bei dem alle Kinder entfernt werden sollen</param>
+        private void removeChildNodeInBrailleTree(ITreeStrategy<OSMElement.OSMElement> parentSubtree)
+        {
+            if (parentSubtree != null && parentSubtree.HasChild && grantTrees.getBrailleTree() != null)
+            {
+                ITreeStrategy<OSMElement.OSMElement> childeens = parentSubtree.Child;
+                grantTrees.getBrailleTree().Remove(childeens.Data);
+                while (childeens.HasNext)
+                {
+                    childeens = childeens.Next;
+                    grantTrees.getBrailleTree().Remove(childeens.Data);
+                }
+            }
+        }
+
+        /// <summary>
         /// Aktualisiert den ganzen Baum (nach dem Laden)
         /// Dabei wird erst mit dem Hauptfilter alles gefiltert und anschließend geprüft, bei welchem Knoten der Filter gewechselt werden muss, dann wird dieser Knoten gesucht und neu gefiltert
         /// </summary>
@@ -1043,7 +1061,7 @@ namespace StrategyGenericTree
         }
 
         /// <summary>
-        /// Erstellt, aktuallisiert alle Gruppen im Braille-Baum
+        /// aktuallisiert alle Gruppen im Braille-Baum
         /// </summary>
         public void updateBrailleGroups()
         {
@@ -1051,7 +1069,7 @@ namespace StrategyGenericTree
             ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree().Copy();
             foreach (INode<OSMElement.OSMElement> node in copyOfBrailleTree.All.Nodes)
             {
-                if (node.Data.properties.isContentElementFiltered == false)
+                if (node.Data.properties.isContentElementFiltered == false && !node.Data.brailleRepresentation.isGroupChild)
                 {
                     Type typeOfTemplate = Type.GetType(node.Data.brailleRepresentation.templateFullName + ", " + node.Data.brailleRepresentation.templateNamspace);
                     if (typeOfTemplate != null)
@@ -1061,10 +1079,23 @@ namespace StrategyGenericTree
                         templateobject.osm = node.Data;
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
-                        OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
-                        if (osmRelationships != null)
-                        {
-                            ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationships.FilteredTree, grantTrees.getFilteredTree());
+                        OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
+                        if (osmRelationship != null)
+                        { 
+                            ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
+                            String id = subtreeFiltered.Data.properties.IdGenerated;
+                            subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(subtreeFiltered.Data, TreeScopeEnum.Subtree);
+                            String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtreeFiltered, id);
+                           ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+                           strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredSubtree(ref tree, idParent);
+                           subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
+                            //entfernen des "alten" Braille-Teilbaums
+                           if (node.HasParent)
+                           {
+                               //List<OsmRelationship<String, String>> conector = grantTrees.getOsmRelationship();
+                               //OsmTreeRelationship.removeOsmRelationship(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
+                               removeChildNodeInBrailleTree((ITreeStrategy<OSMElement.OSMElement>)node);
+                           }
                             if (subtreeFiltered != null)
                             {
                                 template.createUiElementFromTemplate(ref subtreeFiltered, templateobject, node.Data.properties.IdGenerated);

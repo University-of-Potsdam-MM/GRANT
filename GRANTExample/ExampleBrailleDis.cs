@@ -42,15 +42,18 @@ namespace GRANTExample
             try
             {
                 setDauGui(fromGuiElement);
+                // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+                String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+                GuiFunctions guiFuctions = new GuiFunctions(strategyMgr, grantTrees);
+                if (guiFuctions.isTemplateUsableForDevice(path))
+                {
+                    ui.createUiElementsAllScreens(path);
+                    ui.createUiElementsNavigationbarScreens(path);
+                    strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+                }
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
                 {
-                    String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-                    //String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
-                    GuiFunctions guiFuctions = new GuiFunctions(strategyMgr, grantTrees);
-                    if (guiFuctions.isTemplateUsableForDevice(path))
-                    {
-                        ui.createUiElementsAllScreens(path);
-                    }
+                   
                     Settings settings = new Settings();
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
@@ -68,7 +71,7 @@ namespace GRANTExample
                         strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                     }
                 }
-
+                strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 if (grantTrees.getOsmRelationship() == null)
                 {                    
                     List<OsmRelationship<String, String>> relationship = ExampleTree.setOsmRelationship();
@@ -213,7 +216,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm1 = new OSMElement.OSMElement();
             BrailleRepresentation e1 = new BrailleRepresentation();
             GeneralProperties proper1 = new GeneralProperties();
-            e1.screenName = "screen1";
+            e1.screenName = "A1";
             e1.zoom = 1;
             e1.contrast = 120;
             e1.viewName = "v1";
@@ -234,7 +237,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             GeneralProperties proper2 = new GeneralProperties();
             BrailleRepresentation e2 = new BrailleRepresentation();
-            e2.screenName = "screen2";
+            e2.screenName = "A2";
             proper2.valueFiltered = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
           //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e2.showScrollbar = true;
@@ -260,7 +263,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
             BrailleRepresentation e3 = new BrailleRepresentation();
             GeneralProperties proper3 = new GeneralProperties();
-            e3.screenName = "screen1";
+            e3.screenName = "A1";
             e3.showScrollbar = false;
             //   c3.text = "Start Text";
             //c3.fromGuiElement = "nameFiltered";
@@ -281,7 +284,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm4 = new OSMElement.OSMElement();
             BrailleRepresentation e4 = new BrailleRepresentation();
             GeneralProperties proper4 = new GeneralProperties();            
-            e4.screenName = "screen1";
+            e4.screenName = "A2";
             e4.matrix = new bool[,] { 
                 {false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false},
                 {false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false},
@@ -305,7 +308,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm5 = new OSMElement.OSMElement();
             BrailleRepresentation e5 = new BrailleRepresentation();
             GeneralProperties proper5 = new GeneralProperties();
-            e5.screenName = "screen1";
+            e5.screenName = "A1";
             proper5.valueFiltered = "Button";
            // c5.uiElementContent = "Hallo - Button";
            // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
@@ -325,7 +328,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm6 = new OSMElement.OSMElement();
             BrailleRepresentation e6 = new BrailleRepresentation();
             GeneralProperties proper6 = new GeneralProperties();
-            e6.screenName = "screen1";
+            e6.screenName = "A2";
             e6.showScrollbar = true;
            // c6.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
             //object[] otherContent6 = { UiObjectsEnum.TextBox, textBox6 };
@@ -349,7 +352,7 @@ namespace GRANTExample
             GeneralProperties proper7 = new GeneralProperties();
             BrailleRepresentation e7 = new BrailleRepresentation();
             e7.isVisible = true;
-            e7.screenName = "screen1";
+            e7.screenName = "A1";
             //proper7.valueFiltered = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
             DropDownMenuItem dropDownMenu = new DropDownMenuItem();
             dropDownMenu.hasChild = true;
@@ -378,7 +381,7 @@ namespace GRANTExample
             BrailleRepresentation e8 = new BrailleRepresentation();
             GeneralProperties proper8 = new GeneralProperties();
             e8.isVisible = true;
-            e8.screenName = "screen1";
+            e8.screenName = "A2";
             DropDownMenuItem dropDownMenu8 = new DropDownMenuItem();
             dropDownMenu8.hasChild = false;
             dropDownMenu8.hasNext = false;
@@ -406,7 +409,7 @@ namespace GRANTExample
             BrailleRepresentation e9 = new BrailleRepresentation();
             GeneralProperties proper9 = new GeneralProperties();
             e9.isVisible = true;
-            e9.screenName = "screen1";
+            e9.screenName = "A1";
             DropDownMenuItem dropDownMenu9 = new DropDownMenuItem();
             dropDownMenu9.hasChild = true;
             dropDownMenu9.hasNext = true;
@@ -434,7 +437,7 @@ namespace GRANTExample
             BrailleRepresentation e10 = new BrailleRepresentation();
             GeneralProperties proper10 = new GeneralProperties();
             e10.isVisible = true;            
-            e10.screenName = "screen1";
+            e10.screenName = "A2";
             DropDownMenuItem dropDownMenu10 = new DropDownMenuItem();
             dropDownMenu10.hasChild = false;
             dropDownMenu10.hasNext = false;
@@ -462,7 +465,7 @@ namespace GRANTExample
             OSMElement.OSMElement osm11 = new OSMElement.OSMElement();
             BrailleRepresentation e11 = new BrailleRepresentation();
             GeneralProperties proper11 = new GeneralProperties();
-            e11.screenName = "screen1";
+            e11.screenName = "A1";
 
             proper11.valueFiltered = "Button 2";
             e11.viewName = "v11";

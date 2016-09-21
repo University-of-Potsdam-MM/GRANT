@@ -7,11 +7,11 @@ using System.Diagnostics;
 
 namespace GRANTManager.Templates
 {
-    public class TemplateGroup : ATemplateUi
+    public class TemplateGroupAutomatic : ATemplateUi
     {
-        public TemplateGroup(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
+        public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
-        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
+        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = templateObject.osm.properties;
@@ -21,11 +21,11 @@ namespace GRANTManager.Templates
             prop.controlTypeFiltered = "GroupElement";
             prop.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
             braille.isVisible = true;
-            if (templateObject.Screens == null) { 
-                Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); 
+            if (templateObject.Screens == null) {
+                Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewNodeTree();
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = "-------------"+ filteredSubtree.Data.properties.IdGenerated;
+            braille.viewName = templateObject.name+"_"+ filteredSubtree.Data.properties.IdGenerated;
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 
@@ -48,7 +48,7 @@ namespace GRANTManager.Templates
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
-                Debug.WriteLine("Es konnte keine Id erstellt werden."); return new OSMElement.OSMElement();
+                Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewNodeTree();
             }
             prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
@@ -57,8 +57,9 @@ namespace GRANTManager.Templates
             List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
             OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
             strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
-
-            return brailleNode;
+            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
+            tree.AddChild(brailleNode);
+            return tree;
         }
 
     }

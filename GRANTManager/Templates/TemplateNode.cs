@@ -14,7 +14,7 @@ namespace GRANTManager.Templates
     {
         public TemplateNode(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
-        protected override OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
+        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = templateObject.osm;
             GeneralProperties prop = templateObject.osm.properties;
@@ -39,13 +39,14 @@ namespace GRANTManager.Templates
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
-            if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
+            if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewNodeTree(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = templateObject.name;
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
-
-            return brailleNode;
+            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
+            tree.AddChild(brailleNode);
+            return tree;
         }
     }
 }

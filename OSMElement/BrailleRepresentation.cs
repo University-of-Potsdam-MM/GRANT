@@ -30,7 +30,7 @@ namespace OSMElement
         public bool[,] matrix { get; set; }
 
         /// <summary>
-        /// Wandelt die mehrdimensionale Matrix in eine Jagged-Matrix um um diese zu speichern bzw. zu laden
+        /// Wandelt die mehrdimensionale Matrix in eine Jagged-Matrix um diese zu speichern bzw. zu laden
         /// </summary>
         public bool[][] jaggedMatrix {
             get 
@@ -124,8 +124,13 @@ namespace OSMElement
             return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString());
         }
 
+        /// <summary>
+        /// Gibt eine "Beschreibung" von Gruppenelementen, die sich wärend der Laufzeit ändern können --> Es können Elemente hinzukommen oder verschwinden z.B. ein neuer Tab
+        /// </summary>
         public GroupelementsOfSameType groupelementsOfSameType { get; set; }
+
         public bool isGroupChild { get; set; }
+
     }
 
     public struct GroupelementsOfSameType
@@ -136,9 +141,6 @@ namespace OSMElement
         public Boolean? linebreak { get; set; }
 
         public Boolean vertical { get; set; }
-        public Padding padding { get; set; }
-        public Padding margin { get; set; }
-        public Padding boarder { get; set; }
         public Rect childBoundingRectangle { get; set; }
         public String renderer { get; set; }
     }

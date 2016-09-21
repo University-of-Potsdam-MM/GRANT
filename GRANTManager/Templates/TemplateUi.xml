@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TemplateUi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
-  <MinDeviceHeight>30</MinDeviceHeight>
+  <MinDeviceHeight>50</MinDeviceHeight>
   <MinDeviceWidth>40</MinDeviceWidth>
   <UiElement name="TitleBar">
     <IsGroup />
@@ -42,7 +42,7 @@
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-      </childBoundingRectangle>
+      </childBoundingRectangle>s
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -172,5 +172,26 @@
       <Screen>screen40</Screen>
     </Screens>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
+  </UiElement>
+  <UiElement name="navigationBar">
+  <IsGroup>
+    <Linebreak>false</Linebreak>
+    <Vertical>true</Vertical>
+    <childBoundingRectangle>
+      <Height>8</Height>
+      <Width>6</Width>
+    </childBoundingRectangle>
+  </IsGroup>
+  <Renderer>Text</Renderer>
+  <Position>
+    <Height>30</Height>
+    <Width>8</Width>
+    <StartX>0</StartX>
+    <StartY>8</StartY>
+  </Position>
+  <BoxModel/>
+  <ShowScrollbar>true</ShowScrollbar>
+  <Screens />
+  <TextFromUIElement />
   </UiElement>
 </TemplateUi>

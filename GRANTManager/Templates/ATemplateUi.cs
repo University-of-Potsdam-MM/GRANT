@@ -34,16 +34,21 @@ namespace GRANTManager.Templates
                 {
                     templateObject.Screens = new List<string>();
                     templateObject.Screens.Add(screen);
-                    OSMElement.OSMElement brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
+                    ITreeStrategy<OSMElement.OSMElement> brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
                     addIdAndRelationship(brailleNode, ref filteredSubtree, templateObject);
                 }
             }
         }
 
-        private void addIdAndRelationship(OSMElement.OSMElement brailleNode, ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
-        {
+        private void addIdAndRelationship(ITreeStrategy<OSMElement.OSMElement> brailleSubtree, ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
+        { 
+            if (brailleSubtree == null && !brailleSubtree.HasChild) { return; }
+            OSMElement.OSMElement brailleNode = brailleSubtree.Child.Data;
+            brailleSubtree = brailleSubtree.Child;
+            
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }
+            String parentId = idGenerated;
             GeneralProperties prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
@@ -53,9 +58,40 @@ namespace GRANTManager.Templates
                 OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
                 strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
             }
+
+            if (brailleSubtree.HasChild)
+            {
+                brailleSubtree = brailleSubtree.Child;
+                idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleSubtree.Data, parentId);
+                /*if (idGenerated == null) { return; }
+                prop = brailleNode.properties;
+                prop.IdGenerated = idGenerated;
+                brailleNode.properties = prop;
+                if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
+                {
+                    List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
+                    OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+                    strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+                }*/
+                while (brailleSubtree.HasNext)
+                {
+                    brailleSubtree = brailleSubtree.Next;
+                    idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleSubtree.Data, parentId);
+                    if (idGenerated == null) { return; }
+                   /* prop = brailleNode.properties;
+                    prop.IdGenerated = idGenerated;
+                    brailleNode.properties = prop;
+                    if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
+                    {
+                        List<OsmRelationship<String, String>> relationship = grantTrees.getOsmRelationship();
+                        OsmTreeRelationship.addOsmRelationship(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+                    }*/
+                }
+            }
         }
 
-        protected abstract OSMElement.OSMElement createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null);
+        protected abstract ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null);
 
 
         
