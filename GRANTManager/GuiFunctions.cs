@@ -724,18 +724,24 @@ namespace GRANTManager
             bool isValid = true;
             String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
             if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
-            FileStream fs = new FileStream(pathToXsd, FileMode.Open);
-            XmlSchema xsd = XmlSchema.Read(fs, ValidationCallback);
-            // xsd.Write(Console.Out);
-            XmlSchemaSet xsdSet = new XmlSchemaSet();
-            xsdSet.Add(xsd);
-            xDoc.Validate(xsdSet, (o, e) =>
+
+            try
             {
-                Console.WriteLine("{0}", e.Message);
-                isValid = false;
-            });
-            System.Xml.Serialization.XmlSerializerNamespaces a = xsd.Namespaces;
-            return isValid;
+                FileStream fs = new FileStream(pathToXsd, FileMode.Open);
+
+                XmlSchema xsd = XmlSchema.Read(fs, ValidationCallback);
+                // xsd.Write(Console.Out);
+                XmlSchemaSet xsdSet = new XmlSchemaSet();
+                xsdSet.Add(xsd);
+                xDoc.Validate(xsdSet, (o, e) =>
+                {
+                    Console.WriteLine("{0}", e.Message);
+                    isValid = false;
+                });
+                System.Xml.Serialization.XmlSerializerNamespaces a = xsd.Namespaces;
+                return isValid;
+            }
+            catch (IOException e) { Debug.WriteLine("Auf die Datei kann nicht zugegriffen werden.\n" + e); return false; }
         }
 
         static void ValidationCallback(object sender, ValidationEventArgs args)

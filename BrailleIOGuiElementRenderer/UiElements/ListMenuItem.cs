@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BrailleIOGuiElementRenderer.UiElements
 {
-    public class ListMenuItem
+    public struct ListMenuItem
     {
         public bool isMultipleSelection { get; set; }
         public bool isSelected { get; set; }

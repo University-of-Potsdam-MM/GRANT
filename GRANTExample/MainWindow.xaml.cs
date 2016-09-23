@@ -247,7 +247,7 @@ namespace GRANTExample
             }
             if (e.Key == Key.NumPad5)
             {
-                ITreeStrategy<OSMElement.OSMElement> node = guiFuctions.getBrailleNodeAtPoint(9, 23);
+                ITreeStrategy<OSMElement.OSMElement> node = guiFuctions.getBrailleNodeAtPoint(33, 24);
                 Debug.WriteLine("Braille-Node: " + (node == null ? "null" : node.Data.properties.valueFiltered));
             }
 

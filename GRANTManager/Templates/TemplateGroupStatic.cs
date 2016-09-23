@@ -113,6 +113,13 @@ namespace GRANTManager.Templates
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
+            if (templateObject.osm.properties.controlTypeFiltered.Equals("TabItem"))
+            {
+                OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
+                //tabView.orientation = templateObject.orientation;
+                //braille.uiElementSpecialContent = tabView;
+                braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
+            }
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = viewName;

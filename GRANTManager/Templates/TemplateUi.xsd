@@ -36,6 +36,17 @@
                     <xs:enumeration value="TextBox"/>
                     <xs:enumeration value="GroupElement"/>
                     <xs:enumeration value="ListItem" />
+                    <xs:enumeration value="TabItem" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Orientation" minOccurs="0"> <!-- gibt bei (einigen) Elementen die Ausrichtung an-->
+                <xs:simpleType> 
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="Top"/>
+                    <xs:enumeration value="Bottom"/>
+                    <xs:enumeration value="Left"/>
+                    <xs:enumeration value="Right"/>
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
@@ -58,7 +69,7 @@
                           <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0" />
                           <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
                           <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
-                          <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Bottom" type="xsd:int" default="0" minOccurs="0"/>
                         </xsd:sequence>
                       </xsd:complexType>
                     </xsd:element>
@@ -68,7 +79,7 @@
                           <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
                           <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
                           <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
-                          <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Bottom" type="xsd:int" default="0" minOccurs="0"/>
                         </xsd:sequence>
                       </xsd:complexType>
                     </xsd:element>
@@ -78,7 +89,7 @@
                           <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
                           <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
                           <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
-                          <xsd:element name="Buttom" type="xsd:int" default="0" minOccurs="0" />
+                          <xsd:element name="Bottom" type="xsd:int" default="0" minOccurs="0" />
                         </xsd:sequence>
                       </xsd:complexType>
                     </xsd:element>

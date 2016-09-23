@@ -51,7 +51,8 @@ namespace GRANTManager.Templates
                 where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
                     && (string)el.Attribute("name") == "NavigationBarScreens"
                 select el;
-            Debug.WriteLine("uiElement: " + uiElement.Count());
+           // Debug.WriteLine("uiElement: " + uiElement.Count());
+            if (uiElement.Count() == 0) { return; }
             //TODO: mit Events verknüpfen
             /*
              * (Namen) aller Screens holen
@@ -59,6 +60,7 @@ namespace GRANTManager.Templates
              */
             List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
             ATemplateUi generalUiInstance;
+            
             TempletUiObject templateObject = xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
             if (templateObject.Screens == null)
             {
@@ -66,14 +68,30 @@ namespace GRANTManager.Templates
                 templateObject.Screens = screens;
             }
             List<OSMElement.OSMElement> groupElementsStatic = new List<OSMElement.OSMElement>();
-            int index = 1;
+            int index = 0;
             if (screens == null) { return; }
             foreach (String s in screens)
             {
                 OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
                 GeneralProperties childProp = new GeneralProperties();
-                Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle; //TODO: richtig machen
-                rect.Y = rect.Y * index;
+                
+                Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle; //TODO: ist so nur testweise -> richtig machen
+                if (templateObject.orientation != null)
+                {
+                    Debug.WriteLine("2 - Ausrichtung = " + templateObject.orientation + " ("+templateObject.name +": "+s+")");
+                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right)) 
+                    { 
+                        //rect.Y = ((rect.Y +1)* index) + 1; 
+                        rect.Y = (rect.Height + 1) * index + rect.Y + 1;
+                    }
+                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom)) 
+                    { 
+                        //rect.X = (rect.X + 1)+( templateObject.osm.properties.boundingRectangleFiltered.Width * index); 
+                        rect.X = (rect.Width + 1) * index + rect.X +1;
+                    }
+                }
+                Debug.WriteLine("Rect = " + rect);
+
                 childProp.boundingRectangleFiltered = rect;
 
                 childProp.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer;
@@ -87,9 +105,12 @@ namespace GRANTManager.Templates
                 //childBraille.screenName = 
                 //childBraille.uiElementSpecialContent = ?
                 childBraille.viewName = "_" + s;//TODO
-
+                OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
+                tabView.orientation = templateObject.orientation;
+                childBraille.uiElementSpecialContent = tabView;
                 childOsm.brailleRepresentation = childBraille;
                 groupElementsStatic.Add(childOsm);
+                
                 index++;
             }
 
@@ -104,9 +125,13 @@ namespace GRANTManager.Templates
                 {
                     generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
                 }*/
-
+                OSMElement.GroupelementsOfSameType tmp = new GroupelementsOfSameType();
+                BrailleRepresentation br = templateObject.osm.brailleRepresentation;
+                br.groupelementsOfSameType = new GroupelementsOfSameType();
+                OSMElement.OSMElement osm = templateObject.osm;
+                osm.brailleRepresentation = br;
+                templateObject.osm = osm;
                 generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
-            
             generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);//
             
 
@@ -207,6 +232,7 @@ namespace GRANTManager.Templates
             public String groupImplementedClassTypeDllName { get; set; } //nötig?
             public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
             public String name { get; set; }
+            public OSMElement.UiElements.Orientation orientation { get; set; }
 
             /// <summary>
             /// enthält Elemente, welche einem (OSM-)Element  als Gruppe zugeordnet sind
@@ -225,7 +251,7 @@ namespace GRANTManager.Templates
         private TempletUiObject xmlUiElementToTemplateUiObject(XElement xmlElement)
         {
 
-            Debug.WriteLine(xmlElement);
+            //Debug.WriteLine(xmlElement);
  
             TempletUiObject templetObject = new TempletUiObject();
             Int32 result;
@@ -254,17 +280,17 @@ namespace GRANTManager.Templates
                 if (!boxModel.Element("Padding").IsEmpty)
                 {
                     XElement padding = boxModel.Element("Padding");
-                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Buttom") == null ? 0 : Convert.ToInt32(padding.Element("Buttom").Value));
+                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Bottom") == null ? 0 : Convert.ToInt32(padding.Element("Bottom").Value));
                 }
                 if (!boxModel.Element("Margin").IsEmpty)
                 {
                     XElement margin = boxModel.Element("Margin");
-                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Buttom") == null ? 0 : Convert.ToInt32(margin.Element("Buttom").Value));
+                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Bottom") == null ? 0 : Convert.ToInt32(margin.Element("Bottom").Value));
                 }
                 if (!boxModel.Element("Boarder").IsEmpty)
                 {
                     XElement boarder = boxModel.Element("Boarder");
-                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Buttom") == null ? 0 : Convert.ToInt32(boarder.Element("Buttom").Value));
+                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Bottom") == null ? 0 : Convert.ToInt32(boarder.Element("Bottom").Value));
                 }
             }
 
@@ -298,6 +324,13 @@ namespace GRANTManager.Templates
                     templetObject.Screens.Add(s.Value);
                 }
 
+            }
+            if (xmlElement.Element("Orientation") != null && !xmlElement.Element("Orientation").IsEmpty)
+            {
+                String value = xmlElement.Element("Orientation").Value;
+              //  templetObject.orientation = (value == OSMElement.UiElements.Orientation.Left.ToString() ? OSMElement.UiElements.Orientation.Left : (value == OSMElement.UiElements.Orientation.Bottom.ToString() ? OSMElement.UiElements.Orientation.Bottom : (value == OSMElement.UiElements.Orientation.Right.ToString() ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));
+                templetObject.orientation = (value.Equals( OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left : (value.Equals( OSMElement.UiElements.Orientation.Bottom.ToString()) ? OSMElement.UiElements.Orientation.Bottom : (value.Equals( OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));
+                
             }
             braille.showScrollbar = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
             templetObject.name = xmlElement.Attribute("name").Value;

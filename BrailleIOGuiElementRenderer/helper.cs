@@ -33,13 +33,13 @@ namespace BrailleIOGuiElementRenderer
         /// <summary>
         /// kopiert den Inhalt einer (kleineren) Matrix in eine größere; dabei werden möglicherweise Werte der größeren Matrix überschrieben
         /// </summary>
-        /// <param name="smallMatrix">ibt die kleinere Matrix an</param>
+        /// <param name="smallMatrix">ist die kleinere Matrix an</param>
         /// <param name="bigMatrix">ibt die größere Matrix an</param>
         /// <param name="startX">gibt an wieviele Pins nach Links frei bleiben sollen</param>
         /// <param name="startY">gibt an wieviele Pins nach oben frei bleiben sollen</param>
         public static void copyMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int startX = 0, int startY = 0)
         {
-            for (int i = startX; (i < (bigMatrix.Length / bigMatrix.GetLength(0))) && (i - startX < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)
+            for (int i = startX; (i < bigMatrix.GetLength(1)) && (i - startX < smallMatrix.GetLength(1)); i++)
             {
                 for (int j = startY; (j < bigMatrix.GetLength(0)) && (j - startY < smallMatrix.GetLength(0)); j++)
                 {
@@ -206,10 +206,22 @@ namespace BrailleIOGuiElementRenderer
         }
 
         /// <summary>
+        /// entfernt von einer bool-Matrix den linken Rand
+        /// </summary>
+        /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
+        public static void RemoveRightBoarder(ref bool[,] viewMatrix)
+        {
+            for (int i = 1; i < viewMatrix.GetLength(0) - 1; i++)
+            {
+                viewMatrix[i, viewMatrix.GetLength(1)-1] = false;
+            }
+        }
+
+        /// <summary>
         /// entfernt von einer bool-Matrix den unteren Rand
         /// </summary>
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
-        public static void RemoveDownBoarder(ref bool[,] viewMatrix)
+        public static void RemoveBottomBoarder(ref bool[,] viewMatrix)
         {
             for (int i = 1; i < (viewMatrix.Length /viewMatrix.GetLength(0))-1 ; i++)
             {
@@ -222,7 +234,7 @@ namespace BrailleIOGuiElementRenderer
         /// entfernt von einer bool-Matrix den oberen Rand
         /// </summary>
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
-        public static void RemoveUpBoarder(ref bool[,] viewMatrix)
+        public static void RemoveTopBoarder(ref bool[,] viewMatrix)
         {
             for (int i = 1; i < (viewMatrix.Length / viewMatrix.GetLength(0)) - 1; i++)
             {
@@ -238,6 +250,50 @@ namespace BrailleIOGuiElementRenderer
                 line[0, i] = true;
             }
             return line;
+        }
+
+        public static bool[,] createDownBorder(int heightView, int widthView)
+        {
+            bool[,] viewMatrix = new bool[heightView, widthView];
+
+            for (int width = 0; width < widthView; width++)
+            {
+                    viewMatrix[heightView-1, width] = true;
+            }
+            return viewMatrix;
+        }
+
+        public static bool[,] createLeftBorder(int heightView, int widthView)
+        {
+            bool[,] viewMatrix = new bool[heightView, widthView];
+            for (int height = 0; height < heightView; height++)
+            {
+                    viewMatrix[height, 0] = true;
+                
+            }
+            return viewMatrix;
+        }
+
+        internal static bool[,] createRightBorder(int heightView, int widthView)
+        {
+            bool[,] viewMatrix = new bool[heightView, widthView];
+            for (int height = 0; height < heightView; height++)
+            {
+                viewMatrix[height, widthView-1] = true;
+
+            }
+            return viewMatrix;
+        }
+
+        internal static bool[,] createUpBorder(int heightView, int widthView)
+        {
+            bool[,] viewMatrix = new bool[heightView, widthView];
+
+            for (int width = 0; width < widthView; width++)
+            {
+                viewMatrix[0,width]  = true;
+            }
+            return viewMatrix;
         }
     }
 }

@@ -16,19 +16,19 @@
         <Left>0</Left>
         <Top>0</Top>
         <Right>0</Right>
-        <Buttom>1</Buttom>
+        <Bottom>1</Bottom>
       </Margin>
       <Padding>
         <Left>0</Left>
         <Top>0</Top>
         <Right>0</Right>
-        <Buttom>1</Buttom>
+        <Bottom>1</Bottom>
       </Padding>
       <Boarder>
         <Left>0</Left>
         <Top>0</Top>
         <Right>0</Right>
-        <Buttom>1</Buttom>
+        <Bottom>1</Bottom>
       </Boarder>
     </BoxModel>
     <ShowScrollbar>false</ShowScrollbar>
@@ -42,7 +42,7 @@
       <childBoundingRectangle>
         <Height>9</Height>
         <Width>15</Width>
-      </childBoundingRectangle>s
+      </childBoundingRectangle>
     </IsGroup>
     <Renderer>DropDownMenu</Renderer>
     <Position>
@@ -158,13 +158,13 @@
       <Margin />
       <Padding>
         <Left>1</Left>
-        <Buttom>1</Buttom>
+        <Bottom>1</Bottom>
       </Padding>
       <Boarder>
         <Left>1</Left>
         <Top>1</Top>
 		<Right>1</Right>
-        <Buttom>1</Buttom>
+        <Bottom>1</Bottom>
       </Boarder>
     </BoxModel>
     <ShowScrollbar>true</ShowScrollbar>
@@ -173,25 +173,26 @@
     </Screens>
     <TextFromUIElement>nameFiltered</TextFromUIElement>
   </UiElement>
-  <UiElement name="navigationBar">
-  <IsGroup>
-    <Linebreak>false</Linebreak>
-    <Vertical>true</Vertical>
-    <childBoundingRectangle>
-      <Height>8</Height>
-      <Width>6</Width>
-    </childBoundingRectangle>
-  </IsGroup>
-  <Renderer>Text</Renderer>
-  <Position>
-    <Height>30</Height>
-    <Width>8</Width>
-    <StartX>0</StartX>
-    <StartY>8</StartY>
-  </Position>
-  <BoxModel/>
-  <ShowScrollbar>true</ShowScrollbar>
-  <Screens />
-  <TextFromUIElement />
+  <UiElement name="NavigationBarScreens">
+    <IsGroup>
+      <Linebreak>false</Linebreak>
+      <Vertical>true</Vertical>
+      <childBoundingRectangle>
+        <Height>8</Height>
+        <Width>8</Width>
+      </childBoundingRectangle>
+    </IsGroup>
+    <Renderer>TabItem</Renderer>
+    <Orientation>Left</Orientation>
+    <Position>
+      <Height>48</Height>
+      <Width>8</Width>
+      <StartX>0</StartX>
+      <StartY>6</StartY>
+    </Position>
+    <BoxModel/>
+    <ShowScrollbar>false</ShowScrollbar>
+    <Screens />
+    <TextFromUIElement />
   </UiElement>
 </TemplateUi>

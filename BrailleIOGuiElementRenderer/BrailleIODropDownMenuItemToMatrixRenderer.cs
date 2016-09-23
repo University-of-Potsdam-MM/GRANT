@@ -66,8 +66,8 @@ namespace BrailleIOGuiElementRenderer
             DropDownMenuItem dropDownMenu = (DropDownMenuItem)uiContent.uiElementSpecialContent; //Der Type mussan dieser Stelle vorher nicht geprüft werden, da das schon in der aufrufenden Methode gemacht wurde
             if (dropDownMenu.hasPrevious)
             {
-                //Helper.RemoveDownBoarder(ref boxMatrix);
-                Helper.RemoveUpBoarder(ref boxMatrix);
+                //Helper.RemoveBottomBoarder(ref boxMatrix);
+                Helper.RemoveTopBoarder(ref boxMatrix);
             }
             //String to Braille/Matrix
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();

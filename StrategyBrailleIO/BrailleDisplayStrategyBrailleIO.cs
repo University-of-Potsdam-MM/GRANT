@@ -194,6 +194,7 @@ namespace StrategyBrailleIO
         public void generatedBrailleUi()
         {
             if (!isInitialized) { setActiveAdapter(); }
+            if (grantTrees == null || grantTrees.getBrailleTree() == null) { return; }
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
@@ -467,7 +468,6 @@ namespace StrategyBrailleIO
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
-            BrailleIOButtonToMatrixRenderer buttonRenderer = new BrailleIOButtonToMatrixRenderer();
             vr.SetOtherContent(brailleUiElement, renderer);
             vr.ShowScrollbars = brailleUiElement.showScrollbar;
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
@@ -518,6 +518,8 @@ namespace StrategyBrailleIO
                     return new BrailleIOGroupViewRangeToMatrixRenderer();
                 case "ListItem":
                     return new BrailleIOListItemToMatrixRenderer();
+                case "TabItem":
+                    return new BrailleIOTabItemToMatrixRenderer();
             }
             return null;
         }
@@ -525,7 +527,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
         /// </summary>
-        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox, ListItem, GroupElement }
+        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox, ListItem, GroupElement, TabItem }
 
         private struct uiElementsTypeStruct
         {
@@ -581,6 +583,11 @@ namespace StrategyBrailleIO
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.ListItem.ToString();
             uiElement.heightMin = 6;
             uiElement.widthMin = 15;
+            uiElementList.Add(uiElement);
+
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.TabItem.ToString();
+            uiElement.heightMin = 20;
+            uiElement.widthMin = 6;
             uiElementList.Add(uiElement);
 
             if (uiElementList.Count != Enum.GetNames(typeof( uiElementeTypesBrailleIoEnum)).Length)
@@ -756,6 +763,14 @@ namespace StrategyBrailleIO
                 properties.isToggleStateOn = false;
                 brailleR.uiElementSpecialContent = listMenuItem;
             }
+            if (uiElementeTypesBrailleIoEnum.TabItem.ToString().Equals(uiElementType))
+            {
+                properties.valueFiltered = "TabItem";
+                rect = new Rect(0, 0, 8, 8);
+                OSMElement.UiElements.TabItem tabview = new TabItem();
+                tabview.orientation = OSMElement.UiElements.Orientation.Left;
+                brailleR.uiElementSpecialContent = tabview;
+            }
             /*if (uiElementeTypesBrailleIoEnum.GroupElement.ToString().Equals(uiElementType))
             {
                 properties.valueFiltered = "Beispiel Beispieltext Beispieltext";//TODO
@@ -833,6 +848,22 @@ namespace StrategyBrailleIO
             return brailleListItem;
         }
 
+        private BrailleIOGuiElementRenderer.UiElements.TabItem convertToTabView(OSMElement.OSMElement osmElement)
+        {
+            BrailleIOGuiElementRenderer.UiElements.TabItem tabViewBraille = new BrailleIOGuiElementRenderer.UiElements.TabItem();
+            if (osmElement.Equals(new OSMElement.OSMElement())) { return tabViewBraille; }
+            if (!osmElement.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.TabItem)))
+            {
+                return tabViewBraille;
+            }
+            
+            OSMElement.UiElements.TabItem tabOsm = (OSMElement.UiElements.TabItem)osmElement.brailleRepresentation.uiElementSpecialContent;
+            Debug.WriteLine("4 - Ausrichtung = " + tabOsm.orientation + " (" + osmElement.brailleRepresentation.viewName + ": " + osmElement.properties.valueFiltered + ")");
+            tabViewBraille.orientation = tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom :
+                (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Top.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Top : (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Right.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Right : BrailleIOGuiElementRenderer.UiElements.Orientation.Left));
+            return tabViewBraille;
+        }
+
         /// <summary>
         /// Konvertiert den <code>uiElementSpecialContent</code> des <code>OSMElement</code>s zu einem entsprechenden Objekt, welches BrailleIO bekannt ist
         /// </summary>
@@ -850,6 +881,10 @@ namespace StrategyBrailleIO
             if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.ListMenuItem)))
             {
                 brailleIOElement = convertToListItem(osmElement);
+            }
+            if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.TabItem)))
+            {
+                brailleIOElement = convertToTabView(osmElement);
             }
             return brailleIOElement;
         }
@@ -915,6 +950,10 @@ namespace StrategyBrailleIO
             if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.ListMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
                 childUi.uiElementSpecialContent = convertToListItem(brailleTreeNode);
+            }
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.TabItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            {
+                childUi.uiElementSpecialContent = convertToTabView(brailleTreeNode);
             }
             groupelement.childUiElement = childUi;
             
