@@ -712,6 +712,7 @@ namespace GRANTManager
         public static bool isTemplateValid(String pathToXml)
         {
             XDocument xDoc;
+            if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
             try
             {
                 xDoc = XDocument.Load(@pathToXml);

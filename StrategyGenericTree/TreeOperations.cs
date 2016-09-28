@@ -730,16 +730,23 @@ namespace StrategyGenericTree
         /// Entfernt alle Kinder des Knotens, aber nicht den Knoten selbst
         /// </summary>
         /// <param name="parentSubtree">gibt den Teilbaum an, bei dem alle Kinder entfernt werden sollen</param>
-        private void removeChildNodeInBrailleTree(ITreeStrategy<OSMElement.OSMElement> parentSubtree)
+        public void removeChildNodeInBrailleTree(ITreeStrategy<OSMElement.OSMElement> parentSubtree)
         {
             if (parentSubtree != null && parentSubtree.HasChild && grantTrees.getBrailleTree() != null)
             {
+                List<OSMElement.OSMElement> listToRemove = new List<OSMElement.OSMElement>();
                 ITreeStrategy<OSMElement.OSMElement> childeens = parentSubtree.Child;
-                grantTrees.getBrailleTree().Remove(childeens.Data);
+                //grantTrees.getBrailleTree().Remove(childeens.Data);
+                listToRemove.Add(childeens.Data);
                 while (childeens.HasNext)
                 {
                     childeens = childeens.Next;
-                    grantTrees.getBrailleTree().Remove(childeens.Data);
+                    //grantTrees.getBrailleTree().Remove(childeens.Data);
+                    listToRemove.Add(childeens.Data);
+                }
+                foreach (OSMElement.OSMElement osm in listToRemove)
+                {
+                    grantTrees.getBrailleTree().Remove(osm);
                 }
             }
         }
@@ -1083,6 +1090,7 @@ namespace StrategyGenericTree
                         if (osmRelationship != null)
                         { 
                             ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
+                            if (subtreeFiltered == null) { return; }
                             String id = subtreeFiltered.Data.properties.IdGenerated;
                             subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(subtreeFiltered.Data, TreeScopeEnum.Subtree);
                             String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtreeFiltered, id);
@@ -1190,6 +1198,82 @@ namespace StrategyGenericTree
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Ändert die Eigenschaft beim Braille-Knoten, welcher dem Screen entspricht,
+        /// </summary>
+        /// <param name="screenName">gibt den namen des Screens an</param>
+        /// <param name="isActiv"></param>
+        /// <param name="navigationbarSubstring">gibt einen (Teil-)String des Namens des Navigationsleiste an; wie diese im Baum benannt ist</param>
+        public void setPropertyForScreen(string screenName, bool isActiv, String navigationbarSubstring = "NavigationBarScreens")
+        {
+            /*
+             * 1. Knoten mit Screen suchen
+             * 2. Navigationsleiset darin suchen
+             * 2. Eigenschaft ändern
+             * 3. Leiste neu Darstellen
+             */
+            ITreeStrategy<OSMElement.OSMElement> screenTree = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(screenName);
+            INode<OSMElement.OSMElement> navigationBarSubtree = (INode<OSMElement.OSMElement>)strategyMgr.getSpecifiedTree().NewNodeTree();
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)screenTree).AllChildren.Nodes)
+            {
+                if (node.Data.brailleRepresentation.viewName.Contains(navigationbarSubstring))
+                { //Knoten mit Navigationsleiste gefunden
+                    navigationBarSubtree = node;
+                    break;
+                }
+            }
+            if (navigationBarSubtree != null && navigationBarSubtree.Count > 0)
+            {
+                Debug.WriteLine("" + navigationBarSubtree.ToString());
+                foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)navigationBarSubtree).AllChildren.Nodes)
+                {
+                    GeneralProperties prop = node.Data.properties;
+                    if (node.Data.properties.valueFiltered.Equals(screenName))
+                    {                        
+                        prop.isEnabledFiltered = false;
+                       // Debug.WriteLine("Tab '" + node.Data.properties.valueFiltered + "' ist disabled");
+                    }
+                    else
+                    {
+                        prop.isEnabledFiltered = true;
+                        //Debug.WriteLine("Tab '" + node.Data.properties.valueFiltered + "' ist enabled");
+                    }
+                    OSMElement.OSMElement osm = node.Data;
+                    osm.properties = prop;
+                    
+                    //changeBrailleRepresentation(ref osm);
+                    node.Data = osm;
+                }
+                OSMElement.OSMElement osmScreen = navigationBarSubtree.Data;
+                grantTrees.setBrailleTree(navigationBarSubtree.Root);
+                //removeChildNodeInBrailleTree
+               
+                strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osmScreen);
+                navigationBarSubtree.Data = osmScreen;
+                grantTrees.setBrailleTree(navigationBarSubtree.Root);
+                
+            }
+        }
+
+        /// <summary>
+        /// Ermittelt für jeden Screen-Teilbaum, den Knoten mit der Navigationsleiste
+        /// </summary>
+        /// <param name="navigationbarSubstring">gibt den Teil-String des Namenes für die view der Navigationsleiste an</param>
+        /// <returns></returns>
+        public List<ITreeStrategy<OSMElement.OSMElement>> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens")
+        {
+            List<ITreeStrategy<OSMElement.OSMElement>> result = new List<ITreeStrategy<OSMElement.OSMElement>>();
+           // ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.getBrailleTree();
+           foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).AllChildren.Nodes)
+            {
+                if(node.Data.brailleRepresentation.viewName != null && node.Data.brailleRepresentation.viewName.Contains(navigationbarSubstring) && node.HasChild)
+                {
+                    result.Add((ITreeStrategy<OSMElement.OSMElement>)node);
+                }
+            }
+            return result;
         }
 
     }

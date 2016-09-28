@@ -198,6 +198,11 @@ namespace StrategyBrailleIO
             ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
             createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
+            String activeScreenName = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
+            if (activeScreenName != null)
+            {
+                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen(activeScreenName);
+            }
             Debug.WriteLine("");
         }
         
@@ -858,7 +863,7 @@ namespace StrategyBrailleIO
             }
             
             OSMElement.UiElements.TabItem tabOsm = (OSMElement.UiElements.TabItem)osmElement.brailleRepresentation.uiElementSpecialContent;
-            Debug.WriteLine("4 - Ausrichtung = " + tabOsm.orientation + " (" + osmElement.brailleRepresentation.viewName + ": " + osmElement.properties.valueFiltered + ")");
+           // Debug.WriteLine("4 - Ausrichtung = " + tabOsm.orientation + " (" + osmElement.brailleRepresentation.viewName + ": " + osmElement.properties.valueFiltered + ")");
             tabViewBraille.orientation = tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom :
                 (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Top.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Top : (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Right.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Right : BrailleIOGuiElementRenderer.UiElements.Orientation.Left));
             return tabViewBraille;
@@ -883,7 +888,7 @@ namespace StrategyBrailleIO
                 brailleIOElement = convertToListItem(osmElement);
             }
             if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.TabItem)))
-            {
+            {                
                 brailleIOElement = convertToTabView(osmElement);
             }
             return brailleIOElement;
@@ -899,6 +904,7 @@ namespace StrategyBrailleIO
             BrailleIOGuiElementRenderer.UiElement brailleIOElement = new BrailleIOGuiElementRenderer.UiElement();
             brailleIOElement.contrast = osmElement.brailleRepresentation.contrast;
             brailleIOElement.isDisabled = osmElement.properties.isEnabledFiltered.HasValue ? !(Boolean)osmElement.properties.isEnabledFiltered : false;
+            
             brailleIOElement.isVisible = osmElement.brailleRepresentation.isVisible;
             brailleIOElement.matrix = osmElement.brailleRepresentation.matrix;
             brailleIOElement.screenName = osmElement.brailleRepresentation.screenName;
@@ -942,7 +948,7 @@ namespace StrategyBrailleIO
             childUi.viewName = brailleTreeNode.brailleRepresentation.viewName;
             childUi.isVisible = true;
             childUi.screenName = brailleTreeNode.brailleRepresentation.screenName;
-            
+            childUi.isDisabled = brailleTreeNode.properties.isEnabledFiltered == null ? false : !((bool)brailleTreeNode.properties.isEnabledFiltered);
             if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.DropDownMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
                 childUi.uiElementSpecialContent = convertDropDownMenu((OSMElement.UiElements.DropDownMenuItem)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);
@@ -1047,17 +1053,18 @@ namespace StrategyBrailleIO
                     if (screenAvtiveNew != null)
                     {
                         screenAvtiveNew.SetVisibility(true);
-                        brailleIOMediator.RenderDisplay();
+                        strategyMgr.getSpecifiedTreeOperations().setPropertyForScreen(screenName, true);
+                        
                     }
                     else
                     {
                         screenAvtive.SetVisibility(true);
-                        brailleIOMediator.RenderDisplay();
                         if (strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames().Contains(screenName))
                         {
                             Debug.WriteLine("TODO");
                         }
                     }
+                    brailleIOMediator.RenderDisplay();
                 }
             }
         }

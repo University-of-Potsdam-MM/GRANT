@@ -78,6 +78,10 @@ namespace BrailleIOGuiElementRenderer
                    bool[,] childMatrix;
                    if (child.renderer != null)
                    {
+                      /* if (child.renderer.GetType().Equals(typeof(BrailleIOTabItemToMatrixRenderer)))
+                       {
+                           System.Diagnostics.Debug.WriteLine("Tab = "+child.childUiElement.text+", isDisabled = "+child.childUiElement.isDisabled+", Screen ="+ child.childUiElement.screenName);
+                       }*/
                        childMatrix = child.renderer.RenderMatrix(tmpChildView, child.childUiElement as object);
                    }
                    else

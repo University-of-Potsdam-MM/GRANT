@@ -42,99 +42,164 @@ namespace GRANTManager.Templates
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
 
-        public void createUiElementsNavigationbarScreens(string pathToXml)
+        /// <summary>
+        /// aktualisiert die Navigationsleisten (Anzahl der Tabs) auf allen Screens, die eine Navigationsleiste anzeigen
+        /// </summary>
+        /// <param name="pathToXml"></param>
+        public void updateNavigationbarScreens(string pathToXml)
+        {
+            TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
+            if (templateObject.Equals(new TempletUiObject())) { return; }
+            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            /*
+             * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
+             * ergänzen
+             */
+            List<ITreeStrategy<OSMElement.OSMElement>> navigationbars = strategyMgr.getSpecifiedTreeOperations().getListOfNavigationbars();
+            List<String> screensForShowNavigationbar = new List<string>();
+            foreach (ITreeStrategy<OSMElement.OSMElement> nbar in navigationbars)
+            {                
+                if (nbar.HasChild)
+                {
+                    strategyMgr.getSpecifiedTreeOperations().removeChildNodeInBrailleTree(nbar);
+                    strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(nbar.Data);
+                }
+                screensForShowNavigationbar.Add(nbar.Data.brailleRepresentation.screenName);
+            }
+            templateObject.Screens = screensForShowNavigationbar;
+            List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
+            templateObject.groupElementsStatic = groupElementsStatic;
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+            BrailleRepresentation br = templateObject.osm.brailleRepresentation;
+            br.groupelementsOfSameType = new GroupelementsOfSameType();
+            OSMElement.OSMElement osm = templateObject.osm;
+            osm.brailleRepresentation = br;
+            templateObject.osm = osm;
+            ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
+        }
+
+        /// <summary>
+        /// Fügt eine Navigationsleiste für den angegebenen Screen hinzu
+        /// </summary>
+        /// <param name="pathToXml">gibt den Pfad zum Template der Navigationsleiste an</param>
+        /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
+        public void addNavigationbarForScreen(string pathToXml, ITreeStrategy<OSMElement.OSMElement> subtree)
+        {
+            TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
+            if (templateObject.Equals(new TempletUiObject())) { return; }
+            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            List<String> screenNavi = new List<string>();
+            screenNavi.Add(subtree.Data.brailleRepresentation.screenName);
+            templateObject.Screens = screenNavi;
+            List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
+            templateObject.groupElementsStatic = groupElementsStatic;
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+            BrailleRepresentation br = templateObject.osm.brailleRepresentation;
+            br.groupelementsOfSameType = new GroupelementsOfSameType();
+            OSMElement.OSMElement osm = templateObject.osm;
+            osm.brailleRepresentation = br;
+            templateObject.osm = osm;
+            ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
+        }
+
+        /// <summary>
+        /// Ermittelt von einem angegebenen Template das zugehörige Template-Objekt für die Navigationsleiste
+        /// </summary>
+        /// <param name="pathToXml"></param>
+        /// <returns></returns>
+        private TempletUiObject getTemplateUiObjectOfnavigationbarScreen(string pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
-            //TODO: diese Elemente müssen wahrscheinlich bei createUiElementsNavigationbarScreens ausgeschlossen oder extra beachtet werden
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Elements("UiElement")
                 where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
                     && (string)el.Attribute("name") == "NavigationBarScreens"
                 select el;
-           // Debug.WriteLine("uiElement: " + uiElement.Count());
-            if (uiElement.Count() == 0) { return; }
-            //TODO: mit Events verknüpfen
-            /*
-             * (Namen) aller Screens holen
-             * für jeden (in der xml angegebenen) Screen die Navigationsbar zeichnen
-             */
-            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
-            ATemplateUi generalUiInstance;
-            
-            TempletUiObject templateObject = xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
-            if (templateObject.Screens == null)
-            {
-                //wir wollen alle verfügbaren Screens
-                templateObject.Screens = screens;
-            }
+            // Debug.WriteLine("uiElement: " + uiElement.Count());
+            if (uiElement.Count() == 0) { return new TempletUiObject(); }
+
+            //TempletUiObject templateObject = xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
+            return xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
+        }
+
+        /// <summary>
+        /// Ermittelt die Positionen der einzelnen "Tabs" in der Navigationsleiste
+        /// </summary>
+        /// <param name="screens">gibt die Liste der Screens an, die in der Navigationsleiste angezeigt werden sollen</param>
+        /// <param name="templateObject"></param>
+        /// <param name="index">gibt den Index an, ab welchen die (Tab-)Element die Position berechnet werden soll</param>
+        /// <returns></returns>
+        private List<OSMElement.OSMElement> calculatePositionOfScreenTab(List<String> screens, TempletUiObject templateObject, int index = 0)
+        {
             List<OSMElement.OSMElement> groupElementsStatic = new List<OSMElement.OSMElement>();
-            int index = 0;
-            if (screens == null) { return; }
+            if (screens == null || templateObject.Equals(new TempletUiObject())) { return null; }
             foreach (String s in screens)
             {
                 OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
                 GeneralProperties childProp = new GeneralProperties();
-                
-                Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle; //TODO: ist so nur testweise -> richtig machen
-                if (templateObject.orientation != null)
+                Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
+                //if (templateObject.orientation != null)
                 {
-                    Debug.WriteLine("2 - Ausrichtung = " + templateObject.orientation + " ("+templateObject.name +": "+s+")");
-                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right)) 
-                    { 
+                    //Debug.WriteLine("2 - Ausrichtung = " + templateObject.orientation + " ("+templateObject.name +": "+s+")");
+                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right))
+                    {
                         //rect.Y = ((rect.Y +1)* index) + 1; 
                         rect.Y = (rect.Height + 1) * index + rect.Y + 1;
                     }
-                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom)) 
-                    { 
+                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom))
+                    {
                         //rect.X = (rect.X + 1)+( templateObject.osm.properties.boundingRectangleFiltered.Width * index); 
-                        rect.X = (rect.Width + 1) * index + rect.X +1;
+                        rect.X = (rect.Width + 1) * index + rect.X + 1;
                     }
                 }
-                Debug.WriteLine("Rect = " + rect);
-
+               // Debug.WriteLine("Rect = " + rect);
                 childProp.boundingRectangleFiltered = rect;
-
                 childProp.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer;
                 childProp.valueFiltered = s;
                 childOsm.properties = childProp;
                 BrailleRepresentation childBraille = new BrailleRepresentation();
-                //  childBraille.contrast = templateObject.osm.brailleRepresentation.contrast;
-                //childBraille.fromGuiElement = templateObject.osm.brailleRepresentation.fromGuiElement;
                 childBraille.isGroupChild = true;
                 childBraille.isVisible = true;
-                //childBraille.screenName = 
-                //childBraille.uiElementSpecialContent = ?
                 childBraille.viewName = "_" + s;//TODO
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
                 tabView.orientation = templateObject.orientation;
                 childBraille.uiElementSpecialContent = tabView;
                 childOsm.brailleRepresentation = childBraille;
                 groupElementsStatic.Add(childOsm);
-                
                 index++;
             }
+            return groupElementsStatic;
+        }
 
-                templateObject.groupElementsStatic = groupElementsStatic;
+        public void createUiElementsNavigationbarScreens(string pathToXml)
+        {
+            TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
+            if (templateObject.Equals(new TempletUiObject())) { return; }
+            //TODO: mit Events verknüpfen
+            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            ATemplateUi generalUiInstance;
+            if (templateObject.Screens == null)
+            {
+                //wir wollen alle verfügbaren Screens
+                templateObject.Screens = screens;
+            }
+            List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
+            templateObject.groupElementsStatic = groupElementsStatic;
+            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
 
-                ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
-                /*if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
-                {
-                    generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
-                }
-                else
-                {
-                    generalUiInstance = new TemplateGroup(strategyMgr, grantTrees);
-                }*/
-                OSMElement.GroupelementsOfSameType tmp = new GroupelementsOfSameType();
-                BrailleRepresentation br = templateObject.osm.brailleRepresentation;
-                br.groupelementsOfSameType = new GroupelementsOfSameType();
-                OSMElement.OSMElement osm = templateObject.osm;
-                osm.brailleRepresentation = br;
-                templateObject.osm = osm;
-                generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            BrailleRepresentation br = templateObject.osm.brailleRepresentation;
+            br.groupelementsOfSameType = new GroupelementsOfSameType();
+            OSMElement.OSMElement osm = templateObject.osm;
+            osm.brailleRepresentation = br;
+            templateObject.osm = osm;
+            generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+
             generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);//
-            
-
         }
 
         /// <summary>

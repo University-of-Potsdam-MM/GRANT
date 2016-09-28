@@ -35,8 +35,7 @@ namespace BrailleIOGuiElementRenderer
                 throw new Exception("Kein 'uiElementSpecialContent' angegeben!");
             }
             Type typeSpecialContent = groupViewRange.uiElementSpecialContent.GetType();
-            Console.WriteLine("Type = {0}", typeSpecialContent.Name);
-
+            
             TabItem tabview;
             if (typeof(TabItem).Equals(typeSpecialContent))
             {
@@ -89,7 +88,7 @@ namespace BrailleIOGuiElementRenderer
                 if (tabview.orientation.Equals(UiElements.Orientation.Right))
                 {
                     Helper.RemoveLeftBoarder(ref box);
-                } 
+                }
             }
             Helper.copyMatrixInMatrix(box, ref viewMatrix);
             Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, spceLeft);

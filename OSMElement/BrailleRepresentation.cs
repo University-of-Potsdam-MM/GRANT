@@ -78,7 +78,14 @@ namespace OSMElement
         /// </summary>
         public String fromGuiElement { get; set; }
 
+        /// <summary>
+        /// gibt für Bilder einen Kontrastwert zwischen 0 und 255 an
+        /// </summary>
         public int contrast { get; set; }
+
+        /// <summary>
+        /// gibt die Zoomstufe bei Bildern an
+        /// </summary>
         public double zoom { get; set; }
 
         /// <summary>

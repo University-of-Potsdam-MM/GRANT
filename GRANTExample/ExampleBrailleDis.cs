@@ -42,13 +42,19 @@ namespace GRANTExample
             try
             {
                 setDauGui(fromGuiElement);
-                // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+                ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
+                    // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                 String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+                if (subtreeNav != null && subtreeNav.Count > 0)
+                {
+                    ui.addNavigationbarForScreen(path, subtreeNav);
+                }
                 GuiFunctions guiFuctions = new GuiFunctions(strategyMgr, grantTrees);
                 if (guiFuctions.isTemplateUsableForDevice(path))
                 {
                     ui.createUiElementsAllScreens(path);
-                    ui.createUiElementsNavigationbarScreens(path);
+                  //  ui.createUiElementsNavigationbarScreens(path);
+                    ui.updateNavigationbarScreens(path);
                     strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
                 }
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)

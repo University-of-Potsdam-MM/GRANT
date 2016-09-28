@@ -123,6 +123,12 @@ namespace GRANTManager.Interfaces
         void deleteChildsOfBrailleGroups();
 
         /// <summary>
+        /// Entfernt alle Kinder des Knotens, aber nicht den Knoten selbst
+        /// </summary>
+        /// <param name="parentSubtree">gibt den Teilbaum an, bei dem alle Kinder entfernt werden sollen</param>
+        void removeChildNodeInBrailleTree(ITreeStrategy<OSMElement.OSMElement> parentSubtree);
+
+        /// <summary>
         /// Ermittelt den Knoten des BrailleBaums zu einem Punkt
         /// bei Gruppenknoten wird "versucht" das entsprechende Kind zu ermitteln 
         /// </summary>
@@ -137,5 +143,14 @@ namespace GRANTManager.Interfaces
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         StrategyManager getStrategyMgr();
+
+        void setPropertyForScreen(string screenName, bool isActiv, String navigationbarSubstring = "NavigationBarScreens");
+
+        /// <summary>
+        /// Ermittelt für jeden Screen-Teilbaum, den Knoten mit der Navigationsleiste
+        /// </summary>
+        /// <param name="navigationbarSubstring">gibt den Teil-String des Namenes für die view der Navigationsleiste an</param>
+        /// <returns></returns>
+        List<ITreeStrategy<OSMElement.OSMElement>> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens");
     }
 }
