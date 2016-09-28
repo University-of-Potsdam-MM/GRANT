@@ -8,9 +8,9 @@ using GRANTManager;
 using GRANTManager.Interfaces;
 using OSMElement;
 
-namespace GRANTManager.Templates
+namespace TemplatesUi
 {
-    public abstract class ATemplateUi
+    abstract class ATemplateUi
     {
         protected StrategyManager strategyMgr { get; private set; }
         protected GeneratedGrantTrees grantTrees { get; private set; }
@@ -25,7 +25,7 @@ namespace GRANTManager.Templates
             this.grantTrees = grantTrees;
         }
 
-        public virtual void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public virtual void createUiElementFromTemplate(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
             if (templateObject.Screens != null)
             {
@@ -35,12 +35,12 @@ namespace GRANTManager.Templates
                     templateObject.Screens = new List<string>();
                     templateObject.Screens.Add(screen);
                     ITreeStrategy<OSMElement.OSMElement> brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
-                    addIdAndRelationship(brailleNode, ref filteredSubtree, templateObject);
+                    addIdAndRelationship(brailleNode, filteredSubtree, templateObject);
                 }
             }
         }
 
-        private void addIdAndRelationship(ITreeStrategy<OSMElement.OSMElement> brailleSubtree, ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
+        private void addIdAndRelationship(ITreeStrategy<OSMElement.OSMElement> brailleSubtree, ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject)
         { 
             if (brailleSubtree == null || !brailleSubtree.HasChild) { return; }
             OSMElement.OSMElement brailleNode = brailleSubtree.Child.Data;
@@ -91,7 +91,7 @@ namespace GRANTManager.Templates
             }
         }
 
-        protected abstract ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null);
+        protected abstract ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
 
 
         

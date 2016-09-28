@@ -12,10 +12,11 @@ using System.Xml.Linq;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using GRANTManager.Interfaces;
 
-namespace GRANTManager.Templates
+namespace TemplatesUi
 {
-    public class GenaralUI
+    public class GenaralUI : IGenaralUiTemplate
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
@@ -37,8 +38,6 @@ namespace GRANTManager.Templates
             iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
             createUiElementsAllScreens(pathToXml);
             createUiElementsNavigationbarScreens(pathToXml);
-
-            //createUiElementsNavigationbarScreens(pathToXml);
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
 
@@ -77,7 +76,7 @@ namespace GRANTManager.Templates
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
             ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
-            generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
+            generalUiInstance.createUiElementFromTemplate(tree, templateObject);
         }
 
         /// <summary>
@@ -103,7 +102,7 @@ namespace GRANTManager.Templates
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
             ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
-            generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
+            generalUiInstance.createUiElementFromTemplate(tree, templateObject);
         }
 
         /// <summary>
@@ -144,15 +143,12 @@ namespace GRANTManager.Templates
                 Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
                 //if (templateObject.orientation != null)
                 {
-                    //Debug.WriteLine("2 - Ausrichtung = " + templateObject.orientation + " ("+templateObject.name +": "+s+")");
                     if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right))
                     {
-                        //rect.Y = ((rect.Y +1)* index) + 1; 
                         rect.Y = (rect.Height + 1) * index + rect.Y + 1;
                     }
                     if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom))
                     {
-                        //rect.X = (rect.X + 1)+( templateObject.osm.properties.boundingRectangleFiltered.Width * index); 
                         rect.X = (rect.Width + 1) * index + rect.X + 1;
                     }
                 }
@@ -199,7 +195,7 @@ namespace GRANTManager.Templates
             templateObject.osm = osm;
             generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
 
-            generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);//
+            generalUiInstance.createUiElementFromTemplate(tree, templateObject);//
         }
 
         /// <summary>
@@ -287,26 +283,10 @@ namespace GRANTManager.Templates
             {
                 generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
             }
-            generalUiInstance.createUiElementFromTemplate(ref subtree, xmlUiElementToTemplateUiObject(firstElement));
+            generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(firstElement));
         }
 
-        public struct TempletUiObject
-        {
-            public OSMElement.OSMElement osm { get; set; }
-            public String groupImplementedClassTypeFullName { get; set; } //nötig?
-            public String groupImplementedClassTypeDllName { get; set; } //nötig?
-            public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
-            public String name { get; set; }
-            public OSMElement.UiElements.Orientation orientation { get; set; }
 
-            /// <summary>
-            /// enthält Elemente, welche einem (OSM-)Element  als Gruppe zugeordnet sind
-            /// die Elemente (Anzahl) dieser Gruppe verändern sich nicht (die inhalte dürfen sich aber ändern)
-            /// </summary>
-            /// [XmlIgnore]
-            public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
-
-        }
 
         /// <summary>
         /// Wandelt ein XElement in ein <c>TempletUiObject</c> um
@@ -315,9 +295,6 @@ namespace GRANTManager.Templates
         /// <returns>ein <c>TempletUiObject</c></returns>
         private TempletUiObject xmlUiElementToTemplateUiObject(XElement xmlElement)
         {
-
-            //Debug.WriteLine(xmlElement);
- 
             TempletUiObject templetObject = new TempletUiObject();
             Int32 result;
             result = 0;
@@ -435,7 +412,7 @@ namespace GRANTManager.Templates
                 }
 
                 ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
-                generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
+                generalUiInstance.createUiElementFromTemplate(tree, templateObject);
             }
         }
 
@@ -501,7 +478,18 @@ namespace GRANTManager.Templates
                 templateObject.Screens = new List<string>();
                 templateObject.Screens.Add(screen);
 
-                generalUiInstance.createUiElementFromTemplate(ref tree, templateObject);
+                generalUiInstance.createUiElementFromTemplate(tree, templateObject);
+            }
+        }
+
+
+        public void createUiElementFromTemplate(GRANTManager.Interfaces.ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GRANTManager.Interfaces.TempletUiObject templateObject, String brailleNodeId = null)
+        {
+            Type typeOfTemplate = Type.GetType(templateObject.osm.brailleRepresentation.templateFullName + ", " + templateObject.osm.brailleRepresentation.templateNamspace);
+            if (typeOfTemplate != null)
+            {
+                ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                template.createUiElementFromTemplate(filteredSubtree, templateObject, brailleNodeId);
             }
         }
     }

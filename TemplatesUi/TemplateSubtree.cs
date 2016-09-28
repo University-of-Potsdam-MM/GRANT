@@ -4,10 +4,11 @@ using OSMElement.UiElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using GRANTManager;
 
-namespace GRANTManager.Templates
+namespace TemplatesUi
 {
-    public class TemplateSubtree : ATemplateUi
+    class TemplateSubtree : ATemplateUi
     {
         int? boxStartX;
         int? boxStartY;
@@ -19,7 +20,7 @@ namespace GRANTManager.Templates
             deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         }
 
-        public override void createUiElementFromTemplate(ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
+        public override void createUiElementFromTemplate(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
         {
             if (!filteredSubtree.HasChild ) { return; }
             if (filteredSubtree.HasChild)
@@ -33,7 +34,7 @@ namespace GRANTManager.Templates
             }
         }
 
-        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
+        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
         {
             if (filteredSubtree.Data.properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewNodeTree(); }
             OSMElement.OSMElement brailleNode = templateObject.osm;
@@ -171,7 +172,7 @@ namespace GRANTManager.Templates
         /// </summary>
         /// <param name="parentNode">gibt den Elternknoten an</param>
         /// <param name="templateObject">gibt das zu nutzende Template an</param>
-        private void iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentNode, GenaralUI.TempletUiObject templateObject, String brailleNodeId)
+        private void iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentNode, TempletUiObject templateObject, String brailleNodeId)
         {            
             if (parentNode.HasChild)
             {

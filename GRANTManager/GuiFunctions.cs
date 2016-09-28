@@ -723,7 +723,7 @@ namespace GRANTManager
                 return false;
             }
             bool isValid = true;
-            String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
+            String pathToXsd = @"TemplateUi.xsd";
             if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
 
             try
@@ -800,7 +800,7 @@ namespace GRANTManager
                 Debug.WriteLine("die XML (" + pathToXml + ") ist nicht korrekt: " + e);
                 return false;
             }
-            String pathToXsd = @"Templates" + Path.DirectorySeparatorChar + "TemplateUi.xsd";
+            String pathToXsd = @"TemplateUi.xsd";
             if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
             minDeviceHeight = Convert.ToInt32( xElement.Element("MinDeviceHeight").Value);
             minDeviceWidth = Convert.ToInt32(xElement.Element("MinDeviceWidth").Value);

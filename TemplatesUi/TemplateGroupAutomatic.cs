@@ -4,14 +4,15 @@ using OSMElement.UiElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using GRANTManager;
 
-namespace GRANTManager.Templates
+namespace TemplatesUi
 {
-    public class TemplateGroupAutomatic : ATemplateUi
+    class TemplateGroupAutomatic : ATemplateUi
     {
         public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
-        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String brailleNodeId = null)
+        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = templateObject.osm.properties;

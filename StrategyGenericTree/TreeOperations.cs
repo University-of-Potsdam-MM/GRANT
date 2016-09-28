@@ -19,9 +19,9 @@ using System.Text;
 using System.Threading.Tasks;
 using OSMElement.UiElements;
 using System.Security.Cryptography;
-using GRANTManager.Templates;
 using System.Windows;
 using System.Diagnostics;
+using TemplatesUi;
 
 namespace StrategyGenericTree
 {
@@ -1081,8 +1081,8 @@ namespace StrategyGenericTree
                     Type typeOfTemplate = Type.GetType(node.Data.brailleRepresentation.templateFullName + ", " + node.Data.brailleRepresentation.templateNamspace);
                     if (typeOfTemplate != null)
                     {
-                        ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
-                        GenaralUI.TempletUiObject templateobject = new GenaralUI.TempletUiObject();
+                       // ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                        TempletUiObject templateobject = new TempletUiObject();
                         templateobject.osm = node.Data;
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
@@ -1106,7 +1106,8 @@ namespace StrategyGenericTree
                            }
                             if (subtreeFiltered != null)
                             {
-                                template.createUiElementFromTemplate(ref subtreeFiltered, templateobject, node.Data.properties.IdGenerated);
+                                IGenaralUiTemplate uiTemplate = new GenaralUI(strategyMgr, grantTrees);
+                                uiTemplate.createUiElementFromTemplate(subtreeFiltered, templateobject, node.Data.properties.IdGenerated);
                             }
                         }
                     }

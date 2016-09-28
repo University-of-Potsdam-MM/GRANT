@@ -12,8 +12,7 @@ using BrailleIOGuiElementRenderer;
 using OSMElement.UiElements;
 using System.Windows;
 using System.Diagnostics;
-using GRANTManager.Templates;
-
+using TemplatesUi;
 
 namespace GRANTExample
 {
@@ -22,9 +21,9 @@ namespace GRANTExample
         StrategyManager strategyMgr;
         UpdateNode updateNode;
         GeneratedGrantTrees grantTrees;
-        GenaralUI ui;
+        IGenaralUiTemplate ui;
 
-        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees, GenaralUI ui)
+        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees, IGenaralUiTemplate ui)
         {
             strategyMgr = mgr;
             this.grantTrees = grantTrees;

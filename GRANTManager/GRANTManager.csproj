@@ -69,6 +69,7 @@
     <Compile Include="GeneratedGrantTrees.cs" />
     <Compile Include="GuiFunctions.cs" />
     <Compile Include="Interfaces\IBrailleDisplayStrategy.cs" />
+    <Compile Include="Interfaces\IGenaralUiTemplate.cs" />
     <Compile Include="Interfaces\ITreeOperations.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
     <Compile Include="OsmTreeRelationship.cs" />
@@ -79,12 +80,6 @@
     <Compile Include="Interfaces\IFilterStrategy.cs" />
     <Compile Include="Interfaces\IOperationSystemStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Templates\ATemplateUi.cs" />
-    <Compile Include="Templates\GenaralUI.cs" />
-    <Compile Include="Templates\TemplateGroupAutomatic.cs" />
-    <Compile Include="Templates\TemplateGroupStatic.cs" />
-    <Compile Include="Templates\TemplateSubtree.cs" />
-    <Compile Include="Templates\TemplateNode.cs" />
     <Compile Include="TreeScopeEnum.cs" />
     <Compile Include="UpdateNode.cs" />
   </ItemGroup>
@@ -94,18 +89,7 @@
       <Name>OSMElement</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\TemplateUi.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Templates\TemplateUi.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

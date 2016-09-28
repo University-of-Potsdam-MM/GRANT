@@ -6,14 +6,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GRANTManager;
 
-namespace GRANTManager.Templates
+
+namespace TemplatesUi
 {
-    public class TemplateGroupStatic : ATemplateUi
+    class TemplateGroupStatic : ATemplateUi
     {
         public TemplateGroupStatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
-        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, string brailleNodeId = null)
+        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, string brailleNodeId = null)
         {
             OSMElement.OSMElement createdParentNode = createParentBrailleNode(filteredSubtree, templateObject);
             ITreeStrategy<OSMElement.OSMElement> brailleSubtree = strategyMgr.getSpecifiedTree().NewNodeTree();
@@ -21,7 +23,7 @@ namespace GRANTManager.Templates
             int index = 0;
             foreach (OSMElement.OSMElement child in templateObject.groupElementsStatic)
             {
-                GenaralUI.TempletUiObject childTemplate = new GenaralUI.TempletUiObject();
+                TempletUiObject childTemplate = new TempletUiObject();
                 childTemplate.osm = child;
                 childTemplate.Screens = templateObject.Screens;
                 OSMElement.OSMElement childOsm = createChildBrailleNode(filteredSubtree, childTemplate, templateObject.name+"_"+index);
@@ -36,7 +38,7 @@ namespace GRANTManager.Templates
             throw new NotImplementedException();
         }
 
-        private OSMElement.OSMElement createParentBrailleNode(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
+        private OSMElement.OSMElement createParentBrailleNode(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = templateObject.osm.properties;
@@ -87,7 +89,7 @@ namespace GRANTManager.Templates
             return brailleNode;
         }
 
-        private OSMElement.OSMElement createChildBrailleNode(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject, String viewName)
+        private OSMElement.OSMElement createChildBrailleNode(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String viewName)
         {
             //TODO: falls eine Beziehung im Baum erstellt werden soll muss diese hier? noch gesetzt werden => geht nicht ID ist noch nicht vorhanden
             OSMElement.OSMElement brailleNode = templateObject.osm;

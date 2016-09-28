@@ -21,7 +21,7 @@ using GRANTApplication;
 using OSMElement;
 using GRANTManager;
 using GRANTManager.Interfaces;
-using GRANTManager.Templates;
+using TemplatesUi;
 
 namespace GRANTExample
 {
@@ -47,7 +47,7 @@ namespace GRANTExample
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
-        GenaralUI ui;
+        IGenaralUiTemplate ui;
         
         /// <summary>
         /// Initialisierung der Eventverfolgung des NuGet-Package MousekeyHook
