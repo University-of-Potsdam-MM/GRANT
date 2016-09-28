@@ -42,7 +42,7 @@ namespace GRANTManager.Templates
 
         private void addIdAndRelationship(ITreeStrategy<OSMElement.OSMElement> brailleSubtree, ref ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GenaralUI.TempletUiObject templateObject)
         { 
-            if (brailleSubtree == null && !brailleSubtree.HasChild) { return; }
+            if (brailleSubtree == null || !brailleSubtree.HasChild) { return; }
             OSMElement.OSMElement brailleNode = brailleSubtree.Child.Data;
             brailleSubtree = brailleSubtree.Child;
             
