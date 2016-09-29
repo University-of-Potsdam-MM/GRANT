@@ -83,7 +83,7 @@ namespace BrailleIOGuiElementRenderer
            }
            view.ContentHeight = textMatrix.GetLength(0);
            view.ContentWidth = textMatrix.GetLength(1);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 3);
+            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, 2,3);
 
             //call post hooks
             callAllPostHooks(view, cM, ref viewMatrix, false);

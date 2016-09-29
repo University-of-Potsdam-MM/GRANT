@@ -12,7 +12,6 @@
                 <xs:complexType>
                   <xs:sequence minOccurs="0">
                     <xs:element name="Linebreak" type="xs:boolean" />
-                    <xs:element name="Vertical" type="xs:boolean" />
                     <xs:element name="childBoundingRectangle">
                       <xs:complexType>
                         <xs:sequence>
@@ -22,6 +21,18 @@
                           <!-- xs:element name="StartY" type="xs:int" nillable="true" /--> <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
                         </xs:sequence>
                       </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Orientation"> <!-- gibt bei (einigen) Elementen die Ausrichtung an-->
+                      <xs:simpleType> 
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="Top"/>
+                          <xs:enumeration value="Bottom"/>
+                          <xs:enumeration value="Left"/>
+                          <xs:enumeration value="Right"/>
+                          <xs:enumeration value="Vertical"/>
+                          <xs:enumeration value="Horizontal"/>
+                        </xs:restriction>
+                      </xs:simpleType>
                     </xs:element>
                   </xs:sequence>
                 </xs:complexType>
@@ -37,16 +48,6 @@
                     <xs:enumeration value="GroupElement"/>
                     <xs:enumeration value="ListItem" />
                     <xs:enumeration value="TabItem" />
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:element>
-              <xs:element name="Orientation" minOccurs="0"> <!-- gibt bei (einigen) Elementen die Ausrichtung an-->
-                <xs:simpleType> 
-                  <xs:restriction base="xs:string">
-                    <xs:enumeration value="Top"/>
-                    <xs:enumeration value="Bottom"/>
-                    <xs:enumeration value="Left"/>
-                    <xs:enumeration value="Right"/>
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>

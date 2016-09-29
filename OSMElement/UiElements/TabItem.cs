@@ -23,5 +23,5 @@ namespace OSMElement.UiElements
         //isDisabled --> Element ist aktiv (kann daher nicht mehr aktiviert werden)
     }
 
-    public enum Orientation { Left, Top, Bottom, Right};
+    public enum Orientation { Left, Top, Bottom, Right, Vertical, Horizontal }; //TODO: in BrailleRepresentation?
 }

@@ -149,7 +149,8 @@ namespace OSMElement
         /// </summary>
         public Boolean? linebreak { get; set; }
 
-        public Boolean vertical { get; set; }
+       // public Boolean vertical { get; set; }
+        public UiElements.Orientation orienataion { get; set; }
         public Rect childBoundingRectangle { get; set; }
         public String renderer { get; set; }
     }

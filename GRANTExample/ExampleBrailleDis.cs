@@ -40,10 +40,11 @@ namespace GRANTExample
         {
             try
             {
-                setDauGui(fromGuiElement);
-                ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
+               
                     // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                 String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+                setDauGui(fromGuiElement);
+                ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
                 if (subtreeNav != null && subtreeNav.Count > 0)
                 {
                     ui.addNavigationbarForScreen(path, subtreeNav);
@@ -54,8 +55,9 @@ namespace GRANTExample
                     ui.createUiElementsAllScreens(path);
                   //  ui.createUiElementsNavigationbarScreens(path);
                     ui.updateNavigationbarScreens(path);
-                    strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+                    
                 }
+                strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
                 {
                    

@@ -59,7 +59,7 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="TemplateUi.xsd">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

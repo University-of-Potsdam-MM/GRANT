@@ -44,7 +44,7 @@ namespace BrailleIOGuiElementRenderer
                
                getMax(ref maxHeight, ref maxWidth, groupViewRange.child);
                viewMatrix = new bool[maxHeight, maxWidth];
-               if ( groupViewRange.child[0].renderer != null && groupViewRange.child[0].renderer.GetType().Equals(typeof(BrailleIOTabItemToMatrixRenderer)))
+               if (groupViewRange.child[0].renderer != null && groupViewRange.child[0].renderer.GetType().Equals(typeof(BrailleIOTabItemToMatrixRenderer)) && groupViewRange.child[0].childUiElement.uiElementSpecialContent != null)
                {
                    if (groupViewRange.child[0].childUiElement.uiElementSpecialContent.GetType().Equals(typeof(UiElements.TabItem)))
                    {

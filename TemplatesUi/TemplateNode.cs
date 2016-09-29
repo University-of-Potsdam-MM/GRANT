@@ -39,6 +39,13 @@ namespace TemplatesUi
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
+            if (templateObject.osm.properties.controlTypeFiltered.Equals("TabItem"))
+            {
+                OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
+                //tabView.orientation = templateObject.orientation;
+                //braille.uiElementSpecialContent = tabView;
+                braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
+            }
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewNodeTree(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             braille.viewName = templateObject.name;

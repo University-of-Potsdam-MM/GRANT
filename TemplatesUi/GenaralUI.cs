@@ -342,7 +342,12 @@ namespace TemplatesUi
                 templetObject.groupImplementedClassTypeDllName = typeof(TemplateSubtree).Module.Assembly.GetName().Name; // == Dll-Name
                 GroupelementsOfSameType group = new GroupelementsOfSameType();
                 group.linebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
-                group.vertical = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Vertical").Value);
+                String orientation = xmlElement.Element("IsGroup").Element("Orientation").Value;
+                group.orienataion = orientation.Equals(OSMElement.UiElements.Orientation.Vertical.ToString()) ? OSMElement.UiElements.Orientation.Vertical :
+                    orientation.Equals(OSMElement.UiElements.Orientation.Top.ToString()) ? OSMElement.UiElements.Orientation.Top :
+                    orientation.Equals(OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right :
+                    orientation.Equals(OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left :
+                    orientation.Equals(OSMElement.UiElements.Orientation.Horizontal.ToString()) ? OSMElement.UiElements.Orientation.Horizontal : OSMElement.UiElements.Orientation.Bottom;
                 position = xmlElement.Element("IsGroup").Element("childBoundingRectangle");
                 Rect childRect = new Rect();
                 isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);

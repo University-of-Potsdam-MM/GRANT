@@ -48,11 +48,11 @@ namespace BrailleIOGuiElementRenderer
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
             MatrixBrailleRenderer m = new MatrixBrailleRenderer();
             bool[,] textMatrix = m.RenderMatrix(view.ViewBox.Width - 4, (groupViewRange.text as object == null ? "" : groupViewRange.text as object), false);
-            
             bool[,] box = new bool[0,0];
 
                 box = Helper.createBox(view.ViewBox.Height, view.ViewBox.Width);
-                int spceLeft = 1;
+                int spceLeft = 2;
+                int spacetop = 2;
                 if (tabview.orientation.Equals(UiElements.Orientation.Bottom))
                 {
                     Helper.RemoveBottomBoarder(ref box);
@@ -60,15 +60,16 @@ namespace BrailleIOGuiElementRenderer
                 if (tabview.orientation.Equals(UiElements.Orientation.Top))
                 {
                     Helper.RemoveTopBoarder(ref box);
+                    spacetop = 1;
                 }
                 if (tabview.orientation.Equals(UiElements.Orientation.Left))
                 {
                     Helper.RemoveLeftBoarder(ref box);
+                    spceLeft = 1;
                 }
                 if (tabview.orientation.Equals(UiElements.Orientation.Right))
                 {
                     Helper.RemoveRightBoarder(ref box);
-                    spceLeft = 2;
                 }  
 
             if (groupViewRange.isDisabled)
@@ -91,7 +92,8 @@ namespace BrailleIOGuiElementRenderer
                 }
             }
             Helper.copyMatrixInMatrix(box, ref viewMatrix);
-            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, spceLeft);
+            Helper.copyTextMatrixInMatrix(textMatrix, ref viewMatrix, spceLeft, spacetop);
+         //   Helper.copyMatrixInMatrix(textMatrix, ref viewMatrix, spceLeft, 2);
              return viewMatrix;
         }
     }

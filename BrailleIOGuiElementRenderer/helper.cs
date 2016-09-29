@@ -14,18 +14,19 @@ namespace BrailleIOGuiElementRenderer
         /// </summary>
         /// <param name="smallMatrix">gibt die kleinere Matrix (mit Braille-Text an) an</param>
         /// <param name="bigMatrix">gibt die größere Matrix an</param>
-        /// <param name="spaceLeft">gibt an wieviele pins nach Links (und  Rechts) frei bleiben sollen</param>
-        public static void copyTextMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int spaceLeft)
+        /// <param name="startX">gibt an wieviele pins nach Links (und  Rechts) frei bleiben sollen</param>
+        /// <param name="startY">gibt an wieviele Pins nach oben frei bleiben sollen</param>
+        public static void copyTextMatrixInMatrix(bool[,] smallMatrix, ref bool[,] bigMatrix, int startX = 2, int startY = 2)
         {
             //Console.WriteLine("GetLength = {0},  GetUpperBound = {1}", bigMatrix.GetLength(0), bigMatrix.GetUpperBound(0));
             // getLength(0) ^= Anzahl der Zeilen
             // Length ^= Anzahl der Elemente insgesamt
             // Length / getLength ^= Pins pro Zeile (.GetLength(1) for the number of column)
-            for (int i = spaceLeft; (i < (bigMatrix.Length / bigMatrix.GetLength(0)) - 2) && (i < (smallMatrix.Length / smallMatrix.GetLength(0))); i++)//ab Pinreihe 'spaceLeft' soll der Text erscheinen
+            for (int i = startX; (i < bigMatrix.GetLength(1) ) && (i - startX < smallMatrix.GetLength(1)); i++)//ab Pinreihe 'spaceLeft' soll der Text erscheinen
             {
-                for (int j = 2; (j < bigMatrix.GetLength(0) - 2) && (j < smallMatrix.GetLength(0) + 2); j++)
+                for (int j = startY; (j < bigMatrix.GetLength(0) - startY) && (j < smallMatrix.GetLength(0) + startY); j++)
                 {
-                    bigMatrix[j, i] = smallMatrix[j - 2, i - spaceLeft];
+                    bigMatrix[j, i] = smallMatrix[j - startY, i - startX];
                 }
             }
         }
