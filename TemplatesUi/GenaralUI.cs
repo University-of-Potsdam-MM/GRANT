@@ -475,7 +475,8 @@ namespace TemplatesUi
             }
             else
             {
-                generalUiInstance = new TemplateSubtree(strategyMgr, grantTrees);
+               // generalUiInstance = new TemplateSubtree(strategyMgr, grantTrees);
+                generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
             }
            // ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             foreach (String screen in screenList)

@@ -107,7 +107,7 @@
               </xsd:element>
               <xs:element name="TextFromUIElement" type="xs:string" /> <!-- Gibt den Namen einer GeneralProperties an, von welcher der Text angezeigt werden soll; wenn es leer ist, bezieht sich dieses Objekt auf kein Element des gefilterten Baumes-->
             </xs:sequence>
-            <xs:attribute name="name" type="xs:string" use="required" /> <!-- Vordefinierte Namen sind: ("TitleBar",)  "StatusBar", "NavigationBarScreens" bei diesen ist der name so zu verwenden, damit die Events ensprechend verarbeitet werden können, die Elemente sind aber nicht zwingend zu nutzen -->
+            <xs:attribute name="name" type="xs:string" use="required" /> <!-- Vordefinierte Namen sind: ("TitleBar",)  "BrailleStatusBar", "NavigationBarScreens" bei diesen ist der name so zu verwenden, damit die Events ensprechend verarbeitet werden können, die Elemente sind aber nicht zwingend zu nutzen -->
           </xs:complexType>
         </xs:element>
       </xs:sequence>
