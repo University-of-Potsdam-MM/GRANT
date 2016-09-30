@@ -447,11 +447,11 @@ namespace GRANTManager
                     saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + brailleTreeSavedName);
                 }
                 XmlSerializer serializer;
-                if (grantTree.getOsmRelationship() != null && !grantTree.getOsmRelationship().Equals(new OsmRelationship<String, String>()) && grantTree.getOsmRelationship().Count > 0)
+                if (grantTree.getOsmRelationship() != null && !grantTree.getOsmRelationship().Equals(new OsmConnector<String, String>()) && grantTree.getOsmRelationship().Count > 0)
                 {
                     using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + osmConectorName))
                     {
-                        serializer = new XmlSerializer(typeof(List<OsmRelationship<String, String>>));
+                        serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
                         serializer.Serialize(writer, grantTree.getOsmRelationship());
                     }
                 }
@@ -504,11 +504,15 @@ namespace GRANTManager
             if (File.Exists(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName))
             {
                 fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                serializer = new XmlSerializer(typeof(List<OsmRelationship<String, String>>));
+                serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
                 using (StreamReader reader = new StreamReader(fs))
                 {
-                    List<OsmRelationship<String, String>> osmConector = (List<OsmRelationship<String, String>>)serializer.Deserialize(reader);
-                    grantTree.setOsmRelationship(osmConector);
+                    try
+                    {
+                        List<OsmConnector<String, String>> osmConector = (List<OsmConnector<String, String>>)serializer.Deserialize(reader);
+                        grantTree.setOsmRelationship(osmConector);
+                    }
+                    catch (InvalidOperationException e) { Console.WriteLine("Fehler beim Laden der OSM-Beziehungen: {0}", e); }
                 }
             }
             fs.Close();
@@ -569,10 +573,10 @@ namespace GRANTManager
         /// </summary>
         private void updateConnectedBrailleNodes()
         {
-            List<OsmRelationship<String, String>> osmConector =  grantTree.getOsmRelationship();
+            List<OsmConnector<String, String>> osmConector =  grantTree.getOsmRelationship();
             if (osmConector != null)
             {
-                foreach (OsmRelationship<String, String> con in osmConector)
+                foreach (OsmConnector<String, String> con in osmConector)
                 {
                     OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(con.BrailleTree);
                     strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
@@ -700,7 +704,7 @@ namespace GRANTManager
         public void deleteGrantTrees()
         {
             //grantTree = new GeneratedGrantTrees();
-            grantTree.setOsmRelationship(new List<OsmRelationship<String, String>>());
+            grantTree.setOsmRelationship(new List<OsmConnector<String, String>>());
             grantTree.setFilterstrategiesOfNodes(new List<FilterstrategyOfNode<String, String, String>>());
             ITreeStrategy<OSMElement.OSMElement> treeNew = strategyMgr.getSpecifiedTree().NewNodeTree();
             grantTree.setFilteredTree(null);

@@ -79,7 +79,7 @@ namespace GRANTExample
                 strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 if (grantTrees.getOsmRelationship() == null)
                 {                    
-                    List<OsmRelationship<String, String>> relationship = ExampleTree.setOsmRelationship();
+                    List<OsmConnector<String, String>> relationship = ExampleTree.setOsmRelationship();
                     grantTrees.setOsmRelationship(relationship);
                     
                 }
@@ -99,7 +99,7 @@ namespace GRANTExample
                             brailleId = treeElement[0].Data.properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
-                    OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
+                    OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -139,7 +139,7 @@ namespace GRANTExample
                             brailleId = treeElement[0].Data.properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
-            OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
+            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
             if(osmRelationships != null)
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);

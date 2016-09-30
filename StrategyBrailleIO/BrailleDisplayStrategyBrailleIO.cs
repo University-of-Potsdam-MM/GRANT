@@ -241,7 +241,7 @@ namespace StrategyBrailleIO
         /// <returns>ein <code>Image</code> des Bildbereiches</returns>
         private Image captureScreen(String idGeneratedBrailleNode)
         {
-            OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
+            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
             OSMElement.OSMElement nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
             if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }

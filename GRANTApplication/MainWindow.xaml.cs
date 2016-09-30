@@ -332,7 +332,7 @@ namespace GRANTApplication
                         operationSystemStrategy.getCursorPoint(out pointX, out pointY);
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
 
-                        List<OsmRelationship<String, String>> relationship = setOsmRelationship(osmElement.properties.IdGenerated);
+                        List<OsmConnector<String, String>> relationship = setOsmRelationship(osmElement.properties.IdGenerated);
                         grantTrees.setOsmRelationship(relationship);
 
 
@@ -400,14 +400,14 @@ namespace GRANTApplication
                         #endregion
                         if (grantTrees.getOsmRelationship() == null)
                         {
-                            List<OsmRelationship<String, String>> relationship = setOsmRelationship();
+                            List<OsmConnector<String, String>> relationship = setOsmRelationship();
                             grantTrees.setOsmRelationship(relationship);
                         }
                         brailleDisplayStrategy.generatedBrailleUi();
                     }
                     else
                     {
-                        OsmRelationship<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
+                        OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
                        // strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -569,10 +569,10 @@ namespace GRANTApplication
             return grantTrees.getBrailleTree();
         }
 
-        private List<OsmRelationship<String, String>> setOsmRelationship(String guiID)
+        private List<OsmConnector<String, String>> setOsmRelationship(String guiID)
         {
-            List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
-            OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
+            List<OsmConnector<String, String>> relationships = new List<OsmConnector<String, String>>();
+            OsmConnector<String, String> r3 = new OsmConnector<String, String>();
             r3.FilteredTree = guiID;
             r3.BrailleTree = "braille123_3";
 
@@ -580,16 +580,16 @@ namespace GRANTApplication
             return relationships;
         }
 
-        private List<OsmRelationship<String, String>> setOsmRelationship()
+        private List<OsmConnector<String, String>> setOsmRelationship()
         {
-            List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
-            OsmRelationship<String, String> r1 = new OsmRelationship<String, String>();
+            List<OsmConnector<String, String>> relationships = new List<OsmConnector<String, String>>();
+            OsmConnector<String, String> r1 = new OsmConnector<String, String>();
             r1.FilteredTree = "461FD37218F2E2BCBE4C5486629A2FC6"; //Notepad;
             r1.BrailleTree = "braille123_1";
-            OsmRelationship<String, String> r2 = new OsmRelationship<String, String>();
+            OsmConnector<String, String> r2 = new OsmConnector<String, String>();
             r2.FilteredTree = "gui123_2";
             r2.BrailleTree = "braille123_2";
-            OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
+            OsmConnector<String, String> r3 = new OsmConnector<String, String>();
             r3.FilteredTree = "6941463181BDAA498DBC02B4164EF1AA";
             r3.BrailleTree = "braille123_3";
 

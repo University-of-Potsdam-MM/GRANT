@@ -14,13 +14,13 @@ namespace OSMElement
     /// <typeparam name="T">gibt die IdGenerated des Knotens im gefilterten Baum an</typeparam>
     /// <typeparam name="U">gibt die IdGenerated des Knotens im Baum der Braille-Darstellung an</typeparam>
     [Serializable]
-    public class OsmRelationship<T, U>
+    public class OsmConnector<T, U>
     {
-        public OsmRelationship()
+        public OsmConnector()
         {
         }
 
-        public OsmRelationship(T filteredTree, U brailleTree)
+        public OsmConnector(T filteredTree, U brailleTree)
         {
             this.FilteredTree = filteredTree;
             this.BrailleTree = brailleTree;

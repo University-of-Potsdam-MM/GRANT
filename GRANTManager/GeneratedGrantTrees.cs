@@ -18,7 +18,7 @@ namespace GRANTManager
         /// <summary>
         /// gibt die Beziehung zwischen <code>filteredTree</code> und <code>brailleTree</code> anhand der generierten Id an
         /// </summary>
-        private List<OsmRelationship<String, String>> osmRelationship = new List<OsmRelationship<string, string>>();
+        private List<OsmConnector<String, String>> osmRelationship = new List<OsmConnector<string, string>>();
 
         /// <summary>
         /// Gibt die Filterstrategien an;
@@ -66,7 +66,7 @@ namespace GRANTManager
         /// Gibt die Beziehungen zwischen <value>brailleTree</value> und <value>filteredTree</value> an
         /// </summary>
         /// <returns>Beziehungen zwischen <value>brailleTree</value> und <value>filteredTree</value></returns>
-        public List<OsmRelationship<String, String>> getOsmRelationship()
+        public List<OsmConnector<String, String>> getOsmRelationship()
         {
             return osmRelationship;
         }
@@ -75,7 +75,7 @@ namespace GRANTManager
         /// Setzt die Beziehungen zwischen <value>brailleTree</value> und <value>filteredTree</value>
         /// </summary>
         /// <param name="relationship"></param>
-        public void setOsmRelationship(List<OsmRelationship<String, String>> relationship)
+        public void setOsmRelationship(List<OsmConnector<String, String>> relationship)
         {
             osmRelationship = relationship;
         }

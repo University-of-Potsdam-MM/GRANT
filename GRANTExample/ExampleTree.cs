@@ -237,8 +237,8 @@ namespace GRANTExample
                         List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
-                            List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                            OsmTreeRelationship.addOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            OsmTreeConnector.addOsmConnection(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
                             grantTree.setOsmRelationship(relationshipList);
                         }
                     }
@@ -280,11 +280,11 @@ namespace GRANTExample
                         List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
-                            List<OsmRelationship<String, String>> relationshipList = grantTree.getOsmRelationship();
-                            //   OsmTreeRelationship.addOsmRelationship(filteredSubtree.properties.IdGenerated, "braille123_3", ref relationship);
-                            //  OsmTreeRelationship.addOsmRelationship(filteredSubtree.properties.IdGenerated, "braille123_5", ref relationship);
-                            OsmTreeRelationship.setOsmRelationship(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
-                            //  OsmTreeRelationship.setOsmRelationship(filteredSubtree.properties.IdGenerated, "braille123_11", ref relationshipList);
+                            List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            //   OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_3", ref relationship);
+                            //  OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_5", ref relationship);
+                            OsmTreeConnector.setOsmConnection(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            //  OsmTreeRelationship.setOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_11", ref relationshipList);
                             grantTree.setOsmRelationship(relationshipList);
                         }
 
@@ -325,14 +325,14 @@ namespace GRANTExample
             //Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", cUserFilterName);
         }
 
-       /* private List<OsmRelationship<String, String>> setOsmRelationship(String guiID)
+       /* private List<OsmConnector<String, String>> setOsmConnection(String guiID)
         {
             if (strategyMgr.getOsmRelationship() == null)
             {
-                //List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
-                strategyMgr.setOsmRelationship(new List<OsmRelationship<String, String>>());
+                //List<OsmConnector<String, String>> relationships = new List<OsmConnector<String, String>>();
+                strategyMgr.setOsmConnection(new List<OsmConnector<String, String>>());
             }
-            OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
+            OsmConnector<String, String> r3 = new OsmConnector<String, String>();
             r3.FilteredTree = guiID;
             r3.BrailleTree =  "braille123_3";
             strategyMgr.getOsmRelationship().Add(r3);
@@ -340,16 +340,16 @@ namespace GRANTExample
             return strategyMgr.getOsmRelationship();
         }*/
 
-        public static List<OsmRelationship<String, String>> setOsmRelationship()
+        public static List<OsmConnector<String, String>> setOsmRelationship()
         {
-            List<OsmRelationship<String, String>> relationships = new List<OsmRelationship<String, String>>();
-            OsmRelationship<String, String> r1 = new OsmRelationship<String, String>();
+            List<OsmConnector<String, String>> relationships = new List<OsmConnector<String, String>>();
+            OsmConnector<String, String> r1 = new OsmConnector<String, String>();
             r1.FilteredTree = "461FD37218F2E2BCBE4C5486629A2FC6"; //Notepad;
             r1.BrailleTree = "braille123_1";
-            OsmRelationship<String, String> r2 = new OsmRelationship<String, String>();
+            OsmConnector<String, String> r2 = new OsmConnector<String, String>();
             r2.FilteredTree = "gui123_2";
             r2.BrailleTree = "braille123_2";
-            OsmRelationship<String, String> r3 = new OsmRelationship<String, String>();
+            OsmConnector<String, String> r3 = new OsmConnector<String, String>();
             r3.FilteredTree = "6941463181BDAA498DBC02B4164EF1AA";
             r3.BrailleTree = "braille123_3";
 

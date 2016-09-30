@@ -467,7 +467,7 @@ namespace StrategyGenericTree
 
         private bool isCheckboxOfAssociatedElementSelected(OSMElement.OSMElement element)
         {
-            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(element.properties.IdGenerated));
+            OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(element.properties.IdGenerated));
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -493,7 +493,7 @@ namespace StrategyGenericTree
         /// <returns>den anzuzeigenden Text</returns>
         private String getTextForView(OSMElement.OSMElement osmElement)
         {
-            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated));
+            OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated));
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -517,7 +517,7 @@ namespace StrategyGenericTree
         /// <returns><code>true</code> fals das UI-Element aktiviert ist; sonst <code>false</code> (falls der Wert nicht bestimmt werden kann, wird <code>null</code> zurückgegeben)</returns>
         private bool? isUiElementEnable(OSMElement.OSMElement osmElement)
         {
-            OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated)); 
+            OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated)); 
             if (osmRelationship == null)
             {
                 Console.WriteLine("kein passendes objekt gefunden");
@@ -1086,7 +1086,7 @@ namespace StrategyGenericTree
                         templateobject.osm = node.Data;
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(node.Data.brailleRepresentation.screenName);
-                        OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
+                        OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationship != null)
                         { 
                             ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
@@ -1100,8 +1100,8 @@ namespace StrategyGenericTree
                             //entfernen des "alten" Braille-Teilbaums
                            if (node.HasParent)
                            {
-                               //List<OsmRelationship<String, String>> conector = grantTrees.getOsmRelationship();
-                               //OsmTreeRelationship.removeOsmRelationship(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
+                               //List<OsmConnector<String, String>> conector = grantTrees.getOsmRelationship();
+                               //OsmTreeRelationship.removeOsmConnection(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
                                removeChildNodeInBrailleTree((ITreeStrategy<OSMElement.OSMElement>)node);
                            }
                             if (subtreeFiltered != null)
@@ -1128,16 +1128,16 @@ namespace StrategyGenericTree
                 {
                    //für alle KinElemente
                     //strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree()
-                    //OsmTreeRelationship.removeOsmRelationship()
+                    //OsmTreeRelationship.removeOsmConnection()
                 }*/
                 if (node.HasParent && node.Parent.Data.properties.isContentElementFiltered == false)
                 {
-                    OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated));
+                    OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated));
                     if(osmRelationship != null)
                     {
                         Debug.WriteLine("Lösche Element ({0}, {1}) mit der ID {2} --> filteredTree-Id {3}", node.Data.properties.valueFiltered, node.Data.properties.controlTypeFiltered, node.Data.properties.IdGenerated, osmRelationship.FilteredTree);
-                        List<OsmRelationship<String, String>> conector = grantTrees.getOsmRelationship();
-                        OsmTreeRelationship.removeOsmRelationship(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
+                        List<OsmConnector<String, String>> conector = grantTrees.getOsmRelationship();
+                        OsmTreeConnector.removeOsmConnection(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
                         strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(node.Data);
                     }
                 }
