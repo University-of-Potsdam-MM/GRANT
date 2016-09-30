@@ -12,7 +12,6 @@ using System.Xml.Linq;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
-using GRANTManager.Interfaces;
 
 namespace TemplatesUi
 {
@@ -272,18 +271,23 @@ namespace TemplatesUi
              {
                  Debug.WriteLine(element);
              }*/            
-            XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
+           // XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
             ATemplateUi generalUiInstance;
-            TempletUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
-            if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
+           // TempletUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
+            foreach (XElement element in uiElement)
             {
-                generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+                TempletUiObject templateObject = xmlUiElementToTemplateUiObject(element);
+
+                if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
+                {
+                    generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+                }
+                else
+                {
+                    generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
+                }
+                generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element));
             }
-            else
-            {
-                generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
-            }
-            generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(firstElement));
         }
 
 
