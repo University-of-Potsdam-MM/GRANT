@@ -39,11 +39,10 @@ namespace GRANTExample
         public void UiBrailleDis(String fromGuiElement)
         {
             try
-            {
-               
+            {               
                     // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                 String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
-                setDauGui(fromGuiElement);
+              /* setDauGui(fromGuiElement);
                 ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
                 if (subtreeNav != null && subtreeNav.Count > 0)
                 {
@@ -56,11 +55,10 @@ namespace GRANTExample
                   //  ui.createUiElementsNavigationbarScreens(path);
                     ui.updateNavigationbarScreens(path);
                     
-                }
+                }*/
                 strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
-                {
-                   
+                {                   
                     Settings settings = new Settings();
                     strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 

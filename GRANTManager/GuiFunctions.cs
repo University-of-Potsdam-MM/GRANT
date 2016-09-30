@@ -23,7 +23,7 @@ namespace GRANTManager
         GeneratedGrantTrees grantTree;
         private String filteredTreeSavedName = "filteredTree.xml";
         private String brailleTreeSavedName = "brailleTree.xml";
-        private String osmConectorName = "osmConector.xml";
+        private String osmConectorName = "osmConnector.xml";
         private String filterstrategyFileName = "filterstrategies.xml";
 
         public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree)
@@ -473,6 +473,10 @@ namespace GRANTManager
             }            
         }
 
+        /// <summary>
+        /// Lädt ein GRANT-Projekt
+        /// </summary>
+        /// <param name="projectFilePath">Gibt den Pfad zum Grant-Projekt an; die Dateiendung muss .gant sein</param>
         public void loadGrantProject(String projectFilePath)
         {
             if (!Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
@@ -540,6 +544,10 @@ namespace GRANTManager
             loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
         }
 
+        /// <summary>
+        /// Lädt den Braille-Baum
+        /// </summary>
+        /// <param name="filePath">gibt den Pfad zum Braille-Baum an</param>
         private void loadBrailleTree(String filePath)
         {
             if (!File.Exists(@filePath))
@@ -552,7 +560,24 @@ namespace GRANTManager
             fs.Close();
             //Baum setzen
             grantTree.setBrailleTree(loadedTree);
+            updateConnectedBrailleNodes();
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+        }
+
+        /// <summary>
+        /// Aktualisiert die (mit dem gefilterten Baum verbundenen) Knoten im Braille-Baum
+        /// </summary>
+        private void updateConnectedBrailleNodes()
+        {
+            List<OsmRelationship<String, String>> osmConector =  grantTree.getOsmRelationship();
+            if (osmConector != null)
+            {
+                foreach (OsmRelationship<String, String> con in osmConector)
+                {
+                    OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(con.BrailleTree);
+                    strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+                }
+            }
         }
 
         /// <summary>

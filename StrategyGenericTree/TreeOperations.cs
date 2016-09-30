@@ -1135,7 +1135,7 @@ namespace StrategyGenericTree
                     OsmRelationship<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated));
                     if(osmRelationship != null)
                     {
-                        Debug.WriteLine("Lösche Element ({0}, {1}) mit der ID {2} --> filteredTree-Id {3}", node.Data.properties.nameFiltered, node.Data.properties.controlTypeFiltered, node.Data.properties.IdGenerated, osmRelationship.FilteredTree);
+                        Debug.WriteLine("Lösche Element ({0}, {1}) mit der ID {2} --> filteredTree-Id {3}", node.Data.properties.valueFiltered, node.Data.properties.controlTypeFiltered, node.Data.properties.IdGenerated, osmRelationship.FilteredTree);
                         List<OsmRelationship<String, String>> conector = grantTrees.getOsmRelationship();
                         OsmTreeRelationship.removeOsmRelationship(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
                         strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(node.Data);
@@ -1267,6 +1267,7 @@ namespace StrategyGenericTree
         {
             List<ITreeStrategy<OSMElement.OSMElement>> result = new List<ITreeStrategy<OSMElement.OSMElement>>();
            // ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.getBrailleTree();
+            if (grantTrees.getBrailleTree() == null) { return result; }
            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).AllChildren.Nodes)
             {
                 if(node.Data.brailleRepresentation.viewName != null && node.Data.brailleRepresentation.viewName.Contains(navigationbarSubstring) && node.HasChild)
