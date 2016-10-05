@@ -388,7 +388,7 @@ namespace GRANTManager
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
                 grantTree.getFilteredTree().XmlSerialize(fs);
-                fs.Close();
+                //fs.Close(); <- nicht benötigt da using
             }
         }
 
@@ -402,7 +402,7 @@ namespace GRANTManager
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
                 grantTree.getBrailleTree().XmlSerialize(fs);
-                fs.Close();
+                //fs.Close(); <- nicht benötigt da using
             }
         }
 
@@ -490,32 +490,45 @@ namespace GRANTManager
                 return;
             }
             deleteGrantTrees();
+            GrantProjectObject grantProjectObject;
             String projectDirectory = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
 
-            System.IO.FileStream fs = System.IO.File.Open(projectFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             XmlSerializer serializer;
-            GrantProjectObject grantProjectObject;
-            using (StreamReader reader = new StreamReader(fs))
-            {
-                serializer = new XmlSerializer(typeof(GrantProjectObject));
-                grantProjectObject = (GrantProjectObject) serializer.Deserialize(reader);
+            System.IO.FileStream fs = null;
+            try{ 
+                fs = System.IO.File.Open(projectFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                using (StreamReader reader = new StreamReader(fs))
+                {
+                    fs = null;
+                    serializer = new XmlSerializer(typeof(GrantProjectObject));
+                    grantProjectObject = (GrantProjectObject)serializer.Deserialize(reader);
+                }
+            }finally{
+                if(fs != null){fs.Dispose();}
             }
+            
             //setze OSM-Beziehungen
             if (File.Exists(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName))
             {
-                fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
-                using (StreamReader reader = new StreamReader(fs))
+                try
                 {
-                    try
+                    fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+
+                    serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
+                    using (StreamReader reader = new StreamReader(fs))
                     {
-                        List<OsmConnector<String, String>> osmConector = (List<OsmConnector<String, String>>)serializer.Deserialize(reader);
-                        grantTree.setOsmRelationship(osmConector);
+                        fs = null;
+                        try
+                        {
+                            List<OsmConnector<String, String>> osmConector = (List<OsmConnector<String, String>>)serializer.Deserialize(reader);
+                            grantTree.setOsmRelationship(osmConector);
+                        }
+                        catch (InvalidOperationException e) { Console.WriteLine("Fehler beim Laden der OSM-Beziehungen: {0}", e); }
                     }
-                    catch (InvalidOperationException e) { Console.WriteLine("Fehler beim Laden der OSM-Beziehungen: {0}", e); }
                 }
+                finally { if (fs != null) { fs.Dispose(); } }
             }
-            fs.Close();
+            //fs.Close(); <- nicht benötigt da using
             #region Laden der Strategyn
             if (grantProjectObject.grantBrailleStrategyFullName != null && grantProjectObject.grantBrailleStrategyNamespace != null)
             {
@@ -559,11 +572,15 @@ namespace GRANTManager
                 Debug.WriteLine("Die Datei Existiert nicht");
                 return;
             }
-            System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-            ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
-            fs.Close();
-            //Baum setzen
-            grantTree.setBrailleTree(loadedTree);
+            System.IO.FileStream fs;
+            using (fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
+                // fs.Close();<- nicht benötigt da using
+                //Baum setzen
+                grantTree.setBrailleTree(loadedTree);
+            }
+            
             updateConnectedBrailleNodes();
             strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
         }
@@ -592,14 +609,19 @@ namespace GRANTManager
         {
             if (File.Exists(@filePath))
             {
-                System.IO.FileStream fs = System.IO.File.Open(@filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                XmlSerializer serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
-                using (StreamReader reader = new StreamReader(fs))
-                {
-                    List<FilterstrategyOfNode<String, String, String>> filterstrategies = (List<FilterstrategyOfNode<String, String, String>>)serializer.Deserialize(reader);
-                    grantTree.setFilterstrategiesOfNodes(filterstrategies);
+                System.IO.FileStream fs = null;
+                try{ fs = System.IO.File.Open(@filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
+                    using (StreamReader reader = new StreamReader(fs))
+                    {
+                        fs = null;
+                        List<FilterstrategyOfNode<String, String, String>> filterstrategies = (List<FilterstrategyOfNode<String, String, String>>)serializer.Deserialize(reader);
+                        grantTree.setFilterstrategiesOfNodes(filterstrategies);
+                    }
+                    //fs.Close(); 
                 }
-                fs.Close();
+                finally { if (fs != null) { fs.Dispose(); } }
             }
             else
             {
@@ -618,12 +640,13 @@ namespace GRANTManager
                 Debug.WriteLine("Die Datei Existiert nicht");
                 return;
             }
-            System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-            ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
-            fs.Close();
-            //Baum setzen
-            grantTree.setFilteredTree(loadedTree);
-
+            using (System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
+               // fs.Close();
+                //Baum setzen
+                grantTree.setFilteredTree(loadedTree);
+            }
             //Filter-Strategy setzen
             if (grantTree.getFilteredTree() != null && grantTree.getFilteredTree().HasChild && !grantTree.getFilteredTree().Child.Data.Equals(new OSMElement.OSMElement()) && !grantTree.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties()))
             {
