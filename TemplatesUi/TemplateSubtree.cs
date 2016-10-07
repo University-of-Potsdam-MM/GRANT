@@ -21,23 +21,23 @@ namespace TemplatesUi
             deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         }
 
-        public override void createUiElementFromTemplate(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
+        public override void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
         {
-            if (!filteredSubtree.HasChild ) { return; }
-            if (filteredSubtree.HasChild)
+            if (!strategyMgr.getSpecifiedTree().HasChild(filteredSubtree)) { return; }
+            if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree))
             {
-                ITreeStrategy<OSMElement.OSMElement> filteredSubtreeCopy = filteredSubtree.Copy();
-                if (filteredSubtreeCopy.HasChild)
+                Object filteredSubtreeCopy = strategyMgr.getSpecifiedTree().Copy(filteredSubtree);
+                if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtreeCopy))
                 {
-                    filteredSubtreeCopy = filteredSubtreeCopy.Child;
+                    filteredSubtreeCopy = strategyMgr.getSpecifiedTree().Child(filteredSubtreeCopy);
                     iteratedChildreen(filteredSubtreeCopy, templateObject, brailleNodeId);
                 }
             }
         }
 
-        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
+        protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
         {
-            if (filteredSubtree.Data.properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewNodeTree(); }
+            if (strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewTree(); }
             OSMElement.OSMElement brailleNode = templateObject.osm;
             GeneralProperties prop = templateObject.osm.properties;
             BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
@@ -45,23 +45,23 @@ namespace TemplatesUi
            // prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer; // den Renderer der Kindelemente setzen
             prop.isEnabledFiltered = false;
             braille.isVisible = true;
-            if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewNodeTree(); }
+            if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = "GroupChild" + filteredSubtree.Data.properties.IdGenerated;
+            braille.viewName = "GroupChild" + strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
             braille.isGroupChild = true;
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("DropDownMenu"))
             {
                 OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
-                if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
-                if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Contains("Item"))
+                if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
+                if (strategyMgr.getSpecifiedTree().HasNext(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(filteredSubtree)).properties.controlTypeFiltered.Contains("Item"))
                 {
                     dropDownMenu.hasNext = true;
                 }
-                if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Contains("Item"))
+                if (strategyMgr.getSpecifiedTree().HasPrevious(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Previous(filteredSubtree)).properties.controlTypeFiltered.Contains("Item"))
                 {
                     dropDownMenu.hasPrevious = true;
                 }
-                if (filteredSubtree.HasParent && filteredSubtree.Parent.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
+                if (strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
                 dropDownMenu.isOpen = false;
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
@@ -69,11 +69,11 @@ namespace TemplatesUi
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("ListItem"))
             {
                 OSMElement.UiElements.ListMenuItem litItem = new ListMenuItem();
-                if (filteredSubtree.HasNext) { litItem.hasNext = true; }
+                if (strategyMgr.getSpecifiedTree().HasNext(filteredSubtree) ) { litItem.hasNext = true; }
                 //TODO: multi
-                if (filteredSubtree.HasChild)
+                if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree))
                 {
-                    if (filteredSubtree.Child.Data.properties.controlTypeFiltered.Equals("CheckBox"))
+                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( filteredSubtree)).properties.controlTypeFiltered.Equals("CheckBox"))
                     {
                         litItem.isMultipleSelection = true;
                     }
@@ -100,11 +100,11 @@ namespace TemplatesUi
                  Rect rectTmp = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
                  if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Right))
                  {
-                     rectTmp.Y = (rectTmp.Height + 1) * filteredSubtree.BranchIndex + rectTmp.Y + 1;
+                     rectTmp.Y = (rectTmp.Height + 1) * strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) + rectTmp.Y + 1;
                  }
                  if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Bottom))
                  {
-                     rectTmp.X = (rectTmp.Width + 1) * filteredSubtree.BranchIndex + rectTmp.X + 1;
+                     rectTmp.X = (rectTmp.Width + 1) * strategyMgr.getSpecifiedTree().BranchIndex( filteredSubtree) + rectTmp.X + 1;
                  }
                  boxStartX = Convert.ToInt32(rectTmp.X);
                  boxStartY = Convert.ToInt32(rectTmp.Y);
@@ -119,7 +119,7 @@ namespace TemplatesUi
                      int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height);
                      if (braille.groupelementsOfSameType.linebreak == true)
                      {
-                         column = filteredSubtree.BranchIndex / elementsProColumn;
+                         column = strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) / elementsProColumn;
                      }
                      if (boxStartY == null)
                      {
@@ -130,7 +130,7 @@ namespace TemplatesUi
                          boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.X);
                      }
 
-                     boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Y) + ((filteredSubtree.BranchIndex - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height));
+                     boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Y) + ((strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) - (column * elementsProColumn)) * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height));
                      boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.X) + (column * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width));
 
                  }
@@ -142,7 +142,7 @@ namespace TemplatesUi
                      int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
                      if (braille.groupelementsOfSameType.linebreak == true)
                      {
-                         line = filteredSubtree.BranchIndex / elementsProLine;
+                         line = strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) / elementsProLine;
                      }
                      if (boxStartY == null)
                      {
@@ -161,7 +161,7 @@ namespace TemplatesUi
                          boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Y) + line * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height);
                          if (line > 0)
                          {
-                             boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.X) + ((filteredSubtree.BranchIndex - (elementsProLine * line))) * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
+                             boxStartX = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.X) + ((strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) - (elementsProLine * line))) * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
                          }
                      }
                  }
@@ -172,22 +172,22 @@ namespace TemplatesUi
 
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
-            if (!filteredSubtree.HasParent) { return strategyMgr.getSpecifiedTree().NewNodeTree(); }
+            if (!strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) ) { return strategyMgr.getSpecifiedTree().NewTree(); }
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode, brailleNodeId);
             
             if (idGenerated == null)
             {
-                Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewNodeTree();
+                Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
             }
             prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
 
             List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-            OsmTreeConnector.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+            OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
             strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
-            tree.AddChild(brailleNode);
+            Object tree = strategyMgr.getSpecifiedTree().NewTree();
+            strategyMgr.getSpecifiedTree().AddChild(tree, brailleNode);
             return tree;
         }
 
@@ -196,20 +196,20 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="parentNode">gibt den Elternknoten an</param>
         /// <param name="templateObject">gibt das zu nutzende Template an</param>
-        private void iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentNode, TempletUiObject templateObject, String brailleNodeId)
+        private void iteratedChildreen(Object parentNode, TempletUiObject templateObject, String brailleNodeId)
         {            
-            if (parentNode.HasChild)
+            if (strategyMgr.getSpecifiedTree().HasChild(parentNode))
             {
-                parentNode = parentNode.Child;
+                parentNode = strategyMgr.getSpecifiedTree().Child(parentNode);
                 createSpecialUiElement(parentNode, templateObject, brailleNodeId);
             }
             else
             {
                 return;
             }
-            while (parentNode.HasNext)
+            while (strategyMgr.getSpecifiedTree().HasNext(parentNode))
             {
-                parentNode = parentNode.Next;
+                parentNode =strategyMgr.getSpecifiedTree().Next( parentNode);
                 createSpecialUiElement(parentNode, templateObject, brailleNodeId);
             }           
             return;       

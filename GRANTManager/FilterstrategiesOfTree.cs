@@ -11,14 +11,14 @@ namespace GRANTManager
 {
     public class FilterstrategiesOfTree
     {
-        public static FilterstrategyOfNode<String, String, String> getMainFilterstrategyOfTree(ITreeStrategy<OSMElement.OSMElement> filteredTree, List<FilterstrategyOfNode<String, String, String>> filterstrategies)
+        public static FilterstrategyOfNode<String, String, String> getMainFilterstrategyOfTree(Object filteredTree, List<FilterstrategyOfNode<String, String, String>> filterstrategies, ITreeStrategy<OSMElement.OSMElement> treeStrategy)
         {
-            if (filteredTree == null || !filteredTree.HasChild)
+            if (filteredTree == null || !treeStrategy.HasChild(filteredTree))
             {
                 Debug.WriteLine("Angaben im Baum fehlen!");
                 return null;
             }
-            return getFilterstrategyOfNode(filteredTree.Child.Data.properties.IdGenerated, filterstrategies);
+            return getFilterstrategyOfNode(treeStrategy.GetData(treeStrategy.Child(filteredTree)).properties.IdGenerated, filterstrategies);
         }
 
         public static bool addFilterstrategyOfNode(String idGeneratedOfNode, Type filterstrategyType, ref List<FilterstrategyOfNode<String, String, String>> filterstrategies)

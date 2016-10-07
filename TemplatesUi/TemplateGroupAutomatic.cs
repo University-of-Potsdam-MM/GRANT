@@ -12,7 +12,7 @@ namespace TemplatesUi
     {
         public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
-        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null)
+        protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = templateObject.osm.properties;
@@ -23,10 +23,10 @@ namespace TemplatesUi
             prop.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
             braille.isVisible = true;
             if (templateObject.Screens == null) {
-                Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewNodeTree();
+                Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree();
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = templateObject.name+"_"+ filteredSubtree.Data.properties.IdGenerated;
+            braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 
@@ -49,17 +49,17 @@ namespace TemplatesUi
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
-                Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewNodeTree();
+                Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
             }
             prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
 
             List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-            OsmTreeConnector.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+            OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
             strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
-            ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
-            tree.AddChild(brailleNode);
+            Object tree = strategyMgr.getSpecifiedTree().NewTree();
+            strategyMgr.getSpecifiedTree().AddChild(tree, brailleNode);
             return tree;
         }
 

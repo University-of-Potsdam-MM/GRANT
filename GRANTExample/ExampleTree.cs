@@ -32,15 +32,15 @@ namespace GRANTExample
                     int pointX;
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                    ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
+                    Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
                     if (grantTree.getFilteredTree() != null)
                     {
-                        strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(tree.Child.Data.properties);
+                        strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties);
                     }
-                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
-                    if (tree.HasChild == true)
+                   // strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                    if (strategyMgr.getSpecifiedTree().HasChild(tree)== true)
                     {
-                        return printProperties(tree.Child.Data.properties);
+                        return printProperties(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties);
                     }
                     return "";
                   
@@ -64,14 +64,14 @@ namespace GRANTExample
                     int pointX;
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                    ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
+                    Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
                     if (grantTree.getFilteredTree() != null)
                     {
-                        List<ITreeStrategy<OSMElement.OSMElement>> result = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), tree.Child.Data.properties, OperatorEnum.and);
+                        List<Object> result = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
                         if (result.Count == 1)
                         {
                             GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree);
-                            guiFunctions.filterAndAddSubtreeOfApplication(result[0].Data.properties.IdGenerated);
+                            guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTree().GetData(result[0]).properties.IdGenerated);
 
                           // guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById("7CA0B5B9845D7906E3BD235A600F3546"));
                         }
@@ -142,7 +142,7 @@ namespace GRANTExample
                     int pointX;
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                    ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
+                    Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
                    // strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentBrailleTreeNode, -1);
                     grantTree.setFilteredTree(tree);
                     Console.WriteLine();
@@ -151,45 +151,6 @@ namespace GRANTExample
                 catch (Exception ex)
                 {
                     Console.WriteLine("An error occurred: '{0}'", ex);
-                }
-            }
-        }
-
-        private void baumSchleife(ITreeStrategy<OSMElement.OSMElement> tree)
-        {
-            
-            ITreeStrategy<OSMElement.OSMElement> node1;
-            while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
-            {
-                node1 = tree.Child;
-                Console.WriteLine("Name: {0}, Type: {1}", node1.Data.properties.nameFiltered, tree.Data.properties.localizedControlTypeFiltered);
-                baumSchleife(node1);
-            }
-            while (tree.HasNext)
-            {
-                node1 = tree.Next;
-                Console.WriteLine("Name: {0}, Type: {1}", node1.Data.properties.nameFiltered, tree.Data.properties.localizedControlTypeFiltered);
-                baumSchleife(node1);
-            }
-            if (tree.Count == 1 && tree.Depth == -1)
-            {
-                //baumSchleife(parentBrailleTreeNode);
-                return;
-            }
-            if (!tree.HasChild)
-            {
-                node1 = tree;
-                if (tree.HasParent)
-                {
-                    node1.Remove();
-                }
-            }
-            if (!tree.HasNext && !tree.HasParent)
-            {
-                if (tree.HasPrevious)
-                {
-                    node1 = tree;
-                    node1.Remove();
                 }
             }
         }
@@ -234,11 +195,11 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
                             List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
-                            OsmTreeConnector.addOsmConnection(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            OsmTreeConnector.addOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated, ref relationshipList);
                             grantTree.setOsmRelationship(relationshipList);
                         }
                     }
@@ -277,13 +238,13 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
                             List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
                             //   OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_3", ref relationship);
                             //  OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_5", ref relationship);
-                            OsmTreeConnector.setOsmConnection(osmElement.properties.IdGenerated, treeElement[0].Data.properties.IdGenerated, ref relationshipList);
+                            OsmTreeConnector.setOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated, ref relationshipList);
                             //  OsmTreeRelationship.setOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_11", ref relationshipList);
                             grantTree.setOsmRelationship(relationshipList);
                         }

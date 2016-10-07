@@ -15,11 +15,11 @@ namespace TemplatesUi
     {
         public TemplateGroupStatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
 
-        protected override ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, string brailleNodeId = null)
+        protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, string brailleNodeId = null)
         {
             OSMElement.OSMElement createdParentNode = createParentBrailleNode(filteredSubtree, templateObject);
-            ITreeStrategy<OSMElement.OSMElement> brailleSubtree = strategyMgr.getSpecifiedTree().NewNodeTree();
-            ITreeStrategy<OSMElement.OSMElement>  brailleSubtreeParent = brailleSubtree.AddChild(createdParentNode);
+            Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
+            Object  brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, createdParentNode);
             int index = 0;
             foreach (OSMElement.OSMElement child in templateObject.groupElementsStatic)
             {
@@ -27,7 +27,7 @@ namespace TemplatesUi
                 childTemplate.osm = child;
                 childTemplate.Screens = templateObject.Screens;
                 OSMElement.OSMElement childOsm = createChildBrailleNode(filteredSubtree, childTemplate, templateObject.name+"_"+index);
-                brailleSubtreeParent.AddChild(childOsm);
+                strategyMgr.getSpecifiedTree().AddChild( brailleSubtreeParent, childOsm);
                 index++;
             }
 
@@ -38,7 +38,7 @@ namespace TemplatesUi
             throw new NotImplementedException();
         }
 
-        private OSMElement.OSMElement createParentBrailleNode(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject)
+        private OSMElement.OSMElement createParentBrailleNode(Object filteredSubtree, TempletUiObject templateObject)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
             GeneralProperties prop = templateObject.osm.properties;
@@ -83,13 +83,13 @@ namespace TemplatesUi
             brailleNode.properties = prop;
 
             List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-            OsmTreeConnector.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+            OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
             strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
 
             return brailleNode;
         }
 
-        private OSMElement.OSMElement createChildBrailleNode(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String viewName)
+        private OSMElement.OSMElement createChildBrailleNode(Object filteredSubtree, TempletUiObject templateObject, String viewName)
         {
             //TODO: falls eine Beziehung im Baum erstellt werden soll muss diese hier? noch gesetzt werden => geht nicht ID ist noch nicht vorhanden
             OSMElement.OSMElement brailleNode = templateObject.osm;
@@ -101,16 +101,16 @@ namespace TemplatesUi
             if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
             {
                 OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
-                if (filteredSubtree.HasChild && filteredSubtree.Child.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
-                if (filteredSubtree.HasNext && filteredSubtree.Next.Data.properties.controlTypeFiltered.Contains("Item"))
+                if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree) &&  strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
+                if (strategyMgr.getSpecifiedTree().HasNext(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Next(filteredSubtree)).properties.controlTypeFiltered.Contains("Item"))
                 {
                     dropDownMenu.hasNext = true;
                 }
-                if (filteredSubtree.HasPrevious && filteredSubtree.Previous.Data.properties.controlTypeFiltered.Contains("Item"))
+                if (strategyMgr.getSpecifiedTree().HasPrevious(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Previous(filteredSubtree)).properties.controlTypeFiltered.Contains("Item"))
                 {
                     dropDownMenu.hasPrevious = true;
                 }
-                if (filteredSubtree.HasParent && filteredSubtree.Parent.Data.properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
+                if (strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
                 dropDownMenu.isOpen = false;
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;

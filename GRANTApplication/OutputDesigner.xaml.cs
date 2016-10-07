@@ -342,7 +342,7 @@ namespace GRANTApplication
 
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "filteredProject_" + grantTrees.getFilteredTree().Child.Data.properties.nameFiltered; // Default file name
+            dlg.FileName = "filteredProject_" + strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child( grantTrees.getFilteredTree())).properties.nameFiltered; // Default file name
             dlg.DefaultExt = ".grant"; // Default file extension
             dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
@@ -376,7 +376,7 @@ namespace GRANTApplication
                 guiFunctions.loadGrantProject(dlg.FileName);
 
 
-                ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+                Object tree = grantTrees.getFilteredTree();
 
                 tvOutput.Items.Clear();
                 root.Items.Clear();
@@ -386,7 +386,7 @@ namespace GRANTApplication
                 root.controlTypeFiltered = "Filtered- Updated- Tree";
 
                 //
-                guiFunctions.treeIteration(tree.Copy(), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                 SaveButton.IsEnabled = true;
                 tvOutput.Items.Add(root);
 

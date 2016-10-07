@@ -13,8 +13,8 @@ namespace GRANTManager
     /// </summary>
     public class GeneratedGrantTrees
     {
-        private ITreeStrategy<OSMElement.OSMElement> filteredTree; // enthält den gefilterten Baum
-        private ITreeStrategy<OSMElement.OSMElement> brailleTree; // enthält die Baumdarstellung der UI auf der stiftplatte
+        private Object filteredTree; // enthält den gefilterten Baum
+        private Object brailleTree; // enthält die Baumdarstellung der UI auf der stiftplatte
         /// <summary>
         /// gibt die Beziehung zwischen <code>filteredTree</code> und <code>brailleTree</code> anhand der generierten Id an
         /// </summary>
@@ -30,7 +30,7 @@ namespace GRANTManager
         /// Setzt den aktuell gefilterten Baum
         /// </summary>
         /// <param name="parentNode">gibt den gefilterten Baum an</param>
-        public void setFilteredTree(ITreeStrategy<OSMElement.OSMElement> tree)
+        public void setFilteredTree(Object tree)
         {
             filteredTree = tree;
         }
@@ -39,7 +39,7 @@ namespace GRANTManager
         /// Gibt den gefilterten Baum zurück
         /// </summary>
         /// <returns>Ger gefilterte Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> getFilteredTree()
+        public Object getFilteredTree()
         {
             return filteredTree;
         }
@@ -48,7 +48,7 @@ namespace GRANTManager
         /// Setzt die aktuelle Barille-UI-Darstellung.
         /// </summary>
         /// <param name="parentNode"></param>
-        public void setBrailleTree(ITreeStrategy<OSMElement.OSMElement> tree)
+        public void setBrailleTree(Object tree)
         {
             brailleTree = tree;
         }
@@ -57,7 +57,7 @@ namespace GRANTManager
         /// Gibt die aktuelle Braille-UI-Darstellung zurück
         /// </summary>
         /// <returns>Braille-UI-Darstellung</returns>
-        public ITreeStrategy<OSMElement.OSMElement> getBrailleTree()
+        public Object getBrailleTree()
         {
             return brailleTree;
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,8 +10,6 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Security.Permissions;
-using GRANTManager.Interfaces;
-
 
 //entnommen von: http://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection (Autor: Nicholas Butler; Lizenz CPOL)
 
@@ -28,12 +26,12 @@ using GRANTManager.Interfaces;
 [assembly: SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Common.NodeTree`1+AllEnumerator.Nodes")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Common.NodeTree`1+BaseEnumerableCollectionPair.Nodes")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Scope = "member", Target = "Common.NodeTree`1+BaseEnumerableCollectionPair+BaseNodesEnumerableCollection.GetEnumerator():System.Collections.Generic.IEnumerator`1<Common.INode`1<T>>")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "typeOfTemplate", Target = "Common.NodeTree`1+AllEnumerator")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "typeOfTemplate", Target = "Common.NodeTree`1+BaseEnumerableCollectionPair")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "typeOfTemplate", Target = "Common.NodeTree`1+RootObject")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "typeOfTemplate", Target = "Common.NodeTree`1+NodeXmlSerializationAdapter")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "typeOfTemplate", Target = "Common.NodeTree`1+NodeXmlSerializationAdapter+IXmlCollection")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "typeOfTemplate", Target = "Common.NodeTree`1+TreeXmlSerializationAdapter")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Common.NodeTree`1+AllEnumerator")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Common.NodeTree`1+BaseEnumerableCollectionPair")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Common.NodeTree`1+RootObject")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Common.NodeTree`1+NodeXmlSerializationAdapter")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Common.NodeTree`1+NodeXmlSerializationAdapter+IXmlCollection")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Scope = "type", Target = "Common.NodeTree`1+TreeXmlSerializationAdapter")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "Common.NodeTree`1.Dispose():System.Void")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "Common.NodeTree`1.Finalize():System.Void")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Scope = "member", Target = "Common.NodeTree`1+BaseEnumerableCollectionPair+BaseNodesEnumerableCollection.Dispose():System.Void")]
@@ -41,7 +39,7 @@ using GRANTManager.Interfaces;
 [assembly: SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible", Scope = "member", Target = "Common.NodeTree`1.XmlAdapterTag")]
 [assembly: SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Scope = "member", Target = "Common.NodeTree`1+NodeXmlSerializationAdapter.Children")]
 
-namespace StrategyGenericTree
+namespace Common
 {
 
     //-----------------------------------------------------------------------------
@@ -135,19 +133,19 @@ namespace StrategyGenericTree
         int Count { get; }
         int DirectChildCount { get; }
 
-        ITreeStrategy<T> Parent { get; }
-        ITreeStrategy<T> Previous { get; }
-        ITreeStrategy<T> Next { get; }
-        ITreeStrategy<T> Child { get; }
+        INode<T> Parent { get; }
+        INode<T> Previous { get; }
+        INode<T> Next { get; }
+        INode<T> Child { get; }
 
-        ITreeStrategy<T> Tree { get; }
+        ITree<T> Tree { get; }
 
-        ITreeStrategy<T> Root { get; }
-        ITreeStrategy<T> Top { get; }
-        ITreeStrategy<T> First { get; }
-        ITreeStrategy<T> Last { get; }
+        INode<T> Root { get; }
+        INode<T> Top { get; }
+        INode<T> First { get; }
+        INode<T> Last { get; }
 
-        ITreeStrategy<T> LastChild { get; }
+        INode<T> LastChild { get; }
 
         bool IsTree { get; }
         bool IsRoot { get; }
@@ -159,31 +157,31 @@ namespace StrategyGenericTree
         bool IsFirst { get; }
         bool IsLast { get; }
 
-        ITreeStrategy<T> this[T item] { get; }
+        INode<T> this[T item] { get; }
 
-        bool Contains(ITreeStrategy<T> item);
+        bool Contains(INode<T> item);
         bool Contains(T item);
 
-        ITreeStrategy<T> InsertPrevious(T o);
-        ITreeStrategy<T> InsertNext(T o);
-        ITreeStrategy<T> InsertChild(T o);
-        ITreeStrategy<T> Add(T o);
-        ITreeStrategy<T> AddChild(T o);
+        INode<T> InsertPrevious(T o);
+        INode<T> InsertNext(T o);
+        INode<T> InsertChild(T o);
+        INode<T> Add(T o);
+        INode<T> AddChild(T o);
 
-        void InsertPrevious(ITreeStrategy<T> tree);
-        void InsertNext(ITreeStrategy<T> tree);
-        void InsertChild(ITreeStrategy<T> tree);
-        void Add(ITreeStrategy<T> tree);
-        void AddChild(ITreeStrategy<T> tree);
+        void InsertPrevious(ITree<T> tree);
+        void InsertNext(ITree<T> tree);
+        void InsertChild(ITree<T> tree);
+        void Add(ITree<T> tree);
+        void AddChild(ITree<T> tree);
 
-        ITreeStrategy<T> Cut(T o);
-        ITreeStrategy<T> Copy(T o);
-        ITreeStrategy<T> DeepCopy(T o);
+        ITree<T> Cut(T o);
+        ITree<T> Copy(T o);
+        ITree<T> DeepCopy(T o);
         bool Remove(T o);
 
-        ITreeStrategy<T> Cut();
-        ITreeStrategy<T> Copy();
-        ITreeStrategy<T> DeepCopy();
+        ITree<T> Cut();
+        ITree<T> Copy();
+        ITree<T> DeepCopy();
         void Remove();
 
         bool CanMoveToParent { get; }
@@ -233,28 +231,28 @@ namespace StrategyGenericTree
         int Count { get; }
         int DirectChildCount { get; }
 
-        ITreeStrategy<T> Root { get; }
+        INode<T> Root { get; }
 
-        ITreeStrategy<T> this[T o] { get; }
+        INode<T> this[T o] { get; }
 
         string ToStringRecursive();
 
         bool Contains(T item);
-        bool Contains(ITreeStrategy<T> item);
+        bool Contains(INode<T> item);
 
-        ITreeStrategy<T> InsertChild(T o);
-        ITreeStrategy<T> AddChild(T o);
+        INode<T> InsertChild(T o);
+        INode<T> AddChild(T o);
 
-        void InsertChild(ITreeStrategy<T> tree);
-        void AddChild(ITreeStrategy<T> tree);
+        void InsertChild(ITree<T> tree);
+        void AddChild(ITree<T> tree);
 
-        ITreeStrategy<T> Cut(T o);
-        ITreeStrategy<T> Copy(T o);
-        ITreeStrategy<T> DeepCopy(T o);
+        ITree<T> Cut(T o);
+        ITree<T> Copy(T o);
+        ITree<T> DeepCopy(T o);
         bool Remove(T o);
 
-        ITreeStrategy<T> Copy();
-        ITreeStrategy<T> DeepCopy();
+        ITree<T> Copy();
+        ITree<T> DeepCopy();
 
         IEnumerableCollectionPair<T> All { get; }
         IEnumerableCollectionPair<T> AllChildren { get; }
@@ -280,7 +278,7 @@ namespace StrategyGenericTree
     // NodeTree
 
     [Serializable]
-    public class NodeTree<T> : INode<T>, ITree<T>, ISerializable, ITreeStrategy<T>
+    public class NodeTree<T> : INode<T>, ITree<T>, ISerializable
     {
         private T _Data = default(T);
 
@@ -289,7 +287,7 @@ namespace StrategyGenericTree
         private NodeTree<T> _Next = null;
         private NodeTree<T> _Child = null;
 
-        public NodeTree() { }
+        protected NodeTree() { }
 
         ~NodeTree()
         {
@@ -309,11 +307,6 @@ namespace StrategyGenericTree
             {
                 if (_EventHandlerList != null) _EventHandlerList.Dispose();
             }
-        }
-
-        public ITreeStrategy<T> NewNodeTree()
-        {
-            return new RootObject();
         }
 
         //-----------------------------------------------------------------------------
@@ -380,7 +373,7 @@ namespace StrategyGenericTree
             {
                 int i = -1;
 
-                for (INode<T> node = this; !node.IsRoot; node = (INode<T>) node.Parent) i++;
+                for (INode<T> node = this; !node.IsRoot; node = node.Parent) i++;
 
                 return i;
             }
@@ -392,7 +385,7 @@ namespace StrategyGenericTree
             {
                 int i = -1;
 
-                for (INode<T> node = this; node != null; node = (INode<T>)node.Previous) i++;
+                for (INode<T> node = this; node != null; node = node.Previous) i++;
 
                 return i;
             }
@@ -404,7 +397,7 @@ namespace StrategyGenericTree
             {
                 int i = 0;
 
-                for (INode<T> node = (INode<T>)First; node != null; node = (INode<T>)node.Next) i++;
+                for (INode<T> node = First; node != null; node = node.Next) i++;
 
                 return i;
             }
@@ -416,7 +409,7 @@ namespace StrategyGenericTree
         [ReflectionPermission(SecurityAction.Demand, Unrestricted = true)]
         protected virtual T DeepCopyData(T data)
         {
-            //if ( ! Root.IsTree ) throw new InvalidOperationException( "This is not a parentNode" );
+            //if ( ! Root.IsTree ) throw new InvalidOperationException( "This is not a tree" );
 
             if (data == null) { Debug.Assert(true); return default(T); }
 
@@ -556,20 +549,20 @@ namespace StrategyGenericTree
         {
             get
             {
-                INode<T> root = (INode<T>)Root;
+                INode<T> root = Root;
 
                 if (!root.IsTree) throw new InvalidOperationException("This is not a Tree");
 
-                return GetNodeTree((ITreeStrategy<T>)root).Version;
+                return GetNodeTree(root).Version;
             }
 
             set
             {
-                INode<T> root = (INode<T>)Root;
+                INode<T> root = Root;
 
                 if (!root.IsTree) throw new InvalidOperationException("This is not a Tree");
 
-                GetNodeTree((ITreeStrategy<T>)root).Version = value;
+                GetNodeTree(root).Version = value;
             }
         }
 
@@ -577,11 +570,11 @@ namespace StrategyGenericTree
 
         protected void IncrementVersion()
         {
-            INode<T> root = (INode<T>)Root;
+            INode<T> root = Root;
 
             if (!root.IsTree) throw new InvalidOperationException("This is not a Tree");
 
-            GetNodeTree((ITreeStrategy<T>)root).Version++;
+            GetNodeTree(root).Version++;
         }
 
         //-----------------------------------------------------------------------------
@@ -655,8 +648,7 @@ namespace StrategyGenericTree
 
         }
 
-        //static rausgenommen, damit es ins Interface rein kann
-        public ITreeStrategy<T> XmlDeserialize(Stream stream)
+        public static ITree<T> XmlDeserialize(Stream stream)
         {
             XmlSerializer xmlSerializer;
 
@@ -686,7 +678,7 @@ namespace StrategyGenericTree
 
             ITree<T> tree = adapter.Tree;
 
-            return (ITreeStrategy<T>) tree;
+            return tree;
         }
 
         //-----------------------------------------------------------------------------
@@ -728,14 +720,14 @@ namespace StrategyGenericTree
             {
                 get
                 {
-                    return new NodeXmlSerializationAdapter(XmlAdapterTag, (INode<T>) _Tree.Root);
+                    return new NodeXmlSerializationAdapter(XmlAdapterTag, _Tree.Root);
                 }
 
                 set
                 {
                     _Tree = NodeTree<T>.NewTree();
 
-                    ReformTree((INode<T>)_Tree.Root, value);
+                    ReformTree(_Tree.Root, value);
                 }
             }
 
@@ -743,7 +735,7 @@ namespace StrategyGenericTree
             {
                 foreach (NodeXmlSerializationAdapter child in node.Children)
                 {
-                    INode<T> n = (INode<T>) parent.AddChild(child.Data);
+                    INode<T> n = parent.AddChild(child.Data);
 
                     ReformTree(n, child);
                 }
@@ -796,7 +788,7 @@ namespace StrategyGenericTree
 
                 set
                 {
-                    GetNodeTree((ITreeStrategy<T>)_Node)._Data = value;
+                    GetNodeTree(_Node)._Data = value;
                 }
             }
 
@@ -839,43 +831,43 @@ namespace StrategyGenericTree
             }
         }
 
-        public ITreeStrategy<T> Parent { get { return _Parent; } }
-        public ITreeStrategy<T> Previous { get { return _Previous; } }
-        public ITreeStrategy<T> Next { get { return _Next; } }
-        public ITreeStrategy<T> Child { get { return _Child; } }
+        public INode<T> Parent { get { return _Parent; } }
+        public INode<T> Previous { get { return _Previous; } }
+        public INode<T> Next { get { return _Next; } }
+        public INode<T> Child { get { return _Child; } }
 
         //-----------------------------------------------------------------------------
 
-        public ITreeStrategy<T> Tree
+        public ITree<T> Tree
         {
             get
             {
-                return Root;
+                return (ITree<T>)Root;
             }
         }
 
-        public ITreeStrategy<T> Root
+        public INode<T> Root
         {
             get
             {
-                ITreeStrategy<T> node = this;
+                INode<T> node = this;
 
                 while (node.Parent != null)
-                    node = (ITreeStrategy<T>)node.Parent;
+                    node = node.Parent;
 
                 return node;
             }
         }
 
-        public ITreeStrategy<T> Top
+        public INode<T> Top
         {
             get
             {
-                if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+                if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
                 //if ( this.IsRoot ) throw new InvalidOperationException( "This is a Root" );
                 if (this.IsRoot) return null;
 
-                ITreeStrategy<T> node = this;
+                INode<T> node = this;
 
                 while (node.Parent.Parent != null)
                     node = node.Parent;
@@ -884,11 +876,11 @@ namespace StrategyGenericTree
             }
         }
 
-        public ITreeStrategy<T> First
+        public INode<T> First
         {
             get
             {
-                ITreeStrategy<T> node = this;
+                INode<T> node = this;
 
                 while (node.Previous != null)
                     node = node.Previous;
@@ -897,11 +889,11 @@ namespace StrategyGenericTree
             }
         }
 
-        public ITreeStrategy<T> Last
+        public INode<T> Last
         {
             get
             {
-                ITreeStrategy<T> node = this;
+                INode<T> node = this;
 
                 while (node.Next != null)
                     node = node.Next;
@@ -910,12 +902,12 @@ namespace StrategyGenericTree
             }
         }
 
-        public ITreeStrategy<T> LastChild
+        public INode<T> LastChild
         {
             get
             {
                 if (Child == null) return null;
-                return (ITreeStrategy<T>) Child.Last;
+                return Child.Last;
             }
         }
 
@@ -974,42 +966,42 @@ namespace StrategyGenericTree
 
         //-----------------------------------------------------------------------------
 
-        public virtual ITreeStrategy<T> this[T item]
+        public virtual INode<T> this[T item]
         {
             get
             {
-                if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+                if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
                 IEqualityComparer<T> comparer = DataComparer;
 
                 foreach (INode<T> n in All.Nodes)
                     if (comparer.Equals(n.Data, item))
-                        return (ITreeStrategy<T>) n;
+                        return n;
 
                 return null;
             }
         }
 
-        public virtual bool Contains(ITreeStrategy<T> item)
+        public virtual bool Contains(INode<T> item)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
-            return All.Nodes.Contains((INode<T>) item);
+            return All.Nodes.Contains(item);
         }
 
         public virtual bool Contains(T item)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             return All.Values.Contains(item);
         }
 
         //-----------------------------------------------------------------------------
 
-        public ITreeStrategy<T> InsertPrevious(T o)
+        public INode<T> InsertPrevious(T o)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> newNode = CreateNode();
             newNode._Data = o;
@@ -1019,10 +1011,10 @@ namespace StrategyGenericTree
             return newNode;
         }
 
-        public ITreeStrategy<T> InsertNext(T o)
+        public INode<T> InsertNext(T o)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> newNode = CreateNode();
             newNode._Data = o;
@@ -1032,9 +1024,9 @@ namespace StrategyGenericTree
             return newNode;
         }
 
-        public ITreeStrategy<T> InsertChild(T o)
+        public INode<T> InsertChild(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> newNode = CreateNode();
             newNode._Data = o;
@@ -1044,17 +1036,17 @@ namespace StrategyGenericTree
             return newNode;
         }
 
-        public ITreeStrategy<T> Add(T o)
+        public INode<T> Add(T o)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             return this.Last.InsertNext(o);
         }
 
-        public ITreeStrategy<T> AddChild(T o)
+        public INode<T> AddChild(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             if (Child == null)
                 return InsertChild(o);
@@ -1064,70 +1056,70 @@ namespace StrategyGenericTree
 
         //-----------------------------------------------------------------------------
 
-        public void InsertPrevious(ITreeStrategy<T> tree)
+        public void InsertPrevious(ITree<T> tree)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> newTree = GetNodeTree(tree);
 
             if (!newTree.IsRoot) throw new ArgumentException("Tree is not a Root");
-            if (!newTree.IsTree) throw new ArgumentException("Tree is not a parentNode");
+            if (!newTree.IsTree) throw new ArgumentException("Tree is not a tree");
 
-            for (INode<T> n = (INode<T>) newTree.Child; n != null; n = (INode<T>) n.Next)
+            for (INode<T> n = newTree.Child; n != null; n = n.Next)
             {
-                NodeTree<T> node = GetNodeTree((ITreeStrategy<T>)n);
+                NodeTree<T> node = GetNodeTree(n);
                 NodeTree<T> copy = node.CopyCore();
                 InsertPreviousCore(copy);
             }
         }
 
-        public void InsertNext(ITreeStrategy<T> tree)
+        public void InsertNext(ITree<T> tree)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> newTree = GetNodeTree(tree);
 
             if (!newTree.IsRoot) throw new ArgumentException("Tree is not a Root");
-            if (!newTree.IsTree) throw new ArgumentException("Tree is not a parentNode");
+            if (!newTree.IsTree) throw new ArgumentException("Tree is not a tree");
 
-            for (INode<T> n = (INode<T>)newTree.LastChild; n != null; n = (INode<T>)n.Previous)
+            for (INode<T> n = newTree.LastChild; n != null; n = n.Previous)
             {
-                NodeTree<T> node = GetNodeTree((ITreeStrategy<T>)n);
+                NodeTree<T> node = GetNodeTree(n);
                 NodeTree<T> copy = node.CopyCore();
                 InsertNextCore(copy);
             }
         }
 
-        public void InsertChild(ITreeStrategy<T> tree)
+        public void InsertChild(ITree<T> tree)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> newTree = GetNodeTree(tree);
 
             if (!newTree.IsRoot) throw new ArgumentException("Tree is not a Root");
-            if (!newTree.IsTree) throw new ArgumentException("Tree is not a parentNode");
+            if (!newTree.IsTree) throw new ArgumentException("Tree is not a tree");
 
-            for (INode<T> n = (INode<T>)newTree.LastChild; n != null; n = (INode<T>)n.Previous)
+            for (INode<T> n = newTree.LastChild; n != null; n = n.Previous)
             {
-                NodeTree<T> node = GetNodeTree((ITreeStrategy<T>)n);
+                NodeTree<T> node = GetNodeTree(n);
                 NodeTree<T> copy = node.CopyCore();
                 InsertChildCore(copy);
             }
         }
 
-        public void Add(ITreeStrategy<T> tree)
+        public void Add(ITree<T> tree)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             this.Last.InsertNext(tree);
         }
 
-        public void AddChild(ITreeStrategy<T> tree)
+        public void AddChild(ITree<T> tree)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             if (this.Child == null)
                 this.InsertChild(tree);
@@ -1137,11 +1129,11 @@ namespace StrategyGenericTree
 
         //-----------------------------------------------------------------------------
 
-        protected virtual void InsertPreviousCore(ITreeStrategy<T> newINode)
+        protected virtual void InsertPreviousCore(INode<T> newINode)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
             if (!newINode.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (newINode.IsTree) throw new ArgumentException("Node is a parentNode");
+            if (newINode.IsTree) throw new ArgumentException("Node is a tree");
 
             IncrementVersion();
 
@@ -1156,23 +1148,23 @@ namespace StrategyGenericTree
 
             if (newNode.Previous != null)
             {
-                NodeTree<T> Previous = GetNodeTree((ITreeStrategy<T>)newNode.Previous);
+                NodeTree<T> Previous = GetNodeTree(newNode.Previous);
                 Previous._Next = newNode;
             }
             else // this is a first node
             {
-                NodeTree<T> Parent = GetNodeTree((ITreeStrategy<T>)newNode.Parent);
+                NodeTree<T> Parent = GetNodeTree(newNode.Parent);
                 Parent._Child = newNode;
             }
 
-            OnInserted(this, NodeTreeInsertOperation.Previous, (INode<T>)newINode);
+            OnInserted(this, NodeTreeInsertOperation.Previous, newINode);
         }
 
-        protected virtual void InsertNextCore(ITreeStrategy<T> newINode)
+        protected virtual void InsertNextCore(INode<T> newINode)
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
             if (!newINode.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (newINode.IsTree) throw new ArgumentException("Node is a parentNode");
+            if (newINode.IsTree) throw new ArgumentException("Node is a tree");
 
             IncrementVersion();
 
@@ -1187,17 +1179,17 @@ namespace StrategyGenericTree
 
             if (newNode.Next != null)
             {
-                NodeTree<T> Next = GetNodeTree((ITreeStrategy<T>)newNode.Next);
+                NodeTree<T> Next = GetNodeTree(newNode.Next);
                 Next._Previous = newNode;
             }
 
-            OnInserted(this, NodeTreeInsertOperation.Next, (INode<T>)newINode);
+            OnInserted(this, NodeTreeInsertOperation.Next, newINode);
         }
 
-        protected virtual void InsertChildCore(ITreeStrategy<T> newINode)
+        protected virtual void InsertChildCore(INode<T> newINode)
         {
             if (!newINode.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (newINode.IsTree) throw new ArgumentException("Node is a parentNode");
+            if (newINode.IsTree) throw new ArgumentException("Node is a tree");
 
             IncrementVersion();
 
@@ -1211,11 +1203,11 @@ namespace StrategyGenericTree
 
             if (newNode.Next != null)
             {
-                NodeTree<T> Next = GetNodeTree((ITreeStrategy<T>)newNode.Next);
+                NodeTree<T> Next = GetNodeTree(newNode.Next);
                 Next._Previous = newNode;
             }
 
-            OnInserted(this, NodeTreeInsertOperation.Child, (INode<T>) newINode);
+            OnInserted(this, NodeTreeInsertOperation.Child, newINode);
         }
 
         protected virtual void AddCore(INode<T> newINode)
@@ -1224,16 +1216,16 @@ namespace StrategyGenericTree
 
             NodeTree<T> lastNode = GetNodeTree(Last);
 
-            lastNode.InsertNextCore((ITreeStrategy<T>)newINode);
+            lastNode.InsertNextCore(newINode);
         }
 
         protected virtual void AddChildCore(INode<T> newINode)
         {
             if (this.Child == null)
-                this.InsertChildCore((ITreeStrategy<T>)newINode);
+                this.InsertChildCore(newINode);
             else
             {
-                NodeTree<T> childNode = GetNodeTree((ITreeStrategy<T>)Child);
+                NodeTree<T> childNode = GetNodeTree(Child);
 
                 childNode.AddCore(newINode);
             }
@@ -1241,38 +1233,38 @@ namespace StrategyGenericTree
 
         //-----------------------------------------------------------------------------
 
-        public ITreeStrategy<T> Cut(T o)
+        public ITree<T> Cut(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
-            INode<T> n = (INode<T>) this[o];
+            INode<T> n = this[o];
             if (n == null) return null;
             return n.Cut();
         }
 
-        public ITreeStrategy<T> Copy(T o)
+        public ITree<T> Copy(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
-            INode<T> n = (INode<T>)this[o];
+            INode<T> n = this[o];
             if (n == null) return null;
             return n.Copy();
         }
 
-        public ITreeStrategy<T> DeepCopy(T o)
+        public ITree<T> DeepCopy(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
-            INode<T> n = (INode<T>)this[o];
+            INode<T> n = this[o];
             if (n == null) return null;
             return n.DeepCopy();
         }
 
         public bool Remove(T o)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
-            INode<T> n = (INode<T>)this[o];
+            INode<T> n = this[o];
             if (n == null) return false;
 
             n.Remove();
@@ -1284,7 +1276,7 @@ namespace StrategyGenericTree
         private NodeTree<T> BoxInTree(NodeTree<T> node)
         {
             if (!node.IsRoot) throw new ArgumentException("Node is not a Root");
-            if (node.IsTree) throw new ArgumentException("Node is a parentNode");
+            if (node.IsTree) throw new ArgumentException("Node is a tree");
 
             NodeTree<T> tree = CreateTree();
 
@@ -1293,19 +1285,19 @@ namespace StrategyGenericTree
             return tree;
         }
 
-        public ITreeStrategy<T> Cut()
+        public ITree<T> Cut()
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             NodeTree<T> node = CutCore();
 
             return BoxInTree(node);
         }
 
-        public ITreeStrategy<T> Copy()
+        public ITree<T> Copy()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             if (IsTree)
             {
@@ -1321,9 +1313,9 @@ namespace StrategyGenericTree
             }
         }
 
-        public ITreeStrategy<T> DeepCopy()
+        public ITree<T> DeepCopy()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             if (IsTree)
             {
@@ -1342,7 +1334,7 @@ namespace StrategyGenericTree
         public void Remove()
         {
             if (this.IsRoot) throw new InvalidOperationException("This is a Root");
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
 
             RemoveCore();
         }
@@ -1357,7 +1349,7 @@ namespace StrategyGenericTree
 
             OnCutting(this);
 
-            INode<T> OldRoot = (INode<T>)Root;
+            INode<T> OldRoot = Root;
 
             if (this._Next != null)
                 this._Next._Previous = this._Previous;
@@ -1382,7 +1374,7 @@ namespace StrategyGenericTree
 
         protected virtual NodeTree<T> CopyCore()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
             if (IsRoot && !IsTree) throw new InvalidOperationException("This is a Root");
 
             if (IsTree)
@@ -1415,7 +1407,7 @@ namespace StrategyGenericTree
 
         protected virtual NodeTree<T> DeepCopyCore()
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
             if (IsRoot && !IsTree) throw new InvalidOperationException("This is a Root");
 
             if (IsTree)
@@ -1450,7 +1442,7 @@ namespace StrategyGenericTree
         {
             NodeTree<T> previousNewChildNode = null;
 
-            for (INode<T> oldChildNode = (INode<T>)oldNode.Child; oldChildNode != null; oldChildNode = (INode<T>)oldChildNode.Next)
+            for (INode<T> oldChildNode = oldNode.Child; oldChildNode != null; oldChildNode = oldChildNode.Next)
             {
                 NodeTree<T> newChildNode = CreateNode();
 
@@ -1563,7 +1555,7 @@ namespace StrategyGenericTree
         {
             if (!CanMoveToParent) throw new InvalidOperationException("Cannot move to Parent");
 
-            NodeTree<T> parentNode = GetNodeTree((ITreeStrategy<T>)this.Parent);
+            NodeTree<T> parentNode = GetNodeTree(this.Parent);
 
             NodeTree<T> thisNode = this.CutCore();
 
@@ -1574,7 +1566,7 @@ namespace StrategyGenericTree
         {
             if (!CanMoveToPrevious) throw new InvalidOperationException("Cannot move to Previous");
 
-            NodeTree<T> previousNode = GetNodeTree((ITreeStrategy<T>)this.Previous);
+            NodeTree<T> previousNode = GetNodeTree(this.Previous);
 
             NodeTree<T> thisNode = this.CutCore();
 
@@ -1585,7 +1577,7 @@ namespace StrategyGenericTree
         {
             if (!CanMoveToNext) throw new InvalidOperationException("Cannot move to Next");
 
-            NodeTree<T> nextNode = GetNodeTree((ITreeStrategy<T>)this.Next);
+            NodeTree<T> nextNode = GetNodeTree(this.Next);
 
             NodeTree<T> thisNode = this.CutCore();
 
@@ -1596,7 +1588,7 @@ namespace StrategyGenericTree
         {
             if (!CanMoveToChild) throw new InvalidOperationException("Cannot move to Child");
 
-            NodeTree<T> previousNode = GetNodeTree((ITreeStrategy<T>)this.Previous);
+            NodeTree<T> previousNode = GetNodeTree(this.Previous);
 
             NodeTree<T> thisNode = this.CutCore();
 
@@ -1607,7 +1599,7 @@ namespace StrategyGenericTree
         {
             if (!CanMoveToFirst) throw new InvalidOperationException("Cannot move to first");
 
-            NodeTree<T> firstNode = GetNodeTree((ITreeStrategy<T>)this.First);
+            NodeTree<T> firstNode = GetNodeTree(this.First);
 
             NodeTree<T> thisNode = this.CutCore();
 
@@ -2012,18 +2004,18 @@ namespace StrategyGenericTree
 
                     if (CurrentNode.IsRoot)
                     {
-                        CurrentNode = (INode<T>)CurrentNode.Child;
+                        CurrentNode = CurrentNode.Child;
                         if (CurrentNode == null) goto hell;
                     }
 
                     if (_First) { _First = false; return true; }
 
-                    if (CurrentNode.Child != null) { CurrentNode = (INode<T>)CurrentNode.Child; return true; }
+                    if (CurrentNode.Child != null) { CurrentNode = CurrentNode.Child; return true; }
 
-                    for (; CurrentNode.Parent != null; CurrentNode = (INode<T>)CurrentNode.Parent)
+                    for (; CurrentNode.Parent != null; CurrentNode = CurrentNode.Parent)
                     {
                         if (CurrentNode == Root) goto hell;
-                        if (CurrentNode.Next != null) { CurrentNode = (INode<T>)CurrentNode.Next; return true; }
+                        if (CurrentNode.Next != null) { CurrentNode = CurrentNode.Next; return true; }
                     }
 
                 hell:
@@ -2069,12 +2061,12 @@ namespace StrategyGenericTree
 
                     if (CurrentNode == null) throw new InvalidOperationException("Current is null");
 
-                    if (CurrentNode.Child != null) { CurrentNode = (INode<T>)CurrentNode.Child; return true; }
+                    if (CurrentNode.Child != null) { CurrentNode = CurrentNode.Child; return true; }
 
-                    for (; CurrentNode.Parent != null; CurrentNode = (INode<T>)CurrentNode.Parent)
+                    for (; CurrentNode.Parent != null; CurrentNode = CurrentNode.Parent)
                     {
                         if (CurrentNode == Root) goto hell;
-                        if (CurrentNode.Next != null) { CurrentNode = (INode<T>)CurrentNode.Next; return true; }
+                        if (CurrentNode.Next != null) { CurrentNode = CurrentNode.Next; return true; }
                     }
 
                 hell:
@@ -2128,9 +2120,9 @@ namespace StrategyGenericTree
                     if (CurrentNode == null) throw new InvalidOperationException("Current is null");
 
                     if (CurrentNode == Root)
-                        CurrentNode = (INode<T>) Root.Child;
+                        CurrentNode = Root.Child;
                     else
-                        CurrentNode = (INode<T>)CurrentNode.Next;
+                        CurrentNode = CurrentNode.Next;
 
                     if (CurrentNode != null) return true;
 
@@ -2185,9 +2177,9 @@ namespace StrategyGenericTree
                     if (CurrentNode == null) throw new InvalidOperationException("Current is null");
 
                     if (CurrentNode == Root)
-                        CurrentNode = (INode<T>) Root.LastChild;
+                        CurrentNode = Root.LastChild;
                     else
-                        CurrentNode = (INode<T>)CurrentNode.Previous;
+                        CurrentNode = CurrentNode.Previous;
 
                     if (CurrentNode != null) return true;
 
@@ -2208,7 +2200,7 @@ namespace StrategyGenericTree
             {
                 int i = 0;
 
-                for (INode<T> n = (INode<T>)this.Child; n != null; n = (INode<T>)n.Next) i++;
+                for (INode<T> n = this.Child; n != null; n = n.Next) i++;
 
                 return i;
             }
@@ -2228,7 +2220,7 @@ namespace StrategyGenericTree
         public void Clear()
         {
             if (!this.IsRoot) throw new InvalidOperationException("This is not a Root");
-            if (!this.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!this.IsTree) throw new InvalidOperationException("This is not a tree");
 
             OnClearing(this);
 
@@ -2240,19 +2232,19 @@ namespace StrategyGenericTree
         //-----------------------------------------------------------------------------
         // GetNodeTree
 
-        protected static NodeTree<T> GetNodeTree(ITreeStrategy<T> tree)
+        protected static NodeTree<T> GetNodeTree(ITree<T> tree)
         {
             if (tree == null) throw new ArgumentNullException("Tree is null");
 
             return (NodeTree<T>)tree; // can throw an InvalidCastException.
         }
 
-      /*  protected static NodeTree<T> GetNodeTree(INodeTree<T> node)
+        protected static NodeTree<T> GetNodeTree(INode<T> node)
         {
             if (node == null) throw new ArgumentNullException("Node is null");
 
             return (NodeTree<T>)node; // can throw an InvalidCastException.
-        }*/
+        }
 
         //-----------------------------------------------------------------------------
         // ICollection
@@ -2267,7 +2259,7 @@ namespace StrategyGenericTree
             {
                 int i = IsRoot ? 0 : 1;
 
-                for (INode<T> n = (INode<T>) this.Child; n != null; n = (INode<T>)n.Next)
+                for (INode<T> n = this.Child; n != null; n = n.Next)
                     i += n.Count;
 
                 return i;
@@ -2497,7 +2489,7 @@ namespace StrategyGenericTree
 
         protected virtual void OnValidate(INode<T> node, T data)
         {
-            if (!Root.IsTree) throw new InvalidOperationException("This is not a parentNode");
+            if (!Root.IsTree) throw new InvalidOperationException("This is not a tree");
             if (data is INode<T>) throw new ArgumentException("Object is a node");
 
             if ((!typeof(T).IsClass) || ((object)data) != null)
@@ -2510,7 +2502,7 @@ namespace StrategyGenericTree
                 if (e != null) e(node, new NodeTreeDataEventArgs<T>(data));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnValidate(node, data);
+            if (!IsRoot) GetNodeTree(Root).OnValidate(node, data);
         }
 
         //-----------------------------------------------------------------------------
@@ -2550,7 +2542,7 @@ namespace StrategyGenericTree
                 if (e != null) e(node, new NodeTreeDataEventArgs<T>(data));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnSettingCore(node, data, false);
+            if (!IsRoot) GetNodeTree(Root).OnSettingCore(node, data, false);
 
             if (raiseValidate) OnValidate(node, data);
         }
@@ -2568,7 +2560,7 @@ namespace StrategyGenericTree
                 if (e != null) e(node, new NodeTreeDataEventArgs<T>(data));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnSetDoneCore(node, data, false);
+            if (!IsRoot) GetNodeTree(Root).OnSetDoneCore(node, data, false);
 
             //			if ( raiseValidate ) OnValidate( Node, Data );
         }
@@ -2576,9 +2568,9 @@ namespace StrategyGenericTree
         //-----------------------------------------------------------------------------
         // Insert
 
-        protected virtual void OnInserting(ITreeStrategy<T> oldNode, NodeTreeInsertOperation operation, ITreeStrategy<T> newNode)
+        protected virtual void OnInserting(INode<T> oldNode, NodeTreeInsertOperation operation, INode<T> newNode)
         {
-            OnInsertingCore((INode<T>)oldNode, operation, (INode<T>)newNode, true);
+            OnInsertingCore(oldNode, operation, newNode, true);
         }
 
         protected virtual void OnInsertingCore(INode<T> oldNode, NodeTreeInsertOperation operation, INode<T> newNode, bool raiseValidate)
@@ -2589,7 +2581,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, new NodeTreeInsertEventArgs<T>(operation, newNode));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnInsertingCore(oldNode, operation, newNode, false);
+            if (!IsRoot) GetNodeTree(Root).OnInsertingCore(oldNode, operation, newNode, false);
 
             if (raiseValidate) OnValidate(oldNode, newNode.Data);
 
@@ -2598,7 +2590,7 @@ namespace StrategyGenericTree
 
         protected virtual void OnInsertingTree(INode<T> newNode)
         {
-            for (INode<T> child = (INode<T>)newNode.Child; child != null; child = (INode<T>)child.Next)
+            for (INode<T> child = newNode.Child; child != null; child = child.Next)
             {
                 OnInsertingTree(newNode, child);
 
@@ -2619,7 +2611,7 @@ namespace StrategyGenericTree
                 if (e != null) e(newNode, new NodeTreeInsertEventArgs<T>(NodeTreeInsertOperation.Tree, child));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnInsertingTreeCore(newNode, child, false);
+            if (!IsRoot) GetNodeTree(Root).OnInsertingTreeCore(newNode, child, false);
 
             if (raiseValidate) OnValidate(newNode, child.Data);
         }
@@ -2637,7 +2629,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, new NodeTreeInsertEventArgs<T>(operation, newNode));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnInsertedCore(oldNode, operation, newNode, false);
+            if (!IsRoot) GetNodeTree(Root).OnInsertedCore(oldNode, operation, newNode, false);
 
             //			if ( raiseValidate ) OnValidate( OldNode, NewNode.Data );
 
@@ -2646,7 +2638,7 @@ namespace StrategyGenericTree
 
         protected virtual void OnInsertedTree(INode<T> newNode)
         {
-            for (INode<T> child = (INode<T>)newNode.Child; child != null; child = (INode<T>)child.Next)
+            for (INode<T> child = newNode.Child; child != null; child = child.Next)
             {
                 OnInsertedTree(newNode, child);
 
@@ -2667,7 +2659,7 @@ namespace StrategyGenericTree
                 if (e != null) e(newNode, new NodeTreeInsertEventArgs<T>(NodeTreeInsertOperation.Tree, child));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnInsertedTreeCore(newNode, child, false);
+            if (!IsRoot) GetNodeTree(Root).OnInsertedTreeCore(newNode, child, false);
 
             //			if ( raiseValidate ) OnValidate( newNode, child.Data );
         }
@@ -2683,7 +2675,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, EventArgs.Empty);
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnCutting(oldNode);
+            if (!IsRoot) GetNodeTree(Root).OnCutting(oldNode);
         }
 
         protected virtual void OnCutDone(INode<T> oldRoot, INode<T> oldNode)
@@ -2694,7 +2686,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, EventArgs.Empty);
             }
 
-            if (!IsTree) GetNodeTree((ITreeStrategy<T>)oldRoot).OnCutDone(oldRoot, oldNode);
+            if (!IsTree) GetNodeTree(oldRoot).OnCutDone(oldRoot, oldNode);
         }
 
         //-----------------------------------------------------------------------------
@@ -2713,7 +2705,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, new NodeTreeNodeEventArgs<T>(newNode));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnCopyingCore(oldNode, newNode, false);
+            if (!IsRoot) GetNodeTree(Root).OnCopyingCore(oldNode, newNode, false);
 
             //			if ( raiseValidate ) OnValidate( oldNode, newNode.Data );
         }
@@ -2731,7 +2723,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, new NodeTreeNodeEventArgs<T>(newNode));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnCopiedCore(oldNode, newNode, false);
+            if (!IsRoot) GetNodeTree(Root).OnCopiedCore(oldNode, newNode, false);
 
             //			if ( raiseValidate ) OnValidate( oldNode, newNode.Data );
         }
@@ -2752,7 +2744,7 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, new NodeTreeNodeEventArgs<T>(newNode));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnDeepCopyingCore(oldNode, newNode, false);
+            if (!IsRoot) GetNodeTree(Root).OnDeepCopyingCore(oldNode, newNode, false);
 
             //			if ( raiseValidate ) OnValidate( oldNode, newNode.Data );
         }
@@ -2770,14 +2762,12 @@ namespace StrategyGenericTree
                 if (e != null) e(oldNode, new NodeTreeNodeEventArgs<T>(newNode));
             }
 
-            if (!IsRoot) GetNodeTree((ITreeStrategy<T>)Root).OnDeepCopiedCore(oldNode, newNode, false);
+            if (!IsRoot) GetNodeTree(Root).OnDeepCopiedCore(oldNode, newNode, false);
 
             //			if ( raiseValidate ) OnValidate( oldNode, newNode.Data );
         }
 
         //-----------------------------------------------------------------------------
-
-       
 
     } // class NodeTree
 

@@ -260,8 +260,8 @@ namespace GRANTApplication
                         strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                      //   filterStrategy.setStrategyMgr(strategyMgr);
-                        ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
+                        Object tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                      //  strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                         Console.WriteLine("\n");
                         #endregion
 
@@ -295,7 +295,7 @@ namespace GRANTApplication
 
                         IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                      //   filterStrategy.setStrategyMgr(strategyMgr);
-                        ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
+                        Object treeGuiOma = getDauGui();
                         grantTrees.setBrailleTree(treeGuiOma);
                         
                             #region kopiert von "if (e.Key == Key.F5) ..."
@@ -310,7 +310,7 @@ namespace GRANTApplication
                                     strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                                     // IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                                    ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                                    Object tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                                     grantTrees.setFilteredTree(tree);
                                     // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
                                     //  treeStrategy.printTreeElements(parentNode, -1);
@@ -350,9 +350,9 @@ namespace GRANTApplication
                 try
                 {
                     System.IO.FileStream fs = System.IO.File.Open("c:\\Users\\mkarlapp\\Desktop\\testGui.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                    ITreeStrategy<OSMElement.OSMElement> tree3 = treeStrategy.XmlDeserialize(fs);
+                    Object tree3 = treeStrategy.XmlDeserialize(fs);
                     fs.Close();
-                    strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree3, -1);
+                   // strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree3, -1);
                 }
                 catch (Exception ex)
                 {
@@ -369,7 +369,7 @@ namespace GRANTApplication
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                   //  filterStrategy.setStrategyMgr(strategyMgr);
                     //treeStrategy.setStrategyMgr(strategyMgr);
-                    ITreeStrategy<OSMElement.OSMElement> treeGuiOma = getDauGui();
+                    Object treeGuiOma = getDauGui();
                     grantTrees.setBrailleTree(treeGuiOma);
                     if (grantTrees.getFilteredTree() == null)
                     {
@@ -385,7 +385,7 @@ namespace GRANTApplication
                                 strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                                // IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                                ITreeStrategy<OSMElement.OSMElement> tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                                Object tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                                 grantTrees.setFilteredTree(tree);
                                 // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
                                 //  treeStrategy.printTreeElements(parentNode, -1);
@@ -430,9 +430,9 @@ namespace GRANTApplication
       
 
         #region Beispielobjekte
-        private ITreeStrategy<OSMElement.OSMElement> getDauGui()
+        private Object getDauGui()
         {
-            ITreeStrategy<OSMElement.OSMElement> osmDau = strategyMgr.getSpecifiedTree().NewNodeTree();
+            Object osmDau = strategyMgr.getSpecifiedTree().NewTree();
 
             #region Element 2
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();

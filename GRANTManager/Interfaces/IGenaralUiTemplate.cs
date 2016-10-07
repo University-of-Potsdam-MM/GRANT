@@ -4,13 +4,13 @@ namespace GRANTManager.Interfaces
 {
     public interface IGenaralUiTemplate
     {
-        void addNavigationbarForScreen(string pathToXml, GRANTManager.Interfaces.ITreeStrategy<OSMElement.OSMElement> subtree);
+        void addNavigationbarForScreen(string pathToXml, Object subtree);
         void createUiElementsAllScreens(string pathToXml);
         void createUiElementsNavigationbarScreens(string pathToXml);
         void generatedUiFromTemplate(string pathToXml);
         void updateNavigationbarScreens(string pathToXml);
 
-        void createUiElementFromTemplate(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
+        void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
     }
     public struct TempletUiObject
     {

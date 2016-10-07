@@ -195,7 +195,7 @@ namespace StrategyBrailleIO
         {
             if (!initialized) { setActiveAdapter(); }
             if (grantTrees == null || grantTrees.getBrailleTree() == null) { return; }
-            ITreeStrategy<OSMElement.OSMElement> osm = grantTrees.getBrailleTree().Copy();
+            Object osm = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
             createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
             String activeScreenName = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
@@ -257,9 +257,9 @@ namespace StrategyBrailleIO
             }
             else
             {
-                if(grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild && !grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered.Equals(IntPtr.Zero))
+                if(grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered.Equals(IntPtr.Zero))
                 {
-                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
+                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
                 }
                 else
                 {
@@ -273,78 +273,78 @@ namespace StrategyBrailleIO
         /// Geht rekursive durch alle Baumelemente und erstellt die einzelnen Views
         /// </summary>
         /// <param name="tree">gibt das Baum-Objekt der Oberflaeche an</param>
-        private void createViewsFromTree(ITreeStrategy<OSMElement.OSMElement> tree)
+        private void createViewsFromTree(Object tree)
         {
-            ITreeStrategy<OSMElement.OSMElement> node1;
+            Object node1;
             //Falls die Baumelemente Kinder des jeweiligen Elements sind
-            while ((tree.HasChild || tree.HasNext )&& !(tree.Count == 1 && tree.Depth == -1))
+            while ((strategyMgr.getSpecifiedTree().HasChild(tree)|| strategyMgr.getSpecifiedTree().HasNext(tree) )&& !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
             {
-                if (tree.HasChild)
+                if (strategyMgr.getSpecifiedTree().HasChild(tree))
                 {
-                    node1 = tree.Child;
-                    if (node1.IsTop && !node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.brailleRepresentation.screenName.Equals(""))
+                    node1 =  strategyMgr.getSpecifiedTree().Child(tree);
+                    if (strategyMgr.getSpecifiedTree().IsTop(node1) && ! strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName.Equals(""))
                     {
-                        createScreen(node1.Data.brailleRepresentation.screenName);
+                        createScreen(strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName);
                     }
                     else
                     {
-                        if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && !node1.Data.brailleRepresentation.viewName.Equals("") && !node1.Data.brailleRepresentation.isGroupChild)
+                        if (! strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).properties.Equals(new GeneralProperties()) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.viewName.Equals("") && ! strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.isGroupChild)
                         {
-                            createView(node1.Data);
+                            createView(strategyMgr.getSpecifiedTree().GetData(node1));
                         }
                     }
                     createViewsFromTree(node1);
                 }
                 else
                 {
-                    node1 = tree.Next;
-                    if (tree.HasNext)
+                    node1 = strategyMgr.getSpecifiedTree().Next(tree);
+                    if (strategyMgr.getSpecifiedTree().HasNext(tree))
                     {
-                        if (node1.IsTop && !node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.brailleRepresentation.screenName.Equals(""))
+                        if (strategyMgr.getSpecifiedTree().IsTop(node1) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName.Equals(""))
                         {
-                            createScreen(node1.Data.brailleRepresentation.screenName);
+                            createScreen(strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName);
                         }
                         else
                         {
-                            if (!node1.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !node1.Data.properties.Equals(new GeneralProperties()) && node1.Data.brailleRepresentation.viewName != null && !node1.Data.brailleRepresentation.viewName.Equals("") && !node1.Data.brailleRepresentation.isGroupChild)
+                            if (!strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).properties.Equals(new GeneralProperties()) && strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.viewName != null && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.isGroupChild)
                             {
-                                createView(node1.Data);
+                                createView(strategyMgr.getSpecifiedTree().GetData(node1));
                             }
                         }
                     }
                     createViewsFromTree(node1);
                 }
             }
-            if(tree.Count == 1 && tree.Depth == -1){
-                if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+            if(strategyMgr.getSpecifiedTree().Count(tree)== 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1){
+                if (!strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()))
                 {
-                    if (tree.IsTop && !tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.brailleRepresentation.screenName.Equals(""))
+                    if (strategyMgr.getSpecifiedTree().IsTop(tree) && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName.Equals(""))
                     {
-                        createScreen(tree.Data.brailleRepresentation.screenName);
+                        createScreen(strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName);
                     }
                     else
                     {
-                        if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && !tree.Data.properties.Equals(new GeneralProperties()) && tree.Data.brailleRepresentation.viewName != null && !tree.Data.brailleRepresentation.viewName.Equals("") && !tree.Data.brailleRepresentation.isGroupChild)
+                        if (!strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(tree).properties.Equals(new GeneralProperties()) && strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.viewName != null && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.isGroupChild)
                         {
-                            createView(tree.Data);
+                            createView(strategyMgr.getSpecifiedTree().GetData(tree));
                         }
                     }
                 }
             }
-            if (!tree.HasChild)
+            if (!strategyMgr.getSpecifiedTree().HasChild(tree))
             {
                 node1 = tree;
-                if (tree.HasParent)
+                if (strategyMgr.getSpecifiedTree().HasParent(tree))
                 {
-                    node1.Remove();
+                    strategyMgr.getSpecifiedTree().Remove(node1);
                 }
             }
-            if (!tree.HasNext && !tree.HasParent)
+            if (!strategyMgr.getSpecifiedTree().HasNext(tree) && ! strategyMgr.getSpecifiedTree().HasParent(tree))
             {
-                if (tree.HasPrevious)
+                if (strategyMgr.getSpecifiedTree().HasPrevious(tree))
                 {
                     node1 = tree;
-                    node1.Remove();
+                    strategyMgr.getSpecifiedTree().Remove(node1);
                 }
             }
         }
@@ -915,8 +915,8 @@ namespace StrategyBrailleIO
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
             if (grantTrees.getBrailleTree() != null)
             {
-                List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
-                if (nodeList != null && nodeList.Count == 1 && nodeList[0].HasChild)
+                List<Object> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
+                if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
                 //if (osmElement.brailleRepresentation.groupelementsOfDiffrentTypes  != null)
                 {
                     List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
@@ -971,22 +971,22 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="parentBrailleTreeNode">gibt den Elternknoten an</param>
         /// <param name="templateObject">gibt das zu nutzende Template an</param>
-        private List<BrailleIOGuiElementRenderer.Groupelements> iteratedChildreen(ITreeStrategy<OSMElement.OSMElement> parentBrailleTreeNode)
+        private List<BrailleIOGuiElementRenderer.Groupelements> iteratedChildreen(Object parentBrailleTreeNode)
         {
             List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
-            if (parentBrailleTreeNode.HasChild)
+            if (strategyMgr.getSpecifiedTree().HasChild(parentBrailleTreeNode))
             {
-                parentBrailleTreeNode = parentBrailleTreeNode.Child;
-                childList.Add(osmSubelementToGroupelement(parentBrailleTreeNode.Data));
+                parentBrailleTreeNode = strategyMgr.getSpecifiedTree().Child(parentBrailleTreeNode);
+                childList.Add(osmSubelementToGroupelement(strategyMgr.getSpecifiedTree().GetData(parentBrailleTreeNode)));
             }
             else
             {
                 return null;
             }
-            while (parentBrailleTreeNode.HasNext)
+            while (strategyMgr.getSpecifiedTree().HasNext(parentBrailleTreeNode))
             {
-                parentBrailleTreeNode = parentBrailleTreeNode.Next;
-                childList.Add(osmSubelementToGroupelement(parentBrailleTreeNode.Data));
+                parentBrailleTreeNode = strategyMgr.getSpecifiedTree().Next(parentBrailleTreeNode);
+                childList.Add(osmSubelementToGroupelement(strategyMgr.getSpecifiedTree().GetData(parentBrailleTreeNode)));
             }
             return childList;
         }
@@ -1103,19 +1103,19 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
         /// <param name="steps">positiv entspricht Verschiebung nach rechts</param>
-        public void moveViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps)
+        public void moveViewRangHoricontal(Object viewNode, int steps)
         {
             //es muss aufgepasst werden, dass
-            BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
+            BrailleIOScreen screen = brailleIOMediator.GetView(strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.screenName) as BrailleIOScreen;
 
             BrailleIOViewRange viewRange;
-            if (viewNode.Data.properties.controlTypeFiltered.Equals("TextBox"))
+            if (strategyMgr.getSpecifiedTree().GetData(viewNode).properties.controlTypeFiltered.Equals("TextBox"))
             {
-                viewRange = screen.GetViewRange("_TextBoxText_" + viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+                viewRange = screen.GetViewRange("_TextBoxText_" + strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.viewName) as BrailleIOViewRange;
             }
             else
             {
-                viewRange = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+                viewRange = screen.GetViewRange(strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.viewName) as BrailleIOViewRange;
             }
             //groupView.SetXOffset(mx + groupView.GetXOffset()); 
             if (viewRange != null)
@@ -1130,18 +1130,18 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
         /// <param name="steps">positiv entspricht Verschiebung nach unten</param>
-        public void moveViewRangVertical(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps)
+        public void moveViewRangVertical(Object viewNode, int steps)
         {
             //es muss aufgepasst werden, dass
-            BrailleIOScreen screen = brailleIOMediator.GetView(viewNode.Data.brailleRepresentation.screenName) as BrailleIOScreen;
+            BrailleIOScreen screen = brailleIOMediator.GetView(strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.screenName) as BrailleIOScreen;
             BrailleIOViewRange viewRange;
-            if (viewNode.Data.properties.controlTypeFiltered.Equals("TextBox"))
+            if (strategyMgr.getSpecifiedTree().GetData(viewNode).properties.controlTypeFiltered.Equals("TextBox"))
             {
-                viewRange = screen.GetViewRange("_TextBoxText_" + viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+                viewRange = screen.GetViewRange("_TextBoxText_" + strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.viewName) as BrailleIOViewRange;
             }
             else
             {
-                viewRange = screen.GetViewRange(viewNode.Data.brailleRepresentation.viewName) as BrailleIOViewRange;
+                viewRange = screen.GetViewRange(strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.viewName) as BrailleIOViewRange;
             }
             //groupView.SetXOffset(mx + groupView.GetXOffset()); 
             viewRange.MoveVertical(steps);

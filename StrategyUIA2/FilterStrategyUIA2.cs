@@ -38,7 +38,7 @@ namespace StrategyUIA2
         /// </summary>
         /// <param name="hwnd">den handle der Anwendung an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
+        public Object filtering(IntPtr hwnd)
         {
             ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
@@ -53,9 +53,9 @@ namespace StrategyUIA2
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        private ITreeStrategy<OSMElement.OSMElement> filtering(AutomationElement automationElement, TreeScopeEnum treeScope, int depth)
+        private Object filtering(AutomationElement automationElement, TreeScopeEnum treeScope, int depth)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+            Object tree = getStrategyMgr().getSpecifiedTree().NewTree();
             if (automationElement == null)
             {
                 throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
@@ -71,7 +71,7 @@ namespace StrategyUIA2
                 case TreeScopeEnum.Descendants:
                     // selbe wie Children bloß alle Kindeskinder
                     filterChildren(automationElement, -1, ref tree);
-                   // strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref parentNode);
+                    // strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref parentNode);
                     break;
                 case TreeScopeEnum.Subtree:
                     filterSubtree(automationElement, ref tree);
@@ -90,11 +90,11 @@ namespace StrategyUIA2
                     setSpecialPropertiesOfFirstNode(ref tree);
                     strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredTree(ref tree);
                     List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
-                    FilterstrategiesOfTree.addFilterstrategyOfNode(tree.Child.Data.properties.IdGenerated, this.GetType(), ref filterstrategies);
+                    FilterstrategiesOfTree.addFilterstrategyOfNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated, this.GetType(), ref filterstrategies);
                     grantTrees.setFilterstrategiesOfNodes(filterstrategies);
                     break;
             }
-             
+
             return tree;
         }
 
@@ -107,10 +107,10 @@ namespace StrategyUIA2
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
-        {            
+        public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
+        {
             AutomationElement mainElement = deliverAutomationElementFromHWND(hwnd);
-            return filtering(mainElement, treeScope, depth);            
+            return filtering(mainElement, treeScope, depth);
         }
 
         /// <summary>
@@ -121,15 +121,17 @@ namespace StrategyUIA2
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
+        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
         {
             AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
             if (mainElement == null)
             {
                 throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
             }
-            ITreeStrategy<OSMElement.OSMElement> tree = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+            Object tree = getStrategyMgr().getSpecifiedTree().NewTree();
 
+          /*  UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+            uiaEvents.eventsUIA_withAutomationElement(mainElement);*/
             return filtering(mainElement, treeScope, depth);
         }
 
@@ -139,18 +141,18 @@ namespace StrategyUIA2
         /// <param name="element">gibt ein <code>AutomationElement</code> der zu filternden Anwendung an</param>
         /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe </param>
         /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterApplication(AutomationElement element, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterApplication(AutomationElement element, int depth, ref Object tree)
         {
             IntPtr mainAppHwdn = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(element.Current.ProcessId);
-            AutomationElement mainAppAutomationelement =  deliverAutomationElementFromHWND(mainAppHwdn);
+            AutomationElement mainAppAutomationelement = deliverAutomationElementFromHWND(mainAppHwdn);
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainAppAutomationelement);
-            ITreeStrategy<OSMElement.OSMElement> top  = tree.AddChild(osmElement);
+            Object top = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
             filterChildren(mainAppAutomationelement, -1, ref top);
         }
 
-        private void filterSubtree(AutomationElement element, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterSubtree(AutomationElement element, ref Object tree)
         {
             //ITreeStrategy<OSMElement.OSMElement> treeTop = parentNode.Copy();
             //filterElement(element, ref parentNode);
@@ -158,10 +160,10 @@ namespace StrategyUIA2
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(element);
-            ITreeStrategy<OSMElement.OSMElement> treeTop = tree.AddChild(osmElement);
+            Object treeTop = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
 
             filterChildren(element, -1, ref treeTop);
-            tree = treeTop.Root;
+            tree = strategyMgr.getSpecifiedTree().Root(treeTop);
         }
 
         /// <summary>
@@ -169,11 +171,11 @@ namespace StrategyUIA2
         /// </summary>
         /// <param name="mainElement">gibt das gewünschte <code>AutomationElement</code> an</param>
         /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterElement(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterElement(AutomationElement mainElement, ref Object tree)
         {
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainElement);
-            tree.AddChild(osmElement);
+            strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
         }
 
         /// <summary>
@@ -182,9 +184,9 @@ namespace StrategyUIA2
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Kinder gefiltert werden sollen</param>
         /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterChildren(AutomationElement mainElement, int depth, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterChildren(AutomationElement mainElement, int depth, ref Object tree)
         {
-           //TODO: oder auch über TreeWalker?
+            //TODO: oder auch über TreeWalker?
             AutomationElementCollection collection = mainElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             findChildrenOfNode(tree, collection, TreeScope.Children, depth);
         }
@@ -194,7 +196,7 @@ namespace StrategyUIA2
         /// </summary>
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die geschwister gefiltert werden sollen</param>
         /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterSibling(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterSibling(AutomationElement mainElement, ref Object tree)
         {
             //TreeWalker walker = TreeWalker.ControlViewWalker;
             TreeWalker walker = TreeWalker.ContentViewWalker;
@@ -209,16 +211,16 @@ namespace StrategyUIA2
         /// </summary>
         /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Eltern ermittelt werden sollen</param>
         /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterParents(AutomationElement mainElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void filterParents(AutomationElement mainElement, ref Object tree)
         {
             if (!(mainElement.Current.ControlType.LocalizedControlType).Equals("Fenster"))// TODO: Root bestimmen
             {
-               // TreeWalker walker = TreeWalker.ControlViewWalker;
+                // TreeWalker walker = TreeWalker.ControlViewWalker;
                 TreeWalker walker = TreeWalker.ContentViewWalker;
                 AutomationElement elementParent = walker.GetParent(mainElement);
                 addParentOfNode(elementParent, ref tree);
                 filterParents(elementParent, ref  tree);
-                
+
             }
         }
 
@@ -235,7 +237,7 @@ namespace StrategyUIA2
             GeneralProperties elementP = new GeneralProperties();
             try
             {
-            elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+                elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
             }
             catch (Exception a)
             {
@@ -243,7 +245,7 @@ namespace StrategyUIA2
             }
             try
             {
-            elementP.accessKeyFiltered = element.Current.AccessKey;
+                elementP.accessKeyFiltered = element.Current.AccessKey;
             }
             catch (Exception a)
             {
@@ -251,125 +253,141 @@ namespace StrategyUIA2
             }
             try
             {
-            elementP.autoamtionIdFiltered = element.Current.AutomationId;
+                elementP.autoamtionIdFiltered = element.Current.AutomationId;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (AutomationId) '{0}'", a.ToString());
             }
 
-            try {
-            if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+            try
             {
-                elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+                if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
+                {
+                    elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
                 }
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (BoundingRectangle) '{0}'", a.ToString());
             }
-            try {
-            elementP.classNameFiltered = element.Current.ClassName;
+            try
+            {
+                elementP.classNameFiltered = element.Current.ClassName;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
             }
-            try {
+            try
+            {
                 String tmp = element.Current.ControlType.ProgrammaticName;
-                String[] t =  tmp.Split(new String[]{"."}, StringSplitOptions.RemoveEmptyEntries);
+                String[] t = tmp.Split(new String[] { "." }, StringSplitOptions.RemoveEmptyEntries);
                 elementP.controlTypeFiltered = t[1];
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
             }
-            try {
-            elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            try
+            {
+                elementP.frameWorkIdFiltered = element.Current.FrameworkId;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (FrameworkId) '{0}'", a.ToString());
             }
-            try {
-            elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            try
+            {
+                elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (HasKeyboardFocus) '{0}'", a.ToString());
             }
-            try {
-            elementP.helpTextFiltered = element.Current.HelpText;
+            try
+            {
+                elementP.helpTextFiltered = element.Current.HelpText;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
             }
-            try {
-            elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
+            try
+            {
+                elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (NativeWindowHandle) '{0}'", a.ToString());
             }
-            try {
-            elementP.isContentElementFiltered = element.Current.IsContentElement;
+            try
+            {
+                elementP.isContentElementFiltered = element.Current.IsContentElement;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsContentElement) '{0}'", a.ToString());
             }
-            try {
-            elementP.isControlElementFiltered = element.Current.IsControlElement;
+            try
+            {
+                elementP.isControlElementFiltered = element.Current.IsControlElement;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsControlElement) '{0}'", a.ToString());
             }
-            try {
-            elementP.isEnabledFiltered = element.Current.IsEnabled;
+            try
+            {
+                elementP.isEnabledFiltered = element.Current.IsEnabled;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsEnabled) '{0}'", a.ToString());
             }
-            try {
-            elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            try
+            {
+                elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsKeyboardFocusable) '{0}'", a.ToString());
             }
-            try {
-            elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            try
+            {
+                elementP.isOffscreenFiltered = element.Current.IsOffscreen;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsOffscreen) '{0}'", a.ToString());
             }
-            try {
-            elementP.isPasswordFiltered = element.Current.IsPassword;
+            try
+            {
+                elementP.isPasswordFiltered = element.Current.IsPassword;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsPassword) '{0}'", a.ToString());
             }
-            try {
-            elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            try
+            {
+                elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsRequiredForForm) '{0}'", a.ToString());
             }
-            try {
-            elementP.itemStatusFiltered = element.Current.ItemStatus;
+            try
+            {
+                elementP.itemStatusFiltered = element.Current.ItemStatus;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ItemStatus) '{0}'", a.ToString());
             }
-            try {
-            elementP.itemTypeFiltered = element.Current.ItemType;
+            try
+            {
+                elementP.itemTypeFiltered = element.Current.ItemType;
             }
             catch (Exception a)
             {
@@ -383,8 +401,9 @@ namespace StrategyUIA2
             {
                 Console.WriteLine("Property: (runtime) '{0}'", a.ToString());
             }
-            try {
-            elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
+            try
+            {
+                elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
             }
             catch (Exception a)
             {
@@ -400,7 +419,7 @@ namespace StrategyUIA2
             }
             try
             {
-            elementP.processIdFiltered = element.Current.ProcessId;
+                elementP.processIdFiltered = element.Current.ProcessId;
             }
             catch (Exception a)
             {
@@ -429,14 +448,14 @@ namespace StrategyUIA2
                     properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
                 }
                 catch (System.NullReferenceException) { }
-                
+
             }
             object rangeValuePattern = null;
-            if(element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
+            if (element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
             {
                 /*
                  * Conditional Support: Edit, Progress Bar, Scroll Bar, Slider, Spinner
-                 */                
+                 */
                 RangeValue rangeValue = new RangeValue();
                 rangeValue.isReadOnly = (rangeValuePattern as RangeValuePattern).Current.IsReadOnly;
                 rangeValue.largeChange = (rangeValuePattern as RangeValuePattern).Current.LargeChange;
@@ -447,7 +466,7 @@ namespace StrategyUIA2
                 properties.rangeValue = rangeValue;
             }
             object togglePattern;
-            if(element.TryGetCurrentPattern(TogglePattern.Pattern, out togglePattern))
+            if (element.TryGetCurrentPattern(TogglePattern.Pattern, out togglePattern))
             {
                 ToggleState state = (togglePattern as TogglePattern).Current.ToggleState;
                 if (state == ToggleState.On) { properties.isToggleStateOn = true; }
@@ -473,22 +492,22 @@ namespace StrategyUIA2
         /// Setzt für den ersten Knoten spezielle Eigenschaften
         /// </summary>
         /// <param name="parentNode">gibt eine Referenz auf den bisherigen Baum an</param>
-        private void setSpecialPropertiesOfFirstNode(ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void setSpecialPropertiesOfFirstNode(ref Object tree)
         {
-            if (tree.HasChild)
+            if (strategyMgr.getSpecifiedTree().HasChild(tree))
             {
-                GeneralProperties prop = tree.Child.Data.properties;
-             //   prop.grantFilterStrategyFullName = this.GetType().FullName;
-             //   prop.grantFilterStrategyNamespace = this.GetType().Namespace;
+                GeneralProperties prop = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
+                //   prop.grantFilterStrategyFullName = this.GetType().FullName;
+                //   prop.grantFilterStrategyNamespace = this.GetType().Namespace;
                 Settings settings = new Settings();
                 prop.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
                 prop.moduleName = strategyMgr.getSpecifiedOperationSystem().getModulNameOfApplication(prop.nameFiltered);
                 prop.fileName = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByMainWindowTitle(prop.nameFiltered);
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                osm.brailleRepresentation = tree.Child.Data.brailleRepresentation;
-                osm.events = tree.Child.Data.events;
+                osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).brailleRepresentation;
+                osm.events = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).events;
                 osm.properties = prop;
-                tree.Child.Data = osm;
+                strategyMgr.getSpecifiedTree().SetData(strategyMgr.getSpecifiedTree().Child(tree), osm);
             }
         }
 
@@ -528,9 +547,9 @@ namespace StrategyUIA2
             }
             else
             {
-                if (grantTrees.getFilteredTree() != null && grantTrees.getFilteredTree().HasChild && grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered != IntPtr.Zero)
+                if (grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered != IntPtr.Zero)
                 {
-                    IntPtr hwnd = grantTrees.getFilteredTree().Child.Data.properties.hWndFiltered;
+                    IntPtr hwnd = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered;
                     //IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(strategyMgr.getFilteredTree().Child.Data.properties.hWndFiltered));
                     AutomationElement element = AutomationElement.FromHandle(hwnd);
                     au = element.FindFirst(TreeScope.Descendants, cond);
@@ -549,7 +568,7 @@ namespace StrategyUIA2
         /// <param name="osmElementOfFirstNodeOfSubtree">gibt das (alt) OSM-Element an, von dem die neue Filterung ausgeht</param>
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public ITreeStrategy<OSMElement.OSMElement> updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
+        public Object updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
         {
             AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
             if (au != null)
@@ -566,15 +585,15 @@ namespace StrategyUIA2
         /// <param name="top">gibt den Namen des Kindelementes an</param>
         /// <param name="collection">gibt die AutomationElement-Collection an</param>
         /// <param name="depth">gibt an wie tief der Suche ausgehend vom Root-Element an.</param>
-        private void findChildrenOfNode(ITreeStrategy<OSMElement.OSMElement> top, AutomationElementCollection collection, TreeScope treeScorpe, int depth)
+        private void findChildrenOfNode(Object top, AutomationElementCollection collection, TreeScope treeScorpe, int depth)
         {
             foreach (AutomationElement element in collection)
             {
-                if (top.Depth < depth || depth <= -1)
+                if (strategyMgr.getSpecifiedTree().Depth(top) < depth || depth <= -1)
                 {
                     OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
                     osmElement.properties = setProperties(element);
-                    ITreeStrategy<OSMElement.OSMElement> node = top.AddChild(osmElement);
+                    Object node = strategyMgr.getSpecifiedTree().AddChild(top, osmElement);
 
                     AutomationElementCollection c = element.FindAll(treeScorpe, Condition.TrueCondition);
                     findChildrenOfNode(node, c, treeScorpe, depth);
@@ -604,8 +623,9 @@ namespace StrategyUIA2
         {
             //window = WindowFromPoint(cp);
             AutomationElement element;
-            try{
-                element =  AutomationElement.FromHandle(hwnd);
+            try
+            {
+                element = AutomationElement.FromHandle(hwnd);
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -634,51 +654,51 @@ namespace StrategyUIA2
 
         public OSMElement.OSMElement setOSMElement(int pointX, int pointY)
         {
-            
+
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
 
             osmElement.properties = setProperties(mouseElement);
-            
+
             //Id setzen
-            List<ITreeStrategy<OSMElement.OSMElement>> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), osmElement.properties, OperatorEnum.and);
+            List<Object> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), osmElement.properties, OperatorEnum.and);
             if (node.Count == 1)
             {
-                return node[0].Data;
+                return strategyMgr.getSpecifiedTree().GetData(node[0]);
             }
             else
             {
                 Debug.WriteLine("Element im Baum nicht gefunden");
                 return osmElement;
             }
-            
+
         }
 
-       /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
-        {
-            //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
-            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
+        /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
+         {
+             //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
+             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
 
-            OSMElement.OSMElement filteredSubtree = new OSMElement.OSMElement();
+             OSMElement.OSMElement filteredSubtree = new OSMElement.OSMElement();
 
-            filteredSubtree.properties = setProperties(mouseElement);
+             filteredSubtree.properties = setProperties(mouseElement);
             
-            //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)filteredSubtree.properties.boundingRectangleFiltered.TopLeft.X;
-            y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
-            int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
-            int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
-            int[] runtimes= mouseElement.GetRuntimeId();
-            height = y2 - y;
-            width = x2 - x;
+             //Rect mouseRect = mouseElement.Current.BoundingRectangle;
+             x = (int)filteredSubtree.properties.boundingRectangleFiltered.TopLeft.X;
+             y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
+             int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
+             int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
+             int[] runtimes= mouseElement.GetRuntimeId();
+             height = y2 - y;
+             width = x2 - x;
           
-            Console.WriteLine("hier x: " + x);
-            Console.WriteLine("hier y: " + y);
-            Console.WriteLine("hier w: " + width);
-            Console.WriteLine("hier h: " + height);
-            Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
-        }*/
+             Console.WriteLine("hier x: " + x);
+             Console.WriteLine("hier y: " + y);
+             Console.WriteLine("hier w: " + width);
+             Console.WriteLine("hier h: " + height);
+             Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
+         }*/
 
         /// <summary>
         /// Ermittelt das zugehörige AutomationElement eines Knotens aus dem gefilterten Baum
@@ -686,9 +706,9 @@ namespace StrategyUIA2
         /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
         /// <param name="rootElement"></param> --- hier erst ermitteln
         /// <returns>das zugehörige AutomationElement des Knotens</returns>
-        private AutomationElement getAutomationElementFromFilteredTree(ITreeStrategy<OSMElement.OSMElement> node, AutomationElement rootElement)
+        private AutomationElement getAutomationElementFromFilteredTree(Object node, AutomationElement rootElement)
         {
-            Condition condition = setPropertiesCondition(node.Data.properties);
+            Condition condition = setPropertiesCondition(strategyMgr.getSpecifiedTree().GetData(node).properties);
             AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
             if (foundedAutomationElements.Count == 0)
             {
@@ -708,15 +728,15 @@ namespace StrategyUIA2
         /// </summary>
         /// <param name="parentElement">gibt das neue Elternelement an</param>
         /// <param name="parentNode">gibt den "alten" Baum an</param>
-        private void addParentOfNode(AutomationElement parentElement, ref ITreeStrategy<OSMElement.OSMElement> tree)
+        private void addParentOfNode(AutomationElement parentElement, ref Object tree)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree2 = getStrategyMgr().getSpecifiedTree().NewNodeTree();
+            Object tree2 = getStrategyMgr().getSpecifiedTree().NewTree();
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(parentElement);
-            ITreeStrategy<OSMElement.OSMElement> node = tree2.AddChild(osmElement);
-            node.AddChild(tree);
-            tree.Clear();
-            tree.AddChild(tree2);
+            Object node = strategyMgr.getSpecifiedTree().AddChild(tree2, osmElement);
+            strategyMgr.getSpecifiedTree().AddChild(node, tree);
+            strategyMgr.getSpecifiedTree().Clear(tree);
+            strategyMgr.getSpecifiedTree().AddChild(tree, tree2);
         }
 
         /// <summary>
@@ -733,7 +753,7 @@ namespace StrategyUIA2
             #endregion
             if (properties.localizedControlTypeFiltered != null)
             {
-               resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.localizedControlTypeFiltered), resultCondition);
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.localizedControlTypeFiltered), resultCondition);
             }
             if (properties.acceleratorKeyFiltered != null)
             {

@@ -33,7 +33,7 @@ namespace TemplatesUi
             if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
             createUiElementsWitheNoDependency(@pathToXml);
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
-            ITreeStrategy<OSMElement.OSMElement> filteredTreeCopy = grantTrees.getFilteredTree().Copy();
+            Object filteredTreeCopy = strategyMgr.getSpecifiedTree().Copy(grantTrees.getFilteredTree());
             iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
             createUiElementsAllScreens(pathToXml);
             createUiElementsNavigationbarScreens(pathToXml);
@@ -53,22 +53,22 @@ namespace TemplatesUi
              * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
              * ergänzen
              */
-            List<ITreeStrategy<OSMElement.OSMElement>> navigationbars = strategyMgr.getSpecifiedTreeOperations().getListOfNavigationbars();
+            List<Object> navigationbars = strategyMgr.getSpecifiedTreeOperations().getListOfNavigationbars();
             List<String> screensForShowNavigationbar = new List<string>();
             foreach (ITreeStrategy<OSMElement.OSMElement> nbar in navigationbars)
             {                
-                if (nbar.HasChild)
+                if (strategyMgr.getSpecifiedTree().HasChild(nbar))
                 {
                     strategyMgr.getSpecifiedTreeOperations().removeChildNodeInBrailleTree(nbar);
-                    strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(nbar.Data);
+                    strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(nbar));
                 }
-                screensForShowNavigationbar.Add(nbar.Data.brailleRepresentation.screenName);
+                screensForShowNavigationbar.Add(strategyMgr.getSpecifiedTree().GetData(nbar).brailleRepresentation.screenName);
             }
             templateObject.Screens = screensForShowNavigationbar;
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElementsStatic = groupElementsStatic;
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.getFilteredTree();
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
             OSMElement.OSMElement osm = templateObject.osm;
@@ -83,18 +83,18 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="pathToXml">gibt den Pfad zum Template der Navigationsleiste an</param>
         /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
-        public void addNavigationbarForScreen(string pathToXml, ITreeStrategy<OSMElement.OSMElement> subtree)
+        public void addNavigationbarForScreen(string pathToXml, Object subtree)
         {
             TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
             List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
             List<String> screenNavi = new List<string>();
-            screenNavi.Add(subtree.Data.brailleRepresentation.screenName);
+            screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
             templateObject.Screens = screenNavi;
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElementsStatic = groupElementsStatic;
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.getFilteredTree();
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
             OSMElement.OSMElement osm = templateObject.osm;
@@ -185,7 +185,7 @@ namespace TemplatesUi
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElementsStatic = groupElementsStatic;
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.getFilteredTree();
 
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
@@ -201,22 +201,22 @@ namespace TemplatesUi
         /// Iterriert über den gefilterten Baum und ruft für jedes UI-Element die Methode <see cref="createElementType"/> auf
         /// </summary>
         /// <param name="parentNode">gibt den gefilterten Baum an</param>
-        private void iteratedTreeForTemplate(ref ITreeStrategy<OSMElement.OSMElement> tree, String pathToXml)
+        private void iteratedTreeForTemplate(ref Object tree, String pathToXml)
         {
-            ITreeStrategy<OSMElement.OSMElement> node1;
+            Object node1;
             //Falls die Baumelemente Kinder des jeweiligen Elements sind
-            while ((tree.HasChild || tree.HasNext) && !(tree.Count == 1 && tree.Depth == -1))
+            while ((strategyMgr.getSpecifiedTree().HasChild(tree) || strategyMgr.getSpecifiedTree().HasNext(tree)) && !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
             {
-                if (tree.HasChild)
+                if (strategyMgr.getSpecifiedTree().HasChild(tree))
                 {
-                    node1 = tree.Child;
+                    node1 = strategyMgr.getSpecifiedTree().Child(tree);
                     createElementType(ref node1, pathToXml);
                     iteratedTreeForTemplate(ref node1, pathToXml);
                 }
                 else
                 {
-                    node1 = tree.Next;
-                    if (tree.HasNext)
+                    node1 = strategyMgr.getSpecifiedTree().Next(tree);
+                    if (strategyMgr.getSpecifiedTree().HasNext(tree))
                     {
                         //createElementType(ref parentNode);
                         createElementType(ref node1, pathToXml);
@@ -224,28 +224,28 @@ namespace TemplatesUi
                     iteratedTreeForTemplate(ref node1, pathToXml);
                 }
             }
-            if (tree.Count == 1 && tree.Depth == -1)
+            if (strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree)== -1)
             {
-                if (!tree.Data.brailleRepresentation.Equals(new BrailleRepresentation()))
+                if (!strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()))
                 {
                     createElementType(ref tree, pathToXml);
                 }
             }
-            if (!tree.HasChild)
+            if (!strategyMgr.getSpecifiedTree().HasChild(tree))
             {
                 
-                if (tree.HasParent)
+                if (strategyMgr.getSpecifiedTree().HasParent(tree))
                 {
                     node1 = tree;
-                    node1.Remove();
+                    strategyMgr.getSpecifiedTree().Remove(node1);
                 }
             }
-            if (!tree.HasNext && !tree.HasParent)
+            if (!strategyMgr.getSpecifiedTree().HasNext(tree) && !strategyMgr.getSpecifiedTree().HasParent(tree))
             {
-                if (tree.HasPrevious)
+                if (strategyMgr.getSpecifiedTree().HasPrevious(tree))
                 {
                     node1 = tree;
-                    node1.Remove();
+                    strategyMgr.getSpecifiedTree().Remove(node1);
                 }
             }
         }
@@ -255,10 +255,10 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="subtree">gibt den Teilbaum mit dem element, auf welches das Template angewendet werden soll an</param>
         /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
-        private void createElementType(ref ITreeStrategy<OSMElement.OSMElement> subtree, String pathToXml)
+        private void createElementType(ref Object subtree, String pathToXml)
         {
             //falls zu einem UI-Elemente ein Teilbaum gehört, so wird der Baum entsprechend gekürzt => TODO
-            String controlType = subtree.Data.properties.controlTypeFiltered;
+            String controlType = strategyMgr.getSpecifiedTree().GetData(subtree).properties.controlTypeFiltered;
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Elements("UiElement")
@@ -420,7 +420,7 @@ namespace TemplatesUi
                     generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
                 }
 
-                ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree();
+                Object tree = strategyMgr.getSpecifiedTree().NewTree();
                 generalUiInstance.createUiElementFromTemplate(tree, templateObject);
             }
         }
@@ -441,14 +441,14 @@ namespace TemplatesUi
             foreach (XElement e in uiElement)
             {
                 TempletUiObject templateObject = xmlUiElementToTemplateUiObject(e);
-                ITreeStrategy<OSMElement.OSMElement> tree = strategyMgr.getSpecifiedTree().NewNodeTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
+                Object tree = strategyMgr.getSpecifiedTree().NewTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
                 if (templateObject.osm.brailleRepresentation.fromGuiElement!= null && !templateObject.osm.brailleRepresentation.fromGuiElement.Equals(""))
                 {
                     // elementE im gefilterten Baum suchen
                     GeneralProperties properties = new GeneralProperties();
                     properties.controlTypeFiltered = e.Attribute("name").Value;
-                    List<ITreeStrategy<OSMElement.OSMElement>> treefilteredElements = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
-                    foreach (ITreeStrategy<OSMElement.OSMElement> t in treefilteredElements)
+                    List<Object> treefilteredElements = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
+                    foreach (Object t in treefilteredElements)
                     {
                         tree = t;
                         iterateScreensForTemplate(screenList, ref tree, templateObject);
@@ -469,7 +469,7 @@ namespace TemplatesUi
         /// <param name="tree">gibt den gefilterten Baum an</param>
         /// <param name="templateObject">gibt das Template-Objekt an</param>
         /// <param name="typeOfTemplate">gibt den Typ des zu nutzenden Templates an</param>
-        private void iterateScreensForTemplate(List<String> screenList, ref ITreeStrategy<OSMElement.OSMElement> tree, TempletUiObject templateObject)
+        private void iterateScreensForTemplate(List<String> screenList, ref Object tree, TempletUiObject templateObject)
         {
             if (screenList == null) { return; }
             ATemplateUi generalUiInstance;
@@ -493,7 +493,7 @@ namespace TemplatesUi
         }
 
 
-        public void createUiElementFromTemplate(GRANTManager.Interfaces.ITreeStrategy<OSMElement.OSMElement> filteredSubtree, GRANTManager.Interfaces.TempletUiObject templateObject, String brailleNodeId = null)
+        public void createUiElementFromTemplate(Object filteredSubtree, GRANTManager.Interfaces.TempletUiObject templateObject, String brailleNodeId = null)
         {
             Type typeOfTemplate = Type.GetType(templateObject.osm.brailleRepresentation.templateFullName + ", " + templateObject.osm.brailleRepresentation.templateNamspace);
             if (typeOfTemplate != null)

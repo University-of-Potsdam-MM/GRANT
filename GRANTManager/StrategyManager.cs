@@ -196,7 +196,7 @@ namespace GRANTManager
         {
             try
             {
-                treeName.NewNodeTree();
+                treeName.NewTree();
                 specifiedTree = treeName;
             }
             catch (Exception e)

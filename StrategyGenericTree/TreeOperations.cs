@@ -22,6 +22,7 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Diagnostics;
 using TemplatesUi;
+using Common;
 
 namespace StrategyGenericTree
 {
@@ -33,7 +34,7 @@ namespace StrategyGenericTree
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
 
-
+        /*
         #region Print
         /// <summary>
         /// Gibt alle Knoten eines Baumes auf der Konsole aus.
@@ -209,7 +210,7 @@ namespace StrategyGenericTree
         }
         #endregion
         #endregion
-
+        */
         #region search
         ///todo treeKlasse enthält eine Methode namens contains, ist diese in suche nutzbar?  -> Nein, da hier nicht nach einem Element im Baum gesucht werden soll, wo alle Eigenschaften übereinstimmen, sondern nur einige (die anderen haben sich in der zwischenzeit geändert)
         /// <summary>
@@ -219,16 +220,16 @@ namespace StrategyGenericTree
         /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
         /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
-        public List<ITreeStrategy<T>> searchProperties(ITreeStrategy<T> tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper)
+        public List<Object> searchProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper)
         {//TODO: hier fehlen noch viele Eigenschaften
             //TODO: was passiert, wenn T nicht vom Typ GeneralProperties ist?
-            if (!(tree is ITreeStrategy<OSMElement.OSMElement>))
+           /* if (!(tree is ITreeStrategy<OSMElement.OSMElement>))
             {
                 throw new InvalidOperationException("Falscher Baum-Type!");
-            }
+            }*/
            // GeneralProperties generalProperties = (GeneralProperties)Convert.ChangeType(properties, typeof(GeneralProperties));
             //printProperties(generalProperties);
-            List<INode<OSMElement.OSMElement>> result = new List<INode<OSMElement.OSMElement>>();
+            List<Object> result = new List<Object>();
 
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
             {
@@ -263,13 +264,13 @@ namespace StrategyGenericTree
                     }
                 }
             }
-            List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
+          /*  List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
             //printNodeList(result2);
             if (result2.Count == 0)
             {
                 Debug.WriteLine("");
-            }
-            return result2;
+            }*/
+            return result;
         }
 
         /// <summary>
@@ -278,9 +279,9 @@ namespace StrategyGenericTree
         /// <param name="idGenereted">gibt die generierte Id des Knotens an</param>
         /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
-        public List<ITreeStrategy<T>> getAssociatedNodeList(String idGenereted, ITreeStrategy<T> tree)
+        public List<Object> getAssociatedNodeList(String idGenereted, Object tree)
         {
-            List<ITreeStrategy<T>> result = new List<ITreeStrategy<T>>();
+            List<Object> result = new List<Object>();
             if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
             {
                 throw new InvalidOperationException("Falscher Baum-Typ");
@@ -292,7 +293,7 @@ namespace StrategyGenericTree
                 //Console.WriteLine("ID = {0}", node.Data.properties.IdGenerated);
                 if (propertieIdGenerated)
                 {
-                    result.Add((ITreeStrategy<T>)node);
+                    result.Add(node);
                 }
             }
             //printNodeList(result);
@@ -316,7 +317,7 @@ namespace StrategyGenericTree
         /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
         /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>zugehöriger Knoten</returns>
-        private OSMElement.OSMElement getAssociatedNodeElement(String idGenerated, ITreeStrategy<OSMElement.OSMElement> tree)
+        private OSMElement.OSMElement getAssociatedNodeElement(String idGenerated, Object tree)
         {
             
             if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
@@ -340,7 +341,7 @@ namespace StrategyGenericTree
         /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
         /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
         /// <returns>zugehöriger Knoten</returns>
-        private ITreeStrategy<OSMElement.OSMElement> getAssociatedNode(String idGenerated, ITreeStrategy<OSMElement.OSMElement> tree)
+        private Object getAssociatedNode(String idGenerated, Object tree)
         {
 
             if (!(tree.GetType().BaseType == typeof(NodeTree<OSMElement.OSMElement>)))
@@ -351,10 +352,10 @@ namespace StrategyGenericTree
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(idGenerated))
                 {
-                    return (ITreeStrategy<OSMElement.OSMElement>)node;
+                    return node;
                 }
             }
-            return default(ITreeStrategy<OSMElement.OSMElement>);
+            return null;
 
         }
 
@@ -380,15 +381,15 @@ namespace StrategyGenericTree
                     break;
                 }
             }*/
-            List<ITreeStrategy<OSMElement.OSMElement>> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
+            List<Object> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
             if (node.Count == 1)
             {
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                osm.brailleRepresentation = node[0].Data.brailleRepresentation;
-                osm.events = node[0].Data.events;
-                properties.IdGenerated = node[0].Data.properties.IdGenerated;
+                osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(node[0]).brailleRepresentation;
+                osm.events = strategyMgr.getSpecifiedTree().GetData(node[0]).events;
+                properties.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node[0]).properties.IdGenerated;
                 osm.properties = properties;
-                node[0].Data = osm;
+                strategyMgr.getSpecifiedTree().SetData(node[0], osm);
                 return;
             }
             Debug.WriteLine("TODO");
@@ -423,8 +424,9 @@ namespace StrategyGenericTree
         /// <param name="element">das geänderte Element für die Braille-Darstellung</param>
         private void changeBrailleRepresentation(ref OSMElement.OSMElement element)
         {
-            ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.getBrailleTree();
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)brailleTree).All.Nodes)
+            Object brailleTree = grantTrees.getBrailleTree();
+            if (!brailleTree.GetType().BaseType.Equals(typeof( NodeTree<OSMElement.OSMElement>))) { return; }
+            foreach (INode<OSMElement.OSMElement> node in ((NodeTree<OSMElement.OSMElement>)brailleTree).All.Nodes)
             {
                 if (node.Data.properties.IdGenerated != null && node.Data.properties.IdGenerated.Equals(element.properties.IdGenerated))
                 {
@@ -475,11 +477,11 @@ namespace StrategyGenericTree
             }
             //OSMElement.OSMElement associatedNode = getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
 
-            List<ITreeStrategy<OSMElement.OSMElement>> associatedNodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
-            if (associatedNodeList != null && associatedNodeList.Count == 1 && associatedNodeList[0].HasChild)
+            List<Object> associatedNodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
+            if (associatedNodeList != null && associatedNodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(associatedNodeList[0]))
             {
                 //die Infos ob eine Checkbox ausgewählt ist stehen (zumindest bei meiner Beispielanwendung) im Kindelement
-                return associatedNodeList[0].Child.Data.properties.isToggleStateOn != null ? (bool) associatedNodeList[0].Child.Data.properties.isToggleStateOn : false;
+                return strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(associatedNodeList[0])).properties.isToggleStateOn != null ? (bool) strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(associatedNodeList[0])).properties.isToggleStateOn : false;
             }
             //return associatedNode.properties.isToggleStateOn != null ? (bool)associatedNode.properties.isToggleStateOn : false ;
             return false;
@@ -560,7 +562,7 @@ namespace StrategyGenericTree
         {
             if (grantTrees.getBrailleTree() == null)
             {
-                grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewNodeTree());
+                grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewTree());
             }
           
             //prüfen, ob der Knoten schon vorhanden ist
@@ -585,9 +587,11 @@ namespace StrategyGenericTree
                 return null;
             }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree();
+            Object tree = grantTrees.getBrailleTree();
+            Type t = grantTrees.getBrailleTree().GetType();
+            if (!grantTrees.getBrailleTree().GetType().BaseType.Equals(typeof(NodeTree<OSMElement.OSMElement>))) { return null; }
           //  foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes)
-            foreach(INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).DirectChildren.Nodes)
+            foreach(INode<OSMElement.OSMElement> node in ((NodeTree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).DirectChildren.Nodes)
             {   //ermittelt an welchen Screen-Knoten die View angehangen werden soll
                 if (!node.Data.brailleRepresentation.Equals(new BrailleRepresentation()) && node.Data.brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
                 {
@@ -605,18 +609,18 @@ namespace StrategyGenericTree
                         // es müssen von diesem Screen-Zweig alle Kinder durchsucht werden um die view mit der parentId zu finden
                         if (node.HasChild)
                         {
-                            ITreeStrategy<OSMElement.OSMElement>  nodeScreen = node.Child;
-                            if (nodeScreen.Data.properties.IdGenerated.Equals(parentId))
+                            Object nodeScreen = node.Child;
+                            if (strategyMgr.getSpecifiedTree().GetData(nodeScreen).properties.IdGenerated.Equals(parentId))
                             {
-                                nodeScreen.AddChild(brailleNodeWithId);
+                                strategyMgr.getSpecifiedTree().AddChild(nodeScreen, brailleNodeWithId);
                                 return prop.IdGenerated;
                             }
-                            while (nodeScreen.HasNext)
+                            while (strategyMgr.getSpecifiedTree().HasNext( nodeScreen))
                             {
-                                nodeScreen = nodeScreen.Next;
-                                if (nodeScreen.Data.properties.IdGenerated.Equals(parentId))
+                                nodeScreen = strategyMgr.getSpecifiedTree().Next(nodeScreen);
+                                if (strategyMgr.getSpecifiedTree().GetData(nodeScreen).properties.IdGenerated.Equals(parentId))
                                 {
-                                    nodeScreen.AddChild(brailleNodeWithId);
+                                    strategyMgr.getSpecifiedTree().AddChild(nodeScreen, brailleNodeWithId);
                                     return prop.IdGenerated;
                                 }
                             }
@@ -642,32 +646,32 @@ namespace StrategyGenericTree
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
             osmScreen.brailleRepresentation = brailleScreen;
-            if (!grantTrees.getBrailleTree().Contains(osmScreen)) { return false; }
-            ITreeStrategy<OSMElement.OSMElement> treeCopy = grantTrees.getBrailleTree().Copy();
-            if (!treeCopy.HasChild) { return false; }
-            treeCopy = treeCopy.Child;
+            if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
+            Object treeCopy = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
+            if (! strategyMgr.getSpecifiedTree().HasChild(treeCopy)) { return false; }
+            treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
             bool hasNext = true;
             do
             {
-                if (treeCopy.Data.brailleRepresentation.screenName.Equals(screenName))
+                if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.screenName.Equals(screenName))
                 {
                     
                     //TODO: alle Kinder untersuchen
-                    if (treeCopy.HasChild)
+                    if (strategyMgr.getSpecifiedTree().HasChild(treeCopy))
                     {
-                        treeCopy = treeCopy.Child;
-                        if (treeCopy.Data.brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
-                        while (treeCopy.HasNext)
+                        treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
+                        if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
+                        while (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
                         {
-                            treeCopy = treeCopy.Next;
-                            if (treeCopy.Data.brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
+                            treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
+                            if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
                         }
                     }
                     return false;
                 }
-                if (treeCopy.HasNext)
+                if(strategyMgr.getSpecifiedTree().HasNext(treeCopy))
                 {
-                    treeCopy = treeCopy.Next;
+                    treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
                     hasNext = true;
                 }
                 else
@@ -696,9 +700,9 @@ namespace StrategyGenericTree
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
             osmScreen.brailleRepresentation = brailleScreen;
-            if (!grantTrees.getBrailleTree().Contains(osmScreen))
+            if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen))
             {
-                grantTrees.getBrailleTree().AddChild(osmScreen);
+                strategyMgr.getSpecifiedTree().AddChild(grantTrees.getBrailleTree(), osmScreen);
             }
         }
 
@@ -722,7 +726,7 @@ namespace StrategyGenericTree
                 Console.WriteLine("Der Knoten ist nicht vorhanden!");
                 return;
             }
-            grantTrees.getBrailleTree().Remove(nodeToRemove);
+            strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), nodeToRemove);
             
         }
 
@@ -730,23 +734,23 @@ namespace StrategyGenericTree
         /// Entfernt alle Kinder des Knotens, aber nicht den Knoten selbst
         /// </summary>
         /// <param name="parentSubtree">gibt den Teilbaum an, bei dem alle Kinder entfernt werden sollen</param>
-        public void removeChildNodeInBrailleTree(ITreeStrategy<OSMElement.OSMElement> parentSubtree)
+        public void removeChildNodeInBrailleTree(Object parentSubtree)
         {
-            if (parentSubtree != null && parentSubtree.HasChild && grantTrees.getBrailleTree() != null)
+            if (parentSubtree != null && strategyMgr.getSpecifiedTree().HasChild(parentSubtree) && grantTrees.getBrailleTree() != null)
             {
                 List<OSMElement.OSMElement> listToRemove = new List<OSMElement.OSMElement>();
-                ITreeStrategy<OSMElement.OSMElement> childeens = parentSubtree.Child;
+                Object childeens = strategyMgr.getSpecifiedTree().Child(parentSubtree);
                 //grantTrees.getBrailleTree().Remove(childeens.Data);
-                listToRemove.Add(childeens.Data);
-                while (childeens.HasNext)
+                listToRemove.Add(strategyMgr.getSpecifiedTree().GetData(childeens));
+                while (strategyMgr.getSpecifiedTree().HasNext(childeens))
                 {
-                    childeens = childeens.Next;
+                    childeens = strategyMgr.getSpecifiedTree().Next(childeens);
                     //grantTrees.getBrailleTree().Remove(childeens.Data);
-                    listToRemove.Add(childeens.Data);
+                    listToRemove.Add(strategyMgr.getSpecifiedTree().GetData(childeens));
                 }
                 foreach (OSMElement.OSMElement osm in listToRemove)
                 {
-                    grantTrees.getBrailleTree().Remove(osm);
+                    strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), osm);
                 }
             }
         }
@@ -758,13 +762,13 @@ namespace StrategyGenericTree
         /// <param name="hwndNew"></param>
         public void updateFilteredTree(IntPtr hwndNew)
         {
-            ITreeStrategy<OSMElement.OSMElement> treeLoaded = grantTrees.getFilteredTree().Copy();
+            Object treeLoaded =  strategyMgr.getSpecifiedTree().Copy(grantTrees.getFilteredTree());
 
-            ITreeStrategy<OSMElement.OSMElement> treeNew = strategyMgr.getSpecifiedFilter().filtering(hwndNew, TreeScopeEnum.Application, -1);
+            Object treeNew = strategyMgr.getSpecifiedFilter().filtering(hwndNew, TreeScopeEnum.Application, -1);
             grantTrees.setFilteredTree(treeNew);
 
-            if (treeNew.Equals(strategyMgr.getSpecifiedTree().NewNodeTree()) || !treeNew.HasChild) { throw new Exception("Anwendung kann nicht neu gefiltert werden."); }
-            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes());
+            if (treeNew.Equals(strategyMgr.getSpecifiedTree().NewTree()) || ! strategyMgr.getSpecifiedTree().HasChild(treeNew)) { throw new Exception("Anwendung kann nicht neu gefiltert werden."); }
+            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
             foreach (FilterstrategyOfNode<String, String, String> nodeStrategy in grantTrees.getFilterstrategiesOfNodes())
             {
                 //ersten Knoten ausschließen -> wurde mit der richtigen Strategy gefiltert
@@ -797,9 +801,9 @@ namespace StrategyGenericTree
         /// <param name="subTree">gibt den Teilbaum an</param>
         /// <param name="idOfFirstNode">gibt die Id des esten Knotens des Teilbaumes an</param>
         /// <returns>die Id des Elternknotens des Teilbaumes oder <c>null</c></returns>
-        public String changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree, String idOfFirstNode)
+        public String changeSubTreeOfFilteredTree(Object subTree, String idOfFirstNode)
         {
-            if (subTree == strategyMgr.getSpecifiedTree().NewNodeTree() || subTree.HasChild == false) { Debug.WriteLine("Keine Elemente im Teilbaum!"); return null; }
+            if (subTree == strategyMgr.getSpecifiedTree().NewTree() || strategyMgr.getSpecifiedTree().HasChild(subTree) == false) { Debug.WriteLine("Keine Elemente im Teilbaum!"); return null; }
             if (grantTrees.getFilteredTree() == null) { Debug.WriteLine("Kein Baum Vorhanden!"); return null; }
             if (idOfFirstNode == null || idOfFirstNode.Equals("")) { Debug.WriteLine("Keine Id des ersten Knotens im Teilbaum vorhanden!"); return null; }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getFilteredTree()).All.Nodes)
@@ -811,30 +815,29 @@ namespace StrategyGenericTree
                     {
                       //  if (subTree.Child.HasNext || subTree.Child.HasChild)
                         {
-                            ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
+                            Object parentNode = strategyMgr.getSpecifiedTree().Parent(node);
 
                             if (node.BranchIndex == 0)
                             {
-                                
-                                grantTrees.getFilteredTree().Remove(node.Data);
-                                parentNode.InsertChild(subTree);
+                               strategyMgr.getSpecifiedTree().Remove(grantTrees.getFilteredTree(), node.Data);
+                                strategyMgr.getSpecifiedTree().InsertChild(parentNode, subTree);
                             }
                             else
                             {
                                 if (node.BranchIndex + 1 == node.BranchCount)
                                 {
                                     //ITreeStrategy<OSMElement.OSMElement> parentNode = node.Parent;
-                                    grantTrees.getFilteredTree().Remove(node.Data);
-                                    parentNode.AddChild(subTree);
+                                    strategyMgr.getSpecifiedTree().Remove(grantTrees.getFilteredTree(), node.Data);
+                                    strategyMgr.getSpecifiedTree().AddChild(parentNode, subTree);
                                 }
                                 else
                                 {
-                                    ITreeStrategy<OSMElement.OSMElement> previousNode = node.Previous;
-                                    grantTrees.getFilteredTree().Remove(node.Data);
-                                    previousNode.InsertNext(subTree);
+                                    Object previousNode = node.Previous;
+                                    strategyMgr.getSpecifiedTree().Remove(grantTrees.getFilteredTree(),node.Data);
+                                    strategyMgr.getSpecifiedTree().InsertNext(previousNode,subTree);
                                 }
                             }
-                            return parentNode.Data.properties.IdGenerated;
+                            return strategyMgr.getSpecifiedTree().GetData(parentNode).properties.IdGenerated;
                         }
                         
                     }
@@ -848,7 +851,7 @@ namespace StrategyGenericTree
         /// Generiert für den kompletten Baum die Ids
         /// </summary>
         /// <param name="parentNode">gibt eine referenz zu dem Baum an</param>
-        public void generatedIdsOfFilteredTree(ref ITreeStrategy<OSMElement.OSMElement> tree)
+        public void generatedIdsOfFilteredTree(ref Object tree)
         {
             Console.WriteLine("===== DEBUG BEGINN - HASH ======");
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)tree).All.Nodes)
@@ -874,10 +877,10 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="parentNode">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
-        public void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent)
+        public void generatedIdsOfFilteredSubtree(ref Object tree, String idOfParent)
         {
             //getFilteredTreeOsmElementById(idOfParent);
-            ITreeStrategy<OSMElement.OSMElement> subtree =getAssociatedNode(idOfParent, tree);
+            Object subtree =getAssociatedNode(idOfParent, tree);
             if (subtree == null) { return; }
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree).All.Nodes)
             {
@@ -890,7 +893,7 @@ namespace StrategyGenericTree
                     node.Data = osm;
                 }
             }
-            tree = subtree.Root;
+            tree = strategyMgr.getSpecifiedTree().Root(subtree);
         }
 
         /// <summary>
@@ -974,15 +977,15 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
         /// <param name="subtree">gibt den Teilbaum an, bei dem die Strategy gesetzt werden soll</param>
-        public void setFilterstrategyInPropertiesAndObject(Type strategyType, ITreeStrategy<OSMElement.OSMElement> subtree)
+        public void setFilterstrategyInPropertiesAndObject(Type strategyType, Object subtree)
         {
-            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes());
+            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
 
             if (mainFilterstrategy.FilterstrategyFullName.Equals(strategyType.FullName) && mainFilterstrategy.FilterstrategyDll.Equals(strategyType.Namespace)) 
             {
                 removeFilterStrategyofSubtree(strategyType, ref subtree);
                 Debug.WriteLine("Die Strategy muss nicht ergänzt werden!");
-                grantTrees.setFilteredTree(subtree.Root);
+                grantTrees.setFilteredTree(strategyMgr.getSpecifiedTree().Root(subtree));
                 return; 
             }
             Settings settings = new Settings();
@@ -999,16 +1002,16 @@ namespace StrategyGenericTree
                     strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
                 }
             }
-            grantTrees.setFilteredTree( subtree.Root);
+            grantTrees.setFilteredTree(strategyMgr.getSpecifiedTree().Root(subtree));
         }
 
-        private void removeFilterStrategyofSubtree(Type strategyType, ref ITreeStrategy<OSMElement.OSMElement> subtree)
+        private void removeFilterStrategyofSubtree(Type strategyType, ref Object subtree)
         {
             Settings settings = new Settings();
             List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
             //ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
-            if (!subtree.HasChild) { return; }
-            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)subtree.Child).All.Nodes)
+            if (! strategyMgr.getSpecifiedTree().HasChild(subtree)) { return; }
+            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>) strategyMgr.getSpecifiedTree().Child(subtree)).All.Nodes)
             {
                 bool isRemoved = FilterstrategiesOfTree.removeFilterstrategyOfNode(node.Data.properties.IdGenerated, strategyType, ref filterstrategies);
                 if (isRemoved)
@@ -1025,25 +1028,25 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
         /// <returns>Teilbaum des Screens oder <c>null</c></returns>
-        public ITreeStrategy<OSMElement.OSMElement> getSubtreeOfScreen(String screenName)
+        public Object getSubtreeOfScreen(String screenName)
         {
             if (screenName == null || screenName.Equals("")) { Debug.WriteLine("Kein Name des Screens angegeben"); return null; }
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree().Copy();
-            if (tree == null || !tree.HasChild) { return null; }
-            tree = tree.Child;
+            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
+            if (tree == null || !strategyMgr.getSpecifiedTree().HasChild(tree)) { return null; }
+            tree = strategyMgr.getSpecifiedTree().Child(tree);
 
-            if (tree.Data.brailleRepresentation.screenName.Equals(screenName))
+            if (strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName.Equals(screenName))
             {
                 return tree;
             }
  
-            while (tree.HasNext)
+            while (strategyMgr.getSpecifiedTree().HasNext(tree))
             {
-                if (tree.Next.Data.brailleRepresentation.screenName.Equals(screenName))
+                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(tree)).brailleRepresentation.screenName.Equals(screenName))
                 {
-                    return tree.Next;
+                    return strategyMgr.getSpecifiedTree().Next(tree);
                 }
-                tree = tree.Next;
+                tree = strategyMgr.getSpecifiedTree().Next(tree);
             }
             return null;
         }
@@ -1054,15 +1057,15 @@ namespace StrategyGenericTree
         /// <returns>Eine Liste der Namen der Screens im Braille-Baum</returns>
         public List<String> getPosibleScreenNames()
         {
-            if (grantTrees == null || grantTrees.getBrailleTree() == null || !grantTrees.getBrailleTree().HasChild) { return null; }
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return null; }
             List<String> screens = new List<string>();
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getBrailleTree().Copy();
-            tree = tree.Child;
-            screens.Add(tree.Data.brailleRepresentation.screenName);
-            while (tree.HasNext)
+            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
+            tree = strategyMgr.getSpecifiedTree().Child(tree);;
+            screens.Add(strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName);
+            while (strategyMgr.getSpecifiedTree().HasNext(tree))
             {
-                tree = tree.Next;
-                screens.Add(tree.Data.brailleRepresentation.screenName);
+                tree = strategyMgr.getSpecifiedTree().Next(tree);
+                screens.Add(strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName);
             }
             return screens;
         }
@@ -1072,8 +1075,8 @@ namespace StrategyGenericTree
         /// </summary>
         public void updateBrailleGroups()
         {
-            if (grantTrees == null || grantTrees.getBrailleTree() == null || !grantTrees.getBrailleTree().HasChild) { return; }
-            ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree().Copy();
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return; }
+            ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
             foreach (INode<OSMElement.OSMElement> node in copyOfBrailleTree.All.Nodes)
             {
                 if (node.Data.properties.isContentElementFiltered == false && !node.Data.brailleRepresentation.isGroupChild)
@@ -1089,12 +1092,12 @@ namespace StrategyGenericTree
                         OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(node.Data.properties.IdGenerated) );
                         if (osmRelationship != null)
                         { 
-                            ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
+                            Object subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
                             if (subtreeFiltered == null) { return; }
-                            String id = subtreeFiltered.Data.properties.IdGenerated;
-                            subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(subtreeFiltered.Data, TreeScopeEnum.Subtree);
+                            String id = strategyMgr.getSpecifiedTree().GetData(subtreeFiltered).properties.IdGenerated;
+                            subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
                             String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtreeFiltered, id);
-                           ITreeStrategy<OSMElement.OSMElement> tree = grantTrees.getFilteredTree();
+                           Object tree = grantTrees.getFilteredTree();
                            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredSubtree(ref tree, idParent);
                            subtreeFiltered = getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
                             //entfernen des "alten" Braille-Teilbaums
@@ -1102,7 +1105,7 @@ namespace StrategyGenericTree
                            {
                                //List<OsmConnector<String, String>> conector = grantTrees.getOsmRelationship();
                                //OsmTreeRelationship.removeOsmConnection(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
-                               removeChildNodeInBrailleTree((ITreeStrategy<OSMElement.OSMElement>)node);
+                               removeChildNodeInBrailleTree(node);
                            }
                             if (subtreeFiltered != null)
                             {
@@ -1120,8 +1123,8 @@ namespace StrategyGenericTree
         /// </summary>
         public void deleteChildsOfBrailleGroups()
         {
-            if (grantTrees == null || grantTrees.getBrailleTree() == null || !grantTrees.getBrailleTree().HasChild) { return; }
-            ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree().Copy();
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return; }
+            ITree<OSMElement.OSMElement> copyOfBrailleTree = (ITree<OSMElement.OSMElement>)strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
             foreach (INode<OSMElement.OSMElement> node in copyOfBrailleTree.All.Nodes)
             {
                 /*if (node.Data.properties.isContentElementFiltered == false)
@@ -1154,13 +1157,13 @@ namespace StrategyGenericTree
         /// <param name="offsetX">gibt den x-Offset der Gruppen-View an</param>
         /// <param name="offsetY">ibt den x-Offset der Gruppen-View an</param>
         /// <returns>den knoten, welcher dem Element entspricht, welches auf der Stifftplatte geklickt wurde oder null</returns>
-        public ITreeStrategy<OSMElement.OSMElement> getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY)
+        public Object getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY)
         {
             if (grantTrees == null || groupViewName == null || groupViewName.Equals("")) { return null; }
             String visibleScreen = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
-            ITreeStrategy<OSMElement.OSMElement> screenTree = getSubtreeOfScreen(visibleScreen);
+           Object screenTree = getSubtreeOfScreen(visibleScreen);
             screenTree = getSubtreeOfView(groupViewName, screenTree);
-            if (screenTree == null || screenTree.Equals(strategyMgr.getSpecifiedTree().NewNodeTree())) { return null; }
+            if (screenTree == null || screenTree.Equals(strategyMgr.getSpecifiedTree().NewTree())) { return null; }
            // screenTree = screenTree.Child;
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)screenTree).AllChildren.Nodes)
             {
@@ -1178,22 +1181,22 @@ namespace StrategyGenericTree
             return (ITreeStrategy<OSMElement.OSMElement>)screenTree; 
         }
 
-        private ITreeStrategy<OSMElement.OSMElement> getSubtreeOfView(String viewName, ITreeStrategy<OSMElement.OSMElement> subtree)
+        private Object getSubtreeOfView(String viewName, Object subtree)
         {
             if (subtree == null) { return null; }
-            if (subtree.HasChild)
+            if (strategyMgr.getSpecifiedTree().HasChild(subtree))
             {
-                subtree = subtree.Child;
-                if (subtree.Data.brailleRepresentation.viewName.Equals(viewName))
+                subtree = strategyMgr.getSpecifiedTree().Child(subtree);
+                if (strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.viewName.Equals(viewName))
                 {
                     return subtree;
                 }
             }
             else { return null; }
-            while (subtree.HasNext)
+            while (strategyMgr.getSpecifiedTree().HasNext(subtree))
             {
-                subtree = subtree.Next;
-                if (subtree.Data.brailleRepresentation.viewName.Equals(viewName))
+                subtree = strategyMgr.getSpecifiedTree().Next(subtree);
+                if (strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.viewName.Equals(viewName))
                 {
                     return subtree;
                 }
@@ -1215,8 +1218,8 @@ namespace StrategyGenericTree
              * 2. Eigenschaft ändern
              * 3. Leiste neu Darstellen
              */
-            ITreeStrategy<OSMElement.OSMElement> screenTree = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(screenName);
-            INode<OSMElement.OSMElement> navigationBarSubtree = (INode<OSMElement.OSMElement>)strategyMgr.getSpecifiedTree().NewNodeTree();
+            Object screenTree = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(screenName);
+            INode<OSMElement.OSMElement> navigationBarSubtree = (INode<OSMElement.OSMElement>)strategyMgr.getSpecifiedTree().NewTree();
             foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)screenTree).AllChildren.Nodes)
             {
                 if (node.Data.brailleRepresentation.viewName.Contains(navigationbarSubstring))
@@ -1263,9 +1266,9 @@ namespace StrategyGenericTree
         /// </summary>
         /// <param name="navigationbarSubstring">gibt den Teil-String des Namenes für die view der Navigationsleiste an</param>
         /// <returns></returns>
-        public List<ITreeStrategy<OSMElement.OSMElement>> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens")
+        public List<Object> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens")
         {
-            List<ITreeStrategy<OSMElement.OSMElement>> result = new List<ITreeStrategy<OSMElement.OSMElement>>();
+            List<Object> result = new List<Object>();
            // ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.getBrailleTree();
             if (grantTrees.getBrailleTree() == null) { return result; }
            foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).AllChildren.Nodes)

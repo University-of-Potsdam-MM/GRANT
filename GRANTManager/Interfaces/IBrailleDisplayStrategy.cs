@@ -76,14 +76,14 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
         /// <param name="steps">positiv entspricht Verschiebung nach rechts</param>
-        void moveViewRangHoricontal(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps);
+        void moveViewRangHoricontal(Object viewNode, int steps);
 
         /// <summary>
         /// Verschiebt eine Gruppen von Views vertical um den angegebenen Werte
         /// </summary>
         /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
         /// <param name="steps">positiv entspricht Verschiebung nach unten</param>
-        void moveViewRangVertical(ITreeStrategy<OSMElement.OSMElement> viewNode, int steps);
+        void moveViewRangVertical(Object viewNode, int steps);
 
 
         void setStrategyMgr(StrategyManager strategyMgr);

@@ -30,11 +30,11 @@ namespace GRANTManager
         /// <param name="filteredTreeGeneratedId">gibt die generierte Id des Knotens an</param>
         public void updateNodeOfFilteredTree(String filteredTreeGeneratedId)
         {
-            List<ITreeStrategy<OSMElement.OSMElement>> relatedFilteredTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(filteredTreeGeneratedId, grantTrees.getFilteredTree()); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            List<Object> relatedFilteredTreeObject = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(filteredTreeGeneratedId, grantTrees.getFilteredTree()); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
             foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
             {
                 //prüfen, ob der Knoten nicht mit dem standard-filterStrategies gefiltert werden soll und ggf. Filter kurzzeitig wechseln
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes());
+                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
                 FilterstrategyOfNode<String, String, String> nodeFilterstrategy = FilterstrategiesOfTree.getFilterstrategyOfNode(filteredTreeGeneratedId, grantTrees.getFilterstrategiesOfNodes());
                 if (nodeFilterstrategy != null)
                 {
@@ -44,7 +44,7 @@ namespace GRANTManager
 
                 }
                 //Filtern + Knoten aktualisieren
-                OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(treeElement.Data);
+                OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(strategyMgr.getSpecifiedTree().GetData(treeElement));
                 strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
 
                 if (nodeFilterstrategy != null)
@@ -67,7 +67,7 @@ namespace GRANTManager
             OSMElement.OSMElement relatedFilteredTreeObject = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(filteredTreeGeneratedId);
             if (relatedFilteredTreeObject.Equals(new OSMElement.OSMElement())) { return; }
                 //prüfen, ob der Knoten nicht mit dem standard-filterStrategies gefiltert werden soll und ggf. Filter kurzzeitig wechseln
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes());
+                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
                 //Filtern
                 OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(relatedFilteredTreeObject);
                 
@@ -106,9 +106,9 @@ namespace GRANTManager
         /// </summary>
         public void compareAndChangeFileName()
         {
-            if (!grantTrees.getFilteredTree().HasChild || grantTrees.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties())) { return; }
-            String fileNameNew = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByModulName(grantTrees.getFilteredTree().Child.Data.properties.moduleName);
-            if (!fileNameNew.Equals(grantTrees.getFilteredTree().Child.Data.properties.fileName))
+            if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( grantTrees.getFilteredTree())).properties.Equals(new GeneralProperties())) { return; }
+            String fileNameNew = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByModulName(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName);
+            if (!fileNameNew.Equals(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.fileName))
             {
                 Debug.WriteLine("Der Pfad der Anwendung muss amgepasst werden.");
                 changeFileName(fileNameNew);
@@ -121,8 +121,8 @@ namespace GRANTManager
         /// <param name="fileNameNew">gibt den neuen Dateipfad an</param>
         public void changeFileName(String fileNameNew)
         {
-            if (!grantTrees.getFilteredTree().HasChild || grantTrees.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties())) { return; }
-            GeneralProperties properties = grantTrees.getFilteredTree().Child.Data.properties;
+            if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.Equals(new GeneralProperties())) { return; }
+            GeneralProperties properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties;
             properties.fileName = fileNameNew;
             strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(properties);
         }

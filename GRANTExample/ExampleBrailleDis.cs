@@ -92,11 +92,11 @@ namespace GRANTExample
                     }
                     GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         String brailleId = "";
                         if (treeElement.Count > 0)
                         {
-                            brailleId = treeElement[0].Data.properties.IdGenerated;
+                            brailleId =strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
                     OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
@@ -133,10 +133,10 @@ namespace GRANTExample
             String brailleId = "";
             GeneralProperties propertiesForSearch = new GeneralProperties();
             propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<ITreeStrategy<OSMElement.OSMElement>> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
-                            brailleId = treeElement[0].Data.properties.IdGenerated;
+                            brailleId = strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
             OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
@@ -172,7 +172,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
    //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
-            OSMElement.OSMElement osmElement = grantTrees.getBrailleTree().Child.Next.Next.Data;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
+            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree())))); ;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
             bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
             return result;
         }

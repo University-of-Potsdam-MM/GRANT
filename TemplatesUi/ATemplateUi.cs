@@ -25,7 +25,7 @@ namespace TemplatesUi
             this.grantTrees = grantTrees;
         }
 
-        public virtual void createUiElementFromTemplate(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public virtual void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
             if (templateObject.Screens != null)
             {
@@ -34,17 +34,17 @@ namespace TemplatesUi
                 {
                     templateObject.Screens = new List<string>();
                     templateObject.Screens.Add(screen);
-                    ITreeStrategy<OSMElement.OSMElement> brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
+                    Object brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
                     addIdAndRelationship(brailleNode, filteredSubtree, templateObject);
                 }
             }
         }
 
-        private void addIdAndRelationship(ITreeStrategy<OSMElement.OSMElement> brailleSubtree, ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject)
+        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TempletUiObject templateObject)
         { 
-            if (brailleSubtree == null || !brailleSubtree.HasChild) { return; }
-            OSMElement.OSMElement brailleNode = brailleSubtree.Child.Data;
-            brailleSubtree = brailleSubtree.Child;
+            if (brailleSubtree == null || !strategyMgr.getSpecifiedTree().HasChild(brailleSubtree)) { return; }
+            OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
+            brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
             
             String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }
@@ -55,14 +55,14 @@ namespace TemplatesUi
             if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
             {
                 List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-                OsmTreeConnector.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
+                OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
                 strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
             }
 
-            if (brailleSubtree.HasChild)
+            if (strategyMgr.getSpecifiedTree().HasChild(brailleSubtree))
             {
-                brailleSubtree = brailleSubtree.Child;
-                idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleSubtree.Data, parentId);
+                brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
+                idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
                 /*if (idGenerated == null) { return; }
                 prop = brailleNode.properties;
                 prop.IdGenerated = idGenerated;
@@ -73,10 +73,10 @@ namespace TemplatesUi
                     OsmTreeRelationship.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
                     strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
                 }*/
-                while (brailleSubtree.HasNext)
+                while (strategyMgr.getSpecifiedTree().HasNext(brailleSubtree))
                 {
-                    brailleSubtree = brailleSubtree.Next;
-                    idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleSubtree.Data, parentId);
+                    brailleSubtree = strategyMgr.getSpecifiedTree().Next(brailleSubtree);
+                    idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
                     if (idGenerated == null) { return; }
                    /* prop = brailleNode.properties;
                     prop.IdGenerated = idGenerated;
@@ -91,7 +91,7 @@ namespace TemplatesUi
             }
         }
 
-        protected abstract ITreeStrategy<OSMElement.OSMElement> createSpecialUiElement(ITreeStrategy<OSMElement.OSMElement> filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
+        protected abstract Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
 
 
         

@@ -24,7 +24,7 @@ namespace GRANTManager.Interfaces
         /// <param name="subTree">gibt den Teilbaum an</param>
         /// <param name="idOfFirstNode">gibt die Id des esten Knotens des Teilbaumes an</param>
         /// <returns>die Id des Elternknotens des Teilbaumes oder <c>null</c></returns>
-        String changeSubTreeOfFilteredTree(ITreeStrategy<OSMElement.OSMElement> subTree, String idOfFirstNode);
+        String changeSubTreeOfFilteredTree(Object subTree, String idOfFirstNode);
 
         /// <summary>
         /// Gibt zu der angegebenen generierten Id aus dem angegeben Baum einen zugehörigen Knoten an
@@ -43,14 +43,14 @@ namespace GRANTManager.Interfaces
         /// <param name="generatedId">Gibt die Id an zuder die zugehörigen Knoten ermittelt werden sollen</param>
         /// <param name="parentNode">gibt den Baum an, in welchem die zugehörigen Knoten ermittelt werden sollen </param>
         /// <returns>Gibt eine Liste mit den Knoten, bei denen die generierte Id übereinstimmt zurück</returns>
-        List<GRANTManager.Interfaces.ITreeStrategy<T>> getAssociatedNodeList(string idGenereted, GRANTManager.Interfaces.ITreeStrategy<T> tree);
+        List<Object> getAssociatedNodeList(string idGenereted, Object tree);
 
         /// <summary>
         /// Gibt die (einige) <code>GeneralProperties</code> des angegebenen Baumes aus
         /// </summary>
         /// <param name="parentNode">Gibt den auszugebenen Baum an</param>
         /// <param name="depth">Gibt die Tiefe der Ausgabe an; Wenn der gesamte Baum ausgegeben werden soll, so muss <value>-1</value> angegeben werden.</param>
-        void printTreeElements(GRANTManager.Interfaces.ITreeStrategy<T> tree, int depth);
+       // void printTreeElements(Object tree, int depth);
 
         /// <summary>
         /// Sucht anhand der angegebenen <code>GeneralProperties</code> alle Knoten die diesen Eigenschaften entsprechen
@@ -59,7 +59,7 @@ namespace GRANTManager.Interfaces
         /// <param name="properties">gibt die zusuchenden Eigenschaften an</param>
         /// <param name="oper">gibt an wie die Eigenschaften verknüpft werden sollen</param>
         /// <returns>Eine Liste mit allen Knoten auf den die Eigenschaften zutreffen</returns>
-        List<GRANTManager.Interfaces.ITreeStrategy<T>> searchProperties(GRANTManager.Interfaces.ITreeStrategy<T> tree, OSMElement.GeneralProperties properties, GRANTManager.OperatorEnum oper);
+        List<Object> searchProperties(Object tree, OSMElement.GeneralProperties properties, GRANTManager.OperatorEnum oper);
 
         /// <summary>
         /// Fügt einen Knoten dem Baum der  Braille-Darstellung hinzu;
@@ -82,7 +82,7 @@ namespace GRANTManager.Interfaces
         /// <param name="hwndNew"></param>
         void updateFilteredTree(IntPtr hwndNew);
 
-        void generatedIdsOfFilteredTree(ref ITreeStrategy<OSMElement.OSMElement> tree);
+        void generatedIdsOfFilteredTree(ref Object tree);
 
 
         /// <summary>
@@ -90,21 +90,21 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="strategyType">gibt die zusetzende Strategie an</param>
         /// <param name="subtree">gibt den Teilbaum an, bei dem die Strategy gesetzt werden soll</param>
-        void setFilterstrategyInPropertiesAndObject(Type strategyType, ITreeStrategy<OSMElement.OSMElement> subtree);
+        void setFilterstrategyInPropertiesAndObject(Type strategyType, Object subtree);
 
         /// <summary>
         /// Ermittelt und setzt die Ids in einem Teilbaum
         /// </summary>
         /// <param name="parentNode">gibt den Baum inkl. des Teilbaums ohne Ids an</param>
         /// <param name="idOfParent">gibt die Id des ersten Knotens des Teilbaums ohne Ids an</param>
-        void generatedIdsOfFilteredSubtree(ref ITreeStrategy<OSMElement.OSMElement> tree, String idOfParent);
+        void generatedIdsOfFilteredSubtree(ref Object tree, String idOfParent);
 
                 /// <summary>
         /// Gibt einen Teilbaum zurück, welcher nur die Views eines Screens enthält
         /// </summary>
         /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
         /// <returns>Teilbaum des Screens oder <c>null</c></returns>
-        ITreeStrategy<OSMElement.OSMElement> getSubtreeOfScreen(String screenName);
+        Object getSubtreeOfScreen(String screenName);
 
         /// <summary>
         /// Gibt die Namen der vorhandenen Screens im Braille-Baum an
@@ -126,7 +126,7 @@ namespace GRANTManager.Interfaces
         /// Entfernt alle Kinder des Knotens, aber nicht den Knoten selbst
         /// </summary>
         /// <param name="parentSubtree">gibt den Teilbaum an, bei dem alle Kinder entfernt werden sollen</param>
-        void removeChildNodeInBrailleTree(ITreeStrategy<OSMElement.OSMElement> parentSubtree);
+        void removeChildNodeInBrailleTree(Object parentSubtree);
 
         /// <summary>
         /// Ermittelt den Knoten des BrailleBaums zu einem Punkt
@@ -138,7 +138,7 @@ namespace GRANTManager.Interfaces
         /// <param name="offsetX">gibt den x-Offset der Gruppen-View an</param>
         /// <param name="offsetY">ibt den x-Offset der Gruppen-View an</param>
         /// <returns>den knoten, welcher dem Element entspricht, welches auf der Stifftplatte geklickt wurde oder null</returns>
-        ITreeStrategy<OSMElement.OSMElement> getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY);
+        Object getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY);
 
         void setStrategyMgr(StrategyManager mamager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
@@ -151,6 +151,6 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="navigationbarSubstring">gibt den Teil-String des Namenes für die view der Navigationsleiste an</param>
         /// <returns></returns>
-        List<ITreeStrategy<OSMElement.OSMElement>> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens");
+        List<Object> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens");
     }
 }

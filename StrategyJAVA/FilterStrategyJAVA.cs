@@ -22,13 +22,13 @@ namespace StrategyJAVA
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
         public StrategyManager getStrategyMgr() { return strategyMgr; }
 
-        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd)
+        public Object filtering(IntPtr hwnd)
         {
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
         }
 
-        public ITreeStrategy<OSMElement.OSMElement> filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
+        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
         {
             return specifiedTree;
         }
@@ -38,7 +38,7 @@ namespace StrategyJAVA
             return -1;
         }
 
-        public ITreeStrategy<OSMElement.OSMElement> NewNodeTree() 
+        public Object NewNodeTree() 
         {
             ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
             return tree;
@@ -51,13 +51,13 @@ namespace StrategyJAVA
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode) { return new GeneralProperties(); }
 
 
-        public ITreeStrategy<OSMElement.OSMElement> filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
+        public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
         {
             throw new NotImplementedException();
         }
 
 
-        public ITreeStrategy<OSMElement.OSMElement> updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
+        public Object updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
         {
             throw new NotImplementedException();
         }

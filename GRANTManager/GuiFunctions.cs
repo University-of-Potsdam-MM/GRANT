@@ -228,12 +228,13 @@ namespace GRANTManager
         /// </summary>
         /// <param name="root">gibt das (erwartete) Eltern-menuItem-element an</param>
         /// <param name="parentNode">gibt den vorgängert Knoten (linker Geschwisterknoten) an</param>
-        private void rootMenuItemCheckSibling(ref MenuItem root, ITreeStrategy<OSMElement.OSMElement> siblingNode)
+        private void rootMenuItemCheckSibling(ref MenuItem root, Object siblingNode)
         {
             if (root.IdGenerated.Trim().Equals("")) { return; }
-            if (siblingNode.HasParent && !siblingNode.Parent.Data.properties.IdGenerated.Equals(root.IdGenerated))
+
+            if (strategyMgr.getSpecifiedTree().HasParent(siblingNode) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(siblingNode)).properties.IdGenerated.Equals(root.IdGenerated))
             {
-                if (root.parentMenuItem.IdGenerated.Equals(siblingNode.Parent.Data.properties.IdGenerated))
+                if (root.parentMenuItem.IdGenerated.Equals(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(siblingNode)).properties.IdGenerated))
                 {
                     root = root.parentMenuItem;
                     rootMenuItemCheckSibling(ref root, siblingNode);
@@ -241,20 +242,20 @@ namespace GRANTManager
             }
         }
 
-        public void treeIteration(ITreeStrategy<OSMElement.OSMElement> tree, ref GuiFunctions.MenuItem root)
+        public void treeIteration(Object tree, ref GuiFunctions.MenuItem root)
         {
 
-            ITreeStrategy<OSMElement.OSMElement> node1;
+            Object node1;
 
-            while (tree.HasChild && !(tree.Count == 1 && tree.Depth == -1))
+            while (strategyMgr.getSpecifiedTree().HasChild(tree) && !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
             {
 
 
                 MenuItem child = new MenuItem();
-                node1 = tree.Child;
-                child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                child.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
-                String nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered;
+                node1 = strategyMgr.getSpecifiedTree().Child(tree);
+                child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
+                child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
+                String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered;
                 if (nameFiltered.Length > 40)
                 {
                     child.nameFiltered = nameFiltered.Substring(0, 40);
@@ -278,7 +279,7 @@ namespace GRANTManager
   */
 
 
-                if (!tree.IsRoot)
+                if (!strategyMgr.getSpecifiedTree().IsRoot(tree))
                 {
                     child.parentMenuItem = root;
 
@@ -286,13 +287,13 @@ namespace GRANTManager
                 }
                 else { root = child; };
 
-                if (node1.HasChild)
+                if (strategyMgr.getSpecifiedTree().HasChild(node1))
                 {
                     treeIteration(node1, ref child);
                 }
                 else
                 {
-                    if (node1.IsFirst && node1.IsLast)
+                    if (strategyMgr.getSpecifiedTree().IsFirst(node1) && strategyMgr.getSpecifiedTree().IsLast(node1))
                     {
                         root = root.parentMenuItem == null ? root : root.parentMenuItem;
                     }
@@ -301,16 +302,16 @@ namespace GRANTManager
 
 
             }
-            while (tree.HasNext)
+            while (strategyMgr.getSpecifiedTree().HasNext(tree))
             {
                 MenuItem sibling = new MenuItem();
-                node1 = tree.Next;
+                node1 = strategyMgr.getSpecifiedTree().Next(tree);
                 //Pruefung, ob wir es ans richtige Element ranhängen und ggf. korrigieren
                 rootMenuItemCheckSibling(ref root, tree);
 
-                sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                sibling.IdGenerated = node1.Data.properties.IdGenerated == null ? " " : node1.Data.properties.IdGenerated;
-                String nameFiltered = node1.Data.properties.nameFiltered == null ? " " : node1.Data.properties.nameFiltered.ToString();
+                sibling.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
+                sibling.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
+                String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered.ToString();
                 if (nameFiltered.Length > 40)
                 {
                     sibling.nameFiltered = nameFiltered.Substring(0, 20);
@@ -341,38 +342,38 @@ namespace GRANTManager
                 sibling.parentMenuItem = root;
                 root.Items.Add(sibling);
 
-                if (node1.HasChild)
+                if (strategyMgr.getSpecifiedTree().HasChild(node1))
                 {
                     treeIteration(node1, ref sibling);
                 }
                 else
                 {
-                    if (node1.IsFirst && node1.IsLast)
+                    if (strategyMgr.getSpecifiedTree().IsFirst(node1) && strategyMgr.getSpecifiedTree().IsLast(node1))
                     {
                         root = root.parentMenuItem == null ? root : root.parentMenuItem;
                     }
-                    if (!node1.HasChild && !node1.HasNext)
+                    if (!strategyMgr.getSpecifiedTree().HasChild(node1) && !strategyMgr.getSpecifiedTree().HasNext(node1))
                     {
                         root = root.parentMenuItem == null ? root : root.parentMenuItem;
                     }
                     treeIteration(node1, ref root);
                 }
             }
-            if (tree.Count == 1 && tree.Depth == -1)
+            if (strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1)
             {
                 
                 return;
             }
-            if (!tree.HasChild)
+            if (!strategyMgr.getSpecifiedTree().HasChild(tree))
             {
                 node1 = tree;
-                if (tree.HasParent)
+                if (strategyMgr.getSpecifiedTree().HasParent(tree))
                 {
-                    node1.Remove();
+                    strategyMgr.getSpecifiedTree().Remove(node1);
                     return;
                 }
             }
-            if (tree.IsFirst && tree.IsLast)
+            if (strategyMgr.getSpecifiedTree().IsFirst(tree) && strategyMgr.getSpecifiedTree().IsLast(tree))
             {
                 root = root.parentMenuItem == null ? root : root.parentMenuItem;
             }
@@ -387,7 +388,7 @@ namespace GRANTManager
             if (grantTree == null || grantTree.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                grantTree.getFilteredTree().XmlSerialize(fs);
+                strategyMgr.getSpecifiedTree().XmlSerialize(grantTree.getFilteredTree(), fs);
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -401,7 +402,7 @@ namespace GRANTManager
             if (grantTree == null || grantTree.getBrailleTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                grantTree.getBrailleTree().XmlSerialize(fs);
+                strategyMgr.getSpecifiedTree().XmlSerialize(grantTree.getBrailleTree(), fs);
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -575,7 +576,7 @@ namespace GRANTManager
             System.IO.FileStream fs;
             using (fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
-                ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
+                Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
                 // fs.Close();<- nicht benötigt da using
                 //Baum setzen
                 grantTree.setBrailleTree(loadedTree);
@@ -642,15 +643,15 @@ namespace GRANTManager
             }
             using (System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
-                ITreeStrategy<OSMElement.OSMElement> loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
+                Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
                // fs.Close();
                 //Baum setzen
                 grantTree.setFilteredTree(loadedTree);
             }
             //Filter-Strategy setzen
-            if (grantTree.getFilteredTree() != null && grantTree.getFilteredTree().HasChild && !grantTree.getFilteredTree().Child.Data.Equals(new OSMElement.OSMElement()) && !grantTree.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties()))
+            if (grantTree.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTree.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).Equals(new OSMElement.OSMElement()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.Equals(new GeneralProperties()))
             {
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTree.getFilteredTree(), grantTree.getFilterstrategiesOfNodes());
+                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTree.getFilteredTree(), grantTree.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
                 if ( mainFilterstrategy != null)
                 {
                     strategyMgr.setSpecifiedFilter(mainFilterstrategy.FilterstrategyFullName+ ", " + mainFilterstrategy.FilterstrategyDll);
@@ -677,20 +678,21 @@ namespace GRANTManager
         /// <returns><c>true</c> falls die Anwendung (nun) geöffnet ist; sonst <c>false</c></returns>
         public bool openAppOfFilteredTree()
         {
-            if (grantTree != null && grantTree.getFilteredTree() != null && grantTree.getFilteredTree().HasChild)
+            if (grantTree != null && grantTree.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTree.getFilteredTree()))
             {
-                if (grantTree.getFilteredTree().Child.Data.properties.Equals(new GeneralProperties()) || grantTree.getFilteredTree().Child.Data.properties.moduleName == null)
+                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.moduleName == null)
                 {
                     Debug.WriteLine("Kein Daten im 1. Knoten Vorhanden.");
                     return false;
                 }
-                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(grantTree.getFilteredTree().Child.Data.properties.moduleName);
+                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.moduleName);
                 Debug.WriteLine("App ist gestartet: {0}", appIsRunnuing);
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
-                    if (grantTree.getFilteredTree().Child.Data.properties.fileName != null)
+
+                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.fileName != null)
                     {
-                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(grantTree.getFilteredTree().Child.Data.properties.fileName);
+                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.fileName);
                         if (!openApp)
                         {
                             Debug.WriteLine("Anwendung konnte nicht geöffnet werden! Ggf. Pfad der Anwendung anpassen."); //TODO
@@ -716,8 +718,9 @@ namespace GRANTManager
         public void filteredLoadedApplication()
         {
             //ist nur notwendig, wenn die Anwendung zwischendurch zu war (--> hwnd's vergleichen) oder die Anwendung verschoben wurde (--> Rect's vergleichen)
-            ITreeStrategy<OSMElement.OSMElement> loadedTree = grantTree.getFilteredTree();
-            IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(loadedTree.Child.Data.properties.moduleName);
+            Object loadedTree = grantTree.getFilteredTree();
+
+            IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
 
             strategyMgr.getSpecifiedTreeOperations().updateFilteredTree(hwnd);
@@ -729,7 +732,7 @@ namespace GRANTManager
             //grantTree = new GeneratedGrantTrees();
             grantTree.setOsmRelationship(new List<OsmConnector<String, String>>());
             grantTree.setFilterstrategiesOfNodes(new List<FilterstrategyOfNode<String, String, String>>());
-            ITreeStrategy<OSMElement.OSMElement> treeNew = strategyMgr.getSpecifiedTree().NewNodeTree();
+            Object treeNew = strategyMgr.getSpecifiedTree().NewTree();
             grantTree.setFilteredTree(null);
             grantTree.setBrailleTree(null);
         }
@@ -741,11 +744,11 @@ namespace GRANTManager
         public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
         {
             OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
-            ITreeStrategy<OSMElement.OSMElement> subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
+            Object subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
             String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
-            ITreeStrategy<OSMElement.OSMElement> tree = grantTree.getFilteredTree();
-            strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredSubtree(ref tree, idParent);
-            List<ITreeStrategy<OSMElement.OSMElement>> searchResultTrees = strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, subtree.Child.Data.properties, OperatorEnum.and);
+            Object tree = grantTree.getFilteredTree();
+
+            List<Object> searchResultTrees = strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
             if (searchResultTrees != null && searchResultTrees.Count == 1)
             {
                 strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), searchResultTrees[0]);
@@ -813,7 +816,7 @@ namespace GRANTManager
         /// <param name="x">gibt die x-Koordinate des Punktes an</param>
         /// <param name="y">gibt die y-Koordinate des Punktes an</param>
         /// <returns></returns>
-        public ITreeStrategy<OSMElement.OSMElement> getBrailleNodeAtPoint(int x, int y)
+        public Object getBrailleNodeAtPoint(int x, int y)
         {
             int offsetX, offsetY;
             String viewAtPoint = strategyMgr.getSpecifiedBrailleDisplay().getBrailleUiElementViewNameAtPoint(x, y, out offsetX, out offsetY);
