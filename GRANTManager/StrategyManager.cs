@@ -20,6 +20,46 @@ namespace GRANTManager
 
         private ITreeOperations<OSMElement.OSMElement> specifiedTreeOperations;
 
+        private IEventManagerStrategy eventManager;
+
+        /// <summary>
+        /// </summary>
+        /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
+        public void setSpecifiedEventManager(String eventManagerClassName)
+        {
+            try
+            {
+                //Type type = Type.GetType(eventManagerClassName);
+                //eventManager = (IEventManagerStrategy)Activator.CreateInstance(type);
+                //eventManager.setStrategyMgr(this); //damit beim Manager-Wechsel nicht der Setter vergessen wird
+
+                //eventManager = new EventAggregatorPRISM_GRANTManager();
+            }
+
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedFilter: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedFilter: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei StrategyManager_setSpecifiedFilter: " + e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gibt die verwendete Filterstrategie zurück (UIA, Java-Access-Bridge, ...)
+        /// </summary>
+        /// <returns></returns>
+        public IEventManagerStrategy getSpecifiedEventManager()
+        {
+            return eventManager;
+        }
+
         /// <summary>
         /// Setz die Klasse für spezielle Baum-Operationen
         /// </summary>

@@ -69,6 +69,7 @@
     <Compile Include="GeneratedGrantTrees.cs" />
     <Compile Include="GuiFunctions.cs" />
     <Compile Include="Interfaces\IBrailleDisplayStrategy.cs" />
+    <Compile Include="Interfaces\IEventManagerStrategy.cs" />
     <Compile Include="Interfaces\IGenaralUiTemplate.cs" />
     <Compile Include="Interfaces\ITreeOperations.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyUIA", "StrategyUIA\StrategyUIA.csproj", "{F181E453-0EBE-4775-9CC1-1CE26CDC4ED2}"
 EndProject
@@ -46,6 +46,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRANTManager", "GRANTManager\GRANTManager.csproj", "{394E1F1D-B5D0-46E2-B60E-7BEE3A939DE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatesUi", "TemplatesUi\TemplatesUi.csproj", "{F1C8AABE-05D8-45CD-8A52-B3B894E58A5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyEventManager_AggregatorPRISM", "StrategyEventManager_AggregatorPRISM\StrategyEventManager_AggregatorPRISM.csproj", "{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -844,6 +846,36 @@ Global
 		{F1C8AABE-05D8-45CD-8A52-B3B894E58A5C}.Setup_x64|Mixed Platforms.Build.0 = Release|Any CPU
 		{F1C8AABE-05D8-45CD-8A52-B3B894E58A5C}.Setup_x64|x64.ActiveCfg = Release|Any CPU
 		{F1C8AABE-05D8-45CD-8A52-B3B894E58A5C}.Setup_x64|x86.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Any CPU.Build.0 = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|x64.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|x86.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Release|x64.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.ReleaseLibre|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.ReleaseLibre|Any CPU.Build.0 = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.ReleaseLibre|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.ReleaseLibre|Mixed Platforms.Build.0 = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.ReleaseLibre|x64.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.ReleaseLibre|x86.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Setup_x64|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Setup_x64|Any CPU.Build.0 = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Setup_x64|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Setup_x64|Mixed Platforms.Build.0 = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Setup_x64|x64.ActiveCfg = Release|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Setup_x64|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
