@@ -16,7 +16,7 @@ using Prism.Events;
 
 namespace StrategyEventManager_AggregatorPRISM
 {
-    class EventAggregatorPRISM : IEventManagerStrategy
+    public class EventAggregatorPRISM : IEventManagerStrategy
     {
         /// <summary>
         /// Test

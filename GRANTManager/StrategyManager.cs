@@ -29,8 +29,8 @@ namespace GRANTManager
         {
             try
             {
-                //Type type = Type.GetType(eventManagerClassName);
-                //eventManager = (IEventManagerStrategy)Activator.CreateInstance(type);
+                Type type = Type.GetType(eventManagerClassName);
+                eventManager = (IEventManagerStrategy)Activator.CreateInstance(type);
                 //eventManager.setStrategyMgr(this); //damit beim Manager-Wechsel nicht der Setter vergessen wird
 
                 //eventManager = new EventAggregatorPRISM_GRANTManager();
@@ -38,16 +38,16 @@ namespace GRANTManager
 
             catch (InvalidCastException ic)
             {
-                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedFilter: " + ic.Message);
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedEventManager: " + ic.Message);
             }
             catch (ArgumentException ae)
             {
-                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedFilter: " + ae.Message);
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedEventManager: " + ae.Message);
 
             }
             catch (Exception e)
             {
-                throw new Exception("Fehler bei StrategyManager_setSpecifiedFilter: " + e.Message);
+                throw new Exception("Fehler bei StrategyManager_setSpecifiedEventManager: " + e.Message);
             }
         }
 
