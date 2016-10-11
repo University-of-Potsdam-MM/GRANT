@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Diagnostics;
 using OSMElement.UiElements;
+using GRANTManager.TreeOperations;
 
 namespace GRANTApplication
 {
@@ -27,7 +28,7 @@ namespace GRANTApplication
         GUIInspector GuiInspector;
         bool filterWindowOpen = false;
         bool outputDesignerWindowOpen = false;
-        UpdateNode updateNode;
+        TreeOperation treeOperation;
         //private PaintEventHandler Paint;
 
 
@@ -44,7 +45,7 @@ namespace GRANTApplication
             strategyMgr = new StrategyManager();
             GuiInspector = new GUIInspector();
             grantTrees = new GeneratedGrantTrees();
-
+            treeOperation = new TreeOperation(strategyMgr, grantTrees);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -60,13 +61,6 @@ namespace GRANTApplication
             brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
             brailleDisplayStrategy.setStrategyMgr(strategyMgr);
 
-            Type to = typeof(TreeOperations<OSMElement.OSMElement>);
-            Console.WriteLine("Type: " + to.Assembly.FullName.ToString());
-            Console.WriteLine("Type: " + to.AssemblyQualifiedName.ToString());
-            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
-            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-
-            updateNode = new UpdateNode(strategyMgr, grantTrees);
         }
 
       
@@ -270,7 +264,7 @@ namespace GRANTApplication
                         //  searchedProperties.nameFiltered = "";
 
                         Console.Write("Gesuchte Eigenschaften ");
-                        strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, searchedProperties, OperatorEnum.or);
+                        treeOperation.searchNodes.searchProperties(tree, searchedProperties, OperatorEnum.or);
 
                     }
                     catch (Exception ex)
@@ -410,10 +404,10 @@ namespace GRANTApplication
                         OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals("braille123_3") || r.FilteredTree.Equals("braille123_3")); //TODO: was machen wir hier, wenn wir mehrere Paare bekommen? (FindFirst?)
 
                        // strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
-                        strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
+                        treeOperation.updateNodes.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                        OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                        //strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
+                        treeOperation.updateNodes.updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
                         brailleDisplayStrategy.updateViewContent(ref relatedBrailleTreeObject);
                     }
 
@@ -461,7 +455,7 @@ namespace GRANTApplication
             proper2.controlTypeFiltered = "Text";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3
@@ -486,7 +480,7 @@ namespace GRANTApplication
             proper3.controlTypeFiltered = "Text";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm3);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm3);
             #endregion
 
             #region Element 4
@@ -514,7 +508,7 @@ namespace GRANTApplication
             proper4.controlTypeFiltered = "Matrix";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm4);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm4);
             #endregion
 
             #region Element 5
@@ -537,7 +531,7 @@ namespace GRANTApplication
             proper5.controlTypeFiltered = "Button";
             osm5.brailleRepresentation = e5;
             osm5.properties = proper5;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm5);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm5);
             #endregion
 
             #region Element 6
@@ -563,7 +557,7 @@ namespace GRANTApplication
             proper6.controlTypeFiltered = "TextBox";
             osm6.brailleRepresentation = e6;
             osm6.properties = proper6;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm6);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm6);
             #endregion
 
             return grantTrees.getBrailleTree();

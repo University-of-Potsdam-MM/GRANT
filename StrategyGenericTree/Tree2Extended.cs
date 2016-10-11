@@ -429,5 +429,23 @@ namespace StrategyGenericTree
                 }
             }
         }
+
+        public IEnumerable<object> AllNodes(object treeObject)
+        {
+            if (!(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
+            return (IEnumerable<object>)((NodeTree<T>)treeObject).All.Nodes;
+        }
+
+        public IEnumerable<object> AllChildrenNodes(object treeObject)
+        {
+            if (!(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
+            return (IEnumerable<object>)((NodeTree<T>)treeObject).AllChildren.Nodes;
+        }
+
+        public IEnumerable<object> DirectChildrenNodes(object treeObject)
+        {
+            if (!(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
+            return (IEnumerable<object>)((NodeTree<T>)treeObject).DirectChildren.Nodes;
+        }
     }
 }

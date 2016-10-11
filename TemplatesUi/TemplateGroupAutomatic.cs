@@ -1,4 +1,5 @@
 ﻿using GRANTManager.Interfaces;
+using GRANTManager.TreeOperations;
 using OSMElement;
 using OSMElement.UiElements;
 using System;
@@ -10,7 +11,7 @@ namespace TemplatesUi
 {
     class TemplateGroupAutomatic : ATemplateUi
     {
-        public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
+        public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
         protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null)
         {
@@ -46,7 +47,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
@@ -57,7 +58,7 @@ namespace TemplatesUi
 
             List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
             OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
-            strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+            treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
             Object tree = strategyMgr.getSpecifiedTree().NewTree();
             strategyMgr.getSpecifiedTree().AddChild(tree, brailleNode);
             return tree;

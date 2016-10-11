@@ -7,12 +7,13 @@ using System.Diagnostics;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using OSMElement;
+using GRANTManager.TreeOperations;
 
 namespace TemplatesUi
 {
     class TemplateNode : ATemplateUi
     {
-        public TemplateNode(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees) { }
+        public TemplateNode(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
         protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null)
         {

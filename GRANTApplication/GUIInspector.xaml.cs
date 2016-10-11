@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Data;
 using System.Linq;
+using GRANTManager.TreeOperations;
 
 namespace GRANTApplication
 {
@@ -19,6 +20,7 @@ namespace GRANTApplication
         Settings settings;
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
+        TreeOperation treeOperations;
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
         bool filterWindowOpen = false;
@@ -31,6 +33,7 @@ namespace GRANTApplication
             settings = new Settings();
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
+            treeOperations = new TreeOperation(strategyMgr, grantTrees);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -42,16 +45,14 @@ namespace GRANTApplication
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
 
-            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
-            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-            strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTrees);
 
             tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
            
-            guiFunctions = new GuiFunctions(strategyMgr, grantTrees);
+            guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
 
             root = new GuiFunctions.MenuItem();
             NodeButton.IsEnabled = false;
@@ -61,7 +62,7 @@ namespace GRANTApplication
 
         void updatePropertiesTable(String IdGenerated)
         {
-            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             
             
             DataTable dataTable = new DataTable();
@@ -327,6 +328,7 @@ namespace GRANTApplication
                             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
                             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+                            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
 
                         }
 
@@ -394,6 +396,7 @@ namespace GRANTApplication
             //Console.WriteLine("Filter: " + Title);
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(titleName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 
@@ -405,8 +408,8 @@ namespace GRANTApplication
         private void Node_Click(object sender, RoutedEventArgs e)
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
-            UpdateNode node = new UpdateNode(strategyMgr, grantTrees);
-            //node.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
+            
+            //updateNodes.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
             guiFunctions.filterAndAddSubtreeOfApplication(((Button)sender).CommandParameter.ToString());
             Object tree = grantTrees.getFilteredTree();
 

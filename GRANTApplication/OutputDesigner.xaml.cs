@@ -10,6 +10,7 @@ using System.Data;
 using System.Windows.Data;
 using System.Globalization;
 using System.Collections;
+using GRANTManager.TreeOperations;
 
 namespace GRANTApplication
 {
@@ -21,6 +22,7 @@ namespace GRANTApplication
         Settings settings;
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
+        TreeOperation treeOperation;
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
         int var2;
@@ -35,6 +37,7 @@ namespace GRANTApplication
             settings = new Settings();
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
+            treeOperation = new TreeOperation(strategyMgr, grantTrees);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -46,20 +49,19 @@ namespace GRANTApplication
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
 
-            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
-            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-            strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTrees);
 
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
            // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);
 
-            guiFunctions = new GuiFunctions(strategyMgr, grantTrees);
+            guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
 
             root = new GuiFunctions.MenuItem();
 
@@ -526,7 +528,7 @@ namespace GRANTApplication
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
                 if (item.IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(item.IdGenerated);
+                    OSMElement.OSMElement osmElement = treeOperation.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     if (osmElement.properties.isOffscreenFiltered == false) { 
                     strategyMgr.getSpecifiedOperationSystem().paintRect(rect);

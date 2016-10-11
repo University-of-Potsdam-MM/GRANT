@@ -7,6 +7,7 @@ using GRANTManager;
 using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows;
+using GRANTManager.TreeOperations;
 
 
 namespace StrategyJAVA
@@ -18,6 +19,8 @@ namespace StrategyJAVA
         private StrategyManager strategyMgr;
 
         private GeneratedGrantTrees grantTrees;
+        private TreeOperation treeOperation;
+        public void setTreeOperation(TreeOperation treeOperation) { this.treeOperation = treeOperation; }
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
         public StrategyManager getStrategyMgr() { return strategyMgr; }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using GRANTManager;
 using GRANTManager.Interfaces;
+using GRANTManager.TreeOperations;
 using OSMElement;
 
 namespace TemplatesUi
@@ -14,15 +15,17 @@ namespace TemplatesUi
     {
         protected StrategyManager strategyMgr { get; private set; }
         protected GeneratedGrantTrees grantTrees { get; private set; }
+        protected TreeOperation treeOperation { get; private set; }
         public ATemplateUi()
         {
 
         }
-            
-        public ATemplateUi(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
+
+        public ATemplateUi(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation)
         {
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
+            this.treeOperation = treeOperation;
         }
 
         public virtual void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
@@ -46,7 +49,7 @@ namespace TemplatesUi
             OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
             brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
             
-            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }
             String parentId = idGenerated;
             GeneralProperties prop = brailleNode.properties;
@@ -56,13 +59,13 @@ namespace TemplatesUi
             {
                 List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
-                strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+                treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
             }
 
             if (strategyMgr.getSpecifiedTree().HasChild(brailleSubtree))
             {
                 brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
-                idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
+                idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
                 /*if (idGenerated == null) { return; }
                 prop = brailleNode.properties;
                 prop.IdGenerated = idGenerated;
@@ -76,7 +79,7 @@ namespace TemplatesUi
                 while (strategyMgr.getSpecifiedTree().HasNext(brailleSubtree))
                 {
                     brailleSubtree = strategyMgr.getSpecifiedTree().Next(brailleSubtree);
-                    idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
+                    idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
                     if (idGenerated == null) { return; }
                    /* prop = brailleNode.properties;
                     prop.IdGenerated = idGenerated;

@@ -13,8 +13,8 @@ namespace GRANTManager.Interfaces
         Object Add(Object NodeOld, T o); //INode
         void AddChild(Object treeOld, Object treeChild); //ITree
         Object AddChild(Object treeOld, T o); //INode
-        //Common.IEnumerableCollectionPair<T> All { get; }
-        //  Common.IEnumerableCollectionPair<T> AllChildren { get; }
+        IEnumerable<Object> AllNodes(Object treeObject); //Common.IEnumerableCollectionPair<T> All { get; }
+        System.Collections.Generic.IEnumerable<Object> AllChildrenNodes(Object treeObject);//  Common.IEnumerableCollectionPair<T> AllChildren { get; }
         int BranchCount(Object node);
         int BranchIndex(Object node);
         /*bool CanMoveToChild { get; }
@@ -40,7 +40,7 @@ namespace GRANTManager.Interfaces
         Object DeepCopy(Object treeOld, T o); //ITree
         int Depth(Object node);
         int DirectChildCount(Object node);
-        // Common.IEnumerableCollectionPair<T> DirectChildren { get; }
+        System.Collections.Generic.IEnumerable<Object> DirectChildrenNodes(Object treeObject);// Common.IEnumerableCollectionPair<T> DirectChildren { get; }
         // Common.IEnumerableCollectionPair<T> DirectChildrenInReverse { get; }
         void Dispose(Object treeOld);
         Object First(Object node); //INode

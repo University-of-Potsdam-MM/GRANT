@@ -22,6 +22,7 @@ using OSMElement;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using TemplatesUi;
+using GRANTManager.TreeOperations;
 
 namespace GRANTExample
 {
@@ -41,7 +42,8 @@ namespace GRANTExample
         Settings settings;
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTree;
-
+        TreeOperation treeOperation;
+        SearchNodes searchNodes;
         ExampleTree exampleTree;
         InspectGui exampleInspectGui;
         ExampleBrailleDis exampleBrailleDis;
@@ -68,6 +70,8 @@ namespace GRANTExample
             settings = new Settings();
             strategyMgr = new StrategyManager();
             grantTree = new GeneratedGrantTrees();
+            searchNodes = new SearchNodes(strategyMgr, grantTree);
+            treeOperation = new TreeOperation(strategyMgr, grantTree);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -85,20 +89,17 @@ namespace GRANTExample
            // brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
           //  brailleDisplayStrategy.setStrategyMgr(strategyMgr);
 
-            strategyMgr.setSpecifiedTreeOperations(settings.getPossibleTreeOperations()[0].className);
-            strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
-            strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTree);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
-            ui = new GenaralUI(strategyMgr, grantTree);
+            ui = new GenaralUI(strategyMgr, grantTree, treeOperation);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
-
-            exampleTree = new ExampleTree(strategyMgr, grantTree);
+            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
+            exampleTree = new ExampleTree(strategyMgr, grantTree, treeOperation);
             exampleInspectGui = new InspectGui(strategyMgr);
-            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, ui);
+            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, ui, treeOperation);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
-            guiFuctions = new GuiFunctions(strategyMgr, grantTree);
+            guiFuctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
             
         }
 
@@ -204,7 +205,7 @@ namespace GRANTExample
             {
               //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree()); // => Tabs in Notepad
                // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.getBrailleTree()); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
+                List<Object> nodeList = searchNodes.getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
                
                 if (nodeList != null && nodeList.Count > 0) 
                 {
@@ -216,7 +217,7 @@ namespace GRANTExample
             {
               //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree()); // => Tabs in Notepad
                 //List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.getBrailleTree()); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
+                List<Object> nodeList = searchNodes.getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
                 if (nodeList != null && nodeList.Count > 0)
                 {
                     strategyMgr.getSpecifiedBrailleDisplay().moveViewRangHoricontal(nodeList[0], -15);
@@ -227,7 +228,7 @@ namespace GRANTExample
             {
               //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree()); // => Tabs in Notepad
                // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.getBrailleTree()); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
+                List<Object> nodeList = searchNodes.getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
                 if (nodeList != null && nodeList.Count > 0)
                 {
                     strategyMgr.getSpecifiedBrailleDisplay().moveViewRangVertical(nodeList[0], 5);
@@ -238,7 +239,7 @@ namespace GRANTExample
             {
                // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.getBrailleTree()); // => Tabs in Notepad
                // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.getBrailleTree()); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
+                List<Object> nodeList = searchNodes.getAssociatedNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.getBrailleTree()); // => Liste in eigener Beispielanwendung
                 if (nodeList != null && nodeList.Count > 0)
                 {
                     strategyMgr.getSpecifiedBrailleDisplay().moveViewRangVertical(nodeList[0], -5);

@@ -62,7 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tree2.cs" />
     <Compile Include="Tree2Extended.cs" />
-    <Compile Include="TreeOperations.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj">

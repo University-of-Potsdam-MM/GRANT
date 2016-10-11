@@ -18,41 +18,6 @@ namespace GRANTManager
         private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
         private AOutputManager specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
 
-        private ITreeOperations<OSMElement.OSMElement> specifiedTreeOperations;
-
-        /// <summary>
-        /// Setz die Klasse für spezielle Baum-Operationen
-        /// </summary>
-        /// <param name="treeClassNames"></param>
-        public void setSpecifiedTreeOperations(String treeOperationsClassName)
-        {
-            try
-            {
-                Type type = Type.GetType(treeOperationsClassName);
-                Type[] typeArgs = { typeof(OSMElement.OSMElement) };
-                var makeme = type.MakeGenericType(typeArgs);
-                specifiedTreeOperations = (ITreeOperations<OSMElement.OSMElement>)Activator.CreateInstance(makeme);
-            }
-            catch (InvalidCastException ic)
-            {
-                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedTreeOperationsr: " + ic.Message);
-            }
-            catch (ArgumentException ae)
-            {
-                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedTreeOperations: " + ae.Message);
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Fehler bei StrategyManager_setSpecifiedTreeOperations: " + e.Message);
-            }
-        }
-
-        public ITreeOperations<OSMElement.OSMElement> getSpecifiedTreeOperations()
-        {
-            return specifiedTreeOperations;
-        }
-
         /// <summary>
         /// Setzt die gewählte Klasse für die Braille-Ausgabe
         /// </summary>

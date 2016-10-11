@@ -9,6 +9,7 @@ using System.Diagnostics;
 using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows;
+using GRANTManager.TreeOperations;
 
 //using Microsoft.Practices.Prism;
 //using Microsoft.Practices.Prism.PubSubEvents;
@@ -26,8 +27,11 @@ namespace StrategyUIA
     {
         private StrategyManager strategyMgr;
         private GeneratedGrantTrees grantTrees;
+        private TreeOperation treeOperation;
+        public void setTreeOperation(TreeOperation treeOperation) { this.treeOperation = treeOperation; }
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
+        
         public StrategyManager getStrategyMgr() { return strategyMgr; }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace StrategyUIA
                     filterApplication(automationElement, depth, ref tree);
                     //beim ersten Knoten die Strategy mit ranschreiben + ModulName
                     setSpecialPropertiesOfFirstNode(ref tree);
-                    strategyMgr.getSpecifiedTreeOperations().generatedIdsOfFilteredTree(ref tree);
+                    treeOperation.generatedIds.generatedIdsOfFilteredTree(ref tree);
                     List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
                     FilterstrategiesOfTree.addFilterstrategyOfNode(strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated, this.GetType(), ref filterstrategies);
                     grantTrees.setFilterstrategiesOfNodes(filterstrategies);
@@ -119,7 +123,7 @@ namespace StrategyUIA
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth)
+        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth = 0)
         {
             AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
             if (mainElement == null)
@@ -642,7 +646,7 @@ namespace StrategyUIA
             osmElement.properties = setProperties(mouseElement);
             
             //Id setzen
-            List<Object> node = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), osmElement.properties, OperatorEnum.and);
+            List<Object> node = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), osmElement.properties, OperatorEnum.and);
             if (node.Count == 1)
             {
                 return strategyMgr.getSpecifiedTree().GetData(node[0]);

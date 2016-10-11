@@ -1,5 +1,6 @@
 ﻿using GRANTManager;
 using GRANTManager.Interfaces;
+using GRANTManager.TreeOperations;
 using OSMElement;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace TemplatesUi
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
-
-        public GenaralUI(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) { this.strategyMgr = strategyMgr; this.grantTrees = grantTrees; }
+        TreeOperation treeOperation;
+        public GenaralUI(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) { this.strategyMgr = strategyMgr; this.grantTrees = grantTrees; this.treeOperation = treeOperation; }
 
         /// <summary>
         /// Ausgehend vom gefilterten Baum wird für einige UI-Elemente ein Template (<see cref="TemplateUi"/>) angewendet aus dem eine Standard UI erstellt wird.
@@ -37,7 +38,7 @@ namespace TemplatesUi
             iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
             createUiElementsAllScreens(pathToXml);
             createUiElementsNavigationbarScreens(pathToXml);
-            strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+            treeOperation.updateNodes.updateBrailleGroups();
         }
 
         /// <summary>
@@ -48,19 +49,19 @@ namespace TemplatesUi
         {
             TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
-            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
             /*
              * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
              * ergänzen
              */
-            List<Object> navigationbars = strategyMgr.getSpecifiedTreeOperations().getListOfNavigationbars();
+            List<Object> navigationbars = treeOperation.searchNodes.getListOfNavigationbars();
             List<String> screensForShowNavigationbar = new List<string>();
             foreach (ITreeStrategy<OSMElement.OSMElement> nbar in navigationbars)
             {                
                 if (strategyMgr.getSpecifiedTree().HasChild(nbar))
                 {
-                    strategyMgr.getSpecifiedTreeOperations().removeChildNodeInBrailleTree(nbar);
-                    strategyMgr.getSpecifiedTreeOperations().removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(nbar));
+                    treeOperation.updateNodes.removeChildNodeInBrailleTree(nbar);
+                    treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(nbar));
                 }
                 screensForShowNavigationbar.Add(strategyMgr.getSpecifiedTree().GetData(nbar).brailleRepresentation.screenName);
             }
@@ -74,7 +75,7 @@ namespace TemplatesUi
             OSMElement.OSMElement osm = templateObject.osm;
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
-            ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
             generalUiInstance.createUiElementFromTemplate(tree, templateObject);
         }
 
@@ -87,7 +88,7 @@ namespace TemplatesUi
         {
             TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
-            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
             List<String> screenNavi = new List<string>();
             screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
             templateObject.Screens = screenNavi;
@@ -100,7 +101,7 @@ namespace TemplatesUi
             OSMElement.OSMElement osm = templateObject.osm;
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
-            ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
             generalUiInstance.createUiElementFromTemplate(tree, templateObject);
         }
 
@@ -175,7 +176,7 @@ namespace TemplatesUi
             TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
             //TODO: mit Events verknüpfen
-            List<String> screens = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
             ATemplateUi generalUiInstance;
             if (templateObject.Screens == null)
             {
@@ -192,7 +193,7 @@ namespace TemplatesUi
             OSMElement.OSMElement osm = templateObject.osm;
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
-            generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees);
+            generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
 
             generalUiInstance.createUiElementFromTemplate(tree, templateObject);//
         }
@@ -280,11 +281,11 @@ namespace TemplatesUi
 
                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
                 {
-                    generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+                    generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
                 }
                 else
                 {
-                    generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
+                    generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
                 }
                 generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element));
             }
@@ -413,11 +414,11 @@ namespace TemplatesUi
                 TempletUiObject templateObject = xmlUiElementToTemplateUiObject(element);
                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
                 {
-                    generalUiInstance = new  TemplateNode(strategyMgr, grantTrees);
+                    generalUiInstance = new  TemplateNode(strategyMgr, grantTrees, treeOperation);
                 }
                 else
                 {
-                    generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
+                    generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
                 }
 
                 Object tree = strategyMgr.getSpecifiedTree().NewTree();
@@ -437,7 +438,7 @@ namespace TemplatesUi
                 where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != "NavigationBarScreens"
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
-            List<String> screenList = strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames();
             foreach (XElement e in uiElement)
             {
                 TempletUiObject templateObject = xmlUiElementToTemplateUiObject(e);
@@ -447,7 +448,7 @@ namespace TemplatesUi
                     // elementE im gefilterten Baum suchen
                     GeneralProperties properties = new GeneralProperties();
                     properties.controlTypeFiltered = e.Attribute("name").Value;
-                    List<Object> treefilteredElements = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
+                    List<Object> treefilteredElements = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
                     foreach (Object t in treefilteredElements)
                     {
                         tree = t;
@@ -475,12 +476,12 @@ namespace TemplatesUi
             ATemplateUi generalUiInstance;
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
             {
-                generalUiInstance = new TemplateNode(strategyMgr, grantTrees);
+                generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
             }
             else
             {
                // generalUiInstance = new TemplateSubtree(strategyMgr, grantTrees);
-                generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees);
+                generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
             }
            // ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             foreach (String screen in screenList)

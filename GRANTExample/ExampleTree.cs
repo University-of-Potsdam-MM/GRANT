@@ -8,6 +8,7 @@ using GRANTApplication;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using OSMElement;
+using GRANTManager.TreeOperations;
 
 namespace GRANTExample
 {
@@ -15,10 +16,13 @@ namespace GRANTExample
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTree;
-        public ExampleTree(StrategyManager mgr, GeneratedGrantTrees tree)
+        TreeOperation treeOperation;
+
+        public ExampleTree(StrategyManager mgr, GeneratedGrantTrees tree, TreeOperation treeOperation)
         {
             strategyMgr = mgr;
             grantTree = tree;
+            this.treeOperation = treeOperation;
         }
 
         public String filterNodeOfApplicatione()
@@ -35,7 +39,7 @@ namespace GRANTExample
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
                     if (grantTree.getFilteredTree() != null)
                     {
-                        strategyMgr.getSpecifiedTreeOperations().changePropertiesOfFilteredNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties);
+                        treeOperation.updateNodes.changePropertiesOfFilteredNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties);
                     }
                    // strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                     if (strategyMgr.getSpecifiedTree().HasChild(tree)== true)
@@ -67,10 +71,10 @@ namespace GRANTExample
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
                     if (grantTree.getFilteredTree() != null)
                     {
-                        List<Object> result = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
+                        List<Object> result = treeOperation.searchNodes.searchProperties(grantTree.getFilteredTree(), strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
                         if (result.Count == 1)
                         {
-                            GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree);
+                            GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
                             guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTree().GetData(result[0]).properties.IdGenerated);
 
                           // guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById("7CA0B5B9845D7906E3BD235A600F3546"));
@@ -142,7 +146,7 @@ namespace GRANTExample
                     int pointX;
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                    Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application, 0);
+                    Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application);
                    // strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentBrailleTreeNode, -1);
                     grantTree.setFilteredTree(tree);
                     Console.WriteLine();
@@ -166,7 +170,7 @@ namespace GRANTExample
             //  searchedProperties.nameFiltered = "";
 
             Console.Write("Gesuchte Eigenschaften ");
-            strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getFilteredTree(), searchedProperties, OperatorEnum.or);
+            treeOperation.searchNodes.searchProperties(grantTree.getFilteredTree(), searchedProperties, OperatorEnum.or);
 
         }
 
@@ -195,7 +199,7 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
                             List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
@@ -238,7 +242,7 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
                             List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
@@ -272,12 +276,14 @@ namespace GRANTExample
             {
                 strategyMgr.setSpecifiedFilter(possibleFilter[2].className);
                 strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
+                strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
                 Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", possibleFilter[2].userName);
             }
             else
             {
                 strategyMgr.setSpecifiedFilter(possibleFilter[0].className);
                 strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
+                strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
                 Console.WriteLine("Die Filter-Strategy wurde auf {0} gewechselt", possibleFilter[0].userName);
             }
 
