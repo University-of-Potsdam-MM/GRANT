@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using GRANTManager;
 using System.Windows;
+using GRANTManager.TreeOperations;
 
 namespace TemplatesUi
 {
@@ -15,7 +16,7 @@ namespace TemplatesUi
         int? boxStartY;
         int deviceWidth;
         int deviceHeight;
-        public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees) : base(strategyMgr, grantTrees)
+        public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation)
         {
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
             deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
@@ -88,7 +89,7 @@ namespace TemplatesUi
 //                braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
             }
             
-             OSMElement.OSMElement brailleGroupNode =  strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(brailleNodeId);
+             OSMElement.OSMElement brailleGroupNode =  treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNodeId);
              bool groupViewWithScrollbars = false;
              if (!brailleGroupNode.Equals(new OSMElement.OSMElement()))
              {
@@ -173,7 +174,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
             if (!strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) ) { return strategyMgr.getSpecifiedTree().NewTree(); }
-            String idGenerated = strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(brailleNode, brailleNodeId);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, brailleNodeId);
             
             if (idGenerated == null)
             {
@@ -185,7 +186,7 @@ namespace TemplatesUi
 
             List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
             OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
-            strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+            treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
             Object tree = strategyMgr.getSpecifiedTree().NewTree();
             strategyMgr.getSpecifiedTree().AddChild(tree, brailleNode);
             return tree;

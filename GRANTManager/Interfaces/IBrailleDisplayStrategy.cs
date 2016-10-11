@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OSMElement;
+using GRANTManager.TreeOperations;
 
 namespace GRANTManager.Interfaces
 {
@@ -88,5 +89,6 @@ namespace GRANTManager.Interfaces
 
         void setStrategyMgr(StrategyManager strategyMgr);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
+        void setTreeOperation(TreeOperation treeOperation);
     }
 }

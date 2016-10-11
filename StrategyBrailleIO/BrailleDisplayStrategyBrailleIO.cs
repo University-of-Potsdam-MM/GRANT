@@ -18,6 +18,7 @@ using OSMElement;
 using OSMElement.UiElements;
 using BrailleIOGuiElementRenderer;
 using BrailleIO.Interface;
+using GRANTManager.TreeOperations;
 
 namespace StrategyBrailleIO
 {
@@ -42,10 +43,11 @@ namespace StrategyBrailleIO
 
         private StrategyManager strategyMgr;
         private GeneratedGrantTrees grantTrees;
+        private TreeOperation treeOperation;
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
-
-        public BrailleDisplayStrategyBrailleIO() { uiElementList = getUiElements(); }
+        public void setTreeOperation(TreeOperation treeOperation) { uiElementList = getUiElements(); this.treeOperation = treeOperation; }
+        public BrailleDisplayStrategyBrailleIO() { uiElementList = getUiElements();}
 
         /// <summary>
         /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
@@ -243,7 +245,7 @@ namespace StrategyBrailleIO
         {
             OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
-            OSMElement.OSMElement nodeFilteredTree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
+            OSMElement.OSMElement nodeFilteredTree = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
             if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }
             Image bmp;
            /* int h = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Height);
@@ -915,7 +917,7 @@ namespace StrategyBrailleIO
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
             if (grantTrees.getBrailleTree() != null)
             {
-                List<Object> nodeList = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
+                List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
                 if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
                 //if (osmElement.brailleRepresentation.groupelementsOfDiffrentTypes  != null)
                 {
@@ -1053,13 +1055,13 @@ namespace StrategyBrailleIO
                     if (screenAvtiveNew != null)
                     {
                         screenAvtiveNew.SetVisibility(true);
-                        strategyMgr.getSpecifiedTreeOperations().setPropertyForScreen(screenName, true);
+                        treeOperation.updateNodes.setPropertyForScreen(screenName, true);
                         
                     }
                     else
                     {
                         screenAvtive.SetVisibility(true);
-                        if (strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames().Contains(screenName))
+                        if (treeOperation.searchNodes.getPosibleScreenNames().Contains(screenName))
                         {
                             Debug.WriteLine("TODO");
                         }

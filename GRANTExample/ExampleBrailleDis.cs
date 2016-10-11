@@ -13,22 +13,23 @@ using OSMElement.UiElements;
 using System.Windows;
 using System.Diagnostics;
 using TemplatesUi;
+using GRANTManager.TreeOperations;
 
 namespace GRANTExample
 {
     public class ExampleBrailleDis
     {
         StrategyManager strategyMgr;
-        UpdateNode updateNode;
+        TreeOperation treeOperation;
         GeneratedGrantTrees grantTrees;
         IGenaralUiTemplate ui;
 
-        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees, IGenaralUiTemplate ui)
+        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees, IGenaralUiTemplate ui, TreeOperation treeOperation)
         {
             strategyMgr = mgr;
             this.grantTrees = grantTrees;
-            updateNode = new UpdateNode(strategyMgr, grantTrees);
             this.ui = ui;
+            this.treeOperation = treeOperation;
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace GRANTExample
                     ui.updateNavigationbarScreens(path);
                     
                 }*/
-                strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+                treeOperation.updateNodes.updateBrailleGroups();
                 if (strategyMgr.getSpecifiedBrailleDisplay() == null)
                 {                   
                     Settings settings = new Settings();
@@ -64,6 +65,7 @@ namespace GRANTExample
 
                     strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
                     strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
+                    strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
                    // strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
                     strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
@@ -92,7 +94,7 @@ namespace GRANTExample
                     }
                     GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         String brailleId = "";
                         if (treeElement.Count > 0)
                         {
@@ -103,12 +105,12 @@ namespace GRANTExample
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                        treeOperation.updateNodes.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                    OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                    OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
                     if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                     {
-                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
+                        treeOperation.updateNodes.updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
                         
                     }
@@ -133,7 +135,7 @@ namespace GRANTExample
             String brailleId = "";
             GeneralProperties propertiesForSearch = new GeneralProperties();
             propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<Object> treeElement = strategyMgr.getSpecifiedTreeOperations().searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
                             brailleId = strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
@@ -143,9 +145,9 @@ namespace GRANTExample
             if(osmRelationships != null)
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                updateNode.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                treeOperation.updateNodes.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
 
-                OSMElement.OSMElement relatedBrailleTreeObject = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
                 if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                 {
                   //  strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(relatedBrailleTreeObject.Data);
@@ -170,6 +172,7 @@ namespace GRANTExample
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
    //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
             OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree())))); ;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
@@ -187,6 +190,7 @@ namespace GRANTExample
             Settings settings = new Settings();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
             bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(uiElementName);
             Console.WriteLine("Beispiel für " + uiElementName);
@@ -235,7 +239,7 @@ namespace GRANTExample
             proper1.controlTypeFiltered = "Screenshot";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm1);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm1);
             #endregion
 
             #region Element 2 Text
@@ -261,7 +265,7 @@ namespace GRANTExample
             proper2.controlTypeFiltered = "Text";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm2);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3 Text
@@ -282,7 +286,7 @@ namespace GRANTExample
             proper3.controlTypeFiltered = "Text";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm3);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm3);
             #endregion
 
             #region Element 4 Matrix
@@ -306,7 +310,7 @@ namespace GRANTExample
             proper4.controlTypeFiltered = "Matrix";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm4);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm4);
             #endregion
 
             #region Element 5 Button
@@ -326,7 +330,7 @@ namespace GRANTExample
             proper5.isEnabledFiltered = true;
             osm5.brailleRepresentation = e5;
             osm5.properties = proper5;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm5);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm5);
             #endregion
 
             #region Element 6 TextBox
@@ -349,7 +353,7 @@ namespace GRANTExample
             proper6.isEnabledFiltered = true;
             osm6.brailleRepresentation = e6;
             osm6.properties = proper6;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm6);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm6);
             #endregion
 
             #region Element 7 DropDownMenu
@@ -378,7 +382,7 @@ namespace GRANTExample
             proper7.controlTypeFiltered = "DropDownMenu";
             osm7.brailleRepresentation = e7;
             osm7.properties = proper7;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm7);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm7);
             #endregion
 
             #region Element 8 DropDownMenu
@@ -406,7 +410,7 @@ namespace GRANTExample
             proper8.isEnabledFiltered = true;
             osm8.brailleRepresentation = e8;
             osm8.properties = proper8;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm8);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm8);
             #endregion
 
             #region Element 9 DropDownMenu
@@ -434,7 +438,7 @@ namespace GRANTExample
             proper9.controlTypeFiltered = "DropDownMenu";
             osm9.brailleRepresentation = e9;
             osm9.properties = proper9;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm9);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm9);
             #endregion
 
             #region Element 10 DropDownMenu
@@ -463,7 +467,7 @@ namespace GRANTExample
             proper10.controlTypeFiltered = "DropDownMenu";
             osm10.brailleRepresentation = e10;
             osm10.properties = proper10;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm10);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm10);
             #endregion
 
             #region Element 11 Button
@@ -482,7 +486,7 @@ namespace GRANTExample
             proper11.controlTypeFiltered = "Button";
             osm11.brailleRepresentation = e11;
             osm11.properties = proper11;
-            strategyMgr.getSpecifiedTreeOperations().addNodeInBrailleTree(osm11);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm11);
             #endregion
 
         }
@@ -503,7 +507,7 @@ namespace GRANTExample
 
         public List<String> getPosibleScreens()
         {
-            return strategyMgr.getSpecifiedTreeOperations().getPosibleScreenNames();
+            return treeOperation.searchNodes.getPosibleScreenNames();
         }
     }
 }

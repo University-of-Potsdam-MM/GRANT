@@ -3,6 +3,7 @@ using GRANTManager;
 using OSMElement;
 using System.Windows;
 using System.Windows.Automation;
+using GRANTManager.TreeOperations;
 
 namespace GRANTManager.Interfaces
 {
@@ -26,7 +27,7 @@ namespace GRANTManager.Interfaces
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        Object filtering(int pointX, int pointY, GRANTManager.TreeScopeEnum treeScope, int depth);
+        Object filtering(int pointX, int pointY, GRANTManager.TreeScopeEnum treeScope, int depth = 0);
 
         //OSMElement.OSMElement filterElement(IntPtr hwnd);
         int deliverElementID(IntPtr hwnd);
@@ -55,6 +56,7 @@ namespace GRANTManager.Interfaces
 
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
+        void setTreeOperation(TreeOperation treeOperation);
         StrategyManager getStrategyMgr();
         Object updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum);
     };

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-
+using GRANTManager.TreeOperations;
 
 using GRANTManager.Interfaces;
 using OSMElement;
@@ -20,16 +20,18 @@ namespace GRANTManager
     public class GuiFunctions
     {
         StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTree;
+        GeneratedGrantTrees grantTrees;
+        TreeOperation treeOperation;
         private String filteredTreeSavedName = "filteredTree.xml";
         private String brailleTreeSavedName = "brailleTree.xml";
         private String osmConectorName = "osmConnector.xml";
         private String filterstrategyFileName = "filterstrategies.xml";
 
-        public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree)
+        public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree, TreeOperation treeOperation)
         {
             this.strategyMgr = strategyMgr;
-            this.grantTree = grantTree;
+            this.grantTrees = grantTree;
+            this.treeOperation = treeOperation;
         }
 
         public class MenuItem
@@ -385,10 +387,10 @@ namespace GRANTManager
         /// <param name="filePath">gibt den Dateipfad + Namen an</param>
         public void saveFilteredTree(String filePath)
         {
-            if (grantTree == null || grantTree.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
+            if (grantTrees == null || grantTrees.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                strategyMgr.getSpecifiedTree().XmlSerialize(grantTree.getFilteredTree(), fs);
+                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.getFilteredTree(), fs);
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -399,10 +401,10 @@ namespace GRANTManager
         /// <param name="filePath">gibt den Dateipfad + Namen an</param>
         private void saveBrailleTree(String filePath)
         {
-            if (grantTree == null || grantTree.getBrailleTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
+            if (grantTrees == null || grantTrees.getBrailleTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                strategyMgr.getSpecifiedTree().XmlSerialize(grantTree.getBrailleTree(), fs);
+                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.getBrailleTree(), fs);
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -413,7 +415,7 @@ namespace GRANTManager
         /// <param name="projectFilePath">gibt den Pfad + Dateinamen des Projektes an</param>
         public void saveProject(String projectFilePath)
         {
-            if (grantTree == null) { Debug.WriteLine("Grant-Tree ist null -- Projekt kann nicht gespeichert werden!"); return; }
+            if (grantTrees == null) { Debug.WriteLine("Grant-Tree ist null -- Projekt kann nicht gespeichert werden!"); return; }
             if (!Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
             {
                 // .grant hinzufügen
@@ -430,8 +432,6 @@ namespace GRANTManager
             projectObject.grantDisplayStrategyNamespace = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().Namespace;
             projectObject.grantTreeStrategyFullName = strategyMgr.getSpecifiedTree() == null ? null : strategyMgr.getSpecifiedTree().GetType().Namespace + "." + strategyMgr.getSpecifiedTree().GetType().Name;
             projectObject.grantTreeStrategyNamespace = strategyMgr.getSpecifiedTree() == null ? null : strategyMgr.getSpecifiedTree().GetType().Namespace;
-            projectObject.grantTreeOperationsFullName = strategyMgr.getSpecifiedTreeOperations() == null ? null : strategyMgr.getSpecifiedTreeOperations().GetType().Namespace + "." + strategyMgr.getSpecifiedTreeOperations().GetType().Name;
-            projectObject.grantTreeOperationsNamespace = strategyMgr.getSpecifiedTreeOperations() == null ? null : strategyMgr.getSpecifiedTreeOperations().GetType().Namespace;
             projectObject.grantOperationSystemStrategyFullName = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().FullName;
             projectObject.grantOperationSystemStrategyNamespace = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().Namespace;
             projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
@@ -441,27 +441,27 @@ namespace GRANTManager
             if (di.Exists)
             {
                 //löscht temporär alle kindelemente von Gruppen und deren Beziehungen im Braille-Baum
-                strategyMgr.getSpecifiedTreeOperations().deleteChildsOfBrailleGroups();
+                treeOperation.updateNodes.deleteChildsOfBrailleGroups();
                 saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + filteredTreeSavedName);
-                if (grantTree.getBrailleTree() != null)
+                if (grantTrees.getBrailleTree() != null)
                 {
                     saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + brailleTreeSavedName);
                 }
                 XmlSerializer serializer;
-                if (grantTree.getOsmRelationship() != null && !grantTree.getOsmRelationship().Equals(new OsmConnector<String, String>()) && grantTree.getOsmRelationship().Count > 0)
+                if (grantTrees.getOsmRelationship() != null && !grantTrees.getOsmRelationship().Equals(new OsmConnector<String, String>()) && grantTrees.getOsmRelationship().Count > 0)
                 {
                     using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + osmConectorName))
                     {
                         serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
-                        serializer.Serialize(writer, grantTree.getOsmRelationship());
+                        serializer.Serialize(writer, grantTrees.getOsmRelationship());
                     }
                 }
-                if (grantTree.getFilterstrategiesOfNodes() != null)
+                if (grantTrees.getFilterstrategiesOfNodes() != null)
                 {
                     using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + filterstrategyFileName))
                     {
                         serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
-                        serializer.Serialize(writer, grantTree.getFilterstrategiesOfNodes());
+                        serializer.Serialize(writer, grantTrees.getFilterstrategiesOfNodes());
                     }
                 }
                 using (StreamWriter writer = new StreamWriter(projectFilePath))
@@ -470,7 +470,7 @@ namespace GRANTManager
                     serializer.Serialize(writer, projectObject);
                 }
                 // erstellt wieder die Kinelemente von Gruppen und deren Beziehungen im Braille-Baum
-                strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+                treeOperation.updateNodes.updateBrailleGroups();
             }            
         }
 
@@ -522,7 +522,7 @@ namespace GRANTManager
                         try
                         {
                             List<OsmConnector<String, String>> osmConector = (List<OsmConnector<String, String>>)serializer.Deserialize(reader);
-                            grantTree.setOsmRelationship(osmConector);
+                            grantTrees.setOsmRelationship(osmConector);
                         }
                         catch (InvalidOperationException e) { Console.WriteLine("Fehler beim Laden der OSM-Beziehungen: {0}", e); }
                     }
@@ -534,7 +534,8 @@ namespace GRANTManager
             if (grantProjectObject.grantBrailleStrategyFullName != null && grantProjectObject.grantBrailleStrategyNamespace != null)
             {
                 strategyMgr.setSpecifiedBrailleDisplay(grantProjectObject.grantBrailleStrategyFullName + ", " + grantProjectObject.grantBrailleStrategyNamespace);
-                strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTree);
+                strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
+                strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
                 strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
             }
             if (grantProjectObject.grantDisplayStrategyFullName != null && grantProjectObject.grantDisplayStrategyNamespace != null)
@@ -544,12 +545,6 @@ namespace GRANTManager
             if (grantProjectObject.grantTreeStrategyFullName != null && grantProjectObject.grantTreeStrategyNamespace != null)
             {
                 strategyMgr.setSpecifiedTree(grantProjectObject.grantTreeStrategyFullName + ", " + grantProjectObject.grantTreeStrategyNamespace);
-            }
-            if (grantProjectObject.grantTreeOperationsFullName!= null && grantProjectObject.grantTreeOperationsNamespace != null)
-            {
-                strategyMgr.setSpecifiedTreeOperations(grantProjectObject.grantTreeOperationsFullName + ", " + grantProjectObject.grantTreeOperationsNamespace);
-                strategyMgr.getSpecifiedTreeOperations().setGeneratedGrantTrees(grantTree);
-                strategyMgr.getSpecifiedTreeOperations().setStrategyMgr(strategyMgr);
             }
             if (grantProjectObject.grantOperationSystemStrategyFullName != null && grantProjectObject.grantOperationSystemStrategyNamespace != null)
             {
@@ -579,11 +574,11 @@ namespace GRANTManager
                 Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
                 // fs.Close();<- nicht benötigt da using
                 //Baum setzen
-                grantTree.setBrailleTree(loadedTree);
+                grantTrees.setBrailleTree(loadedTree);
             }
             
             updateConnectedBrailleNodes();
-            strategyMgr.getSpecifiedTreeOperations().updateBrailleGroups();
+            treeOperation.updateNodes.updateBrailleGroups();
         }
 
         /// <summary>
@@ -591,13 +586,13 @@ namespace GRANTManager
         /// </summary>
         private void updateConnectedBrailleNodes()
         {
-            List<OsmConnector<String, String>> osmConector =  grantTree.getOsmRelationship();
+            List<OsmConnector<String, String>> osmConector =  grantTrees.getOsmRelationship();
             if (osmConector != null)
             {
                 foreach (OsmConnector<String, String> con in osmConector)
                 {
-                    OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTreeOperations().getBrailleTreeOsmElementById(con.BrailleTree);
-                    strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
+                    OSMElement.OSMElement brailleNode = treeOperation.searchNodes.getBrailleTreeOsmElementById(con.BrailleTree);
+                    treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
                 }
             }
         }
@@ -618,7 +613,7 @@ namespace GRANTManager
                     {
                         fs = null;
                         List<FilterstrategyOfNode<String, String, String>> filterstrategies = (List<FilterstrategyOfNode<String, String, String>>)serializer.Deserialize(reader);
-                        grantTree.setFilterstrategiesOfNodes(filterstrategies);
+                        grantTrees.setFilterstrategiesOfNodes(filterstrategies);
                     }
                     //fs.Close(); 
                 }
@@ -646,16 +641,17 @@ namespace GRANTManager
                 Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
                // fs.Close();
                 //Baum setzen
-                grantTree.setFilteredTree(loadedTree);
+                grantTrees.setFilteredTree(loadedTree);
             }
             //Filter-Strategy setzen
-            if (grantTree.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTree.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).Equals(new OSMElement.OSMElement()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.Equals(new GeneralProperties()))
+            if (grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).Equals(new OSMElement.OSMElement()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.Equals(new GeneralProperties()))
             {
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTree.getFilteredTree(), grantTree.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
+                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
                 if ( mainFilterstrategy != null)
                 {
                     strategyMgr.setSpecifiedFilter(mainFilterstrategy.FilterstrategyFullName+ ", " + mainFilterstrategy.FilterstrategyDll);
-                    strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
+                    strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+                    strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
                 }
                 else
                 {
@@ -678,21 +674,21 @@ namespace GRANTManager
         /// <returns><c>true</c> falls die Anwendung (nun) geöffnet ist; sonst <c>false</c></returns>
         public bool openAppOfFilteredTree()
         {
-            if (grantTree != null && grantTree.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTree.getFilteredTree()))
+            if (grantTrees != null && grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.moduleName == null)
+                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName == null)
                 {
                     Debug.WriteLine("Kein Daten im 1. Knoten Vorhanden.");
                     return false;
                 }
-                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.moduleName);
+                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName);
                 Debug.WriteLine("App ist gestartet: {0}", appIsRunnuing);
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
 
-                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.fileName != null)
+                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.fileName != null)
                     {
-                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTree.getFilteredTree())).properties.fileName);
+                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.fileName);
                         if (!openApp)
                         {
                             Debug.WriteLine("Anwendung konnte nicht geöffnet werden! Ggf. Pfad der Anwendung anpassen."); //TODO
@@ -703,8 +699,7 @@ namespace GRANTManager
                 }
                 else
                 {
-                    UpdateNode updateNodes = new UpdateNode(strategyMgr, grantTree);
-                    updateNodes.compareAndChangeFileName();
+                    treeOperation.updateNodes.compareAndChangeFileName();
                     //aktiviert die Anwendung (nötig falls es minimiert war)
                    
                     strategyMgr.getSpecifiedOperationSystem().showWindow(appIsRunnuing);
@@ -718,23 +713,23 @@ namespace GRANTManager
         public void filteredLoadedApplication()
         {
             //ist nur notwendig, wenn die Anwendung zwischendurch zu war (--> hwnd's vergleichen) oder die Anwendung verschoben wurde (--> Rect's vergleichen)
-            Object loadedTree = grantTree.getFilteredTree();
+            Object loadedTree = grantTrees.getFilteredTree();
 
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
 
-            strategyMgr.getSpecifiedTreeOperations().updateFilteredTree(hwnd);
+            treeOperation.updateNodes.updateFilteredTree(hwnd);
 
         }
 
         public void deleteGrantTrees()
         {
-            //grantTree = new GeneratedGrantTrees();
-            grantTree.setOsmRelationship(new List<OsmConnector<String, String>>());
-            grantTree.setFilterstrategiesOfNodes(new List<FilterstrategyOfNode<String, String, String>>());
+            //grantTrees = new GeneratedGrantTrees();
+            grantTrees.setOsmRelationship(new List<OsmConnector<String, String>>());
+            grantTrees.setFilterstrategiesOfNodes(new List<FilterstrategyOfNode<String, String, String>>());
             Object treeNew = strategyMgr.getSpecifiedTree().NewTree();
-            grantTree.setFilteredTree(null);
-            grantTree.setBrailleTree(null);
+            grantTrees.setFilteredTree(null);
+            grantTrees.setBrailleTree(null);
         }
 
         /// <summary>
@@ -743,15 +738,15 @@ namespace GRANTManager
         /// <param name="idGeneratedOfFirstNodeOfSubtree">gibt die Id des Knotens an, ab welcher der Teilbaum aktualisiert werden soll (inkl. diesem Knoten)</param>
         public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
         {
-            OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
+            OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
             Object subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
-            String idParent = strategyMgr.getSpecifiedTreeOperations().changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
-            Object tree = grantTree.getFilteredTree();
+            String idParent = treeOperation.updateNodes.changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
+            Object tree = grantTrees.getFilteredTree();
 
-            List<Object> searchResultTrees = strategyMgr.getSpecifiedTreeOperations().searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
+            List<Object> searchResultTrees = treeOperation.searchNodes.searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
             if (searchResultTrees != null && searchResultTrees.Count == 1)
             {
-                strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), searchResultTrees[0]);
+                treeOperation.updateNodes.setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), searchResultTrees[0]);
             }
             else
             {
@@ -820,7 +815,7 @@ namespace GRANTManager
         {
             int offsetX, offsetY;
             String viewAtPoint = strategyMgr.getSpecifiedBrailleDisplay().getBrailleUiElementViewNameAtPoint(x, y, out offsetX, out offsetY);
-            return strategyMgr.getSpecifiedTreeOperations().getTreeElementOfViewAtPoint(x, y, viewAtPoint, offsetX, offsetY);
+            return treeOperation.searchNodes.getTreeElementOfViewAtPoint(x, y, viewAtPoint, offsetX, offsetY);
         }
 
         /// <summary>
