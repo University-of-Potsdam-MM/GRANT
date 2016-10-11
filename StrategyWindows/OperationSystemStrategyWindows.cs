@@ -17,6 +17,16 @@ namespace StrategyWindows
 {
     public class OperationSystemStrategyWindows : IOperationSystemStrategy
     {
+        //todo null verweise?
+        public OperationSystemStrategyWindows()
+        {
+            windowsEventsHandler = new Windows_EventsHandler();
+            windowsEventsMonitor = new Windows_EventsMonitor(windowsEventsHandler);
+        }
+
+        Windows_EventsHandler windowsEventsHandler;
+        Windows_EventsMonitor windowsEventsMonitor;
+
         internal static class NativeMethods
         {
             [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -73,14 +83,12 @@ namespace StrategyWindows
                 this.X = x;
                 this.Y = y;
             }
-
-    }
+        }
 
         public void getCursorPoint(out int x, out int y)
         {
             x = cp.X;
             y = cp.Y;
-
         }
 
         // ermittel Desktoppu
@@ -88,16 +96,13 @@ namespace StrategyWindows
         {
            try
             {
-                return NativeMethods.GetDesktopWindow();
-                
+                return NativeMethods.GetDesktopWindow();                
             }
             catch (Exception e) // 
             {
                 throw new Exception("Fehler bei DesctopHWND: " + e.Message);
             }
         }
-
-
 
         // ermittel Cursor Position
         public bool deliverCursorPosition()
@@ -146,20 +151,6 @@ namespace StrategyWindows
             }
         }
 
-        // refresht Ansicht des übergebenen hwnd
-        public bool updateWindow(IntPtr hwnd)
-        {
-            try
-            {
-                NativeMethods.UpdateWindow(hwnd);
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Fehler bei UpdateWindow: " + e.Message);
-            }
-        }
-
         public Rectangle getRect(OSMElement.OSMElement osmElement)
         {
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
@@ -187,6 +178,22 @@ namespace StrategyWindows
             //updateWindow(IntPtr.Zero);
 
             newGraphics.Dispose();
+        }
+
+        //todo Code säubern
+        #region farbigeUmrandungDesGUIElement
+        // refresht Ansicht des übergebenen hwnd
+        public bool updateWindow(IntPtr hwnd)
+        {
+            try
+            {
+                NativeMethods.UpdateWindow(hwnd);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei UpdateWindow: " + e.Message);
+            }
         }
 
         public void paintScreenWithoutRect(Rectangle rect)
@@ -225,9 +232,7 @@ namespace StrategyWindows
             //redPen.
             newGraphics.DrawRectangle(redPen, rect);
             //newGraphics.Dispose();
-
-
-
+            
             System.Threading.Thread.Sleep(1000);
 
             //newGraphics.Clear(System.Drawing.Color.Transparent);
@@ -267,9 +272,8 @@ namespace StrategyWindows
 
             // Dispose of new graphics.
             newGraphics.Dispose();
-
         }
-
+        #endregion
 
         /// <summary>
         /// Ermittelt ob eine Anwendung geöffnet ist
@@ -294,10 +298,8 @@ namespace StrategyWindows
             return IntPtr.Zero;
         }
 
-
-
         /// <summary>
-        /// Ermittelt den Namen der Anwendung zurück
+        /// Ermittelt den Namen der Anwendung 
         /// </summary>
         /// <param name="name">Titel der Anwendung</param>
         /// <returns></returns>
@@ -318,7 +320,7 @@ namespace StrategyWindows
         }
 
         /// <summary>
-        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung
         /// </summary>
         /// <param name="name">gibt den Titel der Anwendung an</param>
         /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
@@ -360,7 +362,7 @@ namespace StrategyWindows
         }
 
         /// <summary>
-        /// Startete eine Anwendung
+        /// Startet eine Anwendung
         /// </summary>
         /// <param name="name">Gibt den Namen (inkl. Pfad) der Anwendung an</param>
         /// <returns><c>true</c> falls die Anwendung gestartet wurde; sonst <c>false</c></returns>
@@ -414,16 +416,19 @@ namespace StrategyWindows
             return true;
         }
 
+        //todo: diese methode i prism event manager aufrufen in ihr wird festgelgt,
+        //welche keyevents abgefragt werden sollen und wie... ohne festlegung, welche keyeventklasse genutzt wird 
+        //global oder einer bestimmten app übergabe des hwnd und ob mouse und/oder key
         //in interface nehmen
         public void InitializeWindows_EventsMonitor()
         {
-            Windows_EventsMonitor wem = new Windows_EventsMonitor();
+            //Windows_EventsMonitor wem = new Windows_EventsMonitor();
             
-            //wem.Unsubscribe();
+            ////wem.Unsubscribe();
             
-            wem.Subscribe();
-            //mouseKeyHookClass mk = new mouseKeyHookClass();
-            //mk.Subscribe();
+            //wem.Subscribe();
+            ////mouseKeyHookClass mk = new mouseKeyHookClass();
+            ////mk.Subscribe();
         }
 
     }

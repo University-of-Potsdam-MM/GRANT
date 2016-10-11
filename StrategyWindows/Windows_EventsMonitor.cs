@@ -11,6 +11,15 @@ namespace StrategyWindows
 {
     public class Windows_EventsMonitor
     {
+        //Konstruktor
+        Windows_EventsHandler eventHandlerWindows;
+        public Windows_EventsMonitor(Windows_EventsHandler eventHandlerWindows)
+        {
+            this.eventHandlerWindows = eventHandlerWindows;
+        }
+
+        #region mouseKeyboardEvents
+
         /// <summary>
         /// NuGET-Package: https://github.com/gmamaladze/globalmousekeyhook
         /// Use with WindowsForm: http://stackoverflow.com/questions/30678382/key-listener-not-firing-mousekeyhook und http://stackoverflow.com/questions/1730731/how-to-start-winform-app-minimized-to-tray/1732294#1732294
@@ -31,7 +40,103 @@ namespace StrategyWindows
         /// ToDo: Nutzung des Paket Screna: https://github.com/MathewSachin/Screna
         /// Capturing des Screen/Audio/Video/...
         /// </summary>
-        private static IKeyboardMouseEvents m_GlobalHook;
+        
+        private static IKeyboardMouseEvents m_MouseKeyEvents;
+
+        //todo
+        // array, oder reine stringliste mit üpbergabe der dinge die gehooed werden sollen
+        public bool[] keyboardMouseEventSelection = new bool[10];
+        public void initArray()
+        {
+            //keyboardMouseEventSelection = new bool[10];
+            for (int i = 0; i < keyboardMouseEventSelection.Length; i++)
+            {
+                keyboardMouseEventSelection[i] = false;
+            }
+            keyboardMouseEventSelection[0] = true;
+        }
+
+        public void subscribeWindowsEvents()
+        {
+            subscribeGlobalKeyboardMouse();
+            //subscribeApplicationKeyboardMouse();
+            Console.WriteLine("Subscribe der Events");
+        }
+
+        public void unsubscribeWindowsEvents()
+        {
+            unsubscribeKeyboardMouse();
+            Console.WriteLine("Unsubscribe der Events");
+        }
+
+        //Arbeit nur mit ApplicationEvents schwer möglich, 
+        //da unklar, ob der Filter den Fokus hat oder die eigentliche zu filternde Applikation 
+        public void subscribeApplicationKeyboardMouse()
+        {
+            unsubscribeKeyboardMouse();
+            //todo
+            //subscribeKeyboardMouse(prismEventAggregator, Hook.AppEvents(), keyboardMouseEventSelection);
+        }
+
+        private void subscribeGlobalKeyboardMouse()
+        {
+            unsubscribeKeyboardMouse();
+            subscribeKeyboardMouse(Hook.GlobalEvents(), keyboardMouseEventSelection);
+        }
+
+        /// <summary>
+        /// timestamp bei key?
+        /// </summary>
+        /// <param name="mouseKeyEvents"></param>
+        private void subscribeKeyboardMouse(IKeyboardMouseEvents mouseKeyEvents, bool[] keyboardMouseEventSelection)
+        {
+            //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
+            //if (m_Events != null) throw new InvalidOperationException("Can't hook more than once");
+            m_MouseKeyEvents = mouseKeyEvents;
+
+            //keyboard
+            keyboardMouseEventSelection[0] = true;
+            //wenn true dann machen
+            if (keyboardMouseEventSelection[0]) m_MouseKeyEvents.KeyUp += eventHandlerWindows.onKeyUp;
+
+            //mouse
+            //m_Events.MouseUp += OnMouseUp;
+            m_MouseKeyEvents.MouseUpExt += onMouseUpExt;
+            //m_Events.MouseClick += OnMouseClick;
+            //m_Events.MouseDoubleClick += OnMouseDoubleClick;
+        }
+
+        private void onMouseUpExt(object sender, MouseEventExtArgs e)
+        {
+            Console.WriteLine("MouseUp: \t{0}; \t System Timestamp: \t{1}", e.Button, e.Timestamp);
+
+            // uncommenting the following line will suppress the middle mouse button click
+            // if (e.Buttons == MouseButtons.Middle) { e.Handled = true; }
+        }
+
+        
+        //todo hier können alle unsubscribet werden, auch wenn sie gar nicht subscribed wurden???
+        public void unsubscribeKeyboardMouse()
+        {
+            //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
+            if (m_MouseKeyEvents == null) return;
+
+            //m_MouseKeyEvents.KeyDown -= OnKeyDown;
+            // keypress wirft kein event bei pfeiltasten
+            //m_MouseKeyEvents.KeyPress += GlobalHookKeyPress; 
+            m_MouseKeyEvents.KeyUp -= eventHandlerWindows.onKeyUp;
+
+            //m_Events.MouseUp -= OnMouseUp;
+            m_MouseKeyEvents.MouseUpExt -= onMouseUpExt;
+            //m_Events.MouseClick -= OnMouseClick;
+            //m_Events.MouseDoubleClick -= OnMouseDoubleClick;
+
+            //It is recommened to dispose it
+            m_MouseKeyEvents.Dispose();
+            m_MouseKeyEvents = null;
+        }
+
+        #endregion
 
         //Anmeldung der verschiedenen events, welche MouseKeyHook unterstützt
         public void Subscribe()
@@ -40,12 +145,12 @@ namespace StrategyWindows
             //if (m_GlobalHook != null) throw new InvalidOperationException("Can't hook more than once");
 
             // Note: for the application hook, use the Hook.AppEvents() instead
-            m_GlobalHook = Hook.GlobalEvents();
+            m_MouseKeyEvents = Hook.GlobalEvents();
 
-            m_GlobalHook.MouseDownExt += GlobalHookMouseDownExt;
+            m_MouseKeyEvents.MouseDownExt += GlobalHookMouseDownExt;
             // keypress wirft kein event bei pfeiltasten
             //m_GlobalHook.KeyPress += GlobalHookKeyPress; 
-            m_GlobalHook.KeyUp += OnKeyUp;
+            m_MouseKeyEvents.KeyUp += OnKeyUp;
 
             Console.WriteLine("Subscribe des Hook");
         }
@@ -87,14 +192,14 @@ namespace StrategyWindows
         public void Unsubscribe()
         {
             //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
-            //if (m_GlobalHook == null) return;
+            if (m_MouseKeyEvents == null) return;
 
-            m_GlobalHook.MouseDownExt -= GlobalHookMouseDownExt;
+            m_MouseKeyEvents.MouseDownExt -= GlobalHookMouseDownExt;
             //m_GlobalHook.KeyPress -= GlobalHookKeyPress;
-            m_GlobalHook.KeyUp -= OnKeyUp;
+            m_MouseKeyEvents.KeyUp -= OnKeyUp;
 
             //It is recommened to dispose it
-            m_GlobalHook.Dispose();
+            m_MouseKeyEvents.Dispose();
         }
 
     }
