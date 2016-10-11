@@ -22,13 +22,11 @@ namespace GRANTExample
         StrategyManager strategyMgr;
         TreeOperation treeOperation;
         GeneratedGrantTrees grantTrees;
-        IGenaralUiTemplate ui;
 
-        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees, IGenaralUiTemplate ui, TreeOperation treeOperation)
+        public ExampleBrailleDis(StrategyManager mgr, GeneratedGrantTrees grantTrees,  TreeOperation treeOperation)
         {
             strategyMgr = mgr;
             this.grantTrees = grantTrees;
-            this.ui = ui;
             this.treeOperation = treeOperation;
         }
 

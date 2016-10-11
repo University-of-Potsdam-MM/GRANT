@@ -668,8 +668,7 @@ namespace GRANTManager.TreeOperations
                             subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
                             String idParent = changeSubTreeOfFilteredTree(subtreeFiltered, id);
                             Object tree = grantTrees.getFilteredTree();
-                            Object subtree = treeOperation.searchNodes.getAssociatedNode(idParent, tree); //TODO: Prüfen, ob das der selbe Baum ist wie "subtreeFiltered"
-                           tree=  treeOperation.generatedIds.generatedIdsOfFilteredSubtree(subtree);
+                           tree=  treeOperation.generatedIds.generatedIdsOfFilteredSubtree(treeOperation.searchNodes.getAssociatedNode(idParent, tree));
                            grantTrees.setFilteredTree(tree);
                             subtreeFiltered = treeOperation.searchNodes.getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());
                             //entfernen des "alten" Braille-Teilbaums
@@ -679,8 +678,7 @@ namespace GRANTManager.TreeOperations
                             }
                             if (subtreeFiltered != null)
                             {
-                              /*  IGenaralUiTemplate uiTemplate = new GenaralUI(strategyMgr, grantTrees);
-                                uiTemplate.createUiElementFromTemplate(subtreeFiltered, templateobject, strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);*/
+                                strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementFromTemplate(subtreeFiltered, templateobject, strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                             }
                         }
                     }

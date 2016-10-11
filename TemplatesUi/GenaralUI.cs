@@ -21,8 +21,9 @@ namespace TemplatesUi
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
-        public GenaralUI(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) { this.strategyMgr = strategyMgr; this.grantTrees = grantTrees; this.treeOperation = treeOperation; }
-
+        public GenaralUI(StrategyManager strategyMgr) { this.strategyMgr = strategyMgr;   }
+        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
+        public void setTreeOperation(TreeOperation treeOperation) { this.treeOperation = treeOperation; }
         /// <summary>
         /// Ausgehend vom gefilterten Baum wird für einige UI-Elemente ein Template (<see cref="TemplateUi"/>) angewendet aus dem eine Standard UI erstellt wird.
         /// </summary>
@@ -499,7 +500,7 @@ namespace TemplatesUi
             Type typeOfTemplate = Type.GetType(templateObject.osm.brailleRepresentation.templateFullName + ", " + templateObject.osm.brailleRepresentation.templateNamspace);
             if (typeOfTemplate != null)
             {
-                ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees, treeOperation);
                 template.createUiElementFromTemplate(filteredSubtree, templateObject, brailleNodeId);
             }
         }

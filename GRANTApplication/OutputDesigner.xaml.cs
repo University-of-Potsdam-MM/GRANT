@@ -56,7 +56,9 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
 
-
+            strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
            // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);

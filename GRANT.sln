@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyUIA", "StrategyUIA\StrategyUIA.csproj", "{F181E453-0EBE-4775-9CC1-1CE26CDC4ED2}"
 EndProject
@@ -852,6 +852,7 @@ Global
 		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.Debug|x86.Build.0 = Debug|Any CPU
 		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Any CPU.Build.0 = Debug|Any CPU
 		{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}.DebugLibre|Mixed Platforms.ActiveCfg = Debug|Any CPU

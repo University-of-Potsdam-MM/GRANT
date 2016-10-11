@@ -49,7 +49,6 @@ namespace GRANTExample
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
-        IGenaralUiTemplate ui;
         
         /// <summary>
         /// Initialisierung der Eventverfolgung des NuGet-Package MousekeyHook
@@ -96,12 +95,15 @@ namespace GRANTExample
 
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
-            ui = new GenaralUI(strategyMgr, grantTree, treeOperation);
+            strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTree);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);
+
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             exampleTree = new ExampleTree(strategyMgr, grantTree, treeOperation);
             exampleInspectGui = new InspectGui(strategyMgr);
-            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, ui, treeOperation);
+            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, treeOperation);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
             guiFuctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
@@ -318,7 +320,7 @@ namespace GRANTExample
                 Debug.WriteLine("Das Template ist für eine größere Stifftplatte (min Height = " + minDeviceHeight + " Width = "+minDeviceWidth+") vorgesehen.");
                 return;
             }
-            ui.generatedUiFromTemplate(path);
+            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(path);
 
             if (grantTree.getBrailleTree() != null)
             {

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using GRANTManager.TreeOperations;
+
 namespace GRANTManager.Interfaces
 {
     public interface IGenaralUiTemplate
     {
+        void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
+        void setTreeOperation(TreeOperation treeOperation);
         void addNavigationbarForScreen(string pathToXml, Object subtree);
         void createUiElementsAllScreens(string pathToXml);
         void createUiElementsNavigationbarScreens(string pathToXml);
@@ -27,7 +31,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// [XmlIgnore]
         public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
-
+         
     }
 
 }
