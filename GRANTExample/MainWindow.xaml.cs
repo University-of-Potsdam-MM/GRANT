@@ -77,9 +77,8 @@ namespace GRANTExample
 
             List<Strategy> possibleTrees = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
-
-
-
+            
+            // Setzen des Eventmanager
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
             strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
 
@@ -143,6 +142,7 @@ namespace GRANTExample
                   grantTree.getFilteredTree().XmlSerialize(fs);
                   fs.Close();*/
                 Debug.WriteLine("F5");
+                //Debug.WriteLine(strategyMgr.getSpecifiedEventManager().deliverString().ToString());
             }
             if (e.Key == Key.F6)
             {
