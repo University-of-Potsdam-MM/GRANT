@@ -80,6 +80,11 @@ namespace GRANTExample
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
 
 
+
+            List<Strategy> possibleEventManager = settings.getPossibleEventManager();
+            strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
+
+
              List<Strategy> possibleFilter = settings.getPossibleFilters();
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));

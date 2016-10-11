@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StrategyEvents
+using GRANTManager;
+
+namespace GRANTManager.Interfaces
 {
-    public class Class1
+    public interface IEventManagerStrategy
     {
+        string deliverString(); 
     }
 }

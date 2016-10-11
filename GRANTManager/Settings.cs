@@ -141,5 +141,20 @@ namespace GRANTManager
             return displayStrategy;
         }
 
+        public List<Strategy> getPossibleEventManager()
+        {
+            List<Strategy> eventManager = new List<Strategy>();
+            List<String> eventManagerNames = getPossibleStrategyClasses("PossibleEventManager");
+            if (eventManagerNames == null) { return eventManager; }
+            Strategy f = new Strategy();
+            foreach (String fName in eventManagerNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                eventManager.Add(f);
+            }
+            return eventManager;
+        }
+
     }
 }
