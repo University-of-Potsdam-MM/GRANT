@@ -142,6 +142,7 @@ namespace GRANTExample
                   grantTree.getFilteredTree().XmlSerialize(fs);
                   fs.Close();*/
                 Debug.WriteLine("F5");
+                
                 //Debug.WriteLine(strategyMgr.getSpecifiedEventManager().deliverString().ToString());
             }
             if (e.Key == Key.F6)
@@ -325,6 +326,7 @@ namespace GRANTExample
             if (grantTree.getBrailleTree() != null)
             {
                 Debug.WriteLineIf(grantTree.getBrailleTree() != null, "Baum-Elemente Anzahl: " + strategyMgr.getSpecifiedTree().Count( grantTree.getBrailleTree()));
+               // Console.WriteLine("Baum:\n " + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
             }
             //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);
         }
