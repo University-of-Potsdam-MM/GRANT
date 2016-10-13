@@ -45,6 +45,8 @@
                     <Grid>
                         <ComboBox Name="comboBox2" ItemsSource="{Binding Combobox2items}"  VerticalAlignment="Center" HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
                     </Grid>-->
+                    <Label Foreground="White" Margin="75,5,5,5" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
+                    <Button Content="Save Project"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-1,0,-11,0">
                     <!--       <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
@@ -66,7 +68,7 @@
             <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="235" Margin="15,7,0,17" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="306">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree" HorizontalAlignment="Center" Width="235"/>
-                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="gridOutput"  Height="275" >
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="brailleOutput"  Height="275" >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                                 <StackPanel Orientation="Horizontal">
@@ -85,8 +87,8 @@
                     <RowDefinition Height="10*"/>
                 </Grid.RowDefinitions>
             -->
-                <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="470">
-                    <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="470" Height="Auto">
+                    <DataGrid CanUserResizeRows="False" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <DataGrid.LayoutTransform>
                             <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom}" ScaleY="{Binding Path=Value, ElementName=_zoom}" CenterX="0" CenterY="0" />
                         </DataGrid.LayoutTransform>
@@ -98,8 +100,8 @@
             </StackPanel>
         </Grid>
         <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gray" Height="40" Margin="-1,0,1,5">
-            <Label Foreground="White" VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
-            <Button Content="Save Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
+            <Label Foreground="White" VerticalAlignment="Center" Content="Load Default Gui template or custom template : "/>
+            <Button Content="Load Template" Click="LoadTemplate_Click" x:Name="LoadTemplate"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140"/>
         </StackPanel>
         <Grid DockPanel.Dock="Left" Height="335" VerticalAlignment="Top" Margin="5,5,5,5">
             <!-- Left-->
@@ -152,7 +154,7 @@
                     <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="230" Margin="0,0,-1,0">
                         <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
                 		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" EnableRowVirtualization="False" EnableColumnVirtualization="False"
-                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3">
+                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3" IsReadOnly="True">
                             <DataGrid.LayoutTransform>
                                 <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom1}" ScaleY="{Binding Path=Value, ElementName=_zoom1}" CenterX="0" CenterY="0" />
                             </DataGrid.LayoutTransform>

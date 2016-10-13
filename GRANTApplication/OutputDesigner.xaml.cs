@@ -299,13 +299,42 @@ namespace GRANTApplication
 
 
                 int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
-
                 comboBox2.SelectedIndex = var3;
                 listGuiElements();
                 int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
                 int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 createBrailleDisplay(dWidth, dHeight, dataGrid2);
 
+            }// Load Project wirft Fehler
+        }
+
+        private void LoadTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            // dlg.FileName = "filteredTree_"; // Default file name
+            dlg.DefaultExt = ".xml"; // Default file extension
+            dlg.Filter = "XML documents (.xml)|*.xml"; // Filter files by extension
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(dlg.FileName);
+                Object tree = grantTrees.getBrailleTree();
+
+                brailleOutput.Items.Clear();
+                root.Items.Clear();
+
+                //TreeViewItem root = new TreeViewItem();
+
+                root.controlTypeFiltered = "Braille-Tree";
+
+                //
+                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                SaveButton.IsEnabled = true;
+                brailleOutput.Items.Add(root);
             }// Load Project wirft Fehler
         }
 
