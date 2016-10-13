@@ -307,7 +307,7 @@ namespace GRANTExample
         {
            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
          //  String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-           String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+           String path = @"C:\Users\mkarlapp\Desktop\TemplateUi.xml";
 
             if (!GuiFunctions.isTemplateValid(path))
             {

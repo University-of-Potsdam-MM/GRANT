@@ -293,6 +293,7 @@ namespace GRANTApplication
 
                 //
                 guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                
                 SaveButton.IsEnabled = true;
                 tvOutput.Items.Add(root);
 
@@ -327,12 +328,14 @@ namespace GRANTApplication
                 brailleOutput.Items.Clear();
                 root.Items.Clear();
 
-                //TreeViewItem root = new TreeViewItem();
+               // TreeViewItem root = new TreeViewItem();
 
-                root.controlTypeFiltered = "Braille-Tree";
+               root.controlTypeFiltered = "Braille-Tree";
 
                 //
-                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+              //  guiFunctions.createTreeForOutput(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                guiFunctions.createTreeForOutput(tree, ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+               
                 SaveButton.IsEnabled = true;
                 brailleOutput.Items.Add(root);
             }// Load Project wirft Fehler

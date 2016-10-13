@@ -244,6 +244,71 @@ namespace GRANTManager
             }
         }
 
+        public void createTreeForOutput(Object tree, ref GuiFunctions.MenuItem root)
+        {
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
+            {
+                 MenuItem child = new MenuItem();
+                //Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node)) + node.ToString());
+                child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
+                child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
+                //String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered;
+                String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
+                if (nameFiltered.Length > 40)
+                {
+                    child.nameFiltered = nameFiltered.Substring(0, 40);
+                }
+                else
+                {
+                    child.nameFiltered = nameFiltered;
+                }
+
+                if (!strategyMgr.getSpecifiedTree().IsRoot(node))
+                {
+                    child.parentMenuItem = root;
+                    root.Items.Add(child);
+                    if (strategyMgr.getSpecifiedTree().IsLast(node))
+                    {
+                        root = getRootForNextElement(node, child);
+                    }
+                }
+                else { root = child; };
+
+                if (strategyMgr.getSpecifiedTree().HasChild(node))
+                {
+                    root = child;
+                }
+            }
+            //geht zurück zum "Root"-MenuItem
+            while (root.parentMenuItem != null)
+            {
+                root = root.parentMenuItem;
+            }
+        }
+
+        /// <summary>
+        /// Ermittelt zu einem Knoten das MenuItem, welches für den nächsten Knoten verwendet werden soll
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="nodeItem"></param>
+        /// <returns><c>GuiFunctions.MenuItem</c>, welches für den nächsten Knoten verwendet werden soll</returns>
+        private GuiFunctions.MenuItem getRootForNextElement(Object node, GuiFunctions.MenuItem nodeItem)
+        {
+            if (!strategyMgr.getSpecifiedTree().HasNext(node) && strategyMgr.getSpecifiedTree().HasParent(node)) 
+            {
+                if (strategyMgr.getSpecifiedTree().HasNext(strategyMgr.getSpecifiedTree().Parent(node)))
+                {
+                    return nodeItem.parentMenuItem.parentMenuItem;
+                }
+                else
+                {
+                    return getRootForNextElement(strategyMgr.getSpecifiedTree().Parent(node), nodeItem.parentMenuItem);
+                }
+            }
+            return nodeItem;
+        }
+
+
         public void treeIteration(Object tree, ref GuiFunctions.MenuItem root)
         {
 
@@ -252,9 +317,10 @@ namespace GRANTManager
             while (strategyMgr.getSpecifiedTree().HasChild(tree) && !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
             {
 
-
+                
                 MenuItem child = new MenuItem();
                 node1 = strategyMgr.getSpecifiedTree().Child(tree);
+                Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node1)) + node1.ToString() + "\t" + 1);
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
                 String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered;
@@ -309,6 +375,7 @@ namespace GRANTManager
                 MenuItem sibling = new MenuItem();
                 node1 = strategyMgr.getSpecifiedTree().Next(tree);
                 //Pruefung, ob wir es ans richtige Element ranhängen und ggf. korrigieren
+                Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node1)) + node1.ToString() + "\t"+ 2);
                 rootMenuItemCheckSibling(ref root, tree);
 
                 sibling.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
@@ -361,6 +428,8 @@ namespace GRANTManager
                     treeIteration(node1, ref root);
                 }
             }
+            Debug.WriteLine("strategyMgr.getSpecifiedTree().Count(tree) = {0}, strategyMgr.getSpecifiedTree().Depth(tree) = {1}", strategyMgr.getSpecifiedTree().Count(tree), strategyMgr.getSpecifiedTree().Depth(tree));
+            Debug.WriteLine(""+strategyMgr.getSpecifiedTree().IsRoot(tree));
             if (strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1)
             {
                 
