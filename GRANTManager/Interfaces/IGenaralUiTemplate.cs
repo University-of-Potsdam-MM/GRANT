@@ -23,6 +23,7 @@ namespace GRANTManager.Interfaces
         public String groupImplementedClassTypeDllName { get; set; } //nötig?
         public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
         public String name { get; set; }
+        public Boolean allElementsOfType { get; set;}
         public OSMElement.UiElements.Orientation orientation { get; set; }
 
         /// <summary>

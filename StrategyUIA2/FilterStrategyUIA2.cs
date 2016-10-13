@@ -205,7 +205,6 @@ namespace StrategyUIA2
             TreeWalker walker = TreeWalker.ContentViewWalker;
             AutomationElement elementParent = walker.GetParent(mainElement);
             filterChildren(elementParent, 1, ref tree);
-            Console.WriteLine();
             //oder             walker.GetPreviousSibling(mainElement);             walker.GetNextSibling(mainElement);
         }
 

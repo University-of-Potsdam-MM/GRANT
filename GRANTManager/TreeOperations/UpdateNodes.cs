@@ -321,21 +321,13 @@ namespace GRANTManager.TreeOperations
                 return null;
             }
             // prüfen, ob es die View auf dem Screen schon gibt
-            if (existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName))
+            if (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName))
             {
                 return null;
             }
             addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName);
-            Object tree = grantTrees.getBrailleTree();
-            Type t = grantTrees.getBrailleTree().GetType();
             //  foreach (INode<OSMElement.OSMElement> node in ((ITree<OSMElement.OSMElement>)grantTrees.getBrailleTree()).All.Nodes)
-            if (strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()) < 1)
-            {
-                Console.WriteLine();
-            }
-            Console.WriteLine("strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()) = {0}", strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()));
             Object children = strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree());
-            Console.WriteLine();
             foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
             {
                  //ermittelt an welchen Screen-Knoten die View angehangen werden soll
@@ -379,56 +371,7 @@ namespace GRANTManager.TreeOperations
             return null;
         }
 
-        /// <summary>
-        /// Prüft, ob die Angegebene View für den angegebenen Screen schon existiert
-        /// </summary>
-        /// <param name="screenName"></param>
-        /// <param name="viewName"></param>
-        /// <returns></returns>
-        private bool existViewInScreen(String screenName, String viewName)
-        {
-            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("")) { return false; }
-            OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
-            BrailleRepresentation brailleScreen = new BrailleRepresentation();
-            brailleScreen.screenName = screenName;
-            osmScreen.brailleRepresentation = brailleScreen;
-            if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
-            Object treeCopy = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
-            if (!strategyMgr.getSpecifiedTree().HasChild(treeCopy)) { return false; }
-            treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
-            bool hasNext = true;
-            do
-            {
-                if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.screenName.Equals(screenName))
-                {
-                    //TODO: alle Kinder untersuchen
-                    if (strategyMgr.getSpecifiedTree().HasChild(treeCopy))
-                    {
-                        treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
-                        if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
-                        while (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
-                        {
-                            treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
-                            if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName)) { Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true; }
-                        }
-                    }
-                    return false;
-                }
-                if (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
-                {
-                    treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
-                    hasNext = true;
-                }
-                else
-                {
-                    hasNext = false;
-                }
 
-            } while (hasNext);
-
-            return false;
-
-        }
 
         /// <summary>
         /// Fügt einen 'Zweig' für den Screen an den Root-Knoten an, falls der Screen im Baum noch nicht existiert

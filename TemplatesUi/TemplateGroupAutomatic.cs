@@ -27,7 +27,23 @@ namespace TemplatesUi
                 Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree();
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
+            //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
+            if (!templateObject.allElementsOfType || !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name))
+            {
+                braille.viewName = templateObject.name;
+            }
+            else
+            {
+                int i = 0;
+                String viewName = templateObject.name + "_"+i;
+                
+                while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName))
+                {
+                    i++;
+                    viewName += i;
+                }
+                braille.viewName = viewName;
+            }
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 
