@@ -47,29 +47,30 @@
                     </MenuItem>
 
                 </Menu>
-                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-3,0,-10,0" >
-                    <Label Margin="5,5,5,5" VerticalAlignment="Center" Content="Load:"/>
+                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="-3,0,-10,0" >
+                    <Label Foreground="White" Margin="5,5,5,5" VerticalAlignment="Center" Content="Load:"/>
                     <Button Content="Load Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140"  Margin="5,5,250,5 " Click="LoadButton_Click" x:Name="LoadButton"/>
-                    <Label  HorizontalAlignment="Left" VerticalAlignment="Center" Content="Start Output Design"/>
+                    <Label Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Start Output Design"/>
                     <Button Content="Start Output Designer" CommandParameter="{Binding TreeLoad}" HorizontalAlignment="Right" Height="22" VerticalAlignment="Center" Width="170" Click="SaveStartButton_Click" x:Name="SaveStartButton" />
 
 
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="-1,0,-11,0" >
-                    <Label Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Filterstrategy: "/>
-                    <RadioButton Foreground="White" GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
-                    <RadioButton Foreground="White"  GroupName="Filter" Content="JAB"  Click="RadioButton_Click"  Height="14" Width="42" />
-                    <RadioButton Foreground="White" GroupName="Filter" Content="UIA2"  Click="RadioButton_Click"  Height="14" Width="42" />
-
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-3,0,-11,0" >
+                    <Label Margin="5,5,5,5"  VerticalAlignment="Top" Content="Filterstrategy: "/>
+                    <RadioButton  GroupName="Filter" Content="UIA"   Click="RadioButton_Click" IsChecked="True" Height="14" Width="45"/>
+                    <RadioButton   GroupName="Filter" Content="JAB"  Click="RadioButton_Click"  Height="14" Width="42" />
+                    <RadioButton  GroupName="Filter" Content="UIA2"  Click="RadioButton_Click"  Height="14" Width="42" />
+                    <Label Margin="68,5,5,5"  VerticalAlignment="Top" HorizontalAlignment="Right" Content="Filter marked tree node with choosen Filterstrategy: " Width="285"/>
+                    <Button Content="Filter Node" Click="Node_Click" x:Name="NodeButton" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Right" VerticalAlignment="Center" Width="140" Margin="5,0,0,0"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-1,0,-11,0">
+               <!-- <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-1,0,-11,0">
                     <Label Margin="5,5,5,5" VerticalAlignment="Top" Content="Filter marked tree node with choosen Filterstrategy: "/>
                     <Button Content="Filter Node" Click="Node_Click" x:Name="NodeButton" CommandParameter="{Binding IdGenerated}" IsEnabled="{Binding BEnabled}"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="140"/>
 
                 </StackPanel>
-
+-->
             </StackPanel>
         </StackPanel>
         <StackPanel Background="GhostWhite" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="137" Width="738"  >
@@ -78,8 +79,8 @@
 
         </StackPanel>
 
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40"  Margin="-1,0,-11,0">
-            <Label  HorizontalAlignment="Left" VerticalAlignment="Center" Content="Save Filtered Tree as Project"/>
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gray" Height="40"  Margin="-1,-80,-11,0">
+            <Label Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Save Filtered Tree as Project"/>
             <Button Content="Save Project" HorizontalAlignment="Center" Height="22" VerticalAlignment="Center" Width="140" Click="SaveButton_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}" Margin="5,5"/>
 
 
@@ -88,7 +89,7 @@
 
 
         <!-- Left-->
-        <ScrollViewer Margin="-1,10,-1,0"  DockPanel.Dock="Left" BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="330" Background="GhostWhite" Height="490">
+        <ScrollViewer Margin="-1,-70,-1,0"  DockPanel.Dock="Left" BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="330" Background="GhostWhite" Height="490">
             <StackPanel Background="GhostWhite"  Width="320" VerticalAlignment="Top" Height="485">
                 <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" Height="31" Width="300" Margin="5,0,13,0"/>
                 <TreeView Background="White" x:Name="tvMain" BorderThickness="1" MinHeight="250" Width="300"  Height="447" Margin="6,0,14,0" >
@@ -117,7 +118,7 @@
 
         </ScrollViewer>
 
-        <ScrollViewer Margin="-1,10,-1,0" DockPanel.Dock="Right" BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="390" Background="GhostWhite" Height="490">
+        <ScrollViewer Margin="-1,-70,-1,0" DockPanel.Dock="Right" BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="390" Background="GhostWhite" Height="490">
             <StackPanel Background="White"  Width="370" VerticalAlignment="Top" Height="480" MaxHeight="478">
                 <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Properties" Width="370"  Height="31"/>
                 <DataGrid  HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid1" Background="White" Height="447" Width="370" >

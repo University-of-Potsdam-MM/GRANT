@@ -146,124 +146,54 @@ namespace GRANTApplication
         private void listBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dataGrid3.ItemsSource = null;
-            // CellContent cellContent = new CellContent();
             if (((ListBox)sender).SelectedItem != null)
             {
                 String element = (sender as ListBox).SelectedItem.ToString();
                 bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(element);
 
+                //DataTable dataTable4 = createBrailleDisplay3((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3);
 
-                DataTable dataTable4 = createBrailleDisplay3((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3);
-
+                DataTable dataTable4 = createBrailleDisplayMatrix((guiElementRep.Length / guiElementRep.GetLength(0)), guiElementRep.GetLength(0), dataGrid3);
 
                 for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite / Column
                 {
-                    //System.Console.WriteLine(a.ToString());
-                   // System.Console.WriteLine("a:" + a.ToString());
-                    // DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
-                    //                         .ContainerFromIndex(i);
-                    //  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator
-                    //  .ContainerFromIndex(i);
-                    // row.Background = Brushes.Red;
-                    //DataRow dr = (DataRow)row.DataContext;
-
-
-
-                    //  DataColumn dc = new DataColumn();
-                    //   dataTable4.Columns.Add(new DataColumn(a.ToString()));
-
-
                     for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
                     {
-                        //System.Console.WriteLine("i: " + i.ToString());
-
-                        // cellContent.cellinput = guiElementRep[i, a].ToString();
-                        //System.Console.WriteLine(guiElementRep[i, a].ToString());
-                        // DataRow row1 = dataTable4.NewRow();
-
-                        //dataTable4.Rows.Add(row1);
-
-                        //leer
-                          dataTable4.Rows[i][a] = "";
+                        dataTable4.Rows[i][a] = "";
                         //dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
-                        
-
-                        //dataGrid3.RowBackground = Brushes.Black;
-                        /* if (dataTable4.Rows[i][a].ToString() == "True")
-                         {
-                             //dataGrid3.RowBackground = Brushes.Black;
-                             DataGridCell firstColumnInFirstRow = dataGrid3.Columns[1].GetCellContent(dataGrid3.Items[1]).Parent as DataGridCell;
-                             firstColumnInFirstRow.Background = Brushes.Black;
-
-                         }*/
-                        // else { dataGrid3.RowBackground = Brushes.White; }
-                        // DataGridRow firstRow = dataGrid3.ItemContainerGenerator.ContainerFromItem(dataGrid3.Items[1]) as DataGridRow;
-
-                        /*   DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(i);
-                           if (row == null)
-                           {
-                               dataGrid3.UpdateLayout();
-                               dataGrid3.ScrollIntoView(dataGrid3.Items[i]);
-                               row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(i);
-                           }
-                           //System.Console.WriteLine("first: " + row.ToString());
-                           DataGridCell firstColumnInFirstRow = dataGrid3.Columns[a].GetCellContent(row).Parent as DataGridCell;
-                           //set background
-                           firstColumnInFirstRow.Background = Brushes.Black;
-                       }*/
-                        // dataGrid3.ItemsSource = "xxx";
                     }
 
                 }
-
                 dataGrid3.ItemsSource = dataTable4.AsDataView();
                 malemal(dataGrid3, guiElementRep);
             }
-           
-            
         }
 
         public void malemal(DataGrid datagrid, bool[,] guiElementRep)
         {
-           
-         
            for (int h = 0; h < dataGrid3.Items.Count; h++)
            // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
             {
                DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
-                if (row == null)
-                     {
-                         dataGrid3.UpdateLayout();
-                         dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
-                         row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
-             
-                     }
-                     
-               
-               
-                for (int w = 0; w < dataGrid3.Columns.Count; w++)
+               if (row == null)
+               {
+                  dataGrid3.UpdateLayout();
+                  dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
+                  row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+               }
+               for (int w = 0; w < dataGrid3.Columns.Count; w++)
                 {
-                   
-                      
                     if (dataGrid3.Columns[w].GetCellContent(row) == null)
                     {
                         dataGrid3.UpdateLayout();
-                        
                     }
                     DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
-                    //set background
-                                                                                                                         //  DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
-                 
-                    //TextBlock tb = firstColumnInFirstRow.Content as TextBlock;
-                    //System.Console.WriteLine("first: " + firstColumnInFirstRow.ToString());
-                    //System.Console.WriteLine("second: " + );
                     if (guiElementRep[h, w].ToString() == "True") { 
-                        firstColumnInFirstRow.Background = Brushes.Black; }
-                    else {  firstColumnInFirstRow.Background = Brushes.White; }
-
-                    //guiElementRep[i, a].ToString();
-
-                    //firstColumnInFirstRow.Background = Brushes.Black;
+                        firstColumnInFirstRow.Background = Brushes.Black;
+                    }
+                    else {
+                        firstColumnInFirstRow.Background = Brushes.White;
+                    }
                 }
                
             }
@@ -271,57 +201,18 @@ namespace GRANTApplication
 
 
 
-
-        private DataTable createBrailleDisplay3(int dWidth, int dHeight, DataGrid dataGrid)
-        {
-            //var dataGrid = sender as DataGrid;
-          //  System.Console.WriteLine(" DWIDTH: " + dWidth);
-
-           // System.Console.WriteLine(" DHEIGHT: " + dHeight);
-            // Add 10 Rows
-            DataTable dataTable = new DataTable();
-
-            // Add 7 Columns
-            for (int i = 1; i <= dWidth; i++)
-            {
-
-                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
-                dataTable.Columns.Add(dCol1);
-
-            }
-
-            //dataGrid2.ItemsSource = dataTable.DefaultView;
-            for (int i = 1; i <= dHeight; i++)
-            {
-                DataRow row1 = dataTable.NewRow();
-                dataTable.Rows.Add(row1);
-
-            }
-
-            //dataGrid.ItemsSource = dataTable.DefaultView;
-
-
-            dataGrid.ItemsSource = dataTable.AsDataView();
-            return dataTable;
-
-        }
-
-        private void createBrailleDisplayMatrix(int dWidth, int dHeight, DataGrid dataGrid, bool[,] guiElementRep)
+        private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
         {
             //var dataGrid = sender as DataGrid;
             System.Console.WriteLine(" DWIDTH: " + dWidth);
-
             System.Console.WriteLine(" DHEIGHT: " + dHeight);
             // Add 10 Rows
-            DataTable dataTable = new DataTable();
 
-            // Add 7 Columns
+            DataTable dataTable = new DataTable();
             for (int i = 0; i < dWidth; i++)
             {
-
                 DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
                 dataTable.Columns.Add(dCol1);
-
             }
 
             //dataGrid2.ItemsSource = dataTable.DefaultView;
@@ -329,15 +220,26 @@ namespace GRANTApplication
             {
                 DataRow row1 = dataTable.NewRow();
                 dataTable.Rows.Add(row1);
-
+                System.Console.WriteLine(" ROW: " + row1);
             }
 
             //dataGrid.ItemsSource = dataTable.DefaultView;
-
-
             dataGrid.ItemsSource = dataTable.AsDataView();
-          
+        }
 
+        private DataTable createBrailleDisplayMatrix(int dWidth, int dHeight, DataGrid dataGrid)
+        {
+            DataTable dataTable = new DataTable();
+            for (int i = 0; i < dWidth; i++){
+                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+                dataTable.Columns.Add(dCol1);
+            }
+            for (int i = 0; i < dHeight; i++){
+                DataRow row1 = dataTable.NewRow();
+                dataTable.Rows.Add(row1);
+            }
+            dataGrid.ItemsSource = dataTable.AsDataView();
+            return dataTable;
         }
 
         private void SaveProject_Click(object sender, RoutedEventArgs e)
@@ -459,7 +361,7 @@ namespace GRANTApplication
 
         }
 
-        private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
+   /*     private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
         {
             //var dataGrid = sender as DataGrid;
             System.Console.WriteLine(" DWIDTH: " + dWidth);
@@ -492,7 +394,7 @@ namespace GRANTApplication
         }
 
 
-      
+     */ 
 
 
 
@@ -512,7 +414,7 @@ namespace GRANTApplication
             int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
             //dataGrid2.ItemsSource = null;
            
-            createBrailleDisplay(dWidth, dHeight, dataGrid2);
+            createBrailleDisplay(dWidth, dHeight, dataGrid2); // später das zu matrix machen
             // this.Title = "Selected: " + value;
 
         }
