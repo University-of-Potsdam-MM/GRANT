@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Globalization;
 using System.Collections;
 using GRANTManager.TreeOperations;
+using System.Linq;
 
 namespace GRANTApplication
 {
@@ -22,7 +23,7 @@ namespace GRANTApplication
         Settings settings;
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
-        TreeOperation treeOperation;
+        TreeOperation treeOperations;
         GuiFunctions.MenuItem root;
         GuiFunctions guiFunctions;
         int var2;
@@ -37,7 +38,7 @@ namespace GRANTApplication
             settings = new Settings();
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
-            treeOperation = new TreeOperation(strategyMgr, grantTrees);
+            treeOperations = new TreeOperation(strategyMgr, grantTrees);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -49,26 +50,28 @@ namespace GRANTApplication
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
-            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
+            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
             strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
-            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
+            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperations);
 
             strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
-            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperations);
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
             tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
-           // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);
+            // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);
+            brailleOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleOutput_SelectedItemChanged);
 
-            guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
+            guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
 
             root = new GuiFunctions.MenuItem();
 
             //NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
+            LoadTemplate.IsEnabled = false;
             //dataGrid3.Visibility = false;
 
 
@@ -295,6 +298,7 @@ namespace GRANTApplication
                 guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                 
                 SaveButton.IsEnabled = true;
+                LoadTemplate.IsEnabled = true;
                 tvOutput.Items.Add(root);
 
 
@@ -464,7 +468,7 @@ namespace GRANTApplication
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
                 if (item.IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperation.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     if (osmElement.properties.isOffscreenFiltered == false) { 
                     strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
@@ -497,7 +501,213 @@ namespace GRANTApplication
 
         }
 
-     
+        void updatePropertiesTable(String IdGenerated)
+        {
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+
+
+            DataTable dataTable = new DataTable();
+
+            DataColumn dc = new DataColumn();
+            dataTable.Columns.Add(new DataColumn("Property"));
+            dataTable.Columns.Add(new DataColumn("Content"));
+
+
+            DataRow dataRow = dataTable.NewRow();
+            DataRow dataRow1 = dataTable.NewRow();
+            DataRow dataRow2 = dataTable.NewRow();
+            DataRow dataRow3 = dataTable.NewRow();
+            DataRow dataRow4 = dataTable.NewRow();
+            DataRow dataRow5 = dataTable.NewRow();
+            DataRow dataRow6 = dataTable.NewRow();
+            DataRow dataRow7 = dataTable.NewRow();
+            DataRow dataRow8 = dataTable.NewRow();
+            DataRow dataRow9 = dataTable.NewRow();
+            DataRow dataRow10 = dataTable.NewRow();
+            DataRow dataRow11 = dataTable.NewRow();
+            DataRow dataRow12 = dataTable.NewRow();
+
+            DataRow dataRow13 = dataTable.NewRow();
+            DataRow dataRow14 = dataTable.NewRow();
+            DataRow dataRow15 = dataTable.NewRow();
+            DataRow dataRow16 = dataTable.NewRow();
+            DataRow dataRow17 = dataTable.NewRow();
+            DataRow dataRow18 = dataTable.NewRow();
+            DataRow dataRow19 = dataTable.NewRow();
+            DataRow dataRow20 = dataTable.NewRow();
+            DataRow dataRow21 = dataTable.NewRow();
+            DataRow dataRow22 = dataTable.NewRow();
+            DataRow dataRow23 = dataTable.NewRow();
+            DataRow dataRow24 = dataTable.NewRow();
+            DataRow dataRow25 = dataTable.NewRow();
+
+            dataRow[0] = "IdGenerated";
+            if (osmElement.properties.IdGenerated == null) { return; }
+            dataRow[1] = osmElement.properties.IdGenerated.ToString();
+            dataTable.Rows.Add(dataRow);
+
+
+            dataRow1[0] = "ControlType";
+            dataRow1[1] = osmElement.properties.controlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow1);
+
+            dataRow2[0] = "Name";
+            dataRow2[1] = osmElement.properties.nameFiltered.ToString();
+            dataTable.Rows.Add(dataRow2);
+
+            dataRow3["Property"] = "AcceleratorKey";
+            dataRow3["Content"] = osmElement.properties.acceleratorKeyFiltered.ToString();
+            dataTable.Rows.Add(dataRow3);
+
+            dataRow4["Property"] = "AccessKey";
+            dataRow4["Content"] = osmElement.properties.accessKeyFiltered.ToString();
+            dataTable.Rows.Add(dataRow4);
+
+            dataRow5["Property"] = "HelpText";
+            dataRow5["Content"] = osmElement.properties.helpTextFiltered.ToString();
+            dataTable.Rows.Add(dataRow5);
+
+            dataRow6["Property"] = "AutoamtionId";
+            dataRow6["Content"] = osmElement.properties.autoamtionIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow6);
+
+            dataRow7["Property"] = "ClassName";
+            dataRow7["Content"] = osmElement.properties.classNameFiltered.ToString();
+            dataTable.Rows.Add(dataRow7);
+
+            dataRow8["Property"] = "Value";
+            dataRow8["Content"] = osmElement.properties.valueFiltered;
+            dataTable.Rows.Add(dataRow8);
+
+            dataRow9["Property"] = "FrameWorkId";
+            dataRow9["Content"] = osmElement.properties.frameWorkIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow9);
+
+            dataRow10["Property"] = "ItemType";
+            dataRow10["Content"] = osmElement.properties.itemTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow10);
+
+            dataRow11["Property"] = "ItemStatus";
+            dataRow11["Content"] = osmElement.properties.itemStatusFiltered.ToString();
+            dataTable.Rows.Add(dataRow11);
+
+            dataRow12["Property"] = "Filterstrategy";
+            //dataRow12["Content"] = filteredSubtree.properties.grantFilterStrategy == null ? " " : filteredSubtree.properties.grantFilterStrategy.ToString();
+            //dataRow12["Content"] =  filteredSubtree.properties.grantFilterStrategyFullName;
+            dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
+            dataTable.Rows.Add(dataRow12);
+
+            dataRow13["Property"] = "labeledbyFiltered";
+            dataRow13["Content"] = osmElement.properties.labeledbyFiltered == null ? " " : osmElement.properties.labeledbyFiltered.ToString();
+            dataTable.Rows.Add(dataRow13);
+
+            dataRow14["Property"] = "localizedControlTypeFiltered";
+            dataRow14["Content"] = osmElement.properties.localizedControlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow14);
+
+            dataRow15["Property"] = "processIdFiltered";
+            dataRow15["Content"] = osmElement.properties.processIdFiltered.ToString();
+            dataTable.Rows.Add(dataRow15);
+
+            dataRow16["Property"] = "isKeyboardFocusableFiltered";
+            dataRow16["Content"] = osmElement.properties.isKeyboardFocusableFiltered == null ? " " : osmElement.properties.isKeyboardFocusableFiltered.ToString();
+            dataTable.Rows.Add(dataRow16);
+
+            dataRow17["Property"] = "isEnabledFiltered";
+            dataRow17["Content"] = osmElement.properties.isEnabledFiltered == null ? " " : osmElement.properties.isEnabledFiltered.ToString();
+            dataTable.Rows.Add(dataRow17);
+
+            dataRow18["Property"] = "isOffscreenFiltered";
+            dataRow18["Content"] = osmElement.properties.isOffscreenFiltered == null ? " " : osmElement.properties.isOffscreenFiltered.ToString();
+            dataTable.Rows.Add(dataRow18);
+
+            dataRow19["Property"] = "isContentElementFiltered";
+            dataRow19["Content"] = osmElement.properties.isContentElementFiltered == null ? " " : osmElement.properties.isContentElementFiltered.ToString();
+            dataTable.Rows.Add(dataRow19);
+
+            dataRow20["Property"] = "hasKeyboardFocusFiltered";
+            dataRow20["Content"] = osmElement.properties.hasKeyboardFocusFiltered == null ? " " : osmElement.properties.hasKeyboardFocusFiltered.ToString();
+            dataTable.Rows.Add(dataRow20);
+
+            dataRow21["Property"] = "isPasswordFiltered";
+            dataRow21["Content"] = osmElement.properties.isPasswordFiltered == null ? " " : osmElement.properties.isPasswordFiltered.ToString();
+            dataTable.Rows.Add(dataRow21);
+
+            dataRow22["Property"] = "isRequiredForFormFiltered";
+            dataRow22["Content"] = osmElement.properties.isRequiredForFormFiltered == null ? " " : osmElement.properties.isRequiredForFormFiltered.ToString();
+            dataTable.Rows.Add(dataRow22);
+
+            dataRow23["Property"] = "hWndFiltered";
+            dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
+            dataTable.Rows.Add(dataRow23);
+
+            String ids = String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
+
+            dataRow24["Property"] = "runtimeIDFiltered";
+            dataRow24["Content"] = ids;
+            dataTable.Rows.Add(dataRow24);
+
+            dataRow25["Property"] = "boundingRectangleFiltered";
+            dataRow25["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
+            dataTable.Rows.Add(dataRow25);
+            dataTable.Rows.Add();
+
+
+
+            //dataTable.Rows.Add();
+
+            //dataTable.Rows.Add(dataRow);
+            dataGrid4.ItemsSource = dataTable.DefaultView;
+
+            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+
+
+            // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
+            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+
+           // NodeButton.CommandParameter = IdGenerated;
+
+        }
+
+        void brailleOutput_SelectedItemChanged(object sender,
+        RoutedPropertyChangedEventArgs<object> e)
+        {
+            //NodeButton.IsEnabled = true;
+
+            var tree = sender as TreeView;
+
+            // ... Determine typeOfTemplate of SelectedItem.
+            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            {
+                // ... Handle a TreeViewItem.
+                GuiFunctions.MenuItem item = tree.SelectedItem as GuiFunctions.MenuItem;
+                //this.Title = "Selected header: " + item.IdGenerated.ToString();
+                if (item.IdGenerated != null)
+                {
+                    //Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+
+                    //root = root.parentMenuItem == null ? root : root.parentMenuItem;
+                    //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
+
+                    //updateProperties(item);
+                    updatePropertiesTable(item.IdGenerated);
+                }
+                //Methode MenuItem übergeben - tabelle
+            }
+            else if (tree.SelectedItem is string)
+            {
+                // ... Handle a string.
+                //this.Name = "Selected: " + parentNode.SelectedItem.ToString();
+                Console.WriteLine("Fehler: ");
+
+            }
+            //OSMElement.OSMElement filteredSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
+            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(filteredSubtree);
+
+
+            //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+        }
+
     }
 }
 //wird im  moment nicht aufgerufen
