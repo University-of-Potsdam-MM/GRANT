@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GRANTManager;
 using GRANTManager.TreeOperations;
 using System.Collections.Generic;
+using System.Diagnostics;
+using OSMElement;
 
 namespace FilteredTreeTest
 {
@@ -11,11 +13,10 @@ namespace FilteredTreeTest
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
-        // SearchNodes searchNodes;
+        SearchNodes searchNodes;
         TreeOperation treeOperation;
         GuiFunctions guiFuctions;
-        private String applicationName = "calc.exe";
-        private String applicationPathName = @"C:\Windows\system32\calc.exe";
+        private String projectPath;
 
         [TestInitialize]
         public void Initialize()
@@ -23,7 +24,7 @@ namespace FilteredTreeTest
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
             Settings settings = new Settings();
-            //  searchNodes = new SearchNodes(strategyMgr, grantTrees);
+            searchNodes = new SearchNodes(strategyMgr, grantTrees);
             treeOperation = new TreeOperation(strategyMgr, grantTrees);
             List<GRANTManager.Strategy> posibleOS = settings.getPossibleOperationSystems();
             strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
@@ -37,11 +38,115 @@ namespace FilteredTreeTest
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
+            projectPath = System.IO.Path.Combine(
+            System.IO.Path.GetDirectoryName(
+            System.Reflection.Assembly.GetExecutingAssembly().Location), "SavedTrees");
+            projectPath = System.IO.Path.Combine(projectPath, "filteredTree_Rechner.grant");
+            //
         }
 
         [TestMethod]
         public void TestLoadFilteredTree()
         {
+            guiFuctions.loadGrantProject(@projectPath);
+            if (grantTrees.getFilteredTree() == null)
+            {
+                Assert.Fail("Es ist kein gefilterter Baum vorhanden!");
+            }
+            if(strategyMgr.getSpecifiedTree().Count(grantTrees.getFilteredTree()) != 45)
+            {
+                Assert.Fail("Der gefilterte Baum hätte 45 Knoten haben müssen -- er hat {0} Knoten!", strategyMgr.getSpecifiedTree().Count(grantTrees.getFilteredTree()));
+            }
+            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
+            if (!mainFilterstrategy.FilterstrategyFullName.Equals("StrategyUIA.FilterStrategyUIA"))
+            {
+                Assert.Fail("Der 1. Knoten hätte mit 'StrategyUIA.FilterStrategyUIA' gefiltert werden sollen -- genutzter Filter ist '{0}'", mainFilterstrategy.FilterstrategyFullName);
+            }
+            FilterstrategyOfNode<String, String, String> node_ED842B72B012E86CE468B73FA1378361 = FilterstrategiesOfTree.getFilterstrategyOfNode("ED842B72B012E86CE468B73FA1378361", grantTrees.getFilterstrategiesOfNodes());
+            if (!node_ED842B72B012E86CE468B73FA1378361.FilterstrategyFullName.Equals("StrategyUIA2.FilterStrategyUIA2"))
+            {
+                Assert.Fail("Der Knoten mit der Id 'ED842B72B012E86CE468B73FA1378361' hätte mit 'StrategyUIA2.FilterStrategyUIA2' gefiltert werden sollen -- genutzter Filter ist '{1}'", node_ED842B72B012E86CE468B73FA1378361.FilterstrategyFullName);
+            }
+            Debug.WriteLine(node_ED842B72B012E86CE468B73FA1378361.FilterstrategyFullName);
+            guiFuctions.deleteGrantTrees();
+        }
+
+        [TestMethod]
+        public void TestLoadFilteredTreeAndCompare()
+        {
+            guiFuctions.loadGrantProject(@projectPath);
+            if (grantTrees.getFilteredTree() == null)
+            {
+                Assert.Fail("Es ist kein gefilterter Baum vorhanden!");
+            }
+            Object loadedTree = strategyMgr.getSpecifiedTree().Copy( grantTrees.getFilteredTree());
+            FilterstrategyOfNode<String, String, String> mainFilterstrategyLoaded = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
+            String moduleName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName;
+            String fileName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.fileName;
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(moduleName); //Die Anwendung sollte schon offen sein, durch das Laden des Baums
+            grantTrees.setFilteredTree( strategyMgr.getSpecifiedFilter().filtering(appHwnd));
+            // Debug.WriteLine("\n\n"+strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getFilteredTree())+"\n\n");
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getFilteredTree()))
+            {
+                List<Object> nodes = searchNodes.getAssociatedNodeList(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, loadedTree);
+                if (nodes.Count != 1) { Assert.Fail("Es wurde nicht die richtige Anzahl an zugehörigen Knoten im geladenen Baum gefunden! Betrachteter Knoten:\n{0}\n\t Anzahl der gefundenen zugehörigen Knoten im geladenen Baum = {1}", node, nodes.Count); }
+                bool isEqual = compareToNodes(node, nodes[0]);
+                if (!isEqual)
+                {
+                    Assert.Fail("Der geladene Baum enthält den Knoten folgenden Knoten nicht:\n{0}", strategyMgr.getSpecifiedTree().GetData(node));
+                }
+                
+            }
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(loadedTree))
+            {
+                List<Object> nodes = searchNodes.getAssociatedNodeList(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, loadedTree);
+                if (nodes.Count != 1) { Assert.Fail("Es wurde nicht die richtige Anzahl an zugehörigen Knoten im gefilterten Baum gefunden! Betrachteter Knoten:\n{0}\n\t Anzahl der gefundenen zugehörigen Knoten im gefilterten Baum = {1}", node, nodes.Count); }
+                bool isEqual = compareToNodes(node, nodes[0]);
+                if (!isEqual)
+                {
+                    Assert.Fail("Der gefilterte Baum enthält den Knoten folgenden Knoten nicht:\n{0}", strategyMgr.getSpecifiedTree().GetData(node));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Prüft, ob zwei Knoten gleich sind, dabei werden die folgenden Eigenschaften ignoriert: runtimeIDFiltered, hWndFiltered, processIdFiltered
+        /// </summary>
+        /// <param name="node1"></param>
+        /// <param name="node2"></param>
+        /// <returns><c>true</c> falls beide Knoten gleich sind; sonst <c>false</c></returns>
+        private bool compareToNodes(object node1, object node2)
+        {
+            if (strategyMgr.getSpecifiedTree().Depth(node1)!= strategyMgr.getSpecifiedTree().Depth(node2)) { Assert.Fail("Die Tiefe der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (strategyMgr.getSpecifiedTree().DirectChildCount(node1) != strategyMgr.getSpecifiedTree().DirectChildCount(node2)) { Assert.Fail("Die Anzahl der direkten Kinder der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            OSMElement.OSMElement osmNode1 = strategyMgr.getSpecifiedTree().GetData(node1);
+            OSMElement.OSMElement osmNode2 = strategyMgr.getSpecifiedTree().GetData(node2);
+            if (osmNode1.properties.acceleratorKeyFiltered != null && !osmNode1.properties.acceleratorKeyFiltered.Equals(osmNode2.properties.acceleratorKeyFiltered)) { Assert.Fail("Der acceleratorKey der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.accessKeyFiltered != null && !osmNode1.properties.accessKeyFiltered.Equals(osmNode2.properties.accessKeyFiltered)) { Assert.Fail("Der accessKeyFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.autoamtionIdFiltered != null && !osmNode1.properties.autoamtionIdFiltered.Equals(osmNode2.properties.autoamtionIdFiltered)) { Assert.Fail("Der autoamtionIdFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.classNameFiltered != null && !osmNode1.properties.classNameFiltered.Equals(osmNode2.properties.classNameFiltered)) { Assert.Fail("Der classNameFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.controlTypeFiltered != null && !osmNode1.properties.controlTypeFiltered.Equals(osmNode2.properties.controlTypeFiltered)) { Assert.Fail("Der controlTypeFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.fileName != null && !osmNode1.properties.fileName.Equals(osmNode2.properties.fileName)) { Assert.Fail("Der fileName der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.frameWorkIdFiltered != null && !osmNode1.properties.frameWorkIdFiltered.Equals(osmNode2.properties.frameWorkIdFiltered)) { Assert.Fail("Der frameWorkIdFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.grantFilterStrategy != null && !osmNode1.properties.grantFilterStrategy.Equals(osmNode2.properties.grantFilterStrategy)) { Assert.Fail("Der grantFilterStrategy der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.hasKeyboardFocusFiltered != null && !osmNode1.properties.hasKeyboardFocusFiltered.Equals(osmNode2.properties.hasKeyboardFocusFiltered)) { Assert.Fail("Der hasKeyboardFocusFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.helpTextFiltered != null && !osmNode1.properties.helpTextFiltered.Equals(osmNode2.properties.helpTextFiltered)) { Assert.Fail("Der helpTextFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.IdGenerated != null && !osmNode1.properties.IdGenerated.Equals(osmNode2.properties.IdGenerated)) { Assert.Fail("Der IdGenerated der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isContentElementFiltered != null && !osmNode1.properties.isContentElementFiltered.Equals(osmNode2.properties.isContentElementFiltered)) { Assert.Fail("Der isContentElementFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isEnabledFiltered != null && !osmNode1.properties.isEnabledFiltered.Equals(osmNode2.properties.isEnabledFiltered)) { Assert.Fail("Der isEnabledFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isKeyboardFocusableFiltered != null && !osmNode1.properties.isKeyboardFocusableFiltered.Equals(osmNode2.properties.isKeyboardFocusableFiltered)) { Assert.Fail("Der isKeyboardFocusableFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isOffscreenFiltered != null && !osmNode1.properties.isOffscreenFiltered.Equals(osmNode2.properties.isOffscreenFiltered)) { Assert.Fail("Der isOffscreenFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isPasswordFiltered != null && !osmNode1.properties.isPasswordFiltered.Equals(osmNode2.properties.isPasswordFiltered)) { Assert.Fail("Der isPasswordFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isRequiredForFormFiltered != null && !osmNode1.properties.isRequiredForFormFiltered.Equals(osmNode2.properties.isRequiredForFormFiltered)) { Assert.Fail("Der isRequiredForFormFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.isToggleStateOn != null && !osmNode1.properties.isToggleStateOn.Equals(osmNode2.properties.isToggleStateOn)) { Assert.Fail("Der isToggleStateOn der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.itemStatusFiltered != null && !osmNode1.properties.itemStatusFiltered.Equals(osmNode2.properties.itemStatusFiltered)) { Assert.Fail("Der itemStatusFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.itemTypeFiltered != null && !osmNode1.properties.itemTypeFiltered.Equals(osmNode2.properties.itemTypeFiltered)) { Assert.Fail("Der itemTypeFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.labeledbyFiltered != null && !osmNode1.properties.labeledbyFiltered.Equals(osmNode2.properties.labeledbyFiltered)) { Assert.Fail("Der labeledbyFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (!osmNode1.properties.localizedControlTypeFiltered.Equals(osmNode2.properties.localizedControlTypeFiltered)) { Assert.Fail("Der localizedControlTypeFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.moduleName != null && !osmNode1.properties.moduleName.Equals(osmNode2.properties.moduleName)) { Assert.Fail("Der moduleName der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.nameFiltered != null && !osmNode1.properties.nameFiltered.Equals(osmNode2.properties.nameFiltered)) { Assert.Fail("Der nameFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (!osmNode1.properties.rangeValue.Equals(osmNode2.properties.rangeValue)) { Assert.Fail("Der rangeValue der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            return true;
         }
     }
 }

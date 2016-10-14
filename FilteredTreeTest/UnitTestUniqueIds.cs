@@ -63,7 +63,7 @@ namespace FilteredTreeTest
             }            
         }
 
-        private IntPtr startApp(String appMainModulNameCalc)
+        protected IntPtr startApp(String appMainModulNameCalc)
         {
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(appMainModulNameCalc);
             if (appHwnd.Equals(IntPtr.Zero))

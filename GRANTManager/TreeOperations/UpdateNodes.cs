@@ -131,7 +131,6 @@ namespace GRANTManager.TreeOperations
             changePropertiesOfFilteredNode(properties);
         }
 
-        #region Kopie aus TreeOperations
         /// <summary>
         /// Ändert von einem Knoten die <code>GeneralProperties</code> ausgehend von der <code>IdGenerated</code>
         /// </summary>
@@ -705,6 +704,5 @@ namespace GRANTManager.TreeOperations
 
             }
         }
-        #endregion
     }
 }
