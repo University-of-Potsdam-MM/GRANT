@@ -18,6 +18,7 @@ namespace FilteredTreeTest
         GuiFunctions guiFuctions;
         private String projectPath;
 
+
         [TestInitialize]
         public void Initialize()
         {
@@ -38,11 +39,11 @@ namespace FilteredTreeTest
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
-            projectPath = System.IO.Path.Combine(
-            System.IO.Path.GetDirectoryName(
-            System.Reflection.Assembly.GetExecutingAssembly().Location), "SavedTrees");
-            projectPath = System.IO.Path.Combine(projectPath, "filteredTree_Rechner.grant");
+            
+            projectPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SavedTrees");
+           projectPath = System.IO.Path.Combine(projectPath, "filteredTree_Rechner.grant");
             //
+            
         }
 
         [TestMethod]
@@ -148,5 +149,6 @@ namespace FilteredTreeTest
             if (!osmNode1.properties.rangeValue.Equals(osmNode2.properties.rangeValue)) { Assert.Fail("Der rangeValue der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             return true;
         }
+
     }
 }
