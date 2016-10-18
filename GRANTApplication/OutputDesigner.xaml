@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GRANTApplication"
         mc:Ignorable="d"
         Title="OutputDesigner" 
-              WindowStartupLocation="Manual" Left="750" Top="150" MaxHeight="850" Width="1150" MaxWidth="1150" Height="850" Background="GhostWhite">
+              WindowStartupLocation="Manual" Left="765" Top="150" MaxHeight="850" Width="1150" MaxWidth="1150" Height="850" Background="GhostWhite">
     <Window.Resources>
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>

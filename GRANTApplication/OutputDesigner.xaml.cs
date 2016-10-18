@@ -866,11 +866,11 @@ namespace GRANTApplication
                 if (item.IdGenerated != null)
                 {
                     OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
-                    System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
-                    if (osmElement.properties.isOffscreenFiltered == false)
-                    {
-                        strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
-                    }
+                    //System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+                    //if (osmElement.properties.isOffscreenFiltered == false)
+                    //{
+                    //    strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    //}
                     int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
                     listBox1.SelectedIndex = var1;
