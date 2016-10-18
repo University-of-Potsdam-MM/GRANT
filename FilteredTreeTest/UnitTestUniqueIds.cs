@@ -5,7 +5,7 @@ using GRANTManager.TreeOperations;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace GeneratedIdTest
+namespace FilteredTreeTest
 {
     [TestClass]
     public class UnitTestUniqueIds
@@ -43,9 +43,9 @@ namespace GeneratedIdTest
         [TestMethod]
         public void TestGeneratedIdsOfFilteredTreeUnique()
         {
-            filterApplication();
-            Debug.WriteIf(grantTrees.getFilteredTree() == null, "Es ist kein gefilterter Baum vorhanden");
-            if (grantTrees.getFilteredTree() == null) { return; }
+            HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
+            hf.filterApplication(applicationName, applicationPathName);
+            if (grantTrees.getFilteredTree() == null) { Assert.Fail("Es ist kein gefilterter Baum vorhanden"); return; }
             Object copyedTree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getFilteredTree());
             String nodeId;
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getFilteredTree()))
@@ -64,31 +64,8 @@ namespace GeneratedIdTest
             }            
         }
 
-        private IntPtr startApp(String appMainModulNameCalc)
-        {
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(appMainModulNameCalc);
-            if (appHwnd.Equals(IntPtr.Zero))
-            {
-                bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(applicationPathName);
-                if (!openApp)
-                {
-                    Debug.WriteLine("Anwendung konnte nicht geöffnet werden! Ggf. Pfad der Anwendung anpassen.");
-                    return IntPtr.Zero; ;
-                }                
-            }
-            else
-            {
-                strategyMgr.getSpecifiedOperationSystem().showWindow(appHwnd);
-            }
-            return appHwnd;
-        }
 
-        private void filterApplication()
-        {
-            IntPtr appHwnd = startApp(applicationName);
-            if (appHwnd == IntPtr.Zero) { return; }
-            Object filteredTree = strategyMgr.getSpecifiedFilter().filtering(appHwnd);
-            grantTrees.setFilteredTree(filteredTree);
-        }
+
+
     }
 }

@@ -142,6 +142,7 @@ namespace GRANTExample
                   grantTree.getFilteredTree().XmlSerialize(fs);
                   fs.Close();*/
                 Debug.WriteLine("F5");
+                //Debug.WriteLine("count =" + strategyMgr.getSpecifiedTree().Count(grantTree.getFilteredTree()));
                 
                 //Debug.WriteLine(strategyMgr.getSpecifiedEventManager().deliverString().ToString());
             }
