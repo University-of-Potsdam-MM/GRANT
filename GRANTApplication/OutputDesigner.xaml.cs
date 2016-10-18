@@ -799,11 +799,11 @@ namespace GRANTApplication
             //dataTable.Rows.Add(dataRow);
             dataGrid5.ItemsSource = dataTable.DefaultView;
 
-            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+            //System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
 
 
             // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
-            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+            //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
 
             // NodeButton.CommandParameter = IdGenerated;
 
