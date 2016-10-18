@@ -53,7 +53,6 @@ namespace GRANTApplication
             tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
            
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
-
             root = new GuiFunctions.MenuItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GRANTApplication"
         mc:Ignorable="d"
         Title="OutputDesigner" 
-              WindowStartupLocation="Manual" Left="850" Top="150" MaxHeight="850" Width="1150" MaxWidth="1150" Height="850" Background="GhostWhite">
+              WindowStartupLocation="Manual" Left="750" Top="150" MaxHeight="850" Width="1150" MaxWidth="1150" Height="850" Background="GhostWhite">
     <Window.Resources>
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
@@ -83,7 +83,7 @@
             </ScrollViewer>
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="250,10,612,16">
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
-                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Properties"  Height="31"/>
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
                     <DataGrid BorderThickness="1" x:Name="dataGrid5" Background="White" Height="273" />
                 </StackPanel>
 
@@ -104,7 +104,7 @@
                 </Grid.RowDefinitions>
             -->
                 <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="589" Height="271" Grid.RowSpan="2" VerticalAlignment="Top">
-                    <DataGrid CanUserResizeRows="False" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                    <DataGrid CanUserResizeRows="False" Margin="0,10,0,0" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <DataGrid.LayoutTransform>
                             <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom}" ScaleY="{Binding Path=Value, ElementName=_zoom}" CenterX="0" CenterY="0" />
                         </DataGrid.LayoutTransform>
@@ -170,7 +170,7 @@
                     <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="286" Margin="-30,-4,-30,0">
                         <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
                 		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" EnableRowVirtualization="False" EnableColumnVirtualization="False"
-                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3" IsReadOnly="True">
+                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3" IsReadOnly="True" Margin="0,10,0,0">
                             <DataGrid.LayoutTransform>
                                 <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom1}" ScaleY="{Binding Path=Value, ElementName=_zoom1}" CenterX="0" CenterY="0" />
                             </DataGrid.LayoutTransform>
@@ -209,7 +209,7 @@
 
 
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="322" MaxHeight="478">
-                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Properties"  Height="31"/>
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree Properties"  Height="31"/>
                     <DataGrid BorderThickness="1" x:Name="dataGrid4" Background="White" Height="291" />
                 </StackPanel>
 

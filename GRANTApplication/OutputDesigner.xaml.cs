@@ -24,7 +24,8 @@ namespace GRANTApplication
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperations;
-        GuiFunctions.MenuItem root;
+        GuiFunctions.MenuItem filteredRoot;
+        GuiFunctions.MenuItem brailleRoot;
         GuiFunctions guiFunctions;
         int var2;
         String matrix;
@@ -61,13 +62,20 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperations);
             //tvMain.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
-            tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
             // listBox1.SelectedItem += new RoutedPropertyChangedEventHandler<object>(listBox1_SelectionChanged);
+
+            //tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(trees_SelectedItemChanged);
+            tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
+            
+            //brailleOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(trees_SelectedItemChanged);
             brailleOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleOutput_SelectedItemChanged);
+
+
 
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
 
-            root = new GuiFunctions.MenuItem();
+            filteredRoot = new GuiFunctions.MenuItem();
+            brailleRoot = new GuiFunctions.MenuItem();
 
             //NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
@@ -168,11 +176,11 @@ namespace GRANTApplication
 
                 }
                 dataGrid3.ItemsSource = dataTable4.AsDataView();
-                malemal(dataGrid3, guiElementRep);
+                paintMatrix(dataGrid3, guiElementRep);
             }
         }
 
-        public void malemal(DataGrid datagrid, bool[,] guiElementRep)
+        public void paintMatrix(DataGrid datagrid, bool[,] guiElementRep)
         {
            for (int h = 0; h < dataGrid3.Items.Count; h++)
            // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
@@ -203,7 +211,7 @@ namespace GRANTApplication
         }
 
 
-
+        //wenn unten gemalt wird diese methode raus
         private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
         {
             //var dataGrid = sender as DataGrid;
@@ -288,18 +296,18 @@ namespace GRANTApplication
                 Object tree = grantTrees.getFilteredTree();
 
                 tvOutput.Items.Clear();
-                root.Items.Clear();
+                filteredRoot.Items.Clear();
 
                 //TreeViewItem root = new TreeViewItem();
 
-                root.controlTypeFiltered = "Filtered- Updated- Tree";
+                filteredRoot.controlTypeFiltered = "Filtered- Updated- Tree";
 
                 //
-                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                 
                 SaveButton.IsEnabled = true;
                 LoadTemplate.IsEnabled = true;
-                tvOutput.Items.Add(root);
+                tvOutput.Items.Add(filteredRoot);
 
 
 
@@ -327,21 +335,21 @@ namespace GRANTApplication
             if (result == true)
             {
                 strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(dlg.FileName);
-                Object tree = grantTrees.getBrailleTree();
+                Object tree1 = grantTrees.getBrailleTree();
 
                 brailleOutput.Items.Clear();
-                root.Items.Clear();
+                brailleRoot.Items.Clear();
 
-               // TreeViewItem root = new TreeViewItem();
+                // TreeViewItem root = new TreeViewItem();
 
-               root.controlTypeFiltered = "Braille-Tree";
+                brailleRoot.controlTypeFiltered = "Braille-Tree";
 
                 //
               //  guiFunctions.createTreeForOutput(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-                guiFunctions.createTreeForOutput(tree, ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                guiFunctions.createTreeForOutput(tree1, ref brailleRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                
                 SaveButton.IsEnabled = true;
-                brailleOutput.Items.Add(root);
+                brailleOutput.Items.Add(brailleRoot);
             }// Load Project wirft Fehler
         }
 
@@ -456,52 +464,7 @@ namespace GRANTApplication
         }
 
 
-        void tvOutput_SelectedItemChanged(object sender,
-      RoutedPropertyChangedEventArgs<object> e)
-        {
-
-            var tree = sender as TreeView;
-            if (tree.SelectedItem is GuiFunctions.MenuItem)
-            {
-                // ... Handle a TreeViewItem.
-                GuiFunctions.MenuItem item = tree.SelectedItem as GuiFunctions.MenuItem;
-                //this.Title = "Selected header: " + item.IdGenerated.ToString();
-                if (item.IdGenerated != null)
-                {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
-                    System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
-                    if (osmElement.properties.isOffscreenFiltered == false) { 
-                    strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
-                    }
-                    //System.Drawing.Color MessageColor = System.Drawing.Color.Red;
-                    //System.Windows.Media.Brush Red = null;
-                    //listBox1.Foreground = Red;
-                    //listBox1.M
-
-
-                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
-                    if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
-                    listBox1.SelectedIndex = var1;
-
-
-
-                    System.Console.WriteLine(" INDEX: " + var1);
-
-                    //listBox1.Foreground = System.Windows.Media.Brushes.DarkRed;
-                    // int index = listBox1.(item.controlTypeFiltered, -1);
-                    //listBox1.SelectedIndex(item.controlTypeFiltered);
-                    //ItemColor = c; 
-                    //listGuiElements();
-
-
-                }
-
-            }
-
-
-        }
-
-        void updatePropertiesTable(String IdGenerated)
+        void updateFilteredTable(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
 
@@ -665,47 +628,260 @@ namespace GRANTApplication
             // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
 
-           // NodeButton.CommandParameter = IdGenerated;
+            // NodeButton.CommandParameter = IdGenerated;
 
         }
 
-        void brailleOutput_SelectedItemChanged(object sender,
-        RoutedPropertyChangedEventArgs<object> e)
+        void tvOutput_SelectedItemChanged(object sender,
+      RoutedPropertyChangedEventArgs<object> e)
         {
-            //NodeButton.IsEnabled = true;
 
             var tree = sender as TreeView;
-
-            // ... Determine typeOfTemplate of SelectedItem.
+            System.Console.WriteLine(" NAMEtvoutup!!!!!!!!!!!!!!!!!!!: " + tree.Name);
+            GuiFunctions.MenuItem item;
             if (tree.SelectedItem is GuiFunctions.MenuItem)
             {
                 // ... Handle a TreeViewItem.
-                GuiFunctions.MenuItem item = tree.SelectedItem as GuiFunctions.MenuItem;
+                if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
+               
+                else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
+                else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
                 if (item.IdGenerated != null)
                 {
-                    //Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+                    if (osmElement.properties.isOffscreenFiltered == false) { 
+                     strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    }
+                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
+                    if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
+                    listBox1.SelectedIndex = var1;
 
-                    //root = root.parentMenuItem == null ? root : root.parentMenuItem;
-                    //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
+                    updateFilteredTable(item.IdGenerated);
 
-                    //updateProperties(item);
-                    updatePropertiesTable(item.IdGenerated);
-                }
-                //Methode MenuItem übergeben - tabelle
+                    System.Console.WriteLine(" INDEX: " + var1);
+
+                  }
+
             }
-            else if (tree.SelectedItem is string)
+
+
+        }
+
+        void updateBrailleTable(String IdGenerated)
+        {
+            System.Console.WriteLine(" HIEEEEEEEEER in der Methode: ");
+
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+
+
+            DataTable dataTable = new DataTable();
+
+            DataColumn dc = new DataColumn();
+            dataTable.Columns.Add(new DataColumn("Property"));
+            dataTable.Columns.Add(new DataColumn("Content"));
+
+
+            DataRow dataRow = dataTable.NewRow();
+            DataRow dataRow1 = dataTable.NewRow();
+            DataRow dataRow2 = dataTable.NewRow();
+            DataRow dataRow3 = dataTable.NewRow();
+            DataRow dataRow4 = dataTable.NewRow();
+            DataRow dataRow5 = dataTable.NewRow();
+            DataRow dataRow6 = dataTable.NewRow();
+            DataRow dataRow7 = dataTable.NewRow();
+            DataRow dataRow8 = dataTable.NewRow();
+            DataRow dataRow9 = dataTable.NewRow();
+            DataRow dataRow10 = dataTable.NewRow();
+            DataRow dataRow11 = dataTable.NewRow();
+            DataRow dataRow12 = dataTable.NewRow();
+
+            DataRow dataRow13 = dataTable.NewRow();
+            DataRow dataRow14 = dataTable.NewRow();
+            DataRow dataRow15 = dataTable.NewRow();
+            DataRow dataRow16 = dataTable.NewRow();
+            DataRow dataRow17 = dataTable.NewRow();
+           
+      
+
+            dataRow[0] = "IdGenerated";
+            if (osmElement.properties.IdGenerated == null) { return; }
+            dataRow[1] = osmElement.properties.IdGenerated.ToString();
+            dataTable.Rows.Add(dataRow);
+
+            dataRow1["Property"] = "isEnabledFiltered";
+            dataRow1["Content"] = osmElement.properties.isEnabledFiltered == null ? " " : osmElement.properties.isEnabledFiltered.ToString();
+            dataTable.Rows.Add(dataRow1);
+
+            dataRow2["Property"] = "boundingRectangleFiltered";
+            dataRow2["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
+            dataTable.Rows.Add(dataRow2);
+            dataTable.Rows.Add();
+
+            dataRow3["Property"] = "Value";
+            dataRow3["Content"] = osmElement.properties.valueFiltered;
+            dataTable.Rows.Add(dataRow3);
+
+            dataRow4[0] = "ControlType";
+            dataRow4[1] = osmElement.properties.controlTypeFiltered.ToString();
+            dataTable.Rows.Add(dataRow4);
+           
+            dataRow5[0] = "Name";
+            dataRow5[1] = osmElement.brailleRepresentation.viewName.ToString();
+            dataTable.Rows.Add(dataRow5);
+
+            dataRow6[0] = "Visibility";
+            dataRow6[1] = osmElement.brailleRepresentation.isVisible.ToString(); 
+            dataTable.Rows.Add(dataRow6);
+
+    /*        dataRow7[0] = "Matrix";
+            dataRow7[1] = osmElement.brailleRepresentation.matrix.ToString();
+            dataTable.Rows.Add(dataRow7);
+
+            dataRow8[0] = "FromGuiElement";
+            dataRow8[1] = osmElement.brailleRepresentation.fromGuiElement.ToString();
+            dataTable.Rows.Add(dataRow8);
+
+            dataRow9[0] = "Contrast";
+            dataRow9[1] = osmElement.brailleRepresentation.contrast.ToString();
+            dataTable.Rows.Add(dataRow9);
+
+            dataRow10[0] = "Zoom";
+            dataRow10[1] = osmElement.brailleRepresentation.zoom.ToString();
+            dataTable.Rows.Add(dataRow10);
+
+            dataRow11[0] = "Screen name";
+            dataRow11[1] = osmElement.brailleRepresentation.screenName.ToString();
+            dataTable.Rows.Add(dataRow11);
+
+            dataRow12[12] = "Show Scrollbar";
+            dataRow12[12] = osmElement.brailleRepresentation.showScrollbar.ToString();
+            dataTable.Rows.Add(dataRow12);
+
+            dataRow13[13] = "UIElementSpecialContent";
+            dataRow13[13] = osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
+            dataTable.Rows.Add(dataRow13);
+
+            dataRow14[0] = "Padding";
+            dataRow14[1] = osmElement.brailleRepresentation.padding.ToString();
+            dataTable.Rows.Add(dataRow14);
+
+            dataRow15[0] = "Margin";
+            dataRow15[1] = osmElement.brailleRepresentation.margin.ToString();
+            dataTable.Rows.Add(dataRow15);
+
+            dataRow16[0] = "Boarder";
+            dataRow16[1] = osmElement.brailleRepresentation.boarder.ToString();
+            dataTable.Rows.Add(dataRow16);
+
+            dataRow17[0] = "ZIndex";
+            dataRow17[1] = osmElement.brailleRepresentation.zIntex.ToString();
+            dataTable.Rows.Add(dataRow17);
+            */
+
+            /*   dataRow23["Property"] = "hWndFiltered";
+               dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
+               dataTable.Rows.Add(dataRow23);
+
+               String ids = String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
+
+               dataRow24["Property"] = "runtimeIDFiltered";
+               dataRow24["Content"] = ids;
+               dataTable.Rows.Add(dataRow24);
+               */
+
+
+
+
+            //dataTable.Rows.Add();
+
+            //dataTable.Rows.Add(dataRow);
+            dataGrid5.ItemsSource = dataTable.DefaultView;
+
+            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+
+
+            // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
+            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+
+            // NodeButton.CommandParameter = IdGenerated;
+
+        }
+
+  /*      void trees_SelectedItemChanged(object sender,
+      RoutedPropertyChangedEventArgs<object> e)
+        {
+
+            var tree = sender as TreeView;
+            System.Console.WriteLine(" NAMEtbraille!!!!!!!!!!!!!!!!!!!: " + tree.Name);
+            GuiFunctions.MenuItem item; 
+            if (tree.SelectedItem is GuiFunctions.MenuItem)
             {
-                // ... Handle a string.
-                //this.Name = "Selected: " + parentNode.SelectedItem.ToString();
-                Console.WriteLine("Fehler: ");
+                // ... Handle a TreeViewItem.
+                if (tree.Name == "filteredRoot") { item = filteredRoot; }
+                else if (tree.Name == "brailleRoot") { item = brailleRoot;}
+                else  { item = tree.SelectedItem as GuiFunctions.MenuItem; }
+                //this.Title = "Selected header: " + item.IdGenerated.ToString();
+                if (item.IdGenerated != null)
+                {
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+                    if (osmElement.properties.isOffscreenFiltered == false)
+                    {
+                        strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    }
+                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
+                    if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
+                    listBox1.SelectedIndex = var1;
+
+                    if (tree.Name == "filteredRoot") { System.Console.WriteLine(" in filtered: "); updateFilteredTable(item.IdGenerated); }
+                    if (tree.Name == "brailleRoot") { System.Console.WriteLine(" in braille: ");  updateBrailleTable(item.IdGenerated); }
+                    
+
+                    System.Console.WriteLine(" INDEX: " + var1);
+
+                }
 
             }
-            //OSMElement.OSMElement filteredSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
-            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(filteredSubtree);
+        }
+        */
 
+        void brailleOutput_SelectedItemChanged(object sender,
+  RoutedPropertyChangedEventArgs<object> e)
+        {
 
-            //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+            var tree = sender as TreeView;
+            System.Console.WriteLine(" NAMEtbraille!!!!!!!!!!!!!!!!!!!: " + tree.Name);
+
+            GuiFunctions.MenuItem item;
+            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            {
+                // ... Handle a TreeViewItem.
+                if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
+
+                else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
+                else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
+                //this.Title = "Selected header: " + item.IdGenerated.ToString();
+                if (item.IdGenerated != null)
+                {
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+                    if (osmElement.properties.isOffscreenFiltered == false)
+                    {
+                        strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    }
+                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
+                    if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
+                    listBox1.SelectedIndex = var1;
+
+                    updateBrailleTable(item.IdGenerated);
+
+                    System.Console.WriteLine(" INDEX: " + var1);
+
+                }
+
+            }
         }
 
     }
