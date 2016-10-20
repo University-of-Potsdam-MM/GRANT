@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OSMElement;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace GRANTManager.TreeOperations
         public List<Object> searchProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
         {//TODO: hier fehlen noch viele Eigenschaften
             List<Object> result = new List<Object>();
+            if (tree == null) { return result; }
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                 Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || strategyMgr.getSpecifiedTree().GetData(node).properties.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
@@ -270,6 +272,63 @@ namespace GRANTManager.TreeOperations
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Prüft, ob die Angegebene View für den angegebenen Screen schon existiert
+        /// </summary>
+        /// <param name="screenName"></param>
+        /// <param name="viewName"></param>
+        /// <returns></returns>
+        public bool existViewInScreen(String screenName, String viewName)
+        {
+            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("")) { return false; }
+            OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
+            BrailleRepresentation brailleScreen = new BrailleRepresentation();
+            brailleScreen.screenName = screenName;
+            osmScreen.brailleRepresentation = brailleScreen;
+            if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
+            Object treeCopy = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
+            if (!strategyMgr.getSpecifiedTree().HasChild(treeCopy)) { return false; }
+            treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
+            bool hasNext = true;
+            do
+            {
+                if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.screenName.Equals(screenName))
+                {
+                    //TODO: alle Kinder untersuchen
+                    if (strategyMgr.getSpecifiedTree().HasChild(treeCopy))
+                    {
+                        treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
+                        if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName))
+                        {
+                            Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true;
+                        }
+                        while (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
+                        {
+                            treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
+                            if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName))
+                            {
+                                Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+                if (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
+                {
+                    treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
+                    hasNext = true;
+                }
+                else
+                {
+                    hasNext = false;
+                }
+
+            } while (hasNext);
+
+            return false;
+
         }
 
     }

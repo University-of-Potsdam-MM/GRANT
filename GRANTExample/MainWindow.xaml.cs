@@ -49,7 +49,6 @@ namespace GRANTExample
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
-        IGenaralUiTemplate ui;
         
         /// <summary>
         /// Initialisierung der Eventverfolgung des NuGet-Package MousekeyHook
@@ -95,12 +94,15 @@ namespace GRANTExample
 
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
-            ui = new GenaralUI(strategyMgr, grantTree, treeOperation);
+            strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTree);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);
+
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             exampleTree = new ExampleTree(strategyMgr, grantTree, treeOperation);
             exampleInspectGui = new InspectGui(strategyMgr);
-            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, ui, treeOperation);
+            exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, treeOperation);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
             guiFuctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
@@ -140,6 +142,8 @@ namespace GRANTExample
                   grantTree.getFilteredTree().XmlSerialize(fs);
                   fs.Close();*/
                 Debug.WriteLine("F5");
+                //Debug.WriteLine("count =" + strategyMgr.getSpecifiedTree().Count(grantTree.getFilteredTree()));
+                
                 //Debug.WriteLine(strategyMgr.getSpecifiedEventManager().deliverString().ToString());
             }
             if (e.Key == Key.F6)
@@ -304,7 +308,7 @@ namespace GRANTExample
         {
            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
          //  String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-           String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
+           String path = @"C:\Users\mkarlapp\Desktop\TemplateUi.xml";
 
             if (!GuiFunctions.isTemplateValid(path))
             {
@@ -318,11 +322,12 @@ namespace GRANTExample
                 Debug.WriteLine("Das Template ist für eine größere Stifftplatte (min Height = " + minDeviceHeight + " Width = "+minDeviceWidth+") vorgesehen.");
                 return;
             }
-            ui.generatedUiFromTemplate(path);
+            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(path);
 
             if (grantTree.getBrailleTree() != null)
             {
                 Debug.WriteLineIf(grantTree.getBrailleTree() != null, "Baum-Elemente Anzahl: " + strategyMgr.getSpecifiedTree().Count( grantTree.getBrailleTree()));
+               // Console.WriteLine("Baum:\n " + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
             }
             //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);
         }

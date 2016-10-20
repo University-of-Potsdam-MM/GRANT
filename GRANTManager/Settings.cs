@@ -111,21 +111,6 @@ namespace GRANTManager
             return filter;
         }
 
-        public List<Strategy> getPossibleTreeOperations()
-        {
-            List<Strategy> trees = new List<Strategy>();
-            List<String> treeNames = getPossibleStrategyClasses("PossibleTreeOperations");
-            if (treeNames == null) { return trees; }
-            Strategy t = new Strategy();
-            foreach (String tName in treeNames)
-            {
-                t.userName = tName;
-                t.className = strategyUserNameToClassName(tName);
-                trees.Add(t);
-            }
-            return trees;
-        }
-
         public List<Strategy> getPosibleDisplayStrategies()
         {
             List<Strategy> displayStrategy = new List<Strategy>();
@@ -145,6 +130,21 @@ namespace GRANTManager
         {
             List<Strategy> eventManager = new List<Strategy>();
             List<String> eventManagerNames = getPossibleStrategyClasses("PossibleEventManager");
+            if (eventManagerNames == null) { return eventManager; }
+            Strategy f = new Strategy();
+            foreach (String fName in eventManagerNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                eventManager.Add(f);
+            }
+            return eventManager;
+        }
+
+        public List<Strategy> getPossibleUiTemplateStrategies()
+        {
+            List<Strategy> eventManager = new List<Strategy>();
+            List<String> eventManagerNames = getPossibleStrategyClasses("PossibleUiTemplateStrategies");
             if (eventManagerNames == null) { return eventManager; }
             Strategy f = new Strategy();
             foreach (String fName in eventManagerNames)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GRANTApplication"
         mc:Ignorable="d"
         Title="OutputDesigner" 
-              WindowStartupLocation="Manual" Left="850" Top="150" MaxHeight="850" Width="Auto" MaxWidth="750" Height="850" Background="GhostWhite">
+              WindowStartupLocation="Manual" Left="765" Top="150" MaxHeight="850" Width="1150" MaxWidth="1150" Height="850" Background="GhostWhite">
     <Window.Resources>
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
@@ -18,13 +18,11 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="25,5" />
         </Style>
-      
-        
     </Window.Resources>
-    <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="750" VerticalAlignment="Top" Background="GhostWhite" >
-        <StackPanel Background="GhostWhite" DockPanel.Dock="Top"  Height="Auto" Margin="-4,0,4,0" >
-            <StackPanel VerticalAlignment="Top">
-                <Menu Width="Auto" Height="20" Margin="-1,0,-9,0" >
+    <DockPanel LastChildFill="True" Height="815" Width="Auto" MaxWidth="1150" VerticalAlignment="Top" Background="GhostWhite" Margin="0,0,0,0" >
+        <StackPanel Background="GhostWhite" DockPanel.Dock="Top"  Height="Auto" Margin="0,0,0,0" >
+            <StackPanel VerticalAlignment="Top" Margin="0,0,0,0">
+                <Menu Width="Auto" Height="20" Margin="0,0,0,0" >
                     <MenuItem Header="_File">
                         <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
                         <!-- Click="AppExit_Click"-->
@@ -37,11 +35,9 @@
                         <Separator />
                         <MenuItem x:Name="Autor" Header="&amp;Autor" HorizontalAlignment="Left" Width="140"/>
                     </MenuItem>
-
                 </Menu>
-                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="-1,0,-10,0">
-                    <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
-
+                <StackPanel Orientation="Horizontal"  Background="Gray" Margin="0,0,0,0">
+                    <Label  Margin="2,5,5,5" Foreground="White" VerticalAlignment="Top" Content="New Project: "/>
                     <!--  <Button Content="1. Load Filtered Tree" Click="LoadTree_Click" x:Name="LoadTree"    HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
                     <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140"/>
                     <!-- <Button Content="2. Choose Output Device" Click="LoadDevice_Click"  x:Name="LoadDevice"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Margin="5,5,5,5"/>-->
@@ -49,80 +45,86 @@
                     <Grid>
                         <ComboBox Name="comboBox2" ItemsSource="{Binding Combobox2items}"  VerticalAlignment="Center" HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
                     </Grid>-->
+                    <Label Foreground="White" Margin="475,5,5,5" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
+                    <Button Content="Save Project"   VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="-1,0,-11,0">
+                <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,0,0">
                     <!--       <Label  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Top" Content="Laod existing Project: "/>
                     <Button Content="Load Project" Click="LoadProject_Click" x:Name="LoadProject"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"/>
              -->
-                    <Label  Margin="5,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
+                    <Label  Margin="2,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
                     <Grid>
                         <ComboBox  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Center"  Name="comboBox2" ItemsSource="{Binding Combobox2items}"   HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
                     </Grid>
-
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-
         <!--  <ScrollViewer  DockPanel.Dock="Bottom" Margin="2,0,9,10"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Top" Height="300">
             <StackPanel Background="Gold" Height="290" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,0,10,0">
             <DataGrid  HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White"  RowHeight="10" ColumnWidth="10"/>
             </StackPanel>
        </ScrollViewer>-->
-        <Grid DockPanel.Dock="Bottom" Background="Gold" Height="300" VerticalAlignment="Top" Width="750">
-            <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False"
-          CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" 
-          SelectionUnit="Cell" HorizontalAlignment="Left" BorderThickness="1" x:Name="dataGrid2" Background="White">
+        <Grid DockPanel.Dock="Bottom" Background="Coral" Height="330" VerticalAlignment="Top" Margin="0,0,0,0">
+            <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="235" Margin="10,10,0,15" >
+                <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="305">
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree" HorizontalAlignment="Center" Width="235"/>
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="brailleOutput"  Height="274" HorizontalAlignment="Right" Width="235" >
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding controlTypeFiltered}" />
+                                    <TextBlock><Run Text="-"/></TextBlock>
+                                    <TextBlock Text="{Binding nameFiltered}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </StackPanel>
+            </ScrollViewer>
+            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="250,10,612,16">
+                <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
+                    <DataGrid BorderThickness="1" x:Name="dataGrid5" Background="White" Height="273" />
+                </StackPanel>
 
 
-
-             <!--   <TextBox Name="textBox" Background="{Binding ElementName=textBox, Path=Text, Converter={StaticResource SignedUnsigned}}"/>-->
-                <!-- <DataGrid.Style>
-                    <Style TargetType="DataGrid">
-                        <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
-                    </Style>
-                </DataGrid.Style>-->
-
-                <!-- <DataGrid.CellStyle>
-                    <Style TargetType="{x:Type DataGridCell}">
-
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Name}" Value="True" >
-                                <Setter Property="Background" Value="{Binding Color}" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.CellStyle>-->
-
-                <!--   <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="{x:Type DataGridColumnHeader}">
-                       
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
-                <DataGrid.RowHeaderStyle>
-                    <Style TargetType="{x:Type DataGridRowHeader}">
-                        <Setter Property="Content" Value="{Binding}" />
-                    </Style>
-                </DataGrid.RowHeaderStyle>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="IsSelected" Value="{Binding IsRowSelected}" />
-                        <Setter Property="Header" Value="{Binding Content}" />
-                    </Style>
-                </DataGrid.RowStyle>-->
-            </DataGrid>
+            </ScrollViewer>
+            <Grid Background="White" Width="589" HorizontalAlignment="Right" Margin="0,42,10,17" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="67*"/>
+                    <RowDefinition Height="69*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0*"/>
+                </Grid.ColumnDefinitions>
+                <!--        <Grid.RowDefinitions>
+                    <RowDefinition Height="7*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+            -->
+                <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="589" Height="271" Grid.RowSpan="2" VerticalAlignment="Top">
+                    <DataGrid CanUserResizeRows="False" Margin="0,10,0,0" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <DataGrid.LayoutTransform>
+                            <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom}" ScaleY="{Binding Path=Value, ElementName=_zoom}" CenterX="0" CenterY="0" />
+                        </DataGrid.LayoutTransform>
+                    </DataGrid>
+                </ScrollViewer>
+            </Grid>
+            <StackPanel Background="LightGray" Margin="535,0,10,288" Height="31" VerticalAlignment="Bottom" >
+                <Slider x:Name="_zoom" Minimum="0.1" Maximum="1.5" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Height="30" Width="571" Margin="4,4,0,0" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
+            </StackPanel>
         </Grid>
-
-        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Coral" Height="40" Margin="-1,0,1,25">
-            <Label VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
-            <Button Content="Save Project" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
+        <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gray" Height="40" Margin="0,0,0,10">
+            <Label Foreground="White" VerticalAlignment="Center" Content="Load Default Gui template or custom template : " Margin="20,7"/>
+            <Button Content="Load Template" Click="LoadTemplate_Click" x:Name="LoadTemplate"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" IsEnabled="{Binding TEnabled}"/>
         </StackPanel>
-        <Grid DockPanel.Dock="Left" Height="335" VerticalAlignment="Top" Margin="5,5,5,5">
+        <Grid DockPanel.Dock="Left" Margin="0,5,0,0" Width="1150">
             <!-- Left-->
-            <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="240" Margin="0,7" >
-                <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="325">
+            <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="235" Margin="10,0,0,15" >
+                <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="322">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="235"/>
-                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvOutput" Width="235"  Height="290" >
-
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvOutput" Width="235"  Height="291" >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                                 <StackPanel Orientation="Horizontal">
@@ -135,22 +137,16 @@
                                     <TextBlock Text="{Binding nameFiltered}" />
                                 </StackPanel>
                             </HierarchicalDataTemplate>
-
                         </TreeView.ItemTemplate>
-
                     </TreeView>
                     <!--<Grid Margin="10" MinWidth="350" MinHeight="700">-->
                     <!--</Grid>-->
-
                 </StackPanel>
             </ScrollViewer>
-
             <!-- <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >-->
-            <StackPanel DockPanel.Dock="Left"   Background="White" Width="230"   Height="320" HorizontalAlignment="Center" >
-                <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="229" Margin="0,0,1,0" />
-
-
-                <ListBox BorderBrush="Gray" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="listBox1" VerticalAlignment="Top" Height="169" SelectionChanged="listBox1_SelectionChanged"  Foreground="{Binding color}" Margin="0,0,1,0" >
+            <StackPanel DockPanel.Dock="Left"   Background="White" Width="286" HorizontalAlignment="Center" Margin="535,0,329,0" Height="323" VerticalAlignment="Top" >
+                <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="286" />
+                <ListBox BorderBrush="Gray" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="listBox1" VerticalAlignment="Top" Height="140" SelectionChanged="listBox1_SelectionChanged"  Foreground="{Binding color}" >
                     <ListBox.Resources>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Template">
@@ -170,108 +166,55 @@
                         </Style>
                     </ListBox.Resources>
                 </ListBox>
-                <Grid VerticalAlignment="Top" Height="114" HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="0,5,1,0">
-                    <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
+                <Grid VerticalAlignment="Top" Height="114" HorizontalAlignment="Center" Margin="0,4,0,0">
+                    <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="286" Margin="-30,-4,-30,0">
+                        <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
                 		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" EnableRowVirtualization="False" EnableColumnVirtualization="False"
-                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3"  Width="Auto" Height="Auto" >
-                       <!-- <DataGrid.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-
-                                <Style.Triggers>
-
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource self}, Path=ParentColumn.FieldName}" Value="PaperProfit">
-                                        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Content,Converter={StaticResource myConverterForeground}}"/>
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-
-                            </Style>
-                        </DataGrid.CellStyle>-->
-
-
-
-
-                        <!--   <DataGrid.Style>
-                               <Style TargetType="{x:Type DataGrid}">
-                                <Setter Property="AlternatingRowBackground" Value="LightYellow"/>
-                            
-                        </DataGrid.Style>-->
-                      
-                        <!--    <DataGridTextColumn Header="SimpleHeader"                                    
-                    Width="1.5*" 
-                    Binding="{Binding Path=NumberValue}">
-
-                            <DataGridTextColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=NumberValue, Converter={StaticResource MyConverter}}" Value="True">
-                                            <Setter Property="Background" Value="Yellow" />
-                                            <Setter Property="BorderThickness" Value="1" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding Path=NumberValue, Converter={StaticResource MyConverter}}" Value="False">
-                                            <Setter Property="Background" Value="Red" />
-                                            <Setter Property="BorderThickness" Value="1" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridTextColumn.CellStyle>
-                        </DataGridTextColumn>-->
-                     <!--   <DataGrid.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=CellContent.cellinput}" Value="True" >
-                                        <Setter Property="Background" Value="Black" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=CellContent.cellinput}" Value="False" >
-                                        <Setter Property="Background" Value="White" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Width" Value="20"/>
-                                <Setter Property="Height" Value="20"/>
-                                <Setter Property="Background" Value="Red"/>
-
-                            </Style>
-                        </DataGrid.CellStyle>-->
-
-
-
-                    </DataGrid>
-
+                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3" IsReadOnly="True" Margin="0,10,0,0">
+                            <DataGrid.LayoutTransform>
+                                <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom1}" ScaleY="{Binding Path=Value, ElementName=_zoom1}" CenterX="0" CenterY="0" />
+                            </DataGrid.LayoutTransform>
+                        </DataGrid>
+                    </ScrollViewer>
                 </Grid>
-            </StackPanel>
-            <!--   <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
-                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="230" />
-                    <ListBox Name="listBoxForSelection" ItemsSource="{Binding}"  IsSynchronizedWithCurrentItem="True" SelectionMode="Single"  >
-
-                        SelectionChanged="listBoxForSelection_SelectionChanged"  
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <RadioButton IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}},Path=IsSelected}">
-                                    <RadioButton.Content>
-                                        <TextBlock Text="{Binding}" Margin="5">
-                                        </TextBlock>
-                                    </RadioButton.Content>
-                                </RadioButton>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>-->
-            <!--  </ScrollViewer>-->
-
-            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Right"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330"  Margin="0,0,8,0"  >
-
-                <StackPanel Background="White" Width="230"   Height="320" HorizontalAlignment="Center">
-                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Events"  HorizontalAlignment="Center" Width="230"/>
-
-
+                <StackPanel Background="lIGHTGray" Margin="0,0,0,0" >
+                    <Slider x:Name="_zoom1" Minimum="0.3" Maximum="2.5" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Height="30" Width="265" Margin="4,4,0,0" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
                 </StackPanel>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Left"   Background="White" Width="302" HorizontalAlignment="Center" Margin="826,0,22,0" Height="323" VerticalAlignment="Top">
+                <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Event-Elements" HorizontalAlignment="Right"  Width="301" Margin="0,0,1,0" />
+                <ListBox BorderBrush="Gray" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" x:Name="listBox2" VerticalAlignment="Top" Height="283"  Foreground="{Binding color}" HorizontalAlignment="Left" Width="301"  >
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border x:Name="Border" Padding="2" SnapsToDevicePixels="true">
+                                            <ContentPresenter />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="true">
+                                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.Resources>
+                </ListBox>
+            </StackPanel>
+
+            <ScrollViewer Background="GhostWhite" HorizontalAlignment="Left"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="249,0,0,15" >
+
+
+                <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="322" MaxHeight="478">
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree Properties"  Height="31"/>
+                    <DataGrid BorderThickness="1" x:Name="dataGrid4" Background="White" Height="291" />
+                </StackPanel>
+
+
             </ScrollViewer>
-
-
         </Grid>
-
-
-
     </DockPanel>
 </Window>

@@ -205,7 +205,6 @@ namespace StrategyBrailleIO
             {
                 strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen(activeScreenName);
             }
-            Debug.WriteLine("");
         }
         
         /// <summary>
@@ -228,7 +227,6 @@ namespace StrategyBrailleIO
                      }
                  }
                 // der screen existiert schon -> ok
-                 Debug.WriteLine("");
             }
             catch
             {
@@ -361,10 +359,7 @@ namespace StrategyBrailleIO
              * die Angabe des 'UI-Element'-Typs steht bei den Propertys in controlTypeFiltered
              */
             if (osmElement.properties.isControlElementFiltered == false || osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
-            if (osmElement.brailleRepresentation.viewName.Equals(1) || osmElement.brailleRepresentation.viewName.Equals("-------------navigationBar2"))
-            {
-                Debug.WriteLine("");
-            }
+
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
             String uiElementType = osmElement.properties.controlTypeFiltered;
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))

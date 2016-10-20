@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using GRANTManager.TreeOperations;
+
 namespace GRANTManager.Interfaces
 {
     public interface IGenaralUiTemplate
     {
+        void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
+        void setTreeOperation(TreeOperation treeOperation);
         void addNavigationbarForScreen(string pathToXml, Object subtree);
         void createUiElementsAllScreens(string pathToXml);
         void createUiElementsNavigationbarScreens(string pathToXml);
@@ -19,6 +23,7 @@ namespace GRANTManager.Interfaces
         public String groupImplementedClassTypeDllName { get; set; } //nötig?
         public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
         public String name { get; set; }
+        public Boolean allElementsOfType { get; set;}
         public OSMElement.UiElements.Orientation orientation { get; set; }
 
         /// <summary>
@@ -27,7 +32,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// [XmlIgnore]
         public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
-
+         
     }
 
 }

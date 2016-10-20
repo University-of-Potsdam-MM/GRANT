@@ -20,6 +20,7 @@ namespace GRANTManager
 
         private IEventManagerStrategy eventManager;
 
+        private IGenaralUiTemplate generalUiTemplate;
         /// <summary>
         /// </summary>
         /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
@@ -240,6 +241,33 @@ namespace GRANTManager
         public AOutputManager getSpecifiedDisplayStrategy()
         {
             return specifiedDisplayStrategy;
+        }
+
+        public void setSpecifiedGeneralTemplateUi(String generalUiTemplateClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(generalUiTemplateClassName);
+                generalUiTemplate = (IGenaralUiTemplate)Activator.CreateInstance(type, this);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedGeneralTemplateUi: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedGeneralTemplateUi: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Fehler bei StrategyManager_setSpecifieddisplayStrategy: " + e.Message);
+            }
+        }
+
+        public IGenaralUiTemplate getSpecifiedGeneralTemplateUi()
+        {
+            return generalUiTemplate;
         }
 
     }

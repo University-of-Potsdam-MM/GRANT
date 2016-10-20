@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GrantProjectObject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <grantBrailleStrategyFullName>StrategyBrailleIO.BrailleDisplayStrategyBrailleIO</grantBrailleStrategyFullName>
+  <grantBrailleStrategyNamespace>StrategyBrailleIO</grantBrailleStrategyNamespace>
+  <grantTreeStrategyFullName>StrategyGenericTree.Tree2Extended`1</grantTreeStrategyFullName>
+  <grantTreeStrategyNamespace>StrategyGenericTree</grantTreeStrategyNamespace>
+  <grantOperationSystemStrategyFullName>StrategyWindows.OperationSystemStrategyWindows</grantOperationSystemStrategyFullName>
+  <grantOperationSystemStrategyNamespace>StrategyWindows</grantOperationSystemStrategyNamespace>
+  <device>
+    <height>0</height>
+    <width>0</width>
+    <orientation>Front</orientation>
+  </device>
+</GrantProjectObject>

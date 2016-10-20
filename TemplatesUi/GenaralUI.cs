@@ -21,8 +21,9 @@ namespace TemplatesUi
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
-        public GenaralUI(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) { this.strategyMgr = strategyMgr; this.grantTrees = grantTrees; this.treeOperation = treeOperation; }
-
+        public GenaralUI(StrategyManager strategyMgr) { this.strategyMgr = strategyMgr;   }
+        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
+        public void setTreeOperation(TreeOperation treeOperation) { this.treeOperation = treeOperation; }
         /// <summary>
         /// Ausgehend vom gefilterten Baum wird für einige UI-Elemente ein Template (<see cref="TemplateUi"/>) angewendet aus dem eine Standard UI erstellt wird.
         /// </summary>
@@ -35,7 +36,11 @@ namespace TemplatesUi
             createUiElementsWitheNoDependency(@pathToXml);
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
             Object filteredTreeCopy = strategyMgr.getSpecifiedTree().Copy(grantTrees.getFilteredTree());
-            iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
+            //iteratedTreeForTemplate(ref filteredTreeCopy, pathToXml);
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(filteredTreeCopy))
+            {
+                createElementType(node, pathToXml);
+            }
             createUiElementsAllScreens(pathToXml);
             createUiElementsNavigationbarScreens(pathToXml);
             treeOperation.updateNodes.updateBrailleGroups();
@@ -199,66 +204,12 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Iterriert über den gefilterten Baum und ruft für jedes UI-Element die Methode <see cref="createElementType"/> auf
-        /// </summary>
-        /// <param name="parentNode">gibt den gefilterten Baum an</param>
-        private void iteratedTreeForTemplate(ref Object tree, String pathToXml)
-        {
-            Object node1;
-            //Falls die Baumelemente Kinder des jeweiligen Elements sind
-            while ((strategyMgr.getSpecifiedTree().HasChild(tree) || strategyMgr.getSpecifiedTree().HasNext(tree)) && !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
-            {
-                if (strategyMgr.getSpecifiedTree().HasChild(tree))
-                {
-                    node1 = strategyMgr.getSpecifiedTree().Child(tree);
-                    createElementType(ref node1, pathToXml);
-                    iteratedTreeForTemplate(ref node1, pathToXml);
-                }
-                else
-                {
-                    node1 = strategyMgr.getSpecifiedTree().Next(tree);
-                    if (strategyMgr.getSpecifiedTree().HasNext(tree))
-                    {
-                        //createElementType(ref parentNode);
-                        createElementType(ref node1, pathToXml);
-                    }
-                    iteratedTreeForTemplate(ref node1, pathToXml);
-                }
-            }
-            if (strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree)== -1)
-            {
-                if (!strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()))
-                {
-                    createElementType(ref tree, pathToXml);
-                }
-            }
-            if (!strategyMgr.getSpecifiedTree().HasChild(tree))
-            {
-                
-                if (strategyMgr.getSpecifiedTree().HasParent(tree))
-                {
-                    node1 = tree;
-                    strategyMgr.getSpecifiedTree().Remove(node1);
-                }
-            }
-            if (!strategyMgr.getSpecifiedTree().HasNext(tree) && !strategyMgr.getSpecifiedTree().HasParent(tree))
-            {
-                if (strategyMgr.getSpecifiedTree().HasPrevious(tree))
-                {
-                    node1 = tree;
-                    strategyMgr.getSpecifiedTree().Remove(node1);
-                }
-            }
-        }
-
-        /// <summary>
         /// Sofern für das angegebene UI-element ein template vorhanden ist wird dieses angewendet
         /// </summary>
         /// <param name="subtree">gibt den Teilbaum mit dem element, auf welches das Template angewendet werden soll an</param>
         /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
-        private void createElementType(ref Object subtree, String pathToXml)
+        private void createElementType(Object subtree, String pathToXml)
         {
-            //falls zu einem UI-Elemente ein Teilbaum gehört, so wird der Baum entsprechend gekürzt => TODO
             String controlType = strategyMgr.getSpecifiedTree().GetData(subtree).properties.controlTypeFiltered;
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
@@ -305,6 +256,7 @@ namespace TemplatesUi
             result = 0;
             GeneralProperties properties = new GeneralProperties();
             BrailleRepresentation braille = new BrailleRepresentation();
+            templetObject.allElementsOfType = xmlElement.Element("AllElementsOfType") == null ? false : Boolean.Parse( xmlElement.Element("AllElementsOfType").Value);
             properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
             braille.fromGuiElement = xmlElement.Element("TextFromUIElement").Value;
             XElement position = xmlElement.Element("Position");
@@ -499,7 +451,7 @@ namespace TemplatesUi
             Type typeOfTemplate = Type.GetType(templateObject.osm.brailleRepresentation.templateFullName + ", " + templateObject.osm.brailleRepresentation.templateNamspace);
             if (typeOfTemplate != null)
             {
-                ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
+                ATemplateUi template = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees, treeOperation);
                 template.createUiElementFromTemplate(filteredSubtree, templateObject, brailleNodeId);
             }
         }

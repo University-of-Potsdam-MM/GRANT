@@ -8,6 +8,7 @@
         <xs:element maxOccurs="unbounded" name="UiElement">
           <xs:complexType>
             <xs:sequence>
+             <xs:element name="AllElementsOfType"  type="xs:boolean" minOccurs="0"/>
               <xs:element name="IsGroup">
                 <xs:complexType>
                   <xs:sequence minOccurs="0">

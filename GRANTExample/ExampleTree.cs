@@ -149,8 +149,6 @@ namespace GRANTExample
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application);
                    // strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentBrailleTreeNode, -1);
                     grantTree.setFilteredTree(tree);
-                    Console.WriteLine();
-                  //  baumSchleife(parentBrailleTreeNode);
                 }
                 catch (Exception ex)
                 {

@@ -87,35 +87,7 @@ namespace StrategyGenericTree
              return ((INode<T>)node).BranchIndex; 
         }
 
-    /*    public bool CanMoveToChild(Object node)
-        {
-            get { return ((INode<T>)this).CanMoveToChild; }
-        }
 
-        public bool CanMoveToFirst(Object node)
-        {
-            get { return ((INode<T>)this).CanMoveToFirst; }
-        }
-
-        public bool CanMoveToLast
-        {
-            get { return ((INode<T>)this).CanMoveToLast; }
-        }
-
-        public bool CanMoveToNext
-        {
-            get { return ((INode<T>)this).CanMoveToNext; }
-        }
-
-        public bool CanMoveToParent
-        {
-            get { return ((INode<T>)this).CanMoveToParent; }
-        }
-
-        public bool CanMoveToPrevious
-        {
-            get { return ((INode<T>)this).CanMoveToPrevious; }
-        }*/
 
         public Object Child(Object node)
         {
@@ -371,9 +343,9 @@ namespace StrategyGenericTree
         public string ToStringRecursive(Object treeOld)
         {
             Type treeOldType = treeOld.GetType();
-            if (treeOldType.BaseType.Name.Equals(typeof(NodeTree<T>).Name) || treeOldType.Name.Equals(typeof(NodeTree<T>).Name))
-            {
-                return ((NodeTree<T>)treeOld).ToStringRecursive();
+           if (treeOldType.BaseType.Name.Equals(typeof(NodeTree<T>).Name) || treeOldType.Name.Equals(typeof(NodeTree<T>).Name))
+            {                
+                return ((NodeTree<T>)treeOld).ToStringRecursive();                
             }
             else
             {
@@ -432,20 +404,28 @@ namespace StrategyGenericTree
 
         public IEnumerable<object> AllNodes(object treeObject)
         {
-            if (!(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
+            if (treeObject == null || !(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
             return (IEnumerable<object>)((NodeTree<T>)treeObject).All.Nodes;
         }
 
         public IEnumerable<object> AllChildrenNodes(object treeObject)
         {
-            if (!(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
+            if (treeObject == null || !(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
             return (IEnumerable<object>)((NodeTree<T>)treeObject).AllChildren.Nodes;
         }
 
         public IEnumerable<object> DirectChildrenNodes(object treeObject)
         {
-            if (!(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
+            if (treeObject == null || !(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
             return (IEnumerable<object>)((NodeTree<T>)treeObject).DirectChildren.Nodes;
+        }
+
+
+        public bool Equals(object node1, object node2)
+        {
+            IEqualityComparer<T> comparer = ((NodeTree<T>)node1).DataComparer;
+            bool result = comparer.Equals(((NodeTree<T>)node1).Data, ((NodeTree<T>)node2).Data);
+            return result;
         }
     }
 }
