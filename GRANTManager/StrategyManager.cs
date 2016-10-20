@@ -136,7 +136,7 @@ namespace GRANTManager
             try
             {
                 Type type = Type.GetType(operationSystemClassName);
-                specifiedOperationSystem = (IOperationSystemStrategy)Activator.CreateInstance(type);
+                specifiedOperationSystem = (IOperationSystemStrategy)Activator.CreateInstance(type, this);
                 specifiedOperationSystem.setStrategyMgr(this); //damit beim Filter-Wechsel nicht der Setter vergessen wird
             }
             catch (InvalidCastException ic)

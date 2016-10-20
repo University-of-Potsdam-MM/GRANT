@@ -24,16 +24,18 @@ namespace StrategyWindows
         /// Methode aus Interface IOperationSystemStrategy
         /// </summary>
         /// <param name="manager"></param>
-        public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public void setStrategyMgr(StrategyManager manager) 
+        { strategyMgr = manager; }
 
         //todo null verweise?
         /// <summary>
         /// Init des eventhandler, mit übergabe des tartagymanager für nutzung von diesem, und eventmonitor mit übergabe des eventhandler, da dieser in eventmonitor erzeugt und methoden daraus genutzt werden
         /// </summary>
-        public OperationSystemStrategyWindows()
+        public OperationSystemStrategyWindows(StrategyManager manager)
         {
+            strategyMgr = manager;
             windowsEventsHandler = new Windows_EventsHandler(strategyMgr);
-            //windowsEventsHandler.setStrategyMgr(strategyMgr);
+            windowsEventsHandler.setStrategyMgr(strategyMgr);
             windowsEventsMonitor = new Windows_EventsMonitor(windowsEventsHandler);
         }
 

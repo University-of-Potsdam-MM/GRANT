@@ -16,13 +16,14 @@ namespace StrategyWindows
 
         //todo test ob hier, in keymouseklasse prism-pakcage istalliert sein muss
         #region eventsHandler
-        public EventAggregator prismEventAggregator = new EventAggregator();
+        public IEventAggregator prismEventAggregator = new EventAggregator();
 
         //public EventAggregatorPRISM_GRANTManager ea = new EventAggregatorPRISM_GRANTManager();
 
         public Windows_EventsHandler(StrategyManager manager)
         {
             strategyMgr = manager;
+            
             prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
         }
 
@@ -32,7 +33,7 @@ namespace StrategyWindows
         //public SubscriptionToken stringSubToken;
 
         public StrategyManager strategyMgr;
-        //public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
+        public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
 
         public void onKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {

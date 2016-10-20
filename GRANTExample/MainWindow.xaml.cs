@@ -71,6 +71,12 @@ namespace GRANTExample
             grantTree = new GeneratedGrantTrees();
             searchNodes = new SearchNodes(strategyMgr, grantTree);
             treeOperation = new TreeOperation(strategyMgr, grantTree);
+
+            // Setzen des Eventmanager
+            List<Strategy> possibleEventManager = settings.getPossibleEventManager();
+            strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
+
+            
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -78,9 +84,6 @@ namespace GRANTExample
             List<Strategy> possibleTrees = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
             
-            // Setzen des Eventmanager
-            List<Strategy> possibleEventManager = settings.getPossibleEventManager();
-            strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
 
 
              List<Strategy> possibleFilter = settings.getPossibleFilters();
