@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using GRANTManager;
+using Prism.Events;
 
 namespace GRANTManager.Interfaces
 {
@@ -14,6 +15,8 @@ namespace GRANTManager.Interfaces
         //void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         //StrategyManager getStrategyMgr();
 
-        string deliverString(); 
+        EventAggregator getSpecifiedEventManagerClass(); 
+
+        //class updateOSMEven();
     }
 }

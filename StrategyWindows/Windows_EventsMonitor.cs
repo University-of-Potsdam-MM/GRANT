@@ -15,7 +15,7 @@ namespace StrategyWindows
         Windows_EventsHandler eventHandlerWindows;
         public Windows_EventsMonitor(Windows_EventsHandler eventHandlerWindows)
         {
-            this.eventHandlerWindows = eventHandlerWindows;
+            this.eventHandlerWindows = eventHandlerWindows;            
         }
 
         #region mouseKeyboardEvents

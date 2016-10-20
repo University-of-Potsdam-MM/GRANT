@@ -19,6 +19,10 @@ using Prism.Events;
 //https://github.com/PrismLibrary/Prism/blob/master/Documentation/WPF/70-CommunicatingBetweenLooselyCoupledComponents.md
 //http://www.codeproject.com/Articles/355473/Prism-EventAggregator-Sample
 
+using System.Collections.ObjectModel;
+
+using StrategyWindows;
+
 namespace StrategyEventManager_AggregatorPRISM
 {
     public class EventAggregatorPRISM : IEventManagerStrategy
@@ -34,25 +38,37 @@ namespace StrategyEventManager_AggregatorPRISM
         //getstrategymgr ruft nur die lokale gesetzte variable strategymgr ab
         //public StrategyManager getStrategyMgr() { return strategyMgr; }
 
+
+        public EventAggregator prismEventAggregatorClass = new EventAggregator();
+        
         /// <summary>
         /// Test
         /// </summary>
-        public string g = "wer";
-        string IEventManagerStrategy.deliverString()
+        //public string g = "wer";
+        EventAggregator IEventManagerStrategy.getSpecifiedEventManagerClass()
         {
             //strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
-            return g;
+            return prismEventAggregatorClass;
         }
 
-        public IEventAggregator prismEventAggregatorClass = new EventAggregator();
-
-        ////Kreierung des events
-        //public class stringOSMEvent : PubSubEvent<string> { }
-
-        ////timerEvent
-        //public class stringTimeEvent : PubSubEvent<string> { }
-
         //#region publisher
+        public void mouseKeyHookEventHandler()
+        {
+            Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse folgt");
+            //Publish
+            //aufruf mittels übergebenem prismeventaggregator
+            prismEventAggregatorClass.GetEvent<stringOSMEventTest>().Subscribe(generateOSM);
+
+            object pd = new updateOSMEvent();
+
+            //prismEventAggregatorClass.GetType().
+            //prismEventAggregatorClass.GetEvent<pd>().Subscribe(generateOSM);
+
+            ///hier weitermachen: wie die klasse updateosmevent weitergeben für nutzung, bzw. verfügbar machen?
+            prismEventAggregatorClass.GetEvent<updateOSMEvent>().Subscribe(generateOSM);
+
+        }
+
 
         //#endregion
 
@@ -60,7 +76,54 @@ namespace StrategyEventManager_AggregatorPRISM
         //#endregion
 
         //#region handler
-        //#endregion
+        public void generateOSM(string osm)
+        {
+            Console.WriteLine("winevent verarbeitet" + osm);
+            //osm = "werhers";
+        }
 
+        //#endregion
     }
+
+    ////Kreierung des event
+    // dies evtl. in eigene klasse, es ist der verbinder zwischen dem subscriber und dem publisher
+
+    //uklare bezeichnung dieser klasse, sollte sie so bezeichnet sein, als ob sie beschreibt, was die folge des events ist, oder sollte sie so bezeichnet sein
+    //public class stringOSMEvent : PubSubEvent<string> { }
+
+    //???typ, ist dieser auch über grantStrategymanager nutzbar???
+    public class updateOSMEvent : PubSubEvent<string> 
+    {    
+        //void get()
+        //{
+        //    updateOSMEvent.
+        //}
+    }
+
+
+    //updateOSMEvent IEventManagerStrategy.getUpdateOSMEventClass()
+    //{
+    //    //strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+    //    return updateOSMEvent;
+    //}
+
+    //todo: Rückgabe der klassen, als liste geht nicht
+    ////List<PubSubEvent> list = new List<PubSubEvent>();
+    ////Collection<IEventAggregator> col = new Collection<EventAggregator>();
+    //public void setList()
+    //{
+    //    //list.Add(stringOSMEvent);
+    //    //col.Add(EventAggregatorPRISM.updateOSMEvent);
+    //}
+
+    ////    IEventManagerStrategy.getSpecifiedEventManagerClass()
+    ////{
+    ////    //strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+    ////    return prismEventAggregatorClass;
+    ////}
+
+
+    ////timerEvent
+    //public class stringTimeEvent : PubSubEvent<string> { }
+
 }
