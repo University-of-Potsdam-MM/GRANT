@@ -12,15 +12,30 @@ using OSMElement;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
+using GRANTManager;
 
 namespace StrategyWindows
 {
     public class OperationSystemStrategyWindows : IOperationSystemStrategy
     {
+        private StrategyManager strategyMgr;
+        
+        /// <summary>
+        /// Methode aus Interface IOperationSystemStrategy
+        /// </summary>
+        /// <param name="manager"></param>
+        public void setStrategyMgr(StrategyManager manager) 
+        { strategyMgr = manager; }
+
         //todo null verweise?
-        public OperationSystemStrategyWindows()
+        /// <summary>
+        /// Init des eventhandler, mit übergabe des tartagymanager für nutzung von diesem, und eventmonitor mit übergabe des eventhandler, da dieser in eventmonitor erzeugt und methoden daraus genutzt werden
+        /// </summary>
+        public OperationSystemStrategyWindows(StrategyManager manager)
         {
-            windowsEventsHandler = new Windows_EventsHandler();
+            strategyMgr = manager;
+            windowsEventsHandler = new Windows_EventsHandler(strategyMgr);
+            windowsEventsHandler.setStrategyMgr(strategyMgr);
             windowsEventsMonitor = new Windows_EventsMonitor(windowsEventsHandler);
         }
 
@@ -430,6 +445,7 @@ namespace StrategyWindows
             ////mouseKeyHookClass mk = new mouseKeyHookClass();
             ////mk.Subscribe();
         }
+
 
     }
     

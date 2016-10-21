@@ -13,17 +13,26 @@ namespace StrategyWindows
 {
     public class Windows_EventsHandler
     {
+
         //todo test ob hier, in keymouseklasse prism-pakcage istalliert sein muss
         #region eventsHandler
         public IEventAggregator prismEventAggregator = new EventAggregator();
+
         //public EventAggregatorPRISM_GRANTManager ea = new EventAggregatorPRISM_GRANTManager();
-           
+
+        public Windows_EventsHandler(StrategyManager manager)
+        {
+            strategyMgr = manager;
+            
+            prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+        }
+
+   
         //todo was bringt token für vorteile? wie wird es genutzt?
         //public SubscriptionToken objSubToken;
         //public SubscriptionToken stringSubToken;
 
         public StrategyManager strategyMgr;
-        Settings settings = new Settings();
         public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
 
         public void onKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -35,9 +44,12 @@ namespace StrategyWindows
                 //return e.KeyValue.ToString();
                 //der wurf soll hier nicht erfolgen???, es erfolgt ein aufruf einer methode in rprimsklasse und die parameter werde von hier mit übergeben, in prism klasse erfolgt der publish
                 //diese methode hat als parameter einfach alle infos zu dem event und kann immer dieselbe bezeichnung haben
-                //cea.agg.GetEvent<stringOSMEvent>().Publish("Wurf aus windowskeyEventsMonitorKlasse");
+                //cea.agg.GetEvent<stringOSMEvent>().Publish("Wurf aus windowskeyEventsMonitorKlasse")
 
-                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), DateTime.Now.ToString(), prismEventAggregator);
+                //prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+
+                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), DateTime.Now.ToString());
+
 
                 ////todo kann alles weg?
                 //////test ab hier für erhalt der initialisierten klasse, der instanz                
@@ -57,13 +69,13 @@ namespace StrategyWindows
         }
 
         //gibt info des eventwurf an prism weiter , es passiert hier das publish    
-        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string dateTimeNow, IEventAggregator prismEvAgg)
+        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string dateTimeNow)
         {
             Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse folgt" + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
             
             //Publish
             //aufruf mittels übergebenem prismeventaggregator
-            prismEvAgg.GetEvent<stringOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+            prismEventAggregator.GetEvent<stringOSMEventTest>().Publish(mouseKeyEventType + mouseKeyEventValue);
             
     ////////Aufruf direkt von globalem prismeventaggregator
     //////prismEventAggregator.GetEvent<stringOSMEvent>().Publish(mouseKeyEventType);
@@ -132,7 +144,7 @@ namespace StrategyWindows
     }
 
     //Kreierung des events
-    public class stringOSMEvent : PubSubEvent<string> { }
+    public class stringOSMEventTest : PubSubEvent<string> { }
 
     //timerEvent
     public class stringTimeEvent : PubSubEvent<string> { }

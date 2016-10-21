@@ -50,6 +50,10 @@
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>GRANTManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StrategyWindows\StrategyWindows.csproj">
+      <Project>{8635b65c-13f9-4a97-88f6-e0507bd73d8d}</Project>
+      <Name>StrategyWindows</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
