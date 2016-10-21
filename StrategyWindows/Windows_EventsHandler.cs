@@ -73,10 +73,19 @@ namespace StrategyWindows
         {
             Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse folgt" + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
             
+
+
+
             //Publish
             //aufruf mittels übergebenem prismeventaggregator
             prismEventAggregator.GetEvent<stringOSMEventTest>().Publish(mouseKeyEventType + mouseKeyEventValue);
+
+            ///todo hier ist klasse des event aus prism direkt aus grantmanager, globale klasse, genutzt, ohne instanzbildung
+            ///nächster test subscribe des event dieser klasse in ganz anderem teilprojekt!
+            prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+
             
+
     ////////Aufruf direkt von globalem prismeventaggregator
     //////prismEventAggregator.GetEvent<stringOSMEvent>().Publish(mouseKeyEventType);
 

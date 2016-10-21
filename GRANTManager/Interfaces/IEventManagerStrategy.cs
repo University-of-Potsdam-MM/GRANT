@@ -18,5 +18,7 @@ namespace GRANTManager.Interfaces
         IEventAggregator getSpecifiedEventManagerClass(); 
 
         //class updateOSMEven();
+
+
     }
 }
