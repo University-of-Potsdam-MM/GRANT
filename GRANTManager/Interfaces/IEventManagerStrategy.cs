@@ -15,7 +15,7 @@ namespace GRANTManager.Interfaces
         //void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         //StrategyManager getStrategyMgr();
 
-        EventAggregator getSpecifiedEventManagerClass(); 
+        IEventAggregator getSpecifiedEventManagerClass(); 
 
         //class updateOSMEven();
     }

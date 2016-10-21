@@ -39,13 +39,13 @@ namespace StrategyEventManager_AggregatorPRISM
         //public StrategyManager getStrategyMgr() { return strategyMgr; }
 
 
-        public EventAggregator prismEventAggregatorClass = new EventAggregator();
+        public IEventAggregator prismEventAggregatorClass = new EventAggregator();
         
         /// <summary>
         /// Test
         /// </summary>
         //public string g = "wer";
-        EventAggregator IEventManagerStrategy.getSpecifiedEventManagerClass()
+        IEventAggregator IEventManagerStrategy.getSpecifiedEventManagerClass()
         {
             //strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             return prismEventAggregatorClass;

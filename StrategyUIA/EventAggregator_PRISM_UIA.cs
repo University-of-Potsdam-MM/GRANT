@@ -19,7 +19,7 @@ namespace StrategyUIA
 
     #region eventAggregator
 
-    class EventAggregator_PRISM
+    class EventAggregator_PRISM_UIA
 
     //todo wie kriege ich das hier öffentlich? ich muss prinzipien/konzepte der klassen/objektorientierung verstehen/wissen
 
