@@ -40,6 +40,11 @@ namespace GRANTApplication
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
             treeOperations = new TreeOperation(strategyMgr, grantTrees);
+
+            // Setzen des Eventmanager
+            List<Strategy> possibleEventManager = settings.getPossibleEventManager();
+            strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
+
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));

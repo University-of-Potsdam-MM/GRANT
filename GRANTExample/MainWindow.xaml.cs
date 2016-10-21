@@ -36,7 +36,7 @@ namespace GRANTExample
             InitializeComponent();
             InitializeFilterComponent();
 
-            InitializeStrategyWindows_Windows_EventsMonitor();
+            //InitializeStrategyWindows_Windows_EventsMonitor();
         }
 
         Settings settings;
