@@ -270,84 +270,27 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Geht rekursive durch alle Baumelemente und erstellt die einzelnen Views
+        /// Geht durch alle Baumelemente und erstellt die einzelnen Views
         /// </summary>
         /// <param name="tree">gibt das Baum-Objekt der Oberflaeche an</param>
         private void createViewsFromTree(Object tree)
         {
-            Object node1;
-            //Falls die Baumelemente Kinder des jeweiligen Elements sind
-            while ((strategyMgr.getSpecifiedTree().HasChild(tree)|| strategyMgr.getSpecifiedTree().HasNext(tree) )&& !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                if (strategyMgr.getSpecifiedTree().HasChild(tree))
+                if (strategyMgr.getSpecifiedTree().IsTop(node) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName.Equals(""))
                 {
-                    node1 =  strategyMgr.getSpecifiedTree().Child(tree);
-                    if (strategyMgr.getSpecifiedTree().IsTop(node1) && ! strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName.Equals(""))
-                    {
-                        createScreen(strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName);
-                    }
-                    else
-                    {
-                        if (! strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).properties.Equals(new GeneralProperties()) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.viewName.Equals("") && ! strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.isGroupChild)
-                        {
-                            createView(strategyMgr.getSpecifiedTree().GetData(node1));
-                        }
-                    }
-                    createViewsFromTree(node1);
+                    createScreen(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName);
                 }
                 else
                 {
-                    node1 = strategyMgr.getSpecifiedTree().Next(tree);
-                    if (strategyMgr.getSpecifiedTree().HasNext(tree))
+                    if (!strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).properties.Equals(new GeneralProperties()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.isGroupChild)
                     {
-                        if (strategyMgr.getSpecifiedTree().IsTop(node1) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName.Equals(""))
-                        {
-                            createScreen(strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.screenName);
-                        }
-                        else
-                        {
-                            if (!strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node1).properties.Equals(new GeneralProperties()) && strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.viewName != null && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(node1).brailleRepresentation.isGroupChild)
-                            {
-                                createView(strategyMgr.getSpecifiedTree().GetData(node1));
-                            }
-                        }
-                    }
-                    createViewsFromTree(node1);
-                }
-            }
-            if(strategyMgr.getSpecifiedTree().Count(tree)== 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1){
-                if (!strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()))
-                {
-                    if (strategyMgr.getSpecifiedTree().IsTop(tree) && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName.Equals(""))
-                    {
-                        createScreen(strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName);
-                    }
-                    else
-                    {
-                        if (!strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(tree).properties.Equals(new GeneralProperties()) && strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.viewName != null && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.isGroupChild)
-                        {
-                            createView(strategyMgr.getSpecifiedTree().GetData(tree));
-                        }
+                        createView(strategyMgr.getSpecifiedTree().GetData(node));
                     }
                 }
-            }
-            if (!strategyMgr.getSpecifiedTree().HasChild(tree))
-            {
-                node1 = tree;
-                if (strategyMgr.getSpecifiedTree().HasParent(tree))
-                {
-                    strategyMgr.getSpecifiedTree().Remove(node1);
-                }
-            }
-            if (!strategyMgr.getSpecifiedTree().HasNext(tree) && ! strategyMgr.getSpecifiedTree().HasParent(tree))
-            {
-                if (strategyMgr.getSpecifiedTree().HasPrevious(tree))
-                {
-                    node1 = tree;
-                    strategyMgr.getSpecifiedTree().Remove(node1);
-                }
-            }
+            }          
         }
+
 
         /// <summary>
         /// Erstellt aus einer <code>OSMElement.OSMElement</code> die entsprechende View
