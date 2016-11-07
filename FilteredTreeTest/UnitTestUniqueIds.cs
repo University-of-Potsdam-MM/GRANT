@@ -27,7 +27,7 @@ namespace FilteredTreeTest
           //  searchNodes = new SearchNodes(strategyMgr, grantTrees);
             treeOperation = new TreeOperation(strategyMgr, grantTrees);
             List<GRANTManager.Strategy> posibleOS = settings.getPossibleOperationSystems();
-            strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
+            
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
             strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
@@ -36,6 +36,7 @@ namespace FilteredTreeTest
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
         }
