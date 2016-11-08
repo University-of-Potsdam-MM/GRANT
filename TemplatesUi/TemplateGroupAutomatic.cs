@@ -28,7 +28,7 @@ namespace TemplatesUi
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            if (!templateObject.allElementsOfType || !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name))
+            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name)) //!templateObject.allElementsOfType ||
             {
                 braille.viewName = templateObject.name;
             }

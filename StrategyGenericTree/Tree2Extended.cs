@@ -101,6 +101,7 @@ namespace StrategyGenericTree
 
         public bool Contains(Object treeOld, T item)
         {
+            if (treeOld == null || item == null) { return false; }
             return ((ITree<T>)treeOld).Contains(item);
         }
 

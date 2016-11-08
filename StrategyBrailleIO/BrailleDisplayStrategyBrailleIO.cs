@@ -288,7 +288,8 @@ namespace StrategyBrailleIO
                         createView(strategyMgr.getSpecifiedTree().GetData(node));
                     }
                 }
-            }          
+            }
+          
         }
 
 
@@ -304,6 +305,7 @@ namespace StrategyBrailleIO
             if (osmElement.properties.isControlElementFiltered == false || osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
 
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
+
             String uiElementType = osmElement.properties.controlTypeFiltered;
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
             {
@@ -321,6 +323,7 @@ namespace StrategyBrailleIO
                     Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", osmElement.properties.controlTypeFiltered);
                     return;
                 }
+
                 createViewOtherContent(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, osmElement, renderer);
                 return;
             }
