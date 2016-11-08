@@ -829,8 +829,10 @@ namespace GRANTManager
             Object tree = grantTrees.getFilteredTree();
 
             List<Object> searchResultTrees = treeOperation.searchNodes.searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
+
             if (searchResultTrees != null && searchResultTrees.Count == 1)
             {
+                treeOperation.generatedIds.generatedIdsOfFilteredSubtree(searchResultTrees[0]);
                 treeOperation.updateNodes.setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), searchResultTrees[0]);
             }
             else
