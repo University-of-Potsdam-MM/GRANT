@@ -62,6 +62,8 @@ namespace GRANTManager.Interfaces
         /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
         bool showWindow(IntPtr hwnd);
 
+        void setForegroundWindow(IntPtr hWnd);
+
         void InitializeWindows_EventsMonitor();
 
         void setStrategyMgr(StrategyManager strategyManager);

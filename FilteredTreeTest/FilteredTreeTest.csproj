@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -55,6 +56,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="HelpFunctions.cs" />
+    <Compile Include="UnitTestUpdateNode.cs" />
     <Compile Include="UnitTestSaveTree.cs" />
     <Compile Include="UnitTestLoadTree.cs" />
     <Compile Include="UnitTestUniqueIds.cs" />

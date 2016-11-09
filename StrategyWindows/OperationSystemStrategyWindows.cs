@@ -64,7 +64,7 @@ namespace StrategyWindows
             bErase);
 
             [DllImport("User32.dll")]
-            public static extern Int32 SetForegroundWindow(int hWnd);
+            public static extern Int32 SetForegroundWindow(IntPtr hWnd);
 
             [DllImport("User32.dll")]
             public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
@@ -430,6 +430,12 @@ namespace StrategyWindows
             }
             return true;
         }
+
+        public void setForegroundWindow(IntPtr hWnd)
+        {
+            NativeMethods.SetForegroundWindow(hWnd);
+        }
+
 
         //todo: diese methode i prism event manager aufrufen in ihr wird festgelgt,
         //welche keyevents abgefragt werden sollen und wie... ohne festlegung, welche keyeventklasse genutzt wird 
