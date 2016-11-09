@@ -27,7 +27,7 @@ namespace StrategyWindows
         public void setStrategyMgr(StrategyManager manager) 
         { strategyMgr = manager; }
 
-        //todo null verweise?
+        //todo warum wird methode windowsEventsHandler.setStrategyMgr aufgerfuen und gleichzeitig übergabe des strategymgr in windowseventhandler? z38 auskommentiert
         /// <summary>
         /// Init des eventhandler, mit übergabe des tartagymanager für nutzung von diesem, und eventmonitor mit übergabe des eventhandler, da dieser in eventmonitor erzeugt und methoden daraus genutzt werden
         /// </summary>
@@ -35,7 +35,7 @@ namespace StrategyWindows
         {
             strategyMgr = manager;
             windowsEventsHandler = new Windows_EventsHandler(strategyMgr);
-            windowsEventsHandler.setStrategyMgr(strategyMgr);
+            //windowsEventsHandler.setStrategyMgr(strategyMgr);
             windowsEventsMonitor = new Windows_EventsMonitor(windowsEventsHandler);
         }
 

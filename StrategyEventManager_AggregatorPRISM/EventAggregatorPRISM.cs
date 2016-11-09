@@ -21,6 +21,7 @@ using Prism.Events;
 
 using System.Collections.ObjectModel;
 
+//todo: notwendig für erhalt der prismeventklasse, sollte nicht sein!
 using StrategyWindows;
 
 namespace StrategyEventManager_AggregatorPRISM
@@ -40,7 +41,12 @@ namespace StrategyEventManager_AggregatorPRISM
 
 
         public IEventAggregator prismEventAggregatorClass = new EventAggregator();
-        
+
+        //public EventAggregatorPRISM() 
+        //{
+        //    prismMouseKeyHookEventHandler_Subscribe();
+        //}
+
         /// <summary>
         /// Test
         /// </summary>
@@ -52,20 +58,29 @@ namespace StrategyEventManager_AggregatorPRISM
         }
 
         //#region publisher
-        public void mouseKeyHookEventHandler()
+        public void prismMouseKeyHookEventHandler_Subscribe()
         {
             Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse folgt");
             //Publish
             //aufruf mittels übergebenem prismeventaggregator
             prismEventAggregatorClass.GetEvent<stringOSMEventTest>().Subscribe(generateOSM);
 
-            object pd = new updateOSMEvent();
+            //object pd = new updateOSMEvent();
 
-            //prismEventAggregatorClass.GetType().
-            //prismEventAggregatorClass.GetEvent<pd>().Subscribe(generateOSM);
+            ////prismEventAggregatorClass.GetType().
+            ////prismEventAggregatorClass.GetEvent<pd>().Subscribe(generateOSM);
 
-            ///hier weitermachen: wie die klasse updateosmevent weitergeben für nutzung, bzw. verfügbar machen?
-            prismEventAggregatorClass.GetEvent<updateOSMEvent>().Subscribe(generateOSM);
+            /////hier weitermachen: wie die klasse updateosmevent weitergeben für nutzung, bzw. verfügbar machen?
+            //prismEventAggregatorClass.GetEvent<updateOSMEvent>().Subscribe(generateOSM);
+
+            PRISMHandler_Class p = new PRISMHandler_Class();
+
+            //prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+            //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+            prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(p.generateOSM_PRISMHandler_Class); ///hier muss ein subscribe hin
+
+            prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSM); ///hier muss ein subscribe hin
+
 
         }
 
@@ -91,14 +106,14 @@ namespace StrategyEventManager_AggregatorPRISM
     //uklare bezeichnung dieser klasse, sollte sie so bezeichnet sein, als ob sie beschreibt, was die folge des events ist, oder sollte sie so bezeichnet sein
     //public class stringOSMEvent : PubSubEvent<string> { }
 
-    //???typ, ist dieser auch über grantStrategymanager nutzbar???
-    public class updateOSMEvent : PubSubEvent<string> 
-    {    
-        //void get()
-        //{
-        //    updateOSMEvent.
-        //}
-    }
+    ////???typ, ist dieser auch über grantStrategymanager nutzbar???
+    //public class updateOSMEvent : PubSubEvent<string> 
+    //{    
+    //    //void get()
+    //    //{
+    //    //    updateOSMEvent.
+    //    //}
+    //}
 
 
     //updateOSMEvent IEventManagerStrategy.getUpdateOSMEventClass()

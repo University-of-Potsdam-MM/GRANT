@@ -24,6 +24,11 @@ using GRANTManager.Interfaces;
 using TemplatesUi;
 using GRANTManager.TreeOperations;
 
+
+using Prism.Events;
+
+
+
 namespace GRANTExample
 {
     /// <summary>
@@ -35,6 +40,8 @@ namespace GRANTExample
         {
             InitializeComponent();
             InitializeFilterComponent();
+
+            eventTest();
 
             //InitializeStrategyWindows_Windows_EventsMonitor();
         }
@@ -63,6 +70,22 @@ namespace GRANTExample
         //    //StrategyWindows.Windows_EventsMonitor me = new StrategyWindows.Windows_EventsMonitor();
         //    //me.Subscribe();
         //}
+
+
+        public IEventAggregator prismEventAggregatorClass = new EventAggregator();
+
+        public void eventTest()
+        {
+            prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+            prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
+        }
+
+        public void generateOSMmwxaml(string osm)
+        {
+            Console.WriteLine("winevent verarbeitet in mainwindowxaml" + osm);
+            //osm = "werhers";
+        }
+
 
         private void InitializeFilterComponent()
         {

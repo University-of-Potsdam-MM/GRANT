@@ -15,7 +15,10 @@ namespace StrategyWindows
         Windows_EventsHandler eventHandlerWindows;
         public Windows_EventsMonitor(Windows_EventsHandler eventHandlerWindows)
         {
-            this.eventHandlerWindows = eventHandlerWindows;            
+            this.eventHandlerWindows = eventHandlerWindows;
+            
+            //todo diese methode in globaler eventklasse aufrufen und festelegen, welche keymouseevents von welcher applikation abgefangen werden sollen!
+            subscribeWindowsEvents();
         }
 
         #region mouseKeyboardEvents
