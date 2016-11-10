@@ -15,7 +15,13 @@ namespace GRANTManager.TreeOperations
     /// </summary>
     public class UpdateNodes
     {
+        /// <summary>
+        /// Enthält die zur Verfügung stehenden Strategien
+        /// </summary>
         private StrategyManager strategyMgr;
+        /// <summary>
+        /// Enthält die generierten Bäume und dessen Beziehungen
+        /// </summary>
         private GeneratedGrantTrees grantTrees;
         private TreeOperation treeOperation;
         public UpdateNodes(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation)

@@ -52,7 +52,7 @@ namespace TemplatesUi
         /// <param name="pathToXml"></param>
         public void updateNavigationbarScreens(string pathToXml)
         {
-            TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
+            TempletUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
             List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
             /*
@@ -91,7 +91,7 @@ namespace TemplatesUi
         /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
         public void addNavigationbarForScreen(string pathToXml, Object subtree)
         {
-            TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
+            TempletUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
             List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
             List<String> screenNavi = new List<string>();
@@ -115,11 +115,11 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="pathToXml"></param>
         /// <returns></returns>
-        private TempletUiObject getTemplateUiObjectOfnavigationbarScreen(string pathToXml)
+        private TempletUiObject getTemplateUiObjectOfNavigationbarScreen(string pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Elements("UiElement")
+                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
                 where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
                     && (string)el.Attribute("name") == "NavigationBarScreens"
                 select el;
@@ -178,7 +178,7 @@ namespace TemplatesUi
 
         public void createUiElementsNavigationbarScreens(string pathToXml)
         {
-            TempletUiObject templateObject = getTemplateUiObjectOfnavigationbarScreen(pathToXml);
+            TempletUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TempletUiObject())) { return; }
             //TODO: mit Events verknüpfen
             List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
@@ -213,16 +213,16 @@ namespace TemplatesUi
             String controlType = strategyMgr.getSpecifiedTree().GetData(subtree).properties.controlTypeFiltered;
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Elements("UiElement")
+                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
                 where (string)el.Attribute("name") == controlType && 
                 (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") != "" &&
                 (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
-            /* foreach (XElement element in uiElement)
+          /*   foreach (XElement element in uiElement)
              {
                  Debug.WriteLine(element);
-             }*/            
+             }*/
            // XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
             ATemplateUi generalUiInstance;
            // TempletUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
@@ -354,7 +354,7 @@ namespace TemplatesUi
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Elements("UiElement")
+                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
                 where (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") == "" &&
                 (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
                 select el;
@@ -386,7 +386,7 @@ namespace TemplatesUi
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Elements("UiElement")
+                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
                 where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != "NavigationBarScreens"
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }

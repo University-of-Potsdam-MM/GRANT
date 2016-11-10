@@ -5,7 +5,10 @@
       <xs:sequence>   
         <xs:element name="MinDeviceHeight" type="xs:positiveInteger" />
         <xs:element name="MinDeviceWidth" type="xs:positiveInteger" />
-        <xs:element maxOccurs="unbounded" name="UiElement">
+        <xsd:element name="SymbolView">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xs:element maxOccurs="unbounded" name="UiElement">
           <xs:complexType>
             <xs:sequence>
              <xs:element name="AllElementsOfType"  type="xs:boolean" minOccurs="0"/>
@@ -111,6 +114,83 @@
             <xs:attribute name="name" type="xs:string" use="required" /> <!-- Vordefinierte Namen sind: ("TitleBar",)  "BrailleStatusBar", "NavigationBarScreens" bei diesen ist der name so zu verwenden, damit die Events ensprechend verarbeitet werden können, die Elemente sind aber nicht zwingend zu nutzen -->
           </xs:complexType>
         </xs:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      
+    <xsd:element name="LayoutView">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="UiElement">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="IsGroup" />
+                    <xsd:element name="Renderer" type="xsd:string" />
+                    <xsd:element name="Position">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Height" type="xsd:unsignedByte" />
+                          <xsd:element name="Width" nillable="true" />
+                          <xsd:element name="StartX" type="xsd:unsignedByte" />
+                          <xsd:element name="StartY" nillable="true" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="BoxModel">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Margin" />
+                          <xsd:element name="Padding">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element minOccurs="0" name="Left" type="xsd:unsignedByte" />
+                                <xsd:element name="Top" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Right" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Bottom" type="xsd:unsignedByte" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                          <xsd:element name="Boarder">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element minOccurs="0" name="Left" type="xsd:unsignedByte" />
+                                <xsd:element name="Top" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Right" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Bottom" type="xsd:unsignedByte" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ShowScrollbar" type="xsd:boolean" />
+                    <xsd:element name="Screens" />
+                    <xsd:element name="TextFromUIElement" type="xsd:string" />
+                  </xsd:sequence>
+                  <xsd:attribute name="name" type="xsd:string" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="Screenshot">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Renderer" type="xsd:string" />
+                    <xsd:element name="Position">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Height" type="xsd:unsignedByte" />
+                          <xsd:element name="Width" nillable="true" />
+                          <xsd:element name="StartX" type="xsd:unsignedByte" />
+                          <xsd:element name="StartY" type="xsd:unsignedByte" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>  
+    
       </xs:sequence>
      <xsd:attribute name="Version" type="xsd:unsignedByte" use="required" />
     </xs:complexType>
