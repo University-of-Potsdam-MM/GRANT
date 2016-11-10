@@ -11,12 +11,13 @@ using Prism.Events;
 
 namespace StrategyWindows
 {
-    public class Windows_EventsHandler
+    public class Windows_EventsHandler //: IEventManagerStrategy
     {
 
         //todo test ob hier, in keymouseklasse prism-pakcage istalliert sein muss
         #region eventsHandler
         public IEventAggregator prismEventAggregator = new EventAggregator();
+
 
         //public EventAggregatorPRISM_GRANTManager ea = new EventAggregatorPRISM_GRANTManager();
 
@@ -27,7 +28,8 @@ namespace StrategyWindows
             //prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
         }
 
-   
+
+
         //todo was bringt token für vorteile? wie wird es genutzt?
         //public SubscriptionToken objSubToken;
         //public SubscriptionToken stringSubToken;
@@ -68,12 +70,22 @@ namespace StrategyWindows
             }
         }
 
+        //IEventAggregator IEventManagerStrategy.getSpecifiedEventManagerClass()
+        //{
+        //    //strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
+        //    return prismEventAggregator;
+        //}
+
+
         //gibt info des eventwurf an prism weiter , es passiert hier das publish    
         public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string dateTimeNow)
         {
             Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
-            
 
+            prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+
+
+            //prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
 
 
             //Publish
@@ -92,6 +104,12 @@ namespace StrategyWindows
             //ea.prismEventAggregatorClass.GetEvent<>().Publish(dateTimeNow);
             //ea = this.ea;
             //ea.prismEventAggregatorClass.GetEvent<>().
+        }
+
+        public void generateOSMmwxaml(string osm)
+        {
+            Console.WriteLine("winevent verarbeitet in wineventhandler" + osm);
+            //osm = "werhers";
         }
 
 

@@ -170,8 +170,8 @@ namespace StrategyWindows
 
         private void OnKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            Console.WriteLine("KeyUp  \t\t {0}\n", e.KeyValue);
-            Console.WriteLine("KeyUp  \t\t {0}\n", e.KeyCode);
+            Console.WriteLine("KeyUp_WEM  \t\t {0}\n", e.KeyValue);
+            Console.WriteLine("KeyUp_WEM  \t\t {0}\n", e.KeyCode);
             //return e.KeyValue.ToString();
         }
 

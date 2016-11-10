@@ -58,31 +58,33 @@ namespace StrategyEventManager_AggregatorPRISM
         }
 
         //#region publisher
-        public void prismMouseKeyHookEventHandler_Subscribe()
-        {
-            Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse folgt");
-            //Publish
-            //aufruf mittels übergebenem prismeventaggregator
-            prismEventAggregatorClass.GetEvent<stringOSMEventTest>().Subscribe(generateOSM);
 
-            //object pd = new updateOSMEvent();
+        //todo subscriber hier ungenutzt
+        //public void prismMouseKeyHookEventHandler_Subscribe()
+        //{
+        //    Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse folgt");
+        //    //Publish
+        //    //aufruf mittels übergebenem prismeventaggregator
+        //    prismEventAggregatorClass.GetEvent<stringOSMEventTest>().Subscribe(generateOSM);
 
-            ////prismEventAggregatorClass.GetType().
-            ////prismEventAggregatorClass.GetEvent<pd>().Subscribe(generateOSM);
+        //    //object pd = new updateOSMEvent();
 
-            /////hier weitermachen: wie die klasse updateosmevent weitergeben für nutzung, bzw. verfügbar machen?
-            //prismEventAggregatorClass.GetEvent<updateOSMEvent>().Subscribe(generateOSM);
+        //    ////prismEventAggregatorClass.GetType().
+        //    ////prismEventAggregatorClass.GetEvent<pd>().Subscribe(generateOSM);
 
-            PRISMHandler_Class p = new PRISMHandler_Class();
+        //    /////hier weitermachen: wie die klasse updateosmevent weitergeben für nutzung, bzw. verfügbar machen?
+        //    //prismEventAggregatorClass.GetEvent<updateOSMEvent>().Subscribe(generateOSM);
 
-            //prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
-            //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
-            prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(p.generateOSM_PRISMHandler_Class); ///hier muss ein subscribe hin
+        //    PRISMHandler_Class p = new PRISMHandler_Class();
 
-            prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSM); ///hier muss ein subscribe hin
+        //    //prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+        //    //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+        //    prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(p.generateOSM_PRISMHandler_Class); ///hier muss ein subscribe hin
+
+        //    prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSM); ///hier muss ein subscribe hin
 
 
-        }
+        //}
 
 
         //#endregion
