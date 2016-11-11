@@ -47,7 +47,7 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Gibt die verwendete Filterstrategie zurück (UIA, Java-Access-Bridge, ...)
+        /// Gibt den verwendeten eventmanager zurück
         /// </summary>
         /// <returns></returns>
         public IEventManagerStrategy getSpecifiedEventManager()

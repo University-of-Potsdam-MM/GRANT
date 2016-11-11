@@ -30,6 +30,6 @@ namespace GRANTManager
             //osm = "werhers";
         }
 
-
+        //public IEventAggregator prismEventAggregatorClassHandler = new EventAggregator();
     }
 }
