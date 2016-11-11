@@ -173,7 +173,6 @@
               <xsd:element name="Screenshot">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="Renderer" type="xsd:string" />
                     <xsd:element name="Position">
                       <xsd:complexType>
                         <xsd:sequence>
@@ -184,6 +183,17 @@
                         </xsd:sequence>
                       </xsd:complexType>
                     </xsd:element>
+                    <xsd:element name="Screens">
+                      <!-- Wenn die Liste leer ist, soll das entsprechende Element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
+                      <xsd:complexType>
+                        <xsd:sequence minOccurs="0">
+                          <xsd:element maxOccurs="unbounded" name="Screen" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ConnectedFilteredNode" type="xs:string"/> <!--Gibt den Controltype des gefilterten Knotens an, von welchem ein screenshot erstellt werden soll-->
+                    <xs:element name="Zoom"  type="xs:double" minOccurs="0"/><!--Gibt den Zoom-Wert des Screenshots an. Dieser muss zwischen 0.0 und 3.0 liegen-->
+                    <xs:element name="Contrast"  type="xs:int" minOccurs="0"/><!--Gibt den Kontrast-Wert des Screenshots an. Dieser muss zwischen 0 und 255 liegen-->
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>

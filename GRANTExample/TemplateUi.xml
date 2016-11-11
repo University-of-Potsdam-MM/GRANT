@@ -243,13 +243,18 @@
       <TextFromUIElement />
     </UiElement>
     <Screenshot>
-      <Renderer>Text</Renderer>
       <Position>
         <Height>6</Height>
         <Width xsi:nil="true" />
         <StartX>0</StartX>
         <StartY>0</StartY>
       </Position>
+      <Screens>
+        <Screen>lv</Screen>
+      </Screens>
+      <ConnectedFilteredNode>Window</ConnectedFilteredNode>
+      <Zoom>0.2</Zoom>
+      <Contrast>220</Contrast>
     </Screenshot>
   </LayoutView>
 </TemplateUi>

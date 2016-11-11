@@ -50,8 +50,8 @@ namespace GRANTExample
                 GuiFunctions guiFuctions = new GuiFunctions(strategyMgr, grantTrees);
                 if (guiFuctions.isTemplateUsableForDevice(path))
                 {
-                    ui.createUiElementsAllScreens(path);
-                  //  ui.createUiElementsNavigationbarScreens(path);
+                    ui.createUiElementsAllScreensSymbolView(path);
+                  //  ui.createUiElementsNavigationbarScreensSymbolView(path);
                     ui.updateNavigationbarScreens(path);
                     
                 }*/
@@ -501,6 +501,18 @@ namespace GRANTExample
                strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen(name);
             }
            // ITreeStrategy<OSMElement.OSMElement> subtreeFiltered = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen(visibleScreen);
+           //Screenshots aktualisieren beim Screen-Wechsel
+           Object subnodesOfScreen = treeOperation.searchNodes.getSubtreeOfScreen(name);
+           GeneralProperties prop = new GeneralProperties();
+           prop.controlTypeFiltered = "Screenshot";
+           List<Object> screenshotNodes = treeOperation.searchNodes.searchProperties(subnodesOfScreen, prop);
+           foreach (Object node in screenshotNodes)
+           {
+               OSMElement.OSMElement osmScreenshot = strategyMgr.getSpecifiedTree().GetData(node);
+               strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osmScreenshot);
+               strategyMgr.getSpecifiedTree().SetData(node, osmScreenshot);
+               grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().Root(node));
+           }
         }
 
         public List<String> getPosibleScreens()

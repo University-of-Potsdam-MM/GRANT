@@ -28,7 +28,7 @@ namespace TemplatesUi
             this.treeOperation = treeOperation;
         }
 
-        public virtual void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public virtual void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
             if (templateObject.Screens != null)
             {
@@ -43,7 +43,32 @@ namespace TemplatesUi
             }
         }
 
-        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TempletUiObject templateObject)
+        /// <summary>
+        /// Erstellt ausgehend von einem Template einen Knoten im Braille-Baum sowie dessen Beziehung
+        /// </summary>
+        /// <param name="screenshotObject">gibt die Eigenschaften für den Screenshot-Knoten an</param>
+        /// <param name="nodes">gibt eine Liste aller Knoten des gefilterten Baums an von denen der Screenshot erstellt werden soll</param>
+        public void createUiScreenshotFromTemplate(TemplateScreenshotObject screenshotObject, List<Object> nodes)
+        {
+            //TODO: verschiedene Screens beachten
+            //TODO: Baumbeziehung setzen
+            foreach (Object node in nodes)
+            {
+                createUiElementFromTemplate(node, CastScreenshotObject(screenshotObject));
+            }
+        }
+
+        private TemplateUiObject CastScreenshotObject(TemplateScreenshotObject screenshotObject)
+        {
+            TemplateUiObject castedSO = new TemplateUiObject();
+            castedSO.name = screenshotObject.name;
+            castedSO.Screens = screenshotObject.Screens;
+            castedSO.osm = screenshotObject.osm;
+
+            return castedSO;
+        }
+
+        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TemplateUiObject templateObject)
         { 
             if (brailleSubtree == null || !strategyMgr.getSpecifiedTree().HasChild(brailleSubtree)) { return; }
             OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
@@ -55,7 +80,7 @@ namespace TemplatesUi
             GeneralProperties prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
-            if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
+            if(filteredSubtree != null) //(templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
             {
                 List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
@@ -94,7 +119,7 @@ namespace TemplatesUi
             }
         }
 
-        protected abstract Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
+        protected abstract Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
 
 
         

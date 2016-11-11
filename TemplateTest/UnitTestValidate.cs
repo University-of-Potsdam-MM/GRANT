@@ -49,14 +49,15 @@ namespace TemplateTest
         public void TestIsTemplateValid()
         {
             bool isValid = GuiFunctions.isTemplateValid(pathToTemplate);
-           if (!isValid) { Assert.Fail("Das Template ist nicht valide!"); }
+           Assert.AreEqual(true, isValid, "Das Template ist nicht valide!");
         }
 
         [TestMethod]
         public void TestIsTemplateUsableForDevice()
         {
             bool isValid = guiFuctions.isTemplateUsableForDevice(pathToTemplate);
-            if (!isValid) { Assert.Fail("Das Template ist für das Ausgabegerät nicht geeignet!"); }
+            Assert.AreEqual(true, isValid, "Das Template ist für das Ausgabegerät nicht geeignet!");
+            //if (!isValid) { Assert.Fail("Das Template ist für das Ausgabegerät nicht geeignet!"); }
         }
     }
 }

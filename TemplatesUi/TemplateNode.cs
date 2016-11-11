@@ -15,7 +15,7 @@ namespace TemplatesUi
     {
         public TemplateNode(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
-        protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null)
+        protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = templateObject.osm;
             GeneralProperties prop = templateObject.osm.properties;
@@ -23,6 +23,7 @@ namespace TemplatesUi
 
             prop.isEnabledFiltered = false;
             braille.isVisible = true;
+            #region DropDownMenu
             if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
             {
                 OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
@@ -40,6 +41,8 @@ namespace TemplatesUi
                 dropDownMenu.isVertical = false;
                 braille.uiElementSpecialContent = dropDownMenu;
             }
+            #endregion
+            #region TabItem
             if (templateObject.osm.properties.controlTypeFiltered.Equals("TabItem"))
             {
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
@@ -47,6 +50,7 @@ namespace TemplatesUi
                 //braille.uiElementSpecialContent = tabView;
                 braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
             }
+            #endregion
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             if (!templateObject.allElementsOfType || !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name))

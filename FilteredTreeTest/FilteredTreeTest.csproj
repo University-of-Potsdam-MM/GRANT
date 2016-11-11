@@ -114,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="SavedTrees\filteredTree_Rechner.grant">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

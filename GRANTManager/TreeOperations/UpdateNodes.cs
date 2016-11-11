@@ -204,15 +204,17 @@ namespace GRANTManager.TreeOperations
         {
             BrailleRepresentation updatedContentBR = element.brailleRepresentation;
             GeneralProperties updatedContentGP = element.properties;
-            String updatedText = getTextForView(element);
+            if (element.brailleRepresentation.fromGuiElement != null)
+            {
+                updatedContentGP.valueFiltered = getTextForView(element);
+            }
             if (element.brailleRepresentation.uiElementSpecialContent != null && element.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.ListMenuItem)))
             {
                 ListMenuItem listMenuItem = (ListMenuItem)element.brailleRepresentation.uiElementSpecialContent;
                 updatedContentGP.isToggleStateOn = isCheckboxOfAssociatedElementSelected(element);
             }
 
-            // updatedContentBR.text = updatedText;
-            updatedContentGP.valueFiltered = updatedText;
+            
             bool? isEnable = isUiElementEnable(element);
             if (isEnable != null)
             {
@@ -603,7 +605,7 @@ namespace GRANTManager.TreeOperations
                     Type typeOfTemplate = Type.GetType(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.templateFullName + ", " + strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.templateNamspace);
                     if (typeOfTemplate != null)
                     {
-                        TempletUiObject templateobject = new TempletUiObject();
+                        TemplateUiObject templateobject = new TemplateUiObject();
                         templateobject.osm = strategyMgr.getSpecifiedTree().GetData(node);
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName);
@@ -616,6 +618,7 @@ namespace GRANTManager.TreeOperations
                             subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
                             String idParent = changeSubTreeOfFilteredTree(subtreeFiltered, id);
                             Object tree = grantTrees.getFilteredTree();
+                            if (idParent == null || tree == null) { return; }
                            tree=  treeOperation.generatedIds.generatedIdsOfFilteredSubtree(treeOperation.searchNodes.getAssociatedNode(idParent, tree));
                            grantTrees.setFilteredTree(tree);
                             subtreeFiltered = treeOperation.searchNodes.getAssociatedNode(osmRelationship.FilteredTree, grantTrees.getFilteredTree());

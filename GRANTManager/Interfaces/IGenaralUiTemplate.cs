@@ -9,14 +9,14 @@ namespace GRANTManager.Interfaces
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
         void addNavigationbarForScreen(string pathToXml, Object subtree);
-        void createUiElementsAllScreens(string pathToXml);
-        void createUiElementsNavigationbarScreens(string pathToXml);
+        void createUiElementsAllScreens(string pathToXml, String nameOfView);
+        void createUiElementsNavigationbarScreensSymbolView(string pathToXml);
         void generatedUiFromTemplate(string pathToXml);
         void updateNavigationbarScreens(string pathToXml);
 
-        void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId = null);
+        void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
-    public struct TempletUiObject
+    public struct TemplateUiObject
     {
         public OSMElement.OSMElement osm { get; set; }
         public String groupImplementedClassTypeFullName { get; set; } //nötig?
@@ -33,6 +33,14 @@ namespace GRANTManager.Interfaces
         /// [XmlIgnore]
         public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
          
+    }
+
+    public struct TemplateScreenshotObject
+    {
+        public OSMElement.OSMElement osm { get; set; }
+        public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
+        public String name { get; set; }
+        public String connectedFilteredNodeControltype { get; set; } //oder lieber auf "name" mtchen?
     }
 
 }

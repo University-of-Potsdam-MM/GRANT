@@ -134,6 +134,7 @@ namespace GRANTManager.TreeOperations
         /// <returns>zugehöriger Knoten</returns>
         internal Object getAssociatedNode(String idGenerated, Object tree)
         {
+            if (tree == null || idGenerated == null) { return null; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(idGenerated))

@@ -22,7 +22,7 @@ namespace TemplatesUi
             deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         }
 
-        public override void createUiElementFromTemplate(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
+        public override void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId)
         {
             if (!strategyMgr.getSpecifiedTree().HasChild(filteredSubtree)) { return; }
             if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree))
@@ -36,7 +36,7 @@ namespace TemplatesUi
             }
         }
 
-        protected override Object createSpecialUiElement(Object filteredSubtree, TempletUiObject templateObject, String brailleNodeId)
+        protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId)
         {
             if (strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewTree(); }
             OSMElement.OSMElement brailleNode = templateObject.osm;
@@ -197,7 +197,7 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="parentNode">gibt den Elternknoten an</param>
         /// <param name="templateObject">gibt das zu nutzende Template an</param>
-        private void iteratedChildreen(Object parentNode, TempletUiObject templateObject, String brailleNodeId)
+        private void iteratedChildreen(Object parentNode, TemplateUiObject templateObject, String brailleNodeId)
         {            
             if (strategyMgr.getSpecifiedTree().HasChild(parentNode))
             {

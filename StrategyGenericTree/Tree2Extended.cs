@@ -193,6 +193,7 @@ namespace StrategyGenericTree
 
         public bool HasChild(Object node)
         {
+            if (node == null) { return false; }
             return ((INode<T>)node).HasChild; 
         }
 
