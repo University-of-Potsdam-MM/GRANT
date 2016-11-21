@@ -155,24 +155,20 @@ namespace GRANTManager.TreeOperations
         /// <returns>Teilbaum des Screens oder <c>null</c></returns>
         public Object getSubtreeOfScreen(String screenName)
         {
-            //TODO. hier sollten auch die direkten Kinder von root reichen durchzugehen
+
             if (screenName == null || screenName.Equals("")) { Debug.WriteLine("Kein Name des Screens angegeben"); return null; }
             Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
-            if (tree == null || !strategyMgr.getSpecifiedTree().HasChild(tree)) { return null; }
-            tree = strategyMgr.getSpecifiedTree().Child(tree);
+            if (grantTrees.getBrailleTree() == null ) { return null; }
 
-            if (strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName.Equals(screenName))
+            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
             {
-                return tree;
-            }
-
-            while (strategyMgr.getSpecifiedTree().HasNext(tree))
-            {
-                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(tree)).brailleRepresentation.screenName.Equals(screenName))
+                foreach(Object screenNodes in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                 {
-                    return strategyMgr.getSpecifiedTree().Next(tree);
+                    if (strategyMgr.getSpecifiedTree().GetData(screenNodes).brailleRepresentation.screenName.Equals(screenName))
+                    {
+                        return screenNodes;
+                    }
                 }
-                tree = strategyMgr.getSpecifiedTree().Next(tree);
             }
             return null;
         }
@@ -180,19 +176,21 @@ namespace GRANTManager.TreeOperations
         /// <summary>
         /// Gibt die Namen der vorhandenen Screens im Braille-Baum an
         /// </summary>
-        /// <returns>Eine Liste der Namen der Screens im Braille-Baum</returns>
-        public List<String> getPosibleScreenNames()
+        /// <param name="viewCategory">gibt die viewCategory an</param>
+        /// <returns>Eine Liste der Namen der Screens im Braille-Baum, falls <para>viewCategory</para> angegeben ist, werden nur die Screens dieser viewCategory zurückgegeben</returns>
+        public List<String> getPosibleScreenNames(String viewCategory = null)
         {
-            //TODO. hier sollten auch die direkten Kinder von root reichen durchzugehen
             if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return null; }
             List<String> screens = new List<string>();
-            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
-            tree = strategyMgr.getSpecifiedTree().Child(tree); ;
-            screens.Add(strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName);
-            while (strategyMgr.getSpecifiedTree().HasNext(tree))
+            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
             {
-                tree = strategyMgr.getSpecifiedTree().Next(tree);
-                screens.Add(strategyMgr.getSpecifiedTree().GetData(tree).brailleRepresentation.screenName);
+                if(viewCategory == null || viewCategory.Equals(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory))
+                {
+                    foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
+                    {
+                        screens.Add(strategyMgr.getSpecifiedTree().GetData(screenSubtree).brailleRepresentation.screenName);
+                    }
+                }
             }
             return screens;
         }
@@ -281,56 +279,45 @@ namespace GRANTManager.TreeOperations
         /// <param name="screenName"></param>
         /// <param name="viewName"></param>
         /// <returns></returns>
-        public bool existViewInScreen(String screenName, String viewName)
+        public bool existViewInScreen(String screenName, String viewName, String viewCategory)
         {
-            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("")) { return false; }
+            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || viewCategory == null || viewCategory.Equals("")) { return false; }
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
             osmScreen.brailleRepresentation = brailleScreen;
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
-            Object treeCopy = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
-            if (!strategyMgr.getSpecifiedTree().HasChild(treeCopy)) { return false; }
-            treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
-            bool hasNext = true;
-            do
+
+            if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return false; }
+            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.screenName.Equals(screenName))
+                if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory.Equals(viewCategory))
                 {
-                    //TODO: alle Kinder untersuchen
-                    if (strategyMgr.getSpecifiedTree().HasChild(treeCopy))
+                    foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                     {
-                        treeCopy = strategyMgr.getSpecifiedTree().Child(treeCopy);
-                        if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName))
+                        OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
+                        if (nodeData.brailleRepresentation.screenName != null && nodeData.brailleRepresentation.screenName.Equals(screenName))
                         {
-                            Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true;
-                        }
-                        while (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
-                        {
-                            treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
-                            if (strategyMgr.getSpecifiedTree().GetData(treeCopy).brailleRepresentation.viewName.Equals(viewName))
+                            foreach (Object childScreen in strategyMgr.getSpecifiedTree().AllChildrenNodes(node))
                             {
-                                Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!"); return true;
+                                OSMElement.OSMElement childScreenData = strategyMgr.getSpecifiedTree().GetData(childScreen);
+                                if (childScreenData.brailleRepresentation.viewName != null && childScreenData.brailleRepresentation.viewName.Equals(viewName))
+                                {
+                                    Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!");
+                                    return true;
+                                }
                             }
+                            return false;
                         }
                     }
                     return false;
                 }
-                if (strategyMgr.getSpecifiedTree().HasNext(treeCopy))
-                {
-                    treeCopy = strategyMgr.getSpecifiedTree().Next(treeCopy);
-                    hasNext = true;
-                }
-                else
-                {
-                    hasNext = false;
-                }
+            }
 
-            } while (hasNext);
-
+            
             return false;
-
         }
+
 
     }
 }

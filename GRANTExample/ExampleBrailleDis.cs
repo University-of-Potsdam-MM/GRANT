@@ -41,8 +41,8 @@ namespace GRANTExample
             {               
                     // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                 String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
-              /* setDauGui(fromGuiElement);
-                ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
+               setDauGui(fromGuiElement);
+               /* ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
                 if (subtreeNav != null && subtreeNav.Count > 0)
                 {
                     ui.addNavigationbarForScreen(path, subtreeNav);
@@ -219,6 +219,9 @@ namespace GRANTExample
         #region Beispielobjekte
         private void setDauGui(String fromGuiElement3)
         {
+            List<String> viewCategory = Settings.getPossibleViewCategories();
+            if (viewCategory == null || viewCategory.Count < 2) { return; }
+
             #region Element 1 Screenshot
             OSMElement.OSMElement osm1 = new OSMElement.OSMElement();
             BrailleRepresentation e1 = new BrailleRepresentation();
@@ -227,17 +230,17 @@ namespace GRANTExample
             e1.zoom = 1;
             e1.contrast = 120;
             e1.viewName = "v1";
-           // c1.fromGuiElement = "nameFiltered";
+            // c1.fromGuiElement = "nameFiltered";
             e1.showScrollbar = true;
             e1.isVisible = true;
-            Rect p1 = new Rect(70,0,50,30);
+            Rect p1 = new Rect(70, 0, 50, 30);
             proper1.boundingRectangleFiltered = p1;
-            
-         //   proper1.IdGenerated = "braille123_1";
+
+            //   proper1.IdGenerated = "braille123_1";
             proper1.controlTypeFiltered = "Screenshot";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm1);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm1, viewCategory[0]);
             #endregion
 
             #region Element 2 Text
@@ -263,7 +266,7 @@ namespace GRANTExample
             proper2.controlTypeFiltered = "Text";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2, viewCategory[0]);
             #endregion
 
             #region Element 3 Text
@@ -284,7 +287,7 @@ namespace GRANTExample
             proper3.controlTypeFiltered = "Text";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm3);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm3, viewCategory[0]);
             #endregion
 
             #region Element 4 Matrix
@@ -308,7 +311,7 @@ namespace GRANTExample
             proper4.controlTypeFiltered = "Matrix";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm4);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm4, viewCategory[0]);
             #endregion
 
             #region Element 5 Button
@@ -328,7 +331,7 @@ namespace GRANTExample
             proper5.isEnabledFiltered = true;
             osm5.brailleRepresentation = e5;
             osm5.properties = proper5;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm5);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm5, viewCategory[0]);
             #endregion
 
             #region Element 6 TextBox
@@ -351,7 +354,7 @@ namespace GRANTExample
             proper6.isEnabledFiltered = true;
             osm6.brailleRepresentation = e6;
             osm6.properties = proper6;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm6);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm6, viewCategory[0]);
             #endregion
 
             #region Element 7 DropDownMenu
@@ -380,7 +383,7 @@ namespace GRANTExample
             proper7.controlTypeFiltered = "DropDownMenu";
             osm7.brailleRepresentation = e7;
             osm7.properties = proper7;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm7);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm7, viewCategory[0]);
             #endregion
 
             #region Element 8 DropDownMenu
@@ -408,7 +411,7 @@ namespace GRANTExample
             proper8.isEnabledFiltered = true;
             osm8.brailleRepresentation = e8;
             osm8.properties = proper8;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm8);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm8, viewCategory[0]);
             #endregion
 
             #region Element 9 DropDownMenu
@@ -436,7 +439,7 @@ namespace GRANTExample
             proper9.controlTypeFiltered = "DropDownMenu";
             osm9.brailleRepresentation = e9;
             osm9.properties = proper9;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm9);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm9, viewCategory[0]);
             #endregion
 
             #region Element 10 DropDownMenu
@@ -465,7 +468,7 @@ namespace GRANTExample
             proper10.controlTypeFiltered = "DropDownMenu";
             osm10.brailleRepresentation = e10;
             osm10.properties = proper10;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm10);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm10, viewCategory[0]);
             #endregion
 
             #region Element 11 Button
@@ -484,7 +487,7 @@ namespace GRANTExample
             proper11.controlTypeFiltered = "Button";
             osm11.brailleRepresentation = e11;
             osm11.properties = proper11;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm11);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm11, viewCategory[0]);
             #endregion
 
         }

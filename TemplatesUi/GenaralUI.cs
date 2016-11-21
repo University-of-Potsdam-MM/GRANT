@@ -21,7 +21,16 @@ namespace TemplatesUi
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
-        public GenaralUI(StrategyManager strategyMgr) { this.strategyMgr = strategyMgr;   }
+        private String VIEWCATEGORY_SYMBOLVIEW;
+        private String VIEWCATEGORY_LAYOUTVIEW;
+        public GenaralUI(StrategyManager strategyMgr)
+        {
+            this.strategyMgr = strategyMgr;
+            List<String> viewCategories = Settings.getPossibleViewCategories();
+            if(viewCategories == null) { throw new Exception("Es wurden keine ViewCategories in den Settings angegeben!"); }
+            VIEWCATEGORY_SYMBOLVIEW = viewCategories[0];
+            VIEWCATEGORY_LAYOUTVIEW = viewCategories[1];
+        }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
         public void setTreeOperation(TreeOperation treeOperation) { this.treeOperation = treeOperation; }
         /// <summary>
@@ -44,14 +53,14 @@ namespace TemplatesUi
         public void generatedLayoutView(String pathToTemplate)
         {
             createScreenshotViews(pathToTemplate);
-            createUiElementsAllScreens(pathToTemplate, "LayoutView");
+            createUiElementsAllScreens(pathToTemplate, VIEWCATEGORY_LAYOUTVIEW);
         }
 
         private void createScreenshotViews(string pathToTemplate)
         {
             XElement xmlDoc = XElement.Load(@pathToTemplate);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element("LayoutView").Elements("Screenshot")
+                from el in xmlDoc.Element(VIEWCATEGORY_LAYOUTVIEW).Elements("Screenshot")
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
             /*foreach (XElement element in uiElement)
@@ -84,10 +93,10 @@ namespace TemplatesUi
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getFilteredTree()))
             {
-                createElementType(node, pathToTemplate);
+                createElementTypeOfSymbolView(node, pathToTemplate);
             }
-            createUiElementsAllScreens(pathToTemplate, "SymbolView");
-            createUiElementsNavigationbarScreensSymbolView(pathToTemplate);
+            createUiElementsAllScreens(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
+            createUiElementsNavigationbarScreens(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
             treeOperation.updateNodes.updateBrailleGroups();
         }
 
@@ -95,11 +104,11 @@ namespace TemplatesUi
         /// aktualisiert die Navigationsleisten (Anzahl der Tabs) auf allen Screens, die eine Navigationsleiste anzeigen
         /// </summary>
         /// <param name="pathToXml"></param>
-        public void updateNavigationbarScreens(string pathToXml)
+        public void updateNavigationbarScreensOfSymbolView(string pathToXml)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(VIEWCATEGORY_SYMBOLVIEW);
             /*
              * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
              * ergänzen
@@ -126,7 +135,7 @@ namespace TemplatesUi
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
             ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
-            generalUiInstance.createUiElementFromTemplate(tree, templateObject);
+            generalUiInstance.createUiElementFromTemplate(tree, templateObject, null, VIEWCATEGORY_SYMBOLVIEW);
         }
 
         /// <summary>
@@ -134,11 +143,11 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="pathToXml">gibt den Pfad zum Template der Navigationsleiste an</param>
         /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
-        public void addNavigationbarForScreen(string pathToXml, Object subtree)
+        public void addNavigationbarForScreen(string pathToXml, Object subtree, String viewCategory = null)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(viewCategory);
             List<String> screenNavi = new List<string>();
             screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
             templateObject.Screens = screenNavi;
@@ -164,7 +173,7 @@ namespace TemplatesUi
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
+                from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
                 where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
                     && (string)el.Attribute("name") == "NavigationBarScreens"
                 select el;
@@ -172,7 +181,7 @@ namespace TemplatesUi
             if (uiElement.Count() == 0) { return new TemplateUiObject(); }
 
             //TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
-            return xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
+            return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
         }
 
         /// <summary>
@@ -221,12 +230,12 @@ namespace TemplatesUi
             return groupElementsStatic;
         }
 
-        public void createUiElementsNavigationbarScreensSymbolView(string pathToXml)
+        public void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
             //TODO: mit Events verknüpfen
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames();
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(VIEWCATEGORY_SYMBOLVIEW);
             ATemplateUi generalUiInstance;
             if (templateObject.Screens == null)
             {
@@ -249,16 +258,16 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Sofern für das angegebene UI-element ein template vorhanden ist wird dieses angewendet
+        /// Sofern für das angegebene UI-Element ein Template vorhanden ist wird dieses angewendet
         /// </summary>
         /// <param name="subtree">gibt den Teilbaum mit dem element, auf welches das Template angewendet werden soll an</param>
         /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
-        private void createElementType(Object subtree, String pathToXml)
+        private void createElementTypeOfSymbolView(Object subtree, String pathToXml)
         {
             String controlType = strategyMgr.getSpecifiedTree().GetData(subtree).properties.controlTypeFiltered;
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
+                from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
                 where (string)el.Attribute("name") == controlType && 
                 (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") != "" &&
                 (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
@@ -273,7 +282,7 @@ namespace TemplatesUi
            // TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
             foreach (XElement element in uiElement)
             {
-                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(element);
+                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW);
 
                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
                 {
@@ -283,7 +292,7 @@ namespace TemplatesUi
                 {
                     generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
                 }
-                generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element));
+                generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW), null, VIEWCATEGORY_SYMBOLVIEW);
             }
         }
 
@@ -369,13 +378,15 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="xmlElement">gibt ein XElement aus der TemplateUi.xml an</param>
         /// <returns>ein <c>TemplateUiObject</c></returns>
-        private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement)
+        private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement, String viewCategory)
         {
             TemplateUiObject templetObject = new TemplateUiObject();
             Int32 result;
             result = 0;
             GeneralProperties properties = new GeneralProperties();
             BrailleRepresentation braille = new BrailleRepresentation();
+
+            braille.screenCategory = viewCategory;
             templetObject.allElementsOfType = xmlElement.Element("AllElementsOfType") == null ? false : Boolean.Parse( xmlElement.Element("AllElementsOfType").Value);
             properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
             braille.fromGuiElement = xmlElement.Element("TextFromUIElement").Value;
@@ -474,7 +485,7 @@ namespace TemplatesUi
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element("SymbolView").Elements("UiElement")
+                from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
                 where (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") == "" &&
                 (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
                 select el;
@@ -483,7 +494,7 @@ namespace TemplatesUi
             {
                 //Debug.WriteLine(element);
                 ATemplateUi generalUiInstance;
-                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(element);
+                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW);
                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
                 {
                     generalUiInstance = new  TemplateNode(strategyMgr, grantTrees, treeOperation);
@@ -494,7 +505,7 @@ namespace TemplatesUi
                 }
 
                 Object tree = strategyMgr.getSpecifiedTree().NewTree();
-                generalUiInstance.createUiElementFromTemplate(tree, templateObject);
+                generalUiInstance.createUiElementFromTemplate(tree, templateObject, null, VIEWCATEGORY_SYMBOLVIEW);
             }
         }
 
@@ -502,19 +513,20 @@ namespace TemplatesUi
         /// Erstellt die Ui-Elemente, welche auf jedem Screen vorhanden sein sollen
         /// </summary>
         /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
-        /// <param name="nameOfView">gibt den Namen der Ansicht an (momentan verfügbar. "SymbolView" und "LayoutView"</param>
-        public void createUiElementsAllScreens(String pathToXml, String nameOfView)
+        /// <param name="screenCategory">gibt den Namen der Ansicht an (momentan verfügbar. "SymbolView" und "LayoutView"</param>
+        public void createUiElementsAllScreens(String pathToXml, String screenCategory)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element(nameOfView).Elements("UiElement")
+                from el in xmlDoc.Element(screenCategory).Elements("UiElement")
                 where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != "NavigationBarScreens"
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
-            List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames();
+            List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames(screenCategory);
             foreach (XElement e in uiElement)
             {
-                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(e);
+                Debug.WriteIf(screenCategory == "LayoutView", e);
+                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(e, screenCategory);
                 Object tree = strategyMgr.getSpecifiedTree().NewTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
                 if (templateObject.osm.brailleRepresentation.fromGuiElement!= null && !templateObject.osm.brailleRepresentation.fromGuiElement.Equals(""))
                 {
@@ -539,7 +551,7 @@ namespace TemplatesUi
       
 
         /// <summary>
-        /// Iterriert über alle angegebenen Screens und fügt das Ui-element ggf. hinzu
+        /// Iterriert über alle angegebenen Screens und fügt das Ui-Element ggf. hinzu
         /// </summary>
         /// <param name="screenList">gibt die Liste der Screens an, auf die das Ui-Objekt soll</param>
         /// <param name="tree">gibt den gefilterten Baum an</param>
@@ -569,7 +581,7 @@ namespace TemplatesUi
         }
 
 
-        public void createUiElementFromTemplate(Object filteredSubtree, GRANTManager.Interfaces.TemplateUiObject templateObject, String brailleNodeId = null)
+        public void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
         {
             Type typeOfTemplate = Type.GetType(templateObject.osm.brailleRepresentation.templateFullName + ", " + templateObject.osm.brailleRepresentation.templateNamspace);
             if (typeOfTemplate != null)

@@ -28,17 +28,18 @@ namespace TemplatesUi
             this.treeOperation = treeOperation;
         }
 
-        public virtual void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public virtual void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null, String viewCategory = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
             if (templateObject.Screens != null)
             {
                 List<String> screenList = templateObject.Screens;
+                viewCategory = viewCategory == null ? templateObject.osm.brailleRepresentation.screenCategory : viewCategory;
                 foreach (String screen in screenList)
                 {
                     templateObject.Screens = new List<string>();
                     templateObject.Screens.Add(screen);
                     Object brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
-                    addIdAndRelationship(brailleNode, filteredSubtree, templateObject);
+                    addIdAndRelationship(brailleNode, filteredSubtree, templateObject, viewCategory);
                 }
             }
         }
@@ -50,11 +51,14 @@ namespace TemplatesUi
         /// <param name="nodes">gibt eine Liste aller Knoten des gefilterten Baums an von denen der Screenshot erstellt werden soll</param>
         public void createUiScreenshotFromTemplate(TemplateScreenshotObject screenshotObject, List<Object> nodes)
         {
+            List<String> viewCategories = Settings.getPossibleViewCategories();
+            if(viewCategories == null || viewCategories.Count > 2) { throw new Exception("Die ViewCategorien wurden in den Settings nicht (ausreichend) angegeben!"); }
             //TODO: verschiedene Screens beachten
             //TODO: Baumbeziehung setzen
             foreach (Object node in nodes)
             {
-                createUiElementFromTemplate(node, CastScreenshotObject(screenshotObject));
+                // viewCategories[1] = LayoutView
+                createUiElementFromTemplate(node, CastScreenshotObject(screenshotObject), null, viewCategories[1]);
             }
         }
 
@@ -68,13 +72,13 @@ namespace TemplatesUi
             return castedSO;
         }
 
-        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TemplateUiObject templateObject)
+        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TemplateUiObject templateObject, String viewCategory = null)
         { 
             if (brailleSubtree == null || !strategyMgr.getSpecifiedTree().HasChild(brailleSubtree)) { return; }
             OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
             brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
-            
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
+            viewCategory = viewCategory == null ? templateObject.osm.brailleRepresentation.screenCategory : viewCategory;
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, viewCategory);
             if (idGenerated == null) { return; }
             String parentId = idGenerated;
             GeneralProperties prop = brailleNode.properties;
@@ -90,31 +94,14 @@ namespace TemplatesUi
             if (strategyMgr.getSpecifiedTree().HasChild(brailleSubtree))
             {
                 brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
-                idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
-                /*if (idGenerated == null) { return; }
-                prop = brailleNode.properties;
-                prop.IdGenerated = idGenerated;
-                brailleNode.properties = prop;
-                if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
-                {
-                    List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-                    OsmTreeRelationship.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
-                    strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
-                }*/
+                idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree),viewCategory, parentId);
+
                 while (strategyMgr.getSpecifiedTree().HasNext(brailleSubtree))
                 {
                     brailleSubtree = strategyMgr.getSpecifiedTree().Next(brailleSubtree);
-                    idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
+                    idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree),viewCategory, parentId);
                     if (idGenerated == null) { return; }
-                   /* prop = brailleNode.properties;
-                    prop.IdGenerated = idGenerated;
-                    brailleNode.properties = prop;
-                    if (templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
-                    {
-                        List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-                        OsmTreeRelationship.addOsmConnection(filteredSubtree.Data.properties.IdGenerated, idGenerated, ref relationship);
-                        strategyMgr.getSpecifiedTreeOperations().updateNodeOfBrailleUi(ref brailleNode);
-                    }*/
+
                 }
             }
         }

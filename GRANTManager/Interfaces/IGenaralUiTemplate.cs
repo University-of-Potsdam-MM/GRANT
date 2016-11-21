@@ -8,11 +8,11 @@ namespace GRANTManager.Interfaces
     {
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
-        void addNavigationbarForScreen(string pathToXml, Object subtree);
+        void addNavigationbarForScreen(string pathToXml, Object subtree, String viewCategory = null);
         void createUiElementsAllScreens(string pathToXml, String nameOfView);
-        void createUiElementsNavigationbarScreensSymbolView(string pathToXml);
+        void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory);
         void generatedUiFromTemplate(string pathToXml);
-        void updateNavigationbarScreens(string pathToXml);
+        void updateNavigationbarScreensOfSymbolView(string pathToXml);
 
         void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
@@ -32,6 +32,8 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// [XmlIgnore]
         public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
+
+        public String viewCategory { get; set; }
          
     }
 

@@ -277,15 +277,20 @@ namespace StrategyBrailleIO
         {
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                if (strategyMgr.getSpecifiedTree().IsTop(node) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName.Equals(""))
+                //top => der Knoten mit der Angabe der ViewCategory
+                if (!strategyMgr.getSpecifiedTree().IsTop(node))
                 {
-                    createScreen(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName);
-                }
-                else
-                {
-                    if (!strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).properties.Equals(new GeneralProperties()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.isGroupChild)
+                    //Depth == 1 => Knoten mit den Screens
+                    if (strategyMgr.getSpecifiedTree().Depth(node) ==1 && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName.Equals(""))
                     {
-                        createView(strategyMgr.getSpecifiedTree().GetData(node));
+                        createScreen(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName);
+                    }
+                    else
+                    {
+                        if (!strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).properties.Equals(new GeneralProperties()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("") && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.isGroupChild)
+                        {
+                            createView(strategyMgr.getSpecifiedTree().GetData(node));
+                        }
                     }
                 }
             }

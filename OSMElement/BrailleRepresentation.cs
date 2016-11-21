@@ -94,6 +94,11 @@ namespace OSMElement
         public String screenName { get; set; }
 
         /// <summary>
+        /// gibt die Kategorie des Screens an z.B. LayoutView oder SymbolView
+        /// </summary>
+        public String screenCategory { get; set; }
+
+        /// <summary>
         /// Enthält den darzustellenden Text eines UI-Elements
         /// </summary>
      //   public String text { get; set; }
@@ -130,7 +135,7 @@ namespace OSMElement
 
         public override string ToString()
         {
-            return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString());
+            return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}, screenCategory = {3}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString(), screenCategory);
         }
 
         /// <summary>

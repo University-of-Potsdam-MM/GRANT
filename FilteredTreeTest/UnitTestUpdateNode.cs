@@ -41,7 +41,7 @@ namespace FilteredTreeTest
 
 
         [TestMethod]
-        public void TestChangeFilterForNode()
+        public void ChangeFilterForNodeTest()
         {
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
@@ -69,7 +69,7 @@ namespace FilteredTreeTest
         /// Ändert die Anzeige bei Calc und prüft, ob die Änderung ausgelesen wird
         /// </summary>
         [TestMethod]
-        public void TestChangeContentForNode()
+        public void ChangeContentForNodeTest()
         {
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);

@@ -284,8 +284,9 @@ namespace GRANTExample
             }
             if (e.Key == Key.NumPad5)
             {
-                object node = guiFuctions.getBrailleNodeAtPoint(3, 47);
+                object node = guiFuctions.getBrailleNodeAtPoint(19, 23);
                 Debug.WriteLine("Braille-Node: " + (node == null ? "null" : strategyMgr.getSpecifiedTree().GetData(node).properties.valueFiltered));
+                NodeBox.Text = strategyMgr.getSpecifiedTree().ToString(node);
             }
 
        }
@@ -354,9 +355,8 @@ namespace GRANTExample
             if (grantTree.getBrailleTree() != null)
             {
                 Debug.WriteLineIf(grantTree.getBrailleTree() != null, "Baum-Elemente Anzahl: " + strategyMgr.getSpecifiedTree().Count( grantTree.getBrailleTree()));
-               // Console.WriteLine("Baum:\n " + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
+                Console.WriteLine("Baum:\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
             }
-            //strategyMgr.getSpecifiedTreeOperations().printTreeElements(grantTree.getBrailleTree(), -1);
         }
     }
 }

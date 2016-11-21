@@ -11,6 +11,7 @@ namespace TemplatesUi
 {
     class TemplateGroupAutomatic : ATemplateUi
     {
+        String VIEWCATEGORY = "SymbolView"; //Stimmt das?
         public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
@@ -28,7 +29,7 @@ namespace TemplatesUi
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name)) //!templateObject.allElementsOfType ||
+            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name, templateObject.viewCategory )) //!templateObject.allElementsOfType ||
             {
                 braille.viewName = templateObject.name;
             }
@@ -37,7 +38,7 @@ namespace TemplatesUi
                 int i = 0;
                 String viewName = templateObject.name + "_"+i;
                 
-                while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName))
+                while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName, templateObject.viewCategory))
                 {
                     i++;
                     viewName += i;
@@ -63,7 +64,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, VIEWCATEGORY);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
@@ -76,7 +77,7 @@ namespace TemplatesUi
             OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
             treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
             Object tree = strategyMgr.getSpecifiedTree().NewTree();
-            strategyMgr.getSpecifiedTree().AddChild(tree, brailleNode);
+            //strategyMgr.getSpecifiedTree().AddChild(tree, brailleNode);
             return tree;
         }
 

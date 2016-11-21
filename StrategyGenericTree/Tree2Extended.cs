@@ -423,7 +423,7 @@ namespace StrategyGenericTree
         }
 
 
-        public bool Equals(object node1, object node2)
+        public new bool Equals(object node1, object node2)
         {
             IEqualityComparer<T> comparer = ((NodeTree<T>)node1).DataComparer;
             bool result = comparer.Equals(((NodeTree<T>)node1).Data, ((NodeTree<T>)node2).Data);

@@ -16,6 +16,45 @@ namespace TemplatesUi
     {
         public TemplateGroupStatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees,  TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
+        public override void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null, String viewCategory = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        {
+            if (templateObject.Screens != null)
+            {
+                List<String> screenList = templateObject.Screens;
+                foreach (String screen in screenList)
+                {
+                    templateObject.Screens = new List<string>();
+                    templateObject.Screens.Add(screen);
+                    Object brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
+                    addSubtreeInBrailleTree(brailleNode);
+                }
+            }
+        }
+
+        private void addSubtreeInBrailleTree(object brailleNode)
+        {
+            OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( brailleNode));
+            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            {
+                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.screenCategory.Equals(osm.brailleRepresentation.screenCategory))
+                {
+                    foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategory))
+                    {
+                        if (strategyMgr.getSpecifiedTree().GetData(screenSubtree).brailleRepresentation.screenName.Equals(osm.brailleRepresentation.screenName))
+                        {
+                            if(strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osm))
+                            {
+                                strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), osm);
+                            }
+                            strategyMgr.getSpecifiedTree().AddChild(screenSubtree, brailleNode);
+                            return;
+                        }
+                    }
+                }
+            }
+          
+        }
+
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, string brailleNodeId = null)
         {
             OSMElement.OSMElement createdParentNode = createParentBrailleNode(filteredSubtree, templateObject);
@@ -28,15 +67,15 @@ namespace TemplatesUi
                 childTemplate.osm = child;
                 childTemplate.Screens = templateObject.Screens;
                 OSMElement.OSMElement childOsm = createChildBrailleNode(filteredSubtree, childTemplate, templateObject.name+"_"+index);
-                strategyMgr.getSpecifiedTree().AddChild( brailleSubtreeParent, childOsm);
-                index++;
+                if (!childOsm.Equals(new OSMElement.OSMElement()))
+                {
+                    strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, childOsm);
+                    index++;
+                }
+                
             }
 
             return brailleSubtree;
-
-
-
-            throw new NotImplementedException();
         }
 
         private OSMElement.OSMElement createParentBrailleNode(Object filteredSubtree, TemplateUiObject templateObject)
@@ -74,7 +113,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.viewCategory == null ? templateObject.osm.brailleRepresentation.screenCategory : templateObject.viewCategory);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return new OSMElement.OSMElement();

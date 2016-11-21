@@ -143,18 +143,24 @@ namespace GRANTManager
 
         public List<Strategy> getPossibleUiTemplateStrategies()
         {
-            List<Strategy> eventManager = new List<Strategy>();
-            List<String> eventManagerNames = getPossibleStrategyClasses("PossibleUiTemplateStrategies");
-            if (eventManagerNames == null) { return eventManager; }
+            List<Strategy> templates = new List<Strategy>();
+            List<String> templatesNames = getPossibleStrategyClasses("PossibleUiTemplateStrategies");
+            if (templatesNames == null) { return templates; }
             Strategy f = new Strategy();
-            foreach (String fName in eventManagerNames)
+            foreach (String fName in templatesNames)
             {
                 f.userName = fName;
                 f.className = strategyUserNameToClassName(fName);
-                eventManager.Add(f);
+                templates.Add(f);
             }
-            return eventManager;
+            return templates;
         }
 
+
+        public static List<String> getPossibleViewCategories()
+        {
+            String viewCategories = readAppSettings("ListOfViewCategories");
+            return splitNames(viewCategories);
+        }
     }
 }

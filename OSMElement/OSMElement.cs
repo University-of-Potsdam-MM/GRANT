@@ -18,7 +18,7 @@ namespace OSMElement
 
         public override string ToString()
         {//Achtung nur einige Eigenschaften berücksichtigt
-            return String.Format("GeneralProperties = {0}, BrailleRepresentation = {1}", properties.ToString(), brailleRepresentation.ToString());
+            return String.Format("GeneralProperties: {0}, BrailleRepresentation: {1}", properties.ToString(), brailleRepresentation.ToString());
         }
     }
 }
