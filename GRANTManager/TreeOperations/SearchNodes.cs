@@ -195,6 +195,20 @@ namespace GRANTManager.TreeOperations
             return screens;
         }
 
+        /// <summary>
+        /// Gibt eine Liste der tatsächlich genutzten Ansichten (viewCategory) zurück vgl <see cref="GRANTManager.Settings.getPossibleViewCategories"/>
+        /// </summary>
+        /// <returns></returns>
+        public List<String> getUsedViewCategories()
+        {
+            if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return null; }
+            List<String> viewCategories = new List<string>();
+            foreach (Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            {
+                viewCategories.Add(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory);
+            }
+            return viewCategories;
+        }
 
         /// <summary>
         /// Ermittelt den Knoten des BrailleBaums zu einem Punkt

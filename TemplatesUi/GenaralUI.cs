@@ -220,6 +220,7 @@ namespace TemplatesUi
                 childBraille.isGroupChild = true;
                 childBraille.isVisible = true;
                 childBraille.viewName = "_" + s;//TODO
+                childBraille.screenCategory = templateObject.osm.brailleRepresentation.screenCategory;
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
                 tabView.orientation = templateObject.orientation;
                 childBraille.uiElementSpecialContent = tabView;
@@ -525,7 +526,6 @@ namespace TemplatesUi
             List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames(screenCategory);
             foreach (XElement e in uiElement)
             {
-                Debug.WriteIf(screenCategory == "LayoutView", e);
                 TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(e, screenCategory);
                 Object tree = strategyMgr.getSpecifiedTree().NewTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
                 if (templateObject.osm.brailleRepresentation.fromGuiElement!= null && !templateObject.osm.brailleRepresentation.fromGuiElement.Equals(""))

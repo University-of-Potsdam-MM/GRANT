@@ -94,7 +94,7 @@ namespace OSMElement
         public String screenName { get; set; }
 
         /// <summary>
-        /// gibt die Kategorie des Screens an z.B. LayoutView oder SymbolView
+        /// gibt die Kategorie des Screens an z.B. LayoutView oder SymbolView an
         /// </summary>
         public String screenCategory { get; set; }
 

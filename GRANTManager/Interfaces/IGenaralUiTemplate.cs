@@ -33,7 +33,7 @@ namespace GRANTManager.Interfaces
         /// [XmlIgnore]
         public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
 
-        public String viewCategory { get; set; }
+
          
     }
 

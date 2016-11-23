@@ -41,7 +41,7 @@ namespace GRANTExample
             {               
                     // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                 String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
-               setDauGui(fromGuiElement);
+             //  setDauGui(fromGuiElement);
                /* ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
                 if (subtreeNav != null && subtreeNav.Count > 0)
                 {

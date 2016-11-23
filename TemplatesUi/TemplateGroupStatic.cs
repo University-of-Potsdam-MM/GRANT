@@ -65,7 +65,7 @@ namespace TemplatesUi
             {
                 TemplateUiObject childTemplate = new TemplateUiObject();
                 childTemplate.osm = child;
-                childTemplate.Screens = templateObject.Screens;
+                childTemplate.Screens = templateObject.Screens;                
                 OSMElement.OSMElement childOsm = createChildBrailleNode(filteredSubtree, childTemplate, templateObject.name+"_"+index);
                 if (!childOsm.Equals(new OSMElement.OSMElement()))
                 {
@@ -113,7 +113,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.viewCategory == null ? templateObject.osm.brailleRepresentation.screenCategory : templateObject.viewCategory);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.osm.brailleRepresentation.screenCategory );
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return new OSMElement.OSMElement();

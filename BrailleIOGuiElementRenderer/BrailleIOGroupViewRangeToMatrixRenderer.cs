@@ -8,6 +8,7 @@ using BrailleIO.Renderer;
 using System.Drawing;
 using BrailleIO;
 using BrailleIOGuiElementRenderer.UiElements;
+using System.Diagnostics;
 
 namespace BrailleIOGuiElementRenderer
 {
@@ -89,10 +90,15 @@ namespace BrailleIOGuiElementRenderer
                        MatrixBrailleRenderer m = new MatrixBrailleRenderer();
                        childMatrix = m.RenderMatrix(tmpChildView, child.childUiElement.text as object);
                    }
-                   Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - (Convert.ToInt32(view.ContentBox.Y) + Convert.ToInt32(view.ViewBox.Y)));
-                   //Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - Convert.ToInt32(view.ViewBox.Y));
-                   
-               }
+                    /*Console.WriteLine("ChildMatrix:");
+                    printMatrix(childMatrix);
+                    Console.WriteLine("viewMatrix:");
+                    printMatrix(viewMatrix);*/
+                    Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - (Convert.ToInt32(view.ContentBox.Y) + Convert.ToInt32(view.ViewBox.Y)));
+                    //Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - Convert.ToInt32(view.ViewBox.Y));
+                   /* Console.WriteLine("viewMatrix:");
+                    printMatrix(viewMatrix);*/
+                }
            }
            view.ContentHeight = maxHeight;
            view.ContentWidth = maxWidth;
@@ -100,6 +106,23 @@ namespace BrailleIOGuiElementRenderer
             //call post hooks
             callAllPostHooks(view, cM, ref viewMatrix, false);
            return viewMatrix;
+        }
+
+        private void printMatrix(bool[,] matrix)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < (matrix.Length / matrix.GetLength(0)); j++)
+                {
+                    //   Console.Write(viewAtPoint[i,j]+ "\t");
+                    if (matrix[i, j]) { Console.Write("x"); }
+                    else
+                    {
+                        Console.Write(" ");
+                    }
+                }
+                Console.WriteLine("");
+            }
         }
 
         private void getMax(ref int maxHeight, ref int maxWidth, List<Groupelements> childs)

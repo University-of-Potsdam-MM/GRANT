@@ -11,7 +11,6 @@ namespace TemplatesUi
 {
     class TemplateGroupAutomatic : ATemplateUi
     {
-        String VIEWCATEGORY = "SymbolView"; //Stimmt das?
         public TemplateGroupAutomatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
@@ -29,7 +28,7 @@ namespace TemplatesUi
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name, templateObject.viewCategory )) //!templateObject.allElementsOfType ||
+            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name, templateObject.osm.brailleRepresentation.screenCategory )) //!templateObject.allElementsOfType ||
             {
                 braille.viewName = templateObject.name;
             }
@@ -38,7 +37,7 @@ namespace TemplatesUi
                 int i = 0;
                 String viewName = templateObject.name + "_"+i;
                 
-                while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName, templateObject.viewCategory))
+                while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName, templateObject.osm.brailleRepresentation.screenCategory))
                 {
                     i++;
                     viewName += i;
@@ -64,7 +63,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, VIEWCATEGORY);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.osm.brailleRepresentation.screenCategory);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
