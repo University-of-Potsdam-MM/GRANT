@@ -83,7 +83,7 @@ namespace GRANTExample
 
         public void generateOSMmwxaml(string osm)
         {
-            Console.WriteLine("winevent verarbeitet in mainwindowxaml" + osm);
+            Console.WriteLine("winevent verarbeitet in mainwindowxaml_" + osm);
             //osm = "werhers";
         }
 
