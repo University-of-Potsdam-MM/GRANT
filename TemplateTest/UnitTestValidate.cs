@@ -36,13 +36,12 @@ namespace TemplateTest
             strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
-            strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
 
             pathToTemplate = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Template");
             pathToTemplate = System.IO.Path.Combine(pathToTemplate, "TemplateUi.xml");
             //
-
+            guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod]
@@ -58,6 +57,7 @@ namespace TemplateTest
             bool isValid = guiFuctions.isTemplateUsableForDevice(pathToTemplate);
             Assert.AreEqual(true, isValid, "Das Template ist für das Ausgabegerät nicht geeignet!");
             //if (!isValid) { Assert.Fail("Das Template ist für das Ausgabegerät nicht geeignet!"); }
+            guiFuctions.deleteGrantTrees();
         }
     }
 }

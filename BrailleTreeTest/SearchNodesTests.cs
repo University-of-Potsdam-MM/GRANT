@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using OSMElement;
 using System.Windows;
+using System.Diagnostics;
 
-namespace GRANTManager.TreeOperations.Tests
+namespace GRANTManager.BrailleTreeTests
 {
     [TestClass()]
     public class SearchNodesTests
@@ -17,6 +18,7 @@ namespace GRANTManager.TreeOperations.Tests
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
         GuiFunctions guiFuctions;
+        private String pathToTemplate;
 
         private String VIEWCATEGORYSYMBOLVIEW;
         private String VIEWCATEGORYLAYOUTVIEW;
@@ -24,6 +26,7 @@ namespace GRANTManager.TreeOperations.Tests
         [TestInitialize]
         public void Initialize()
         {
+            #region initialisieren
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
             Settings settings = new Settings();
@@ -39,14 +42,22 @@ namespace GRANTManager.TreeOperations.Tests
              strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);*/
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
+            strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
+            strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
+            #endregion
 
             List<String> viewCategories = Settings.getPossibleViewCategories();
             if (viewCategories == null) { Assert.Fail("Die ViewCategories sind in der Config nicht richtig angegeben!"); }
             VIEWCATEGORYSYMBOLVIEW = viewCategories[0];
             VIEWCATEGORYLAYOUTVIEW = viewCategories[1];
-            
+
+            pathToTemplate = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Template");
+            pathToTemplate = System.IO.Path.Combine(pathToTemplate, "TemplateUiGroups.xml");
+
         }
 
         /// <summary>
@@ -89,13 +100,6 @@ namespace GRANTManager.TreeOperations.Tests
             #endregion
         }
 
-        /// <summary>
-        /// Erstellt einen gefilterten Tree, welcher zum Testen der suchen genutzt werden kann
-        /// </summary>
-        private void initilaizefilteredTree()
-        {
-
-        }
 
 
         [TestMethod()]
@@ -104,6 +108,7 @@ namespace GRANTManager.TreeOperations.Tests
             initilaizeBrailleTree2Screens();
             List<String> possibleScreens = treeOperation.searchNodes.getPosibleScreenNames();
             Assert.AreEqual(2, possibleScreens.Count, "Der Baum hätte 2 Screens enthalten müssen!");
+            guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod()]
@@ -118,6 +123,62 @@ namespace GRANTManager.TreeOperations.Tests
             {
                 Assert.IsTrue(possibleViewCategories.Contains(uVC), "Der Screen Name '" + uVC + " hätte in der Liste der möglichen Screens aus der Config auftauchen müssen!");
             }
+            guiFuctions.deleteGrantTrees();
         }
+
+
+
+        [TestMethod]
+        public void getBrailleNodeAtPointTest()
+        {
+            initilaizeBrailleTree2Nodes();
+            strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
+            strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("TestScreen");
+            Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(5, 35);
+            Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
+            OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
+            Assert.AreEqual("TestView - 2", data.brailleRepresentation.viewName, "An der Position (5,35) hätte die 'TestView - 2' sein sollen!");
+            strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
+            guiFuctions.deleteGrantTrees();
+        }
+
+
+    private void initilaizeBrailleTree2Nodes()
+    {
+        #region erster Knoten
+        BrailleRepresentation braille = new BrailleRepresentation();
+        braille.isVisible = true;
+        braille.screenName = "TestScreen";
+        braille.viewName = "TestView";
+
+        GeneralProperties prop = new GeneralProperties();
+        prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+        prop.controlTypeFiltered = "Text";
+        prop.valueFiltered = "Test";
+
+        OSMElement.OSMElement osm = new OSMElement.OSMElement();
+        osm.brailleRepresentation = braille;
+        osm.properties = prop;
+        treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+        #endregion
+        #region 2. Knoten
+        BrailleRepresentation braille2 = new BrailleRepresentation();
+        braille2.isVisible = true;
+        braille2.screenName = "TestScreen";
+        braille2.viewName = "TestView - 2";
+
+        GeneralProperties prop2 = new GeneralProperties();
+        prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+        prop2.controlTypeFiltered = "Text";
+        prop2.valueFiltered = "Test 2";
+
+        OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+        osm2.brailleRepresentation = braille2;
+        osm2.properties = prop2;
+        treeOperation.updateNodes.addNodeInBrailleTree(osm2, VIEWCATEGORYSYMBOLVIEW);
+        #endregion
     }
+
+}
 }

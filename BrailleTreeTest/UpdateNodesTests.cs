@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GRANTManager.TreeOperations;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OSMElement;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 
-namespace GRANTManager.TreeOperations.Tests
+namespace GRANTManager.BrailleTreeTests
 {
     [TestClass()]
     public class UpdateNodesTests
@@ -150,7 +151,7 @@ namespace GRANTManager.TreeOperations.Tests
             treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
             Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
-            
+            guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod()]
@@ -199,7 +200,7 @@ namespace GRANTManager.TreeOperations.Tests
             {
                 Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(child));
             }
-            
+            guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod()]
@@ -248,6 +249,7 @@ namespace GRANTManager.TreeOperations.Tests
                 Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(child));
             }
             Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+            guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod()]
@@ -300,7 +302,7 @@ namespace GRANTManager.TreeOperations.Tests
             {
                 Assert.AreEqual(0, strategyMgr.getSpecifiedTree().DirectChildCount(child));
             }
-
+            guiFuctions.deleteGrantTrees();
         }
 
     }

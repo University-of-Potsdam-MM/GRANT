@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TemplateUi xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
+  <MinDeviceHeight>50</MinDeviceHeight>
+  <MinDeviceWidth>40</MinDeviceWidth>
+  <SymbolView>
+	  <UiElement name="TitleBar">
+		<IsGroup />
+		<Renderer>Text</Renderer>
+		<Position>
+		  <Height>6</Height>
+		  <Width xsi:nil="true" />
+		  <StartX>0</StartX>
+		  <StartY>0</StartY>
+		</Position>
+		<BoxModel>
+		  <Margin />
+		  <Padding>
+			<Left>0</Left>
+			<Top>0</Top>
+			<Right>0</Right>
+			<Bottom>1</Bottom>
+		  </Padding>
+		  <Boarder>
+			<Left>0</Left>
+			<Top>0</Top>
+			<Right>0</Right>
+			<Bottom>1</Bottom>
+		  </Boarder>
+		</BoxModel>
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens />
+		<TextFromUIElement>nameFiltered</TextFromUIElement>
+	  </UiElement>
+	  <UiElement name="BrailleStatusBar" >
+		<IsGroup />
+		<Renderer>Text</Renderer>
+		<Position>
+		  <Height>6</Height>
+		  <Width xsi:nil="true" />
+		  <StartX>0</StartX>
+		  <StartY xsi:nil="true" />
+		</Position>
+		<BoxModel>
+		  <Margin />
+		  <Padding>
+			<Top>1</Top>
+		  </Padding>
+		  <Boarder>
+			<Top>1</Top>
+		  </Boarder>
+		</BoxModel>
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens />
+		<TextFromUIElement />
+	  </UiElement>
+	  <UiElement name="NavigationBarScreens">
+		<IsGroup>
+		  <Linebreak>false</Linebreak>
+		  <childBoundingRectangle>
+			<Height>8</Height>
+			<Width>8</Width>
+		  </childBoundingRectangle>
+		  <Orientation>Left</Orientation>
+		</IsGroup>
+		<Renderer>TabItem</Renderer>
+
+		<Position>
+		  <Height>48</Height>
+		  <Width>8</Width>
+		  <StartX>0</StartX>
+		  <StartY>6</StartY>
+		</Position>
+		<BoxModel/>
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens />
+		<TextFromUIElement />
+	  </UiElement>
+	  <UiElement name="MenuBar">
+		<IsGroup>
+		  <Linebreak>false</Linebreak>
+		  <childBoundingRectangle>
+			<Height>9</Height>
+			<Width>15</Width>
+		  </childBoundingRectangle>
+		  <Orientation>Horizontal</Orientation>
+		</IsGroup>
+		<Renderer>Button</Renderer>
+		<Position>
+		  <Height>10</Height>
+		  <Width xsi:nil="true" />
+		  <StartX>11</StartX>
+		  <StartY>20</StartY>
+		</Position>
+		<BoxModel />
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens>
+		  <Screen>b</Screen>
+		</Screens>
+		<TextFromUIElement>nameFiltered</TextFromUIElement>
+	  </UiElement>
+		<UiElement name="Menu">
+		<IsGroup>
+		  <Linebreak>false</Linebreak>
+		  <childBoundingRectangle>
+			<Height>9</Height>
+			<Width>15</Width>
+		  </childBoundingRectangle>
+		  <Orientation>Horizontal</Orientation>
+		</IsGroup>
+		<Renderer>Button</Renderer>
+		<Position>
+		  <Height>10</Height>
+		  <Width xsi:nil="true" />
+		  <StartX>11</StartX>
+		  <StartY>20</StartY>
+		</Position>
+		<BoxModel />
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens>
+		  <Screen>b2</Screen>
+		</Screens>
+		<TextFromUIElement>nameFiltered</TextFromUIElement>
+	  </UiElement>
+		<UiElement name="Tab">
+		<IsGroup>
+		  <Linebreak>false</Linebreak>
+		  <childBoundingRectangle>
+			<Height>11</Height>
+			<Width>12</Width>
+		  </childBoundingRectangle>
+		  <Orientation>Top</Orientation>
+		</IsGroup>
+		<Renderer>TabItem</Renderer>
+		<Position>
+		  <Height>11</Height>
+		  <Width xsi:nil="true" />
+		  <StartX>10</StartX>
+		  <StartY>10</StartY>
+		</Position>
+		<BoxModel/>
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens>
+		  <Screen>a1</Screen>
+		</Screens>
+		<TextFromUIElement>nameFiltered</TextFromUIElement>
+	  </UiElement> 
+	  	  <UiElement name="Pane">
+		<IsGroup>
+		  <Linebreak>true</Linebreak>
+		  <childBoundingRectangle>
+			<Height>11</Height>
+			<Width>12</Width>
+		  </childBoundingRectangle>
+		  <Orientation>Top</Orientation>
+		</IsGroup>
+		<Renderer>Button</Renderer>
+		<Position>
+		  <Height>30</Height>
+		  <Width xsi:nil="true" />
+		  <StartX>10</StartX>
+		  <StartY>10</StartY>
+		</Position>
+		<BoxModel/>
+		<ShowScrollbar>false</ShowScrollbar>
+		<Screens>
+		  <Screen>a1</Screen>
+		</Screens>
+		<TextFromUIElement>nameFiltered</TextFromUIElement>
+	  </UiElement>
+  </SymbolView>
+  <LayoutView>
+    <UiElement name="TitleBar">
+      <IsGroup />
+      <Renderer>Text</Renderer>
+      <Position>
+        <Height>6</Height>
+        <Width xsi:nil="true" />
+        <StartX>0</StartX>
+        <StartY>0</StartY>
+      </Position>
+      <BoxModel>
+        <Margin />
+        <Padding>
+          <Left>0</Left>
+          <Top>0</Top>
+          <Right>0</Right>
+          <Bottom>1</Bottom>
+        </Padding>
+        <Boarder>
+          <Left>0</Left>
+          <Top>0</Top>
+          <Right>0</Right>
+          <Bottom>1</Bottom>
+        </Boarder>
+      </BoxModel>
+      <ShowScrollbar>false</ShowScrollbar>
+      <Screens />
+      <TextFromUIElement>nameFiltered</TextFromUIElement>
+    </UiElement>
+    <UiElement name="BrailleStatusBar" >
+      <IsGroup />
+      <Renderer>Text</Renderer>
+      <Position>
+        <Height>6</Height>
+        <Width xsi:nil="true" />
+        <StartX>0</StartX>
+        <StartY xsi:nil="true" />
+      </Position>
+      <BoxModel>
+        <Margin />
+        <Padding>
+          <Top>1</Top>
+        </Padding>
+        <Boarder>
+          <Top>1</Top>
+        </Boarder>
+      </BoxModel>
+      <ShowScrollbar>false</ShowScrollbar>
+      <Screens />
+      <TextFromUIElement />
+    </UiElement>
+    <Screenshot>
+      <Position>
+        <Height>60</Height>
+        <Width xsi:nil="true" />
+        <StartX>0</StartX>
+        <StartY>7</StartY>
+      </Position>
+	  <Screens>
+        <Screen>lv</Screen>
+      </Screens>
+	  <ConnectedFilteredNode>Window</ConnectedFilteredNode>
+	  <Zoom>0.2</Zoom>
+	  <Contrast>220</Contrast>
+    </Screenshot>
+  </LayoutView>
+</TemplateUi>

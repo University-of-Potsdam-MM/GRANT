@@ -104,6 +104,20 @@ namespace StrategyBrailleIO
             }
         }
 
+        public void removeActiveAdapter()
+        {
+            if (brailleIOMediator != null)
+            {
+                List<AbstractViewBoxModelBase> brailleIOScreens = brailleIOMediator.GetViews();
+                foreach (var s in brailleIOScreens)
+                {
+                    brailleIOMediator.RemoveView(s.Name);
+                }
+                brailleIOMediator = null;
+                initialized = false;
+            }
+        }
+
         public void setActiveAdapter()
         {
             if (brailleIOMediator == null)
@@ -997,11 +1011,12 @@ namespace StrategyBrailleIO
                 if (screenAvtive != null)
                 {
                     screenAvtive.SetVisibility(false);
+                    
                     BrailleIOScreen screenAvtiveNew = brailleIOMediator.GetView(screenName) as BrailleIOScreen;
                     if (screenAvtiveNew != null)
                     {
                         screenAvtiveNew.SetVisibility(true);
-                        treeOperation.updateNodes.setPropertyForScreen(screenName, true);
+                        treeOperation.updateNodes.setPropertyInNavigationbarForScreen(screenName, true);
                         
                     }
                     else

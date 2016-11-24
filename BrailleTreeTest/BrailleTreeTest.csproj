@@ -46,12 +46,16 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="HelpFunctions.cs" />
     <Compile Include="SearchNodesTests.cs" />
+    <Compile Include="ConnectedNodesTest.cs" />
     <Compile Include="UpdateNodesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -100,9 +104,18 @@
       <Project>{8635b65c-13f9-4a97-88f6-e0507bd73d8d}</Project>
       <Name>StrategyWindows</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TemplatesUi\TemplatesUi.csproj">
+      <Project>{f1c8aabe-05d8-45cd-8a52-b3b894e58a5c}</Project>
+      <Name>TemplatesUi</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\TemplateUiGroups.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

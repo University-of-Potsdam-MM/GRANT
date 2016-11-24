@@ -173,7 +173,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
    //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
-            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree())))); ;//strategyMgr.getBrailleTree().Child.Next.Next.Next.Next.Next.Next.Data;
+            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Child( strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree()))))); ;
             bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
             return result;
         }

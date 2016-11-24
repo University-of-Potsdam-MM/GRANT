@@ -760,8 +760,8 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="screenName">gibt den namen des Screens an</param>
         /// <param name="isActiv"></param>
-        /// <param name="navigationbarSubstring">gibt einen (Teil-)String des Namens des Navigationsleiste an; wie diese im Baum benannt ist</param>
-        public void setPropertyForScreen(string screenName, bool isActiv, String navigationbarSubstring = "NavigationBarScreens")
+        /// <param name="navigationbarSubstring">gibt einen (Teil-)String des Namens der Navigationsleiste an; wie diese im Baum benannt ist</param>
+        public void setPropertyInNavigationbarForScreen(string screenName, bool isActiv, String navigationbarSubstring = "NavigationBarScreens")
         {
             /*
              * 1. Knoten mit Screen suchen
@@ -770,6 +770,9 @@ namespace GRANTManager.TreeOperations
              * 3. Leiste neu Darstellen
              */
             Object screenTree = treeOperation.searchNodes.getSubtreeOfScreen(screenName);
+            if (screenTree == null) {
+                Debug.WriteLine("Gesuchter ScreenName: "+screenName+"\t Baum: \n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+                throw new Exception("Der Screen konnte nicht gefunden werden, deshalb konnten die Eigenschaften der Navigationsleiste nicht geändert werden!");  }
             Object navigationBarSubtree = strategyMgr.getSpecifiedTree().NewTree();
             foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(screenTree))
             {

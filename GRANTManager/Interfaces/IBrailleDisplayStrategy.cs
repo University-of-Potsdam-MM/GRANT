@@ -20,6 +20,8 @@ namespace GRANTManager.Interfaces
         /// </summary>
         void setActiveAdapter();
 
+        void removeActiveAdapter();
+
         /// <summary>
         /// Erstellt initial die Braille-UI
         /// </summary>
