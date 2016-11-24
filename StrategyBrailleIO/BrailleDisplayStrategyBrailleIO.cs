@@ -1111,6 +1111,25 @@ namespace StrategyBrailleIO
             brailleIOMediator.RenderDisplay();
         }
 
+        public TactileNodeInfos getTactileNodeInfos(object brailleNode)
+        {
+            TactileNodeInfos nodeInfos = new TactileNodeInfos();
+            OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(brailleNode);
+            object screen = brailleIOMediator.GetView(data.brailleRepresentation.screenName);
+            if(screen is BrailleIOScreen)
+            {
+                object view = (screen as BrailleIOScreen).GetViewRange(data.brailleRepresentation.viewName);
+                if (view is BrailleIOViewRange)
+                {
+                    BrailleIOViewRange viewRange = view as BrailleIOViewRange;
+                    nodeInfos.contentHeight = viewRange.ContentHeight;
+                    nodeInfos.contentWidth = viewRange.ContentWidth;
+                    nodeInfos.offsetX = viewRange.OffsetPosition.X;
+                    nodeInfos.offsetY = viewRange.OffsetPosition.Y;
+                }
+            }
 
+            return nodeInfos;
+        }
     }
 }

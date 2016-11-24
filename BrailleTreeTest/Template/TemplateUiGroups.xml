@@ -230,7 +230,7 @@
         <Screen>lv</Screen>
       </Screens>
 	  <ConnectedFilteredNode>Window</ConnectedFilteredNode>
-	  <Zoom>0.2</Zoom>
+	  <Zoom>0.0</Zoom>
 	  <Contrast>220</Contrast>
     </Screenshot>
   </LayoutView>

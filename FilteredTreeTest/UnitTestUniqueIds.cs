@@ -54,7 +54,6 @@ namespace FilteredTreeTest
                 nodeId = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
                 foreach (Object nodeCopy in strategyMgr.getSpecifiedTree().AllNodes(copyedTree))
                 {
-                    bool result = strategyMgr.getSpecifiedTree().Equals(node, nodeCopy);
                     if (!strategyMgr.getSpecifiedTree().Equals(node, nodeCopy) && nodeId.Equals(strategyMgr.getSpecifiedTree().GetData(nodeCopy).properties.IdGenerated))
                     {
                         Debug.WriteLine("selbe ID :(");

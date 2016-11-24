@@ -906,6 +906,53 @@ namespace GRANTManager
         }
 
         /// <summary>
+        /// Ermittelt zu einen Punkt auf der Stifftplatte bei einem Screenshot die zugehörige Position auf dem (normalen) Display
+        /// </summary>
+        /// <param name="brailleNode">gibt den zu der Klickposition zugehörigen Braille-Knoten an; bei diesem muss es sich um ein Knoten mit dem Controlltype 'Screenshot' handeln</param>
+        /// <param name="x">gibt den x-Wert der Klickposition an</param>
+        /// <param name="y">gibt den y-Wert der Klickposition an</param>
+        /// <param name="applicationX">gibt den x-Wert auf dem (ormalen) Display an, falls der Wert nicht ermittelt werden kann so wird diese Variable auf <code>-1</code> gesetzt</param>
+        /// <param name="applicationY">gibt den y-Wert auf dem (ormalen) Display an, falls der Wert nicht ermittelt werden kann so wird diese Variable auf <code>-1</code> gesetzt</param>
+        public void getScreenshotPointInApplication(Object brailleNode, int x, int y, out int applicationX, out int applicationY)
+        {
+            //Achtung: erstmal offset und zoom vernachlässigt
+
+            applicationX = -1;
+            applicationY = -1;
+            OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(brailleNode);
+            if (dataBraille.Equals(new OSMElement.OSMElement())) { return; }
+            if (!dataBraille.properties.controlTypeFiltered.Equals("Screenshot")) { Debug.WriteLine("Achtung: diese Funktion sollte nur genutzt werden, wenn es sich bei dem Knoten um einen Screenshot handelt!"); return; }
+
+
+            #region Klickposition im Screenshot auf der Stiftplatte ermitteln
+            TactileNodeInfos nodeinfos = strategyMgr.getSpecifiedBrailleDisplay().getTactileNodeInfos(brailleNode);
+            Device device = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+            int pointScreenshotBrailleX =  x - Convert.ToInt32( dataBraille.properties.boundingRectangleFiltered.TopLeft.X);
+
+            int pointScreenshotBrailleY = y - Convert.ToInt32(dataBraille.properties.boundingRectangleFiltered.TopLeft.Y);
+            //TODO: prüfen, ob der Punkt im Knoten liegt
+            #endregion
+            #region Punkt des BrailleScreenshots auf Knotenposition in richtiger Anwendung mappen
+            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
+            OSMElement.OSMElement dataFiltered = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
+            if (osmRelationships == null) { return; }
+
+            if (nodeinfos.Equals(new TactileNodeInfos()))
+            {
+                return;
+            }
+            int applicationNodeX = Convert.ToInt32(dataFiltered.properties.boundingRectangleFiltered.Width / nodeinfos.contentWidth * pointScreenshotBrailleX);
+            int applicationNodeY = Convert.ToInt32(dataFiltered.properties.boundingRectangleFiltered.Height / nodeinfos.contentHeight * pointScreenshotBrailleY);
+            Debug.WriteLine("x = {0}, y = {1}", applicationNodeX, applicationNodeY);
+            #endregion
+            #region Punkt auf Bildschirm bezogen
+            //TODO momentan funktioniert es nur, da sich die anwendung links Oben  auf dem Monitor befindet
+            applicationX = applicationNodeX;
+            applicationY = applicationNodeY;
+            #endregion
+        }
+
+        /// <summary>
         /// Prüft, ob das angegebene Template für die gewählte Stiftplatte von der Größe her passend ist
         /// </summary>
         /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>

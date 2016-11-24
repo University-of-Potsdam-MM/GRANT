@@ -92,5 +92,15 @@ namespace GRANTManager.Interfaces
         void setStrategyMgr(StrategyManager strategyMgr);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
+
+        TactileNodeInfos getTactileNodeInfos(Object brailleNode);
+    }
+
+    public struct TactileNodeInfos
+    {
+        public int contentHeight { get; set; }
+        public int contentWidth { get; set; }
+        public int offsetX { get; set; }
+        public int offsetY { get; set; }
     }
 }

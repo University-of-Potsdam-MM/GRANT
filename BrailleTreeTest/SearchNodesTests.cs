@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using OSMElement;
 using System.Windows;
 using System.Diagnostics;
+using GRANTManager;
 
-namespace GRANTManager.BrailleTreeTests
+namespace BrailleTreeTests
 {
     [TestClass()]
     public class SearchNodesTests

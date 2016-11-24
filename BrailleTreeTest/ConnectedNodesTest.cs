@@ -6,7 +6,7 @@ using GRANTManager.TreeOperations;
 using OSMElement;
 using System.Windows;
 
-namespace BrailleTreeTest
+namespace BrailleTreeTests
 {
     [TestClass]
     public class ConnectedNodesTest
@@ -60,13 +60,12 @@ namespace BrailleTreeTest
         [TestMethod]
         public void getBrailleNodeInGroupAtPointTest()
         {
-            guiFuctions.deleteGrantTrees();
             initilaizeFilteredTree();
-
-
             strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
             strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
             strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            // auf dem Screen 'a1' befindet sich der gesuchte Knoten
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("a1");
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(25, 25);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
             OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
@@ -76,12 +75,14 @@ namespace BrailleTreeTest
         }
 
         [TestMethod]
-        public void getConnectedNodeToPoint()
+        public void getConnectedNodeToPointTest()
         {            
             initilaizeFilteredTree();
             strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
             strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
             strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            // auf dem Screen 'a1' befindet sich der gesuchte Knoten
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("a1");
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(25, 25);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
             OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
@@ -103,9 +104,62 @@ namespace BrailleTreeTest
         private void initilaizeFilteredTree()
         {
             String moduleName = "calc.exe";
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(moduleName);
-            grantTrees.setFilteredTree(strategyMgr.getSpecifiedFilter().filtering(appHwnd));
+            String applicationPathName = @"C:\Windows\system32\calc.exe";
+            /* IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(moduleName);
+             grantTrees.setFilteredTree(strategyMgr.getSpecifiedFilter().filtering(appHwnd));*/
+            HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
+            hf.filterApplication(moduleName, applicationPathName);
         }
 
+
+        [TestMethod]
+        public void getScreenshotPointInApplicationTest()
+        {
+            initilaizeFilteredTree();
+            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
+            strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
+            strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            //in dem genutzten Template ist bei der View 'lv' der Screenshot
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("lv"); 
+            int pointX = 6;
+            int pointY = 42;
+            Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(pointX, pointY);
+            int clickX;
+            int clickY;
+            guiFuctions.getScreenshotPointInApplication(nodeAtPoint, pointX, pointY, out clickX, out clickY);
+            //nun folgt der Abgleich, ob die richtige Position ermittelt wurde => es sollte der Button '7' auf dem Taschenrechner sein
+            OSMElement.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().setOSMElement(clickX, clickY);
+            Assert.AreEqual("Button", dataOfPoint.properties.controlTypeFiltered, "Es hätte der Button sein sollen!");
+            Assert.AreEqual("7", dataOfPoint.properties.nameFiltered, "auf dem Button hätte die Zahl '7' stehen müssen!");
+            List<Object> searchresult = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), dataOfPoint.properties);
+            Assert.AreNotEqual(null, searchresult, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen!");
+            Assert.AreNotEqual(new List<Object>(), searchresult, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen!");
+            Assert.AreEqual(1, searchresult.Count, "Es hätte genau ein Knoten gefunden werden müssen!");
+            strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
+            guiFuctions.deleteGrantTrees();
+        }
+
+        [TestMethod]
+        public void getScreenshotPointInApplication_FailureTest()
+        {
+            initilaizeFilteredTree();
+            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
+            strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
+            strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            //in dem genutzten Template ist bei der View 'a1' kein Screenshot
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("a1");
+            int pointX = 6;
+            int pointY = 42;
+            Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(pointX, pointY);
+            int clickX;
+            int clickY;
+            guiFuctions.getScreenshotPointInApplication(nodeAtPoint, pointX, pointY, out clickX, out clickY);
+            Assert.AreEqual(-1, clickX, "An der Stelle hätte kein Screenshot sein, dürfen, deshalb hätte auch keine Position (x) ermittelt werden dürfen!");
+            Assert.AreEqual(-1, clickY, "An der Stelle hätte kein Screenshot sein, dürfen, deshalb hätte auch keine Position (y) ermittelt werden dürfen!");
+
+            strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
+            guiFuctions.deleteGrantTrees();
+            
+        }
     }
 }
