@@ -22,7 +22,7 @@ namespace TemplatesUi
             deviceHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         }
 
-        public override void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject,  String brailleNodeId, String viewCategory = null)
+        public override void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject,  String brailleNodeId)
         {
             if (!strategyMgr.getSpecifiedTree().HasChild(filteredSubtree)) { return; }
             if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree))
@@ -178,7 +178,7 @@ namespace TemplatesUi
             {
                 Debug.WriteLine("");
             }
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.osm.brailleRepresentation.screenCategory, brailleNodeId);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, brailleNodeId);
             
             if (idGenerated == null)
             {

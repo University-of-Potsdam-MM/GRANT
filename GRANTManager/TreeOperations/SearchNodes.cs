@@ -299,6 +299,7 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
+            brailleScreen.screenCategory = viewCategory;
             osmScreen.brailleRepresentation = brailleScreen;
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
 

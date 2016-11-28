@@ -19,6 +19,7 @@ namespace GRANTManager.BrailleTreeTests
 
         private String VIEWCATEGORYSYMBOLVIEW;
         private String VIEWCATEGORYLAYOUTVIEW;
+        private String pathToTemplate;
 
         [TestInitialize]
         public void Initialize()
@@ -33,9 +34,9 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
             strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
-           /* strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
+            strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
-            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);*/
+            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperation);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
@@ -45,6 +46,9 @@ namespace GRANTManager.BrailleTreeTests
             if(viewCategories == null) { Assert.Fail("Die ViewCategories sind in der Config nicht richtig angegeben!"); }
             VIEWCATEGORYSYMBOLVIEW = viewCategories[0];
             VIEWCATEGORYLAYOUTVIEW = viewCategories[1];
+
+            pathToTemplate = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Template");
+            pathToTemplate = System.IO.Path.Combine(pathToTemplate, "TemplateUiGroups.xml");
         }
 
         [TestMethod()]
@@ -63,7 +67,7 @@ namespace GRANTManager.BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -72,7 +76,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = prop;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
             //Ebenen:  0. Root; 1. SymbolView; 2. Screen; 3. Inhalt
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
             Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber "+strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree())+" Knoten!");
@@ -94,6 +98,7 @@ namespace GRANTManager.BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
 
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
@@ -103,13 +108,14 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = prop;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             #region 2. Knoten
             BrailleRepresentation braille2 = new BrailleRepresentation();
             braille2.isVisible = true;
             braille2.screenName = "TestScreen";
             braille2.viewName = "TestView - 2";
+            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
 
             GeneralProperties prop2 = new GeneralProperties();
             prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
@@ -119,7 +125,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             osm2.brailleRepresentation = braille2;
             osm2.properties = prop2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
@@ -135,7 +141,7 @@ namespace GRANTManager.BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -144,11 +150,12 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = prop;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
             Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
             Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
             guiFuctions.deleteGrantTrees();
@@ -163,7 +170,7 @@ namespace GRANTManager.BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -172,7 +179,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = prop;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
 
             #region 2. Knoten
@@ -180,7 +187,7 @@ namespace GRANTManager.BrailleTreeTests
             braille2.isVisible = true;
             braille2.screenName = "TestScreen - 2";
             braille2.viewName = "TestView";
-
+            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop2 = new GeneralProperties();
             prop2.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop2.controlTypeFiltered = "Text";
@@ -189,7 +196,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             osm2.brailleRepresentation = braille2;
             osm2.properties = prop2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
@@ -212,7 +219,7 @@ namespace GRANTManager.BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -221,7 +228,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = prop;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
 
             #region 2. Knoten
@@ -229,7 +236,7 @@ namespace GRANTManager.BrailleTreeTests
             braille2.isVisible = true;
             braille2.screenName = "TestScreen - 2";
             braille2.viewName = "TestView";
-
+            braille2.screenCategory = VIEWCATEGORYLAYOUTVIEW;
             GeneralProperties prop2 = new GeneralProperties();
             prop2.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop2.controlTypeFiltered = "Text";
@@ -238,7 +245,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             osm2.brailleRepresentation = braille2;
             osm2.properties = prop2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2, VIEWCATEGORYLAYOUTVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
@@ -261,7 +268,7 @@ namespace GRANTManager.BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -270,7 +277,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = prop;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
 
             #region 2. Knoten
@@ -278,7 +285,7 @@ namespace GRANTManager.BrailleTreeTests
             braille2.isVisible = true;
             braille2.screenName = "TestScreen";
             braille2.viewName = "TestView - 2";
-
+            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop2 = new GeneralProperties();
             prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
             prop2.controlTypeFiltered = "Text";
@@ -287,7 +294,7 @@ namespace GRANTManager.BrailleTreeTests
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
             osm2.brailleRepresentation = braille2;
             osm2.properties = prop2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2, VIEWCATEGORYSYMBOLVIEW);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
@@ -302,6 +309,187 @@ namespace GRANTManager.BrailleTreeTests
             {
                 Assert.AreEqual(0, strategyMgr.getSpecifiedTree().DirectChildCount(child));
             }
+            guiFuctions.deleteGrantTrees();
+        }
+
+        [TestMethod()]
+        public void addNavigationbarForScreenTest()
+        {
+            #region erster Knoten
+            BrailleRepresentation braille = new BrailleRepresentation();
+            braille.isVisible = true;
+            braille.screenName = "TestScreen";
+            braille.viewName = "TestView";
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop = new GeneralProperties();
+            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            prop.controlTypeFiltered = "Text";
+            prop.valueFiltered = "Test";
+
+            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            osm.brailleRepresentation = braille;
+            osm.properties = prop;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
+            #endregion
+            #region 2. Knoten
+            BrailleRepresentation braille2 = new BrailleRepresentation();
+            braille2.isVisible = true;
+            braille2.screenName = "TestScreen";
+            braille2.viewName = "TestView - 2";
+            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop2 = new GeneralProperties();
+            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            prop2.controlTypeFiltered = "Text";
+            prop2.valueFiltered = "Test 2";
+
+            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            osm2.brailleRepresentation = braille2;
+            osm2.properties = prop2;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
+            #endregion
+            strategyMgr.getSpecifiedGeneralTemplateUi().addNavigationbarForScreen(pathToTemplate, braille.screenName, braille.screenCategory);
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 7 Knoten haben müssen!");
+            bool foundNavbar = false;
+            foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            {
+                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName!= null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("_NavigationBarScreens_groupElementsStatic_Count_1"))
+                {
+                    foundNavbar = true;
+                    break;
+                }
+            }
+            Assert.AreEqual(true, foundNavbar, "In dem Braille-Baum hätte die Navigationsleiste gefunden werden müssen!");
+            guiFuctions.deleteGrantTrees();
+        }
+
+        [TestMethod()]
+        public void createNavigationbarForScreenTest()
+        {
+            #region erster Knoten
+            BrailleRepresentation braille = new BrailleRepresentation();
+            braille.isVisible = true;
+            braille.screenName = "TestScreen";
+            braille.viewName = "TestView";
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop = new GeneralProperties();
+            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            prop.controlTypeFiltered = "Text";
+            prop.valueFiltered = "Test";
+
+            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            osm.brailleRepresentation = braille;
+            osm.properties = prop;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
+            #endregion
+            #region 2. Knoten
+            BrailleRepresentation braille2 = new BrailleRepresentation();
+            braille2.isVisible = true;
+            braille2.screenName = "TestScreen";
+            braille2.viewName = "TestView - 2";
+            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop2 = new GeneralProperties();
+            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            prop2.controlTypeFiltered = "Text";
+            prop2.valueFiltered = "Test 2";
+
+            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            osm2.brailleRepresentation = braille2;
+            osm2.properties = prop2;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
+            #endregion
+            strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementsNavigationbarScreens(pathToTemplate, braille.screenCategory);
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
+            bool foundNavbar = false;
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            {
+                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("_NavigationBarScreens_groupElementsStatic_Count_1"))
+                {
+                    foundNavbar = true;
+                    break;
+                }
+            }
+            Assert.AreEqual(true, foundNavbar, "In dem Braille-Baum hätte die Navigationsleiste gefunden werden müssen!");
+            guiFuctions.deleteGrantTrees();
+        }
+
+        [TestMethod()]
+        public void updateNavigationbarForScreenTest()
+        {
+            #region erster Knoten
+            BrailleRepresentation braille = new BrailleRepresentation();
+            braille.isVisible = true;
+            braille.screenName = "TestScreen";
+            braille.viewName = "TestView";
+            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop = new GeneralProperties();
+            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            prop.controlTypeFiltered = "Text";
+            prop.valueFiltered = "Test";
+
+            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            osm.brailleRepresentation = braille;
+            osm.properties = prop;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm);
+            #endregion
+            #region 2. Knoten
+            BrailleRepresentation braille2 = new BrailleRepresentation();
+            braille2.isVisible = true;
+            braille2.screenName = "TestScreen";
+            braille2.viewName = "TestView - 2";
+            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop2 = new GeneralProperties();
+            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            prop2.controlTypeFiltered = "Text";
+            prop2.valueFiltered = "Test 2";
+
+            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            osm2.brailleRepresentation = braille2;
+            osm2.properties = prop2;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
+            #endregion
+            strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementsNavigationbarScreens(pathToTemplate, braille.screenCategory);
+            //Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
+            #region 3. Knoten
+            BrailleRepresentation braille3 = new BrailleRepresentation();
+            braille3.isVisible = true;
+            braille3.screenName = "TestScreen - 3";
+            braille3.viewName = "TestView - 3";
+            braille3.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+
+            GeneralProperties prop3 = new GeneralProperties();
+            prop3.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            prop3.controlTypeFiltered = "Text";
+            prop3.valueFiltered = "Test 3";
+
+            OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
+            osm3.brailleRepresentation = braille3;
+            osm3.properties = prop3;
+            treeOperation.updateNodes.addNodeInBrailleTree(osm3);
+            #endregion
+            strategyMgr.getSpecifiedGeneralTemplateUi().updateNavigationbarScreens(pathToTemplate, braille.screenCategory);
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+            Assert.AreEqual(9, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 9 Knoten haben müssen!");
+
+
+            Object subtreeNavbar = null;
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            {
+                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("_NavigationBarScreens_groupElementsStatic_Count_2"))
+                {
+                    subtreeNavbar = node;
+                    break;
+                }
+            }
+            Assert.AreNotEqual(null, subtreeNavbar, "Es hätte ein Teilbaum für die Navigationsleiste gefunden werden müssen!");
+            Assert.AreEqual(2, strategyMgr.getSpecifiedTree().DirectChildCount(subtreeNavbar), "Die Navigationsleiste hätte genau zwei Kindeelemente haben müssen!");
             guiFuctions.deleteGrantTrees();
         }
 

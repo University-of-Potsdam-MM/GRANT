@@ -68,7 +68,6 @@ namespace TemplatesUi
                    Debug.WriteLine(element);
                }*/
             ATemplateUi generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
-            // TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
             foreach (XElement element in uiElement)
             {
                 TemplateScreenshotObject templateObject = xmlUiScreenshotToTemplateUiScreenshot(element);
@@ -90,7 +89,7 @@ namespace TemplatesUi
             if (pathToTemplate.Equals("")) { Debug.WriteLine("Keine Xml angegeben!"); return; }
             if (!File.Exists(@pathToTemplate)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
             createUiElementsWitheNoDependencySymbolView(@pathToTemplate);
-            //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Nethode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
+            //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Methode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getFilteredTree()))
             {
                 createElementTypeOfSymbolView(node, pathToTemplate);
@@ -103,19 +102,20 @@ namespace TemplatesUi
         /// <summary>
         /// aktualisiert die Navigationsleisten (Anzahl der Tabs) auf allen Screens, die eine Navigationsleiste anzeigen
         /// </summary>
+        /// <param name="viewCategory">gibt die ViewCategory an, bei der die Navigationsleisten aktualisiert werden sollen</param>
         /// <param name="pathToXml"></param>
-        public void updateNavigationbarScreensOfSymbolView(string pathToXml)
+        public void updateNavigationbarScreens(string pathToXml, String viewCategory)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(VIEWCATEGORY_SYMBOLVIEW);
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(viewCategory);
             /*
              * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
              * ergänzen
              */
             List<Object> navigationbars = treeOperation.searchNodes.getListOfNavigationbars();
             List<String> screensForShowNavigationbar = new List<string>();
-            foreach (ITreeStrategy<OSMElement.OSMElement> nbar in navigationbars)
+            foreach (Object nbar in navigationbars)
             {                
                 if (strategyMgr.getSpecifiedTree().HasChild(nbar))
                 {
@@ -135,7 +135,7 @@ namespace TemplatesUi
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
             ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
-            generalUiInstance.createUiElementFromTemplate(tree, templateObject, null, VIEWCATEGORY_SYMBOLVIEW);
+            generalUiInstance.createUiElementFromTemplate(tree, templateObject);
         }
 
         /// <summary>
@@ -143,13 +143,15 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="pathToXml">gibt den Pfad zum Template der Navigationsleiste an</param>
         /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
-        public void addNavigationbarForScreen(string pathToXml, Object subtree, String viewCategory = null)
+        /// <param name="viewCategory"gibt die ViewCategory an, auf welcher die Navigationsleiste angezeigt werden soll
+        public void addNavigationbarForScreen(string pathToXml, String screenName, String viewCategory)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
             List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(viewCategory);
             List<String> screenNavi = new List<string>();
-            screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
+            //screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
+            screenNavi.Add(screenName);
             templateObject.Screens = screenNavi;
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
@@ -293,7 +295,7 @@ namespace TemplatesUi
                 {
                     generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
                 }
-                generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW), null, VIEWCATEGORY_SYMBOLVIEW);
+                generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW));
             }
         }
 
@@ -364,6 +366,7 @@ namespace TemplatesUi
                 }
             }
             braille.contrast = contrast;
+            braille.screenCategory = VIEWCATEGORY_LAYOUTVIEW;
          //   braille.showScrollbar = Convert.ToBoolean(xmlElement.Element("ShowScrollbar").Value);
             templetObject.name = templetObject.Screens != null ? templetObject.Screens[0] : "all"; //TODO: besserer Name
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
@@ -506,7 +509,7 @@ namespace TemplatesUi
                 }
 
                 Object tree = strategyMgr.getSpecifiedTree().NewTree();
-                generalUiInstance.createUiElementFromTemplate(tree, templateObject, null, VIEWCATEGORY_SYMBOLVIEW);
+                generalUiInstance.createUiElementFromTemplate(tree, templateObject);
             }
         }
 

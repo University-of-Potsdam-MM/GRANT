@@ -308,10 +308,9 @@ namespace GRANTManager.TreeOperations
         /// Falls ein Knoten mit der 'IdGenerated' schon vorhanden sein sollte, wird dieser aktualisiert
         /// </summary>
         /// <param name="brailleNode">gibt die Darstellung des Knotens an</param>
-        /// <param name="viewCategory">gibt die Kategorie der View an
         /// <param name="parentId">falls diese gesetzt ist, so soll der Knoten als Kindknoten an diesem angehangen werden</param>
         /// <returns> die generierte Id, falls der Knoten hinzugefügt oder geupdatet wurde, sonst <c>null</c></returns>
-        public String addNodeInBrailleTree(OSMElement.OSMElement brailleNode, String viewCategory, String parentId = null)
+        public String addNodeInBrailleTree(OSMElement.OSMElement brailleNode, String parentId = null)
         {
             if (grantTrees.getBrailleTree() == null) { grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().NewTree()); }
             //prüfen, ob der Knoten schon vorhanden ist
@@ -330,16 +329,16 @@ namespace GRANTManager.TreeOperations
                 Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!"); return null;
             }
             // prüfen, ob es die View auf dem Screen schon gibt
-            if (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName, viewCategory))
+            if (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName, brailleNode.brailleRepresentation.screenCategory))
             {
                 return null;
             }
-            addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName, viewCategory);
+            addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.screenCategory);
 
             //1. richtige ViewCategorie finden
             foreach (Object viewCategoryNode in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(viewCategoryNode).brailleRepresentation.screenCategory.Equals(viewCategory))
+                if (strategyMgr.getSpecifiedTree().GetData(viewCategoryNode).brailleRepresentation.screenCategory.Equals(brailleNode.brailleRepresentation.screenCategory))
                 {
                     foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategoryNode))
                     {
@@ -455,10 +454,9 @@ namespace GRANTManager.TreeOperations
         /// Fügt einen 'Zweig' für den Screen an den Root-Knoten an, falls der Screen im Baum noch nicht existiert
         /// </summary>
         /// <param name="screenName">gibt den Namen des Screens an</param>
-        /// <param name="viewCategory">gibt die Kategorie der View an; falls kein Wert angegeben wurde so wird als default die erste angabe der Config genutzt</param>
-        private void addSubtreeOfScreen(String screenName, String viewCategory = null)
+        /// <param name="viewCategory">gibt die Kategorie der View an</param>
+        private void addSubtreeOfScreen(String screenName, String viewCategory)
         {
-            viewCategory = viewCategory == null ? VIEWCATEGORY_SYMBOLVIEW : viewCategory;
             if (screenName == null || screenName.Equals(""))
             {
                 Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!");
@@ -467,6 +465,7 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
+            brailleScreen.screenCategory = viewCategory;
             osmScreen.brailleRepresentation = brailleScreen;
 
 

@@ -28,18 +28,17 @@ namespace TemplatesUi
             this.treeOperation = treeOperation;
         }
 
-        public virtual void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null, String viewCategory = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public virtual void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
             if (templateObject.Screens != null)
             {
                 List<String> screenList = templateObject.Screens;
-                viewCategory = viewCategory == null ? templateObject.osm.brailleRepresentation.screenCategory : viewCategory;
                 foreach (String screen in screenList)
                 {
                     templateObject.Screens = new List<string>();
                     templateObject.Screens.Add(screen);
                     Object brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
-                    addIdAndRelationship(brailleNode, filteredSubtree, templateObject, viewCategory);
+                    addIdAndRelationship(brailleNode, filteredSubtree, templateObject);
                 }
             }
         }
@@ -58,7 +57,7 @@ namespace TemplatesUi
             foreach (Object node in nodes)
             {
                 // viewCategories[1] = LayoutView
-                createUiElementFromTemplate(node, CastScreenshotObject(screenshotObject), null, viewCategories[1]);
+                createUiElementFromTemplate(node, CastScreenshotObject(screenshotObject));
             }
         }
 
@@ -72,13 +71,12 @@ namespace TemplatesUi
             return castedSO;
         }
 
-        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TemplateUiObject templateObject, String viewCategory = null)
+        private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TemplateUiObject templateObject)
         { 
             if (brailleSubtree == null || !strategyMgr.getSpecifiedTree().HasChild(brailleSubtree)) { return; }
             OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
             brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
-            viewCategory = viewCategory == null ? templateObject.osm.brailleRepresentation.screenCategory : viewCategory;
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, viewCategory);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }
             String parentId = idGenerated;
             GeneralProperties prop = brailleNode.properties;
@@ -94,12 +92,12 @@ namespace TemplatesUi
             if (strategyMgr.getSpecifiedTree().HasChild(brailleSubtree))
             {
                 brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
-                idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree),viewCategory, parentId);
+                idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
 
                 while (strategyMgr.getSpecifiedTree().HasNext(brailleSubtree))
                 {
                     brailleSubtree = strategyMgr.getSpecifiedTree().Next(brailleSubtree);
-                    idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree),viewCategory, parentId);
+                    idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(brailleSubtree), parentId);
                     if (idGenerated == null) { return; }
 
                 }

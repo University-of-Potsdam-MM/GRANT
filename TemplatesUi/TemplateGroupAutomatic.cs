@@ -63,7 +63,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.osm.brailleRepresentation.screenCategory);
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();

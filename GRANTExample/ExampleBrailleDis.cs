@@ -240,7 +240,7 @@ namespace GRANTExample
             proper1.controlTypeFiltered = "Screenshot";
             osm1.brailleRepresentation = e1;
             osm1.properties = proper1;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm1, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm1);
             #endregion
 
             #region Element 2 Text
@@ -266,7 +266,7 @@ namespace GRANTExample
             proper2.controlTypeFiltered = "Text";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3 Text
@@ -287,7 +287,7 @@ namespace GRANTExample
             proper3.controlTypeFiltered = "Text";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm3, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm3);
             #endregion
 
             #region Element 4 Matrix
@@ -311,7 +311,7 @@ namespace GRANTExample
             proper4.controlTypeFiltered = "Matrix";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm4, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm4);
             #endregion
 
             #region Element 5 Button
@@ -331,7 +331,7 @@ namespace GRANTExample
             proper5.isEnabledFiltered = true;
             osm5.brailleRepresentation = e5;
             osm5.properties = proper5;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm5, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm5);
             #endregion
 
             #region Element 6 TextBox
@@ -354,7 +354,7 @@ namespace GRANTExample
             proper6.isEnabledFiltered = true;
             osm6.brailleRepresentation = e6;
             osm6.properties = proper6;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm6, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm6);
             #endregion
 
             #region Element 7 DropDownMenu
@@ -383,7 +383,7 @@ namespace GRANTExample
             proper7.controlTypeFiltered = "DropDownMenu";
             osm7.brailleRepresentation = e7;
             osm7.properties = proper7;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm7, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm7);
             #endregion
 
             #region Element 8 DropDownMenu
@@ -411,7 +411,7 @@ namespace GRANTExample
             proper8.isEnabledFiltered = true;
             osm8.brailleRepresentation = e8;
             osm8.properties = proper8;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm8, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm8);
             #endregion
 
             #region Element 9 DropDownMenu
@@ -439,7 +439,7 @@ namespace GRANTExample
             proper9.controlTypeFiltered = "DropDownMenu";
             osm9.brailleRepresentation = e9;
             osm9.properties = proper9;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm9, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm9);
             #endregion
 
             #region Element 10 DropDownMenu
@@ -468,7 +468,7 @@ namespace GRANTExample
             proper10.controlTypeFiltered = "DropDownMenu";
             osm10.brailleRepresentation = e10;
             osm10.properties = proper10;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm10, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm10);
             #endregion
 
             #region Element 11 Button
@@ -487,7 +487,7 @@ namespace GRANTExample
             proper11.controlTypeFiltered = "Button";
             osm11.brailleRepresentation = e11;
             osm11.properties = proper11;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm11, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm11);
             #endregion
 
         }

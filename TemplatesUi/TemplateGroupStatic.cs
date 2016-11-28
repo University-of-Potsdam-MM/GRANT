@@ -16,7 +16,7 @@ namespace TemplatesUi
     {
         public TemplateGroupStatic(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees,  TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation) { }
 
-        public override void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null, String viewCategory = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
+        public override void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null) //noch sollte eigenltich das OSM-Element reichen, aber bei Komplexeren Elementen wird wahrscheinlich ein Teilbaum benötigt
         {
             if (templateObject.Screens != null)
             {
@@ -113,7 +113,7 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
 
-            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, templateObject.osm.brailleRepresentation.screenCategory );
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return new OSMElement.OSMElement();
@@ -123,7 +123,10 @@ namespace TemplatesUi
             brailleNode.properties = prop;
 
             List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
-            OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
+            if (filteredSubtree != null)
+            {
+                OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
+            }
             treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
 
             return brailleNode;

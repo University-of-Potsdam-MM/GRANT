@@ -462,7 +462,7 @@ namespace GRANTApplication
             proper2.controlTypeFiltered = "Text";
             osm2.brailleRepresentation = e2;
             osm2.properties = proper2;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm2, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
             #region Element 3
@@ -487,7 +487,7 @@ namespace GRANTApplication
             proper3.controlTypeFiltered = "Text";
             osm3.brailleRepresentation = e3;
             osm3.properties = proper3;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm3, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm3);
             #endregion
 
             #region Element 4
@@ -515,7 +515,7 @@ namespace GRANTApplication
             proper4.controlTypeFiltered = "Matrix";
             osm4.brailleRepresentation = e4;
             osm4.properties = proper4;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm4, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm4);
             #endregion
 
             #region Element 5
@@ -538,7 +538,7 @@ namespace GRANTApplication
             proper5.controlTypeFiltered = "Button";
             osm5.brailleRepresentation = e5;
             osm5.properties = proper5;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm5, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm5);
             #endregion
 
             #region Element 6
@@ -564,7 +564,7 @@ namespace GRANTApplication
             proper6.controlTypeFiltered = "TextBox";
             osm6.brailleRepresentation = e6;
             osm6.properties = proper6;
-            treeOperation.updateNodes.addNodeInBrailleTree(osm6, viewCategory[0]);
+            treeOperation.updateNodes.addNodeInBrailleTree(osm6);
             #endregion
 
             return grantTrees.getBrailleTree();

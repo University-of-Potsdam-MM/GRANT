@@ -8,11 +8,11 @@ namespace GRANTManager.Interfaces
     {
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
-        void addNavigationbarForScreen(string pathToXml, Object subtree, String viewCategory = null);
+        void addNavigationbarForScreen(string pathToXml, String screenName, String viewCategory);
         void createUiElementsAllScreens(string pathToXml, String nameOfView);
         void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory);
         void generatedUiFromTemplate(string pathToXml);
-        void updateNavigationbarScreensOfSymbolView(string pathToXml);
+        void updateNavigationbarScreens(string pathToXml, String viewCategory);
 
         void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
