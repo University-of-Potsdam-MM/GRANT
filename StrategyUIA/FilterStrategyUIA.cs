@@ -40,12 +40,12 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="hwnd">den handle der Anwendung an</param>
         /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
-        public Object filtering(IntPtr hwnd)
+      /*  public Object filtering(IntPtr hwnd)
         {
             ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
             //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
             return filtering(hwnd, TreeScopeEnum.Application, -1);
-        }
+        }*/
 
         /// <summary>
         /// Filtert eine Anwendung/Teilanwendung ausgehend vom AutomationElement;
@@ -109,7 +109,7 @@ namespace StrategyUIA
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
+        public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1)
         {            
             AutomationElement mainElement = deliverAutomationElementFromHWND(hwnd);
             return filtering(mainElement, treeScope, depth);            

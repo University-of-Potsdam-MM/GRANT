@@ -19,8 +19,13 @@ namespace OSMElement.UiElements
         /// Gibt das Inhaltsobjekt einer Tab-View an
         /// dies könnte z.B. bei einem Editor mit mehreren Tab das eigentliche (offene) Text-Feld sein
         /// </summary>
-       // public object content { get; set; } --> TODO?
+        // public object content { get; set; } --> TODO?
         //isDisabled --> Element ist aktiv (kann daher nicht mehr aktiviert werden)
+
+        public override string ToString()
+        {
+            return String.Format("TabItem: orientation = {0}", orientation.ToString());
+        }
     }
 
     public enum Orientation { Left, Top, Bottom, Right, Vertical, Horizontal }; //TODO: in BrailleRepresentation?

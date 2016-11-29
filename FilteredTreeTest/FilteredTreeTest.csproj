@@ -58,6 +58,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="HelpFunctions.cs" />
+    <Compile Include="FilterTest.cs" />
     <Compile Include="UnitTestUpdateNode.cs" />
     <Compile Include="UnitTestSaveTree.cs" />
     <Compile Include="UnitTestLoadTree.cs" />

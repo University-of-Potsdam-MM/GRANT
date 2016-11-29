@@ -17,7 +17,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="hwnd">gibt den Handle an, von dem die Filterung starten soll</param>
         /// <returns>Ein Baum mit den gefilterten Eigenschaften</returns>
-        Object filtering(IntPtr hwnd);
+      //  Object filtering(IntPtr hwnd);
 
         /// <summary>
         /// Filtert ausgehend vom angegebenen Punkt (<paramref name="pointX"/>, <paramref name="pointY"/>) unter Berücksichtigung des angegebenen <code>GRANTManager.TreeScopeEnum</code> Baum
@@ -52,7 +52,7 @@ namespace GRANTManager.Interfaces
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        Object filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth);
+        Object filtering(IntPtr hwnd,  TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1);
 
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
