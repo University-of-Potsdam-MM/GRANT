@@ -8,6 +8,7 @@ using System.IO;
 using OSMElement;
 using System.Windows;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace FilteredTreeTest
 {
@@ -108,6 +109,7 @@ namespace FilteredTreeTest
             }
             //  if (loadedTree1.Equals(loadedTree2)) { return true; } else { return false; } --> geht nicht da boundingRectangle unterschiedlich sein kann
             String node1Id;
+            HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(loadedTree1))
             {
                 node1Id = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
@@ -116,20 +118,33 @@ namespace FilteredTreeTest
                 OSMElement.OSMElement osm1 = strategyMgr.getSpecifiedTree().GetData(node);
                 GeneralProperties prop1 = osm1.properties;
                 prop1.boundingRectangleFiltered = new Rect();
+                prop1.fileName = null;
+                //bei Textfeldern kann sich der Text ändern
+                if (prop1.controlTypeFiltered.Equals("Text"))
+                {
+                    prop1.nameFiltered = "";
+                }
                 osm1.properties = prop1;
                 strategyMgr.getSpecifiedTree().SetData(node, osm1);
                 OSMElement.OSMElement osm2 = strategyMgr.getSpecifiedTree().GetData(associatedNodeList[0]);
-                GeneralProperties prop2 = osm1.properties;
+                GeneralProperties prop2 = osm2.properties;
                 prop2.boundingRectangleFiltered = new Rect();
+                prop2.fileName = null;
+                //bei Textfeldern kann sich der Text ändern
+                if (prop2.controlTypeFiltered.Equals("Text"))
+                {
+                    prop2.nameFiltered = "";
+                }
                 osm2.properties = prop2;
                 strategyMgr.getSpecifiedTree().SetData(associatedNodeList[0], osm2);
+                Assert.AreEqual(true, hf.compareToNodes(node, associatedNodeList[0]), "Die beiden knoten stimmen nicht überein!");
 
-
-                if (!strategyMgr.getSpecifiedTree().Equals(node, associatedNodeList[0]))
-                {
-                    Assert.Fail("Die folgenden beiden Knoten stimmen nicht überein:\n{0}\n{1}", node, associatedNodeList[0]);
-                    return false;
-                }
+                /* if (!strategyMgr.getSpecifiedTree().Equals(node, associatedNodeList[0]))
+                 {
+                     compareToNodes(node, associatedNodeList[0]);
+                     Assert.Fail("Die folgenden beiden Knoten stimmen nicht überein:\n{0}\n{1}", node, associatedNodeList[0]);
+                     return false;
+                 }*/
             }
             return true;
 
