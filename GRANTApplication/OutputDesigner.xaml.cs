@@ -707,8 +707,8 @@ namespace GRANTApplication
             DataRow dataRow15 = dataTable.NewRow();
             DataRow dataRow16 = dataTable.NewRow();
             DataRow dataRow17 = dataTable.NewRow();
-           
-      
+            DataRow dataRow18 = dataTable.NewRow();
+
 
             dataRow[0] = "IdGenerated";
             if (osmElement.properties.IdGenerated == null) { return; }
@@ -764,10 +764,7 @@ namespace GRANTApplication
             dataRow12[1] = osmElement.brailleRepresentation.uiElementSpecialContent == null ? " " : osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
             dataTable.Rows.Add(dataRow12);
 
-            dataRow12[0] = "Padding";
-            dataRow12[1] = osmElement.brailleRepresentation.padding == null ? " " : osmElement.brailleRepresentation.padding.ToString();
-            dataTable.Rows.Add(dataRow12);
-
+            
             dataRow13[0] = "Margin";
             dataRow13[1] = osmElement.brailleRepresentation.margin == null ? " " : osmElement.brailleRepresentation.margin.ToString();
             dataTable.Rows.Add(dataRow13);
@@ -779,6 +776,10 @@ namespace GRANTApplication
             dataRow17[0] = "ZIndex";
             dataRow17[1] = osmElement.brailleRepresentation.zIntex.ToString();
             dataTable.Rows.Add(dataRow17);
+
+            dataRow18[0] = "Padding";
+            dataRow18[1] = osmElement.brailleRepresentation.padding == null ? " " : osmElement.brailleRepresentation.padding.ToString();
+            dataTable.Rows.Add(dataRow18);
 
 
             /*        dataRow7[0] = "Matrix";
