@@ -740,50 +740,85 @@ namespace GRANTApplication
             dataRow6[1] = osmElement.brailleRepresentation.isVisible.ToString(); 
             dataTable.Rows.Add(dataRow6);
 
-    /*        dataRow7[0] = "Matrix";
-            dataRow7[1] = osmElement.brailleRepresentation.matrix.ToString();
+            dataRow7[0] = "FromGuiElement";
+            dataRow7[1] = osmElement.brailleRepresentation.fromGuiElement == null ? " " : osmElement.brailleRepresentation.fromGuiElement.ToString();  
             dataTable.Rows.Add(dataRow7);
 
-            dataRow8[0] = "FromGuiElement";
-            dataRow8[1] = osmElement.brailleRepresentation.fromGuiElement.ToString();
+            dataRow8[0] = "Contrast";
+            dataRow8[1] = osmElement.brailleRepresentation.contrast.ToString();
             dataTable.Rows.Add(dataRow8);
 
-            dataRow9[0] = "Contrast";
-            dataRow9[1] = osmElement.brailleRepresentation.contrast.ToString();
+            dataRow9[0] = "Zoom";
+            dataRow9[1] = osmElement.brailleRepresentation.zoom.ToString();
             dataTable.Rows.Add(dataRow9);
 
-            dataRow10[0] = "Zoom";
-            dataRow10[1] = osmElement.brailleRepresentation.zoom.ToString();
+            dataRow10[0] = "Screen name";
+            dataRow10[1] = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName.ToString();
             dataTable.Rows.Add(dataRow10);
 
-            dataRow11[0] = "Screen name";
-            dataRow11[1] = osmElement.brailleRepresentation.screenName.ToString();
+            dataRow11[0] = "Show Scrollbar";
+            dataRow11[1] = osmElement.brailleRepresentation.showScrollbar.ToString();
             dataTable.Rows.Add(dataRow11);
 
-            dataRow12[12] = "Show Scrollbar";
-            dataRow12[12] = osmElement.brailleRepresentation.showScrollbar.ToString();
+            dataRow12[0] = "UIElementSpecialContent";
+            dataRow12[1] = osmElement.brailleRepresentation.uiElementSpecialContent == null ? " " : osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
             dataTable.Rows.Add(dataRow12);
 
-            dataRow13[13] = "UIElementSpecialContent";
-            dataRow13[13] = osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
+            dataRow12[0] = "Padding";
+            dataRow12[1] = osmElement.brailleRepresentation.padding == null ? " " : osmElement.brailleRepresentation.padding.ToString();
+            dataTable.Rows.Add(dataRow12);
+
+            dataRow13[0] = "Margin";
+            dataRow13[1] = osmElement.brailleRepresentation.margin == null ? " " : osmElement.brailleRepresentation.margin.ToString();
             dataTable.Rows.Add(dataRow13);
 
-            dataRow14[0] = "Padding";
-            dataRow14[1] = osmElement.brailleRepresentation.padding.ToString();
+            dataRow14[0] = "Boarder";
+            dataRow14[1] = osmElement.brailleRepresentation.boarder == null ? " " : osmElement.brailleRepresentation.boarder.ToString();
             dataTable.Rows.Add(dataRow14);
-
-            dataRow15[0] = "Margin";
-            dataRow15[1] = osmElement.brailleRepresentation.margin.ToString();
-            dataTable.Rows.Add(dataRow15);
-
-            dataRow16[0] = "Boarder";
-            dataRow16[1] = osmElement.brailleRepresentation.boarder.ToString();
-            dataTable.Rows.Add(dataRow16);
 
             dataRow17[0] = "ZIndex";
             dataRow17[1] = osmElement.brailleRepresentation.zIntex.ToString();
             dataTable.Rows.Add(dataRow17);
-            */
+
+
+            /*        dataRow7[0] = "Matrix";
+                    dataRow7[1] = osmElement.brailleRepresentation.matrix.ToString();
+                    dataTable.Rows.Add(dataRow7);
+
+                    dataRow8[0] = "FromGuiElement";
+                    dataRow8[1] = osmElement.brailleRepresentation.fromGuiElement.ToString();
+                    dataTable.Rows.Add(dataRow8);
+
+                    
+
+                    dataRow11[0] = "Screen name";
+                    dataRow11[1] = osmElement.brailleRepresentation.screenName.ToString();
+                    dataTable.Rows.Add(dataRow11);
+
+                    dataRow12[12] = "Show Scrollbar";
+                    dataRow12[12] = osmElement.brailleRepresentation.showScrollbar.ToString();
+                    dataTable.Rows.Add(dataRow12);
+
+                    dataRow13[13] = "UIElementSpecialContent";
+                    dataRow13[13] = osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
+                    dataTable.Rows.Add(dataRow13);
+
+                    dataRow14[0] = "Padding";
+                    dataRow14[1] = osmElement.brailleRepresentation.padding.ToString();
+                    dataTable.Rows.Add(dataRow14);
+
+                    dataRow15[0] = "Margin";
+                    dataRow15[1] = osmElement.brailleRepresentation.margin.ToString();
+                    dataTable.Rows.Add(dataRow15);
+
+                    dataRow16[0] = "Boarder";
+                    dataRow16[1] = osmElement.brailleRepresentation.boarder.ToString();
+                    dataTable.Rows.Add(dataRow16);
+
+                    dataRow17[0] = "ZIndex";
+                    dataRow17[1] = osmElement.brailleRepresentation.zIntex.ToString();
+                    dataTable.Rows.Add(dataRow17);
+                    */
 
             /*   dataRow23["Property"] = "hWndFiltered";
                dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
