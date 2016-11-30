@@ -170,6 +170,8 @@ namespace TemplatesUi
             braille.viewName = viewName;
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
+            prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(brailleNode);
+            brailleNode.properties = prop;
 
             return brailleNode;
         }

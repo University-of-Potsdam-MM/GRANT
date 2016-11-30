@@ -140,7 +140,7 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        internal String generatedIdBrailleNode(OSMElement.OSMElement osmElement)
+        public String generatedIdBrailleNode(OSMElement.OSMElement osmElement)
         {
             /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
              * http://stackoverflow.com/questions/12979212/md5-hash-from-string
@@ -156,7 +156,7 @@ namespace GRANTManager.TreeOperations
                 properties.controlTypeFiltered+
                 (braille.screenCategory == null? "":braille.screenCategory) +
                 (braille.uiElementSpecialContent == null? "": braille.uiElementSpecialContent.ToString());
-            Debug.WriteLine("in generatedIdBrailleNode String für Hash = ", result);
+          //  Debug.WriteLine("in generatedIdBrailleNode String für Hash = ", result);
             byte[] hash;
             using (var md5 = MD5.Create())
             {
