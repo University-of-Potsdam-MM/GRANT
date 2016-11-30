@@ -350,7 +350,6 @@ namespace StrategyBrailleIO
             {
                 Image img = captureScreen(osmElement.properties.IdGenerated);
                 if (img == null) { return; }
-                ScreenCapture.SaveImageToFile(@"C:\Users\mkarlapp\Desktop" + System.IO.Path.DirectorySeparatorChar + "t1" + System.IO.Path.DirectorySeparatorChar + osmElement.properties.IdGenerated + ".png", img);
                 createViewImage(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, osmElement, img);
                 return;
             }
