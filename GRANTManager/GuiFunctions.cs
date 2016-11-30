@@ -61,11 +61,16 @@ namespace GRANTManager
                 get;
                 set;
             }
-            public String screenName
+          /*  public String screenName
             {
                 get;
                 set;
             }
+            public String screenCategory
+            {
+                get;
+                set;
+            }*
             /*   public String acceleratorKeyFiltered
                {
                    get;
@@ -256,6 +261,71 @@ namespace GRANTManager
             }
         }
 
+
+//        guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); 
+
+    /*    public void createScreenTreeForBraille(Object tree, ref GuiFunctions.MenuItem root)
+        {
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
+            {
+                MenuItem child = new MenuItem();
+                //Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node)) + node.ToString());
+                child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
+                child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
+                //String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered;
+
+                String nameFiltered;
+
+                if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory;
+
+                }
+                else if (strategyMgr.getSpecifiedTree().Depth(node) == 1)
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName;
+
+                }
+                else
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
+
+                }
+
+
+
+                if (nameFiltered.Length > 40)
+                {
+                    child.nameFiltered = nameFiltered.Substring(0, 40);
+                }
+                else
+                {
+                    child.nameFiltered = nameFiltered;
+                }
+
+                if (!strategyMgr.getSpecifiedTree().IsRoot(node))
+                {
+                    child.parentMenuItem = root;
+                    root.Items.Add(child);
+                    if (strategyMgr.getSpecifiedTree().IsLast(node))
+                    {
+                        root = getRootForNextElement(node, child);
+                    }
+                }
+                else { root = child; };
+
+                if (strategyMgr.getSpecifiedTree().HasChild(node))
+                {
+                    root = child;
+                }
+            }
+            //geht zurück zum "Root"-MenuItem
+            while (root.parentMenuItem != null)
+            {
+                root = root.parentMenuItem;
+            }
+        }*/
+
         public void createTreeForOutput(Object tree, ref GuiFunctions.MenuItem root)
         {
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
@@ -265,11 +335,27 @@ namespace GRANTManager
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
                 //String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered;
+
                 String nameFiltered;
 
-                if (strategyMgr.getSpecifiedTree().IsTop(node)) { nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName; }
-                else { nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName; }
+                if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory;
 
+                }
+                else if(strategyMgr.getSpecifiedTree().Depth(node) == 1)
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName;
+
+                }
+                else
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
+
+                }
+
+
+           
                 if (nameFiltered.Length > 40)
                 {
                     child.nameFiltered = nameFiltered.Substring(0, 40);
@@ -339,6 +425,7 @@ namespace GRANTManager
                 Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node1)) + node1.ToString() + "\t" + 1);
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
+
                 String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered;
                 if (nameFiltered.Length > 40)
                 {

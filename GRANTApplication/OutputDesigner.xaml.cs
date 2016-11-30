@@ -26,6 +26,7 @@ namespace GRANTApplication
         TreeOperation treeOperations;
         GuiFunctions.MenuItem filteredRoot;
         GuiFunctions.MenuItem brailleRoot;
+        GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
         int var2;
         String matrix;
@@ -71,7 +72,7 @@ namespace GRANTApplication
 
             //tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(trees_SelectedItemChanged);
             tvOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(tvOutput_SelectedItemChanged);
-            
+
             //brailleOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(trees_SelectedItemChanged);
             brailleOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleOutput_SelectedItemChanged);
 
@@ -81,6 +82,7 @@ namespace GRANTApplication
 
             filteredRoot = new GuiFunctions.MenuItem();
             brailleRoot = new GuiFunctions.MenuItem();
+            screenRoot = new GuiFunctions.MenuItem();
 
             //NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
@@ -187,31 +189,31 @@ namespace GRANTApplication
 
         public void paintMatrix(DataGrid datagrid, bool[,] guiElementRep)
         {
-           for (int h = 0; h < dataGrid3.Items.Count; h++)
-           // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+            for (int h = 0; h < dataGrid3.Items.Count; h++)
+            // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
             {
-               DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
-               if (row == null)
-               {
-                  dataGrid3.UpdateLayout();
-                  dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
-                  row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
-               }
-               for (int w = 0; w < dataGrid3.Columns.Count; w++)
+                DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+                if (row == null)
+                {
+                    dataGrid3.UpdateLayout();
+                    dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
+                    row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+                }
+                for (int w = 0; w < dataGrid3.Columns.Count; w++)
                 {
                     if (dataGrid3.Columns[w].GetCellContent(row) == null)
                     {
                         dataGrid3.UpdateLayout();
                     }
                     DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
-                    if (guiElementRep[h, w].ToString() == "True") { 
+                    if (guiElementRep[h, w].ToString() == "True") {
                         firstColumnInFirstRow.Background = Brushes.Black;
                     }
                     else {
                         firstColumnInFirstRow.Background = Brushes.White;
                     }
                 }
-               
+
             }
         }
 
@@ -246,11 +248,11 @@ namespace GRANTApplication
         private DataTable createBrailleDisplayMatrix(int dWidth, int dHeight, DataGrid dataGrid)
         {
             DataTable dataTable = new DataTable();
-            for (int i = 0; i < dWidth; i++){
+            for (int i = 0; i < dWidth; i++) {
                 DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
                 dataTable.Columns.Add(dCol1);
             }
-            for (int i = 0; i < dHeight; i++){
+            for (int i = 0; i < dHeight; i++) {
                 DataRow row1 = dataTable.NewRow();
                 dataTable.Rows.Add(row1);
             }
@@ -264,7 +266,7 @@ namespace GRANTApplication
 
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "filteredProject_" + strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child( grantTrees.getFilteredTree())).properties.nameFiltered; // Default file name
+            dlg.FileName = "filteredProject_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.nameFiltered; // Default file name
             dlg.DefaultExt = ".grant"; // Default file extension
             dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
@@ -309,7 +311,7 @@ namespace GRANTApplication
 
                 //
                 guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-                
+
                 SaveButton.IsEnabled = true;
                 LoadTemplate.IsEnabled = true;
                 tvOutput.Items.Add(filteredRoot);
@@ -350,9 +352,9 @@ namespace GRANTApplication
                 brailleRoot.controlTypeFiltered = "Braille-Tree";
 
                 //
-              //  guiFunctions.createTreeForOutput(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                //  guiFunctions.createTreeForOutput(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                 guiFunctions.createTreeForOutput(tree1, ref brailleRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-               
+
                 SaveButton.IsEnabled = true;
                 brailleOutput.Items.Add(brailleRoot);
             }// Load Project wirft Fehler
@@ -410,40 +412,40 @@ namespace GRANTApplication
 
         }
 
-   /*     private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
-        {
-            //var dataGrid = sender as DataGrid;
-            System.Console.WriteLine(" DWIDTH: " + dWidth);
+        /*     private void createBrailleDisplay(int dWidth, int dHeight, DataGrid dataGrid)
+             {
+                 //var dataGrid = sender as DataGrid;
+                 System.Console.WriteLine(" DWIDTH: " + dWidth);
 
-            System.Console.WriteLine(" DHEIGHT: " + dHeight);
-            // Add 10 Rows
-            DataTable dataTable = new DataTable();
+                 System.Console.WriteLine(" DHEIGHT: " + dHeight);
+                 // Add 10 Rows
+                 DataTable dataTable = new DataTable();
 
-            // Add 7 Columns
-            for (int i = 0; i < dWidth; i++)
-            {
+                 // Add 7 Columns
+                 for (int i = 0; i < dWidth; i++)
+                 {
 
-                DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
-                dataTable.Columns.Add(dCol1);
-                
-            }
+                     DataColumn dCol1 = new DataColumn(i.ToString()); // string FirstC=”column1″
+                     dataTable.Columns.Add(dCol1);
 
-            //dataGrid2.ItemsSource = dataTable.DefaultView;
-            for (int i = 0; i < dHeight; i++)
-            {
-                DataRow row1 = dataTable.NewRow();
-                dataTable.Rows.Add(row1);
-                System.Console.WriteLine(" ROW: " + row1);
-            }
+                 }
 
-            //dataGrid.ItemsSource = dataTable.DefaultView;
-            
-            
-            dataGrid.ItemsSource = dataTable.AsDataView();
-        }
+                 //dataGrid2.ItemsSource = dataTable.DefaultView;
+                 for (int i = 0; i < dHeight; i++)
+                 {
+                     DataRow row1 = dataTable.NewRow();
+                     dataTable.Rows.Add(row1);
+                     System.Console.WriteLine(" ROW: " + row1);
+                 }
+
+                 //dataGrid.ItemsSource = dataTable.DefaultView;
 
 
-     */ 
+                 dataGrid.ItemsSource = dataTable.AsDataView();
+             }
+
+
+          */
 
 
 
@@ -462,7 +464,7 @@ namespace GRANTApplication
             int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
             int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
             //dataGrid2.ItemsSource = null;
-           
+
             createBrailleDisplay(dWidth, dHeight, dataGrid2); // später das zu matrix machen
             // this.Title = "Selected: " + value;
 
@@ -609,7 +611,7 @@ namespace GRANTApplication
             dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
             dataTable.Rows.Add(dataRow23);
 
-            String ids = String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
+            String ids = osmElement.properties.runtimeIDFiltered == null ? " " : String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
 
             dataRow24["Property"] = "runtimeIDFiltered";
             dataRow24["Content"] = ids;
@@ -648,7 +650,7 @@ namespace GRANTApplication
             {
                 // ... Handle a TreeViewItem.
                 if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
-               
+
                 else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
                 else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
@@ -656,8 +658,8 @@ namespace GRANTApplication
                 {
                     OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
-                    if (osmElement.properties.isOffscreenFiltered == false) { 
-                     strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+                    if (osmElement.properties.isOffscreenFiltered == false) {
+                        strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
                     }
                     int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
@@ -667,14 +669,82 @@ namespace GRANTApplication
 
                     System.Console.WriteLine(" INDEX: " + var1);
 
-                  }
+                }
 
             }
 
 
         }
 
-        void updateBrailleTable(String IdGenerated)
+        void screenViewIteration(String IdGenerated) {
+
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+            String screenName = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName;
+            Object screenTree = treeOperations.searchNodes.getSubtreeOfScreen(screenName);
+            //guiFunctions.createScreenTreeForBraille(screenTree, ref screenRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+
+            bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
+
+            // datagrid2
+
+            for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite / Column
+            {
+                for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
+                {
+                    //dataTable4.Rows[i][a] = "";
+                    DataGridCell firstColumnInFirstRow = dataGrid2.Columns[i].GetCellContent(a).Parent as DataGridCell;
+                    //dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
+                    if (guiElementRep[i, a].ToString() == "True")
+                    {
+                        firstColumnInFirstRow.Background = Brushes.Black;
+                    }
+                    else
+                    {
+                        firstColumnInFirstRow.Background = Brushes.White;
+                    }
+                }
+
+            }
+
+
+            /*  for (int h = 0; h < dataGrid3.Items.Count; h++)
+              // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+              {
+                  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+                  if (row == null)
+                  {
+                      dataGrid3.UpdateLayout();
+                      dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
+                      row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+                  }
+                  for (int w = 0; w < dataGrid3.Columns.Count; w++)
+                  {
+                      if (dataGrid3.Columns[w].GetCellContent(row) == null)
+                      {
+                          dataGrid3.UpdateLayout();
+                      }
+                      DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
+                      if (guiElementRep[h, w].ToString() == "True")
+                      {
+                          firstColumnInFirstRow.Background = Brushes.Black;
+                      }
+                      else
+                      {
+                          firstColumnInFirstRow.Background = Brushes.White;
+                      }
+                  }
+
+              }*/
+        
+
+        //  strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+        //  int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+        //  int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+        //  createBrailleDisplay(dWidth, dHeight, dataGrid2); // später das zu matrix machen
+
+    }
+
+    void updateBrailleTable(String IdGenerated)
         {
             System.Console.WriteLine(" HIEEEEEEEEER in der Methode: ");
 
@@ -917,6 +987,7 @@ namespace GRANTApplication
                     listBox1.SelectedIndex = var1;
 
                     updateBrailleTable(item.IdGenerated);
+                    screenViewIteration(item.IdGenerated);
 
                     System.Console.WriteLine(" INDEX: " + var1);
 
