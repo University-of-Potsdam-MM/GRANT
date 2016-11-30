@@ -680,32 +680,53 @@ namespace GRANTApplication
 
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
             String screenName = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName;
+            Rect rect = osmElement.properties.boundingRectangleFiltered;
+            int x = (int) rect.X;
+            int y = (int) rect.Y;
+
+
             Object screenTree = treeOperations.searchNodes.getSubtreeOfScreen(screenName);
             //guiFunctions.createScreenTreeForBraille(screenTree, ref screenRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
 
             bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
 
+            if (guiElementRep != new bool[0, 0])
             // datagrid2
-
-            for (int a = 0; a < (guiElementRep.Length / guiElementRep.GetLength(0)); a++)//breite / Column
             {
-                for (int i = 0; i < guiElementRep.GetLength(0); i++) //höhe
-                {
-                    //dataTable4.Rows[i][a] = "";
-                    DataGridCell firstColumnInFirstRow = dataGrid2.Columns[i].GetCellContent(a).Parent as DataGridCell;
-                    //dataTable4.Rows[i][a] = guiElementRep[i, a].ToString();
-                    if (guiElementRep[i, a].ToString() == "True")
+                    for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
                     {
-                        firstColumnInFirstRow.Background = Brushes.Black;
+                        //
+                        {
+                            DataGridRow row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h+x);
+                            if (row == null)
+                            {
+                                dataGrid2.UpdateLayout();
+                                dataGrid2.ScrollIntoView(dataGrid2.Items[h+x]);
+                                row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h+x);
+                            }
+                        for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)); w++)
+                        {
+                                if (dataGrid2.Columns[w+y].GetCellContent(row) == null)
+                                {
+                                    dataGrid2.UpdateLayout();
+                                }
+                                DataGridCell firstColumnInFirstRow = dataGrid2.Columns[w+y].GetCellContent(row).Parent as DataGridCell;
+
+                                if (guiElementRep[h, w].ToString() == "True")
+                                {
+                                    firstColumnInFirstRow.Background = Brushes.Black;
+                                }
+                                else
+                                {
+                                    firstColumnInFirstRow.Background = Brushes.White;
+                                }
+                            }
+
+                        }
                     }
-                    else
-                    {
-                        firstColumnInFirstRow.Background = Brushes.White;
-                    }
+
                 }
-
             }
-
 
             /*  for (int h = 0; h < dataGrid3.Items.Count; h++)
               // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
@@ -742,7 +763,7 @@ namespace GRANTApplication
         //  int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         //  createBrailleDisplay(dWidth, dHeight, dataGrid2); // später das zu matrix machen
 
-    }
+    
 
     void updateBrailleTable(String IdGenerated)
         {
@@ -799,11 +820,11 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow3);
 
             dataRow4[0] = "ControlType";
-            dataRow4[1] = osmElement.properties.controlTypeFiltered.ToString();
+            dataRow4[1] = osmElement.properties.controlTypeFiltered;
             dataTable.Rows.Add(dataRow4);
            
             dataRow5[0] = "Name";
-            dataRow5[1] = osmElement.brailleRepresentation.viewName.ToString();
+            dataRow5[1] = osmElement.brailleRepresentation.viewName;
             dataTable.Rows.Add(dataRow5);
 
             dataRow6[0] = "Visibility";
