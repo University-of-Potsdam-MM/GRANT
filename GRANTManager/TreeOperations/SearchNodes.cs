@@ -13,11 +13,14 @@ namespace GRANTManager.TreeOperations
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
+        private TreeOperation treeOperation;
 
-        public SearchNodes(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
+        public SearchNodes(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation)
         {
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
+            this.treeOperation = treeOperation;
+
         }
 
         ///todo treeKlasse enthält eine Methode namens contains, ist diese in suche nutzbar?  -> Nein, da hier nicht nach einem Element im Baum gesucht werden soll, wo alle Eigenschaften übereinstimmen, sondern nur einige (die anderen haben sich in der zwischenzeit geändert)
@@ -301,6 +304,10 @@ namespace GRANTManager.TreeOperations
             brailleScreen.screenName = screenName;
             brailleScreen.screenCategory = viewCategory;
             osmScreen.brailleRepresentation = brailleScreen;
+            GeneralProperties prop = new GeneralProperties();
+            prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
+            osmScreen.properties = prop;
+            Debug.WriteLine("in existViewInScreen\t generierte ID = ", prop.IdGenerated);
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
 
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return false; }

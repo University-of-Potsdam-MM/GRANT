@@ -467,15 +467,23 @@ namespace GRANTManager.TreeOperations
             brailleScreen.screenName = screenName;
             brailleScreen.screenCategory = viewCategory;
             osmScreen.brailleRepresentation = brailleScreen;
+            GeneralProperties propOsmScreen = new GeneralProperties();
+            propOsmScreen.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
+            osmScreen.properties = propOsmScreen;
+            
 
-
+            //der Screenexistiert noch nicht
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen))
             {
                 OSMElement.OSMElement osmViewCategory = new OSMElement.OSMElement();
                 BrailleRepresentation brailleViewCategory = new BrailleRepresentation();
                 brailleViewCategory.screenCategory = viewCategory;
                 osmViewCategory.brailleRepresentation = brailleViewCategory;
+                GeneralProperties propViewCategory = new GeneralProperties();
+                propViewCategory.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmViewCategory);
+                osmViewCategory.properties = propViewCategory;
                 Object viewCategorySubtree = null;
+                //die viewCategory existert schon
                 if(strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmViewCategory))
                 {
                     //viewCategory suchen
@@ -486,13 +494,19 @@ namespace GRANTManager.TreeOperations
                             viewCategorySubtree = vC;
                         }
                     }
-                }else
+                }
+                //die viewCategory existiert noch nicht
+                else
                 {
                     viewCategorySubtree = strategyMgr.getSpecifiedTree().AddChild(grantTrees.getBrailleTree(), osmViewCategory);
                 }                
                 if(viewCategorySubtree == null ) { throw new Exception("Die Containsmethode gab an, dass die ViewCategory schon vorhanden ist, sie konnte im Baum aber nicht gefunden werden!"); }
+                
                 strategyMgr.getSpecifiedTree().AddChild(viewCategorySubtree, osmScreen);
 
+            }else
+            {
+                Debug.WriteLine("Der Screen exisitert schon!");
             }
         }
 

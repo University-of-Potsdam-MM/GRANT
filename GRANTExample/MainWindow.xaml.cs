@@ -93,7 +93,7 @@ namespace GRANTExample
             settings = new Settings();
             strategyMgr = new StrategyManager();
             grantTree = new GeneratedGrantTrees();
-            searchNodes = new SearchNodes(strategyMgr, grantTree);
+            searchNodes = new SearchNodes(strategyMgr, grantTree, treeOperation);
             treeOperation = new TreeOperation(strategyMgr, grantTree);
 
             // Setzen des Eventmanager

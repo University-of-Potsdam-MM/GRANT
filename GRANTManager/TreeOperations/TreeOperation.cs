@@ -22,7 +22,7 @@ namespace GRANTManager.TreeOperations
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
             generatedIds = new GeneratedIds(strategyMgr);
-            searchNodes = new SearchNodes(strategyMgr, grantTrees);
+            searchNodes = new SearchNodes(strategyMgr, grantTrees, this);
             updateNodes = new UpdateNodes(strategyMgr, grantTrees, this);
         }
     }

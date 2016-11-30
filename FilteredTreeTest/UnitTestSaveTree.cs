@@ -28,7 +28,7 @@ namespace FilteredTreeTest
             strategyMgr = new StrategyManager();
             grantTrees = new GeneratedGrantTrees();
             Settings settings = new Settings();
-            searchNodes = new SearchNodes(strategyMgr, grantTrees);
+            searchNodes = new SearchNodes(strategyMgr, grantTrees, treeOperation);
             treeOperation = new TreeOperation(strategyMgr, grantTrees);
             
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
