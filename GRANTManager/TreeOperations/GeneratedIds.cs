@@ -151,7 +151,12 @@ namespace GRANTManager.TreeOperations
             String result = properties.controlTypeFiltered +
                 braille.fromGuiElement +
                 braille.screenName +
-                braille.viewName;
+                braille.viewName +
+                properties.boundingRectangleFiltered.ToString() +
+                properties.controlTypeFiltered+
+                (braille.screenCategory == null? "":braille.screenCategory) +
+                (braille.uiElementSpecialContent == null? "": braille.uiElementSpecialContent.ToString());
+            Debug.WriteLine("in generatedIdBrailleNode String für Hash = ", result);
             byte[] hash;
             using (var md5 = MD5.Create())
             {
