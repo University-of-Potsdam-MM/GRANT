@@ -697,20 +697,20 @@ namespace GRANTApplication
                     {
                         //
                         {
-                            DataGridRow row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h+x);
+                            DataGridRow row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h+y);
                             if (row == null)
                             {
                                 dataGrid2.UpdateLayout();
-                                dataGrid2.ScrollIntoView(dataGrid2.Items[h+x]);
-                                row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h+x);
+                                dataGrid2.ScrollIntoView(dataGrid2.Items[h+y]);
+                                row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h+y);
                             }
                         for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)); w++)
                         {
-                                if (dataGrid2.Columns[w+y].GetCellContent(row) == null)
+                                if (dataGrid2.Columns[w+x].GetCellContent(row) == null)
                                 {
                                     dataGrid2.UpdateLayout();
                                 }
-                                DataGridCell firstColumnInFirstRow = dataGrid2.Columns[w+y].GetCellContent(row).Parent as DataGridCell;
+                                DataGridCell firstColumnInFirstRow = dataGrid2.Columns[w+x].GetCellContent(row).Parent as DataGridCell;
 
                                 if (guiElementRep[h, w].ToString() == "True")
                                 {
