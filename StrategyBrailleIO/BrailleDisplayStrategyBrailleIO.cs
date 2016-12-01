@@ -622,20 +622,26 @@ namespace StrategyBrailleIO
                 uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase) ||
                 uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // für alle anderen muss bei BrailleIO "otherContent" zugewiesen werden
             {
-
+                setVisibleScreen(osmElementFilteredNode.brailleRepresentation.screenName);
                 IBrailleIOContentRenderer renderer = getRenderer(uiElementType);
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetOtherContent());
-            }else if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase))
+                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                //setVisibleScreen(osmElementFilteredNode.brailleRepresentation.screenName);
+            }
+            else if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetText());
+                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetMatrix());
+                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetImage());
+                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
             else { throw new Exception("Kein passenden Renderer gefunden!"); }
             
