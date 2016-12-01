@@ -307,7 +307,7 @@ namespace GRANTManager.TreeOperations
             GeneralProperties prop = new GeneralProperties();
             prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
             osmScreen.properties = prop;
-            Debug.WriteLine("in existViewInScreen\t generierte ID = ", prop.IdGenerated);
+          //  Debug.WriteLine("in existViewInScreen\t generierte ID = ", prop.IdGenerated);
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
 
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return false; }

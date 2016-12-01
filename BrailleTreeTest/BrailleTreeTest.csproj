@@ -56,6 +56,7 @@
     <Compile Include="HelpFunctions.cs" />
     <Compile Include="SearchNodesTests.cs" />
     <Compile Include="ConnectedNodesTest.cs" />
+    <Compile Include="UniqueIdsTests.cs" />
     <Compile Include="UpdateNodesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
