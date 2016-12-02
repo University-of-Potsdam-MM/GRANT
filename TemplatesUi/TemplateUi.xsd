@@ -5,7 +5,7 @@
       <xs:sequence>   
         <xs:element name="MinDeviceHeight" type="xs:positiveInteger" />
         <xs:element name="MinDeviceWidth" type="xs:positiveInteger" />
-        <xsd:element name="SymbolView">
+        <xsd:element name="SymbolView" minOccurs="0">
           <xsd:complexType>
             <xsd:sequence>
               <xs:element maxOccurs="unbounded" name="UiElement">
@@ -118,7 +118,7 @@
           </xsd:complexType>
         </xsd:element>
       
-    <xsd:element name="LayoutView">
+    <xsd:element name="LayoutView" minOccurs="0">
           <xsd:complexType>
             <xsd:sequence>
               <xsd:element maxOccurs="unbounded" name="UiElement">
