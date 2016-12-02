@@ -210,6 +210,10 @@ namespace GRANTManager.TreeOperations
         {
             BrailleRepresentation updatedContentBR = element.brailleRepresentation;
             GeneralProperties updatedContentGP = element.properties;
+            if (element.brailleRepresentation.isGroupChild && element.brailleRepresentation.groupelementsOfSameType.renderer != null)
+            {
+                updatedContentGP.controlTypeFiltered = element.brailleRepresentation.groupelementsOfSameType.renderer; //TODO: passt das so?
+            }
             if (element.brailleRepresentation.fromGuiElement != null)
             {
                 updatedContentGP.valueFiltered = getTextForView(element);
@@ -783,9 +787,11 @@ namespace GRANTManager.TreeOperations
              * 3. Leiste neu Darstellen
              */
             Object screenTree = treeOperation.searchNodes.getSubtreeOfScreen(screenName);
-            if (screenTree == null) {
-                Debug.WriteLine("Gesuchter ScreenName: "+screenName+"\t Baum: \n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-                throw new Exception("Der Screen konnte nicht gefunden werden, deshalb konnten die Eigenschaften der Navigationsleiste nicht geändert werden!");  }
+            if (screenTree == null)
+            {
+                Debug.WriteLine("Gesuchter ScreenName: " + screenName + "\t Baum: \n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+                throw new Exception("Der Screen konnte nicht gefunden werden, deshalb konnten die Eigenschaften der Navigationsleiste nicht geändert werden!");  
+            }
             Object navigationBarSubtree = strategyMgr.getSpecifiedTree().NewTree();
             foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(screenTree))
             {
