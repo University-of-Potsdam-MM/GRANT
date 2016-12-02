@@ -607,7 +607,17 @@ namespace StrategyBrailleIO
             if (tmpView == null && !osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())) { return new bool[0, 0]; }
             if(osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())){
                 //Screenshot muss extra erstellt werden
-                Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
+                // Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
+                Image img;
+                if (osmElementFilteredNode.properties.IdGenerated == null || osmElementFilteredNode.properties.IdGenerated.Equals("_tmp_id_"))
+                {
+                    img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Height * 10), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Width * 10), 0, 0, 0, 0);
+
+                }
+                else
+                {
+                    img = captureScreen(osmElementFilteredNode.properties.IdGenerated);
+                }
                 if (img == null) { return new bool[0, 0]; }
                 //UiElement brailleUiElement = convertToBrailleIOUiElement(osmElementFilteredNode);
                 createViewImage(brailleIOMediator.GetView(osmElementFilteredNode.brailleRepresentation.screenName) as BrailleIOScreen, osmElementFilteredNode, img);
