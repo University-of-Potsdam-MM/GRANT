@@ -340,6 +340,36 @@ namespace GRANTManager.TreeOperations
             return false;
         }
 
+        /// <summary>
+        /// Gibt die zugehörigen Ids des Braille-Baumes an
+        /// </summary>
+        /// <param name="idGeneratedFilteredNode">gibt die Id des Knotens des gefilterten Baumes an</param>
+        /// <returns>eine Liste der Ids des Braille-Baumes oder <c>null</c></returns>
+        public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
+        {
+            List<OsmConnector<String, String>> osmRelationships = grantTrees.getOsmRelationship().FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
+            if (osmRelationships != null)
+            {
+                List<String> result = new List<string>();
+                foreach(OsmConnector<String, String> r in osmRelationships)
+                {
+                    result.Add(r.BrailleTree);
+                }
+                return result;
+            }
+            else { return null; }
+        }
+
+        /// <summary>
+        /// Gibt die zugehörige Id des gefilterten Baumes zurück
+        /// </summary>
+        /// <param name="idGeneratedBrailleNode">gibt die Id des Knotens des Braille-Baumes an</param>
+        /// <returns>die id des gefilterten Baumes oder <c>null</c></returns>
+        public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
+        {
+            OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
+            if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
+        }
 
     }
 }
