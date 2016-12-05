@@ -170,7 +170,7 @@ namespace GRANTExample
                   fs.Close();*/
                 Debug.WriteLine("F5");
                 //Debug.WriteLine("count =" + strategyMgr.getSpecifiedTree().Count(grantTree.getFilteredTree()));
-                Debug.WriteLine("gefilterter Baum:\n{0}", strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getFilteredTree()));
+              //  Debug.WriteLine("gefilterter Baum:\n{0}", strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getFilteredTree()));
                 //Debug.WriteLine(strategyMgr.getSpecifiedEventManager().deliverString().ToString());
             }
             if (e.Key == Key.F6)
@@ -355,7 +355,7 @@ namespace GRANTExample
             if (grantTree.getBrailleTree() != null)
             {
                 Debug.WriteLineIf(grantTree.getBrailleTree() != null, "Baum-Elemente Anzahl: " + strategyMgr.getSpecifiedTree().Count( grantTree.getBrailleTree()));
-                Console.WriteLine("Baum:\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
+               // Console.WriteLine("Baum:\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
             }
         }
     }

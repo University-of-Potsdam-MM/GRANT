@@ -19,6 +19,7 @@ using OSMElement.UiElements;
 using BrailleIOGuiElementRenderer;
 using BrailleIO.Interface;
 using GRANTManager.TreeOperations;
+using BrailleIO.Renderer;
 
 namespace StrategyBrailleIO
 {
@@ -605,6 +606,7 @@ namespace StrategyBrailleIO
             createView(osmElementFilteredNode);
             BrailleIOViewRange tmpView = (brailleIOMediator.GetView(osmElementFilteredNode.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElementFilteredNode.brailleRepresentation.viewName);
             if (tmpView == null && !osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())) { return new bool[0, 0]; }
+            #region screenshot
             if(osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())){
                 //Screenshot muss extra erstellt werden
                 // Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
@@ -623,6 +625,7 @@ namespace StrategyBrailleIO
                 createViewImage(brailleIOMediator.GetView(osmElementFilteredNode.brailleRepresentation.screenName) as BrailleIOScreen, osmElementFilteredNode, img);
                 tmpView = (brailleIOMediator.GetView(osmElementFilteredNode.brailleRepresentation.screenName) as BrailleIOScreen).GetViewRange(osmElementFilteredNode.brailleRepresentation.viewName);
             }
+            #endregion
             if (tmpView.IsText())
             {
                 tmpView.SetText(tmpView.GetText() == null ? "" : tmpView.GetText());
@@ -639,23 +642,25 @@ namespace StrategyBrailleIO
                 }
                 IBrailleIOContentRenderer renderer = getRenderer(uiElementType);
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetOtherContent());
-                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
                 //setVisibleScreen(osmElementFilteredNode.brailleRepresentation.screenName);
             }
             else if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetText());
-                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                BrailleIOViewMatixRenderer vmr = new BrailleIO.Renderer.BrailleIOViewMatixRenderer();
+                matrix = vmr.RenderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetMatrix());
-                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetImage());
-                matrix = BrailleIO.Renderer.BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
             else { throw new Exception("Kein passenden Renderer gefunden!"); }
             
