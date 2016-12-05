@@ -330,6 +330,7 @@ namespace GRANTApplication
 
         private void LoadTemplate_Click(object sender, RoutedEventArgs e)
         {
+            
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             // dlg.FileName = "filteredTree_"; // Default file name
             dlg.DefaultExt = ".xml"; // Default file extension
@@ -357,6 +358,10 @@ namespace GRANTApplication
 
                 SaveButton.IsEnabled = true;
                 brailleOutput.Items.Add(brailleRoot);
+                dataGrid2.Items.Refresh();
+                dataGrid5.ItemsSource = "";
+                dataGrid5.Items.Refresh();
+
             }// Load Project wirft Fehler
         }
 
@@ -676,7 +681,7 @@ namespace GRANTApplication
 
         }
 
-        void screenViewIteration(String IdGenerated) {
+        void screenViewCurrentIteration(String IdGenerated) {
 
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
             String screenName = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName;
@@ -728,44 +733,124 @@ namespace GRANTApplication
                 }
             }
 
-            /*  for (int h = 0; h < dataGrid3.Items.Count; h++)
-              // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+        /*  for (int h = 0; h < dataGrid3.Items.Count; h++)
+          // for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+          {
+              DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+              if (row == null)
               {
-                  DataGridRow row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
-                  if (row == null)
+                  dataGrid3.UpdateLayout();
+                  dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
+                  row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
+              }
+              for (int w = 0; w < dataGrid3.Columns.Count; w++)
+              {
+                  if (dataGrid3.Columns[w].GetCellContent(row) == null)
                   {
                       dataGrid3.UpdateLayout();
-                      dataGrid3.ScrollIntoView(dataGrid3.Items[h]);
-                      row = (DataGridRow)dataGrid3.ItemContainerGenerator.ContainerFromIndex(h);
                   }
-                  for (int w = 0; w < dataGrid3.Columns.Count; w++)
+                  DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
+                  if (guiElementRep[h, w].ToString() == "True")
                   {
-                      if (dataGrid3.Columns[w].GetCellContent(row) == null)
-                      {
-                          dataGrid3.UpdateLayout();
-                      }
-                      DataGridCell firstColumnInFirstRow = dataGrid3.Columns[w].GetCellContent(row).Parent as DataGridCell;
-                      if (guiElementRep[h, w].ToString() == "True")
-                      {
-                          firstColumnInFirstRow.Background = Brushes.Black;
-                      }
-                      else
-                      {
-                          firstColumnInFirstRow.Background = Brushes.White;
-                      }
+                      firstColumnInFirstRow.Background = Brushes.Black;
                   }
+                  else
+                  {
+                      firstColumnInFirstRow.Background = Brushes.White;
+                  }
+              }
 
-              }*/
-        
+          }*/
+
 
         //  strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
         //  int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
         //  int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
         //  createBrailleDisplay(dWidth, dHeight, dataGrid2); // später das zu matrix machen
 
-    
+        void screenViewIteration(String IdGenerated)
+        {
+            dataGrid2.Items.Refresh();
+            //  dataGrid2.Items.Remove(); //Required a remove item passed to the method, so too specific
+            // dataGrid2.Itemssource = "";
 
-    void updateBrailleTable(String IdGenerated)
+            //dataGrid2..Clear();
+
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+            String screenName = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName;
+
+            if (screenName != null)
+            {
+
+                Object screenTree = treeOperations.searchNodes.getSubtreeOfScreen(screenName);
+                //guiFunctions.createScreenTreeForBraille(screenTree, ref screenRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+
+                foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(screenTree))
+                {
+                    OSMElement.OSMElement osmElement2 = strategyMgr.getSpecifiedTree().GetData(node);
+                    bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement2);
+
+                    Rect rect = osmElement2.properties.boundingRectangleFiltered;
+                    int x = (int)rect.X;
+                    int y = (int)rect.Y;
+
+
+                    if (guiElementRep != new bool[0, 0])
+                    // datagrid2
+                    {
+                        for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+                        {
+                            //
+                            {
+                                DataGridRow row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h + y);
+                                if (row == null)
+                                {
+                                    dataGrid2.UpdateLayout();
+                                    dataGrid2.ScrollIntoView(dataGrid2.Items[h + y]);
+                                    row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h + y);
+                                }
+                                for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)); w++)
+                                {
+                                    if (dataGrid2.Columns[w + x].GetCellContent(row) == null)
+                                    {
+                                        dataGrid2.UpdateLayout();
+                                    }
+                                    DataGridCell firstColumnInFirstRow = dataGrid2.Columns[w + x].GetCellContent(row).Parent as DataGridCell;
+
+
+                                    if (osmElement2.properties.IdGenerated.Equals(osmElement.properties.IdGenerated))
+                                    {
+
+                                        if (guiElementRep[h, w].ToString() == "True")
+                                        {
+                                            firstColumnInFirstRow.Background = Brushes.Red;
+                                        }
+                                        else
+                                        {
+                                            firstColumnInFirstRow.Background = Brushes.Yellow;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (guiElementRep[h, w].ToString() == "True")
+                                        {
+                                            firstColumnInFirstRow.Background = Brushes.Black;
+                                        }
+                                        else
+                                        {
+                                            firstColumnInFirstRow.Background = Brushes.White;
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        void updateBrailleTable(String IdGenerated)
         {
             System.Console.WriteLine(" HIEEEEEEEEER in der Methode: ");
 
