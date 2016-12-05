@@ -777,9 +777,9 @@ namespace GRANTApplication
             //dataGrid2..Clear();
 
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
-            String screenName = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName;
+            String screenName = osmElement.brailleRepresentation.screenName == null ? "" : osmElement.brailleRepresentation.screenName;
 
-            if (screenName != null)
+            if (screenName != null & screenName != "")
             {
 
                 Object screenTree = treeOperations.searchNodes.getSubtreeOfScreen(screenName);
