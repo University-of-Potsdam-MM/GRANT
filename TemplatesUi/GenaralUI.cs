@@ -59,6 +59,7 @@ namespace TemplatesUi
         private void createScreenshotViews(string pathToTemplate)
         {
             XElement xmlDoc = XElement.Load(@pathToTemplate);
+            if(xmlDoc.Element(VIEWCATEGORY_LAYOUTVIEW) == null) { return; }
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Element(VIEWCATEGORY_LAYOUTVIEW).Elements("Screenshot")
                 select el;
@@ -269,6 +270,7 @@ namespace TemplatesUi
         {
             String controlType = strategyMgr.getSpecifiedTree().GetData(subtree).properties.controlTypeFiltered;
             XElement xmlDoc = XElement.Load(@pathToXml);
+            if (xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW) == null) { return; }
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
                 where (string)el.Attribute("name") == controlType && 
@@ -488,6 +490,7 @@ namespace TemplatesUi
         private void createUiElementsWitheNoDependencySymbolView(String pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
+            if (xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW) == null) { return; }
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
                 where (string)el.Element("TextFromUIElement") != null && (string)el.Element("TextFromUIElement") == "" &&
@@ -521,6 +524,7 @@ namespace TemplatesUi
         public void createUiElementsAllScreens(String pathToXml, String screenCategory)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
+            if (xmlDoc.Element(screenCategory) == null) { return; }
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Element(screenCategory).Elements("UiElement")
                 where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != "NavigationBarScreens"
