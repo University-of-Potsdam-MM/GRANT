@@ -124,7 +124,7 @@
             <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="235" Margin="10,0,0,15" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="322">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="235"/>
-                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvOutput" Width="235"  Height="291" >
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvOutput" Width="235"  Height="291">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                                 <StackPanel Orientation="Horizontal">
