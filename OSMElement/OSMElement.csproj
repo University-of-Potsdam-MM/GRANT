@@ -66,6 +66,7 @@
     <Compile Include="FilterstrategyOfNode.cs" />
     <Compile Include="GrantProjectObject.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="RendererUiElementConnector.cs" />
     <Compile Include="UiElements\DropDownMenuItem.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="GeneralProperties.cs" />

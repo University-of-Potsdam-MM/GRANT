@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GRANTManager.TreeOperations;
+using System.Windows;
 
 namespace GRANTManager.Interfaces
 {
@@ -13,7 +14,12 @@ namespace GRANTManager.Interfaces
         void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory);
         void generatedUiFromTemplate(string pathToXml);
         void updateNavigationbarScreens(string pathToXml, String viewCategory);
-
+        /// <summary>
+        /// Stellt alle Elemente eines (Teil-)Baumes da.
+        /// </summary>
+        /// <param name="subtree">gibt den Darzustellenden (Teil-)Baum an</param>
+        /// <param name="idToIgnore">gibt eine Liste von Ids an, welche Zweige bei der Darstellung ignoriert werden sollen</param>
+        void visualizedAllElementsAsSymbols(Object subtree, ref Rect lastRect, String[] idToIgnore = null);
         void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
     public struct TemplateUiObject
@@ -22,6 +28,9 @@ namespace GRANTManager.Interfaces
         public String groupImplementedClassTypeFullName { get; set; } //nötig?
         public String groupImplementedClassTypeDllName { get; set; } //nötig?
         public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
+        /// <summary>
+        /// ViewName
+        /// </summary>
         public String name { get; set; }
         public Boolean allElementsOfType { get; set;}
         public OSMElement.UiElements.Orientation orientation { get; set; }

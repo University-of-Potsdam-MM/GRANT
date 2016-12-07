@@ -21,6 +21,11 @@ namespace GRANTManager
         private List<OsmConnector<String, String>> osmRelationship = new List<OsmConnector<string, string>>();
 
         /// <summary>
+        /// Enthält die Standardzugehörigkeiten der Renderer zu den ControllTypes
+        /// </summary>
+        public List<RendererUiElementConnector> rendererUiElementConnection { get; set; }
+
+        /// <summary>
         /// Gibt die Filterstrategien an;
         /// dabei wird diese nur für den Root-Knoten und für alle Knoten bei dennen die Strategy von Standardfilter abweicht angegeben
         /// </summary>
