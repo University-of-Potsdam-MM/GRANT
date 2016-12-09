@@ -260,7 +260,7 @@ namespace GRANTManager.TreeOperations
 
 
         /// <summary>
-        /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text
+        /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text, sollte es für den Text eine Abkürzung geben, so wird diese genutzt
         /// </summary>
         /// <param name="filteredSubtree">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns>den anzuzeigenden Text</returns>
@@ -279,6 +279,19 @@ namespace GRANTManager.TreeOperations
             {
                 object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.fromGuiElement, associatedNode.properties);
                 text = (objectText != null ? objectText.ToString() : "");
+            }
+            return useAcronymForText( text);
+        }
+
+        public String useAcronymForText(String text)
+        {
+            if (grantTrees.TextviewObject == null || grantTrees.TextviewObject.acronymsOfPropertyContent == null || text == null || text.Equals("")){ return ""; }
+            foreach(AcronymsOfPropertyContent aopc in grantTrees.TextviewObject.acronymsOfPropertyContent)
+            {
+                if (aopc.name.Equals(text))
+                {
+                    return aopc.acronym;
+                }
             }
             return text;
         }

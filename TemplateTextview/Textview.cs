@@ -18,7 +18,6 @@ namespace TemplateTextview
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
-        TextviewObject tvo;
         private int shiftingPerDepth = 2;
 
         public Textview(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation)
@@ -26,9 +25,6 @@ namespace TemplateTextview
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
             this.treeOperation = treeOperation;
-            #region hier nur Testweise einlesen der XML; sollte global passieren(?)
-            tvo = loadTemplateAllElementsTextview();
-            #endregion
         }
 
 
@@ -46,7 +42,7 @@ namespace TemplateTextview
             OSMElement.OSMElement osmFiltered = strategyMgr.getSpecifiedTree().GetData(filteredNode);
             int depth = strategyMgr.getSpecifiedTree().Depth(filteredNode) * shiftingPerDepth;
             startYPosition += 5;
-
+            TextviewObject tvo = grantTrees.TextviewObject;
 
             int x = depth;
             foreach(TextviewElement tve in tvo.textviewElements)
@@ -61,8 +57,15 @@ namespace TemplateTextview
                 braille.screenName = tvo.screenName;
                 braille.fromGuiElement = tve.property;
                 braille.viewName = osmFiltered.properties.IdGenerated + "_" + tve.order;
-                propBraille.boundingRectangleFiltered = new Rect(x, startYPosition, tve.minWidth, 5);//TODO: richtig machen
-                x += tve.minWidth + 2;
+
+                #region ermitteln der Länge für die View
+                object objectText = OSMElement.Helper.getGeneralPropertieElement(braille.fromGuiElement, osmFiltered.properties);
+                String text = (objectText != null ? objectText.ToString() : null);
+                text = treeOperation.updateNodes.useAcronymForText(text);
+                int width = (text.Length *3) < tve.minWidth ? tve.minWidth : (text.Length *3);
+                #endregion
+                propBraille.boundingRectangleFiltered = new Rect(x, startYPosition, width, 5);//TODO: richtig machen
+                x += width + 2;
 
                 osmBraille.properties = propBraille;
                 osmBraille.brailleRepresentation = braille;
@@ -80,47 +83,5 @@ namespace TemplateTextview
         }
         
 
-        //Das Auslesen sollte später woanders passieren
-        private TextviewObject loadTemplateAllElementsTextview(String path = null)
-        {
-            if (path == null)
-            {
-                path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "TemplateAllElementsTextview.xml");
-            }
-            if (!File.Exists(path)) { Debug.WriteLine("Die XML exisitert nicht"); return null; }
-            XElement xmlDoc = XElement.Load(@path);
-            //TODO: hier gegen XSD validieren
-            IEnumerable<XElement> uiElementOrders = xmlDoc.Elements("Orders").Elements("Element");
-
-            if (uiElementOrders == null || !uiElementOrders.Any()) { return null; }
-            TextviewObject tvo = new TextviewObject();
-            tvo.textviewElements = new List<TextviewElement>();
-            foreach (XElement xmlElement in uiElementOrders)
-            {
-                TextviewElement tve = new TextviewElement();
-                tve.order = Int32.Parse( xmlElement.Element("Order").Value);
-                tve.property = xmlElement.Element("Property").Value;
-                tve.minWidth = Int32.Parse( xmlElement.Element("MinWidth").Value);
-                tvo.textviewElements.Add(tve);
-            }
-            tvo.viewCategory = xmlDoc.Element("ViewCategory").Value;
-            tvo.screenName = xmlDoc.Element("Screenname").Value;
-            IEnumerable<XElement> uiElementAcronyms = xmlDoc.Elements("Acronyms").Elements("Acronym");
-
-            if (!(uiElementAcronyms == null || !uiElementAcronyms.Any()))
-            {
-                tvo.acronymsOfPropertyContent = new List<AcronymsOfPropertyContent>();
-                foreach (XElement xmlElement in uiElementAcronyms)
-                {
-                    Debug.WriteLine(xmlElement);
-                    AcronymsOfPropertyContent aopc = new AcronymsOfPropertyContent();
-                    aopc.name = xmlElement.Element("Name").Value;
-                    aopc.acronym = xmlElement.Element("Short").Value;
-                    tvo.acronymsOfPropertyContent.Add(aopc);
-                }
-            }
-
-            return tvo;
-        }
     }
 }

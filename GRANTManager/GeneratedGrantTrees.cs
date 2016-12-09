@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using GRANTManager.Interfaces;
 using OSMElement;
+using System.IO;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace GRANTManager
 {
@@ -25,11 +28,16 @@ namespace GRANTManager
         /// </summary>
         public List<RendererUiElementConnector> rendererUiElementConnection { get; set; }
 
+
+
         /// <summary>
         /// Gibt die Filterstrategien an;
         /// dabei wird diese nur für den Root-Knoten und für alle Knoten bei dennen die Strategy von Standardfilter abweicht angegeben
         /// </summary>
         private List<FilterstrategyOfNode<String, String, String>> filterstrategiesOfNodes = new List<FilterstrategyOfNode<string, string, string>>();
+
+        private TextviewObject textviewobject;
+        public TextviewObject TextviewObject { get { if (textviewobject == null) {loadTemplateAllElementsTextview(); }   return textviewobject;  } set { textviewobject = value; } }
 
         /// <summary>
         /// Setzt den aktuell gefilterten Baum
@@ -103,5 +111,53 @@ namespace GRANTManager
         {
             this.filterstrategiesOfNodes = filterstrategiesOfNodes;
         }
+
+        #region auslesen aus XML
+        /// <summary>
+        /// Liest aus einer XML-Datei informationen zum darstellen der Textview sowie mögliche Abkürzungen aus
+        /// </summary>
+        /// <param name="path">gibt den Path zur XML-Datei an</param>
+        private void loadTemplateAllElementsTextview(String path = null)
+        {
+            if (path == null)
+            {
+                path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "TemplateAllElementsTextview.xml");
+            }
+            if (!File.Exists(path)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
+            XElement xmlDoc = XElement.Load(@path);
+            //TODO: hier gegen XSD validieren
+            IEnumerable<XElement> uiElementOrders = xmlDoc.Elements("Orders").Elements("Element");
+
+            if (uiElementOrders == null || !uiElementOrders.Any()) { return; }
+            TextviewObject tvo = new TextviewObject();
+            tvo.textviewElements = new List<TextviewElement>();
+            foreach (XElement xmlElement in uiElementOrders)
+            {
+                TextviewElement tve = new TextviewElement();
+                tve.order = Int32.Parse(xmlElement.Element("Order").Value);
+                tve.property = xmlElement.Element("Property").Value;
+                tve.minWidth = Int32.Parse(xmlElement.Element("MinWidth").Value);
+                tvo.textviewElements.Add(tve);
+            }
+            tvo.viewCategory = xmlDoc.Element("ViewCategory").Value;
+            tvo.screenName = xmlDoc.Element("Screenname").Value;
+            IEnumerable<XElement> uiElementAcronyms = xmlDoc.Elements("Acronyms").Elements("Acronym");
+
+            if (!(uiElementAcronyms == null || !uiElementAcronyms.Any()))
+            {
+                tvo.acronymsOfPropertyContent = new List<AcronymsOfPropertyContent>();
+                foreach (XElement xmlElement in uiElementAcronyms)
+                {
+                    Debug.WriteLine(xmlElement);
+                    AcronymsOfPropertyContent aopc = new AcronymsOfPropertyContent();
+                    aopc.name = xmlElement.Element("Name").Value;
+                    aopc.acronym = xmlElement.Element("Short").Value;
+                    tvo.acronymsOfPropertyContent.Add(aopc);
+                }
+            }
+            this.TextviewObject = tvo;
+        }
+
+        #endregion
     }
 }

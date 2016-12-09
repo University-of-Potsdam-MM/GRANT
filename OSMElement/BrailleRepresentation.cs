@@ -133,6 +133,11 @@ namespace OSMElement
         /// </summary>
         public String templateNamspace { get; set; }
 
+        /// <summary>
+        /// Enthält den eine Abkürzung des Texts eines UI-Elements
+        /// </summary>
+        public String textAcronym { get; set; }
+
         public override string ToString()
         {
             return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}, screenCategory = {3}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString(), screenCategory);
