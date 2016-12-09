@@ -46,7 +46,7 @@ namespace TemplatesUi
             generatedLayoutView(@pathToXml);
             Rect rect = new Rect(0, 0, 0, 0);
             
-         /*   if (grantTrees.rendererUiElementConnection == null)
+         /*  if (grantTrees.rendererUiElementConnection == null)
             {
                 TemplateAllElementsSymbol t = new TemplateAllElementsSymbol(strategyMgr, grantTrees);
                 t.loadTemplateConnectionsForAllElements();

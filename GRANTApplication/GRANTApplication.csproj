@@ -182,6 +182,10 @@
       <Project>{f1c8aabe-05d8-45cd-8a52-b3b894e58a5c}</Project>
       <Name>TemplatesUi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TemplateTextview\TemplateTextview.csproj">
+      <Project>{9aee5067-3959-4eec-8215-bb562d0025e2}</Project>
+      <Name>TemplateTextview</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
