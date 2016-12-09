@@ -6,7 +6,7 @@
     <Element>
       <Order>1</Order>
       <Property>controlTypeFiltered</Property>
-      <MinWidth>20</MinWidth>
+      <MinWidth>3</MinWidth>
     </Element>
     <Element>
       <Order>2</Order>
