@@ -11,7 +11,9 @@ namespace OSMElement
         public List<TextviewElement> textviewElements { get; set; }
         public String viewCategory { get; set; }
         public String screenName { get; set; }
+        public String itemEnumerate { get; set; }
         public List<AcronymsOfPropertyContent> acronymsOfPropertyContent { get; set; }
+        public List<SpecialGroup> specialGroups { get; set; }
 
         public override string ToString()
         {
@@ -24,10 +26,11 @@ namespace OSMElement
         public int order { get; set; }
         public string property { get; set; }
         public int minWidth { get; set; }
+        public String separator { get; set; }
 
         public override string ToString()
         {
-            return String.Format("order={0}, property={1}, minWidth={2}", order, property, minWidth);
+            return String.Format("order={0}, property={1}, minWidth={2}, separator={3}", order, property, minWidth, separator);
         }
     }
 
@@ -39,6 +42,17 @@ namespace OSMElement
         public override string ToString()
         {
             return String.Format("name={0}, acronym={1}", name, acronym);
+        }
+    }
+
+    public class SpecialGroup
+    {
+        public String controltype { get; set; }
+        public String separator { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("controltype={0}, separator={1}", controltype, separator);
         }
     }
 }

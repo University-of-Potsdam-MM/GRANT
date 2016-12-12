@@ -137,10 +137,23 @@ namespace GRANTManager
                 tve.order = Int32.Parse(xmlElement.Element("Order").Value);
                 tve.property = xmlElement.Element("Property").Value;
                 tve.minWidth = Int32.Parse(xmlElement.Element("MinWidth").Value);
+                XElement xElementSeparator = xmlElement.Element("Separator");
+                if (xElementSeparator != null)
+                {
+                    tve.separator = xElementSeparator.Value;
+                    if (tve.separator.Equals("")) { tve.separator = " "; }
+                }
                 tvo.textviewElements.Add(tve);
             }
             tvo.viewCategory = xmlDoc.Element("ViewCategory").Value;
             tvo.screenName = xmlDoc.Element("Screenname").Value;
+            XElement itemenumarate = xmlDoc.Element("ItemEnumerate");
+            if(itemenumarate != null)
+            {
+                tvo.itemEnumerate = itemenumarate.Value;
+                if (tvo.itemEnumerate.Equals("")) { tvo.itemEnumerate = " "; }
+            }
+            
             IEnumerable<XElement> uiElementAcronyms = xmlDoc.Elements("Acronyms").Elements("Acronym");
 
             if (!(uiElementAcronyms == null || !uiElementAcronyms.Any()))
@@ -155,6 +168,30 @@ namespace GRANTManager
                     tvo.acronymsOfPropertyContent.Add(aopc);
                 }
             }
+
+
+            IEnumerable<XElement> uiElementGroup = xmlDoc.Elements("SpecialGroups").Elements("Group");
+
+            if (!(uiElementGroup == null || !uiElementGroup.Any()))
+            {
+                tvo.specialGroups = new List<SpecialGroup>();
+                foreach (XElement xmlElement in uiElementGroup)
+                {
+                    Debug.WriteLine(xmlElement);
+                    SpecialGroup group = new SpecialGroup();
+                    group.controltype = xmlElement.Element("Controltype").Value;
+                    XElement xElementSeparator = xmlElement.Element("Separator");
+                    if( xElementSeparator != null)
+                    {
+                        group.separator = xElementSeparator.Value;
+                        if (group.separator.Equals("")) { group.separator = " "; }
+                    }
+                    tvo.specialGroups.Add(group);
+                }
+            }
+
+
+
             this.TextviewObject = tvo;
         }
 
