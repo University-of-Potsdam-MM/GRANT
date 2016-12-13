@@ -126,12 +126,13 @@ namespace GRANTManager
             if (!File.Exists(path)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
             XElement xmlDoc = XElement.Load(@path);
             //TODO: hier gegen XSD validieren
-            IEnumerable<XElement> uiElementOrders = xmlDoc.Elements("Orders").Elements("Element");
-
-            if (uiElementOrders == null || !uiElementOrders.Any()) { return; }
             TextviewObject tvo = new TextviewObject();
-            tvo.textviewElements = new List<TextviewElement>();
-            foreach (XElement xmlElement in uiElementOrders)
+            #region default Order
+            IEnumerable<XElement> uiElementDefaultOrders = xmlDoc.Elements("Orders").Elements("DefaultOrder").Elements("Element");
+            if (uiElementDefaultOrders == null || !uiElementDefaultOrders.Any()) { return; }
+            tvo.orders = new Orders();
+            tvo.orders.defaultOrder = new List<TextviewElement>();
+            foreach (XElement xmlElement in uiElementDefaultOrders)
             {
                 TextviewElement tve = new TextviewElement();
                 tve.order = Int32.Parse(xmlElement.Element("Order").Value);
@@ -143,8 +144,45 @@ namespace GRANTManager
                     tve.separator = xElementSeparator.Value;
                     if (tve.separator.Equals("")) { tve.separator = " "; }
                 }
-                tvo.textviewElements.Add(tve);
+                tvo.orders.defaultOrder.Add(tve);
             }
+            #endregion
+            #region special Order
+            IEnumerable<XElement> uiElementOrders = xmlDoc.Elements("Orders").Elements("SpecialOrders");
+            if (uiElementOrders == null || !uiElementOrders.Any()) { return; }
+            tvo.orders.specialOrders= new List<SpecialOrder>();
+            
+            foreach (XElement xmlElement in uiElementOrders)
+            {
+                IEnumerable<XElement> oneSpecialOrder = xmlElement.Elements("SpecialOrder");
+                
+                //Debug.WriteLine(o);
+                foreach (XElement elementOrder in oneSpecialOrder)
+                {
+                    SpecialOrder so = new SpecialOrder();
+                    List<TextviewElement> oneSpecialOrderList = new List<TextviewElement>();
+                    so.controltypeName = elementOrder.Attribute("controlType").Value;
+                    foreach (XElement element in elementOrder.Elements("Element"))
+                    {
+                        TextviewElement tve = new TextviewElement();
+                        tve.order = Int32.Parse(element.Element("Order").Value);
+                        tve.property = element.Element("Property").Value;
+                        tve.minWidth = Int32.Parse(element.Element("MinWidth").Value);
+                        XElement xElementSeparator = element.Element("Separator");
+                        if (xElementSeparator != null)
+                        {
+                            tve.separator = xElementSeparator.Value;
+                            if (tve.separator.Equals("")) { tve.separator = " "; }
+                        }
+                        oneSpecialOrderList.Add(tve);
+                    }
+                    so.order = oneSpecialOrderList;
+                    tvo.orders.specialOrders.Add(so);
+                }
+
+                
+            }
+            #endregion
             tvo.viewCategory = xmlDoc.Element("ViewCategory").Value;
             tvo.screenName = xmlDoc.Element("Screenname").Value;
             XElement itemenumarate = xmlDoc.Element("ItemEnumerate");
@@ -170,7 +208,7 @@ namespace GRANTManager
             }
 
 
-            IEnumerable<XElement> uiElementGroup = xmlDoc.Elements("SpecialGroups").Elements("Group");
+         /*   IEnumerable<XElement> uiElementGroup = xmlDoc.Elements("SpecialGroups").Elements("Group");
 
             if (!(uiElementGroup == null || !uiElementGroup.Any()))
             {
@@ -188,7 +226,7 @@ namespace GRANTManager
                     }
                     tvo.specialGroups.Add(group);
                 }
-            }
+            }*/
 
 
 

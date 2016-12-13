@@ -8,17 +8,36 @@ namespace OSMElement
 {
     public class TextviewObject
     {
-        public List<TextviewElement> textviewElements { get; set; }
+       // public List<TextviewElement> textviewElements { get; set; }
         public String viewCategory { get; set; }
         public String screenName { get; set; }
         public String itemEnumerate { get; set; }
+        public Orders orders { get; set; }
         public List<AcronymsOfPropertyContent> acronymsOfPropertyContent { get; set; }
-        public List<SpecialGroup> specialGroups { get; set; }
+       // public List<SpecialGroup> specialGroups { get; set; }
 
         public override string ToString()
         {
-            return String.Format("viewCategory={0}, screenName={1}, textviewElements: {2}", viewCategory, screenName, String.Join("; ", textviewElements.ToArray().ToString()));
+            return String.Format("viewCategory={0}, screenName={1}", viewCategory, screenName);
         }
+    }
+
+    public class Orders
+    {
+        public List<TextviewElement> defaultOrder { get; set; }
+        public List<SpecialOrder> specialOrders { get; set; }
+    }
+
+    public class SpecialOrder
+    {
+        public String controltypeName { get; set; }
+        public List<TextviewElement> order { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("controltypeName={0}", controltypeName);
+        }
+        
     }
 
     public class TextviewElement
@@ -45,7 +64,7 @@ namespace OSMElement
         }
     }
 
-    public class SpecialGroup
+/*    public class SpecialGroup
     {
         public String controltype { get; set; }
         public String separator { get; set; }
@@ -54,5 +73,5 @@ namespace OSMElement
         {
             return String.Format("controltype={0}, separator={1}", controltype, separator);
         }
-    }
+    }*/
 }

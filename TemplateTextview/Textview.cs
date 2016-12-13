@@ -31,14 +31,14 @@ namespace TemplateTextview
         public void createTextviewOfSubtree(Object subtree, int startYPosition = 0)
         {
 
-            /* foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(subtree))
+             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(subtree))
              {
                  createBrailleGroupFromFilteredNode(node, ref startYPosition);
-             }*/
-            createTextviewOfSubtreeIteration(subtree, ref startYPosition);
+             }
+           // createTextviewOfSubtreeIteration(subtree, ref startYPosition);
         }
 
-        private void createTextviewOfSubtreeIteration(Object subtree, ref int startYPosition)
+   /*     private void createTextviewOfSubtreeIteration(Object subtree, ref int startYPosition)
         {
             foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(subtree))
             {
@@ -55,9 +55,9 @@ namespace TemplateTextview
                     createTextviewOfSubtreeIteration(node, ref startYPosition);
                 }
             }
-        }
+        }*/
 
-        private void addSpecialGroup(Object subtree, ref int startYPosition, SpecialGroup specialGroup)
+       /* private void addSpecialGroup(Object subtree, ref int startYPosition, SpecialGroup specialGroup)
         {
             //Erst einen eigenen Teilbaum mit allen Kindern erzeugen und diesen anschließend dem Braille-Baum hinzufügen
             OSMElement.OSMElement osmGroup = new OSMElement.OSMElement();
@@ -85,11 +85,7 @@ namespace TemplateTextview
             }
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
             Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);
-            /*Element selbst + Kinder hinzufügen
-             * 1. Element selbst mit Eigenschaft --> eigenschaften festlegen
-             * 2. Alle Kinder mit Eigenschaft --> EIgenschaften festlegen
-             * 
-             */
+
             #region Zeichen für Beginn der aufzählung
             if (grantTrees.TextviewObject.itemEnumerate != null && !grantTrees.TextviewObject.itemEnumerate.Equals(""))
             {
@@ -141,8 +137,8 @@ namespace TemplateTextview
             // Debug.WriteLine("=>\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent)));
             addSubtreeInBrailleTree(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent));
         }
-
-        private SpecialGroup existSpecialGroup(String controltype)
+*/
+     /*   private SpecialGroup existSpecialGroup(String controltype)
         {
             foreach(SpecialGroup group in grantTrees.TextviewObject.specialGroups)
             {
@@ -154,7 +150,7 @@ namespace TemplateTextview
             return null;
         }
 
-
+    */
         private OSMElement.OSMElement addSeparatorElementInBrailleTree(String separator, ref int startX, int startY)
         {
             TextviewObject tvo = grantTrees.TextviewObject;
@@ -239,7 +235,14 @@ namespace TemplateTextview
             }
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
             Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);
-            foreach (TextviewElement tve in grantTrees.TextviewObject.textviewElements)
+            List<TextviewElement> order;
+            SpecialOrder so = treeOperation.templateOperations.textViewspecialOrderContainsControltype(osmFiltered.properties.controlTypeFiltered);
+            if (so != null)
+            {
+                order = so.order;
+            }
+            else { order = grantTrees.TextviewObject.orders.defaultOrder; }
+            foreach (TextviewElement tve in order)
             {
                 #region Zeichen für Beginn der aufzählung
                 if (grantTrees.TextviewObject.itemEnumerate != null && !grantTrees.TextviewObject.itemEnumerate.Equals("") && tve.order == 0)

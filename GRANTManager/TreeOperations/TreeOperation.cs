@@ -16,6 +16,7 @@ namespace GRANTManager.TreeOperations
         public GeneratedIds generatedIds { get; private set; }
         public SearchNodes searchNodes { get; private set; }
         public UpdateNodes updateNodes { get; private set; }
+        public TemplateOperations templateOperations { get; private set; }
 
         public TreeOperation(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees)
         {
@@ -24,6 +25,7 @@ namespace GRANTManager.TreeOperations
             generatedIds = new GeneratedIds(strategyMgr);
             searchNodes = new SearchNodes(strategyMgr, grantTrees, this);
             updateNodes = new UpdateNodes(strategyMgr, grantTrees, this);
+            templateOperations = new TemplateOperations(strategyMgr, grantTrees);
         }
     }
 }

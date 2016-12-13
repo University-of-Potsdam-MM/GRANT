@@ -4,6 +4,58 @@
   <Screenname>tv</Screenname>
   <ItemEnumerate>?</ItemEnumerate>
   <Orders>
+	  <DefaultOrder>
+		<Element>
+		  <Order>0</Order>
+		  <Property>controlTypeFiltered</Property>
+		  <MinWidth>3</MinWidth>
+		  <Separator>=</Separator>
+		</Element>
+		<Element>
+		  <Order>1</Order>
+		  <Property>nameFiltered</Property>
+		  <MinWidth>40</MinWidth>
+		  <Separator>=</Separator>
+		</Element>
+	  </DefaultOrder>
+	  <SpecialOrders>
+		  <SpecialOrder controlType="Button">
+			<Element>
+			  <Order>0</Order>
+			  <Property>controlTypeFiltered</Property>
+			  <MinWidth>3</MinWidth>
+			  <Separator>=</Separator>
+			</Element>
+			<Element>
+			  <Order>1</Order>
+			  <Property>hasKeyboardFocusFiltered</Property>
+			  <MinWidth>10</MinWidth>
+			  <Separator>=</Separator>
+			</Element>
+			<Element>
+			  <Order>2</Order>
+			  <Property>nameFiltered</Property>
+			  <MinWidth>40</MinWidth>
+			  <Separator>=</Separator>
+			</Element>
+		  </SpecialOrder>
+		  <SpecialOrder controlType="Text">
+			<Element>
+			  <Order>0</Order>
+			  <Property>controlTypeFiltered</Property>
+			  <MinWidth>3</MinWidth>
+			  <Separator>=</Separator>
+			</Element>
+			<Element>
+			  <Order>1</Order>
+			  <Property>nameFiltered</Property>
+			  <MinWidth>50</MinWidth>
+			  <Separator>=</Separator>
+			</Element>
+		  </SpecialOrder>
+	  </SpecialOrders>
+  </Orders>
+  <Orders>
     <Element>
       <Order>0</Order>
       <Property>controlTypeFiltered</Property>
@@ -17,13 +69,7 @@
 	  <Separator>=</Separator>
     </Element>
   </Orders>
-  <SpecialGroups>
-	<Group>    
-		<Controltype>MenuBar</Controltype>
-		<Separator>=</Separator>
-	</Group>
 
-  </SpecialGroups>
   <Acronyms>
     <Acronym>
       <Name>Button</Name>
