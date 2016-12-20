@@ -27,7 +27,7 @@ namespace TemplateTextview
             this.treeOperation = treeOperation;
         }
 
-
+        //Achtung: gibt noch Probleme, wenn die View zwei mal nacheinander erstellt wird
         public void createTextviewOfSubtree(Object subtree, int startYPosition = 0)
         {
 
@@ -35,122 +35,8 @@ namespace TemplateTextview
              {
                  createBrailleGroupFromFilteredNode(node, ref startYPosition);
              }
-           // createTextviewOfSubtreeIteration(subtree, ref startYPosition);
         }
 
-   /*     private void createTextviewOfSubtreeIteration(Object subtree, ref int startYPosition)
-        {
-            foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(subtree))
-            {
-                //wenn für diesen Knoten ein spezielles Verhalten definiert wurde, dann wird dieses angewendet andernfalls werden die Kindknoten betrachtet
-                OSMElement.OSMElement osmFiltered = strategyMgr.getSpecifiedTree().GetData(node);
-                SpecialGroup specialGroup = existSpecialGroup(osmFiltered.properties.controlTypeFiltered);
-                if (specialGroup != null)
-                {
-                    addSpecialGroup(node, ref startYPosition, specialGroup);
-                }
-                else
-                {
-                    createBrailleGroupFromFilteredNode(node, ref startYPosition);
-                    createTextviewOfSubtreeIteration(node, ref startYPosition);
-                }
-            }
-        }*/
-
-       /* private void addSpecialGroup(Object subtree, ref int startYPosition, SpecialGroup specialGroup)
-        {
-            //Erst einen eigenen Teilbaum mit allen Kindern erzeugen und diesen anschließend dem Braille-Baum hinzufügen
-            OSMElement.OSMElement osmGroup = new OSMElement.OSMElement();
-            GeneralProperties propGroup = new GeneralProperties();
-            BrailleRepresentation brailleGroup = new BrailleRepresentation();
-            brailleGroup.isVisible = true;
-            propGroup.controlTypeFiltered = "GroupElement";
-
-            brailleGroup.screenCategory = grantTrees.TextviewObject.viewCategory;
-            brailleGroup.screenName = grantTrees.TextviewObject.screenName;
-            OSMElement.OSMElement osmFiltered = strategyMgr.getSpecifiedTree().GetData(subtree);
-            brailleGroup.viewName = osmFiltered.properties.IdGenerated;
-            int depth = strategyMgr.getSpecifiedTree().Depth(subtree) * shiftingPerDepth;
-            int startXPosition = depth;
-            propGroup.boundingRectangleFiltered = new Rect(startXPosition, startYPosition, 120 - startXPosition, 5);//TODO: richtig machen
-
-            osmGroup.brailleRepresentation = brailleGroup;
-            osmGroup.properties = propGroup;
-            propGroup.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmGroup);
-
-            if (treeOperation.searchNodes.getBrailleTreeOsmElementById(propGroup.IdGenerated).Equals(new OSMElement.OSMElement()))
-            {
-                propGroup.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
-                osmGroup.properties = propGroup;
-            }
-            Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
-            Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);
-
-            #region Zeichen für Beginn der aufzählung
-            if (grantTrees.TextviewObject.itemEnumerate != null && !grantTrees.TextviewObject.itemEnumerate.Equals(""))
-            {
-                strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, addSeparatorElementInBrailleTree(grantTrees.TextviewObject.itemEnumerate, ref startXPosition, startYPosition));
-                startXPosition += grantTrees.TextviewObject.itemEnumerate.Length * 3 + 2;
-            }
-            #endregion
-            #region TextviewElement -> sollte auch mit ausgelesen werden
-            TextviewElement tvGroup = new TextviewElement();
-            tvGroup.minWidth = 3;
-            tvGroup.order = 0;
-            tvGroup.property = "controlTypeFiltered";
-            object objectText = OSMElement.Helper.getGeneralPropertieElement(tvGroup.property, osmFiltered.properties);
-            String text = (objectText != null ? objectText.ToString() : null);
-            text = treeOperation.updateNodes.useAcronymForText(text);
-            int width = (text.Length * 3) < tvGroup.minWidth ? tvGroup.minWidth : (text.Length * 3);
-            #endregion
-            strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, addElementInBrailleTree(subtree, tvGroup, width, ref startXPosition, startYPosition));
-            startXPosition += width + 2;
-
-            int orderid = 1;
-            foreach(Object child in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
-            {
-                #region Separator
-                if (specialGroup.separator != null && !specialGroup.separator.Equals(""))
-                {
-                    strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, addSeparatorElementInBrailleTree(specialGroup.separator, ref startXPosition, startYPosition));
-                    startXPosition += specialGroup.separator.Length * 3 + 2;
-                }
-                #endregion
-
-                OSMElement.OSMElement osmChildFiltered = strategyMgr.getSpecifiedTree().GetData(child);
-                #region TextviewElement -> sollte auch mit ausgelesen werden
-                TextviewElement tvChild = new TextviewElement();
-                tvChild.minWidth = 3;
-                tvChild.order = orderid;
-                tvChild.property = "nameFiltered";
-                objectText = OSMElement.Helper.getGeneralPropertieElement(tvChild.property, osmChildFiltered.properties);
-                text = (objectText != null ? objectText.ToString() : null);
-                text = treeOperation.updateNodes.useAcronymForText(text);
-                width = (text.Length * 3) < tvChild.minWidth ? tvChild.minWidth : (text.Length * 3);
-                #endregion
-
-                strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, addElementInBrailleTree(child, tvChild, width, ref startXPosition, startYPosition));
-                startXPosition += width + 2;
-                orderid++;
-            }
-            startYPosition += 5;
-            // Debug.WriteLine("=>\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent)));
-            addSubtreeInBrailleTree(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent));
-        }
-*/
-     /*   private SpecialGroup existSpecialGroup(String controltype)
-        {
-            foreach(SpecialGroup group in grantTrees.TextviewObject.specialGroups)
-            {
-                if (group.controltype.Equals(controltype))
-                {
-                    return group;
-                }
-            }
-            return null;
-        }
-
-    */
         private OSMElement.OSMElement addSeparatorElementInBrailleTree(String separator, ref int startX, int startY)
         {
             TextviewObject tvo = grantTrees.TextviewObject;
@@ -227,10 +113,42 @@ namespace TemplateTextview
             osmGroup.brailleRepresentation = brailleGroup;
             osmGroup.properties = propGroup;
             propGroup.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmGroup);
-
+            String brailleParentId = null;
             if (treeOperation.searchNodes.getBrailleTreeOsmElementById(propGroup.IdGenerated).Equals( new OSMElement.OSMElement()))
             {
-                propGroup.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
+                object parent = strategyMgr.getSpecifiedTree().Parent(filteredNode);
+                
+                if(parent != null)
+                {
+                    List<string> ids = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(parent).properties.IdGenerated);
+                    if (ids != null && ids.Count > 0)
+                    {//die richtige Id raussuchen (screen & viewCategory)
+                     //parent (Groupelement)
+                        foreach (String id in ids)
+                        {
+                            List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(id, grantTrees.getBrailleTree());
+                            if (nodeList != null && nodeList.Count > 0)
+                            {
+                                foreach (object o in nodeList)
+                                {
+                                    Object parentGroupelement = strategyMgr.getSpecifiedTree().Parent(o);
+                                    OSMElement.OSMElement osmTmp = strategyMgr.getSpecifiedTree().GetData(parentGroupelement);
+                                    if (osmTmp.brailleRepresentation.screenName.Equals(grantTrees.TextviewObject.screenName) && osmTmp.brailleRepresentation.screenCategory.Equals(grantTrees.TextviewObject.viewCategory))
+                                    {
+                                        brailleParentId = strategyMgr.getSpecifiedTree().GetData(parentGroupelement).properties.IdGenerated;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (brailleParentId != null)
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                propGroup.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup, brailleParentId);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
                 osmGroup.properties = propGroup;
             }
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
@@ -268,12 +186,31 @@ namespace TemplateTextview
             }
             startYPosition += 5;
            // Debug.WriteLine("=>\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent)));
-            addSubtreeInBrailleTree(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent));
+            addSubtreeInBrailleTree(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent), brailleParentId);
         }
 
-        private void addSubtreeInBrailleTree(object brailleNode)
+        private void addSubtreeInBrailleTree(object brailleNode, String parentId)
         {
             OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(brailleNode));
+
+           if (strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osm))
+            {
+                strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), osm);
+            }
+            if (parentId != null)
+            {
+                foreach (object childOfNode in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getBrailleTree()))
+                {
+                    string o = strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated;
+
+                    if (strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated.Equals(parentId))
+                    {
+                        strategyMgr.getSpecifiedTree().AddChild(childOfNode, brailleNode);
+                        return;
+                    }
+                }
+            }
+            //else
             foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.screenCategory.Equals(osm.brailleRepresentation.screenCategory))
@@ -282,17 +219,15 @@ namespace TemplateTextview
                     {
                         if (strategyMgr.getSpecifiedTree().GetData(screenSubtree).brailleRepresentation.screenName.Equals(osm.brailleRepresentation.screenName))
                         {
-                            if (strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osm))
-                            {
-                                strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), osm);
-                            }
                             strategyMgr.getSpecifiedTree().AddChild(screenSubtree, brailleNode);
+                            // es müssen von diesem Screen-Zweig alle Kinder durchsucht werden um die view mit der parentId zu finden
+
                             return;
                         }
                     }
                 }
             }
-
         }
+        
     }
 }

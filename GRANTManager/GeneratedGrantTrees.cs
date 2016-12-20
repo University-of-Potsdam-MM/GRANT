@@ -199,7 +199,7 @@ namespace GRANTManager
                 tvo.acronymsOfPropertyContent = new List<AcronymsOfPropertyContent>();
                 foreach (XElement xmlElement in uiElementAcronyms)
                 {
-                    Debug.WriteLine(xmlElement);
+                    //Debug.WriteLine(xmlElement);
                     AcronymsOfPropertyContent aopc = new AcronymsOfPropertyContent();
                     aopc.name = xmlElement.Element("Name").Value;
                     aopc.acronym = xmlElement.Element("Short").Value;
