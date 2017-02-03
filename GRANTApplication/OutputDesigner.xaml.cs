@@ -344,6 +344,10 @@ namespace GRANTApplication
             {
                 strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(dlg.FileName);
                 Object tree1 = grantTrees.getBrailleTree();
+                #region Marlene testet
+                TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTrees, treeOperations);
+                tempTextView.createTextviewOfSubtree(grantTrees.getFilteredTree());
+                #endregion 
 
                 brailleOutput.Items.Clear();
                 brailleRoot.Items.Clear();
@@ -797,8 +801,8 @@ namespace GRANTApplication
 
                     if (guiElementRep != new bool[0, 0])
                     // datagrid2
-                    {
-                        for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+                    { Device device = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+                        for (int h = 0; h < (guiElementRep.GetLength(0)) && h+y < device.height ; h++) //höhe
                         {
                             //
                             {
@@ -809,7 +813,7 @@ namespace GRANTApplication
                                     dataGrid2.ScrollIntoView(dataGrid2.Items[h + y]);
                                     row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h + y);
                                 }
-                                for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)); w++)
+                                for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)) && w+x < device.width; w++)
                                 {
                                     if (dataGrid2.Columns[w + x].GetCellContent(row) == null)
                                     {

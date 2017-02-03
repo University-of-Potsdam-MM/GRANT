@@ -243,7 +243,7 @@ namespace GRANTManager
 
 
         /// <summary>
-        /// prueft, ob der knoten an der richtigen Stelle dargestellt wird und korrigiert es ggf.
+        /// prueft, ob der Knoten an der richtigen Stelle dargestellt wird und korrigiert es ggf.
         /// </summary>
         /// <param name="root">gibt das (erwartete) Eltern-menuItem-element an</param>
         /// <param name="parentNode">gibt den vorgängert Knoten (linker Geschwisterknoten) an</param>
@@ -261,71 +261,11 @@ namespace GRANTManager
             }
         }
 
-
-//        guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); 
-
-    /*    public void createScreenTreeForBraille(Object tree, ref GuiFunctions.MenuItem root)
-        {
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
-            {
-                MenuItem child = new MenuItem();
-                //Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node)) + node.ToString());
-                child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
-                child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
-                //String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered;
-
-                String nameFiltered;
-
-                if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
-                {
-                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory;
-
-                }
-                else if (strategyMgr.getSpecifiedTree().Depth(node) == 1)
-                {
-                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName;
-
-                }
-                else
-                {
-                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
-
-                }
-
-
-
-                if (nameFiltered.Length > 40)
-                {
-                    child.nameFiltered = nameFiltered.Substring(0, 40);
-                }
-                else
-                {
-                    child.nameFiltered = nameFiltered;
-                }
-
-                if (!strategyMgr.getSpecifiedTree().IsRoot(node))
-                {
-                    child.parentMenuItem = root;
-                    root.Items.Add(child);
-                    if (strategyMgr.getSpecifiedTree().IsLast(node))
-                    {
-                        root = getRootForNextElement(node, child);
-                    }
-                }
-                else { root = child; };
-
-                if (strategyMgr.getSpecifiedTree().HasChild(node))
-                {
-                    root = child;
-                }
-            }
-            //geht zurück zum "Root"-MenuItem
-            while (root.parentMenuItem != null)
-            {
-                root = root.parentMenuItem;
-            }
-        }*/
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tree">gibt den darzustellenden Braille-Baum an</param>
+        /// <param name="root"></param>
         public void createTreeForOutput(Object tree, ref GuiFunctions.MenuItem root)
         {
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
@@ -882,7 +822,9 @@ namespace GRANTManager
             return false;
         }
 
-
+        /// <summary>
+        /// Ermöglicht das Neuladen eines gesamten Baumes
+        /// </summary>
         public void filteredLoadedApplication()
         {
             //ist nur notwendig, wenn die Anwendung zwischendurch zu war (--> hwnd's vergleichen) oder die Anwendung verschoben wurde (--> Rect's vergleichen)
@@ -895,6 +837,9 @@ namespace GRANTManager
 
         }
 
+        /// <summary>
+        /// Löscht die Bäume, OSM-Beziehung etc. aus dem Speicher
+        /// </summary>
         public void deleteGrantTrees()
         {
             //grantTrees = new GeneratedGrantTrees();
