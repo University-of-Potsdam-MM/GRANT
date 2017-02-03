@@ -204,7 +204,7 @@ namespace GRANTApplication
             dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
             dataTable.Rows.Add(dataRow23);
 
-            String ids = String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
+            String ids = osmElement.properties.runtimeIDFiltered == null ? " " : String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
 
             dataRow24["Property"] = "runtimeIDFiltered";
             dataRow24["Content"] = ids;
