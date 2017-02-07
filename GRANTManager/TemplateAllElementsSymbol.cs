@@ -10,6 +10,11 @@ using System.Xml.Linq;
 
 namespace GRANTManager
 {
+    /*Wird momentan nicht genutzt und ist noch nicht vollständig!
+     * Es sollen alle im Baum vorkommenden Elemente angezeigt werden. Dabei werden (einige) UI-Elemente in Symbole umgewandelt.
+     */
+     
+         
     public class TemplateAllElementsSymbol
     {
         StrategyManager strategyMgr;

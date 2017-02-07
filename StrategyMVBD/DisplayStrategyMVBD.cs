@@ -26,6 +26,8 @@ namespace StrategyMVBD
             if (!isMvbdRunning()) { Debug.WriteLine("MVBD ist nicht gestartet!"); return; }
             _endPoint = new IPEndPoint(IPAddress.Loopback, 2017); //TODO: auslesen
             ThreadPool.QueueUserWorkItem(new WaitCallback(Thread_Callback));
+            //Deviceliste abrufen
+            deviceList = getPosibleDevices();
         }
 
         ~DisplayStrategyMVBD() { Dispose(); }
@@ -118,13 +120,7 @@ namespace StrategyMVBD
 
                             if (cmd == 20) //20 => Device-Info
                             {
-                                OrientationEnum orientation = OrientationEnum.Unknown;
-                                if(Enum.IsDefined(typeof(OrientationEnum), (int) ba[2]))
-                                {
-                                    orientation = (OrientationEnum)ba[2];
-                                }
-                                activeDevice = new Device(ba[1], ba[0], orientation, "MVBD_" + ba[4], this.GetType());//TODO: name ordentlich vergeben
-                                Debug.Print("--> DeviceInfo {0}x{1}", ba[0], ba[1]);
+                                setActiveDeviceGrant(ba);
                             }
                             if (cmd == 26)
                             {
@@ -136,6 +132,30 @@ namespace StrategyMVBD
                 }
                 catch (Exception e) { Console.WriteLine("Fehler bei 'DisplayStrategyMVBD \n Fehler:\n {0}", e); }
             }
+        }
+
+        private void setActiveDeviceGrant(Byte[] bas)
+        {
+            OrientationEnum orientation = OrientationEnum.Unknown;
+            if (Enum.IsDefined(typeof(OrientationEnum), (int)bas[2]))
+            {
+                orientation = (OrientationEnum)bas[2];
+            }
+            String deviceName = "";
+            int deviceId = (bas[3] << 0 | bas[4] << 8 | bas[5] << 16 | bas[6] << 24);
+            if (deviceList != null)
+            {
+                foreach (Device device in deviceList)
+                {
+                    if (device.id == deviceId)
+                    {
+                        deviceName = device.name;
+                    }
+                }
+            }
+            Device d = new Device(bas[1], bas[0], orientation, deviceName, this.GetType());
+            d.id = deviceId;
+            activeDevice = d;
         }
 
         private List<Device> interpretDeviceList(Byte[] bas)

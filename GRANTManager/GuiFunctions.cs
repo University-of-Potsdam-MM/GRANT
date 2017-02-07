@@ -663,6 +663,8 @@ namespace GRANTManager
                 strategyMgr.setSpecifiedOperationSystem(grantProjectObject.grantOperationSystemStrategyFullName + ", " + grantProjectObject.grantOperationSystemStrategyNamespace);
             }
             #endregion
+            // ggf. setzen des Ausgabegegrätes
+            strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(grantProjectObject.device);
             //lade FilteredTree + brailleTree -> ist im Unterordner welcher den Projektnamen trägt
             loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + filterstrategyFileName);
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
