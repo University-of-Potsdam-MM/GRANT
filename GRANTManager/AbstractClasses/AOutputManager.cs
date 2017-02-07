@@ -30,13 +30,19 @@ namespace GRANTManager.AbstractClasses
         public void setActiveDevice(Device device)
         {
             //prüfen, ob es nötig ist
-           // Console.WriteLine("this = {0}\n neu = {1}", this.GetType().AssemblyQualifiedName.ToString(), device.deviceClassType.AssemblyQualifiedName);
+            // Console.WriteLine("this = {0}\n neu = {1}", this.GetType().AssemblyQualifiedName.ToString(), device.deviceClassType.AssemblyQualifiedName);
             if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
             {
                 strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassTypeFullName + ", " + device.deviceClassTypeNamespace);
-            }            
-            //TODO: bei MVDB Gerät setzen
+            }
+            if (device.deviceClassTypeNamespace.Equals("StrategyMVBD"))
+            {
+                strategyMgr.getSpecifiedDisplayStrategy().setDevice(device);
+            }
         }
+
+
+        protected abstract void setDevice(Device device);
 
         /// <summary>
         /// Gibt alle möglichen Ausgabegeräte für den gewählten "Adapter"

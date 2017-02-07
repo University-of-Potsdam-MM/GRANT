@@ -17,6 +17,10 @@ namespace OSMElement
         public String name { get; set; }
         public String deviceClassTypeFullName { get; set; }
         public String deviceClassTypeNamespace { get; set; }
+        /// <summary>
+        /// Gibt bei Geräten über MVBD die ID an
+        /// </summary>
+        public int id { get; set; }
         //TODO: + Toche, Hardwaretasten
 
         public Device(int height, int width, OrientationEnum orientation, String name, Type deviceClassType)
@@ -26,6 +30,12 @@ namespace OSMElement
             this.width = width;
             this.orientation = orientation;
             this.name = name;
+            this.deviceClassTypeFullName = deviceClassType.FullName;
+            this.deviceClassTypeNamespace = deviceClassType.Namespace;
+        }
+
+        public Device(Type deviceClassType):this()
+        {
             this.deviceClassTypeFullName = deviceClassType.FullName;
             this.deviceClassTypeNamespace = deviceClassType.Namespace;
         }
