@@ -33,9 +33,12 @@ namespace GRANTManager.AbstractClasses
             // Console.WriteLine("this = {0}\n neu = {1}", this.GetType().AssemblyQualifiedName.ToString(), device.deviceClassType.AssemblyQualifiedName);
             if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
             {
-                strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassTypeFullName + ", " + device.deviceClassTypeNamespace);
+                if (device.deviceClassTypeFullName != null && device.deviceClassTypeNamespace != null)
+                {
+                    strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassTypeFullName + ", " + device.deviceClassTypeNamespace);
+                }
             }
-            if (device.deviceClassTypeNamespace.Equals("StrategyMVBD"))
+            if (device.deviceClassTypeNamespace != null && device.deviceClassTypeNamespace.Equals("StrategyMVBD"))
             {
                 strategyMgr.getSpecifiedDisplayStrategy().setDevice(device);
             }
