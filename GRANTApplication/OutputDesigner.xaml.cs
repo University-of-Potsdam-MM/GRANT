@@ -266,7 +266,7 @@ namespace GRANTApplication
 
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "filteredProject_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.nameFiltered; // Default file name
+            dlg.FileName = GuiFunctions.cleanInput( "filteredProject_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.nameFiltered); // Default file name
             dlg.DefaultExt = ".grant"; // Default file extension
             dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
@@ -324,6 +324,26 @@ namespace GRANTApplication
                 int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
                 int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 createBrailleDisplay(dWidth, dHeight, dataGrid2);
+
+                //ggf. Braille-Baum laden
+                if(grantTrees.getBrailleTree() != null)
+                {
+                    #region Braille-Baum Darstellung  (Kopie von Template laden => Funktion)
+                    brailleOutput.Items.Clear();
+                    brailleRoot.Items.Clear();
+
+                    // TreeViewItem root = new TreeViewItem();
+
+                    brailleRoot.controlTypeFiltered = "Braille-Tree";
+                    guiFunctions.createTreeForOutput(grantTrees.getBrailleTree(), ref brailleRoot); 
+
+                    SaveButton.IsEnabled = true;
+                    brailleOutput.Items.Add(brailleRoot);
+                    dataGrid2.Items.Refresh();
+                    dataGrid5.ItemsSource = "";
+                    dataGrid5.Items.Refresh();
+                    #endregion
+                }
 
             }// Load Project wirft Fehler
         }

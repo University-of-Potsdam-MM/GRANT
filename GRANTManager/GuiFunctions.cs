@@ -13,6 +13,7 @@ using GRANTManager.TreeOperations;
 
 using GRANTManager.Interfaces;
 using OSMElement;
+using System.Text.RegularExpressions;
 
 namespace GRANTManager
 {
@@ -1029,6 +1030,28 @@ namespace GRANTManager
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Entfernt unerwünschte Zeichen => jedes Zeichen, bei dem es sich nicht um ein Wortzeichen, einen Punkt, ein @-Zeichen oder einen Bindestrich handelt
+        /// Quelle: https://msdn.microsoft.com/library/844skk0h(v=vs.110).aspx
+        /// </summary>
+        /// <param name="input">gibt den String an, bei dem die unerwünschten Zeichen gelöscht werden sollen</param>
+        /// <returns>den String ohne die unerwünschten Zeichen</returns>
+        public static String cleanInput(String input)
+        {
+            // Replace invalid characters with empty strings.
+            try
+            {
+                return Regex.Replace(input, @"[^\w\.@-]", "",
+                                     RegexOptions.None, TimeSpan.FromSeconds(1.5));
+            }
+            // If we timeout when replacing invalid characters, 
+            // we should return Empty.
+            catch (RegexMatchTimeoutException)
+            {
+                return String.Empty;
+            }
         }
 
     }
