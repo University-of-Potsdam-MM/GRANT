@@ -114,6 +114,21 @@ namespace GRANTManager.AbstractClasses
 
 
         public abstract void Dispose();
+
+        public bool isDisplayStrategyAvailable(AOutputManager displayStrategy)
+        {
+            if (displayStrategy.GetType().Namespace != null && displayStrategy.GetType().Namespace.Equals("StrategyMVBD"))
+            {
+                return displayStrategy.isDisplayStrategyAvailable();
+            }
+            else
+            {
+                return true;
+            }
+
+        }
+
+        protected virtual bool isDisplayStrategyAvailable() { return true; }
     }
 
         

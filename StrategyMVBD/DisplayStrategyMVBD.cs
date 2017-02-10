@@ -76,6 +76,11 @@ namespace StrategyMVBD
             SendSetDevice(device.id);
             
         }
+
+        protected override bool isDisplayStrategyAvailable()
+        {
+            return isMvbdRunning();
+        }
         #endregion
 
         #region Hilfsfunktionen
