@@ -647,10 +647,17 @@ namespace StrategyBrailleIO
             }
             else if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase))
             {
-                matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetText());
-                BrailleIOViewMatixRenderer vmr = new BrailleIO.Renderer.BrailleIOViewMatixRenderer();
-                matrix = vmr.RenderMatrix(tmpView, matrix);
-                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                if (tmpView.GetText() != null && tmpView.GetText() != "")
+                {
+                    matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetText());
+                    BrailleIOViewMatixRenderer vmr = new BrailleIO.Renderer.BrailleIOViewMatixRenderer();
+                    matrix = vmr.RenderMatrix(tmpView, matrix);
+                    matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                }
+                else
+                {
+                    matrix = new bool[0, 0];
+                }
             }
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
             {

@@ -200,9 +200,12 @@ namespace BrailleIOGuiElementRenderer
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
         public static void RemoveLeftBoarder(ref bool[,] viewMatrix)
         {
-            for (int i = 1; i < viewMatrix.GetLength(0)-1; i++)
+            if (viewMatrix.GetLength(0) > 1)
             {
-                viewMatrix[ i,0] = false;
+                for (int i = 1; i < viewMatrix.GetLength(0) - 1; i++)
+                {
+                    viewMatrix[i, 0] = false;
+                }
             }
         }
 
@@ -212,9 +215,12 @@ namespace BrailleIOGuiElementRenderer
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
         public static void RemoveRightBoarder(ref bool[,] viewMatrix)
         {
-            for (int i = 1; i < viewMatrix.GetLength(0) - 1; i++)
+            if (viewMatrix.GetLength(0) > 1)
             {
-                viewMatrix[i, viewMatrix.GetLength(1)-1] = false;
+                for (int i = 1; i < viewMatrix.GetLength(0) - 1; i++)
+                {
+                    viewMatrix[i, viewMatrix.GetLength(1) - 1] = false;
+                }
             }
         }
 
@@ -224,9 +230,12 @@ namespace BrailleIOGuiElementRenderer
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
         public static void RemoveBottomBoarder(ref bool[,] viewMatrix)
         {
-            for (int i = 1; i < (viewMatrix.Length /viewMatrix.GetLength(0))-1 ; i++)
+            if (viewMatrix.GetLength(0) > 1)
             {
-                viewMatrix[viewMatrix.GetLength(0)-1, i] = false;
+                for (int i = 1; i < (viewMatrix.Length / viewMatrix.GetLength(0)) - 1; i++)
+                {
+                    viewMatrix[viewMatrix.GetLength(0) - 1, i] = false;
+                }
             }
         }
 
@@ -237,9 +246,12 @@ namespace BrailleIOGuiElementRenderer
         /// <param name="viewMatrix">gibt die Referenz zur Matrix an</param>
         public static void RemoveTopBoarder(ref bool[,] viewMatrix)
         {
-            for (int i = 1; i < (viewMatrix.Length / viewMatrix.GetLength(0)) - 1; i++)
+            if (viewMatrix.GetLength(0) > 1)
             {
-                viewMatrix[0, i] = false;
+                for (int i = 1; i < (viewMatrix.Length / viewMatrix.GetLength(0)) - 1; i++)
+                {
+                    viewMatrix[0, i] = false;
+                }
             }
         }
 

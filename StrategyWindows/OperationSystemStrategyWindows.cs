@@ -318,7 +318,7 @@ namespace StrategyWindows
         /// </summary>
         /// <param name="name">Titel der Anwendung</param>
         /// <returns></returns>
-        public String getModulNameOfApplication(String name)
+    /*    public String getModulNameOfApplication(String name)
         {
             foreach (Process clsProcess in Process.GetProcesses())
             {
@@ -332,20 +332,41 @@ namespace StrategyWindows
                 catch (System.ComponentModel.Win32Exception) { }
             }
             return null;
-        }
+        }*/
 
         /// <summary>
-        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung
+        /// Ermittelt den Namen der Anwendung 
         /// </summary>
-        /// <param name="name">gibt den Titel der Anwendung an</param>
-        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
-        public String getFileNameOfApplicationByMainWindowTitle(String name)
+        /// <param name="name">Prozess Id der Anwendung</param>
+        /// <returns></returns>
+        public String getModulNameOfApplication(int processId)
         {
             foreach (Process clsProcess in Process.GetProcesses())
             {
                 try
                 {
-                      if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
+                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.Id.Equals(processId))
+                    {
+                        return clsProcess.MainModule.ModuleName;
+                    }
+                }
+                catch (System.ComponentModel.Win32Exception) { }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung
+        /// </summary>
+        /// <param name="processId">Prozess Id der Anwendung</param>
+        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
+        public String getFileNameOfApplicationByMainWindowTitle(int processId)
+        {
+            foreach (Process clsProcess in Process.GetProcesses())
+            {
+                try
+                {
+                      if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.Id.Equals(processId))
                     {
                         return clsProcess.MainModule.FileName;
                     }

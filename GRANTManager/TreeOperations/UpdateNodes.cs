@@ -284,6 +284,11 @@ namespace GRANTManager.TreeOperations
             return useAcronymForText( text);
         }
 
+        /// <summary>
+        /// Ersetzt einen Text durch eine Abkürzung (sofern vorhanden)
+        /// </summary>
+        /// <param name="text">gibt den Text, der abgekürzt werdn soll an</param>
+        /// <returns> eine abgekürzte Version des Textes oder der Text </returns>
         public String useAcronymForText(String text)
         {
             if (grantTrees.TextviewObject == null || grantTrees.TextviewObject.acronymsOfPropertyContent == null || text == null || text.Equals("")){ return ""; }
