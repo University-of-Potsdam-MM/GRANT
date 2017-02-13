@@ -26,13 +26,15 @@ namespace StrategyMVBD
             if (!isMvbdRunning()) { Debug.WriteLine("MVBD ist nicht gestartet!"); return; }
             _endPoint = new IPEndPoint(IPAddress.Loopback, 2017); //TODO: auslesen
             ThreadPool.QueueUserWorkItem(new WaitCallback(Thread_Callback));
+            //Deviceliste abrufen
+            deviceList = getPosibleDevices();
         }
 
         ~DisplayStrategyMVBD() { Dispose(); }
 
         private bool isMvbdRunning()
         {
-            return base.strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD.exe") == IntPtr.Zero ? false : true ;
+            return base.strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD.exe") != IntPtr.Zero ? true : false ;
         }
 
         #region Implementierung der Abstrakten Klasse
@@ -66,7 +68,19 @@ namespace StrategyMVBD
             return deviceList;
 
         }
-   
+        protected override void setDevice(Device device)
+        {
+            // Command 27
+            if (device.id == 0) return;
+             activeDevice= new Device();
+            SendSetDevice(device.id);
+            
+        }
+
+        protected override bool isDisplayStrategyAvailable()
+        {
+            return isMvbdRunning();
+        }
         #endregion
 
         #region Hilfsfunktionen
@@ -111,26 +125,107 @@ namespace StrategyMVBD
 
                             if (cmd == 20) //20 => Device-Info
                             {
-                                OrientationEnum orientation = OrientationEnum.Unknown;
-                                if(Enum.IsDefined(typeof(OrientationEnum), (int) ba[2]))
-                                {
-                                    orientation = (OrientationEnum)ba[2];
-                                }
-                                activeDevice = new Device(ba[1], ba[0], orientation, "MVBD_" + ba[4], this.GetType());//TODO: name ordentlich vergeben
-                                Debug.Print("--> DeviceInfo {0}x{1}", ba[0], ba[1]);
+                                setActiveDeviceGrant(ba);
                             }
                             if (cmd == 26)
                             {
-                                //TODO: antwort interpretieren und Liste richtig setzen
-                                deviceList = new List<Device>();
-                                deviceList.Add(new Device(64, 30, OrientationEnum.Front, "MVDB_1", this.GetType()));
-                                deviceList.Add(new Device(60, 60, OrientationEnum.Front, "MVDB_2", this.GetType()));
+                                deviceList = interpretDeviceList(ba);
                             }
+                            
                         }
                     }
                 }
                 catch (Exception e) { Console.WriteLine("Fehler bei 'DisplayStrategyMVBD \n Fehler:\n {0}", e); }
             }
+        }
+
+        private void setActiveDeviceGrant(Byte[] bas)
+        {
+            OrientationEnum orientation = OrientationEnum.Unknown;
+            if (Enum.IsDefined(typeof(OrientationEnum), (int)bas[2]))
+            {
+                orientation = (OrientationEnum)bas[2];
+            }
+            String deviceName = "";
+            int deviceId = (bas[3] << 0 | bas[4] << 8 | bas[5] << 16 | bas[6] << 24);
+            if (deviceList != null)
+            {
+                foreach (Device device in deviceList)
+                {
+                    if (device.id == deviceId)
+                    {
+                        deviceName = device.name;
+                    }
+                }
+            }
+            Device d = new Device(bas[1], bas[0], orientation, deviceName, this.GetType());
+            d.id = deviceId;
+            activeDevice = d;
+        }
+
+        private List<Device> interpretDeviceList(Byte[] bas)
+        {
+            if(bas.Length < 4) {Debug.WriteLine("keine Liste vorhanden"); return new List<Device>(); }
+
+            //ID: immer 4 Bytes
+            /* Beispiel für Name
+             * Bytes: 3 66 68 49
+             * 3 => der Name besteht aus 3 Bytes
+             * 66 68 49 => ist der Name
+            */
+            byte[] ba = new byte[bas.Length -1];
+            Buffer.BlockCopy(bas, 1, ba, 0, ba.Length);
+            List <Device> deviceList = new List<Device>();
+            int index = 0;
+            for(int count = bas[0]; count > 0; count--) //TODO: eigentlich count > 0
+            {
+                Device d = new Device(this.GetType());
+                
+                d.id = (ba[0 + index] << 0 | ba[1 + index] << 8 | ba[2 + index] << 16 | ba[3 + index] << 24);
+                int nameLength = ba[4 + index];
+                d.name = Encoding.UTF8.GetString(ba, 4 + 1 + index, nameLength);
+
+                index = index + 4 + 1 + nameLength;
+               // Console.WriteLine(" ===>> " + d.id);
+                //Console.WriteLine(" >>>> " + d.name);
+                deviceList.Add(d);
+            }
+
+            return deviceList;
+        }
+
+        private void SendGetDeviceList()
+        {
+            if ((_tcpClient == null) || (_tcpClient.Connected == false)) return; // -->
+
+            byte[] ba = new byte[3];
+            ba[0] = 26;
+            ba[1] = 0;
+            ba[2] = 0;
+
+            Debug.Print("<-- SendGetDeviceList");
+            Send(ba);
+        }
+
+        private void SendSetDevice(int deviceId)
+        {
+            if ((_tcpClient == null) || (_tcpClient.Connected == false)) return; // -->
+
+            byte[] ba = new byte[7]; 
+            ba[0] = 27; //Command
+
+            int lenData = ba.Length - 3;        // Gesamtlänge - 3 Header
+            ba[1] = (byte)(lenData >> 0);   // Length low byte   = 16
+            ba[2] = (byte)(lenData >> 8);   // Length high Byte  = 3 * 256
+
+            ba[3] = deviceId > 0 ? (byte)(deviceId >> 00) : (byte)0;
+
+            ba[4] = deviceId > Math.Pow(2, 8) ? (byte)(deviceId >> 08) : (byte)0;
+
+            ba[5] = deviceId > Math.Pow(2, 16) ? (byte)(deviceId >> 24) : (byte)0;
+            ba[6] = (byte)0;
+            Debug.Print("<-- SendSetDevice");
+            Send(ba);
         }
 
         private void SendGetDeviceInfo()
@@ -150,7 +245,7 @@ namespace StrategyMVBD
         {
             if ((_tcpClient == null) || (_tcpClient.Connected == false)) return; // -->
 
-            byte[] ba = new byte[3];
+            byte[] ba = new byte[3]; 
             ba[0] = 26;
             ba[1] = 0;
             ba[2] = 0;
@@ -216,6 +311,8 @@ namespace StrategyMVBD
                 _tcpClient = null;
             }
         }
+
+
         #endregion
     }
 }

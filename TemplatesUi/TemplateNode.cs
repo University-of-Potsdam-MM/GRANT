@@ -46,9 +46,9 @@ namespace TemplatesUi
             if (templateObject.osm.properties.controlTypeFiltered.Equals("TabItem"))
             {
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
-                //tabView.orientation = templateObject.orientation;
-                //braille.uiElementSpecialContent = tabView;
-                braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
+                tabView.orientation = templateObject.orientation;
+                braille.uiElementSpecialContent = tabView;
+                //braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
             }
             #endregion
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree(); }

@@ -84,8 +84,10 @@
     <Compile Include="Interfaces\IFilterStrategy.cs" />
     <Compile Include="Interfaces\IOperationSystemStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TemplateAllElementsSymbol.cs" />
     <Compile Include="TreeOperations\GeneratedIds.cs" />
     <Compile Include="TreeOperations\SearchNodes.cs" />
+    <Compile Include="TreeOperations\TemplateOperations.cs" />
     <Compile Include="TreeOperations\TreeOperation.cs" />
     <Compile Include="TreeScopeEnum.cs" />
     <Compile Include="TreeOperations\UpdateNodes.cs" />
@@ -98,6 +100,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TelmpalteAllUiElementsAsSymbol.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="TemplateAllElementsTextview.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

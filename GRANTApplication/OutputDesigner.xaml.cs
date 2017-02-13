@@ -263,7 +263,7 @@ namespace GRANTApplication
 
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "filteredProject_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.nameFiltered; // Default file name
+            dlg.FileName = GuiFunctions.cleanInput( "filteredProject_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.nameFiltered); // Default file name
             dlg.DefaultExt = ".grant"; // Default file extension
             dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
@@ -322,6 +322,26 @@ namespace GRANTApplication
                 int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 createBrailleDisplay(dWidth, dHeight, dataGrid2);
 
+                //ggf. Braille-Baum laden
+                if(grantTrees.getBrailleTree() != null)
+                {
+                    #region Braille-Baum Darstellung  (Kopie von Template laden => Funktion)
+                    brailleOutput.Items.Clear();
+                    brailleRoot.Items.Clear();
+
+                    // TreeViewItem root = new TreeViewItem();
+
+                    brailleRoot.controlTypeFiltered = "Braille-Tree";
+                    guiFunctions.createTreeForOutput(grantTrees.getBrailleTree(), ref brailleRoot); 
+
+                    SaveButton.IsEnabled = true;
+                    brailleOutput.Items.Add(brailleRoot);
+                    dataGrid2.Items.Refresh();
+                    dataGrid5.ItemsSource = "";
+                    dataGrid5.Items.Refresh();
+                    #endregion
+                }
+
             }// Load Project wirft Fehler
         }
 
@@ -341,6 +361,10 @@ namespace GRANTApplication
             {
                 strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(dlg.FileName);
                 Object tree1 = grantTrees.getBrailleTree();
+                #region Marlene testet
+                TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTrees, treeOperations);
+                tempTextView.createTextviewOfSubtree(grantTrees.getFilteredTree());
+                #endregion 
 
                 brailleOutput.Items.Clear();
                 brailleRoot.Items.Clear();
@@ -794,8 +818,8 @@ namespace GRANTApplication
 
                     if (guiElementRep != new bool[0, 0])
                     // datagrid2
-                    {
-                        for (int h = 0; h < (guiElementRep.GetLength(0)); h++) //höhe
+                    { Device device = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+                        for (int h = 0; h < (guiElementRep.GetLength(0)) && h+y < device.height ; h++) //höhe
                         {
                             //
                             {
@@ -806,7 +830,7 @@ namespace GRANTApplication
                                     dataGrid2.ScrollIntoView(dataGrid2.Items[h + y]);
                                     row = (DataGridRow)dataGrid2.ItemContainerGenerator.ContainerFromIndex(h + y);
                                 }
-                                for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)); w++)
+                                for (int w = 0; w < (guiElementRep.Length / guiElementRep.GetLength(0)) && w+x < device.width; w++)
                                 {
                                     if (dataGrid2.Columns[w + x].GetCellContent(row) == null)
                                     {

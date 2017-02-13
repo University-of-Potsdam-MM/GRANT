@@ -34,5 +34,7 @@ namespace StrategyBrailleIO
         public override void Dispose()
         {
         }
+
+        protected override void setDevice(Device device){ }
     }
 }

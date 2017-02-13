@@ -221,7 +221,17 @@ namespace GRANTManager
                     specifiedDisplayStrategy.Dispose(); //sorgt dafür, dass ggf. die alte TCP-Verbindung beendet wird
                   //  specifiedDisplayStrategy = null;
                 }
-                specifiedDisplayStrategy = (AOutputManager)Activator.CreateInstance(type, this);
+                //falls MVBD als DisplayStrstegy gesetzt werden soll, muss geprüft werden, ob MVBD aktiv ist
+                AOutputManager om = (AOutputManager)Activator.CreateInstance(type, this);
+                if (getSpecifiedDisplayStrategy() == null || getSpecifiedDisplayStrategy().isDisplayStrategyAvailable(om))
+                {
+                    specifiedDisplayStrategy = (AOutputManager)Activator.CreateInstance(type, this);
+                }
+                else
+                {
+                    Console.WriteLine("Die DisplayStrategy ist nicht verfügbar.");
+                    System.Windows.Forms.MessageBox.Show("The chosen display strategy is not available!", "GRANT exception");
+                }
             }
             catch (InvalidCastException ic)
             {

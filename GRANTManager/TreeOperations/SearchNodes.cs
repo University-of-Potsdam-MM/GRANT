@@ -118,11 +118,14 @@ namespace GRANTManager.TreeOperations
         /// <returns>zugehöriger Knoten</returns>
         internal OSMElement.OSMElement getAssociatedNodeElement(String idGenerated, Object tree)
         {
-            foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
+            if (tree != null)
             {
-                if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(idGenerated))
+                foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
                 {
-                    return strategyMgr.getSpecifiedTree().GetData(node);
+                    if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(idGenerated))
+                    {
+                        return strategyMgr.getSpecifiedTree().GetData(node);
+                    }
                 }
             }
             return new OSMElement.OSMElement();
@@ -370,6 +373,7 @@ namespace GRANTManager.TreeOperations
             OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
             if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
         }
+
 
     }
 }

@@ -41,6 +41,7 @@ namespace BrailleIOGuiElementRenderer
         /// </summary>
         public String text { get; set; }
 
+
         /// <summary>
         /// Gibt an, ob das UI-Element deaktiviert ist
         /// </summary>

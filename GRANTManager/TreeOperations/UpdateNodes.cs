@@ -192,6 +192,7 @@ namespace GRANTManager.TreeOperations
         private void changeBrailleRepresentation(ref OSMElement.OSMElement element)
         {
             Object brailleTree = grantTrees.getBrailleTree();
+            if(brailleTree == null) { return; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(element.properties.IdGenerated))
@@ -260,7 +261,7 @@ namespace GRANTManager.TreeOperations
 
 
         /// <summary>
-        /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text
+        /// Ermittelt aufgrund der im StrategyManager angegebenen Beziehungen den anzuzeigenden Text, sollte es für den Text eine Abkürzung geben, so wird diese genutzt
         /// </summary>
         /// <param name="filteredSubtree">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
         /// <returns>den anzuzeigenden Text</returns>
@@ -279,6 +280,19 @@ namespace GRANTManager.TreeOperations
             {
                 object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.fromGuiElement, associatedNode.properties);
                 text = (objectText != null ? objectText.ToString() : "");
+            }
+            return useAcronymForText( text);
+        }
+
+        public String useAcronymForText(String text)
+        {
+            if (grantTrees.TextviewObject == null || grantTrees.TextviewObject.acronymsOfPropertyContent == null || text == null || text.Equals("")){ return ""; }
+            foreach(AcronymsOfPropertyContent aopc in grantTrees.TextviewObject.acronymsOfPropertyContent)
+            {
+                if (aopc.name.Equals(text))
+                {
+                    return aopc.acronym;
+                }
             }
             return text;
         }
@@ -365,11 +379,16 @@ namespace GRANTManager.TreeOperations
                                 {
                                     if (strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated.Equals(parentId))
                                     {
+                                  //      Debug.WriteLine("childOfNode.Id = " + strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated);
+                                    //    Debug.WriteLine("neue Id: " + brailleNodeWithId.properties.IdGenerated);
                                         strategyMgr.getSpecifiedTree().AddChild(childOfNode, brailleNodeWithId);
+                                //        Debug.WriteLine("Baum:\n"+ strategyMgr.getSpecifiedTree().ToStringRecursive(strategyMgr.getSpecifiedTree().Root(childOfNode)) +"\n");
                                         return prop.IdGenerated;
                                     }
                                 }
-                                return null;
+                                strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
+                                return prop.IdGenerated;
+                                //return null;
                             }
                         }
                     }

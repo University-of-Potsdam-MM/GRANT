@@ -335,8 +335,13 @@ namespace GRANTExample
         private void Button_Click(object sender, RoutedEventArgs e)
         {
            if (grantTree == null || grantTree.getFilteredTree() == null) { return; }
-         //  String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-           String path = @"C:\Users\mkarlapp\Desktop\TemplateUi.xml";
+
+
+            TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTree, treeOperation);
+            tempTextView.createTextviewOfSubtree(grantTree.getFilteredTree());
+
+            //  String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
+            String path = @"C:\Users\mkarlapp\Desktop\TemplateUi.xml";
 
             if (!GuiFunctions.isTemplateValid(path))
             {

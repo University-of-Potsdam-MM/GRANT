@@ -338,7 +338,7 @@ namespace StrategyWindows
             {
                 try
                 {
-                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
+                      if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
                     {
                         return clsProcess.MainModule.FileName;
                     }

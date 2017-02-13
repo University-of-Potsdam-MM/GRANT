@@ -175,10 +175,6 @@ namespace TemplatesUi
             brailleNode.properties = prop;
             brailleNode.brailleRepresentation = braille;
             if (!strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) ) { return strategyMgr.getSpecifiedTree().NewTree(); }
-            if (brailleNode.brailleRepresentation.viewName.Equals("GroupChildD84AEFE56159685829E89A75D8C07119"))
-            {
-                Debug.WriteLine("");
-            }
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, brailleNodeId);
             
             if (idGenerated == null)

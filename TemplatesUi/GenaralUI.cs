@@ -44,6 +44,15 @@ namespace TemplatesUi
             if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
             generatedSymbolViewFromTemplate(@pathToXml);
             generatedLayoutView(@pathToXml);
+            Rect rect = new Rect(0, 0, 0, 0);
+            
+         /*  if (grantTrees.rendererUiElementConnection == null)
+            {
+                TemplateAllElementsSymbol t = new TemplateAllElementsSymbol(strategyMgr, grantTrees);
+                t.loadTemplateConnectionsForAllElements();
+            }
+            visualizedAllElementsAsSymbols(grantTrees.getFilteredTree(), ref rect);*/
+         
         }
 
         /// <summary>
@@ -597,6 +606,87 @@ namespace TemplatesUi
                 template.createUiElementFromTemplate(filteredSubtree, templateObject, brailleNodeId);
             }
         }
+
+        #region alle Elemente als Symbole darstellen
+
+        /// <summary>
+        /// Stellt alle Elemente eines (Teil-)Baumes da.
+        /// </summary>
+        /// <param name="subtree">gibt den Darzustellenden (Teil-)Baum an</param>
+        /// <param name="idToIgnore">gibt eine Liste von Ids an, welche Zweige bei der Darstellung ignoriert werden sollen</param>
+        public void visualizedAllElementsAsSymbols(object subtree, ref Rect  lastRect, string[] idToIgnore = null)
+        {
+            //Position + Größe des letzten gesetzten Elementes
+            ATemplateUi generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
+            RendererUiElementConnector defaultRendererUiConnector = new RendererUiElementConnector("Text", "Text", new RendererUiElementConnector.SizeUiElement(5, 21));
+            
+            foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(subtree))
+            {
+                /* Prüfen, ob der Knoten Ignoriert werden soll
+                 *    nicht ignorieren -> Kinder
+                 * nur Kinder Zeichnen -> ControllType der Eltern beachten --> evtl. werden mehrere Kinder mit einmal dargestellt
+                 */
+                OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
+                if (idToIgnore == null || !idToIgnore.Contains(osmNode.properties.IdGenerated))
+                {
+                    RendererUiElementConnector connector = rendererUiElementConnectorContainsControltype(osmNode.properties.controlTypeFiltered);
+                    if (connector == null && strategyMgr.getSpecifiedTree().HasChild(node))
+                    {
+                        //Kinder beachten
+                        visualizedAllElementsAsSymbols(node, ref lastRect, idToIgnore);
+                    }
+                    else
+                    {
+                        if(connector == null) { connector = defaultRendererUiConnector; }
+                        //Element erstellen
+
+                        //TODO: je nach element ein anderes Template verwenden?
+                        generalUiInstance.createUiElementFromTemplate(node, createTemplateObjectFromNode(node, connector, ref lastRect));//neue View Category
+                    }
+                }
+            }
+        }
+
+        private TemplateUiObject createTemplateObjectFromNode(Object nodeFiltered, RendererUiElementConnector connector, ref Rect rectLast, String screenName = null)
+        {//TODO: viele zuweisungen hier sind noch nicht sauber -> sodern erstmal nur zum Testen
+            OSMElement.OSMElement osmNodeFiltered = strategyMgr.getSpecifiedTree().GetData(nodeFiltered);
+            TemplateUiObject templObject = new TemplateUiObject();
+            List<String> screens = new List<string>();
+            screens.Add(screenName == null ? "neuerScreen" : screenName);
+            templObject.Screens = screens;
+            templObject.name = osmNodeFiltered.properties.IdGenerated;
+            OSMElement.OSMElement osmTempl = new OSMElement.OSMElement();
+            GeneralProperties propTempl = new GeneralProperties();
+            //Achtung: noch sind so alle Elemente untereinander
+            rectLast.X = 0;
+            rectLast.Y = rectLast.Height == 0 ? 0 : rectLast.Y + rectLast.Height + 1;
+            rectLast.Height = connector.SizeElement.height;
+            rectLast.Width = connector.SizeElement.width;
+            propTempl.boundingRectangleFiltered = rectLast;
+            propTempl.controlTypeFiltered = connector.RendererName;
+
+            BrailleRepresentation brailleTempl = new BrailleRepresentation();
+            brailleTempl.fromGuiElement = osmNodeFiltered.properties.nameFiltered != null ? "nameFiltered" : "valueFiltered";
+            brailleTempl.screenCategory = "blub";
+            osmTempl.brailleRepresentation = brailleTempl;
+            osmTempl.properties = propTempl;
+            templObject.osm = osmTempl;
+            return templObject;
+        }
+
+        private RendererUiElementConnector rendererUiElementConnectorContainsControltype(String controltype)
+        {
+            if(grantTrees.rendererUiElementConnection == null) { return null; }
+            foreach(RendererUiElementConnector connector in grantTrees.rendererUiElementConnection)
+            {
+                if (connector.ControlType.Equals(controltype))
+                {
+                    return connector;
+                }
+            }
+            return null;
+        }
+        #endregion
     }
 
 }
