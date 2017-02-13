@@ -4,7 +4,6 @@ using System.Windows.Input;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Data;
 using System.Linq;

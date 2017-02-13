@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using GRANTManager.Interfaces;
-using System.Windows;
 using System.Drawing;
-using OSMElement;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using GRANTManager;

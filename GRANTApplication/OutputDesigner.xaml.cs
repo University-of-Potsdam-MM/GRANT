@@ -7,9 +7,6 @@ using GRANTManager.Interfaces;
 using OSMElement;
 using System.Windows.Media;
 using System.Data;
-using System.Windows.Data;
-using System.Globalization;
-using System.Collections;
 using GRANTManager.TreeOperations;
 using System.Linq;
 

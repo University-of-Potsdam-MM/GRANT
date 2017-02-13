@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using System.Xml;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using System.Diagnostics;
-
 using BrailleIO;
 using BrailleIO.Structs;
-using Gestures.Recognition;
 using GRANTManager.Interfaces;
 using GRANTManager;
 using OSMElement;
