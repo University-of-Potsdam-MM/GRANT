@@ -217,6 +217,22 @@ namespace OSMElement
         {//Achtung nur einige Eigenschaften berücksichtigt
             return String.Format("nameFiltered = {0}, valueFiltered = {1}, controlTypeFiltered = {2},  boundingRectangleFiltered = {3}, id = {4} ", nameFiltered, valueFiltered, controlTypeFiltered, boundingRectangleFiltered.ToString(), IdGenerated);
         }
+
+        /// <summary>
+        /// Erstellt eine Liste aller Typen aus <typeparamref name="GeneralProperties"/>
+        /// </summary>
+        /// <returns>Liste der Namen aller <typeparamref name="GeneralProperties"/></returns>
+        public static List<String> getAllStringsFor_fromGuiElement()
+        {
+            List<String> fromGuiElementString = new List<string>();
+            var propNames = typeof(GeneralProperties).GetProperties();
+            foreach (var name in propNames)
+            {
+                fromGuiElementString.Add(name.Name.ToString());
+            }
+
+            return fromGuiElementString;
+        }
     }
 
   

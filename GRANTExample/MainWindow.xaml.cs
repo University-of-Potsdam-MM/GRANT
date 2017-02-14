@@ -291,6 +291,7 @@ namespace GRANTExample
 
             if (e.Key == Key.NumPad7)
             {
+
                 List<Object> nodeList = searchNodes.getAssociatedNodeList("5524107E02B9643EDB67F59CB310C26C", grantTree.getFilteredTree()); //schließen-Button Calc
                 if(nodeList == null)
                 {
