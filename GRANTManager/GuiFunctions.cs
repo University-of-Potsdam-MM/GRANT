@@ -1054,5 +1054,99 @@ namespace GRANTManager
             }
         }
 
+        #region add filtered node in braille tree
+        /// <summary>
+        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// </summary>
+        /// <param name="filteredNode">gibt den zugehörigen gefilterten Knoten an</param>
+        public void addFilteredNodeToBrailleTree(Object filteredNode)
+        {
+            addFilteredNodeToBrailleTree("", filteredNode, null, null, null, null, new Rect());
+        }
+
+        /// <summary>
+        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// </summary>
+        /// <param name="guiType"> gibt den GUI-Typ, welcher für die taktile Darstellung genutzt werden soll an</param>
+        /// <param name="filteredNode">gibt den zugehörigen gefilterten Knoten an</param>
+        public void addFilteredNodeToBrailleTree(String guiType, object filteredNode = null)
+        {
+            addFilteredNodeToBrailleTree(guiType, filteredNode, null, null, null, null, new Rect());
+        }
+
+        /* nicht endeutig
+         * public void addFilteredNodeToBrailleTree(String parentIdTactlie, String screenName, String screenCategory, String viewName = null, Rect positionTactile = new Rect())
+        {
+            addFilteredNodeToBrailleTree("", null, viewName, screenName, screenCategory, parentIdTactlie, positionTactile);
+        }*/
+
+        /// <summary>
+        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// </summary>
+        /// <param name="screenName">gibt den Namen des Screens für den neuen Knoten an</param>
+        /// <param name="screenCategory">gibt den Namen des Screencategory für den neuen Knoten an</param>
+        /// <param name="viewName">gibt den namen der neuen View an</param>
+        /// <param name="positionTactile">gibt die 'taktile' Position des neuen Knotens an</param>
+        public void addFilteredNodeToBrailleTree( String screenName, String screenCategory, String viewName = null, Rect positionTactile = new Rect())
+        {
+            addFilteredNodeToBrailleTree("", null, viewName, screenName, screenCategory, null, positionTactile);
+        }
+
+        /// <summary>
+        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// </summary>
+        /// <param name="guiType"> gibt den GUI-Typ, welcher für die taktile Darstellung genutzt werden soll an</param>
+        /// <param name="filteredNode">gibt den zugehörigen gefilterten Knoten an</param>
+        /// <param name="viewName">gibt den namen der neuen View an</param>
+        /// <param name="screenName">gibt den Namen des Screens für den neuen Knoten an</param>
+        /// <param name="screenCategory">gibt den Namen des Screencategory für den neuen Knoten an</param>
+        /// <param name="parentIdTactlie">gibt die ParentId des neuen Knoten an</param>
+        /// <param name="positionTactile">gibt die 'taktile' Position des neuen Knotens an</param>
+        private void addFilteredNodeToBrailleTree(String guiType, object filteredNode = null, String viewName = null, String screenName = null, String screenCategory = null, String parentIdTactlie = null, Rect positionTactile = new Rect())
+        {
+            OSMElement.OSMElement tactileOsm = new OSMElement.OSMElement();
+            GeneralProperties tactileProp = new GeneralProperties();
+            BrailleRepresentation tactlieRep = new BrailleRepresentation();
+            if (guiType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(guiType))
+            {
+                Console.WriteLine("Der GuiTyp passt nicht -- er wurde auf 'Text' gesetzt!");
+                guiType = "Text";
+            }
+            tactileProp.controlTypeFiltered = guiType;
+            tactileProp.boundingRectangleFiltered = positionTactile;
+            if(filteredNode != null)
+            {
+                tactlieRep.fromGuiElement = "nameFiltered";
+            }
+            tactlieRep.viewName = viewName != null ? viewName : Guid.NewGuid().ToString();
+            tactlieRep.screenCategory = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
+            tactlieRep.screenName = screenName != null ?  screenName : tactlieRep.screenCategory;
+            //TODO: falls weitere GUI-Typen hinzukommen, muss hier ergänzt werden!
+            if (guiType.Equals("DropDownMenu"))
+            { //TODO
+            }
+            if (guiType.Equals("ListItem")) {
+                //TODO
+            }
+            if (guiType.Equals("TabItem"))
+            {
+                OSMElement.UiElements.TabItem tabItem = new OSMElement.UiElements.TabItem();
+                tabItem.orientation = OSMElement.UiElements.Orientation.Top;
+                tactlieRep.uiElementSpecialContent = tabItem;
+            }
+           
+
+            tactileOsm.brailleRepresentation = tactlieRep;
+            tactileOsm.properties = tactileProp;
+            String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(tactileOsm, parentIdTactlie);
+            if (filteredNode != null)
+            {
+                List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
+                OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.IdGenerated, idGenerated, ref relationship);
+                treeOperation.updateNodes.updateNodeOfBrailleUi(ref tactileOsm);
+            }
+        }
+        #endregion
+
     }
 }

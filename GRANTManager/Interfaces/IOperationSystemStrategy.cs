@@ -29,16 +29,16 @@ namespace GRANTManager.Interfaces
         /// <summary>
         /// Ermittelt den Namen der Anwendung zurück
         /// </summary>
-        /// <param name="name">Titel der Anwendung</param>
-        /// <returns></returns>
-        String getModulNameOfApplication(String name);
+        /// <param name="name">Prozess Id der Anwendung</param>
+        /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
+        String getModulNameOfApplication(int processId);
 
         /// <summary>
         /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
         /// </summary>
-        /// <param name="name">gibt den Titel der Anwendung an</param>
+        /// <param name="processId">Prozess Id der Anwendung</param>
         /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
-        String getFileNameOfApplicationByMainWindowTitle(String name);
+        String getFileNameOfApplicationByMainWindowTitle(int processId);
 
         /// <summary>
         /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an

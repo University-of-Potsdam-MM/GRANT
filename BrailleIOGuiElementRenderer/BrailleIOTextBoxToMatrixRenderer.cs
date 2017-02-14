@@ -7,6 +7,7 @@ using BrailleIO.Interface;
 using BrailleIO.Renderer;
 using System.Drawing;
 using BrailleIO;
+using System.Diagnostics;
 
 namespace BrailleIOGuiElementRenderer
 {
@@ -46,8 +47,15 @@ namespace BrailleIOGuiElementRenderer
             }
             
             tmpTextBoxView.SetZIndex(3);
-            bool[,] textMatrix = m.RenderMatrix(tmpTextBoxView, (textBoxContent.text as object == null ? "" : textBoxContent.text as object));
-
+            bool[,] textMatrix;
+            if (tmpTextBoxView.ContentBox.Height <= 0 || tmpTextBoxView.ContentBox.Width <= 0)
+            {
+                textMatrix = new bool[0, 0];
+            }
+            else
+            {
+                textMatrix = m.RenderMatrix(tmpTextBoxView, (textBoxContent.text as object == null ? "" : textBoxContent.text as object));
+            }
             if (screen != null)
             {
                 BrailleIOViewRange viewRange = screen.GetViewRange(tmpTextBoxView.Name);
@@ -76,10 +84,22 @@ namespace BrailleIOGuiElementRenderer
             }
 
             //Ecke links oben abrunden
+            Debug.Print(viewMatrix.GetLength(0).ToString());
+            Debug.Print(viewMatrix.GetLength(1).ToString());
+            if(viewMatrix.GetLength(0) <=0 || viewMatrix.GetLength(1) <= 0) { return new bool[0, 0]; }
             viewMatrix[0, 0] = false;
-            viewMatrix[1, 0] = false;
-            viewMatrix[0, 1] = false;
-            viewMatrix[1, 1] = true;
+            if (viewMatrix.GetLength(1) > 1)
+            {
+                viewMatrix[1, 0] = false;
+            }
+            if (viewMatrix.GetLength(0) > 1)
+            {
+                viewMatrix[0, 1] = false;
+            }
+            if (viewMatrix.GetLength(0) > 1 && viewMatrix.GetLength(1) > 1)
+            {
+                viewMatrix[1, 1] = true;
+            }
 
             BrailleIOViewRange tmpBoxView = new BrailleIOViewRange(view.ViewBox.Left, view.ViewBox.Top, view.ViewBox.Width, view.ViewBox.Height);
             tmpBoxView.Name = "_B_"+ textBoxContent.screenName + view.ViewBox.Left + view.ViewBox.Top + view.ViewBox.Width + view.ViewBox.Height;

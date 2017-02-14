@@ -235,7 +235,7 @@ namespace GRANTExample
             {
                 List<String> result = exampleBrailleDis.getPosibleScreens();
                 NodeBox.Text = "MöglichenScreens: \n";
-                NodeBox.Text = NodeBox.Text + String.Join(", ", result.Select(p => p.ToString()).ToArray());
+                NodeBox.Text = result != null ? NodeBox.Text + String.Join(", ", result.Select(p => p.ToString()).ToArray()) : "";
             }
             if (e.Key == Key.Left || e.Key == Key.NumPad4)
             {
@@ -287,6 +287,26 @@ namespace GRANTExample
                 object node = guiFuctions.getBrailleNodeAtPoint(19, 23);
                 Debug.WriteLine("Braille-Node: " + (node == null ? "null" : strategyMgr.getSpecifiedTree().GetData(node).properties.valueFiltered));
                 NodeBox.Text = strategyMgr.getSpecifiedTree().ToString(node);
+            }
+
+            if (e.Key == Key.NumPad7)
+            {
+
+                List<Object> nodeList = searchNodes.getAssociatedNodeList("5524107E02B9643EDB67F59CB310C26C", grantTree.getFilteredTree()); //schließen-Button Calc
+                if(nodeList == null)
+                {
+                    nodeList = searchNodes.getAssociatedNodeList("E317735D2EF01B0E4EF8C1AD47C8F9B8", grantTree.getFilteredTree()); //Notepad++
+                }
+                if (nodeList != null && nodeList.Count > 0)
+                {
+                    // guiFuctions.addFilteredNodeToBrailleTree("Button", nodeList[0], "neu", "tv2", "neu", new Rect(10, 10, 50, 9));
+                 //   guiFuctions.addFilteredNodeToBrailleTree("Button", nodeList[0], null, null, null, new Rect(10, 10, 50, 9));
+                    guiFuctions.addFilteredNodeToBrailleTree("TextBox");
+                    guiFuctions.addFilteredNodeToBrailleTree("Text");
+                    guiFuctions.addFilteredNodeToBrailleTree("Button");
+                    guiFuctions.addFilteredNodeToBrailleTree("TabItem");
+                }
+                
             }
 
        }

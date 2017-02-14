@@ -12,7 +12,7 @@ namespace OSMElement
         /// <summary> //TODO: nicht nur von den Properties ermitteln
         /// Gibt eine konkrete Eigenschaft zurück
         /// </summary>
-        /// <param name="elementName">gibt an welche Eigenschaft geuscht ist</param>
+        /// <param name="elementName">gibt an welche Eigenschaft gewünscht ist</param>
         /// <param name="properties">gibt alle Eigenschaften eines Knotens an</param>
         /// <returns>aus <code>properties</code> die gewünschte Eigenschaft</returns>
         public static object getGeneralPropertieElement(String elementName, GeneralProperties properties)
