@@ -41,10 +41,16 @@ namespace GRANTManager.Interfaces
         String getBrailleUiElementViewNameAtPoint(int x, int y, out int offsetX, out int offsetY);// TODO: --> in ITreeOperation (unabhängig von BrailleIO)
 
         /// <summary>
-        /// Gibt eine Liste mit möglichen Renderen zurück
+        /// Gibt eine Liste mit allen für das gewählte Ausgabegerät möglichen Renderen zurück
         /// </summary>
         /// <returns>Liste der Renderer</returns>
         List<String> getUiElementRenderer();
+
+        /// <summary>
+        /// Gibt eine Liste allen mit möglichen Renderen zurück
+        /// </summary>
+        /// <returns>Liste der Renderer</returns>
+        List<String> getAllUiElementRenderer();
 
         /// <summary>
         /// Gibt zu einem Renderer beispielhaft die Darstellung an

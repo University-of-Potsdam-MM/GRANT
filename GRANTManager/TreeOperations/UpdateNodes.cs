@@ -208,12 +208,17 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="element">gibt den zu verändernden Knoten an</param>
         public void updateNodeOfBrailleUi(ref OSMElement.OSMElement element)
-        {
+        {            
             BrailleRepresentation updatedContentBR = element.brailleRepresentation;
             GeneralProperties updatedContentGP = element.properties;
             if (element.brailleRepresentation.isGroupChild && element.brailleRepresentation.groupelementsOfSameType.renderer != null)
             {
                 updatedContentGP.controlTypeFiltered = element.brailleRepresentation.groupelementsOfSameType.renderer; //TODO: passt das so?
+            }
+            if (!strategyMgr.getSpecifiedBrailleDisplay().getAllUiElementRenderer().Contains(updatedContentGP.controlTypeFiltered))
+            {
+                Debug.Print("Achtung: Der ausgewählte Renderer existiert nicht! Er wurde auf 'Text' gesetzt.");
+                updatedContentGP.controlTypeFiltered = "Text";
             }
             if (element.brailleRepresentation.fromGuiElement != null)
             {
@@ -232,6 +237,11 @@ namespace GRANTManager.TreeOperations
                 updatedContentGP.isEnabledFiltered = (bool)isEnable;
             }
             // updatedContentBR.text = updatedText;
+            if (!GeneralProperties.getAllStringsFor_fromGuiElement().Contains(updatedContentBR.fromGuiElement))
+            {
+                Debug.WriteLine("Achtung: Es wurde ein falscher Wert bei 'fromGuiElement' ausgewählt! Deshalb wurd er auf 'Text' gesetzt.");
+                updatedContentBR.fromGuiElement = "Text";
+            }
 
             element.brailleRepresentation = updatedContentBR;
             element.properties = updatedContentGP;

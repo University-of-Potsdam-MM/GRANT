@@ -560,7 +560,7 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Gibt eine Liste mit möglichen Renderen für BrailleIO zurück, welche für die Ausgabegerätgröße sinnvoll sind
+        /// Gibt eine Liste mit allen für das gewählte Ausgabegerät möglichen Renderen zurück
         /// Achtung: alle neuerstellten Renderer müssen sowohl der Renderer-Liste (getUiElements) als auch dem -Enum (uiElementeTypesBrailleIoEnum) hinzugefügt werden
         /// </summary>
         /// <returns>Liste der BrailleIO-Renderer</returns>
@@ -580,6 +580,21 @@ namespace StrategyBrailleIO
                 {
                     uiElementRenderer.Add(element.uiElementType);
                 }
+            }
+            return uiElementRenderer;
+        }
+
+        /// <summary>
+        /// Gibt eine Liste allen mit möglichen Renderen zurück
+        /// Achtung: alle neuerstellten Renderer müssen sowohl der Renderer-Liste (getUiElements) als auch dem -Enum (uiElementeTypesBrailleIoEnum) hinzugefügt werden
+        /// </summary>
+        /// <returns>Liste der BrailleIO-Renderer</returns>
+        public List<String> getAllUiElementRenderer()
+        {
+            List<String> uiElementRenderer = new List<String>();
+            foreach (uiElementsTypeStruct element in uiElementList)
+            {
+                uiElementRenderer.Add(element.uiElementType);
             }
             return uiElementRenderer;
         }
