@@ -73,10 +73,6 @@ namespace TemplatesUi
                 from el in xmlDoc.Element(VIEWCATEGORY_LAYOUTVIEW).Elements("Screenshot")
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
-            /*foreach (XElement element in uiElement)
-               {
-                   Debug.WriteLine(element);
-               }*/
             ATemplateUi generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
             foreach (XElement element in uiElement)
             {
@@ -189,10 +185,8 @@ namespace TemplatesUi
                 where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
                     && (string)el.Attribute("name") == "NavigationBarScreens"
                 select el;
-            // Debug.WriteLine("uiElement: " + uiElement.Count());
             if (uiElement.Count() == 0) { return new TemplateUiObject(); }
-
-            //TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(uiElement.First()); //Es darf nur ein element bei der Suche herauskommen
+            
             return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
         }
 
@@ -287,13 +281,7 @@ namespace TemplatesUi
                 (string)el.Element("Screens") != null && (string)el.Element("Screens") != ""
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
-          /*   foreach (XElement element in uiElement)
-             {
-                 Debug.WriteLine(element);
-             }*/
-           // XElement firstElement = uiElement.First(); //Achtung hier wird erstmal einfach das erste gefundene genommen
             ATemplateUi generalUiInstance;
-           // TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(firstElement);
             foreach (XElement element in uiElement)
             {
                 TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW);
@@ -508,7 +496,6 @@ namespace TemplatesUi
             if (uiElement == null || !uiElement.Any()) { return; }
             foreach (XElement element in uiElement)
             {
-                //Debug.WriteLine(element);
                 ATemplateUi generalUiInstance;
                 TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW);
                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))

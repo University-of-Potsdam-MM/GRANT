@@ -186,8 +186,6 @@ namespace StrategyMVBD
                 d.name = Encoding.UTF8.GetString(ba, 4 + 1 + index, nameLength);
 
                 index = index + 4 + 1 + nameLength;
-               // Console.WriteLine(" ===>> " + d.id);
-                //Console.WriteLine(" >>>> " + d.name);
                 deviceList.Add(d);
             }
 

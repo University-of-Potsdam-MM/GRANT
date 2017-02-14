@@ -66,7 +66,6 @@ namespace FilteredTreeTest
             if (osmNode1.properties.frameWorkIdFiltered != null && !osmNode1.properties.frameWorkIdFiltered.Equals(osmNode2.properties.frameWorkIdFiltered)) { Assert.Fail("Der frameWorkIdFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (osmNode1.properties.grantFilterStrategy != null && !osmNode1.properties.grantFilterStrategy.Equals(osmNode2.properties.grantFilterStrategy))
             {
-                Debug.WriteLine("");
                 Assert.Fail("Die grantFilterStrategy der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false;
             }
             //      if (osmNode1.properties.hasKeyboardFocusFiltered != null && !osmNode1.properties.hasKeyboardFocusFiltered.Equals(osmNode2.properties.hasKeyboardFocusFiltered)) { Assert.Fail("Der hasKeyboardFocusFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }

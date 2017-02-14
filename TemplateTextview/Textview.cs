@@ -185,7 +185,6 @@ namespace TemplateTextview
                 
             }
             startYPosition += 5;
-           // Debug.WriteLine("=>\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent)));
             addSubtreeInBrailleTree(strategyMgr.getSpecifiedTree().Root(brailleSubtreeParent), brailleParentId);
         }
 

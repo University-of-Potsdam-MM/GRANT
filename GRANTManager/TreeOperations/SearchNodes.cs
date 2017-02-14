@@ -68,12 +68,6 @@ namespace GRANTManager.TreeOperations
                     }
                 }
             }
-            /*  List<ITreeStrategy<T>> result2 = ListINodeToListITreeStrategy(result as List<INode<T>>);
-              //printNodeList(result2);
-              if (result2.Count == 0)
-              {
-                  Debug.WriteLine("");
-              }*/
             return result;
         }
 
@@ -89,7 +83,6 @@ namespace GRANTManager.TreeOperations
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                 Boolean propertieIdGenerated = idGenereted == null || idGenereted.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
-                //Console.WriteLine("ID = {0}", node.Data.properties.IdGenerated);
                 if (propertieIdGenerated)
                 {
                     result.Add(node);
@@ -240,11 +233,6 @@ namespace GRANTManager.TreeOperations
                 {
                     return node;
                 }
-                /*if ((rect.X + offsetX <= pointX && rect.X + offsetX + rect.Width >= pointX) && (rect.Y + offsetY <= pointY && rect.Y + offsetY + rect.Height >= pointY))
-                {
-                    Debug.WriteLine("");
-                }
-                Debug.WriteLine("");*/
             }
             return screenTree;
         }
@@ -310,7 +298,6 @@ namespace GRANTManager.TreeOperations
             GeneralProperties prop = new GeneralProperties();
             prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
             osmScreen.properties = prop;
-          //  Debug.WriteLine("in existViewInScreen\t generierte ID = ", prop.IdGenerated);
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
 
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return false; }

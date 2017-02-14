@@ -1007,7 +1007,6 @@ namespace StrategyBrailleIO
             IEnumerable<XElement> elements = xmlDoc.Elements("Strategy");
             foreach (XElement strategy in elements)
             {
-                Debug.WriteLine("DeviceClassTypeFullName: {0}; DeviceClassTypeDllName: {1}", strategy.Element("DeviceClassTypeFullName").FirstNode, strategy.Element("DeviceClassTypeDllName").Value);
                 if (strategy.Element("DeviceClassTypeFullName").Value.Equals(displayStrategyType.FullName) && strategy.Element("DeviceClassTypeDllName").Value.Equals(displayStrategyType.Namespace))
                 {
                     brailleAdapterType = Type.GetType(strategy.Element("AdaptClassTypeFullName").Value + ", " + strategy.Element("AdapterClassTypeDllName").Value);

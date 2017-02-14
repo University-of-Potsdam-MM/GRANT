@@ -169,7 +169,6 @@ namespace TemplatesUi
                  }
                }
              rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width), Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height));
-             //Debug.WriteLine("Rect: " + rect.ToString());
             prop.boundingRectangleFiltered = rect;
 
             brailleNode.properties = prop;

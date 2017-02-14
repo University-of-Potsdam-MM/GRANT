@@ -222,65 +222,7 @@ namespace StrategyWindows
         }
 
 
-        public void paintRect_Test(Rectangle rect)
-        {            
-            Graphics desktop = Graphics.FromHwnd(NativeMethods.GetDesktopWindow());           
-           
-            Graphics newGraphics = desktop;
-
-         //   newGraphics.SetClip(rect);
-//            System.Drawing.Drawing2D.GraphicsContainer cont;
-
-//            cont = newGraphics.BeginContainer();
-
-            //Graphics newGraphics2 = newGraphics;
-            //newGraphics2.beg
-            
-            Pen redPen = new Pen(Color.Red, 5);
-            //redPen.
-            newGraphics.DrawRectangle(redPen, rect);
-            //newGraphics.Dispose();
-            
-            System.Threading.Thread.Sleep(1000);
-
-            //newGraphics.Clear(System.Drawing.Color.Transparent);
-
-       //     newGraphics.ResetClip();
-
-
-//           newGraphics.EndContainer(cont);
-
-            //newGraphics.ResetTransform();
-            
-            //NativeMethods.InvalidateRect(NativeMethods.GetDesktopWindow(),null, true);
-            NativeMethods.InvalidateRect(IntPtr.Zero ,IntPtr.Zero , true);
-
-           //updateWindow(NativeMethods.GetDesktopWindow());
-
-            ///newGraphics.ResetClip();
-
-           
-//Console.WriteLine("x: " + filteredSubtree.properties.boundingRectangleFiltered.TopLeft.X);
-
-            //IntPtr points = operationSystemStrategy.getHWND();
-            //IntPtr MainHWND = operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points));
-
-            // Create new graphics object using handle to window.
-  //          Graphics newGraphics = Graphics.FromHwnd(deliverDesktopHWND());
-
-    //        System.Drawing.Size s = this.Size;
-
-
-      //      Graphics newGraphics2 = Graphics.FromHwnd(deliverDesktopHWND());
-
-        //    newGraphics2.CopyFromScreen();
-
-            // Draw rectangle to screen.
-          //  newGraphics.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.Red, 5), x, y, width, height);
-
-            // Dispose of new graphics.
-            newGraphics.Dispose();
-        }
+      
         #endregion
 
         /// <summary>
@@ -306,26 +248,6 @@ namespace StrategyWindows
             return IntPtr.Zero;
         }
 
-        /// <summary>
-        /// Ermittelt den Namen der Anwendung 
-        /// </summary>
-        /// <param name="name">Titel der Anwendung</param>
-        /// <returns></returns>
-    /*    public String getModulNameOfApplication(String name)
-        {
-            foreach (Process clsProcess in Process.GetProcesses())
-            {
-                try
-                {
-                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainWindowTitle.Contains(name))
-                    {
-                        return clsProcess.MainModule.ModuleName;
-                    }
-                }
-                catch (System.ComponentModel.Win32Exception) { }
-            }
-            return null;
-        }*/
 
         /// <summary>
         /// Ermittelt den Namen der Anwendung 

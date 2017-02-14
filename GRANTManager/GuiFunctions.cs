@@ -272,11 +272,9 @@ namespace GRANTManager
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                  MenuItem child = new MenuItem();
-                //Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node)) + node.ToString());
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
-                //String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered;
-
+              
                 String nameFiltered;
 
                 if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
@@ -294,8 +292,6 @@ namespace GRANTManager
                     nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
 
                 }
-
-
            
                 if (nameFiltered.Length > 40)
                 {
@@ -363,7 +359,6 @@ namespace GRANTManager
                 
                 MenuItem child = new MenuItem();
                 node1 = strategyMgr.getSpecifiedTree().Child(tree);
-                Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node1)) + node1.ToString() + "\t" + 1);
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
 
@@ -419,7 +414,6 @@ namespace GRANTManager
                 MenuItem sibling = new MenuItem();
                 node1 = strategyMgr.getSpecifiedTree().Next(tree);
                 //Pruefung, ob wir es ans richtige Element ranhängen und ggf. korrigieren
-                Debug.WriteLine(new String('\t', strategyMgr.getSpecifiedTree().Depth(node1)) + node1.ToString() + "\t"+ 2);
                 rootMenuItemCheckSibling(ref root, tree);
 
                 sibling.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
@@ -472,8 +466,6 @@ namespace GRANTManager
                     treeIteration(node1, ref root);
                 }
             }
-            Debug.WriteLine("strategyMgr.getSpecifiedTree().Count(tree) = {0}, strategyMgr.getSpecifiedTree().Depth(tree) = {1}", strategyMgr.getSpecifiedTree().Count(tree), strategyMgr.getSpecifiedTree().Depth(tree));
-            Debug.WriteLine(""+strategyMgr.getSpecifiedTree().IsRoot(tree));
             if (strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1)
             {
                 
@@ -535,8 +527,7 @@ namespace GRANTManager
                 projectFilePath = @projectFilePath + ".grant";
             }
             String directoryPath = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
-
-            Debug.WriteLine(directoryPath);
+            
             GrantProjectObject projectObject = new GrantProjectObject();
             #region Speichern der Strategyn
             projectObject.grantBrailleStrategyFullName =  strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().FullName;
@@ -798,7 +789,6 @@ namespace GRANTManager
                     return false;
                 }
                 IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName);
-                Debug.WriteLine("App ist gestartet: {0}", appIsRunnuing);
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
 

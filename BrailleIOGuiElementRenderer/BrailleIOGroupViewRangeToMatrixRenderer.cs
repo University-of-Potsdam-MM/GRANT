@@ -79,10 +79,7 @@ namespace BrailleIOGuiElementRenderer
                    bool[,] childMatrix;
                    if (child.renderer != null)
                    {
-                      /* if (child.renderer.GetType().Equals(typeof(BrailleIOTabItemToMatrixRenderer)))
-                       {
-                           System.Diagnostics.Debug.WriteLine("Tab = "+child.childUiElement.text+", isDisabled = "+child.childUiElement.isDisabled+", Screen ="+ child.childUiElement.screenName);
-                       }*/
+
                        childMatrix = child.renderer.RenderMatrix(tmpChildView, child.childUiElement as object);
                    }
                    else
@@ -90,14 +87,7 @@ namespace BrailleIOGuiElementRenderer
                        MatrixBrailleRenderer m = new MatrixBrailleRenderer();
                        childMatrix = m.RenderMatrix(tmpChildView, child.childUiElement.text as object);
                    }
-                    /*Console.WriteLine("ChildMatrix:");
-                    printMatrix(childMatrix);
-                    Console.WriteLine("viewMatrix:");
-                    printMatrix(viewMatrix);*/
                     Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - (Convert.ToInt32(view.ContentBox.Y) + Convert.ToInt32(view.ViewBox.Y)));
-                    //Helper.copyMatrixInMatrix(childMatrix, ref viewMatrix, Convert.ToInt32(child.childBoundingRectangle.TopLeft.X) - (Convert.ToInt32(view.ContentBox.X) + Convert.ToInt32(view.ViewBox.X)), Convert.ToInt32(child.childBoundingRectangle.TopLeft.Y) - Convert.ToInt32(view.ViewBox.Y));
-                   /* Console.WriteLine("viewMatrix:");
-                    printMatrix(viewMatrix);*/
                 }
            }
            view.ContentHeight = maxHeight;
@@ -114,7 +104,6 @@ namespace BrailleIOGuiElementRenderer
             {
                 for (int j = 0; j < (matrix.Length / matrix.GetLength(0)); j++)
                 {
-                    //   Console.Write(viewAtPoint[i,j]+ "\t");
                     if (matrix[i, j]) { Console.Write("x"); }
                     else
                     {

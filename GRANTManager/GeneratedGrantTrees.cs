@@ -156,7 +156,6 @@ namespace GRANTManager
             {
                 IEnumerable<XElement> oneSpecialOrder = xmlElement.Elements("SpecialOrder");
                 
-                //Debug.WriteLine(o);
                 foreach (XElement elementOrder in oneSpecialOrder)
                 {
                     SpecialOrder so = new SpecialOrder();
@@ -199,36 +198,12 @@ namespace GRANTManager
                 tvo.acronymsOfPropertyContent = new List<AcronymsOfPropertyContent>();
                 foreach (XElement xmlElement in uiElementAcronyms)
                 {
-                    //Debug.WriteLine(xmlElement);
                     AcronymsOfPropertyContent aopc = new AcronymsOfPropertyContent();
                     aopc.name = xmlElement.Element("Name").Value;
                     aopc.acronym = xmlElement.Element("Short").Value;
                     tvo.acronymsOfPropertyContent.Add(aopc);
                 }
             }
-
-
-         /*   IEnumerable<XElement> uiElementGroup = xmlDoc.Elements("SpecialGroups").Elements("Group");
-
-            if (!(uiElementGroup == null || !uiElementGroup.Any()))
-            {
-                tvo.specialGroups = new List<SpecialGroup>();
-                foreach (XElement xmlElement in uiElementGroup)
-                {
-                    Debug.WriteLine(xmlElement);
-                    SpecialGroup group = new SpecialGroup();
-                    group.controltype = xmlElement.Element("Controltype").Value;
-                    XElement xElementSeparator = xmlElement.Element("Separator");
-                    if( xElementSeparator != null)
-                    {
-                        group.separator = xElementSeparator.Value;
-                        if (group.separator.Equals("")) { group.separator = " "; }
-                    }
-                    tvo.specialGroups.Add(group);
-                }
-            }*/
-
-
 
             this.TextviewObject = tvo;
         }

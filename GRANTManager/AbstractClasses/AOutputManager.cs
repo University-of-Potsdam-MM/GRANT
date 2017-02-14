@@ -30,7 +30,6 @@ namespace GRANTManager.AbstractClasses
         public void setActiveDevice(Device device)
         {
             //prüfen, ob es nötig ist
-            // Console.WriteLine("this = {0}\n neu = {1}", this.GetType().AssemblyQualifiedName.ToString(), device.deviceClassType.AssemblyQualifiedName);
             if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
             {
                 if (device.deviceClassTypeFullName != null && device.deviceClassTypeNamespace != null)

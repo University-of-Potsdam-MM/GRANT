@@ -23,7 +23,6 @@ namespace GRANTManager.TreeOperations
         /// <param name="parentNode">gibt eine referenz zu dem Baum an</param>
         public void generatedIdsOfFilteredTree(ref Object tree)
         {
-            Console.WriteLine("===== DEBUG BEGINN - HASH ======");
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null)
@@ -33,13 +32,8 @@ namespace GRANTManager.TreeOperations
                     properties.IdGenerated = generatedIdFilteredNode(node);
                     osm.properties = properties;
                     strategyMgr.getSpecifiedTree().SetData(node, osm);
-                    if (properties.IdGenerated.Trim().Equals(""))
-                    {
-                        Debug.WriteLine("");
-                    }
                 }
             }
-            Console.WriteLine("===== DEBUG ENDE - HASH ======");
         }
 
         /// <summary>
@@ -131,7 +125,6 @@ namespace GRANTManager.TreeOperations
                 sb.Append(b.ToString("X2"));
             }
             String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
-            // Console.WriteLine("Node: name = {0}, \t controltype = {1}, \t hash[] = {2}, \t hashString = {3}, \t resultString = {4}", node.Data.properties.nameFiltered, node.Data.properties.controlTypeFiltered, tmpHash, sb.ToString(), result);
             return sb.ToString();
         }
 
@@ -156,7 +149,6 @@ namespace GRANTManager.TreeOperations
                 properties.controlTypeFiltered+
                 (braille.screenCategory == null? "":braille.screenCategory) +
                 (braille.uiElementSpecialContent == null? "": braille.uiElementSpecialContent.ToString());
-          //  Debug.WriteLine("in generatedIdBrailleNode String für Hash = ", result);
             byte[] hash;
             using (var md5 = MD5.Create())
             {

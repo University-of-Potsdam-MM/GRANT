@@ -42,8 +42,7 @@ namespace OSMElement
                 {
                     bool[][] resultmatrix = new bool[matrix.GetLength(0)][];
                     int width = matrix.Length / matrix.GetLength(0);
-                    System.Diagnostics.Debug.WriteLine("getLengt(0) = " + matrix.GetLength(0));
-                    for (int i = 0; i < matrix.GetLength(0); i++)
+                     for (int i = 0; i < matrix.GetLength(0); i++)
                     {
                         resultmatrix[i] = new bool[width];
                         for (int j = 0; j < width; j++)
