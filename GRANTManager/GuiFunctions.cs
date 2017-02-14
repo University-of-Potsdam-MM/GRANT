@@ -1112,8 +1112,16 @@ namespace GRANTManager
             tactlieRep.screenCategory = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
             tactlieRep.screenName = screenName != null ?  screenName : tactlieRep.screenCategory;
             //TODO: falls weitere GUI-Typen hinzukommen, muss hier ergänzt werden!
-            if (guiType.Equals("DropDownMenu"))
-            { //TODO
+            if (guiType.Equals("DropDownMenuItem"))
+            { 
+                OSMElement.UiElements.DropDownMenuItem dropDownMenuItem = new OSMElement.UiElements.DropDownMenuItem();
+                if (filteredNode != null)
+                {
+                    OSMElement.OSMElement dataNode = strategyMgr.getSpecifiedTree().GetData(filteredNode);
+                    dropDownMenuItem.hasChild = strategyMgr.getSpecifiedTree().HasChild(filteredNode);
+                    dropDownMenuItem.hasNext = strategyMgr.getSpecifiedTree().HasNext(filteredNode);
+                }
+                tactlieRep.uiElementSpecialContent = dropDownMenuItem;
             }
             if (guiType.Equals("ListItem")) {
                 //TODO

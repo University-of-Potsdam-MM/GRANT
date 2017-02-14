@@ -474,7 +474,7 @@ namespace StrategyBrailleIO
                     return new BrailleIOButtonToMatrixRenderer();
                 case "TextBox":
                     return new BrailleIOTextBoxToMatrixRenderer();
-                case "DropDownMenu":
+                case "DropDownMenuItem":
                     return new BrailleIODropDownMenuItemToMatrixRenderer();
                 case "GroupElement":
                     return new BrailleIOGroupViewRangeToMatrixRenderer();
@@ -489,7 +489,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
         /// </summary>
-        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenu, TextBox, ListItem, GroupElement, TabItem }
+        private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenuItem, TextBox, ListItem, GroupElement, TabItem }
 
         private struct uiElementsTypeStruct
         {
@@ -512,7 +512,7 @@ namespace StrategyBrailleIO
             uiElement.widthMin = 6; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2)
             uiElementList.Add(uiElement);
 
-            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.DropDownMenu.ToString();
+            uiElement.uiElementType = uiElementeTypesBrailleIoEnum.DropDownMenuItem.ToString();
             uiElement.heightMin = 9; // Rahmen (4) + Höhe kleiner Buchstabe (3) + Freizeile (2)
             uiElement.widthMin = 9; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2) + Bubel (3)
             uiElementList.Add(uiElement);
@@ -720,7 +720,7 @@ namespace StrategyBrailleIO
             {
                rect  = new Rect(0, 0, 30, 8);               
             }
-            if (uiElementeTypesBrailleIoEnum.DropDownMenu.ToString().Equals(uiElementType))
+            if (uiElementeTypesBrailleIoEnum.DropDownMenuItem.ToString().Equals(uiElementType))
             {
                 rect = new Rect(0,0,25,10);
                 DropDownMenuItem dropDownMenu = new DropDownMenuItem();
@@ -825,7 +825,7 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// konvertiert das DropDownMenu aus <code>OSMElement.UiElements.DropDownMenu</code> zu <code>BrailleIOGuiElementRenderer.UiElements.DropDownMenu</code>
+        /// konvertiert das DropDownMenuItem aus <code>OSMElement.UiElements.DropDownMenuItem</code> zu <code>BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem</code>
         /// </summary>
         /// <param name="osmMenu"></param>
         /// <returns></returns>

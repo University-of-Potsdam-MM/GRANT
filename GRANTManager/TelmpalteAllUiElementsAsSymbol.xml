@@ -54,7 +54,7 @@
   </UiConnection>
   <UiConnection>
     <ControllTypeFilteredUi>DropDownItem</ControllTypeFilteredUi>
-    <RendererBraille>DropDownMenu</RendererBraille>
+    <RendererBraille>DropDownMenuItem</RendererBraille>
     <Size>
       <Height>8</Height>
       <Width>8</Width>
