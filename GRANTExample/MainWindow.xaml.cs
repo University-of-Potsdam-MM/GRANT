@@ -312,7 +312,13 @@ namespace GRANTExample
                 {
                     guiFuctions.addFilteredNodeToBrailleTree("DropDownMenuItem",nodeList[0]);
                 }
+                nodeList = searchNodes.getAssociatedNodeList("58AA232A14172FB8BCD78A576BE94D80", grantTree.getFilteredTree()); //Beispielanwendung - checkbox
 
+                if (nodeList != null && nodeList.Count > 0)
+                {
+                    guiFuctions.addFilteredNodeToBrailleTree("ListItem", nodeList[0]);
+                }
+                
             }
 
        }

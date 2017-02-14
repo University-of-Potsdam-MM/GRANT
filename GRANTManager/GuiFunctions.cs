@@ -1123,8 +1123,17 @@ namespace GRANTManager
                 }
                 tactlieRep.uiElementSpecialContent = dropDownMenuItem;
             }
-            if (guiType.Equals("ListItem")) {
-                //TODO
+            if (guiType.Equals("ListItem"))
+            {
+                OSMElement.UiElements.ListMenuItem listItem = new OSMElement.UiElements.ListMenuItem();
+                if(filteredNode != null)
+                {
+                    if (strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.controlTypeFiltered.Equals("CheckBox"))
+                    {
+                        listItem.isMultipleSelection = true;
+                    }
+                }
+                tactlieRep.uiElementSpecialContent = listItem;
             }
             if (guiType.Equals("TabItem"))
             {
