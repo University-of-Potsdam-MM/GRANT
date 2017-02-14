@@ -1139,6 +1139,7 @@ namespace GRANTManager
             tactileOsm.brailleRepresentation = tactlieRep;
             tactileOsm.properties = tactileProp;
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(tactileOsm, parentIdTactlie);
+
             if (filteredNode != null)
             {
                 List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
@@ -1147,6 +1148,22 @@ namespace GRANTManager
             }
         }
         #endregion
+
+        /// <summary>
+        /// Erstellt eine Liste aller Typen aus <typeparamref name="GeneralProperties"/>
+        /// </summary>
+        /// <returns>Liste der Namen aller <typeparamref name="GeneralProperties"/></returns>
+        public List<String> getAllStringsFor_fromGuiElement()
+        {
+            List<String> fromGuiElementString = new List<string>();
+            var propNames = typeof(GeneralProperties).GetProperties();
+            foreach (var name in propNames)
+            {
+                fromGuiElementString.Add(name.Name.ToString());
+            }
+
+            return fromGuiElementString;
+        }
 
     }
 }
