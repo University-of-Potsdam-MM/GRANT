@@ -5,30 +5,104 @@ using OSMElement;
 
 namespace GRANTManager.Interfaces
 {
+    /// <summary>
+    /// interface for the tree operations
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface ITreeStrategy<T>
     {
+        /// <summary>
+        /// Creat a new tree structure
+        /// </summary>
+        /// <returns>a object with a new (empty) tree</returns>
         object NewTree();
 
+        /// <summary>
+        /// Adds a subtree (or node) to a given tree
+        /// </summary>
+        /// <param name="treeOld">the 'old' tree to add a part</param>
+        /// <param name="treeNewPart">the subtree (or node) to add</param>
         void Add(object treeOld, object treeNewPart); //ITree
-        object Add(object NodeOld, T o); //INode
+
+        /// <summary>
+        /// Adds node object to a tree
+        /// </summary>
+        /// <param name="treeOld">the 'old' tree to add a part</param>
+        /// <param name="nodeOsm"><c>OSMElement.OSMElement</c> with the properties of the new node</param>
+        /// <returns>tree object where the <para>nodeOsm</para> is added</returns>
+        object Add(object treeOld, T nodeOsm); //INode
+
+        /// <summary>
+        /// Adds a subtree in a given tree
+        /// </summary>
+        /// <param name="treeOld">>the 'old' tree to add a part; the pointer shows the position to add the subtree</param>
+        /// <param name="treeChild">the child subtree to add</param>
         void AddChild(object treeOld, object treeChild); //ITree
-        object AddChild(object treeOld, T o); //INode
+
+        /// <summary>
+        ///  Adds a subtree in a given tree
+        /// </summary>
+        /// <param name="treeOld">>the 'old' tree to add a part; the pointer shows the position to add the subtree</param>
+        /// <param name="nodeOsm"><c>OSMElement.OSMElement</c> with the properties of the new node</param>
+        /// <returns>tree object where the <para>nodeOsm</para> is added</returns>
+        object AddChild(object treeOld, T nodeOsm); //INode
+
         IEnumerable<object> AllNodes(object treeObject); //Common.IEnumerableCollectionPair<T> All { get; }
         System.Collections.Generic.IEnumerable<Object> AllChildrenNodes(object treeObject);//  Common.IEnumerableCollectionPair<T> AllChildren { get; }
+
+        /// <summary>
+        /// Gives the count of branches of a node
+        /// </summary>
+        /// <param name="node"> a node object</param>
+        /// <returns>count of branches of the node</returns>
         int BranchCount(object node);
+
+        /// <summary>
+        /// gives the index of a branch
+        /// </summary>
+        /// <param name="node">a node object</param>
+        /// <returns>index of branch of the node</returns>
         int BranchIndex(object node);
-        /*bool CanMoveToChild { get; }
-        bool CanMoveToFirst { get; }
-        bool CanMoveToLast { get; }
-        bool CanMoveToNext { get; }
-        bool CanMoveToParent { get; }
-        bool CanMoveToPrevious { get; }*/
+
+        /// <summary>
+        /// Gives the child of a node
+        /// </summary>
+        /// <param name="node">a node object</param>
+        /// <returns>object with the child of the given node</returns>
         object Child(object node); //INode
          void Clear(object tree);
+
+
+        /// <summary>
+        /// Determines whether an element is in the tree object
+        /// </summary>
+        /// <param name="treeOld">the tree object which maybe contains the item</param>
+        /// <param name="item">The object to locate in the given <para>treeold</para></param>
+        /// <returns><c>true</c> if item is found; otherwise, <c>false</c></returns>
         bool Contains(object treeOld, object item); //INOde
-        bool Contains(object treeOld, T item);
+
+        /// <summary>
+        /// Determines whether an element is in the tree object
+        /// </summary>
+        /// <param name="treeOld">the tree object which maybe contains the item</param>
+        /// <param name="nodeOsm">a <c>OSMElement.OSMElement<c></param>
+        /// <returns><c>true</c> if item is found; otherwise, <c>false</c></returns>
+        bool Contains(object treeOld, T nodeOsm);
+
+
+        /// <summary>
+        /// Copied a tree object
+        /// </summary>
+        /// <param name="treeOld">tree to copy</param>
+        /// <returns>a copy of the given tree</returns>
         object Copy(object treeOld); //ITree
         object Copy(object treeOld, T o); //ITree
+
+        /// <summary>
+        /// Counts the nodes the tree
+        /// </summary>
+        /// <param name="tree">a tree object</param>
+        /// <returns>number of nodes</returns>
         int Count(object tree);
         object Cut(object treeOld); //ITree
         object Cut(object treeOld, T o); //ITree

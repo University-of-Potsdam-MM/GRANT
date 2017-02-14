@@ -92,11 +92,21 @@ namespace GRANTManager.TreeOperations
             return result;
         }
 
+        /// <summary>
+        /// Sucht in dem gefilterten Baum der Anwendung nach einem Knoten mit einer speziellen Id
+        /// </summary>
+        /// <param name="idGenerated">gibt die Id des gesuchten Knotens an</param>
+        /// <returns><c>OSMElement.OSMElement</c> mit der gesuchten Id</returns>
         public OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated)
         {
             return getAssociatedNodeElement(idGenerated, grantTrees.getFilteredTree());
         }
 
+        /// <summary>
+        /// Sucht in dem Braille Baume nach einem Knoten mit einer speziellen Id
+        /// </summary>
+        /// <param name="idGenerated">gibt die Id des gesuchten Knotens an</param>
+        /// <returns><c>OSMElement.OSMElement</c> mit der gesuchten Id</returns>
         public OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated)
         {
             return getAssociatedNodeElement(idGenerated, grantTrees.getBrailleTree());
@@ -144,8 +154,6 @@ namespace GRANTManager.TreeOperations
             return null;
 
         }
-
-
 
         /// <summary>
         /// Gibt einen Teilbaum zurück, welcher nur die Views eines Screens enthält

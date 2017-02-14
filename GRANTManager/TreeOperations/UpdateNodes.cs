@@ -11,7 +11,7 @@ using OSMElement.UiElements;
 namespace GRANTManager.TreeOperations
 {
     /// <summary>
-    /// Die Klasse Kapselt update-Methode -> ectl. in ein anderes Paket verschieben
+    /// Die Klasse Kapselt update-Methode -> evtl. in ein anderes Paket verschieben
     /// </summary>
     public class UpdateNodes
     {

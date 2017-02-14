@@ -12,22 +12,42 @@ namespace StrategyGenericTree
 {
     public class Tree2Extended <T> : ITreeStrategy<T>
     {
+        /// <summary>
+        /// Creat a new tree structure
+        /// </summary>
+        /// <returns>a object with a new (empty) tree</returns>
         public Object NewTree()
         {
             return (Object)( NodeTree<T>.NewTree());
         }
 
+        /// <summary>
+        /// Adds a subtree (or node) to a given tree
+        /// </summary>
+        /// <param name="treeOld">the 'old' tree to add a part</param>
+        /// <param name="treeNewPart">the subtree (or node) to add</param>
         public void Add(Object treeOld, Object treeNewPart)
         {
             ((INode<T>)treeOld).Add((ITree<T>)treeNewPart);
             //((NodeTree<T>)treeOld).Add((ITree<T>)treeNewPart);
         }
 
-        public Object Add(Object treeOld, T o)
+        /// <summary>
+        /// Adds node object to a tree
+        /// </summary>
+        /// <param name="treeOld">the 'old' tree to add a part</param>
+        /// <param name="nodeOsm"><c>OSMElement.OSMElement</c> with the properties of the new node</param>
+        /// <returns>tree object where the <para>nodeOsm</para> is added</returns>
+        public Object Add(Object treeOld, T nodeOsm)
         {
-            return (((INode<T>)treeOld).Add(o));
+            return (((INode<T>)treeOld).Add(nodeOsm));
         }
 
+        /// <summary>
+        /// Adds a subtree in a given tree
+        /// </summary>
+        /// <param name="treeOld">>the 'old' tree to add a part; the pointer shows the position to add the subtree</param>
+        /// <param name="treeChild">the child subtree to add</param>
         public void AddChild(Object treeOld, Object treeChild)
         {
             Type treeOldType = treeOld.GetType();
@@ -51,70 +71,116 @@ namespace StrategyGenericTree
             }
         }
 
-        
-        public Object AddChild(Object treeOld, T o)
+        /// <summary>
+        ///  Adds a subtree in a given tree
+        /// </summary>
+        /// <param name="treeOld">>the 'old' tree to add a part; the pointer shows the position to add the subtree</param>
+        /// <param name="nodeOsm"><c>OSMElement.OSMElement</c> with the properties of the new node</param>
+        /// <returns>tree object where the <para>nodeOsm</para> is added</returns>
+        public Object AddChild(Object treeOld, T nodeOsm)
         {
             Type treeOldType = treeOld.GetType();
             if (treeOldType.BaseType.Name.Equals(typeof(NodeTree<T>).Name) || treeOldType.Name.Equals(typeof(NodeTree<T>).Name))
             {
-                return ((NodeTree<T>)treeOld).AddChild(o);
+                return ((NodeTree<T>)treeOld).AddChild(nodeOsm);
             }
             else
             {
                 if (treeOldType.BaseType.Name.Equals(typeof(ITree<T>).Name) || treeOldType.Name.Equals(typeof(ITree<T>).Name))
                 {
-                    return ((ITree<T>)treeOld).AddChild(o);
+                    return ((ITree<T>)treeOld).AddChild(nodeOsm);
                 }
                 else
                 {
                     if (treeOldType.BaseType.Name.Equals(typeof(INode<T>).Name) || treeOldType.Name.Equals(typeof(INode<T>).Name))
                     {
-                        return ((INode<T>)treeOld).AddChild(o);
+                        return ((INode<T>)treeOld).AddChild(nodeOsm);
                     }
                 }
             }
             return null;
         }
 
-        
+        /// <summary>
+        /// Gives the count of branches of a node
+        /// </summary>
+        /// <param name="node"> a node object</param>
+        /// <returns>count of branches of the node</returns>
         public int BranchCount(Object node)
         {
              return ((INode<T>)node).BranchCount; 
         }
 
+        /// <summary>
+        /// gives the index of a branch
+        /// </summary>
+        /// <param name="node">a node object</param>
+        /// <returns>index of branch of the node</returns>
         public int BranchIndex(Object node)
         {
              return ((INode<T>)node).BranchIndex; 
         }
 
 
-
+        /// <summary>
+        /// Gives the child of a node
+        /// </summary>
+        /// <param name="node">a node object</param>
+        /// <returns>object with the child of the given node</returns>
         public Object Child(Object node)
         {
             return ((INode<T>)node).Child; 
         }
 
+        /// <summary>
+        /// Determines whether an element is in the tree object
+        /// </summary>
+        /// <param name="treeOld">the tree object which maybe contains the item</param>
+        /// <param name="item">The object to locate in the given <para>treeold</para></param>
+        /// <returns><c>true</c> if item is found; otherwise, <c>false</c></returns>
         public bool Contains(Object treeOld, Object item)
         {
             return ((ITree<T>)treeOld).Contains((INode<T>)item);
         }
 
-        public bool Contains(Object treeOld, T item)
+        /// <summary>
+        /// Determines whether an element is in the tree object
+        /// </summary>
+        /// <param name="treeOld">the tree object which maybe contains the item</param>
+        /// <param name="nodeOsm">a <c>OSMElement.OSMElement<c></param>
+        /// <returns><c>true</c> if item is found; otherwise, <c>false</c></returns>
+        public bool Contains(Object treeOld, T nodeOsm)
         {
-            if (treeOld == null || item == null) { return false; }
-            return ((ITree<T>)treeOld).Contains(item);
+            if (treeOld == null || nodeOsm == null) { return false; }
+            return ((ITree<T>)treeOld).Contains(nodeOsm);
         }
 
+        /// <summary>
+        /// Copied a tree object
+        /// </summary>
+        /// <param name="treeOld">tree to copy</param>
+        /// <returns>a copy of the given tree</returns>
         public Object Copy(Object treeOld)
         {
             return ((ITree<T>)treeOld).Copy();
         }
 
+        /// <summary>
+        /// Copied a tree object
+        /// </summary>
+        /// <param name="treeOld">tree to copy</param>
+        /// <param name="o"></param>
+        /// <returns></returns>
         public Object Copy(Object treeOld,T o)
         {
             return ((ITree<T>)treeOld).Copy(o);
         }
 
+        /// <summary>
+        /// Counts the nodes the tree
+        /// </summary>
+        /// <param name="tree">a tree object</param>
+        /// <returns>number of nodes</returns>
         public int Count(Object tree)
         {
             return((ITree<T>)tree).Count; 
