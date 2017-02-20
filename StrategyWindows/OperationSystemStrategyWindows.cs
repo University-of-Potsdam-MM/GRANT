@@ -12,6 +12,7 @@ namespace StrategyWindows
     public class OperationSystemStrategyWindows : IOperationSystemStrategy
     {
         private StrategyManager strategyMgr;
+        Thread paintRecThread;
         
         /// <summary>
         /// Methode aus Interface IOperationSystemStrategy
@@ -30,6 +31,7 @@ namespace StrategyWindows
             windowsEventsHandler = new Windows_EventsHandler(strategyMgr);
             //windowsEventsHandler.setStrategyMgr(strategyMgr);
             windowsEventsMonitor = new Windows_EventsMonitor(windowsEventsHandler);
+            paintRecThread = new Thread(delegate () { paintRecClear(null); });
         }
 
         Windows_EventsHandler windowsEventsHandler;
@@ -212,14 +214,24 @@ namespace StrategyWindows
             Pen redPen = new Pen(Color.Red, 5);
             newGraphics.DrawRectangle(redPen, rect);
 
-            System.Threading.Thread.Sleep(1000);
-            
-            NativeMethods.InvalidateRect(IntPtr.Zero, IntPtr.Zero , true);
+            if (!paintRecThread.IsAlive)
+            {
+                paintRecThread = new Thread(delegate () { paintRecClear(newGraphics); });
+                paintRecThread.Start();
+            }
+        }
+
+        private void paintRecClear(Graphics graphics)
+        {
+            if(graphics == null) { return; }
+            System.Threading.Thread.Sleep(2000);
+
+            NativeMethods.InvalidateRect(IntPtr.Zero, IntPtr.Zero, true);
 
             //updatewindow säubert nicht ordentlich den screen
             //updateWindow(IntPtr.Zero);
-
-            newGraphics.Dispose();
+            
+            graphics.Dispose();
         }
 
         /// <summary>

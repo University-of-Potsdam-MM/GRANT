@@ -14,6 +14,7 @@ using GRANTManager.TreeOperations;
 using GRANTManager.Interfaces;
 using OSMElement;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace GRANTManager
 {
@@ -40,6 +41,12 @@ namespace GRANTManager
             public MenuItem()
             {
                 this.Items = new ObservableCollection<MenuItem>();
+            }
+
+            public override string ToString()
+            {
+               // return String.Format("Id = {0}, controlType = {1}, name = {2}", IdGenerated, controlTypeFiltered, nameFiltered);
+               return String.Format("{0} - {1}", controlTypeFiltered, nameFiltered);
             }
 
             public String IdGenerated
@@ -225,7 +232,7 @@ namespace GRANTManager
 
                public String valueFiltered { get; set; }*/
 
-            public MenuItem parentMenuItem
+            public TreeViewItem parentMenuItem
             {
                 get;
                 set;
@@ -241,58 +248,64 @@ namespace GRANTManager
             public ObservableCollection<MenuItem> Items { get; set; }
         }
 
-
-
         /// <summary>
-        /// prueft, ob der Knoten an der richtigen Stelle dargestellt wird und korrigiert es ggf.
+        /// "Klopft" einen Baum flach
         /// </summary>
-        /// <param name="root">gibt das (erwartete) Eltern-menuItem-element an</param>
-        /// <param name="parentNode">gibt den vorgängert Knoten (linker Geschwisterknoten) an</param>
-        private void rootMenuItemCheckSibling(ref MenuItem root, Object siblingNode)
+        /// <param name="node">gibt den ersten Knoten an</param>
+        /// <returns></returns>
+        public static IEnumerable<TreeViewItem> Flatten(TreeViewItem node)
         {
-            if (root.IdGenerated.Trim().Equals("")) { return; }
-
-            if (strategyMgr.getSpecifiedTree().HasParent(siblingNode) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(siblingNode)).properties.IdGenerated.Equals(root.IdGenerated))
+            // http://stackoverflow.com/questions/17086190/linq-query-for-selecting-an-item-from-tree-structure-but-to-look-in-the-whole-d -> Antwort von Ben Reich
+            yield return node;
+            if (node.Items != null)
             {
-                if (root.parentMenuItem.IdGenerated.Equals(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(siblingNode)).properties.IdGenerated))
-                {
-                    root = root.parentMenuItem;
-                    rootMenuItemCheckSibling(ref root, siblingNode);
-                }
+                foreach (var child in node.Items)
+                    foreach (var descendant in Flatten((TreeViewItem)child))
+                        yield return descendant;
             }
         }
+
+
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tree">gibt den darzustellenden Braille-Baum an</param>
+        /// <param name="tree">gibt den darzustellenden Baum an</param>
         /// <param name="root"></param>
-        public void createTreeForOutput(Object tree, ref GuiFunctions.MenuItem root)
-        {
+        /// <param name="isFilteredTree">gibt an, ob es sich um den gefilterten Baum handelt</param>
+        public void createTreeForOutput(Object tree, ref TreeViewItem root, bool isFilteredTree = true)
+        {            
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                  MenuItem child = new MenuItem();
+                TreeViewItem treeViewItem = new TreeViewItem();
+                #region Werte hinzufügen
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
               
                 String nameFiltered;
-
-                if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
+                if (!isFilteredTree)
                 {
-                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory;
+                    if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
+                    {
+                        nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory;
+
+                    }
+                    else if (strategyMgr.getSpecifiedTree().Depth(node) == 1)
+                    {
+                        nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName;
+
+                    }
+                    else
+                    {
+                        nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
+
+                    }
+                }else
+                {
+                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered;
 
                 }
-                else if(strategyMgr.getSpecifiedTree().Depth(node) == 1)
-                {
-                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName;
-
-                }
-                else
-                {
-                    nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName;
-
-                }
-           
                 if (nameFiltered.Length > 40)
                 {
                     child.nameFiltered = nameFiltered.Substring(0, 40);
@@ -301,27 +314,69 @@ namespace GRANTManager
                 {
                     child.nameFiltered = nameFiltered;
                 }
+                #endregion
+                treeViewItem.Header = child;
 
-                if (!strategyMgr.getSpecifiedTree().IsRoot(node))
+                #region Tooltip für Knotenbeziehungen
+                if (grantTrees.getBrailleTree() != null)
                 {
-                    child.parentMenuItem = root;
-                    root.Items.Add(child);
-                    if (strategyMgr.getSpecifiedTree().IsLast(node))
+                    Object treeForSearch;
+                    List<String> conIds = new List<string>();
+                    String toolTip = "Connected node:";
+                    if (!isFilteredTree)
                     {
-                        root = getRootForNextElement(node, child);
+                        treeForSearch = grantTrees.getFilteredTree();
+                        conIds.Add(treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
+                    }
+                    else
+                    {
+                        treeForSearch = grantTrees.getBrailleTree();
+                        conIds = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
+                    }
+                    if (conIds != null && conIds.Count > 0 && conIds[0] != null)
+                    {
+                        foreach (String id in conIds)
+                        {
+                            OSMElement.OSMElement conNode = treeOperation.searchNodes.getAssociatedNodeElement(id, treeForSearch);
+                            if (!conNode.Equals(new OSMElement.OSMElement()))
+                            {
+                                if (isFilteredTree)
+                                {
+                                    toolTip += "\n" + conNode.brailleRepresentation.screenCategory +" "+ conNode.brailleRepresentation.screenName+" " + conNode.brailleRepresentation.viewName + " -" +conNode.properties.controlTypeFiltered +  " (" + conNode.properties.IdGenerated + ")";
+                                }
+                                else
+                                {
+                                    toolTip += "\n" + conNode.properties.controlTypeFiltered + " - " + conNode.properties.nameFiltered + " (" + conNode.properties.IdGenerated + ")";
+                                }
+                            }
+                            treeViewItem.ToolTip = toolTip;
+                        }
                     }
                 }
-                else { root = child; };
+                #endregion
+                if (!strategyMgr.getSpecifiedTree().IsRoot(node))
+                {
+                    if (!(isFilteredTree && strategyMgr.getSpecifiedTree().IsTop(node)))
+                    {
+                        child.parentMenuItem = root;
+
+                        root.Items.Add(treeViewItem);
+                        if (strategyMgr.getSpecifiedTree().IsLast(node))
+                        {
+                            root = getRootForNextElement(node, treeViewItem);
+                        }
+                    }
+                }
 
                 if (strategyMgr.getSpecifiedTree().HasChild(node))
                 {
-                    root = child;
+                    root = treeViewItem;
                 }
             }
             //geht zurück zum "Root"-MenuItem
-            while (root.parentMenuItem != null)
+            while (root.Header != null && root.Header is MenuItem && ((MenuItem)root.Header).parentMenuItem != null)
             {
-                root = root.parentMenuItem;
+                root = ((MenuItem)root.Header).parentMenuItem;
             }
         }
 
@@ -331,159 +386,21 @@ namespace GRANTManager
         /// <param name="node"></param>
         /// <param name="nodeItem"></param>
         /// <returns><c>GuiFunctions.MenuItem</c>, welches für den nächsten Knoten verwendet werden soll</returns>
-        private GuiFunctions.MenuItem getRootForNextElement(Object node, GuiFunctions.MenuItem nodeItem)
+        private TreeViewItem getRootForNextElement(Object node, TreeViewItem nodeItem)
         {
             if (!strategyMgr.getSpecifiedTree().HasNext(node) && strategyMgr.getSpecifiedTree().HasParent(node)) 
             {
                 if (strategyMgr.getSpecifiedTree().HasNext(strategyMgr.getSpecifiedTree().Parent(node)))
                 {
-                    return nodeItem.parentMenuItem.parentMenuItem;
+                    return (((MenuItem)((MenuItem)nodeItem.Header).parentMenuItem.Header).parentMenuItem);
                 }
                 else
                 {
-                    return getRootForNextElement(strategyMgr.getSpecifiedTree().Parent(node), nodeItem.parentMenuItem);
+                    return getRootForNextElement(strategyMgr.getSpecifiedTree().Parent(node), ((MenuItem)nodeItem.Header).parentMenuItem);
                 }
             }
+            
             return nodeItem;
-        }
-
-
-        public void treeIteration(Object tree, ref GuiFunctions.MenuItem root)
-        {
-
-            Object node1;
-
-            while (strategyMgr.getSpecifiedTree().HasChild(tree) && !(strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1))
-            {
-
-                
-                MenuItem child = new MenuItem();
-                node1 = strategyMgr.getSpecifiedTree().Child(tree);
-                child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
-                child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
-
-                String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered;
-                if (nameFiltered.Length > 40)
-                {
-                    child.nameFiltered = nameFiltered.Substring(0, 40);
-                }
-                else
-                {
-                    child.nameFiltered = nameFiltered;
-                }
-
-                /*  child.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
-                  child.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
-                  child.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
-                  child.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
-                  child.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
-                  child.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                  child.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
-                  child.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
-                  child.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
-                  child.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
-                  child.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
-  */
-
-
-                if (!strategyMgr.getSpecifiedTree().IsRoot(tree))
-                {
-                    child.parentMenuItem = root;
-
-                    root.Items.Add(child);
-                }
-                else { root = child; };
-
-                if (strategyMgr.getSpecifiedTree().HasChild(node1))
-                {
-                    treeIteration(node1, ref child);
-                }
-                else
-                {
-                    if (strategyMgr.getSpecifiedTree().IsFirst(node1) && strategyMgr.getSpecifiedTree().IsLast(node1))
-                    {
-                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
-                    }
-                    treeIteration(node1, ref root);
-                }
-
-
-            }
-            while (strategyMgr.getSpecifiedTree().HasNext(tree))
-            {
-                MenuItem sibling = new MenuItem();
-                node1 = strategyMgr.getSpecifiedTree().Next(tree);
-                //Pruefung, ob wir es ans richtige Element ranhängen und ggf. korrigieren
-                rootMenuItemCheckSibling(ref root, tree);
-
-                sibling.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.controlTypeFiltered;
-                sibling.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.IdGenerated;
-                String nameFiltered = strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node1).properties.nameFiltered.ToString();
-                if (nameFiltered.Length > 40)
-                {
-                    sibling.nameFiltered = nameFiltered.Substring(0, 20);
-                }
-                else
-                {
-                    sibling.nameFiltered = nameFiltered;
-                }
-                /*       sibling.acceleratorKeyFiltered = node1.Data.properties.acceleratorKeyFiltered == null ? " " : node1.Data.properties.acceleratorKeyFiltered;
-                       sibling.accessKeyFiltered = node1.Data.properties.accessKeyFiltered == null ? " " : node1.Data.properties.accessKeyFiltered;
-
-                       sibling.helpTextFiltered = node1.Data.properties.helpTextFiltered == null ? " " : node1.Data.properties.helpTextFiltered;
-                       sibling.autoamtionIdFiltered = node1.Data.properties.autoamtionIdFiltered == null ? " " : node1.Data.properties.autoamtionIdFiltered;
-                       sibling.classNameFiltered = node1.Data.properties.classNameFiltered == null ? " " : node1.Data.properties.classNameFiltered;
-                       sibling.controlTypeFiltered = node1.Data.properties.controlTypeFiltered == null ? " " : node1.Data.properties.controlTypeFiltered;
-                       sibling.frameWorkIdFiltered = node1.Data.properties.frameWorkIdFiltered == null ? " " : node1.Data.properties.frameWorkIdFiltered;
-
-
-
-                       sibling.itemTypeFiltered = node1.Data.properties.itemTypeFiltered == null ? " " : node1.Data.properties.itemTypeFiltered;
-                       sibling.itemStatusFiltered = node1.Data.properties.itemStatusFiltered == null ? " " : node1.Data.properties.itemStatusFiltered;
-
-
-                       sibling.valueFiltered = node1.Data.properties.valueFiltered == null ? " " : node1.Data.properties.valueFiltered;
-
-                       sibling.boundingRectangleFiltered = node1.Data.properties.boundingRectangleFiltered;
-                       */
-                sibling.parentMenuItem = root;
-                root.Items.Add(sibling);
-
-                if (strategyMgr.getSpecifiedTree().HasChild(node1))
-                {
-                    treeIteration(node1, ref sibling);
-                }
-                else
-                {
-                    if (strategyMgr.getSpecifiedTree().IsFirst(node1) && strategyMgr.getSpecifiedTree().IsLast(node1))
-                    {
-                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
-                    }
-                    if (!strategyMgr.getSpecifiedTree().HasChild(node1) && !strategyMgr.getSpecifiedTree().HasNext(node1))
-                    {
-                        root = root.parentMenuItem == null ? root : root.parentMenuItem;
-                    }
-                    treeIteration(node1, ref root);
-                }
-            }
-            if (strategyMgr.getSpecifiedTree().Count(tree) == 1 && strategyMgr.getSpecifiedTree().Depth(tree) == -1)
-            {
-                
-                return;
-            }
-            if (!strategyMgr.getSpecifiedTree().HasChild(tree))
-            {
-                node1 = tree;
-                if (strategyMgr.getSpecifiedTree().HasParent(tree))
-                {
-                    strategyMgr.getSpecifiedTree().Remove(node1);
-                    return;
-                }
-            }
-            if (strategyMgr.getSpecifiedTree().IsFirst(tree) && strategyMgr.getSpecifiedTree().IsLast(tree))
-            {
-                root = root.parentMenuItem == null ? root : root.parentMenuItem;
-            }
         }
 
         /// <summary>

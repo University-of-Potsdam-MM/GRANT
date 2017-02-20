@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Data;
 using GRANTManager.TreeOperations;
 using System.Linq;
+using System.Diagnostics;
 
 namespace GRANTApplication
 {
@@ -21,12 +22,10 @@ namespace GRANTApplication
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperations;
-        GuiFunctions.MenuItem filteredRoot;
-        GuiFunctions.MenuItem brailleRoot;
+        TreeViewItem filteredRoot;
+        TreeViewItem brailleRoot;
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
-        int var2;
-        String matrix;
 
         [System.ComponentModel.BrowsableAttribute(false)]
         public DataGridCell CurrentCell { get; set; }
@@ -77,8 +76,8 @@ namespace GRANTApplication
 
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
 
-            filteredRoot = new GuiFunctions.MenuItem();
-            brailleRoot = new GuiFunctions.MenuItem();
+            filteredRoot = new TreeViewItem();
+            brailleRoot = new TreeViewItem();
             screenRoot = new GuiFunctions.MenuItem();
 
             //NodeButton.IsEnabled = false;
@@ -304,16 +303,12 @@ namespace GRANTApplication
 
                 //TreeViewItem root = new TreeViewItem();
 
-                filteredRoot.controlTypeFiltered = "Filtered- Updated- Tree";
+                //filteredRoot.Header.controlTypeFiltered = "Filtered- Updated- Tree";
 
-                //
-                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-
+                guiFunctions.createTreeForOutput(tree, ref filteredRoot);
                 SaveButton.IsEnabled = true;
                 LoadTemplate.IsEnabled = true;
                 tvOutput.Items.Add(filteredRoot);
-
-
 
                 int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
                 comboBox2.SelectedIndex = var3;
@@ -329,10 +324,11 @@ namespace GRANTApplication
                     brailleOutput.Items.Clear();
                     brailleRoot.Items.Clear();
 
-                    // TreeViewItem root = new TreeViewItem();
+                    //TreeViewItem rootBraille = new TreeViewItem();
 
-                    brailleRoot.controlTypeFiltered = "Braille-Tree";
-                    guiFunctions.createTreeForOutput(grantTrees.getBrailleTree(), ref brailleRoot); 
+                    // brailleRoot.controlTypeFiltered = "Braille-Tree";
+                    brailleRoot.Header = "Braille-Tree";
+                    guiFunctions.createTreeForOutput(grantTrees.getBrailleTree(), ref brailleRoot, false); 
 
                     SaveButton.IsEnabled = true;
                     brailleOutput.Items.Add(brailleRoot);
@@ -369,13 +365,13 @@ namespace GRANTApplication
                 brailleOutput.Items.Clear();
                 brailleRoot.Items.Clear();
 
-                // TreeViewItem root = new TreeViewItem();
-
-                brailleRoot.controlTypeFiltered = "Braille-Tree";
+                //TreeViewItem root = new TreeViewItem();
+                brailleRoot.Header = "Braille-Tree";
+                //brailleRoot.controlTypeFiltered = "Braille-Tree";
 
                 //
                 //  guiFunctions.createTreeForOutput(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-                guiFunctions.createTreeForOutput(tree1, ref brailleRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                guiFunctions.createTreeForOutput(tree1, ref brailleRoot);
 
                 SaveButton.IsEnabled = true;
                 brailleOutput.Items.Add(brailleRoot);
@@ -671,27 +667,27 @@ namespace GRANTApplication
 
             var tree = sender as TreeView;
             System.Console.WriteLine(" NAMEtvoutup!!!!!!!!!!!!!!!!!!!: " + tree.Name);
-            GuiFunctions.MenuItem item;
-            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            TreeViewItem item;
+            if (tree.SelectedItem is TreeViewItem)
             {
                 // ... Handle a TreeViewItem.
                 if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
 
                 else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
-                else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
+                else { item = tree.SelectedItem as TreeViewItem; }
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
-                if (item.IdGenerated != null)
+                if ( item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     if (osmElement.properties.isOffscreenFiltered == false) {
                         strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
                     }
-                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
+                    int var1 = listBox1.Items.IndexOf(((GuiFunctions.MenuItem)item.Header).controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
                     listBox1.SelectedIndex = var1;
 
-                    updateFilteredTable(item.IdGenerated);
+                    updateFilteredTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
 
                     System.Console.WriteLine(" INDEX: " + var1);
 
@@ -1092,37 +1088,85 @@ namespace GRANTApplication
             var tree = sender as TreeView;
             System.Console.WriteLine(" NAMEtbraille!!!!!!!!!!!!!!!!!!!: " + tree.Name);
 
-            GuiFunctions.MenuItem item;
-            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            TreeViewItem item;
+            if (tree.SelectedItem is TreeViewItem)
             {
                 // ... Handle a TreeViewItem.
                 if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
 
                 else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
-                else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
+                else { item = tree.SelectedItem as TreeViewItem; }
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
-                if (item.IdGenerated != null)
+                if ( item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     //System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     //if (osmElement.properties.isOffscreenFiltered == false)
                     //{
                     //    strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
                     //}
-                    int var1 = listBox1.Items.IndexOf(item.controlTypeFiltered);
+                    
+
+                    updateBrailleTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    screenViewIteration(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    
+
+                    #region in der gefilterten Baumansich Element hervorheben
+                    String connectedFilteredNode = treeOperations.searchNodes.getConnectedFilteredTreenodeId(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    var v = ((TreeViewItem)(((TreeViewItem)tvOutput.Items[0]).Items[0])).Header;
+
+                    var v2 = ((TreeViewItem)(((TreeViewItem)tvOutput.Items[0]).Items[0])).Items;
+                    Debug.Print("");
+                    Type t_v = v.GetType();
+                    Type t_v2 = v2.GetType();
+                    if (connectedFilteredNode != null && connectedFilteredNode != "")
+                    {
+
+                        List<TreeViewItem> menuItem = getMenuItemsById(tvOutput, connectedFilteredNode);
+
+                        TreeViewItem tvi = new TreeViewItem();
+                        if (menuItem != null && menuItem.Count == 1)
+                        {
+                            menuItem[0].IsSelected = true;
+                          //  menuItem[0].IsExpanded = true;
+                            menuItem[0].BringIntoView();
+                        }
+                    }
+                    else
+                    {
+                        if (((TreeViewItem)tvOutput.SelectedItem) != null)
+                        {
+                            ((TreeViewItem)tvOutput.SelectedItem).IsSelected = false;
+                        }
+                    }
+                    #endregion
+                    int var1 = listBox1.Items.IndexOf(((GuiFunctions.MenuItem)item.Header).controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox1.Items.IndexOf("Text"); }
                     listBox1.SelectedIndex = var1;
-
-                    updateBrailleTable(item.IdGenerated);
-                    screenViewIteration(item.IdGenerated);
-
                     System.Console.WriteLine(" INDEX: " + var1);
+                    
 
                 }
 
             }
         }
 
+        /// <summary>
+        /// Ermittelt aus einer TreeView alle Knoten mit einer bestimmten Id
+        /// </summary>
+        /// <param name="treeView">gibt die TreeView an</param>
+        /// <param name="id">gibt die gesuchte Id an</param>
+        /// <returns>Liste mit allen Knoten, die die <para>id</para> haben</returns>
+        private List<TreeViewItem> getMenuItemsById(TreeView treeView, String id)
+        {
+            foreach (TreeViewItem tvi in treeView.Items)
+            {
+                var result = GuiFunctions.Flatten(tvi).Where(t => t.Header != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
+                if (result != null && result.Count<TreeViewItem>() > 0)
+                    return result.ToList<TreeViewItem>();
+            }
+            return null;
+        }
     }
 }
 //wird im  moment nicht aufgerufen

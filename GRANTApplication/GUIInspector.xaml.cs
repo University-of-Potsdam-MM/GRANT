@@ -20,7 +20,8 @@ namespace GRANTApplication
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperations;
-        GuiFunctions.MenuItem root;
+        //  GuiFunctions.MenuItem root;
+        TreeViewItem root;
         GuiFunctions guiFunctions;
         bool filterWindowOpen = false;
         bool outputDesignerWindowOpen = false;
@@ -57,7 +58,8 @@ namespace GRANTApplication
             tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
            
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
-            root = new GuiFunctions.MenuItem();
+            //root = new GuiFunctions.MenuItem();
+            root = new TreeViewItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
             //SaveStartButton.IsEnabled = false;
@@ -239,12 +241,12 @@ namespace GRANTApplication
             var tree = sender as TreeView;
 
             // ... Determine typeOfTemplate of SelectedItem.
-            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            if (tree.SelectedItem is TreeViewItem)
             {
                 // ... Handle a TreeViewItem.
-                GuiFunctions.MenuItem item = tree.SelectedItem as GuiFunctions.MenuItem;
+                TreeViewItem item = tree.SelectedItem as TreeViewItem;
                 //this.Title = "Selected header: " + item.IdGenerated.ToString();
-                if (item.IdGenerated != null)
+                if (item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
                     //Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
 
@@ -252,7 +254,7 @@ namespace GRANTApplication
                     //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
 
                     //updateProperties(item);
-                    updatePropertiesTable(item.IdGenerated);
+                    updatePropertiesTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                 }
             //Methode MenuItem übergeben - tabelle
             }
@@ -366,9 +368,9 @@ namespace GRANTApplication
                         //
        
 
-                        guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-                                                              // root.Selected += root_Selected;
-                                                              //
+                       guiFunctions.createTreeForOutput(tree, ref root);
+                        // root.Selected += root_Selected;
+                        //
                         SaveButton.IsEnabled = true;
                         //SaveStartButton.IsEnabled = true;
                         tvMain.Items.Add(root);
@@ -420,11 +422,10 @@ namespace GRANTApplication
             root.Items.Clear();
 
             //TreeViewItem root = new TreeViewItem();
-            root.controlTypeFiltered = "Filtered- Updated- Tree";
-
+            //  root.controlTypeFiltered = "Filtered- Updated- Tree";
+            root.Header = "Filtered - Tree - Updated";
             //
-            guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-
+            guiFunctions.createTreeForOutput(tree, ref root);
             tvMain.Items.Add(root);
             NodeButton.IsEnabled = false;
             updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
@@ -475,12 +476,11 @@ namespace GRANTApplication
             tvMain.Items.Clear();
             root.Items.Clear();
 
-            //TreeViewItem root = new TreeViewItem();
-            root.controlTypeFiltered = "Filtered- Updated- Tree";
-
-            //
-            guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref root); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
-            tvMain.Items.Add(root);
+           // TreeViewItem root = new TreeViewItem();
+           // root.controlTypeFiltered = "Filtered- Updated- Tree";
+           root.Header = "Filtered - Tree - Updated";
+                //
+               guiFunctions.createTreeForOutput(tree, ref root); tvMain.Items.Add(root);
             NodeButton.IsEnabled = false;
             updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
             SaveButton.IsEnabled = true;
