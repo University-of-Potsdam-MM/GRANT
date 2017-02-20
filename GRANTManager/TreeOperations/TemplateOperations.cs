@@ -18,6 +18,11 @@ namespace GRANTManager.TreeOperations
             this.grantTrees = grantTrees;
         }
 
+        /// <summary>
+        /// Ermittelt, sofern vorhanden, für einen Controlltype die anzuzeigenden Eigenschaften sowie deren Reihenfolge
+        /// </summary>
+        /// <param name="controltype">gibt den Controlltype an</param>
+        /// <returns>ein <c>SpecialOrder</c>-Objekt mit der Reihenfolge der anzuzeigenden Eigenschaften  oder <c>null</c></returns>
         public SpecialOrder textViewspecialOrderContainsControltype(String controltype)
         {
             if (grantTrees.TextviewObject.orders.specialOrders != null)

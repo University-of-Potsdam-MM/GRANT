@@ -18,7 +18,7 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Generiert für den kompletten Baum die Ids
+        /// Generiert für den kompletten gefilterten Baum die Ids
         /// </summary>
         /// <param name="parentNode">gibt eine referenz zu dem Baum an</param>
         public void generatedIdsOfFilteredTree(ref Object tree)
@@ -37,7 +37,7 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Ermittelt und setzt die Ids in einem Teilbaum
+        /// Ermittelt und setzt die Ids in einem Teilbaum des gefilterten Baumes
         /// </summary>
         /// <param name="subtree">gibt den Teilbaum an</param>
         /// <returns>Baum mit den veränderten Ids</returns>

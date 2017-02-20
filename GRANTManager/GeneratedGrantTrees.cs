@@ -114,7 +114,7 @@ namespace GRANTManager
 
         #region auslesen aus XML
         /// <summary>
-        /// Liest aus einer XML-Datei informationen zum darstellen der Textview sowie mögliche Abkürzungen aus
+        /// Liest aus einer XML-Datei informationen zum Darstellen der Textview sowie mögliche Abkürzungen aus
         /// </summary>
         /// <param name="path">gibt den Path zur XML-Datei an</param>
         private void loadTemplateAllElementsTextview(String path = null)

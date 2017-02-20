@@ -11,6 +11,12 @@ namespace OSMElement
     {
         public FilterstrategyOfNode() { }
 
+        /// <summary>
+        /// Kapselt die Filterstrategie eines Knotens
+        /// </summary>
+        /// <param name="idGenerated">gibt die ID des Knotens an</param>
+        /// <param name="strategyName">gibt den Namen der Filterstrategie an</param>
+        /// <param name="strategyDll">gibt den Namen der DLL der Filterstrategie an</param>
         public FilterstrategyOfNode(T idGenerated, U strategyName, V strategyDll)
         {
             this.IdGenerated = idGenerated;

@@ -46,7 +46,7 @@ namespace GRANTManager
             public override string ToString()
             {
                // return String.Format("Id = {0}, controlType = {1}, name = {2}", IdGenerated, controlTypeFiltered, nameFiltered);
-               return String.Format("{0} - {1}", controlTypeFiltered, nameFiltered);
+               return String.Format("{0} - {1}", controlTypeFiltered, nameFiltered); //so wird es in der GUI angezeigt
             }
 
             public String IdGenerated
@@ -69,6 +69,7 @@ namespace GRANTManager
                 get;
                 set;
             }
+            // falls nötig, können diese Properties aktiviert werden
           /*  public String screenName
             {
                 get;
