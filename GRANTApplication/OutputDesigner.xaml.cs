@@ -21,8 +21,8 @@ namespace GRANTApplication
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperations;
-        GuiFunctions.MenuItem filteredRoot;
-        GuiFunctions.MenuItem brailleRoot;
+        TreeViewItem filteredRoot;
+        TreeViewItem brailleRoot;
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
 
@@ -66,8 +66,8 @@ namespace GRANTApplication
             //brailleOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(trees_SelectedItemChanged);
             brailleTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleTreeOutput_SelectedItemChanged);
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
-            filteredRoot = new GuiFunctions.MenuItem();
-            brailleRoot = new GuiFunctions.MenuItem();
+            filteredRoot = new TreeViewItem();
+            brailleRoot = new TreeViewItem();
             screenRoot = new GuiFunctions.MenuItem();
             //NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
@@ -242,8 +242,9 @@ namespace GRANTApplication
                 Object tree = grantTrees.getFilteredTree();
                 filteredTreeOutput.Items.Clear();
                 filteredRoot.Items.Clear();
-                filteredRoot.controlTypeFiltered = "Filtered- Updated- Tree";
-                guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                // filteredRoot.controlTypeFiltered = "Filtered- Updated- Tree";
+                guiFunctions.createTreeForOutput(tree, ref filteredRoot);
+              //  guiFunctions.treeIteration(strategyMgr.getSpecifiedTree().Copy(tree), ref filteredRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                 SaveButton.IsEnabled = true;
                 LoadTemplate.IsEnabled = true;
                 filteredTreeOutput.Items.Add(filteredRoot);
@@ -259,8 +260,9 @@ namespace GRANTApplication
                     #region Braille-Baum Darstellung  (Kopie von Template laden => Funktion)
                     brailleTreeOutput.Items.Clear();
                     brailleRoot.Items.Clear();
-                    brailleRoot.controlTypeFiltered = "Braille-Tree";
-                    guiFunctions.createTreeForOutput(grantTrees.getBrailleTree(), ref brailleRoot); 
+                    // brailleRoot.controlTypeFiltered = "Braille-Tree";
+                    brailleRoot.Header = "Braille-Tree";
+                    guiFunctions.createTreeForOutput(grantTrees.getBrailleTree(), ref brailleRoot, false); 
                     SaveButton.IsEnabled = true;
                     brailleTreeOutput.Items.Add(brailleRoot);
                     dataGrid_brailleDisplaySimul.Items.Refresh();
@@ -296,7 +298,7 @@ namespace GRANTApplication
                 #endregion 
                 brailleTreeOutput.Items.Clear();
                 brailleRoot.Items.Clear();
-                brailleRoot.controlTypeFiltered = "Braille-Tree";
+               brailleRoot.Header = "Braille-Tree";
                 guiFunctions.createTreeForOutput(tree1, ref brailleRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
                 SaveButton.IsEnabled = true;
                 brailleTreeOutput.Items.Add(brailleRoot);
@@ -525,25 +527,25 @@ namespace GRANTApplication
         void filteredTreeOutput_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var tree = sender as TreeView;
-            GuiFunctions.MenuItem item;
-            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            TreeViewItem item;
+            if (tree.SelectedItem is TreeViewItem)
             {
                 // ... Handle a TreeViewItem.
                 if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
                 else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
-                else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
-                if (item.IdGenerated != null)
+                else { item = tree.SelectedItem as TreeViewItem; }
+                if (item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     if (osmElement.properties.isOffscreenFiltered == false)
                     {
                         strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
                     }
-                    int var1 = listBox_GuiElements.Items.IndexOf(item.controlTypeFiltered);
+                    int var1 = listBox_GuiElements.Items.IndexOf(((GuiFunctions.MenuItem)item.Header).controlTypeFiltered);
                     if (var1 < 0) { var1 = listBox_GuiElements.Items.IndexOf("Text"); }
                     listBox_GuiElements.SelectedIndex = var1;
-                    updateFilteredTable(item.IdGenerated);
+                    updateFilteredTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                 }
             }
         }
@@ -779,23 +781,68 @@ namespace GRANTApplication
         void brailleTreeOutput_SelectedItemChanged(object sender,RoutedPropertyChangedEventArgs<object> e)
         {
             var tree = sender as TreeView;
-            GuiFunctions.MenuItem item;
-            if (tree.SelectedItem is GuiFunctions.MenuItem)
+            TreeViewItem item;
+            if (tree.SelectedItem is TreeViewItem)
             {
                 // ... Handle a TreeViewItem.
                 if (tree.Name.Equals(filteredRoot)) { item = filteredRoot; System.Console.WriteLine(" Filt in filtered: "); }
                 else if (tree.Name.Equals(brailleRoot)) { item = brailleRoot; System.Console.WriteLine(" Filt in braille: "); }
-                else { item = tree.SelectedItem as GuiFunctions.MenuItem; }
-                if (item.IdGenerated != null)
+                else { item = tree.SelectedItem as TreeViewItem; }
+                if (item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(item.IdGenerated);
-                    int var1 = listBox_GuiElements.Items.IndexOf(item.controlTypeFiltered);
-                    if (var1 < 0) { var1 = listBox_GuiElements.Items.IndexOf("Text"); }
-                    listBox_GuiElements.SelectedIndex = var1;
-                    updateBrailleTable(item.IdGenerated);
-                    screenViewIteration(item.IdGenerated);
+                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    updateBrailleTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    screenViewIteration(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    #region marked element in filtered tree
+                    String connectedFilteredNode = treeOperations.searchNodes.getConnectedFilteredTreenodeId(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    var v = ((TreeViewItem)(((TreeViewItem)filteredTreeOutput.Items[0]).Items[0])).Header;
+
+                    var v2 = ((TreeViewItem)(((TreeViewItem)filteredTreeOutput.Items[0]).Items[0])).Items;
+
+                    Type t_v = v.GetType();
+                    Type t_v2 = v2.GetType();
+                    if (connectedFilteredNode != null && connectedFilteredNode != "")
+                    {
+
+                        List<TreeViewItem> menuItem = getMenuItemsById(filteredTreeOutput, connectedFilteredNode);
+
+                        TreeViewItem tvi = new TreeViewItem();
+                        if (menuItem != null && menuItem.Count == 1)
+                        {
+                            menuItem[0].IsSelected = true;
+                            menuItem[0].BringIntoView();
+                        }
+                    }
+                    else
+                    {
+                        if (((TreeViewItem)filteredTreeOutput.SelectedItem) != null)
+                        {
+                            ((TreeViewItem)filteredTreeOutput.SelectedItem).IsSelected = false;
+                        }
+                        #endregion
+                        int var1 = listBox_GuiElements.Items.IndexOf(((GuiFunctions.MenuItem)item.Header).controlTypeFiltered);
+                        if (var1 < 0) { var1 = listBox_GuiElements.Items.IndexOf("Text"); }
+                        listBox_GuiElements.SelectedIndex = var1;
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// seek all nodes with a special id
+        /// </summary>
+        /// <param name="treeView"> the treeView in which will be seek</param>
+        /// <param name="id">the searched id</param>
+        /// <returns>list of all nodes with have the searched <para>id</para> </returns>
+        private List<TreeViewItem> getMenuItemsById(TreeView treeView, String id)
+        {
+            foreach (TreeViewItem tvi in treeView.Items)
+            {
+                var result = GuiFunctions.Flatten(tvi).Where(t => t.Header != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
+                if (result != null && result.Count<TreeViewItem>() > 0)
+                    return result.ToList<TreeViewItem>();
+            }
+            return null;
         }
     }
 }
