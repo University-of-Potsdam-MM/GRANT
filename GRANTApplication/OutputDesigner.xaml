@@ -68,7 +68,7 @@
             <ScrollViewer BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="235" Margin="10,10,0,15" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="305">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree" HorizontalAlignment="Center" Width="235"/>
-                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="brailleOutput"  Height="274" HorizontalAlignment="Right" Width="235" >
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="brailleTreeOutput"  Height="274" HorizontalAlignment="Right" Width="235" >
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                                 <StackPanel Orientation="Horizontal">
@@ -84,10 +84,8 @@
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="250,10,612,16">
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
-                    <DataGrid BorderThickness="1" x:Name="dataGrid5" Background="White" Height="273" />
+                    <DataGrid BorderThickness="1" x:Name="dataGrid_brailleTreeProp" Background="White" Height="273" />
                 </StackPanel>
-
-
             </ScrollViewer>
             <Grid Background="White" Width="589" HorizontalAlignment="Right" Margin="0,42,10,17" >
                 <Grid.RowDefinitions>
@@ -104,7 +102,7 @@
                 </Grid.RowDefinitions>
             -->
                 <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="589" Height="271" Grid.RowSpan="2" VerticalAlignment="Top">
-                    <DataGrid CanUserResizeRows="False" Margin="0,10,0,0" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                    <DataGrid CanUserResizeRows="False" Margin="0,10,0,0" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="dataGrid_brailleDisplaySimul" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <DataGrid.LayoutTransform>
                             <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom}" ScaleY="{Binding Path=Value, ElementName=_zoom}" CenterX="0" CenterY="0" />
                         </DataGrid.LayoutTransform>
@@ -124,7 +122,7 @@
             <ScrollViewer  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Background="GhostWhite" HorizontalAlignment="Left" Width="235" Margin="10,0,0,15" >
                 <StackPanel Background="GhostWhite"  Width="235" VerticalAlignment="Top" Height="322">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree" HorizontalAlignment="Center" Width="235"/>
-                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="tvOutput" Width="235"  Height="291">
+                    <TreeView BorderThickness="1" BorderBrush="Gray" Background="White" x:Name="filteredTreeOutput" Width="235"  Height="291">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type MenuItem}" ItemsSource="{Binding Items}">
                                 <StackPanel Orientation="Horizontal">
@@ -146,7 +144,7 @@
             <!-- <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="240"  Height="330" Margin="0,0,7,0" >-->
             <StackPanel DockPanel.Dock="Left"   Background="White" Width="286" HorizontalAlignment="Center" Margin="535,0,329,0" Height="323" VerticalAlignment="Top" >
                 <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="GUI-Elements" HorizontalAlignment="Center"  Width="286" />
-                <ListBox BorderBrush="Gray" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="listBox1" VerticalAlignment="Top" Height="140" SelectionChanged="listBox1_SelectionChanged"  Foreground="{Binding color}" >
+                <ListBox BorderBrush="Gray" BorderThickness="1" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Name="listBox_GuiElements" VerticalAlignment="Top" Height="140" SelectionChanged="listBox_GuiElements_SelectionChanged"  Foreground="{Binding color}" >
                     <ListBox.Resources>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Template">
@@ -170,7 +168,7 @@
                     <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="286" Margin="-30,-4,-30,0">
                         <DataGrid CanUserResizeRows="False" CanUserDeleteRows="False" CanUserResizeColumns="False" 
                 		CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" EnableRowVirtualization="False" EnableColumnVirtualization="False"
-                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid3" IsReadOnly="True" Margin="0,10,0,0">
+                		SelectionUnit="Cell" HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="1" x:Name="dataGrid_GuiElements" IsReadOnly="True" Margin="0,10,0,0">
                             <DataGrid.LayoutTransform>
                                 <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom1}" ScaleY="{Binding Path=Value, ElementName=_zoom1}" CenterX="0" CenterY="0" />
                             </DataGrid.LayoutTransform>
@@ -210,7 +208,7 @@
 
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="322" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree Properties"  Height="31"/>
-                    <DataGrid BorderThickness="1" x:Name="dataGrid4" Background="White" Height="291" />
+                    <DataGrid BorderThickness="1" x:Name="dataGrid4_filteredTreeProp" Background="White" Height="291" />
                 </StackPanel>
 
 
