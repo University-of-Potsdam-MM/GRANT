@@ -306,6 +306,18 @@ namespace GRANTExample
                     guiFuctions.addFilteredNodeToBrailleTree("Button");
                     guiFuctions.addFilteredNodeToBrailleTree("TabItem");
                 }
+                nodeList = searchNodes.getAssociatedNodeList("29E003E8F0AB31A3745C4B944C0254CF", grantTree.getFilteredTree()); //DropDownMenu - notepad++
+
+                if (nodeList != null && nodeList.Count > 0)
+                {
+                    guiFuctions.addFilteredNodeToBrailleTree("DropDownMenuItem",nodeList[0]);
+                }
+                nodeList = searchNodes.getAssociatedNodeList("58AA232A14172FB8BCD78A576BE94D80", grantTree.getFilteredTree()); //Beispielanwendung - checkbox
+
+                if (nodeList != null && nodeList.Count > 0)
+                {
+                    guiFuctions.addFilteredNodeToBrailleTree("ListItem", nodeList[0]);
+                }
                 
             }
 

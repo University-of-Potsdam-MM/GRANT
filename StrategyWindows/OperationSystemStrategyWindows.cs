@@ -12,6 +12,7 @@ namespace StrategyWindows
     public class OperationSystemStrategyWindows : IOperationSystemStrategy
     {
         private StrategyManager strategyMgr;
+        Thread paintRecThread;
         
         /// <summary>
         /// Methode aus Interface IOperationSystemStrategy
@@ -30,6 +31,7 @@ namespace StrategyWindows
             windowsEventsHandler = new Windows_EventsHandler(strategyMgr);
             //windowsEventsHandler.setStrategyMgr(strategyMgr);
             windowsEventsMonitor = new Windows_EventsMonitor(windowsEventsHandler);
+            paintRecThread = new Thread(delegate () { paintRecClear(null); });
         }
 
         Windows_EventsHandler windowsEventsHandler;
@@ -68,6 +70,9 @@ namespace StrategyWindows
 
         private CursorPoint cp = new CursorPoint();          
 
+        /// <summary>
+        /// Gibt einen CursorPoint (Mauszeiger) an
+        /// </summary>
         public CursorPoint Cp
         {
             get
@@ -81,6 +86,9 @@ namespace StrategyWindows
             }
         }
 
+        /// <summary>
+        /// struktur eines CursorPoints (Mauszeigers)
+        /// </summary>
         public struct CursorPoint
         {
             public int X;
@@ -93,13 +101,21 @@ namespace StrategyWindows
             }
         }
 
+        /// <summary>
+        /// Gibt die position des Mauszeigers (CursorPostion) an
+        /// </summary>
+        /// <param name="x">x-Wert des Mauszeigers</param>
+        /// <param name="y">y-Wert des Mauszeigers</param>
         public void getCursorPoint(out int x, out int y)
         {
             x = cp.X;
             y = cp.Y;
         }
 
-        // ermittel Desktoppu
+        /// <summary>
+        /// Ermittelt den Handle des Desktops
+        /// </summary>
+        /// <returns>Handle des Desktops</returns>
         public IntPtr deliverDesktopHWND()
         {
            try
@@ -112,7 +128,10 @@ namespace StrategyWindows
             }
         }
 
-        // ermittel Cursor Position
+        /// <summary>
+        /// Ermittelt die aktuelle Position der Maus (CursorPostion) und weißt sie <c>cp</c> zu
+        /// </summary>
+        /// <returns><c>true</c> falls die Position ermittelt wurde; <c>false</c> sonst</returns>
         public bool deliverCursorPosition()
         {
             NativeMethods.SetProcessDPIAware();
@@ -126,8 +145,11 @@ namespace StrategyWindows
             }
         }
 
-        //Gib Handle an CursorPostion zurück
         // Fehlerbehandlung wie?
+        /// <summary>
+        /// Ermittelt den Handle der CursorPostion 
+        /// </summary>
+        /// <returns>Gib Handle an CursorPostion zurück</returns>
         public IntPtr getHWND()
         {
             try
@@ -142,6 +164,11 @@ namespace StrategyWindows
         }
 
         // Main WindowHandle vom Prozess
+        /// <summary>
+        /// Ermittelt den Main-Handle vom angegebenen Prozess
+        /// </summary>
+        /// <param name="processId">gibt die Id des Prozesses an</param>
+        /// <returns>Main-Handel des angegebenen Prozesses</returns>
         public IntPtr getProcessHwndFromHwnd(int processId)
         {
             try
@@ -159,6 +186,11 @@ namespace StrategyWindows
             }
         }
 
+        /// <summary>
+        /// Ermittelt aus einem <c>OSMElement.OSMElement</c> die zugehörige Position
+        /// </summary>
+        /// <param name="osmElement">gibt das <c>OSMElement an</c></param>
+        /// <returns><c>Rectangle</c> mit der Position des Objektes</returns>
         public Rectangle getRect(OSMElement.OSMElement osmElement)
         {
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
@@ -171,6 +203,10 @@ namespace StrategyWindows
             return new Rectangle(x,y,width,height);
         }
         
+        /// <summary>
+        /// Zeichnet ein Rechteck an der angegebenen Position
+        /// </summary>
+        /// <param name="rect">gibt die Position des Rechteckes an</param>
         public void paintRect(Rectangle rect)
         {            
             Graphics desktop = Graphics.FromHwnd(NativeMethods.GetDesktopWindow());           
@@ -178,52 +214,25 @@ namespace StrategyWindows
             Pen redPen = new Pen(Color.Red, 5);
             newGraphics.DrawRectangle(redPen, rect);
 
-            System.Threading.Thread.Sleep(1000);
-            
-            NativeMethods.InvalidateRect(IntPtr.Zero, IntPtr.Zero , true);
+            if (!paintRecThread.IsAlive)
+            {
+                paintRecThread = new Thread(delegate () { paintRecClear(newGraphics); });
+                paintRecThread.Start();
+            }
+        }
+
+        private void paintRecClear(Graphics graphics)
+        {
+            if(graphics == null) { return; }
+            System.Threading.Thread.Sleep(2000);
+
+            NativeMethods.InvalidateRect(IntPtr.Zero, IntPtr.Zero, true);
 
             //updatewindow säubert nicht ordentlich den screen
             //updateWindow(IntPtr.Zero);
-
-            newGraphics.Dispose();
-        }
-
-        //todo Code säubern
-        #region farbigeUmrandungDesGUIElement
-        // refresht Ansicht des übergebenen hwnd
-        public bool updateWindow(IntPtr hwnd)
-        {
-            try
-            {
-                NativeMethods.UpdateWindow(hwnd);
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Fehler bei UpdateWindow: " + e.Message);
-            }
-        }
-
-        public void paintScreenWithoutRect(Rectangle rect)
-        {
-            //System.Windows//.Automation.Automationelement screenHWND = NativeMethods.GetDesktopWindow();
-
-              //              OSMElement.OSMElement filteredSubtree = new OSMElement.OSMElement();
-
-            IntPtr screen = NativeMethods.GetDesktopWindow();
             
-
-            //filteredSubtree.properties = setProperties(mouseElement);
-
-            Graphics desktop = Graphics.FromHwnd(screen);
-            Graphics newGraphics = desktop;
-
-            //Rectangle rect = operationSystemStrategy.getRect(filteredSubtree);
+            graphics.Dispose();
         }
-
-
-      
-        #endregion
 
         /// <summary>
         /// Ermittelt ob eine Anwendung geöffnet ist
@@ -248,12 +257,11 @@ namespace StrategyWindows
             return IntPtr.Zero;
         }
 
-
         /// <summary>
         /// Ermittelt den Namen der Anwendung 
         /// </summary>
         /// <param name="name">Prozess Id der Anwendung</param>
-        /// <returns></returns>
+        /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
         public String getModulNameOfApplication(int processId)
         {
             foreach (Process clsProcess in Process.GetProcesses())
@@ -356,8 +364,8 @@ namespace StrategyWindows
         /// Aktiviert eine Anwendung
         /// -> wird benötigt beim Filtern, falls die Anwendung minimiert ist
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der anwendung an</param>
-        /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
+        /// <param name="hwnd">gibt den Handle der Anwendung an</param>
+        /// <returns><c>true</c>, falls die Anwendung aktiviert wurde; sonst <c>false</c></returns>
         public bool showWindow(IntPtr hwnd)
         {
             if (NativeMethods.IsIconic(hwnd))
@@ -367,6 +375,10 @@ namespace StrategyWindows
             return true;
         }
 
+        /// <summary>
+        /// Setzt eine Anwendung in den Vordergrund
+        /// </summary>
+        /// <param name="hWnd">gibt den Handle der Anwendung an</param>
         public void setForegroundWindow(IntPtr hWnd)
         {
             NativeMethods.SetForegroundWindow(hWnd);

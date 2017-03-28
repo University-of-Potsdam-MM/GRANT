@@ -372,7 +372,7 @@ namespace GRANTExample
             dropDownMenu.isOpen = true;
             dropDownMenu.isVertical = true;
             proper7.valueFiltered = "Datei";
-            // object[] otherContent7 = {UiObjectsEnum.DropDownMenu, uiElement};
+            // object[] otherContent7 = {UiObjectsEnum.DropDownMenuItem, uiElement};
             e7.uiElementSpecialContent = dropDownMenu;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e7.viewName = "v7";
@@ -380,7 +380,7 @@ namespace GRANTExample
             proper7.boundingRectangleFiltered = p7;
             proper7.isEnabledFiltered = true;
      //       proper7.IdGenerated = "braille123_7";
-            proper7.controlTypeFiltered = "DropDownMenu";
+            proper7.controlTypeFiltered = "DropDownMenuItem";
             osm7.brailleRepresentation = e7;
             osm7.properties = proper7;
             treeOperation.updateNodes.addNodeInBrailleTree(osm7);
@@ -400,14 +400,14 @@ namespace GRANTExample
             dropDownMenu8.isOpen = false;
             dropDownMenu8.isVertical = true;
             proper8.valueFiltered = "Bearbeiten";
-           // object[] otherContent8 = { UiObjectsEnum.DropDownMenu, dropDownMenu8 };
+           // object[] otherContent8 = { UiObjectsEnum.DropDownMenuItem, dropDownMenu8 };
             e8.uiElementSpecialContent = dropDownMenu8;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e8.viewName = "v8";
             Rect p8 = new Rect(25, 10,35,10);
             proper8.boundingRectangleFiltered = p8;
     //        proper8.IdGenerated = "braille123_8";
-            proper8.controlTypeFiltered = "DropDownMenu";
+            proper8.controlTypeFiltered = "DropDownMenuItem";
             proper8.isEnabledFiltered = true;
             osm8.brailleRepresentation = e8;
             osm8.properties = proper8;
@@ -428,7 +428,7 @@ namespace GRANTExample
             dropDownMenu9.isOpen = false;
             dropDownMenu9.isVertical = true;
             proper9.valueFiltered = "Neu";
-           // object[] otherContent9 = { UiObjectsEnum.DropDownMenu, dropDownMenu9 };
+           // object[] otherContent9 = { UiObjectsEnum.DropDownMenuItem, dropDownMenu9 };
             e9.uiElementSpecialContent = dropDownMenu9;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e9.viewName = "v9";
@@ -436,7 +436,7 @@ namespace GRANTExample
             proper9.boundingRectangleFiltered = p9;
             proper9.isEnabledFiltered = true;
  //           proper9.IdGenerated = "braille123_9";
-            proper9.controlTypeFiltered = "DropDownMenu";
+            proper9.controlTypeFiltered = "DropDownMenuItem";
             osm9.brailleRepresentation = e9;
             osm9.properties = proper9;
             treeOperation.updateNodes.addNodeInBrailleTree(osm9);
@@ -457,7 +457,7 @@ namespace GRANTExample
             dropDownMenu10.isOpen = false;
             dropDownMenu10.isVertical = true;
             proper10.valueFiltered = "Beenden";
-          //  object[] otherContent10 = { UiObjectsEnum.DropDownMenu, dropDownMenu10 };
+          //  object[] otherContent10 = { UiObjectsEnum.DropDownMenuItem, dropDownMenu10 };
             e10.uiElementSpecialContent = dropDownMenu10;
             //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e10.viewName = "v10";
@@ -465,7 +465,7 @@ namespace GRANTExample
             proper10.boundingRectangleFiltered = p10;
             
  //           proper10.IdGenerated = "braille123_10";
-            proper10.controlTypeFiltered = "DropDownMenu";
+            proper10.controlTypeFiltered = "DropDownMenuItem";
             osm10.brailleRepresentation = e10;
             osm10.properties = proper10;
             treeOperation.updateNodes.addNodeInBrailleTree(osm10);

@@ -10,13 +10,51 @@ namespace GRANTManager.Interfaces
 {
     public interface IOperationSystemStrategy
     {
+        /// <summary>
+        /// Ermittelt die aktuelle Position der Maus (CursorPostion) und weißt sie <c>cp</c> zu
+        /// </summary>
+        /// <returns><c>true</c> falls die Position ermittelt wurde; <c>false</c> sonst</returns>
         bool deliverCursorPosition();
+
+        // Fehlerbehandlung wie?
+        /// <summary>
+        /// Ermittelt den Handle der CursorPostion 
+        /// </summary>
+        /// <returns>Gib Handle an CursorPostion zurück</returns>
         IntPtr getHWND();
+
+        // Main WindowHandle vom Prozess
+        /// <summary>
+        /// Ermittelt den Main-Handle vom angegebenen Prozess
+        /// </summary>
+        /// <param name="processId">gibt die Id des Prozesses an</param>
+        /// <returns>Main-Handel des angegebenen Prozesses</returns>
         IntPtr getProcessHwndFromHwnd(int processId);
-        //void paintRect(Rectangle rect, Graphics desktop);
+
+        /// <summary>
+        /// Zeichnet ein Rechteck an der angegebenen Position
+        /// </summary>
+        /// <param name="rect">gibt die Position des Rechteckes an</param>
         void paintRect(Rectangle rect);
+
+        /// <summary>
+        /// Ermittelt den Handle des Desktops
+        /// </summary>
+        /// <returns>Handle des Desktops</returns>
         IntPtr deliverDesktopHWND();
+
+        /// <summary>
+        /// Gibt die position des Mauszeigers (CursorPostion) an
+        /// </summary>
+        /// <param name="x">x-Wert des Mauszeigers</param>
+        /// <param name="y">y-Wert des Mauszeigers</param>
         void getCursorPoint(out int x, out int y);
+
+        /// <summary>
+        /// Ermittelt aus einem <c>OSMElement.OSMElement</c> die zugehörige Position
+        /// </summary>
+        /// <param name="osmElement">gibt das <c>OSMElement an</c></param>
+        /// <returns><c>Rectangle</c> mit der Position des Objektes</returns>
         Rectangle getRect(OSMElement.OSMElement osmElement);
 
         /// <summary>
@@ -62,6 +100,10 @@ namespace GRANTManager.Interfaces
         /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
         bool showWindow(IntPtr hwnd);
 
+        /// <summary>
+        /// Setzt eine Anwendung in den Vordergrund
+        /// </summary>
+        /// <param name="hWnd">gibt den Handle der Anwendung an</param>
         void setForegroundWindow(IntPtr hWnd);
 
         void InitializeWindows_EventsMonitor();

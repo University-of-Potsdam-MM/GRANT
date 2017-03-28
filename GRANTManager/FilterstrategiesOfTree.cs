@@ -21,6 +21,13 @@ namespace GRANTManager
             return getFilterstrategyOfNode(treeStrategy.GetData(treeStrategy.Child(filteredTree)).properties.IdGenerated, filterstrategies);
         }
 
+        /// <summary>
+        /// Fügt für diesen Knoten eine Zuordnung der Filterstrategie hinzu
+        /// </summary>
+        /// <param name="idGeneratedOfNode">gibt die ID des Knotens an</param>
+        /// <param name="filterstrategyType">gibt die für den Knoten zu nutzende Filterstrategie an</param>
+        /// <param name="filterstrategies">gibt eine Liste mit der Zuordnung der Filterstrategien an</param>
+        /// <returns><c>true</c> falls die Filterstrategie für den Knoten hinzugefügt wurde; sonst <c>false</c></returns>
         public static bool addFilterstrategyOfNode(String idGeneratedOfNode, Type filterstrategyType, ref List<FilterstrategyOfNode<String, String, String>> filterstrategies)
         {
             //TODO: prüfen, ob der Standardfilter genutzt wird
@@ -44,7 +51,13 @@ namespace GRANTManager
             return false;
         }
 
-
+        /// <summary>
+        /// Entfernt für diesen Knoten die Filterstrategie
+        /// </summary>
+        /// <param name="idGeneratedOfNode">gibt die ID des Knotens an</param>
+        /// <param name="filterstrategyType">gibt die für den Knoten zu nutzende Filterstrategie an</param>
+        /// <param name="filterstrategies">gibt eine Liste mit der Zuordnung der Filterstrategien an</param>
+        /// <returns><c>true</c> falls die Filterstrategie entfernt wurde; sonst <c>false</c></returns>
         public static bool removeFilterstrategyOfNode(String idGeneratedOfNode, Type filterstrategyType, ref List<FilterstrategyOfNode<String, String, String>> filterstrategies)
         {
             FilterstrategyOfNode<String, String, String> filterstrategyOld = getFilterstrategyOfNode(idGeneratedOfNode, filterstrategies);
@@ -56,6 +69,12 @@ namespace GRANTManager
             return false;
         }
 
+        /// <summary>
+        /// Gibt die filterstrategie von einen Knoten an
+        /// </summary>
+        /// <param name="idGeneratedOfNode">gibt die ID des Knotens an</param>
+        /// <param name="filterstrategies">gibt eine Liste mit der Zuordnung der Filterstrategien an</param>
+        /// <returns>ein<c>FilterstrategyOfNode</c>-objekt mit der für den Knoten verwendeten Filterstrategie</returns>
         public static FilterstrategyOfNode<String, String, String> getFilterstrategyOfNode(String idGeneratedOfNode, List<FilterstrategyOfNode<String, String, String>> filterstrategies)
         {
             if (filterstrategies == null || filterstrategies.Equals(new List<FilterstrategyOfNode<String, String, String>>()) || filterstrategies.Count == 0 || idGeneratedOfNode.Equals("")) { return null; }

@@ -51,7 +51,7 @@ namespace TemplatesUi
             braille.viewName = "GroupChild" + strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
             braille.isGroupChild = true;
            // if(templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer != null) { 
-            if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("DropDownMenu"))
+            if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("DropDownMenuItem"))
             {
                 OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
                 if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }

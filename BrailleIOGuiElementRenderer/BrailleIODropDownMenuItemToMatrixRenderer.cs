@@ -30,10 +30,10 @@ namespace BrailleIOGuiElementRenderer
                 dropDownMenu = (DropDownMenuItem)uiElement.uiElementSpecialContent;
             }
             else { 
-                throw new InvalidCastException("Can't cast uiElementSpecialContent to DropDownMenu! {0}"); 
+                throw new InvalidCastException("Can't cast uiElementSpecialContent to DropDownMenuItem! {0}"); 
             }
             if (!dropDownMenu.isChild) 
-            {//bei der obersten "Leiste" im DropDownMenu muss bei der Ausrichtung nichts unterschieden werden
+            {//bei der obersten "Leiste" im DropDownMenuItem muss bei der Ausrichtung nichts unterschieden werden
                 return RenderDropDownMenuHorizontal(view, uiElement);
             }
             else
@@ -77,7 +77,7 @@ namespace BrailleIOGuiElementRenderer
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
             // bool[,] viewMatrix =  Helper.createBox(view.ViewBox.Height - 2, view.ViewBox.Width);
             Helper.copyMatrixInMatrix(boxMatrix, ref viewMatrix); // macht platz in der Matrix für open/close
-            //Anpassungen je nach spezifischen DropDownMenu
+            //Anpassungen je nach spezifischen DropDownMenuItem
             if (dropDownMenu.hasChild)
             {
                 if (dropDownMenu.isOpen) { OpenDropDownMenuElementRight(ref viewMatrix); } else { CloseDropDownMenuElementRight(ref viewMatrix); }
@@ -116,7 +116,7 @@ namespace BrailleIOGuiElementRenderer
             bool[,] viewMatrix = new bool[view.ViewBox.Height, view.ViewBox.Width];
             // bool[,] viewMatrix =  Helper.createBox(view.ViewBox.Height - 2, view.ViewBox.Width);
             Helper.copyMatrixInMatrix(boxMatrix, ref viewMatrix); // macht platz in der Matrix für open/close
-            //Anpassungen je nach spezifischen DropDownMenu
+            //Anpassungen je nach spezifischen DropDownMenuItem
             if (dropDownMenu.hasChild)
             {
                 if (dropDownMenu.isOpen) { OpenDropDownMenuElementDown(ref viewMatrix); } else { CloseDropDownMenuElementDown(ref viewMatrix); }
@@ -161,6 +161,7 @@ namespace BrailleIOGuiElementRenderer
 
         private void OpenDropDownMenuElementDown(ref bool[,] viewMatrix)
         {//unten
+            if (viewMatrix.GetLength(0) < 4 || viewMatrix.GetLength(1) < 6) { return; }
             viewMatrix[viewMatrix.GetLength(0) - 3, 3] = false;
             viewMatrix[viewMatrix.GetLength(0) - 3, 4] = false;
             viewMatrix[viewMatrix.GetLength(0) - 3, 5] = false;
@@ -171,6 +172,7 @@ namespace BrailleIOGuiElementRenderer
 
         private void CloseDropDownMenuElementDown(ref bool[,] viewMatrix)
         {//unten
+            if(viewMatrix.GetLength(0) < 4 || viewMatrix.GetLength(1) < 6) { return; }
             viewMatrix[viewMatrix.GetLength(0) - 3, 3] = false;
             viewMatrix[viewMatrix.GetLength(0) - 3, 4] = false;
             viewMatrix[viewMatrix.GetLength(0) - 3, 5] = false;

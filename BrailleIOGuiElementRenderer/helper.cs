@@ -57,6 +57,7 @@ namespace BrailleIOGuiElementRenderer
         /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
         public static bool[,] createBox(int heightView, int widthView)
         {
+            if(heightView <1 || widthView < 1) { return new bool[0, 0]; }
             bool[,] viewMatrix = new bool[heightView, widthView];
             for (int height = 0; height < heightView; height++)
             {
@@ -86,6 +87,7 @@ namespace BrailleIOGuiElementRenderer
         /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
         public static bool[,] createSelectedBox(int heightView, int widthView)
         {
+            if (heightView < 1 || widthView < 1) { return new bool[0, 0]; }
             bool[,] viewMatrix = new bool[heightView, widthView];
             for (int height = 0; height < heightView; height++)
             {
@@ -105,6 +107,7 @@ namespace BrailleIOGuiElementRenderer
         /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
         public static bool[,] createBoxDeaktivatedUpDown(int heightView, int widthView)
         {
+            if (heightView < 1 || widthView < 1) { return new bool[0, 0]; }
             bool[,] viewMatrix = new bool[heightView, widthView];
             for (int height = 0; height < heightView; height++)
             {
@@ -150,6 +153,7 @@ namespace BrailleIOGuiElementRenderer
         /// <returns>gibt eine Bool-Matrix der Box zurück</returns>
         public static bool[,] createBoxDeaktivatedLeft(int heightView, int widthView)
         {
+            if (heightView < 1 || widthView < 1) { return new bool[0, 0]; }
             bool[,] viewMatrix = new bool[heightView, widthView];
             for (int height = 0; height < heightView; height++)
             {

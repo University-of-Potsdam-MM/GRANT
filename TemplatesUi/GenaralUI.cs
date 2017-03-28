@@ -237,6 +237,11 @@ namespace TemplatesUi
             return groupElementsStatic;
         }
 
+        /// <summary>
+        /// Erstellt für die angegebene View-Category für jeden Screen einen Navigationsleiste
+        /// </summary>
+        /// <param name="pathToXml">gibt den Pfad zum Template an</param>
+        /// <param name="viewCategory">gibt die View-Category an</param>
         public void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);

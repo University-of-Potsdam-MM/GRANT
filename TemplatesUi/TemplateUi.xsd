@@ -46,7 +46,7 @@
                   <xs:restriction base="xs:string">
                     <xs:enumeration value="Text"/>
                     <xs:enumeration value="Button"/>
-                    <xs:enumeration value="DropDownMenu"/>
+                    <xs:enumeration value="DropDownMenuItem"/>
                     <xs:enumeration value="Screenshot"/>
                     <xs:enumeration value="TextBox"/>
                     <xs:enumeration value="GroupElement"/>

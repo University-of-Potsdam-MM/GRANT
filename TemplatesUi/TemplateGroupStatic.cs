@@ -141,7 +141,7 @@ namespace TemplatesUi
 
             prop.isEnabledFiltered = false;
             braille.isVisible = true;
-            if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenu"))
+            if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenuItem"))
             {
                 OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
                 if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree) &&  strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }

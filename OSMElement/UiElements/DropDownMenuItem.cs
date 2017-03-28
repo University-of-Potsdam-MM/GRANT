@@ -18,7 +18,7 @@ namespace OSMElement.UiElements
 
         public override string ToString()
         {
-            return String.Format("DropDownMenu:  isOpen = {0}, hasChild = {1}, isChild = {2}, hasNext = {3}, hasPrevious = {4}, isVertical = {5}", isOpen, hasChild, isChild, hasNext, hasPrevious, isVertical);
+            return String.Format("DropDownMenuItem:  isOpen = {0}, hasChild = {1}, isChild = {2}, hasNext = {3}, hasPrevious = {4}, isVertical = {5}", isOpen, hasChild, isChild, hasNext, hasPrevious, isVertical);
         }
     }
 }

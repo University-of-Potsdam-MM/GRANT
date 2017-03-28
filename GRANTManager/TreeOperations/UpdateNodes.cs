@@ -11,7 +11,7 @@ using OSMElement.UiElements;
 namespace GRANTManager.TreeOperations
 {
     /// <summary>
-    /// Die Klasse Kapselt update-Methode -> ectl. in ein anderes Paket verschieben
+    /// Die Klasse Kapselt update-Methode -> evtl. in ein anderes Paket verschieben
     /// </summary>
     public class UpdateNodes
     {
@@ -237,7 +237,7 @@ namespace GRANTManager.TreeOperations
                 updatedContentGP.isEnabledFiltered = (bool)isEnable;
             }
             // updatedContentBR.text = updatedText;
-            if (updatedContentBR.fromGuiElement != "" && !GeneralProperties.getAllStringsFor_fromGuiElement().Contains(updatedContentBR.fromGuiElement))
+            if (updatedContentBR.fromGuiElement != null && updatedContentBR.fromGuiElement != "" && !GeneralProperties.getAllStringsFor_fromGuiElement().Contains(updatedContentBR.fromGuiElement))
             {
                 Debug.WriteLine("Achtung: Es wurde ein falscher Wert bei 'fromGuiElement' ausgewählt! Deshalb wurd er auf 'Text' gesetzt.");
                 updatedContentBR.fromGuiElement = "Text";
@@ -399,6 +399,7 @@ namespace GRANTManager.TreeOperations
                                     }
                                 }
                                 strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
+                                return prop.IdGenerated;
                                 return prop.IdGenerated;
                                 //return null;
                             }
