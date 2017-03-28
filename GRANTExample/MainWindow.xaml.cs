@@ -115,9 +115,21 @@ namespace GRANTExample
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
           //  strategyMgr.getSpecifiedFilter().setStrategyMgr(strategyMgr);
 
-         //   strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
-           // brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
-          //  brailleDisplayStrategy.setStrategyMgr(strategyMgr);
+            strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
+            //if (strategyMgr.getSpecifiedBrailleDisplay() == null)
+            {
+                Settings settings = new Settings();
+                strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
+
+                strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+                strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTree);
+                strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
+                // strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
+                //strategyMgr.getSpecifiedBrailleDisplay().setActiveAdapter();
+                //strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            }
+            // brailleDisplayStrategy = strategyMgr.getSpecifiedBrailleDisplay();
+            //  brailleDisplayStrategy.setStrategyMgr(strategyMgr);
 
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
 
