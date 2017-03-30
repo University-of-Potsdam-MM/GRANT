@@ -80,6 +80,7 @@
     <Compile Include="OsmTreeConnector.cs" />
     <Compile Include="PRISMHandler_Class.cs" />
     <Compile Include="ScreenCapture.cs" />
+    <Compile Include="ScreenReaderFunctions.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Strategy.cs" />
     <Compile Include="StrategyManager.cs" />

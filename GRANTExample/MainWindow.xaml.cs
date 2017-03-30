@@ -26,8 +26,7 @@ using GRANTManager.TreeOperations;
 
 
 using Prism.Events;
-
-
+using System.Windows.Interop;
 
 namespace GRANTExample
 {
@@ -42,7 +41,7 @@ namespace GRANTExample
             InitializeFilterComponent();
 
             eventTest();
-
+            posibleScreenreaders();
             //InitializeStrategyWindows_Windows_EventsMonitor();
         }
 
@@ -407,5 +406,63 @@ namespace GRANTExample
                // Console.WriteLine("Baum:\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.getBrailleTree()));
             }
         }
+
+        #region Notification
+        private void AddScreenReaderCommand(object sender, RoutedEventArgs e)
+        { //TODO
+        }
+
+        private void posibleScreenreaders()
+        {
+            SelectScreenReader.Items.Clear();
+            ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
+            foreach (KeyValuePair<string, string> entry in srf.screenreaders)
+            {
+                MenuItem m = new MenuItem();
+                m.Header = entry.Key;
+                m.IsCheckable = true;
+                SelectScreenReader.Items.Add(m);
+            }
+            SelectScreenReader.UpdateLayout();
+        }
+
+        private void ScreenReaderCommand(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("");
+            if (e.Source != null && e.Source.GetType().Equals(typeof(MenuItem)))
+            {
+                if (((MenuItem)e.Source).Header != null && !((MenuItem)e.Source).Header.Equals("Select screen reader"))
+                {
+                    MenuItem i = ((MenuItem)e.Source);
+                    ((MenuItem)e.Source).IsEnabled = false;
+                    strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
+                    ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
+                    srf.uncheckedMenuItem(i);
+                    guiFuctions.loadGrantProject(srf.screenreaders[((MenuItem)e.Source).Header as String]);
+                    strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+                    
+                }
+            }
+        }
+
+        private void HideWindowCommand(object sender, RoutedEventArgs e)
+        {
+            var wih = new WindowInteropHelper(Window.GetWindow(this)); // see http://stackoverflow.com/questions/10675305/how-to-get-the-hwnd-of-window-instance
+            IntPtr hWnd = wih.Handle;
+            if (((MenuItem)sender).IsChecked)
+            {
+                strategyMgr.getSpecifiedOperationSystem().hideWindow(hWnd);
+            }
+            else
+            {
+                strategyMgr.getSpecifiedOperationSystem().showWindow(hWnd);
+            }
+        }
+        private void ExitApp(object sender, RoutedEventArgs e)
+        {
+            System.Environment.Exit(1);
+        }
+
+        #endregion
     }
 }

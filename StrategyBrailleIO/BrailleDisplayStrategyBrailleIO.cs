@@ -20,20 +20,16 @@ namespace StrategyBrailleIO
 {
     public class BrailleDisplayStrategyBrailleIO : IBrailleDisplayStrategy
     {
-       IBrailleIOShowOffMonitor monitor;
-       BrailleIOMediator brailleIOMediator {get; set;}
+       private IBrailleIOShowOffMonitor monitor;
+       private BrailleIOMediator brailleIOMediator {get; set;}
         private Boolean initialized = false;
         private List<uiElementsTypeStruct> uiElementList;
         /// <summary>
         /// Ist der Adapter des Simulators
         /// </summary>
-        AbstractBrailleIOAdapterBase showOffAdapter;
+        private AbstractBrailleIOAdapterBase showOffAdapter;
         //GestureRecognizer showOffGestureRecognizer;
 
-        /// <summary>
-        /// Ist der Adapter des BrailleDis
-        /// </summary>
-        AbstractBrailleIOAdapterBase brailleAdapter;
         //GestureRecognizer brailleDisRecognizer; //TODO
 
 
@@ -46,7 +42,7 @@ namespace StrategyBrailleIO
         public BrailleDisplayStrategyBrailleIO() { uiElementList = getUiElements();}
 
         /// <summary>
-        /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
+        /// Creates a simulator if none exisis
         /// </summary>
         private void initializedSimulator()
         {
@@ -57,17 +53,15 @@ namespace StrategyBrailleIO
             /// aus BrailleIOExample (getShowOff()) -> erstmal gekürzt
             if (brailleIOMediator != null)
             {
-                // if the current Adapter manager holds an debug dapter, use it
-                if (brailleIOMediator.AdapterManager is ShowOffBrailleIOAdapterManager)
+                // if the current Adapter manager holds a debug adpter, use it
+                foreach (IBrailleIOAdapter adapter in brailleIOMediator.AdapterManager.GetAdapters())
                 {
-                    monitor = ((ShowOffBrailleIOAdapterManager)brailleIOMediator.AdapterManager).Monitor;
-                    foreach (var adapter in brailleIOMediator.AdapterManager.GetAdapters())
+                    if (adapter is BrailleIOAdapter_ShowOff)
                     {
-                        if (adapter is BrailleIOAdapter_ShowOff)
-                        {
-                            showOffAdapter = adapter as AbstractBrailleIOAdapterBase;
-                            break;
-                        }
+                        //TODO: prüfen, ob Simulator noch läuft
+                        adapter.Connect();
+                        showOffAdapter = adapter as AbstractBrailleIOAdapterBase;
+                        break;
                     }
                 }
 
@@ -102,15 +96,27 @@ namespace StrategyBrailleIO
 
         public void removeActiveAdapter()
         {
-            if (brailleIOMediator != null)
+            removeAllViews();
+            if (brailleIOMediator == null || brailleIOMediator.AdapterManager == null) { return; }
+            foreach (IBrailleIOAdapter adapter in brailleIOMediator.AdapterManager.GetAdapters())
             {
-                List<AbstractViewBoxModelBase> brailleIOScreens = brailleIOMediator.GetViews();
-                foreach (var s in brailleIOScreens)
+                if (adapter != null)
                 {
-                    brailleIOMediator.RemoveView(s.Name);
+                    adapter.Disconnect();
                 }
-                brailleIOMediator = null;
-                initialized = false;
+                if (!(brailleIOMediator.AdapterManager.ActiveAdapter is BrailleIOAdapter_ShowOff))
+                {
+                    brailleIOMediator.AdapterManager.RemoveAdapter(adapter);
+                }
+            }
+        }
+
+        public void removeAllViews()
+        {
+            if (brailleIOMediator == null) { return; }
+            foreach (AbstractViewBoxModelBase view in brailleIOMediator.GetViews())
+            {
+                brailleIOMediator.RemoveView(view.Name);
             }
         }
 
@@ -130,7 +136,7 @@ namespace StrategyBrailleIO
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
+                AbstractBrailleIOAdapterBase brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
             }
             return;

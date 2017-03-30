@@ -101,10 +101,23 @@ namespace GRANTManager.Interfaces
         bool showWindow(IntPtr hwnd);
 
         /// <summary>
+        /// Hides a window
+        /// </summary>
+        /// <param name="hwnd">handle of the window which should be hiden</param>
+        /// <returns><code>true</code> if the window is hiden, otherwise <code>false</code></returns>
+        bool hideWindow(IntPtr hwnd);
+
+        /// <summary>
         /// Setzt eine Anwendung in den Vordergrund
         /// </summary>
         /// <param name="hWnd">gibt den Handle der Anwendung an</param>
         void setForegroundWindow(IntPtr hWnd);
+
+        /// <summary>
+        /// Returns a handle to the foreground window (the window with which the user is currently working). 
+        /// </summary>
+        /// <returns>The return value is a handle to the foreground window or <c>null</c>.</returns>
+        IntPtr getForegroundWindow();
 
         void InitializeWindows_EventsMonitor();
 

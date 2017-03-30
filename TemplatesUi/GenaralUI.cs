@@ -180,14 +180,22 @@ namespace TemplatesUi
         private TemplateUiObject getTemplateUiObjectOfNavigationbarScreen(string pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
-            IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
-                where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
-                    && (string)el.Attribute("name") == "NavigationBarScreens"
-                select el;
-            if (uiElement.Count() == 0) { return new TemplateUiObject(); }
-            
-            return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
+            try
+            {
+                IEnumerable<XElement> uiElement =
+                    from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
+                    where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
+                        && (string)el.Attribute("name") == "NavigationBarScreens"
+                    select el;
+                if (uiElement.Count() == 0) { return new TemplateUiObject(); }
+
+                return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Keine Symboleview vorhanden!");
+                return new TemplateUiObject();
+            }
         }
 
         /// <summary>

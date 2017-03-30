@@ -400,7 +400,6 @@ namespace GRANTManager.TreeOperations
                                 }
                                 strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
                                 return prop.IdGenerated;
-                                return prop.IdGenerated;
                                 //return null;
                             }
                         }
