@@ -29,6 +29,12 @@ namespace GRANTManager
         private String osmConectorName = "osmConnector.xml";
         private String filterstrategyFileName = "filterstrategies.xml";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GuiFunctions"/> class.
+        /// </summary>
+        /// <param name="strategyMgr"></param>
+        /// <param name="grantTree"></param>
+        /// <param name="treeOperation"></param>
         public GuiFunctions(StrategyManager strategyMgr, GeneratedGrantTrees grantTree, TreeOperation treeOperation)
         {
             this.strategyMgr = strategyMgr;
@@ -250,9 +256,9 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// "Klopft" einen Baum flach
+        /// flatten a tree
         /// </summary>
-        /// <param name="node">gibt den ersten Knoten an</param>
+        /// <param name="node"> first node of a tree</param>
         /// <returns></returns>
         public static IEnumerable<TreeViewItem> Flatten(TreeViewItem node)
         {
@@ -265,8 +271,6 @@ namespace GRANTManager
                         yield return descendant;
             }
         }
-
-
 
         /// <summary>
         /// 
@@ -319,19 +323,19 @@ namespace GRANTManager
                 treeViewItem.Header = child;
 
                 #region Tooltip für Knotenbeziehungen
-                if (grantTrees.getBrailleTree() != null)
+                if (grantTrees.brailleTree != null)
                 {
                     Object treeForSearch;
                     List<String> conIds = new List<string>();
                     String toolTip = "Connected node:";
                     if (!isFilteredTree)
                     {
-                        treeForSearch = grantTrees.getFilteredTree();
+                        treeForSearch = grantTrees.filteredTree;
                         conIds.Add(treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
                     }
                     else
                     {
-                        treeForSearch = grantTrees.getBrailleTree();
+                        treeForSearch = grantTrees.brailleTree;
                         conIds = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                     }
                     if (conIds != null && conIds.Count > 0 && conIds[0] != null)
@@ -410,10 +414,10 @@ namespace GRANTManager
         /// <param name="filePath">gibt den Dateipfad + Namen an</param>
         public void saveFilteredTree(String filePath)
         {
-            if (grantTrees == null || grantTrees.getFilteredTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
+            if (grantTrees == null || grantTrees.filteredTree == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.getFilteredTree(), fs);
+                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.filteredTree, fs);
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -424,18 +428,18 @@ namespace GRANTManager
         /// <param name="filePath">gibt den Dateipfad + Namen an</param>
         private void saveBrailleTree(String filePath)
         {
-            if (grantTrees == null || grantTrees.getBrailleTree() == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
+            if (grantTrees == null || grantTrees.brailleTree == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.getBrailleTree(), fs);
+                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.brailleTree, fs);
                 //fs.Close(); <- nicht benötigt da using
             }
         }
 
         /// <summary>
-        /// Speichert das Projekt
+        /// saves a project
         /// </summary>
-        /// <param name="projectFilePath">gibt den Pfad + Dateinamen des Projektes an</param>
+        /// <param name="projectFilePath">path and filename of the project</param>
         public void saveProject(String projectFilePath)
         {
             if (grantTrees == null) { Debug.WriteLine("Grant-Tree ist null -- Projekt kann nicht gespeichert werden!"); return; }
@@ -447,7 +451,7 @@ namespace GRANTManager
             String directoryPath = Path.GetDirectoryName(@projectFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@projectFilePath);
             
             GrantProjectObject projectObject = new GrantProjectObject();
-            #region Speichern der Strategyn
+            #region saves the strategies
             projectObject.grantBrailleStrategyFullName =  strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().FullName;
             projectObject.grantBrailleStrategyNamespace = strategyMgr.getSpecifiedBrailleDisplay() == null ? null : strategyMgr.getSpecifiedBrailleDisplay().GetType().Namespace;
             projectObject.grantDisplayStrategyFullName = strategyMgr.getSpecifiedDisplayStrategy() == null ? null : strategyMgr.getSpecifiedDisplayStrategy().GetType().FullName;
@@ -458,32 +462,32 @@ namespace GRANTManager
             projectObject.grantOperationSystemStrategyNamespace = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().Namespace;
             projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
             #endregion
-            //Ordner für das Projekt erstellen
+            //creates a directory for the project
             DirectoryInfo di = Directory.CreateDirectory(directoryPath);
             if (di.Exists)
             {
-                //löscht temporär alle kindelemente von Gruppen und deren Beziehungen im Braille-Baum
+                //temporary deletes  all children from a group and their connections to the braille (output) tree 
                 treeOperation.updateNodes.deleteChildsOfBrailleGroups();
                 saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + filteredTreeSavedName);
-                if (grantTrees.getBrailleTree() != null)
+                if (grantTrees.brailleTree != null)
                 {
                     saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + brailleTreeSavedName);
                 }
                 XmlSerializer serializer;
-                if (grantTrees.getOsmRelationship() != null && !grantTrees.getOsmRelationship().Equals(new OsmConnector<String, String>()) && grantTrees.getOsmRelationship().Count > 0)
+                if (grantTrees.osmRelationship != null && !grantTrees.osmRelationship.Equals(new OsmConnector<String, String>()) && grantTrees.osmRelationship.Count > 0)
                 {
                     using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + osmConectorName))
                     {
                         serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
-                        serializer.Serialize(writer, grantTrees.getOsmRelationship());
+                        serializer.Serialize(writer, grantTrees.osmRelationship);
                     }
                 }
-                if (grantTrees.getFilterstrategiesOfNodes() != null)
+                if (grantTrees.filterstrategiesOfNodes != null)
                 {
                     using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + filterstrategyFileName))
                     {
                         serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
-                        serializer.Serialize(writer, grantTrees.getFilterstrategiesOfNodes());
+                        serializer.Serialize(writer, grantTrees.filterstrategiesOfNodes);
                     }
                 }
                 using (StreamWriter writer = new StreamWriter(projectFilePath))
@@ -491,15 +495,16 @@ namespace GRANTManager
                     serializer = new XmlSerializer(typeof(GrantProjectObject));
                     serializer.Serialize(writer, projectObject);
                 }
-                // erstellt wieder die Kinelemente von Gruppen und deren Beziehungen im Braille-Baum
+                //rebuilds all children elements from a group and their connections to the braille tree
                 treeOperation.updateNodes.updateBrailleGroups();
             }            
         }
 
         /// <summary>
-        /// Lädt ein GRANT-Projekt
+        /// Loads a GRANT project
         /// </summary>
-        /// <param name="projectFilePath">Gibt den Pfad zum Grant-Projekt an; die Dateiendung muss .gant sein</param>
+        /// <param name="projectFilePath">path to the GRANT project file
+        /// file extension must be ".grant"</param>
         public void loadGrantProject(String projectFilePath)
         {
             if (!Path.GetExtension(@projectFilePath).Equals(".grant", StringComparison.OrdinalIgnoreCase))
@@ -530,7 +535,7 @@ namespace GRANTManager
                 if(fs != null){fs.Dispose();}
             }
             
-            //setze OSM-Beziehungen
+            //set the OSM connection
             if (File.Exists(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName))
             {
                 try
@@ -544,15 +549,14 @@ namespace GRANTManager
                         try
                         {
                             List<OsmConnector<String, String>> osmConector = (List<OsmConnector<String, String>>)serializer.Deserialize(reader);
-                            grantTrees.setOsmRelationship(osmConector);
+                            grantTrees.osmRelationship = osmConector;
                         }
-                        catch (InvalidOperationException e) { Console.WriteLine("Fehler beim Laden der OSM-Beziehungen: {0}", e); }
+                        catch (InvalidOperationException e) { Console.WriteLine("Exception when loading a OSM connection: {0}", e); }
                     }
                 }
                 finally { if (fs != null) { fs.Dispose(); } }
             }
-            //fs.Close(); <- nicht benötigt da using
-            #region Laden der Strategyn
+            #region loads the strategies 
             if (grantProjectObject.grantBrailleStrategyFullName != null && grantProjectObject.grantBrailleStrategyNamespace != null)
             {
                 strategyMgr.setSpecifiedBrailleDisplay(grantProjectObject.grantBrailleStrategyFullName + ", " + grantProjectObject.grantBrailleStrategyNamespace);
@@ -573,18 +577,18 @@ namespace GRANTManager
                 strategyMgr.setSpecifiedOperationSystem(grantProjectObject.grantOperationSystemStrategyFullName + ", " + grantProjectObject.grantOperationSystemStrategyNamespace);
             }
             #endregion
-            // ggf. setzen des Ausgabegegrätes
+            // if necessary set the output device
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(grantProjectObject.device);
-            //lade FilteredTree + brailleTree -> ist im Unterordner welcher den Projektnamen trägt
+            //load filtered tree and braille (output) tree -> it will be in a subfolder wich has the same name like the project
             loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + filterstrategyFileName);
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
             loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
         }
 
         /// <summary>
-        /// Lädt den Braille-Baum
+        /// Loads a braille (output) tree
         /// </summary>
-        /// <param name="filePath">gibt den Pfad zum Braille-Baum an</param>
+        /// <param name="filePath">path to the braille tree</param>
         private void loadBrailleTree(String filePath)
         {
             
@@ -597,9 +601,8 @@ namespace GRANTManager
             using (fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
-                // fs.Close();<- nicht benötigt da using
-                //Baum setzen
-                grantTrees.setBrailleTree(loadedTree);
+
+                grantTrees.brailleTree = loadedTree;
             }
             
             updateConnectedBrailleNodes();
@@ -607,11 +610,11 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Aktualisiert die (mit dem gefilterten Baum verbundenen) Knoten im Braille-Baum
+        /// updates the nodes of the braille tree which are connectet with a node of the filtered tree
         /// </summary>
         private void updateConnectedBrailleNodes()
         {
-            List<OsmConnector<String, String>> osmConector =  grantTrees.getOsmRelationship();
+            List<OsmConnector<String, String>> osmConector =  grantTrees.osmRelationship;
             if (osmConector != null)
             {
                 foreach (OsmConnector<String, String> con in osmConector)
@@ -623,9 +626,9 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Lädt die Filterstrategien für die Knoten
+        /// Loads the strategy of filtering for a node
         /// </summary>
-        /// <param name="filePath">gibt den Dateipfad + Name an</param>
+        /// <param name="filePath">path of the directory and file inclusive the file extension</param>
         private void loadFilterstrategies(String filePath)
         {
             if (File.Exists(@filePath))
@@ -638,40 +641,37 @@ namespace GRANTManager
                     {
                         fs = null;
                         List<FilterstrategyOfNode<String, String, String>> filterstrategies = (List<FilterstrategyOfNode<String, String, String>>)serializer.Deserialize(reader);
-                        grantTrees.setFilterstrategiesOfNodes(filterstrategies);
+                        grantTrees.filterstrategiesOfNodes = filterstrategies;
                     }
-                    //fs.Close(); 
                 }
                 finally { if (fs != null) { fs.Dispose(); } }
             }
             else
             {
-                Debug.WriteLine("Die Datei mit den FIlterstrategien exisitert nicht!");
+                Debug.WriteLine("The file with the strategies of filtering doesn't exist!");
             }
         }
 
         /// <summary>
-        /// Lädt eine gefilterten Baum und speichert das Ergebnis
+        /// Loads a filtered tree and stores the result into the <c>GeneratedGrantTrees</c> object
         /// </summary>
-        /// <param name="filePath">gibt den Dateipfad + Name an</param>
+        /// <param name="filePath">path of the directory and file inclusive the file extension</param>
         private void loadFilteredTree(String filePath)
         {
             if (!File.Exists(@filePath))
             {
-                Debug.WriteLine("Die Datei Existiert nicht");
+                Debug.WriteLine("The file doesn't exist!");
                 return;
             }
             using (System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
-               // fs.Close();
-                //Baum setzen
-                grantTrees.setFilteredTree(loadedTree);
+                grantTrees.filteredTree =loadedTree;
             }
-            //Filter-Strategy setzen
-            if (grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).Equals(new OSMElement.OSMElement()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.Equals(new GeneralProperties()))
+
+            if (grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).Equals(new OSMElement.OSMElement()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.Equals(new GeneralProperties()))
             {
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.getFilteredTree(), grantTrees.getFilterstrategiesOfNodes(), strategyMgr.getSpecifiedTree());
+                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.filteredTree, grantTrees.filterstrategiesOfNodes, strategyMgr.getSpecifiedTree());
                 if ( mainFilterstrategy != null)
                 {
                     strategyMgr.setSpecifiedFilter(mainFilterstrategy.FilterstrategyFullName+ ", " + mainFilterstrategy.FilterstrategyDll);
@@ -680,12 +680,12 @@ namespace GRANTManager
                 }
                 else
                 {
-                    throw new Exception("Keine FilterStrategy im ersten Knoten angegeben");
+                    throw new Exception("Their isn't a filtering strategy in the first node! It can not be filtered.");
                 }
             }
             else
             {
-                throw new Exception("Baum nicht ausreichend spezifiziert!");
+                throw new Exception("The Tree isn't sufficiently specified!");
             }
             if (openAppOfFilteredTree())
             {
@@ -694,28 +694,28 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Öffnet falls nötig die gefilterte Anwendung
+        /// If necessary opens the applications which should be filtered.
         /// </summary>
-        /// <returns><c>true</c> falls die Anwendung (nun) geöffnet ist; sonst <c>false</c></returns>
+        /// <returns><c>true</c> if the application now open; otherwise <c>false</c></returns>
         public bool openAppOfFilteredTree()
         {
-            if (grantTrees != null && grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()))
+            if (grantTrees != null && grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName == null)
+                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.moduleName == null)
                 {
-                    Debug.WriteLine("Kein Daten im 1. Knoten Vorhanden.");
+                    Debug.WriteLine("No data in the first node.");
                     return false;
                 }
-                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.moduleName);
+                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.moduleName);
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
 
-                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.fileName != null)
+                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.fileName != null)
                     {
-                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.fileName);
+                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.fileName);
                         if (!openApp)
                         {
-                            Debug.WriteLine("Anwendung konnte nicht geöffnet werden! Ggf. Pfad der Anwendung anpassen."); //TODO
+                            Debug.WriteLine("Application cann't open! Maybe the path is wrong."); //TODO
                             return false;
                         }
                         else { return true; }
@@ -724,8 +724,8 @@ namespace GRANTManager
                 else
                 {
                     treeOperation.updateNodes.compareAndChangeFileName();
-                    //aktiviert die Anwendung (nötig falls es minimiert war)
-                   
+                    //invoke the application if these was minimised
+
                     strategyMgr.getSpecifiedOperationSystem().showWindow(appIsRunnuing);
                     return true;
                 }
@@ -734,43 +734,41 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Ermöglicht das Neuladen eines gesamten Baumes
+        /// reloads a whole filtered tree; 
         /// </summary>
         public void filteredLoadedApplication()
         {
-            //ist nur notwendig, wenn die Anwendung zwischendurch zu war (--> hwnd's vergleichen) oder die Anwendung verschoben wurde (--> Rect's vergleichen)
-            Object loadedTree = grantTrees.getFilteredTree();
+            //it is just necassary when the application was closed  (--> compare hwnd)
+            Object loadedTree = grantTrees.filteredTree;
 
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.moduleName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
-
             treeOperation.updateNodes.updateFilteredTree(hwnd);
-
         }
 
         /// <summary>
-        /// Löscht die Bäume, OSM-Beziehung etc. aus dem Speicher
+        /// Deletes the trees, OSM connections and strategies of filtering from the <c>GrantProjectObject</c>
         /// </summary>
         public void deleteGrantTrees()
         {
             //grantTrees = new GeneratedGrantTrees();
-            grantTrees.setOsmRelationship(new List<OsmConnector<String, String>>());
-            grantTrees.setFilterstrategiesOfNodes(new List<FilterstrategyOfNode<String, String, String>>());
+            grantTrees.osmRelationship =new List<OsmConnector<String, String>>();
+            grantTrees.filterstrategiesOfNodes = new List<FilterstrategyOfNode<String, String, String>>();
             Object treeNew = strategyMgr.getSpecifiedTree().NewTree();
-            grantTrees.setFilteredTree(null);
-            grantTrees.setBrailleTree(null);
+            grantTrees.filteredTree = null;
+            grantTrees.brailleTree = null;
         }
 
         /// <summary>
-        /// Filtert einen Teilbaum und aktualisiert das Baumobjekt
+        /// filtered a subtree and updates the tree object in the <c>GrantProjectObject</c> object
         /// </summary>
-        /// <param name="idGeneratedOfFirstNodeOfSubtree">gibt die Id des Knotens an, ab welcher der Teilbaum aktualisiert werden soll (inkl. diesem Knoten)</param>
+        /// <param name="idGeneratedOfFirstNodeOfSubtree">id of the node of the subtree to be updated</param>
         public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
         {
             OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
             Object subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
             String idParent = treeOperation.updateNodes.changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
-            Object tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.filteredTree;
 
             List<Object> searchResultTrees = treeOperation.searchNodes.searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
 
@@ -786,26 +784,26 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Prüft, ob eine Angegebene XML-Datei valide zu dem Schema TemplateUi.xsd ist
+        /// checks whether, a XML is valid to the schema (XSD -- TemplateUi.xsd)
         /// </summary>
-        /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
-        /// <returns><c>true</c> falls die Datei valide ist; sonst <c>false</c></returns>
+        /// <param name="pathToXml">path to the XML file</param>
+        /// <returns><c>true</c> if the XML falls die Datei valide ist; sonst <c>false</c></returns>
         public static bool isTemplateValid(String pathToXml)
         {
             XDocument xDoc;
-            if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
+            if (!File.Exists(@pathToXml)) { Debug.WriteLine("The XML doesn't exist!"); return false; }
             try
             {
                 xDoc = XDocument.Load(@pathToXml);
             }
             catch (XmlException e)
             {
-                Debug.WriteLine("die XML ("+pathToXml+") ist nicht korrekt: " + e);
+                Debug.WriteLine("the XML ("+pathToXml+") isn't valid: " + e);
                 return false;
             }
             bool isValid = true;
             String pathToXsd = @"TemplateUi.xsd";
-            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
+            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("The XSD schema doesn't exist!"); return false; }
 
             try
             {
@@ -823,7 +821,7 @@ namespace GRANTManager
                 System.Xml.Serialization.XmlSerializerNamespaces a = xsd.Namespaces;
                 return isValid;
             }
-            catch (IOException e) { Debug.WriteLine("Auf die Datei kann nicht zugegriffen werden.\n" + e); return false; }
+            catch (IOException e) { Debug.WriteLine("The file cann't be accessed\n" + e); return false; }
         }
 
         static void ValidationCallback(object sender, ValidationEventArgs args)
@@ -837,10 +835,10 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Ermittelt zu einem Punkt den entsprechenden Braille-Knoten
+        /// Calculates the braille node to a point (on a braille device)
         /// </summary>
-        /// <param name="x">gibt die x-Koordinate des Punktes an</param>
-        /// <param name="y">gibt die y-Koordinate des Punktes an</param>
+        /// <param name="x">x coordinat of the point</param>
+        /// <param name="y">y coordinat of the point</param>
         /// <returns></returns>
         public Object getBrailleNodeAtPoint(int x, int y)
         {
@@ -850,34 +848,33 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Ermittelt zu einen Punkt auf der Stifftplatte bei einem Screenshot die zugehörige Position auf dem (normalen) Display
+        /// Calculates to a point on a screenshot (on a braille device) the corresponding  point on the orginal "image" of the application
         /// </summary>
-        /// <param name="brailleNode">gibt den zu der Klickposition zugehörigen Braille-Knoten an; bei diesem muss es sich um ein Knoten mit dem Controlltype 'Screenshot' handeln</param>
-        /// <param name="x">gibt den x-Wert der Klickposition an</param>
-        /// <param name="y">gibt den y-Wert der Klickposition an</param>
-        /// <param name="applicationX">gibt den x-Wert auf dem (ormalen) Display an, falls der Wert nicht ermittelt werden kann so wird diese Variable auf <code>-1</code> gesetzt</param>
-        /// <param name="applicationY">gibt den y-Wert auf dem (ormalen) Display an, falls der Wert nicht ermittelt werden kann so wird diese Variable auf <code>-1</code> gesetzt</param>
+        /// <param name="brailleNode">the node with the screenshot (Controlltype == 'Screenshot') on which was clicked on the braille device</param>
+        /// <param name="x">x coordinat of the point</param>
+        /// <param name="y">y coordinat of the point</param>
+        /// <param name="applicationX">x coordinat of the (normal) display OR <code>-1</code> </param>
+        /// <param name="applicationY">y coordinat of the (normal) display OR <code>-1</code> </param>
         public void getScreenshotPointInApplication(Object brailleNode, int x, int y, out int applicationX, out int applicationY)
         {
-            //Achtung: erstmal offset und zoom vernachlässigt
-
+            //attention: offset and zoom are still ignore
             applicationX = -1;
             applicationY = -1;
             OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(brailleNode);
             if (dataBraille.Equals(new OSMElement.OSMElement())) { return; }
-            if (!dataBraille.properties.controlTypeFiltered.Equals("Screenshot")) { Debug.WriteLine("Achtung: diese Funktion sollte nur genutzt werden, wenn es sich bei dem Knoten um einen Screenshot handelt!"); return; }
+            if (!dataBraille.properties.controlTypeFiltered.Equals("Screenshot")) { Debug.WriteLine("Attention: This function should be only used if the controlltype of the node 'Screenshot'"); return; }
 
 
-            #region Klickposition im Screenshot auf der Stiftplatte ermitteln
+            #region calculates the click position of the screenshot on the braille device
             TactileNodeInfos nodeinfos = strategyMgr.getSpecifiedBrailleDisplay().getTactileNodeInfos(brailleNode);
             Device device = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
             int pointScreenshotBrailleX =  x - Convert.ToInt32( dataBraille.properties.boundingRectangleFiltered.TopLeft.X);
 
             int pointScreenshotBrailleY = y - Convert.ToInt32(dataBraille.properties.boundingRectangleFiltered.TopLeft.Y);
-            //TODO: prüfen, ob der Punkt im Knoten liegt
+            //TODO: checks whether the point is into the rectange of the node
             #endregion
-            #region Punkt des BrailleScreenshots auf Knotenposition in richtiger Anwendung mappen
-            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
+            #region mappes the point on the braille device to a point in the application
+            OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
             OSMElement.OSMElement dataFiltered = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
             if (osmRelationships == null) { return; }
 
@@ -887,20 +884,21 @@ namespace GRANTManager
             }
             int applicationNodeX = Convert.ToInt32(dataFiltered.properties.boundingRectangleFiltered.Width / nodeinfos.contentWidth * pointScreenshotBrailleX);
             int applicationNodeY = Convert.ToInt32(dataFiltered.properties.boundingRectangleFiltered.Height / nodeinfos.contentHeight * pointScreenshotBrailleY);
-            Debug.WriteLine("x = {0}, y = {1}", applicationNodeX, applicationNodeY);
+            // Debug.WriteLine("x = {0}, y = {1}", applicationNodeX, applicationNodeY);
             #endregion
-            #region Punkt auf Bildschirm bezogen
-            //TODO momentan funktioniert es nur, da sich die anwendung links Oben  auf dem Monitor befindet
+            #region calculates the point with cover of the (normal) display
+            //TODO Attention: currently it works only if the frame of the application starts in the left upper corner (on the (normal) display)
             applicationX = applicationNodeX;
             applicationY = applicationNodeY;
             #endregion
         }
 
         /// <summary>
-        /// Prüft, ob das angegebene Template für die gewählte Stiftplatte von der Größe her passend ist
+        /// checks whether the template can be used for the choosen device 
+        /// it depends on the dimensions of the braille device
         /// </summary>
-        /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
-        /// <returns><c>true</c> falls das Template passend ist; sonst <c> false</c></returns>
+        /// <param name="pathToXml">path to the XML file</param>
+        /// <returns><c>true</c> if the template can be used; otherwise<c> false</c></returns>
         public bool isTemplateUsableForDevice(String pathToXml)
         {
             int tmpHeight, tmpWidth;
@@ -908,12 +906,13 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Prüft, ob das angegebene Template für die gewählte Stiftplatte von der Größe her passend ist
+        /// checks whether the template can be used for the choosen device 
+        /// it depends on the dimensions of the braille device
         /// </summary>
-        /// <param name="pathToXml">Gibt den pfad zu der Xml Datei an</param>
-        /// <param name="minDeviceHeight">gibt die mindest Devicehöhe der Stiftplatte zurück</param>
-        /// <param name="minDeviceWidth">gibt die mindest Devicebreite der Stiftplatte zurück</param>
-        /// <returns><c>true</c> falls das Template passend ist; sonst <c> false</c></returns>
+        /// <param name="pathToXml">path to the XML file</param>
+        /// <param name="minDeviceHeight">the minimum number of pins of the braille display (height) for the template</param>
+        /// <param name="minDeviceWidth">the minimum number of pins of the braille display (width) for the template</param>
+        /// <returns><c>true</c> if the template can be used; otherwise<c> false</c></returns>
         public bool isTemplateUsableForDevice(String pathToXml, out int minDeviceHeight, out int minDeviceWidth)
         {
             minDeviceHeight = -1;
@@ -925,11 +924,11 @@ namespace GRANTManager
             }
             catch (XmlException e)
             {
-                Debug.WriteLine("die XML (" + pathToXml + ") ist nicht korrekt: " + e);
+                Debug.WriteLine("the XML (" + pathToXml + ") isn't valide: " + e);
                 return false;
             }
             String pathToXsd = @"TemplateUi.xsd";
-            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("Die XSD exisitert nicht"); return false; }
+            if (!File.Exists(@pathToXsd)) { Debug.WriteLine("The XSD schema doesn't exist"); return false; }
             minDeviceHeight = Convert.ToInt32( xElement.Element("MinDeviceHeight").Value);
             minDeviceWidth = Convert.ToInt32(xElement.Element("MinDeviceWidth").Value);
             Device activeDevice = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
@@ -941,11 +940,11 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Entfernt unerwünschte Zeichen => jedes Zeichen, bei dem es sich nicht um ein Wortzeichen, einen Punkt, ein @-Zeichen oder einen Bindestrich handelt
-        /// Quelle: https://msdn.microsoft.com/library/844skk0h(v=vs.110).aspx
+        ///Removes invalide characters
+        /// see: https://msdn.microsoft.com/library/844skk0h(v=vs.110).aspx
         /// </summary>
         /// <param name="input">gibt den String an, bei dem die unerwünschten Zeichen gelöscht werden sollen</param>
-        /// <returns>den String ohne die unerwünschten Zeichen</returns>
+        /// <returns>string without the invalid characters</returns>
         public static String cleanInput(String input)
         {
             // Replace invalid characters with empty strings.
@@ -964,22 +963,22 @@ namespace GRANTManager
 
         #region add filtered node in braille tree
         /// <summary>
-        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// Adds a node to the braille (output) tree
         /// </summary>
-        /// <param name="filteredNode">gibt den zugehörigen gefilterten Knoten an</param>
+        /// <param name="filteredNode">filtered node which should be added</param>
         public void addFilteredNodeToBrailleTree(Object filteredNode)
         {
             addFilteredNodeToBrailleTree("", filteredNode, null, null, null, null, new Rect());
         }
 
         /// <summary>
-        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// Adds a node to the braille (output) tree
         /// </summary>
-        /// <param name="guiType"> gibt den GUI-Typ, welcher für die taktile Darstellung genutzt werden soll an</param>
-        /// <param name="filteredNode">gibt den zugehörigen gefilterten Knoten an</param>
-        public void addFilteredNodeToBrailleTree(String guiType, object filteredNode = null)
+        /// <param name="controlleType">The controlle type which should be used for the tactile representation</param>
+        /// <param name="filteredNode">corresponding filtered node which should be added</param>
+        public void addFilteredNodeToBrailleTree(String controlleType, object filteredNode = null)
         {
-            addFilteredNodeToBrailleTree(guiType, filteredNode, null, null, null, null, new Rect());
+            addFilteredNodeToBrailleTree(controlleType, filteredNode, null, null, null, null, new Rect());
         }
 
         /* nicht endeutig
@@ -989,38 +988,38 @@ namespace GRANTManager
         }*/
 
         /// <summary>
-        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// Adds a node to the braille (output) tree
         /// </summary>
-        /// <param name="screenName">gibt den Namen des Screens für den neuen Knoten an</param>
-        /// <param name="screenCategory">gibt den Namen des Screencategory für den neuen Knoten an</param>
-        /// <param name="viewName">gibt den namen der neuen View an</param>
-        /// <param name="positionTactile">gibt die 'taktile' Position des neuen Knotens an</param>
+        /// <param name="screenName">name of the screen to which the new node should be added</param>
+        /// <param name="screenCategory">screen category of the new node</param>
+        /// <param name="viewName">view name of the new node</param>
+        /// <param name="positionTactile">tactile position from the new node</param>
         public void addFilteredNodeToBrailleTree( String screenName, String screenCategory, String viewName = null, Rect positionTactile = new Rect())
         {
             addFilteredNodeToBrailleTree("", null, viewName, screenName, screenCategory, null, positionTactile);
         }
 
         /// <summary>
-        /// Fügt einen Knoten der taktilen Darstellung hinzu
+        /// Adds a node to the braille (output) tree
         /// </summary>
-        /// <param name="guiType"> gibt den GUI-Typ, welcher für die taktile Darstellung genutzt werden soll an</param>
-        /// <param name="filteredNode">gibt den zugehörigen gefilterten Knoten an</param>
-        /// <param name="viewName">gibt den namen der neuen View an</param>
-        /// <param name="screenName">gibt den Namen des Screens für den neuen Knoten an</param>
-        /// <param name="screenCategory">gibt den Namen des Screencategory für den neuen Knoten an</param>
-        /// <param name="parentIdTactlie">gibt die ParentId des neuen Knoten an</param>
-        /// <param name="positionTactile">gibt die 'taktile' Position des neuen Knotens an</param>
-        private void addFilteredNodeToBrailleTree(String guiType, object filteredNode = null, String viewName = null, String screenName = null, String screenCategory = null, String parentIdTactlie = null, Rect positionTactile = new Rect())
+        /// <param name = "controlleType" > The controlle type which should be used for the tactile representation</param>
+        /// <param name="filteredNode">corresponding filtered node which should be added</param>
+        /// <param name="viewName">view name of the new node</param>
+        /// <param name="screenName">name of the screen to which the new node should be added</param>
+        /// <param name="screenCategory">screen category of the new node</param>
+        /// <param name="parentIdTactlie">id of the parent node in the braille (output) tree</param>
+        /// <param name="positionTactile">tactile position from the new node</param>
+        private void addFilteredNodeToBrailleTree(String controlleType, object filteredNode = null, String viewName = null, String screenName = null, String screenCategory = null, String parentIdTactlie = null, Rect positionTactile = new Rect())
         {
             OSMElement.OSMElement tactileOsm = new OSMElement.OSMElement();
             GeneralProperties tactileProp = new GeneralProperties();
             BrailleRepresentation tactlieRep = new BrailleRepresentation();
-            if (guiType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(guiType))
+            if (controlleType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(controlleType))
             {
-                Console.WriteLine("Der GuiTyp passt nicht -- er wurde auf 'Text' gesetzt!");
-                guiType = "Text";
+                Console.WriteLine("The controlltype does't exist (for this braille device) --> controlltype = 'Text'!");
+                controlleType = "Text";
             }
-            tactileProp.controlTypeFiltered = guiType;
+            tactileProp.controlTypeFiltered = controlleType;
             tactileProp.boundingRectangleFiltered = positionTactile;
             if(filteredNode != null)
             {
@@ -1029,8 +1028,8 @@ namespace GRANTManager
             tactlieRep.viewName = viewName != null ? viewName : Guid.NewGuid().ToString();
             tactlieRep.screenCategory = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
             tactlieRep.screenName = screenName != null ?  screenName : tactlieRep.screenCategory;
-            //TODO: falls weitere GUI-Typen hinzukommen, muss hier ergänzt werden!
-            if (guiType.Equals("DropDownMenuItem"))
+            //Attention: when new Controlletypes are added, these should be added here!
+            if (controlleType.Equals("DropDownMenuItem"))
             { 
                 OSMElement.UiElements.DropDownMenuItem dropDownMenuItem = new OSMElement.UiElements.DropDownMenuItem();
                 if (filteredNode != null)
@@ -1041,7 +1040,7 @@ namespace GRANTManager
                 }
                 tactlieRep.uiElementSpecialContent = dropDownMenuItem;
             }
-            if (guiType.Equals("ListItem"))
+            if (controlleType.Equals("ListItem"))
             {
                 OSMElement.UiElements.ListMenuItem listItem = new OSMElement.UiElements.ListMenuItem();
                 if(filteredNode != null)
@@ -1053,7 +1052,7 @@ namespace GRANTManager
                 }
                 tactlieRep.uiElementSpecialContent = listItem;
             }
-            if (guiType.Equals("TabItem"))
+            if (controlleType.Equals("TabItem"))
             {
                 OSMElement.UiElements.TabItem tabItem = new OSMElement.UiElements.TabItem();
                 tabItem.orientation = OSMElement.UiElements.Orientation.Top;
@@ -1067,7 +1066,7 @@ namespace GRANTManager
 
             if (filteredNode != null)
             {
-                List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
+                List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.IdGenerated, idGenerated, ref relationship);
                 treeOperation.updateNodes.updateNodeOfBrailleUi(ref tactileOsm);
             }

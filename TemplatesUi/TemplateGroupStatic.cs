@@ -34,7 +34,7 @@ namespace TemplatesUi
         private void addSubtreeInBrailleTree(object brailleNode)
         {
             OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( brailleNode));
-            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.screenCategory.Equals(osm.brailleRepresentation.screenCategory))
                 {
@@ -42,9 +42,9 @@ namespace TemplatesUi
                     {
                         if (strategyMgr.getSpecifiedTree().GetData(screenSubtree).brailleRepresentation.screenName.Equals(osm.brailleRepresentation.screenName))
                         {
-                            if(strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osm))
+                            if(strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osm))
                             {
-                                strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), osm);
+                                strategyMgr.getSpecifiedTree().Remove(grantTrees.brailleTree, osm);
                             }
                             strategyMgr.getSpecifiedTree().AddChild(screenSubtree, brailleNode);
                             return;
@@ -122,7 +122,7 @@ namespace TemplatesUi
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
 
-            List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
+            List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
             if (filteredSubtree != null)
             {
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);

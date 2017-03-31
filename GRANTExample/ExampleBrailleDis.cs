@@ -77,29 +77,29 @@ namespace GRANTExample
                     }
                 }
                 strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
-                if (grantTrees.getOsmRelationship() == null)
+                if (grantTrees.osmRelationship == null)
                 {                    
                     List<OsmConnector<String, String>> relationship = ExampleTree.setOsmRelationship();
-                    grantTrees.setOsmRelationship(relationship);
+                    grantTrees.osmRelationship =relationship;
                     
                 }
                 else
                 {
-                    if (grantTrees.getFilteredTree() == null)
+                    if (grantTrees.filteredTree == null)
                     {
                         Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                         return;
                     }
                     GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTrees.brailleTree, propertiesForSearch, OperatorEnum.and);
                         String brailleId = "";
                         if (treeElement.Count > 0)
                         {
                             brailleId =strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
-                    OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
+                    OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -125,7 +125,7 @@ namespace GRANTExample
 
         public void updateImg()
         {
-            if (grantTrees.getFilteredTree() == null)
+            if (grantTrees.filteredTree == null)
             {
                 Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                 return;
@@ -133,13 +133,13 @@ namespace GRANTExample
             String brailleId = "";
             GeneralProperties propertiesForSearch = new GeneralProperties();
             propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTrees.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTrees.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
                             brailleId = strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
-            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
+            OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
             if(osmRelationships != null)
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
@@ -156,12 +156,12 @@ namespace GRANTExample
 
         public bool[,] getRendererExample()
         {
-            if (grantTrees.getFilteredTree() == null)
+            if (grantTrees.filteredTree == null)
             {
                 Console.WriteLine("Die Anwendung wurde noch nicht gefiltert - bitte 'F5' drücken");
                 return null;
             }
-            if (grantTrees.getOsmRelationship() == null)
+            if (grantTrees.osmRelationship == null)
             {
                 Console.WriteLine("Es sind noch keine OSM-Beziehungen vorhanden!");
                 return null;
@@ -173,7 +173,7 @@ namespace GRANTExample
             strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
    //         strategyMgr.getSpecifiedBrailleDisplay().initializedSimulator();
             setDauGui("nameFiltered");
-            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Child( strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree()))))); ;
+            OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Next(strategyMgr.getSpecifiedTree().Child( strategyMgr.getSpecifiedTree().Child(grantTrees.brailleTree))))); ;
             bool[,] result = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement);
             return result;
         }
@@ -514,7 +514,7 @@ namespace GRANTExample
                OSMElement.OSMElement osmScreenshot = strategyMgr.getSpecifiedTree().GetData(node);
                strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osmScreenshot);
                strategyMgr.getSpecifiedTree().SetData(node, osmScreenshot);
-               grantTrees.setBrailleTree(strategyMgr.getSpecifiedTree().Root(node));
+               grantTrees.brailleTree = strategyMgr.getSpecifiedTree().Root(node);
            }
         }
 

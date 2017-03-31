@@ -37,7 +37,7 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
-                    if (grantTree.getFilteredTree() != null)
+                    if (grantTree.filteredTree != null)
                     {
                         treeOperation.updateNodes.changePropertiesOfFilteredNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties);
                     }
@@ -69,9 +69,9 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
-                    if (grantTree.getFilteredTree() != null)
+                    if (grantTree.filteredTree != null)
                     {
-                        List<Object> result = treeOperation.searchNodes.searchProperties(grantTree.getFilteredTree(), strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
+                        List<Object> result = treeOperation.searchNodes.searchProperties(grantTree.filteredTree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
                         if (result.Count == 1)
                         {
                             GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
@@ -148,7 +148,7 @@ namespace GRANTExample
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Application);
                    // strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentBrailleTreeNode, -1);
-                    grantTree.setFilteredTree(tree);
+                    grantTree.filteredTree = tree;
                 }
                 catch (Exception ex)
                 {
@@ -159,7 +159,7 @@ namespace GRANTExample
 
         public void searchPropertie(String localizedControlTypeFiltered)
         {
-            if (grantTree.getFilteredTree() == null)
+            if (grantTree.filteredTree == null)
             {
                     filterTreeOfApplication();
             }
@@ -168,7 +168,7 @@ namespace GRANTExample
             //  searchedProperties.nameFiltered = "";
 
             Console.Write("Gesuchte Eigenschaften ");
-            treeOperation.searchNodes.searchProperties(grantTree.getFilteredTree(), searchedProperties, OperatorEnum.or);
+            treeOperation.searchNodes.searchProperties(grantTree.filteredTree, searchedProperties, OperatorEnum.or);
 
         }
 
@@ -184,7 +184,7 @@ namespace GRANTExample
                 {
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                    if (grantTree.getFilteredTree() == null)
+                    if (grantTree.filteredTree == null)
                     {
                         filterTreeOfApplication();
                     }
@@ -197,12 +197,12 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
-                            List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            List<OsmConnector<String, String>> relationshipList = grantTree.osmRelationship;
                             OsmTreeConnector.addOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated, ref relationshipList);
-                            grantTree.setOsmRelationship(relationshipList);
+                            grantTree.osmRelationship = relationshipList;
                         }
                     }
 
@@ -220,14 +220,14 @@ namespace GRANTExample
         /// </summary>
         public void setOSMRelationship()
         {
-            if (grantTree.getBrailleTree() == null) { return; }
+            if (grantTree.brailleTree == null) { return; }
             if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
             {
                 try
                 {
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
 
-                    if (grantTree.getFilteredTree() == null)
+                    if (grantTree.filteredTree == null)
                     {
                         filterTreeOfApplication();
                     }
@@ -240,15 +240,15 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.getBrailleTree(), propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
-                            List<OsmConnector<String, String>> relationshipList = grantTree.getOsmRelationship();
+                            List<OsmConnector<String, String>> relationshipList = grantTree.osmRelationship;
                             //   OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_3", ref relationship);
                             //  OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_5", ref relationship);
                             OsmTreeConnector.setOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated, ref relationshipList);
                             //  OsmTreeRelationship.setOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_11", ref relationshipList);
-                            grantTree.setOsmRelationship(relationshipList);
+                            grantTree.osmRelationship = relationshipList;
                         }
 
                       
@@ -292,7 +292,7 @@ namespace GRANTExample
 
        /* private List<OsmConnector<String, String>> setOsmConnection(String guiID)
         {
-            if (strategyMgr.getOsmRelationship() == null)
+            if (strategyMgr.osmRelationship == null)
             {
                 //List<OsmConnector<String, String>> relationships = new List<OsmConnector<String, String>>();
                 strategyMgr.setOsmConnection(new List<OsmConnector<String, String>>());
@@ -300,9 +300,9 @@ namespace GRANTExample
             OsmConnector<String, String> r3 = new OsmConnector<String, String>();
             r3.FilteredTree = guiID;
             r3.BrailleTree =  "braille123_3";
-            strategyMgr.getOsmRelationship().Add(r3);
+            strategyMgr.osmRelationship.Add(r3);
            // relationships.Add(r3);
-            return strategyMgr.getOsmRelationship();
+            return strategyMgr.osmRelationship;
         }*/
 
         public static List<OsmConnector<String, String>> setOsmRelationship()

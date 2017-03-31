@@ -12,15 +12,21 @@ namespace GRANTManager.TreeOperations
     public class GeneratedIds
     {
         StrategyManager strategyMgr;
+        #region Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneratedIds"/> class.
+        /// </summary>
+        /// <param name="strategyMgr"></param>
         public GeneratedIds(StrategyManager strategyMgr)
         {
             this.strategyMgr = strategyMgr;
         }
-
+        #endregion
+       
         /// <summary>
-        /// Generiert für den kompletten gefilterten Baum die Ids
+        /// Generates ids for the whole filtered tree.
         /// </summary>
-        /// <param name="parentNode">gibt eine referenz zu dem Baum an</param>
+        /// <param name="parentNode">reference to the filtered tree object</param>
         public void generatedIdsOfFilteredTree(ref Object tree)
         {
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
@@ -37,7 +43,7 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Ermittelt und setzt die Ids in einem Teilbaum des gefilterten Baumes
+        /// Calculates and sets the ids into a subtree of the filtered tree.
         /// </summary>
         /// <param name="subtree">gibt den Teilbaum an</param>
         /// <returns>Baum mit den veränderten Ids</returns>
@@ -61,10 +67,10 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Erstellt eine Id für ein Knoten des gefilterten Baums
+        /// Generates an id for one node of the filtered tree.
         /// </summary>
-        /// <param name="node">gibt den Knoten des gefilterten Baums an</param>
-        /// <returns>die generierte Id</returns>
+        /// <param name="node">one filtered node</param>
+        /// <returns>the generated id</returns>
         private String generatedIdFilteredNode(Object node)
         {
             /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
@@ -105,10 +111,10 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Erstellt die Id für einen Knoten des Braille-Baums
+        /// Generates an id for one node of the braille (output) tree.
         /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
+        /// <param name="node">one node of the braille tree</param>
+        /// <returns>the generated id</returns>
         public String generatedIdBrailleNode(OSMElement.OSMElement osmElement)
         {
             /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/

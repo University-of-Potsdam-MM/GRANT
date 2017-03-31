@@ -76,11 +76,11 @@ namespace BrailleTreeTest
             initilaizeFilteredTree();
             strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
             String nodeId;
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getBrailleTree()))
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
             {
                 nodeId = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
                 Assert.AreNotEqual(null, nodeId, "Es hätte eine Id vorhanden sein müssen. Betrachteter Knoten:\n" + node);
-                foreach (Object nodeCopy in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getBrailleTree()))
+                foreach (Object nodeCopy in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
                 {
                     if (!strategyMgr.getSpecifiedTree().Equals(node, nodeCopy) && nodeId.Equals(strategyMgr.getSpecifiedTree().GetData(nodeCopy).properties.IdGenerated))
                     {

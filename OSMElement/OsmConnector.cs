@@ -8,11 +8,11 @@ namespace OSMElement
 {
 
     /// <summary>
-    /// Gibt die Beziehungen zwischen dem gefilterten Baum und der Braille-Darstellung an über "IdGenerated"
+    /// Specifies the relationship between "filteredTree" and "brailleTree" based on the generated id
     /// http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
     /// </summary>
-    /// <typeparam name="T">gibt die IdGenerated des Knotens im gefilterten Baum an</typeparam>
-    /// <typeparam name="U">gibt die IdGenerated des Knotens im Baum der Braille-Darstellung an</typeparam>
+    /// <typeparam name="T">The generated id of the node in the filtered tree.</typeparam>
+    /// <typeparam name="U">The generated id of the node in the braille (output) tree</typeparam>
     [Serializable]
     public class OsmConnector<T, U>
     {
@@ -20,6 +20,11 @@ namespace OSMElement
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filteredTree">The generated id of the node in the filtered tree.</param>
+        /// <param name="brailleTree">The generated id of the node in the braille (output) tree</param>
         public OsmConnector(T filteredTree, U brailleTree)
         {
             this.FilteredTree = filteredTree;
@@ -27,11 +32,11 @@ namespace OSMElement
         }
 
         /// <summary>
-        /// bezieht sich auf das Element im gefiltert Baum
+        /// id of a node in the filtered tree
         /// </summary>
         public T FilteredTree { get; set; }
         /// <summary>
-        /// bezieht sich auf das Element der Braille-GUI
+        /// id of a node in the braille tree
         /// </summary>
         public U BrailleTree { get; set; }
     }

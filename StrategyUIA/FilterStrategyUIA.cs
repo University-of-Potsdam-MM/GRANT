@@ -91,9 +91,9 @@ namespace StrategyUIA
                     //beim ersten Knoten die Strategy mit ranschreiben + ModulName
                     setSpecialPropertiesOfFirstNode(ref tree);
                     treeOperation.generatedIds.generatedIdsOfFilteredTree(ref tree);
-                    List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.getFilterstrategiesOfNodes();
+                    List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.filterstrategiesOfNodes;
                     FilterstrategiesOfTree.addFilterstrategyOfNode(strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated, this.GetType(), ref filterstrategies);
-                    grantTrees.setFilterstrategiesOfNodes(filterstrategies);
+                    grantTrees.filterstrategiesOfNodes = filterstrategies;
                     break;
             }
              
@@ -532,10 +532,10 @@ namespace StrategyUIA
             }
             else
             {
-                if (grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered != IntPtr.Zero)
+                if (grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.hWndFiltered != IntPtr.Zero)
                 {
-                    IntPtr hwnd = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered;
-                    //IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(strategyMgr.getFilteredTree().Child.Data.properties.hWndFiltered));
+                    IntPtr hwnd = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.hWndFiltered;
+                    //IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(strategyMgr.filteredTree.Child.Data.properties.hWndFiltered));
                     AutomationElement element = AutomationElement.FromHandle(hwnd);
                     au = element.FindFirst(TreeScope.Descendants, cond);
                 }
@@ -646,7 +646,7 @@ namespace StrategyUIA
             osmElement.properties = setProperties(mouseElement);
             
             //Id setzen
-            List<Object> node = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), osmElement.properties, OperatorEnum.and);
+            List<Object> node = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
             if (node.Count == 1)
             {
                 return strategyMgr.getSpecifiedTree().GetData(node[0]);

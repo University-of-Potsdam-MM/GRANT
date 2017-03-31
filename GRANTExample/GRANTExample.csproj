@@ -208,7 +208,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\grant.ico" />
+    <Resource Include="Icons\grant.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="grant.ico" />

@@ -64,7 +64,7 @@ namespace FilteredTreeTest
             String applicationPathName = @"C:\Windows\system32\calc.exe";
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
-            if (grantTrees.getFilteredTree() == null) { Assert.Fail("Es ist kein gefilterter Baum vorhanden"); return; }
+            if (grantTrees.filteredTree == null) { Assert.Fail("Es ist kein gefilterter Baum vorhanden"); return; }
             Console.WriteLine("m_testContext.DeploymentDirectory: " + m_testContext.DeploymentDirectory);
             String folderPathSave = System.IO.Path.Combine(m_testContext.DeploymentDirectory, "filter_test");
             guiFuctions.saveProject(folderPathSave);

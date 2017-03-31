@@ -344,13 +344,13 @@ namespace GRANTApplication
                         Object tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
                         // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
                         //strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentNode, -1);
-                        grantTrees.setFilteredTree(tree);
+                        grantTrees.filteredTree = tree;
 
 
                         // TreeViewItem treeItem = null;
                         // treeItem = new TreeViewItem();
 
-                       // ITreeStrategy<OSMElement.OSMElement> parentNode = strategyMgr.getFilteredTree();
+                       // ITreeStrategy<OSMElement.OSMElement> parentNode = strategyMgr.filteredTree;
 
                        
                             
@@ -416,7 +416,7 @@ namespace GRANTApplication
             
             //updateNodes.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
             guiFunctions.filterAndAddSubtreeOfApplication(((Button)sender).CommandParameter.ToString());
-            Object tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.filteredTree;
 
             tvMain.Items.Clear();
             root.Items.Clear();
@@ -435,11 +435,11 @@ namespace GRANTApplication
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (grantTrees.getFilteredTree() == null) { Console.WriteLine("Der Baum muss vor dem Speichern gefiltert werden."); return; }
+            if (grantTrees.filteredTree == null) { Console.WriteLine("Der Baum muss vor dem Speichern gefiltert werden."); return; }
 
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = GuiFunctions.cleanInput("filteredTree_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.nameFiltered); // Default file name
+            dlg.FileName = GuiFunctions.cleanInput("filteredTree_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.nameFiltered); // Default file name
             dlg.DefaultExt = ".grant"; // Default file extension
             dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.OverwritePrompt = true; // Hinweis wird gezeigt, wenn die Datei schon existiert
@@ -471,7 +471,7 @@ namespace GRANTApplication
                 guiFunctions.loadGrantProject(dlg.FileName);
            
 
-            Object tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.filteredTree;
 
             tvMain.Items.Clear();
             root.Items.Clear();

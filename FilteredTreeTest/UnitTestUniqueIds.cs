@@ -46,10 +46,10 @@ namespace FilteredTreeTest
         {
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
-            if (grantTrees.getFilteredTree() == null) { Assert.Fail("Es ist kein gefilterter Baum vorhanden"); return; }
-            Object copyedTree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getFilteredTree());
+            if (grantTrees.filteredTree == null) { Assert.Fail("Es ist kein gefilterter Baum vorhanden"); return; }
+            Object copyedTree = strategyMgr.getSpecifiedTree().Copy(grantTrees.filteredTree);
             String nodeId;
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getFilteredTree()))
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
                 nodeId = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
                 foreach (Object nodeCopy in strategyMgr.getSpecifiedTree().AllNodes(copyedTree))

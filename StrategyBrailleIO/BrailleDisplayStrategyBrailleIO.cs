@@ -212,8 +212,8 @@ namespace StrategyBrailleIO
         public void generatedBrailleUi()
         {
             if (!initialized) { setActiveAdapter(); }
-            if (grantTrees == null || grantTrees.getBrailleTree() == null) { return; }
-            Object osm = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
+            if (grantTrees == null || grantTrees.brailleTree == null) { return; }
+            Object osm = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
             createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
             String activeScreenName = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
@@ -257,7 +257,7 @@ namespace StrategyBrailleIO
         /// <returns>ein <code>Image</code> des Bildbereiches</returns>
         private Image captureScreen(String idGeneratedBrailleNode)
         {
-            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
+            OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
             OSMElement.OSMElement nodeFilteredTree = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
             if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }
@@ -273,9 +273,9 @@ namespace StrategyBrailleIO
             }
             else
             {
-                if(grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered.Equals(IntPtr.Zero))
+                if(grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.hWndFiltered.Equals(IntPtr.Zero))
                 {
-                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
+                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
                 }
                 else
                 {
@@ -922,9 +922,9 @@ namespace StrategyBrailleIO
             brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
-            if (grantTrees.getBrailleTree() != null)
+            if (grantTrees.brailleTree != null)
             {
-                List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
+                List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.brailleTree); //TODO. gleich übergeben?
                 if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
                 //if (osmElement.brailleRepresentation.groupelementsOfDiffrentTypes  != null)
                 {

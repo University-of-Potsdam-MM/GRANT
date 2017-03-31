@@ -373,11 +373,10 @@ namespace StrategyWindows
         }
 
         /// <summary>
-        /// Aktiviert eine Anwendung
-        /// -> wird benötigt beim Filtern, falls die Anwendung minimiert ist
+        /// invoke the application if these was minimised
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der Anwendung an</param>
-        /// <returns><c>true</c>, falls die Anwendung aktiviert wurde; sonst <c>false</c></returns>
+        /// <param name="hwnd">handle to the application</param>
+        /// <returns><c>true</c>, if the application invoked; otherwiese<c>false</c></returns>
         public bool showWindow(IntPtr hwnd)
         {
             if (NativeMethods.IsIconic(hwnd))
