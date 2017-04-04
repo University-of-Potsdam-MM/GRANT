@@ -299,7 +299,7 @@ namespace GRANTApplication
                 brailleTreeOutput.Items.Clear();
                 brailleRoot.Items.Clear();
                brailleRoot.Header = "Braille-Tree";
-                guiFunctions.createTreeForOutput(tree1, ref brailleRoot); //Achtung wenn keine kopie erstellt wird wird der Baum im StrategyManager auch verändert (nur noch ein Knoten)
+                guiFunctions.createTreeForOutput(tree1, ref brailleRoot);
                 SaveButton.IsEnabled = true;
                 brailleTreeOutput.Items.Add(brailleRoot);
                 dataGrid_brailleDisplaySimul.Items.Refresh();

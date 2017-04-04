@@ -839,7 +839,7 @@ namespace GRANTManager
         /// </summary>
         /// <param name="x">x coordinat of the point</param>
         /// <param name="y">y coordinat of the point</param>
-        /// <returns></returns>
+        /// <returns>the name of the view or <code>null</code></returns>
         public Object getBrailleNodeAtPoint(int x, int y)
         {
             int offsetX, offsetY;
@@ -898,7 +898,7 @@ namespace GRANTManager
         /// it depends on the dimensions of the braille device
         /// </summary>
         /// <param name="pathToXml">path to the XML file</param>
-        /// <returns><c>true</c> if the template can be used; otherwise<c> false</c></returns>
+        /// <returns><c>true</c> if the template can be used; otherwise <c>false</c></returns>
         public bool isTemplateUsableForDevice(String pathToXml)
         {
             int tmpHeight, tmpWidth;

@@ -20,13 +20,10 @@ namespace StrategyBrailleIO
 {
     public class BrailleDisplayStrategyBrailleIO : IBrailleDisplayStrategy
     {
-       private IBrailleIOShowOffMonitor monitor;
-       private BrailleIOMediator brailleIOMediator {get; set;}
+        private IBrailleIOShowOffMonitor monitor;
+        private BrailleIOMediator brailleIOMediator { get; set; }
         private Boolean initialized = false;
         private List<uiElementsTypeStruct> uiElementList;
-        /// <summary>
-        /// Ist der Adapter des Simulators
-        /// </summary>
         private AbstractBrailleIOAdapterBase showOffAdapter;
         //GestureRecognizer showOffGestureRecognizer;
 
@@ -50,7 +47,6 @@ namespace StrategyBrailleIO
             {
                 brailleIOMediator = BrailleIOMediator.Instance;
             }
-            /// aus BrailleIOExample (getShowOff()) -> erstmal gekürzt
             if (brailleIOMediator != null)
             {
                 // if the current Adapter manager holds a debug adpter, use it
@@ -58,7 +54,7 @@ namespace StrategyBrailleIO
                 {
                     if (adapter is BrailleIOAdapter_ShowOff)
                     {
-                        //TODO: prüfen, ob Simulator noch läuft
+                        //TODO: test whether the simulator is still running
                         adapter.Connect();
                         showOffAdapter = adapter as AbstractBrailleIOAdapterBase;
                         break;
@@ -94,13 +90,20 @@ namespace StrategyBrailleIO
             }
         }
 
+        /// <summary>
+        /// Removes the active adapter
+        /// </summary>
         public void removeActiveAdapter()
         {
             removeAllViews();
             if (brailleIOMediator == null || brailleIOMediator.AdapterManager == null) { return; }
             foreach (IBrailleIOAdapter adapter in brailleIOMediator.AdapterManager.GetAdapters())
             {
-                if (adapter != null)
+                /*if (adapter != null)
+                {
+                    adapter.Disconnect();
+                }*/
+                if((brailleIOMediator.AdapterManager.ActiveAdapter is BrailleIOAdapter_ShowOff) || (brailleIOMediator.AdapterManager.ActiveAdapter is BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD))
                 {
                     adapter.Disconnect();
                 }
@@ -111,7 +114,10 @@ namespace StrategyBrailleIO
             }
         }
 
-        public void removeAllViews()
+        /// <summary>
+        /// Removes all views
+        /// </summary>
+        private void removeAllViews()
         {
             if (brailleIOMediator == null) { return; }
             foreach (AbstractViewBoxModelBase view in brailleIOMediator.GetViews())
@@ -120,6 +126,9 @@ namespace StrategyBrailleIO
             }
         }
 
+        /// <summary>
+        /// Initialized a braille display.
+        /// </summary>
         public void setActiveAdapter()
         {
             if (brailleIOMediator == null)
@@ -128,7 +137,7 @@ namespace StrategyBrailleIO
             }
             initialized = true;
             Type activeDeviceType = Type.GetType(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeFullName + ", " + strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace);
-            //falls der BrailleIO-Simulator genutzt werden soll, wird dieser extra initialisiert
+            // If the simulartor will be used it will initilaized seperatly
             if (activeDeviceType.Equals(typeof(DisplayStrategyBrailleIoSimulator)))
             {
                 initializedSimulator();
@@ -140,14 +149,12 @@ namespace StrategyBrailleIO
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
             }
             return;
-
         }
 
-
         /// <summary>
-        /// Ändert den Inhalt einer View
+        /// Updated the content of a specific element
         /// </summary>
-        /// <param name="element">Gibt das OSM-element an, bei dem eine Änderung erfolgte</param>
+        /// <param name="element">element which content should be updated</param>
         public void updateViewContent(ref OSMElement.OSMElement element)
         {
             IBrailleIOAdapterManager adapter =  brailleIOMediator.AdapterManager;
@@ -155,7 +162,7 @@ namespace StrategyBrailleIO
             BrailleIOScreen screen = brailleIOMediator.GetView(element.brailleRepresentation.screenName) as BrailleIOScreen;
             if (screen == null)
             {
-                throw new Exception("Der Screen existiert nicht!");
+                throw new Exception("This screen dosn't exist!");
             }
             BrailleIOViewRange view = screen.GetViewRange(element.brailleRepresentation.viewName) as BrailleIOViewRange;
             String uiElementType = element.properties.controlTypeFiltered;
@@ -164,18 +171,16 @@ namespace StrategyBrailleIO
                 createScreen(element.brailleRepresentation.screenName);
                 createView(element);
                 view = screen.GetViewRange(element.brailleRepresentation.viewName) as BrailleIOViewRange;
-                //throw new Exception("Der View existiert (in dem Screen) nicht!");
-                Console.WriteLine("Die View exisiterte noch nicht; sie wurde gerade erstellt");
             }
             if (!(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase) ||
                 uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // für alle anderen muss bei BrailleIO "otherContent" zugewiesen werden
-            
+                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // for all others it should be used "otherContent"
+
             {
                 IBrailleIOContentRenderer renderer = getRenderer(uiElementType);              
                 if (renderer == null)
                 {
-                    Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", element.properties.controlTypeFiltered);
+                    Console.WriteLine("It dosn't exist a renderer for this UI element ({0}).", element.properties.controlTypeFiltered);
                     return;
                 }
                 view.SetOtherContent(convertToBrailleIOUiElement(element), renderer);
@@ -207,7 +212,7 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Erstellt das UI auf der Stiftplatte
+        /// generated the tactile user interface of a braille device
         /// </summary>
         public void generatedBrailleUi()
         {
@@ -224,9 +229,9 @@ namespace StrategyBrailleIO
         }
         
         /// <summary>
-        /// Erstellt einen neuen Screen, falls dieser noch nicht existiert
+        /// Creates a new screen if it dosn't exist
         /// </summary>
-        /// <param name="screenAvtive">gibt den Namen des Screens an</param>
+        /// <param name="screenAvtive">name of the screen</param>
         private void createScreen(String screenName)
         {
             try
@@ -235,26 +240,26 @@ namespace StrategyBrailleIO
                  if (screen == null)
                  {
                      brailleIOMediator.AddView(screenName, new BrailleIOScreen(screenName));
-                     //der erste erstellte Screen wird sichtbar gemacht, alle anderen nicht
+                     // the first created screen will be visible all other are invisible
                      if (brailleIOMediator.Count() > 1)
                      {
                          BrailleIOScreen screenNew =  brailleIOMediator.GetView(screenName) as BrailleIOScreen;
                          screenNew.SetVisibility(false);
                      }
                  }
-                // der screen existiert schon -> ok
+                // the screen exist -> ok
             }
             catch
             {
-                throw new Exception("Fehler in createScreen(String screenName) in BrailleDisplayStrategyBrailleIO");
+                throw new Exception("Exception in createScreen(String screenName) in BrailleDisplayStrategyBrailleIO");
             }
         }
 
         /// <summary>
-        /// Ermittelt ein Bereich und das zugehörige anzuzeigende Bild
+        /// Seeks to a node the rectangle of the shown image and this image
         /// </summary>
-        /// <param param name="idGeneratedFilteredTreeNode">gibt die generierte Id des Knotens das Braille-Baum-Elements an</param>
-        /// <returns>ein <code>Image</code> des Bildbereiches</returns>
+        /// <param param name="idGeneratedFilteredTreeNode">the id of a node in the braille (output) tree</param>
+        /// <returns>an image of the UI element</returns>
         private Image captureScreen(String idGeneratedBrailleNode)
         {
             OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
@@ -266,7 +271,6 @@ namespace StrategyBrailleIO
             int w = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Width);
             bmp = ScreenCapture.CaptureWindow(nodeFilteredTree.Data.properties.hWndFiltered, h, w, 0, 0, 0, 0);*/
             Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(nodeFilteredTree);
-          //  Console.WriteLine("Braille -- Rect: x = {0}, y = {1}, höhe = {2}, breite= {3}", rect.X, rect.Y, rect.Height, rect.Width);
             if (!nodeFilteredTree.properties.hWndFiltered.Equals(IntPtr.Zero))
             {
                 bmp = ScreenCapture.CaptureWindowPartAtScreenpos(nodeFilteredTree.properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
@@ -279,24 +283,24 @@ namespace StrategyBrailleIO
                 }
                 else
                 {
-                    bmp = ScreenCapture.CaptureScreenPos(rect); // Wenn eine andere Anwendung die gefilterte Anwendung überdeckt, wird der falsche Screenshot erstellt
+                    bmp = ScreenCapture.CaptureScreenPos(rect); // If an other application overlap this application, the screenshot shows a part of both applications
                 }                
             }
             return bmp;
         }
 
         /// <summary>
-        /// Geht durch alle Baumelemente und erstellt die einzelnen Views
+        /// Iterates all the tree elements and creates the views
         /// </summary>
-        /// <param name="tree">gibt das Baum-Objekt der Oberflaeche an</param>
+        /// <param name="tree">a braille tree object</param>
         private void createViewsFromTree(Object tree)
         {
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                //top => der Knoten mit der Angabe der ViewCategory
+                //top => node with specification of the name of the viewCategory
                 if (!strategyMgr.getSpecifiedTree().IsTop(node))
                 {
-                    //Depth == 1 => Knoten mit den Screens
+                    //Depth == 1 => node with specification of the screen names
                     if (strategyMgr.getSpecifiedTree().Depth(node) ==1 && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && !strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName.Equals(""))
                     {
                         createScreen(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName);
@@ -310,17 +314,15 @@ namespace StrategyBrailleIO
                     }
                 }
             }
-          
         }
 
-
         /// <summary>
-        /// Erstellt aus einer <code>OSMElement.OSMElement</code> die entsprechende View
+        /// Creates an associated view from an OSM element
         /// </summary>
-        /// <param name="brailleRepresentation">gibt die Darstellung des GUI-Objektes fuer die Stiftplatte an</param>
+        /// <param name="osmElement">an OSM element</param>
         private void createView(OSMElement.OSMElement osmElement)
         {
-            /* je nach UI-Element sind für die Views verschiedene Eigenschaften wichtig
+            /* depending on the UI element and the renderer used, different properties are importent
              * die Angabe des 'UI-Element'-Typs steht bei den Propertys in controlTypeFiltered
              */
             if (osmElement.properties.isControlElementFiltered == false || osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
@@ -335,13 +337,13 @@ namespace StrategyBrailleIO
             }
             if (!(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase) || 
                 uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase) || 
-                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // für alle anderen muss bei BrailleIO "otherContent" zugewiesen werden
+                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // for all others it should be used "otherContent"
             {
                 
                 IBrailleIOContentRenderer renderer = getRenderer(uiElementType);
                 if (renderer == null)
                 {
-                    Console.WriteLine("Für das UI-Element '{0}' existiert kein Renderer.", osmElement.properties.controlTypeFiltered);
+                    Console.WriteLine("It dosn't exist a renderer for this UI element ({0})", osmElement.properties.controlTypeFiltered);
                     return;
                 }
 
@@ -361,16 +363,16 @@ namespace StrategyBrailleIO
                 return;
             }
 
-            //im Zweifelsfall wird immer eine "Text-View" mit einem leeren Text erstellt
+            // By defaul an empty text view will be used
             createViewText(brailleIOMediator.GetView(brailleRepresentation.screenName) as BrailleIOScreen, osmElement);
         }
 
-        #region create Views       
+        #region creates views       
         /// <summary>
-        /// Erstellt eine View mit einem Text
+        /// Creates a text view
         /// </summary>
-        /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown</param>
+        /// <param name="osmElement">OSM element for this view </param>
         private void createViewText(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -386,10 +388,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Erstellt eine View mit einer Bool-Matrix
+        /// Creates a view with a Boolean matrix
         /// </summary>
-        /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
+        /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown</param>
+        /// <param name="osmElement">OSM element for this view </param>
         private void createViewMatrix(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -405,11 +407,11 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Erstellt eine View mit einem Bild
+        /// Creates a view with a image
         /// </summary>
-        /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
-        /// <param name="image">gibt das Bild an</param>
+        /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown </param>
+        /// <param name="osmElement">OSM element for this view </param>
+        /// <param name="image">the image</param>
         private void createViewImage(BrailleIOScreen screen,  OSMElement.OSMElement osmElement, System.Drawing.Image image)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -427,11 +429,11 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Erstellt eine View die keinen standard-Renderer verwendet
+        /// Creates a view which don't use a standard renderer
         /// </summary>
-        /// <param name="screen">gibt den <code>BrailleIOScreen</code> an, auf dem die View angezeigt werden </param>
-        /// <param name="filteredSubtree">gibt das zur View zugehörige OSM-Element an</param>
-        /// <param name="renderer">gibt den Renderer für diese View an</param>
+        /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown</param>
+        /// <param name="osmElement">OSM element for this view </param>
+        /// <param name="renderer">name of the renderer</param>
         private void createViewOtherContent(BrailleIOScreen screen, OSMElement.OSMElement osmElement, IBrailleIOContentRenderer renderer)
         {
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -448,11 +450,13 @@ namespace StrategyBrailleIO
         #endregion
 
         /// <summary>
-        /// Ermittelt zu einem Punkt den zugehörigen View-Name
+        /// Seeks to a point the associated view name.
         /// </summary>
-        /// <param name="x">gibt die horizontale Position des Punktes auf der Stifftplatte an</param>
-        /// <param name="y">gibt die vertikale Position des Punktes auf der Stifftplatte an</param>
-        /// <returns>falls eine passende View gefunden wurde dessen Name, dieser bezieht sich auf den aktuellen Screen; sonst <code>null</code></returns>
+        /// <param name="x">x coordinat of the point on the braille display</param>
+        /// <param name="y">y coordinat of the point on the braille display</param>
+        /// <param name="offsetX">x offste of the view</param>
+        /// <param name="offsetY">y offste of the view</param>
+        /// <returns>the name of the view or <code>null</code></returns>
         public String getBrailleUiElementViewNameAtPoint(int x, int y, out int offsetX, out int offsetY)
         {
             BrailleIOViewRange viewAtPoint = brailleIOMediator.GetViewAtPosition(x, y);
@@ -468,10 +472,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Ermittelt den zugehörigen Renderer für ein UI-Element
+        /// Gives the correct renderer for a UI element
         /// </summary>
-        /// <param name="guiElementType">gibt den Namen des UI-Elements an</param>
-        /// <returns>der Renderer für das UI-Element oder null</returns>
+        /// <param name="guiElementType">name of the UI element type</param>
+        /// <returns>name of the renderer or <c>null</c></returns>
         private static IBrailleIOContentRenderer getRenderer(String uiElementType)
         {
             switch (uiElementType)
@@ -493,7 +497,7 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Enum welches die verschiedenen 'ui-Elemente' enthält, für welches es Renderer in BrailleIO gibt
+        /// Enum of all possible UI elements which have a BrailleIO renderer
         /// </summary>
         private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenuItem, TextBox, ListItem, GroupElement, TabItem }
 
@@ -505,7 +509,7 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Erstellt eine Liste mit möglichen Ui-Elementen (Renderen) und deren minimale Größe
+        /// Creates a list of all possible renderer for UI elements and their minimal height.
         /// </summary>
         /// <returns></returns>
         private List<uiElementsTypeStruct> getUiElements()
@@ -514,13 +518,13 @@ namespace StrategyBrailleIO
             uiElementsTypeStruct uiElement = new uiElementsTypeStruct();
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Button.ToString();
-            uiElement.heightMin = 7; // Rahmen (2) + Höhe kleiner Buchstabe (3) + Freizeile (2)
-            uiElement.widthMin = 6; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2)
+            uiElement.heightMin = 7; // border (2) + height small letter (3) + free line (2)
+            uiElement.widthMin = 6; // border (2) + width letter (2) + space (2)
             uiElementList.Add(uiElement);
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.DropDownMenuItem.ToString();
-            uiElement.heightMin = 9; // Rahmen (4) + Höhe kleiner Buchstabe (3) + Freizeile (2)
-            uiElement.widthMin = 9; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2) + Bubel (3)
+            uiElement.heightMin = 9; // border (4) + height small letter (3) + free line (2)
+            uiElement.widthMin = 9; // border (2) + width letter (2) + space (2) + 	bullet point (3)
             uiElementList.Add(uiElement);
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Matrix.ToString();
@@ -529,18 +533,18 @@ namespace StrategyBrailleIO
             uiElementList.Add(uiElement);
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Screenshot.ToString();
-            uiElement.heightMin = 1; // macht das Sinn bei einem Screenshot?
-            uiElement.widthMin = 1; // macht das Sinn bei einem Screenshot?
+            uiElement.heightMin = 1; // What should be used for a screenshot? 
+            uiElement.widthMin = 1; // What should be used for a screenshot? 
             uiElementList.Add(uiElement);
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.Text.ToString();
-            uiElement.heightMin = 3; // Höhe kleiner Buchstabe (3) 
-            uiElement.widthMin = 2; // Breite Buchstabe (2) 
+            uiElement.heightMin = 3; // height small letter (3) 
+            uiElement.widthMin = 2; // width letter (2) 
             uiElementList.Add(uiElement);
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.TextBox.ToString();
-            uiElement.heightMin = 7; // Rahmen (2) + Höhe kleiner Buchstabe (3) + Freizeile (2)
-            uiElement.widthMin = 6; // Rahmen (2) + Breite Buchstabe (2) + Freiraum (2)
+            uiElement.heightMin = 7; // border (2) + height small letter (3) + free line (2)
+            uiElement.widthMin = 6; // border (2) + width letter (2) + space (2)
             uiElementList.Add(uiElement);
 
             uiElement.uiElementType = uiElementeTypesBrailleIoEnum.GroupElement.ToString();
@@ -560,16 +564,16 @@ namespace StrategyBrailleIO
 
             if (uiElementList.Count != Enum.GetNames(typeof( uiElementeTypesBrailleIoEnum)).Length)
             {
-                throw new Exception("Achtung es wurden nicht gleichviele Elemente im Enum wie in der Liste alle Ui-Elemente angegeben!");
+                throw new Exception("Attention: The number of renderer in the Enum (uiElementeTypesBrailleIoEnum) and in the list of all UI elements (uiElementList) dosn't match!");
             }
             return uiElementList;
         }
 
         /// <summary>
-        /// Gibt eine Liste mit allen für das gewählte Ausgabegerät möglichen Renderen zurück
-        /// Achtung: alle neuerstellten Renderer müssen sowohl der Renderer-Liste (getUiElements) als auch dem -Enum (uiElementeTypesBrailleIoEnum) hinzugefügt werden
+        /// Gives a list of all possible renderer depending on the choosen device
+        ///  Attention: All newly created renderers must be added in the list of renderers ("getUiElements") and the Enum "uiElementsTypesBrailleIoEnum"
         /// </summary>
-        /// <returns>Liste der BrailleIO-Renderer</returns>
+        /// <returns>list of all possible renderer</returns>
         public List<String> getUiElementRenderer()
         {
             List<String> uiElementRenderer = new List<String>();
@@ -591,10 +595,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Gibt eine Liste allen mit möglichen Renderen zurück
-        /// Achtung: alle neuerstellten Renderer müssen sowohl der Renderer-Liste (getUiElements) als auch dem -Enum (uiElementeTypesBrailleIoEnum) hinzugefügt werden
+        /// list of ALL possible renderer
+        /// Attention: All newly created renderers must be added in the list of renderers ("getUiElements") and the Enum "uiElementsTypesBrailleIoEnum"
         /// </summary>
-        /// <returns>Liste der BrailleIO-Renderer</returns>
+        /// <returns>list of all possible renderer</returns>
         public List<String> getAllUiElementRenderer()
         {
             List<String> uiElementRenderer = new List<String>();
@@ -606,10 +610,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Gibt zu einem Renderer beispielhaft die Darstellung an
+        /// Gives a example tactile representation to a given tree object (node)
         /// </summary>
-        /// <param name="filteredSubtree">gibt das OSM-Element an, welches für die Braille-UI beispielhaft gerendert werden soll</param>
-        /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
+        /// <param name="osmElementFilteredNode">a node</param>
+        /// <returns>Boolean matrix where <code>true</code> represents a shown pin</returns>
         public bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElementFilteredNode)
         {
             if (brailleIOMediator == null)
@@ -624,8 +628,7 @@ namespace StrategyBrailleIO
             if (tmpView == null && !osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())) { return new bool[0, 0]; }
             #region screenshot
             if(osmElementFilteredNode.properties.controlTypeFiltered.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString())){
-                //Screenshot muss extra erstellt werden
-                // Image img = ScreenCapture.CaptureWindow(strategyMgr.getSpecifiedOperationSystem().deliverDesktopHWND(), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Height *10), Convert.ToInt32(osmElementFilteredNode.properties.boundingRectangleFiltered.Width *10), 0, 0, 0, 0);
+                // a screenshot musst be created
                 Image img;
                 if (osmElementFilteredNode.properties.IdGenerated == null || osmElementFilteredNode.properties.IdGenerated.Equals("_tmp_id_"))
                 {
@@ -650,7 +653,7 @@ namespace StrategyBrailleIO
             bool[,] matrix;
             if (!(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase) ||
                 uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // für alle anderen muss bei BrailleIO "otherContent" zugewiesen werden
+                uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))) // for all others it should be used "otherContent"
             {
                 if (osmElementFilteredNode.brailleRepresentation.viewName.Contains("NavigationBarScreens_"))
                 {
@@ -685,29 +688,29 @@ namespace StrategyBrailleIO
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetImage());
                 matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
             }
-            else { throw new Exception("Kein passenden Renderer gefunden!"); }
-            
-            //löschen den temporär erstellten Screens inkl aller temporär erstellten Views
+            else { throw new Exception("It can't found a matching renderer!"); }
+
+            // delete all temporary screens, including their views
             brailleIOMediator.RemoveView(osmElementFilteredNode.brailleRepresentation.screenName);
             return matrix;
         }
 
         /// <summary>
-        /// Gibt zu einem Renderer beispielhaft die Darstellung an
-        /// Es wird eine Standardgröße genutzt
+        /// Gives for a renderer a exemplary tactile representation 
+        /// A standard size is used
         /// </summary>
-        /// <param name="uiElementType">gibt den Namen des Gui-Elements an</param>
-        /// <returns>eine Bool-Matrix mit den gesetzten Pins</returns>
+        /// <param name="uiElementType">name of the UI controlle type</param>
+        /// <returns>Boolean matrix where<code>true</code> represents a shown pin</returns>
         public bool[,] getRendererExampleRepresentation(String uiElementType)
         {
             if (uiElementType.Equals("GroupElement")) { return new bool[1, 1]; }
             return getRendererExampleRepresentation(getExampleOsmElement(uiElementType));
         }
 
-        #region beispielOsmElemente
+        #region example OSMElements
         private OSMElement.OSMElement getExampleOsmElement(String uiElementType)
         {
-            #region gemeinsame Eigenschaften
+            #region common properties
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             GeneralProperties properties = new GeneralProperties();
             BrailleRepresentation brailleR = new BrailleRepresentation();
@@ -718,10 +721,9 @@ namespace StrategyBrailleIO
             Rect rect = new Rect();
             properties.isEnabledFiltered = true;
             properties.IdGenerated = "_tmp_id_";
-            properties.valueFiltered = "Beispiel";
+            properties.valueFiltered = "example";
             #endregion
-            #region unterschiedliche Eigenschaften
-
+            #region different properties depending on the type --> if a new renderer added, add a example represemtation here
             if (uiElementeTypesBrailleIoEnum.Button.ToString().Equals(uiElementType))
             {
                rect  = new Rect(0, 0, 30, 8);               
@@ -763,7 +765,7 @@ namespace StrategyBrailleIO
             }
             if (uiElementeTypesBrailleIoEnum.TextBox.ToString().Equals(uiElementType))
             {
-                properties.valueFiltered = "Beispiel Beispieltext Beispieltext";
+                properties.valueFiltered = "example text example text ...";
                 rect = new Rect(0, 0, 25, 10);
                 brailleR.showScrollbar = true;
             }
@@ -814,12 +816,12 @@ namespace StrategyBrailleIO
 
         #endregion
 
-        #region Konvertieren von Elementen
+        #region converts objects
         /// <summary>
-        /// Wandelt <code>System.Windows.Forms.Padding</code> in <code>BrailleIO.Structs.BoxModel</code> um
+        /// Converts <code>System.Windows.Forms.Padding</code> in <code>BrailleIO.Structs.BoxModel</code>
         /// </summary>
-        /// <param name="padding">gibt ein <code>Padding</code>-Objekt an</param>
-        /// <returns>das übergebene Objekt als <code>BoxModel</code></returns>
+        /// <param name="padding">a <code>Padding</code> object</param>
+        /// <returns>a <code>BoxModel</code> object</returns>
         private BoxModel paddingToBoxModel(Padding padding)
         {
             BoxModel boxModel = new BoxModel();
@@ -831,10 +833,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// konvertiert das DropDownMenuItem aus <code>OSMElement.UiElements.DropDownMenuItem</code> zu <code>BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem</code>
+        /// Converts DropDownMenuItem (from <code>OSMElement.UiElements.DropDownMenuItem</code> to <code>BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem</code>)
         /// </summary>
-        /// <param name="osmMenu"></param>
-        /// <returns></returns>
+        /// <param name="osmMenu"><code>OSMElement.UiElements.DropDownMenuItem</code> DropDownMenuItem</param>
+        /// <returns>a <code>BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem</code> object</returns>
         private BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem convertDropDownMenu(OSMElement.UiElements.DropDownMenuItem osmMenu)
         {
             BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem brailleIOMenu = new BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem();
@@ -847,6 +849,11 @@ namespace StrategyBrailleIO
             return brailleIOMenu;
         }
 
+        /// <summary>
+        /// Converts an <c>OSMElement.OSMElement</c> to a <c>BrailleIOGuiElementRenderer.UiElements.ListMenuItem</c>
+        /// </summary>
+        /// <param name="osmElement">node of braille tree</param>
+        /// <returns>a <c>BrailleIOGuiElementRenderer.UiElements.ListMenuItem</c> object</returns>
         private BrailleIOGuiElementRenderer.UiElements.ListMenuItem convertToListItem(OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElements.ListMenuItem brailleListItem = new BrailleIOGuiElementRenderer.UiElements.ListMenuItem();
@@ -862,6 +869,11 @@ namespace StrategyBrailleIO
             return brailleListItem;
         }
 
+        /// <summary>
+        /// Converts an <c>OSMElement.OSMElement</c> to a <c>BrailleIOGuiElementRenderer.UiElements.ListMenuItem</c>
+        /// </summary>
+        /// <param name="osmElement">node of braille tree</param>
+        /// <returns>a <c>BrailleIOGuiElementRenderer.UiElements.ListMenuItem</c> object</returns>
         private BrailleIOGuiElementRenderer.UiElements.TabItem convertToTabView(OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElements.TabItem tabViewBraille = new BrailleIOGuiElementRenderer.UiElements.TabItem();
@@ -870,19 +882,17 @@ namespace StrategyBrailleIO
             {
                 return tabViewBraille;
             }
-            
             OSMElement.UiElements.TabItem tabOsm = (OSMElement.UiElements.TabItem)osmElement.brailleRepresentation.uiElementSpecialContent;
-           // Debug.WriteLine("4 - Ausrichtung = " + tabOsm.orientation + " (" + osmElement.brailleRepresentation.viewName + ": " + osmElement.properties.valueFiltered + ")");
             tabViewBraille.orientation = tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom :
-                (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Top.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Top : (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Right.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Right : BrailleIOGuiElementRenderer.UiElements.Orientation.Left));
+                 (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Top.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Top : (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Right.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Right : BrailleIOGuiElementRenderer.UiElements.Orientation.Left));
             return tabViewBraille;
         }
 
         /// <summary>
-        /// Konvertiert den <code>uiElementSpecialContent</code> des <code>OSMElement</code>s zu einem entsprechenden Objekt, welches BrailleIO bekannt ist
+        /// Converts an <code>OSMElement</code> (<code>uiElementSpecialContent</code>) to a special object for BrailleIO
         /// </summary>
-        /// <param name="filteredSubtree">gibt das filteredSubtree an</param>
-        /// <returns>ein Objekt mit dem konvertierten Inhalt</returns>
+        /// <param name="osmElement">a node</param>
+        /// <returns>object with the converted content</returns>
         private object convertUiElementSpecialContent(OSMElement.OSMElement osmElement)
         {
             object brailleIOElement = new object();
@@ -904,10 +914,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Konvertiert Inhalte des <code>OSMElement</code>s zu einer entsprechendend Darstellung vom <code>BrailleIOGuiElementRenderer.UiElement</code> um das Element einem Renderer zu übergeben
+        /// Converts a <code>OSMElement</code> object to a <code>BrailleIOGuiElementRenderer.UiElement</code> for rendering
         /// </summary>
-        /// <param name="filteredSubtree">gibt das <code>OSMElement</code> an</param>
-        /// <returns>ein <code>BrailleIOGuiElementRenderer.UiElement</code></returns>
+        /// <param name="osmElement">a node</param>
+        /// <returns>a <code>BrailleIOGuiElementRenderer.UiElement</code> object</returns>
         private BrailleIOGuiElementRenderer.UiElement convertToBrailleIOUiElement(OSMElement.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleIOElement = new BrailleIOGuiElementRenderer.UiElement();
@@ -926,12 +936,9 @@ namespace StrategyBrailleIO
             {
                 List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.brailleTree); //TODO. gleich übergeben?
                 if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
-                //if (osmElement.brailleRepresentation.groupelementsOfDiffrentTypes  != null)
                 {
                     List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
-
                    // brailleIOElement.showScrollbar = true;
-
                     childList = iteratedChildreen(nodeList[0]);
                     brailleIOElement.child = childList;
                 }
@@ -976,10 +983,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Iterriert über die Kinder eines Knotens und erstellt für jedes Kind ein Ui-Element
+        /// Creats for every child node (which is part of a group e.g. munuBar) a data structure
         /// </summary>
-        /// <param name="parentBrailleTreeNode">gibt den Elternknoten an</param>
-        /// <param name="templateObject">gibt das zu nutzende Template an</param>
+        /// <param name="parentBrailleTreeNode">parent node</param>
+        /// <returns>a list with all group elements</returns>
         private List<BrailleIOGuiElementRenderer.Groupelements> iteratedChildreen(Object parentBrailleTreeNode)
         {
             List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
@@ -1001,10 +1008,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Ermittelt anhand des genutzten Typs der DisplayStrategy welcher Adapter verwendet werden muss
+        /// Depending on the choosen DisplayStrategy the adapter to be used is returned
         /// </summary>
-        /// <param name="displayStrategyType">gibt die genutzte DisplayStrategy an</param>
-        /// <returns>der Adapter für die Ausgabe</returns>
+        /// <param name="displayStrategyType">DisplayStrategy</param>
+        /// <returns>adapter for the (braille) output</returns>
         private AbstractBrailleIOAdapterBase displayStrategyClassToBrailleIoAdapterClass(Type displayStrategyType)
         {
             Type brailleAdapterType = null;
@@ -1024,30 +1031,20 @@ namespace StrategyBrailleIO
         }
         #endregion
 
-
+        /// <summary>
+        /// Specifies whether a braille display was initirized
+        /// </summary>
         public bool isInitialized()
         {
             return initialized;
         }
 
         /// <summary>
-        /// Setzt den angegeben Screen auf Visible und den aktuell sichtbaren Screen auf invisible
+        /// Sets the given screen on "visible" and all others of "invisible".
         /// </summary>
-        /// <param name="screenName">gibt den Namen des Screens an, der sichtbar sein soll</param>
+        /// <param name="screenName">the name of the screen which should be visible</param>
         public void setVisibleScreen(String screenName)
         {
-           /* List<Object> allScreens = brailleIOMediator.GetViews();
-            foreach (BrailleIOScreen screen in allScreens)
-            {
-                if (screen.Name.Equals(screenName))
-                {
-                    screen.SetVisibility(true);
-                }
-                else
-                {
-                    screen.SetVisibility(false);
-                }
-            }*/
             object screens = brailleIOMediator.GetActiveViews();
             if (screens == null || !screens.GetType().Equals(typeof(List<AbstractViewBoxModelBase>))) { return; }
             List<AbstractViewBoxModelBase> screenObjectList = (List<AbstractViewBoxModelBase>)screens;
@@ -1062,8 +1059,7 @@ namespace StrategyBrailleIO
                     if (screenAvtiveNew != null)
                     {
                         screenAvtiveNew.SetVisibility(true);
-                        treeOperation.updateNodes.setPropertyInNavigationbarForScreen(screenName, true);
-                        
+                        treeOperation.updateNodes.setPropertyInNavigationbarForScreen(screenName, true);                        
                     }
                     else
                     {
@@ -1079,10 +1075,10 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Gibt den Namen des gerade sichtbaren Screens zurück;
-        /// es sollte nur immer ein Screen sichtbar sein
+        /// Returns the name of the visible screen
+        /// only one screen (per time) should by visible
         /// </summary>
-        /// <returns>den Namen des Sichtbaren Screens oder <c>null</c></returns>
+        /// <returns>name of the visible screen or <c>null</c></returns>
         public String getVisibleScreen()
         {
             object screens = brailleIOMediator.GetActiveViews();
@@ -1096,25 +1092,16 @@ namespace StrategyBrailleIO
                       return screenAvtive.Name;
                 }
             }
-           /* List<Object> allScreens = brailleIOMediator.GetViews();
-            foreach (BrailleIOScreen screen in allScreens)
-            {
-                if (screen.IsVisible())
-                {
-                    return screen.Name;
-                }
-            }*/
             return null;
         }
 
         /// <summary>
-        /// Verschiebt eine Gruppen von Views horizontal um den angegebenen Werte
+        /// moves a (group of) view(s) horizontal
         /// </summary>
-        /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
-        /// <param name="steps">positiv entspricht Verschiebung nach rechts</param>
+        /// <param name="viewNode">the name of the view</param>
+        /// <param name="steps">steps to move right</param>
         public void moveViewRangHoricontal(Object viewNode, int steps)
         {
-            //es muss aufgepasst werden, dass
             BrailleIOScreen screen = brailleIOMediator.GetView(strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.screenName) as BrailleIOScreen;
 
             BrailleIOViewRange viewRange;
@@ -1135,13 +1122,12 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
-        /// Verschiebt eine Gruppen von Views vertical um den angegebenen Werte
+        /// moves a (group of) view(s) vertical
         /// </summary>
-        /// <param name="viewNode">gibt den Knoten der zu verschiebenen View an</param>
-        /// <param name="steps">positiv entspricht Verschiebung nach unten</param>
+        /// <param name="viewNode">the name of the view</param>
+        /// <param name="steps">steps to move left</param>
         public void moveViewRangVertical(Object viewNode, int steps)
         {
-            //es muss aufgepasst werden, dass
             BrailleIOScreen screen = brailleIOMediator.GetView(strategyMgr.getSpecifiedTree().GetData(viewNode).brailleRepresentation.screenName) as BrailleIOScreen;
             BrailleIOViewRange viewRange;
             if (strategyMgr.getSpecifiedTree().GetData(viewNode).properties.controlTypeFiltered.Equals("TextBox"))
@@ -1157,6 +1143,11 @@ namespace StrategyBrailleIO
             brailleIOMediator.RenderDisplay();
         }
 
+        /// <summary>
+        /// Gives position and offset of a node
+        /// </summary>
+        /// <param name="brailleNode">node of the braille (output) tree</param>
+        /// <returns>position and offset of a node</returns>
         public TactileNodeInfos getTactileNodeInfos(object brailleNode)
         {
             TactileNodeInfos nodeInfos = new TactileNodeInfos();
@@ -1174,7 +1165,6 @@ namespace StrategyBrailleIO
                     nodeInfos.offsetY = viewRange.OffsetPosition.Y;
                 }
             }
-
             return nodeInfos;
         }
     }

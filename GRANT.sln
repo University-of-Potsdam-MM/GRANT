@@ -30,10 +30,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOBraillDisAdapter", "..\BrailleIO\BrailleDis\BrailleIOBraillDisAdapter\BrailleIOBraillDisAdapter.csproj", "{4306FCD9-4DD1-42CE-B449-07ABAB7FD8F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HBBrailleDisV2", "..\BrailleIO\BrailleDis\HBBrailleDisV2\HBBrailleDisV2.csproj", "{E5454493-14E2-4429-8EC9-646154154482}"
+	ProjectSection(ProjectDependencies) = postProject
+		{394E1F1D-B5D0-46E2-B60E-7BEE3A939DE2} = {394E1F1D-B5D0-46E2-B60E-7BEE3A939DE2}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOGuiElementRenderer", "BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj", "{8FDC0093-E06D-4116-B182-79EEED0645AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRANTExample", "GRANTExample\GRANTExample.csproj", "{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5454493-14E2-4429-8EC9-646154154482} = {E5454493-14E2-4429-8EC9-646154154482}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOBraillDisAdapterMVBD", "BrailleIOBraillDisAdapterMVBD\BrailleIOBraillDisAdapterMVBD.csproj", "{3B1787C9-B1A9-406F-951A-80E8681E6C6C}"
 EndProject
