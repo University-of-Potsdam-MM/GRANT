@@ -63,7 +63,7 @@ namespace GRANTManager.BrailleTreeTests
              *      - der Braille-Baum hat somit 2 Knoten (Kindbeziehung)
              *      - ID wurde generiert
              */
-            Assert.AreEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum sollte noch leer sein!");
+            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             BrailleRepresentation braille = new BrailleRepresentation();
             braille.isVisible = true;
             braille.screenName = "TestScreen";
@@ -79,10 +79,10 @@ namespace GRANTManager.BrailleTreeTests
             osm.properties = prop;
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             //Ebenen:  0. Root; 1. SymbolView; 2. Screen; 3. Inhalt
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber "+strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree())+" Knoten!");
-            Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()), "Der Root-Knoten muss gerde denau ein Kind haben. Er hat " + strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()) + " Kinder!");
-            object firstChildOfRoot = strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree());
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber "+strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)+" Knoten!");
+            Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree), "Der Root-Knoten muss gerde denau ein Kind haben. Er hat " + strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree) + " Kinder!");
+            object firstChildOfRoot = strategyMgr.getSpecifiedTree().Child(grantTrees.brailleTree);
             Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(firstChildOfRoot), "Das Kind von Root muss genau ein Kind haben. Es hat aber "+ strategyMgr.getSpecifiedTree().DirectChildCount(firstChildOfRoot) + " Kinder!");
             Assert.AreEqual("SymbolView", strategyMgr.getSpecifiedTree().GetData(firstChildOfRoot).brailleRepresentation.screenCategory, "Das erste Kind von Root sollte eigentlich angeben, dass es eine SymbolView ist!");
             object firstChildOfChildOfRoot = strategyMgr.getSpecifiedTree().Child(firstChildOfRoot);
@@ -93,7 +93,7 @@ namespace GRANTManager.BrailleTreeTests
         [TestMethod()]
         public void add2NodesOfSameScreenInBrailleTreeTest()
         {
-            Assert.AreEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum sollte noch leer sein!");
+            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region erster Knoten
             BrailleRepresentation braille = new BrailleRepresentation();
             braille.isVisible = true;
@@ -129,14 +129,14 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Assert.AreEqual(4, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 4 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Assert.AreEqual(4, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 4 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree) + " Knoten!");
         }
 
         [TestMethod()]
         public void addSameNodesOfSameScreenInBrailleTreeTest()
         {
-            Assert.AreEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum sollte noch leer sein!");
+            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region erster Knoten
             BrailleRepresentation braille = new BrailleRepresentation();
             braille.isVisible = true;
@@ -153,19 +153,19 @@ namespace GRANTManager.BrailleTreeTests
             osm.properties = prop;
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree) + " Knoten!");
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 3 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree) + " Knoten!");
             guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod()]
         public void add2NodesOfDifferentScreenInBrailleTreeTest()
         {
-            Assert.AreEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum sollte noch leer sein!");
+            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region erster Knoten
             BrailleRepresentation braille = new BrailleRepresentation();
             braille.isVisible = true;
@@ -200,11 +200,11 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-            Assert.AreEqual(5, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 5 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
-            Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()), "Das Root Element hätte ein Kind haben müssen");
-            foreach(object child in strategyMgr.getSpecifiedTree().DirectChildrenNodes(strategyMgr.getSpecifiedTree().Child( grantTrees.getBrailleTree())))
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            Assert.AreEqual(5, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 5 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree) + " Knoten!");
+            Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree), "Das Root Element hätte ein Kind haben müssen");
+            foreach(object child in strategyMgr.getSpecifiedTree().DirectChildrenNodes(strategyMgr.getSpecifiedTree().Child( grantTrees.brailleTree)))
             {
                 Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(child));
             }
@@ -214,7 +214,7 @@ namespace GRANTManager.BrailleTreeTests
         [TestMethod()]
         public void add2NodesOfDifferentScreenAndViewCategoryInBrailleTreeTest()
         {
-            Assert.AreEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum sollte noch leer sein!");
+            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region erster Knoten
             BrailleRepresentation braille = new BrailleRepresentation();
             braille.isVisible = true;
@@ -249,21 +249,21 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 6 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
-            Assert.AreEqual(2, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()), "Das Root Element hätte zwei Kinder haben müssen");
-            foreach (object child in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 6 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree) + " Knoten!");
+            Assert.AreEqual(2, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree), "Das Root Element hätte zwei Kinder haben müssen");
+            foreach (object child in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(child));
             }
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
             guiFuctions.deleteGrantTrees();
         }
 
         [TestMethod()]
         public void add2NodesOfDifferentViewsInBrailleTreeTest()
         {
-            Assert.AreEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum sollte noch leer sein!");
+            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region erster Knoten
             BrailleRepresentation braille = new BrailleRepresentation();
             braille.isVisible = true;
@@ -298,11 +298,11 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
-            Assert.AreNotEqual(null, grantTrees.getBrailleTree(), "Der BrailleBaum darf nun nicht mehr leer sein!");
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-            Assert.AreEqual(4, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Der BrailleBaum hätte genau 4 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()) + " Knoten!");
-            Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.getBrailleTree()), "Das Root Element hätte ein Kind haben müssen");
-            object symbolViewSubtree = strategyMgr.getSpecifiedTree().Child(grantTrees.getBrailleTree());
+            Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            Assert.AreEqual(4, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Der BrailleBaum hätte genau 4 Knoten haben sollen. Er hat aber " + strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree) + " Knoten!");
+            Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree), "Das Root Element hätte ein Kind haben müssen");
+            object symbolViewSubtree = strategyMgr.getSpecifiedTree().Child(grantTrees.brailleTree);
             Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(symbolViewSubtree), "Der SymbolView-Knoten hätte genau ein Kind haben müssen!");
             object screensubtree = strategyMgr.getSpecifiedTree().Child(symbolViewSubtree);
             Assert.AreEqual(2, strategyMgr.getSpecifiedTree().DirectChildCount(screensubtree), "Der Screen-Knoten hätte genau zwei Kinder haben müssen!");
@@ -351,10 +351,10 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
             strategyMgr.getSpecifiedGeneralTemplateUi().addNavigationbarForScreen(pathToTemplate, braille.screenName, braille.screenCategory);
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 7 Knoten haben müssen!");
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 7 Knoten haben müssen!");
             bool foundNavbar = false;
-            foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName!= null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("_NavigationBarScreens_groupElementsStatic_Count_1"))
                 {
@@ -404,10 +404,10 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
             strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementsNavigationbarScreens(pathToTemplate, braille.screenCategory);
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
             bool foundNavbar = false;
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("_NavigationBarScreens_groupElementsStatic_Count_1"))
                 {
@@ -457,7 +457,7 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
             strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementsNavigationbarScreens(pathToTemplate, braille.screenCategory);
-            //Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
+            //Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
             #region 3. Knoten
             BrailleRepresentation braille3 = new BrailleRepresentation();
             braille3.isVisible = true;
@@ -476,12 +476,12 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm3);
             #endregion
             strategyMgr.getSpecifiedGeneralTemplateUi().updateNavigationbarScreens(pathToTemplate, braille.screenCategory);
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.getBrailleTree()));
-            Assert.AreEqual(9, strategyMgr.getSpecifiedTree().Count(grantTrees.getBrailleTree()), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 9 Knoten haben müssen!");
+            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            Assert.AreEqual(9, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 9 Knoten haben müssen!");
 
 
             Object subtreeNavbar = null;
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Equals("_NavigationBarScreens_groupElementsStatic_Count_2"))
                 {

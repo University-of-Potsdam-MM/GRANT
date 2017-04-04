@@ -61,6 +61,18 @@ namespace StrategyWindows
             [DllImport("User32.dll")]
             public static extern Int32 SetForegroundWindow(IntPtr hWnd);
 
+            /// <summary>
+            ///     Retrieves a handle to the foreground window (the window with which the user is currently working). The system
+            ///     assigns a slightly higher priority to the thread that creates the foreground window than it does to other threads.
+            ///     <para>See https://msdn.microsoft.com/en-us/library/windows/desktop/ms633505%28v=vs.85%29.aspx for more information.</para>
+            /// </summary>
+            /// <returns>
+            ///     C++ ( Type: Type: HWND )<br /> The return value is a handle to the foreground window. The foreground window
+            ///     can be NULL in certain circumstances, such as when a window is losing activation.
+            /// </returns>
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetForegroundWindow();
+
             [DllImport("User32.dll")]
             public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
@@ -361,11 +373,10 @@ namespace StrategyWindows
         }
 
         /// <summary>
-        /// Aktiviert eine Anwendung
-        /// -> wird benötigt beim Filtern, falls die Anwendung minimiert ist
+        /// invoke the application if these was minimised
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der Anwendung an</param>
-        /// <returns><c>true</c>, falls die Anwendung aktiviert wurde; sonst <c>false</c></returns>
+        /// <param name="hwnd">handle to the application</param>
+        /// <returns><c>true</c>, if the application invoked; otherwiese<c>false</c></returns>
         public bool showWindow(IntPtr hwnd)
         {
             if (NativeMethods.IsIconic(hwnd))
@@ -373,6 +384,17 @@ namespace StrategyWindows
                 return NativeMethods.ShowWindow(hwnd, 9); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
             }
             return true;
+        }
+
+        /// <summary>
+        /// Hides a window
+        /// </summary>
+        /// <param name="hwnd">handle of the window which should be hiden</param>
+        /// <returns><code>true</code> if the window is hiden, otherwise <code>false</code></returns>
+        public bool hideWindow(IntPtr hwnd)
+        {
+            return NativeMethods.ShowWindow(hwnd, 0); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
+
         }
 
         /// <summary>
@@ -384,6 +406,14 @@ namespace StrategyWindows
             NativeMethods.SetForegroundWindow(hWnd);
         }
 
+        /// <summary>
+        /// Returns a handle to the foreground window (the window with which the user is currently working). 
+        /// </summary>
+        /// <returns>The return value is a handle to the foreground window or <c>null</c>.</returns>
+        public IntPtr getForegroundWindow()
+        {
+            return NativeMethods.GetForegroundWindow();
+        }
 
         //todo: diese methode i prism event manager aufrufen in ihr wird festgelgt,
         //welche keyevents abgefragt werden sollen und wie... ohne festlegung, welche keyeventklasse genutzt wird 

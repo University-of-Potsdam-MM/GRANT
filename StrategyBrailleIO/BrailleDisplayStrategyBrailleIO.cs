@@ -20,20 +20,16 @@ namespace StrategyBrailleIO
 {
     public class BrailleDisplayStrategyBrailleIO : IBrailleDisplayStrategy
     {
-       IBrailleIOShowOffMonitor monitor;
-       BrailleIOMediator brailleIOMediator {get; set;}
+       private IBrailleIOShowOffMonitor monitor;
+       private BrailleIOMediator brailleIOMediator {get; set;}
         private Boolean initialized = false;
         private List<uiElementsTypeStruct> uiElementList;
         /// <summary>
         /// Ist der Adapter des Simulators
         /// </summary>
-        AbstractBrailleIOAdapterBase showOffAdapter;
+        private AbstractBrailleIOAdapterBase showOffAdapter;
         //GestureRecognizer showOffGestureRecognizer;
 
-        /// <summary>
-        /// Ist der Adapter des BrailleDis
-        /// </summary>
-        AbstractBrailleIOAdapterBase brailleAdapter;
         //GestureRecognizer brailleDisRecognizer; //TODO
 
 
@@ -46,7 +42,7 @@ namespace StrategyBrailleIO
         public BrailleDisplayStrategyBrailleIO() { uiElementList = getUiElements();}
 
         /// <summary>
-        /// Erstellt, sofern noch nicht vorhanden, ein Simulator für das Ausgabegerät
+        /// Creates a simulator if none exisis
         /// </summary>
         private void initializedSimulator()
         {
@@ -57,17 +53,15 @@ namespace StrategyBrailleIO
             /// aus BrailleIOExample (getShowOff()) -> erstmal gekürzt
             if (brailleIOMediator != null)
             {
-                // if the current Adapter manager holds an debug dapter, use it
-                if (brailleIOMediator.AdapterManager is ShowOffBrailleIOAdapterManager)
+                // if the current Adapter manager holds a debug adpter, use it
+                foreach (IBrailleIOAdapter adapter in brailleIOMediator.AdapterManager.GetAdapters())
                 {
-                    monitor = ((ShowOffBrailleIOAdapterManager)brailleIOMediator.AdapterManager).Monitor;
-                    foreach (var adapter in brailleIOMediator.AdapterManager.GetAdapters())
+                    if (adapter is BrailleIOAdapter_ShowOff)
                     {
-                        if (adapter is BrailleIOAdapter_ShowOff)
-                        {
-                            showOffAdapter = adapter as AbstractBrailleIOAdapterBase;
-                            break;
-                        }
+                        //TODO: prüfen, ob Simulator noch läuft
+                        adapter.Connect();
+                        showOffAdapter = adapter as AbstractBrailleIOAdapterBase;
+                        break;
                     }
                 }
 
@@ -102,15 +96,27 @@ namespace StrategyBrailleIO
 
         public void removeActiveAdapter()
         {
-            if (brailleIOMediator != null)
+            removeAllViews();
+            if (brailleIOMediator == null || brailleIOMediator.AdapterManager == null) { return; }
+            foreach (IBrailleIOAdapter adapter in brailleIOMediator.AdapterManager.GetAdapters())
             {
-                List<AbstractViewBoxModelBase> brailleIOScreens = brailleIOMediator.GetViews();
-                foreach (var s in brailleIOScreens)
+                if (adapter != null)
                 {
-                    brailleIOMediator.RemoveView(s.Name);
+                    adapter.Disconnect();
                 }
-                brailleIOMediator = null;
-                initialized = false;
+                if (!(brailleIOMediator.AdapterManager.ActiveAdapter is BrailleIOAdapter_ShowOff))
+                {
+                    brailleIOMediator.AdapterManager.RemoveAdapter(adapter);
+                }
+            }
+        }
+
+        public void removeAllViews()
+        {
+            if (brailleIOMediator == null) { return; }
+            foreach (AbstractViewBoxModelBase view in brailleIOMediator.GetViews())
+            {
+                brailleIOMediator.RemoveView(view.Name);
             }
         }
 
@@ -130,7 +136,7 @@ namespace StrategyBrailleIO
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
-                brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
+                AbstractBrailleIOAdapterBase brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
             }
             return;
@@ -206,8 +212,8 @@ namespace StrategyBrailleIO
         public void generatedBrailleUi()
         {
             if (!initialized) { setActiveAdapter(); }
-            if (grantTrees == null || grantTrees.getBrailleTree() == null) { return; }
-            Object osm = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
+            if (grantTrees == null || grantTrees.brailleTree == null) { return; }
+            Object osm = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
             createViewsFromTree(osm);
             brailleIOMediator.RenderDisplay();
             String activeScreenName = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreen();
@@ -251,7 +257,7 @@ namespace StrategyBrailleIO
         /// <returns>ein <code>Image</code> des Bildbereiches</returns>
         private Image captureScreen(String idGeneratedBrailleNode)
         {
-            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
+            OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode) || r.FilteredTree.Equals(idGeneratedBrailleNode));
             if (osmRelationships == null) { return null; }
             OSMElement.OSMElement nodeFilteredTree = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
             if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }
@@ -267,9 +273,9 @@ namespace StrategyBrailleIO
             }
             else
             {
-                if(grantTrees.getFilteredTree() != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.getFilteredTree()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered.Equals(IntPtr.Zero))
+                if(grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.hWndFiltered.Equals(IntPtr.Zero))
                 {
-                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.getFilteredTree())).properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
+                    bmp = ScreenCapture.CaptureWindowPartAtScreenpos(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.hWndFiltered, Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Height), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Width), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.X), Convert.ToInt32(nodeFilteredTree.properties.boundingRectangleFiltered.Y));
                 }
                 else
                 {
@@ -916,9 +922,9 @@ namespace StrategyBrailleIO
             brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
-            if (grantTrees.getBrailleTree() != null)
+            if (grantTrees.brailleTree != null)
             {
-                List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.getBrailleTree()); //TODO. gleich übergeben?
+                List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.brailleTree); //TODO. gleich übergeben?
                 if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
                 //if (osmElement.brailleRepresentation.groupelementsOfDiffrentTypes  != null)
                 {

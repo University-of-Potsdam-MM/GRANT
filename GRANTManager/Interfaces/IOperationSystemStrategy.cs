@@ -93,18 +93,30 @@ namespace GRANTManager.Interfaces
         bool openApplication(String name);
 
         /// <summary>
-        /// Aktiviert eine Anwendung
-        /// -> wird benötigt beim Filtern, falls die Anwendung minimiert ist
+        /// invoke the application if these was minimised
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der anwendung an</param>
-        /// <returns><c>true</c>, falls die anwendung aktiviert wurde; sonst <c>false</c></returns>
+        /// <param name="hwnd">handle to the application</param>
+        /// <returns><c>true</c>, if the application invoked; otherwiese<c>false</c></returns>
         bool showWindow(IntPtr hwnd);
+
+        /// <summary>
+        /// Hides a window
+        /// </summary>
+        /// <param name="hwnd">handle of the window which should be hiden</param>
+        /// <returns><code>true</code> if the window is hiden, otherwise <code>false</code></returns>
+        bool hideWindow(IntPtr hwnd);
 
         /// <summary>
         /// Setzt eine Anwendung in den Vordergrund
         /// </summary>
         /// <param name="hWnd">gibt den Handle der Anwendung an</param>
         void setForegroundWindow(IntPtr hWnd);
+
+        /// <summary>
+        /// Returns a handle to the foreground window (the window with which the user is currently working). 
+        /// </summary>
+        /// <returns>The return value is a handle to the foreground window or <c>null</c>.</returns>
+        IntPtr getForegroundWindow();
 
         void InitializeWindows_EventsMonitor();
 

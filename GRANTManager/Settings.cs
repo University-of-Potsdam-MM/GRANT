@@ -162,5 +162,19 @@ namespace GRANTManager
             String viewCategories = readAppSettings("ListOfViewCategories");
             return splitNames(viewCategories);
         }
+
+        /// <summary>
+        /// Reads the name of the directory from the config in where are the screen readers are saved
+        /// </summary>
+        /// <returns></returns>
+        public static String getScreenReaderDirectory()
+        {
+            List<String> directory = getPossibleStrategyClasses("savedScreenReaderDirectory");
+            if (directory != null && directory.Count == 1)
+            {
+                return directory[0];
+            }
+            return null;
+        }
     }
 }

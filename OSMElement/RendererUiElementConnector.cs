@@ -8,6 +8,7 @@ namespace OSMElement
 {
     public class RendererUiElementConnector
     {
+        #region Constructor
         public RendererUiElementConnector()
         {
 
@@ -19,7 +20,7 @@ namespace OSMElement
             this.RendererName = rendererName;
             this.SizeElement = size;
         }
-
+        #endregion
         public String ControlType { get; set; }
         public String RendererName { get; set; }
         public SizeUiElement SizeElement { get; set; }

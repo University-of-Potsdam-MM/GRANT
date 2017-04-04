@@ -86,7 +86,7 @@ namespace BrailleTreeTests
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(25, 25);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
             OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
-            OsmConnector<String, String> osmRelationships = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
+            OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
             Assert.AreNotEqual(null, osmRelationships, "Es hätte ein zugehöriger Knoten im gefilterten Baum gefunden werden müssen.");
 
             OSMElement.OSMElement dataFiltere = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
@@ -131,7 +131,7 @@ namespace BrailleTreeTests
             OSMElement.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().setOSMElement(clickX, clickY);
             Assert.AreEqual("Button", dataOfPoint.properties.controlTypeFiltered, "Es hätte der Button sein sollen!");
             Assert.AreEqual("7", dataOfPoint.properties.nameFiltered, "auf dem Button hätte die Zahl '7' stehen müssen!");
-            List<Object> searchresult = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), dataOfPoint.properties);
+            List<Object> searchresult = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, dataOfPoint.properties);
             Assert.AreNotEqual(null, searchresult, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen!");
             Assert.AreNotEqual(new List<Object>(), searchresult, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen!");
             Assert.AreEqual(1, searchresult.Count, "Es hätte genau ein Knoten gefunden werden müssen!");

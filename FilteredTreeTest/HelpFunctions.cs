@@ -19,7 +19,7 @@ namespace FilteredTreeTest
             IntPtr appHwnd = startApp(applicationName, applicationPathName);
             if (appHwnd == IntPtr.Zero) { return; }
             Object filteredTree = strategyMgr.getSpecifiedFilter().filtering(appHwnd);
-            grantTrees.setFilteredTree(filteredTree);
+            grantTrees.filteredTree = filteredTree;
         }
 
         internal IntPtr startApp(String appMainModulNameCalc, String applicationPathName)

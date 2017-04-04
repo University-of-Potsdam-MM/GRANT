@@ -39,7 +39,7 @@ namespace TemplatesUi
         /// <param name="pathToXml">gibt den Pfad zu der XML des Templates für die UI an</param>
         public void generatedUiFromTemplate(String pathToXml) 
         {
-            if (grantTrees == null || grantTrees.getFilteredTree() == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
+            if (grantTrees == null || grantTrees.filteredTree == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
             if (pathToXml.Equals("")) { Debug.WriteLine("Keine Xml angegeben!"); return; }
             if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
             generatedSymbolViewFromTemplate(@pathToXml);
@@ -51,7 +51,7 @@ namespace TemplatesUi
                 TemplateAllElementsSymbol t = new TemplateAllElementsSymbol(strategyMgr, grantTrees);
                 t.loadTemplateConnectionsForAllElements();
             }
-            visualizedAllElementsAsSymbols(grantTrees.getFilteredTree(), ref rect);*/
+            visualizedAllElementsAsSymbols(grantTrees.filteredTree, ref rect);*/
          
         }
 
@@ -79,7 +79,7 @@ namespace TemplatesUi
                 TemplateScreenshotObject templateObject = xmlUiScreenshotToTemplateUiScreenshot(element);
                 GeneralProperties prop = new GeneralProperties();
                 prop.controlTypeFiltered = templateObject.connectedFilteredNodeControltype;
-                List<Object> nodes = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), prop); 
+                List<Object> nodes = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, prop); 
           
                 generalUiInstance.createUiScreenshotFromTemplate(templateObject, nodes);
             }
@@ -91,12 +91,12 @@ namespace TemplatesUi
         /// <param name="pathToTemplate">gibt den Pfad zu der XML des Templates für die UI an</param>
         public void generatedSymbolViewFromTemplate(String pathToTemplate)
         {
-            if (grantTrees == null || grantTrees.getFilteredTree() == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
+            if (grantTrees == null || grantTrees.filteredTree == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
             if (pathToTemplate.Equals("")) { Debug.WriteLine("Keine Xml angegeben!"); return; }
             if (!File.Exists(@pathToTemplate)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
             createUiElementsWitheNoDependencySymbolView(@pathToTemplate);
             //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Methode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getFilteredTree()))
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
                 createElementTypeOfSymbolView(node, pathToTemplate);
             }
@@ -134,7 +134,7 @@ namespace TemplatesUi
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElementsStatic = groupElementsStatic;
-            Object tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.filteredTree;
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
             OSMElement.OSMElement osm = templateObject.osm;
@@ -162,7 +162,7 @@ namespace TemplatesUi
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElementsStatic = groupElementsStatic;
-            Object tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.filteredTree;
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
             OSMElement.OSMElement osm = templateObject.osm;
@@ -180,14 +180,22 @@ namespace TemplatesUi
         private TemplateUiObject getTemplateUiObjectOfNavigationbarScreen(string pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
-            IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
-                where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
-                    && (string)el.Attribute("name") == "NavigationBarScreens"
-                select el;
-            if (uiElement.Count() == 0) { return new TemplateUiObject(); }
-            
-            return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
+            try
+            {
+                IEnumerable<XElement> uiElement =
+                    from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
+                    where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
+                        && (string)el.Attribute("name") == "NavigationBarScreens"
+                    select el;
+                if (uiElement.Count() == 0) { return new TemplateUiObject(); }
+
+                return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Keine Symboleview vorhanden!");
+                return new TemplateUiObject();
+            }
         }
 
         /// <summary>
@@ -257,7 +265,7 @@ namespace TemplatesUi
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElementsStatic = groupElementsStatic;
-            Object tree = grantTrees.getFilteredTree();
+            Object tree = grantTrees.filteredTree;
 
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
@@ -541,7 +549,7 @@ namespace TemplatesUi
                     // elementE im gefilterten Baum suchen
                     GeneralProperties properties = new GeneralProperties();
                     properties.controlTypeFiltered = e.Attribute("name").Value;
-                    List<Object> treefilteredElements = treeOperation.searchNodes.searchProperties(grantTrees.getFilteredTree(), properties, OperatorEnum.and);
+                    List<Object> treefilteredElements = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, properties, OperatorEnum.and);
                     foreach (Object t in treefilteredElements)
                     {
                         tree = t;

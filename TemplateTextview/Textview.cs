@@ -86,7 +86,7 @@ namespace TemplateTextview
             osmBraille.brailleRepresentation = braille;
             propBraille.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmBraille);
             osmBraille.properties = propBraille;
-            List<OsmConnector<String, String>> relationship = grantTrees.getOsmRelationship();
+            List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
             OsmTreeConnector.addOsmConnection(osmFiltered.properties.IdGenerated, propBraille.IdGenerated, ref relationship);
             treeOperation.updateNodes.updateNodeOfBrailleUi(ref osmBraille);
             return osmBraille;
@@ -126,7 +126,7 @@ namespace TemplateTextview
                      //parent (Groupelement)
                         foreach (String id in ids)
                         {
-                            List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(id, grantTrees.getBrailleTree());
+                            List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(id, grantTrees.brailleTree);
                             if (nodeList != null && nodeList.Count > 0)
                             {
                                 foreach (object o in nodeList)
@@ -192,13 +192,13 @@ namespace TemplateTextview
         {
             OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(brailleNode));
 
-           if (strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osm))
+           if (strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osm))
             {
-                strategyMgr.getSpecifiedTree().Remove(grantTrees.getBrailleTree(), osm);
+                strategyMgr.getSpecifiedTree().Remove(grantTrees.brailleTree, osm);
             }
             if (parentId != null)
             {
-                foreach (object childOfNode in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.getBrailleTree()))
+                foreach (object childOfNode in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
                 {
                     string o = strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated;
 
@@ -210,7 +210,7 @@ namespace TemplateTextview
                 }
             }
             //else
-            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.screenCategory.Equals(osm.brailleRepresentation.screenCategory))
                 {

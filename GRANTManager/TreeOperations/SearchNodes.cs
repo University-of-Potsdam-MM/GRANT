@@ -99,7 +99,7 @@ namespace GRANTManager.TreeOperations
         /// <returns><c>OSMElement.OSMElement</c> mit der gesuchten Id</returns>
         public OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNodeElement(idGenerated, grantTrees.getFilteredTree());
+            return getAssociatedNodeElement(idGenerated, grantTrees.filteredTree);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace GRANTManager.TreeOperations
         /// <returns><c>OSMElement.OSMElement</c> mit der gesuchten Id</returns>
         public OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNodeElement(idGenerated, grantTrees.getBrailleTree());
+            return getAssociatedNodeElement(idGenerated, grantTrees.brailleTree);
         }
 
 
@@ -164,10 +164,10 @@ namespace GRANTManager.TreeOperations
         {
 
             if (screenName == null || screenName.Equals("")) { Debug.WriteLine("Kein Name des Screens angegeben"); return null; }
-            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.getBrailleTree());
-            if (grantTrees.getBrailleTree() == null ) { return null; }
+            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
+            if (grantTrees.brailleTree == null ) { return null; }
 
-            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 foreach(Object screenNodes in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                 {
@@ -187,9 +187,9 @@ namespace GRANTManager.TreeOperations
         /// <returns>Eine Liste der Namen der Screens im Braille-Baum, falls <para>viewCategory</para> angegeben ist, werden nur die Screens dieser viewCategory zurückgegeben</returns>
         public List<String> getPosibleScreenNames(String viewCategory = null)
         {
-            if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return null; }
+            if (grantTrees == null || grantTrees.brailleTree == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return null; }
             List<String> screens = new List<string>();
-            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 if(viewCategory == null || viewCategory.Equals(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory))
                 {
@@ -208,9 +208,9 @@ namespace GRANTManager.TreeOperations
         /// <returns></returns>
         public List<String> getUsedViewCategories()
         {
-            if (grantTrees == null || grantTrees.getBrailleTree() == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return null; }
+            if (grantTrees == null || grantTrees.brailleTree == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return null; }
             List<String> viewCategories = new List<string>();
-            foreach (Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            foreach (Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 viewCategories.Add(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory);
             }
@@ -277,9 +277,9 @@ namespace GRANTManager.TreeOperations
         public List<Object> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens")
         {
             List<Object> result = new List<Object>();
-            // ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.getBrailleTree();
-            if (grantTrees.getBrailleTree() == null) { return result; }
-            foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.getBrailleTree()))
+            // ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.brailleTree;
+            if (grantTrees.brailleTree == null) { return result; }
+            foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Contains(navigationbarSubstring) && strategyMgr.getSpecifiedTree().HasChild(node))
                 {
@@ -306,10 +306,10 @@ namespace GRANTManager.TreeOperations
             GeneralProperties prop = new GeneralProperties();
             prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
             osmScreen.properties = prop;
-            if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.getBrailleTree(), osmScreen)) { return false; }
+            if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmScreen)) { return false; }
 
-            if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.getBrailleTree())) { return false; }
-            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.getBrailleTree()))
+            if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return false; }
+            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory.Equals(viewCategory))
                 {
@@ -345,7 +345,7 @@ namespace GRANTManager.TreeOperations
         /// <returns>eine Liste der Ids des Braille-Baumes oder <c>null</c></returns>
         public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
         {
-            List<OsmConnector<String, String>> osmRelationships = grantTrees.getOsmRelationship().FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
+            List<OsmConnector<String, String>> osmRelationships = grantTrees.osmRelationship.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
             if (osmRelationships != null)
             {
                 List<String> result = new List<string>();
@@ -365,7 +365,7 @@ namespace GRANTManager.TreeOperations
         /// <returns>die id des gefilterten Baumes oder <c>null</c></returns>
         public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
         {
-            OsmConnector<String, String> osmRelationship = grantTrees.getOsmRelationship().Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
+            OsmConnector<String, String> osmRelationship = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
             if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
         }
 
