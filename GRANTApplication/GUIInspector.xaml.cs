@@ -20,7 +20,6 @@ namespace GRANTApplication
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperations;
-        //  GuiFunctions.MenuItem root;
         TreeViewItem root;
         GuiFunctions guiFunctions;
         bool filterWindowOpen = false;
@@ -53,30 +52,25 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
-
-
             tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
-           
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
-            //root = new GuiFunctions.MenuItem();
             root = new TreeViewItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
-            //SaveStartButton.IsEnabled = false;
         }
 
+        /// <summary>
+        /// Displays properties of the selected tree node of the filtered tree in the properties table.
+        /// </summary>
+        /// <param name="IdGenerated">Id of the Gui element of the selected node in the filtered tree.</param>
         void updatePropertiesTable(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
-            
-            
             DataTable dataTable = new DataTable();
-
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
             dataTable.Columns.Add(new DataColumn("Content"));
-
-
+            
             DataRow dataRow = dataTable.NewRow();
             DataRow dataRow1 = dataTable.NewRow();
             DataRow dataRow2 = dataTable.NewRow();
@@ -90,7 +84,6 @@ namespace GRANTApplication
             DataRow dataRow10 = dataTable.NewRow();
             DataRow dataRow11 = dataTable.NewRow();
             DataRow dataRow12 = dataTable.NewRow();
-
             DataRow dataRow13 = dataTable.NewRow();
             DataRow dataRow14 = dataTable.NewRow();
             DataRow dataRow15 = dataTable.NewRow();
@@ -109,7 +102,6 @@ namespace GRANTApplication
             if (osmElement.properties.IdGenerated == null) { return; }
             dataRow[1] = osmElement.properties.IdGenerated.ToString();
             dataTable.Rows.Add(dataRow);
-
 
             dataRow1[0] = "ControlType";
             dataRow1[1] = osmElement.properties.controlTypeFiltered.ToString();
@@ -156,8 +148,6 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow11);
 
             dataRow12["Property"] = "Filterstrategy";
-            //dataRow12["Content"] = filteredSubtree.properties.grantFilterStrategy == null ? " " : filteredSubtree.properties.grantFilterStrategy.ToString();
-            //dataRow12["Content"] =  filteredSubtree.properties.grantFilterStrategyFullName;
             dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
             dataTable.Rows.Add(dataRow12);
 
@@ -216,21 +206,10 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow25);
             dataTable.Rows.Add();
 
-            
-
-            //dataTable.Rows.Add();
-
-            //dataTable.Rows.Add(dataRow);
             dataGrid1.ItemsSource = dataTable.DefaultView;
-
             System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
-
-            
-            // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint)
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
-
             NodeButton.CommandParameter = IdGenerated;
-
         }
 
         void tvMain_SelectedItemChanged(object sender,
