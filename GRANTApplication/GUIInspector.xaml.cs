@@ -37,7 +37,6 @@ namespace GRANTApplication
             // Setzen des Eventmanager
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
             strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
-
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -52,7 +51,7 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
-            tvMain.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(tvMain_SelectedItemChanged);
+            filteredTreeOutput.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
             root = new TreeViewItem();
             NodeButton.IsEnabled = false;
@@ -206,17 +205,16 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow25);
             dataTable.Rows.Add();
 
-            dataGrid1.ItemsSource = dataTable.DefaultView;
+            filteredTreeProp.ItemsSource = dataTable.DefaultView;
             System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
             NodeButton.CommandParameter = IdGenerated;
         }
 
-        void tvMain_SelectedItemChanged(object sender,
+        void filteredTreeOutput_SelectedItemChanged(object sender,
         RoutedPropertyChangedEventArgs<object> e)
         {
             NodeButton.IsEnabled = true;
-            
             var tree = sender as TreeView;
 
             // ... Determine typeOfTemplate of SelectedItem.
@@ -224,15 +222,8 @@ namespace GRANTApplication
             {
                 // ... Handle a TreeViewItem.
                 TreeViewItem item = tree.SelectedItem as TreeViewItem;
-                //this.Title = "Selected header: " + item.IdGenerated.ToString();
                 if (item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    //Console.WriteLine("HIIIIEEEER: " + item.IdGenerated.ToString());
-
-                    //root = root.parentMenuItem == null ? root : root.parentMenuItem;
-                    //  Console.WriteLine("HIIIIEEEER: " + item.classNameFiltered.ToString());
-
-                    //updateProperties(item);
                     updatePropertiesTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                 }
             //Methode MenuItem übergeben - tabelle
@@ -240,64 +231,44 @@ namespace GRANTApplication
             else if (tree.SelectedItem is string)
             {
                 // ... Handle a string.
-                //this.Name = "Selected: " + parentNode.SelectedItem.ToString();
                 Console.WriteLine("Fehler: ");
-
             }
-            //OSMElement.OSMElement filteredSubtree = strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById(IdGenerated);
-            // System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(filteredSubtree);
-
-
-            //strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
         }
-
-       
-
-       
-
-      
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-    {
-        IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
-
-        ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
-
-        if (e.Key == Key.F1)
         {
-            if (operationSystemStrategy.deliverCursorPosition())
+            IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
+
+            ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
+
+            if (e.Key == Key.F1)
             {
-                try
+                if (operationSystemStrategy.deliverCursorPosition())
                 {
-
-                    IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-
-                    int pointX;
-                    int pointY;
-
-                    operationSystemStrategy.getCursorPoint(out pointX, out pointY);
-
-                    Console.WriteLine("Pointx: " + pointX);
-                    Console.WriteLine("Pointy: " + pointY);
-
-                    OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
-                    System.Drawing.Rectangle rect = operationSystemStrategy.getRect(osmElement);
-
-
-                        // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);
-                        if (osmElement.properties.isOffscreenFiltered == false) { operationSystemStrategy.paintRect(rect); }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An error occurred: '{0}'", ex);
+                    try
+                    {
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+                        int pointX;
+                        int pointY;
+                        operationSystemStrategy.getCursorPoint(out pointX, out pointY);
+                        Console.WriteLine("Pointx: " + pointX);
+                        Console.WriteLine("Pointy: " + pointY);
+                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        System.Drawing.Rectangle rect = operationSystemStrategy.getRect(osmElement);
+                        if (osmElement.properties.isOffscreenFiltered == false)
+                        {
+                            operationSystemStrategy.paintRect(rect);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", ex);
+                    }
                 }
             }
-        }
 
             if (e.Key == Key.F5)
             {
-                
-
                 if (operationSystemStrategy.deliverCursorPosition())
                 {
                     try
@@ -305,7 +276,6 @@ namespace GRANTApplication
                         //Filtermethode
                         IntPtr points = operationSystemStrategy.getHWND();
                         List<Strategy> possibleFilter = settings.getPossibleFilters();
-                       
                         if (strategyMgr.getSpecifiedFilter() == null)
                         {
                             // auslesen aus GUI..... 
@@ -313,49 +283,18 @@ namespace GRANTApplication
                             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
                             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
-
                         }
-
                         guiFunctions.deleteGrantTrees();
-
-                            IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
-                      //  filterStrategy.setStrategyMgr(strategyMgr);
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                         Object tree = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
-                        // StrategyGenericTree.TreeStrategyGenericTreeMethodes.printTreeElements(parentNode, -1);
-                        //strategyMgr.getSpecifiedTreeOperations().printTreeElements(parentNode, -1);
                         grantTrees.filteredTree = tree;
-
-
-                        // TreeViewItem treeItem = null;
-                        // treeItem = new TreeViewItem();
-
-                       // ITreeStrategy<OSMElement.OSMElement> parentNode = strategyMgr.filteredTree;
-
-                       
-                            
-                        tvMain.Items.Clear();
-                        
+                        filteredTreeOutput.Items.Clear();
                         root.Items.Clear();
-
-                        //parentNode.DeepCopy();
-
-
-
-                        //TreeViewItem root = new TreeViewItem();
-                        //root.controlTypeFiltered = "Filtered-Tree";
-                        //ITreeStrategy<OSMElement.OSMElement> copy = parentNode.Child;
-                        //
-       
-
-                       guiFunctions.createTreeForOutput(tree, ref root);
-                        // root.Selected += root_Selected;
-                        //
+                        guiFunctions.createTreeForOutput(tree, ref root);
                         SaveButton.IsEnabled = true;
-                        //SaveStartButton.IsEnabled = true;
-                        tvMain.Items.Add(root);
+                        filteredTreeOutput.Items.Add(root);
                         NodeButton.IsEnabled = false;
                         updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
-
                     }
 
                     catch (Exception ex)
@@ -364,58 +303,35 @@ namespace GRANTApplication
                     }
                 }
             }
-
-
         }
    
-      
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-           
-            //sender.ToString();
             var button = sender as RadioButton;
-
             // ... Display button content as title.
             String titleName = button.Content.ToString();
-            //Console.WriteLine("Filter: " + Title);
             strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(titleName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
-            //Console.WriteLine("Strategy: " + strategyMgr.getSpecifiedFilter().ToString()); 
         }
 
-  /*     private void dataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }*/
-        
         private void Node_Click(object sender, RoutedEventArgs e)
         {
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
-            
-            //updateNodes.filterNodeWithNewStrategy(((Button)sender).CommandParameter.ToString());
             guiFunctions.filterAndAddSubtreeOfApplication(((Button)sender).CommandParameter.ToString());
             Object tree = grantTrees.filteredTree;
-
-            tvMain.Items.Clear();
+            filteredTreeOutput.Items.Clear();
             root.Items.Clear();
-
-            //TreeViewItem root = new TreeViewItem();
-            //  root.controlTypeFiltered = "Filtered- Updated- Tree";
             root.Header = "Filtered - Tree - Updated";
-            //
             guiFunctions.createTreeForOutput(tree, ref root);
-            tvMain.Items.Add(root);
+            filteredTreeOutput.Items.Add(root);
             NodeButton.IsEnabled = false;
             updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
-            //SaveButton.IsEnabled = true;
-
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (grantTrees.filteredTree == null) { Console.WriteLine("Der Baum muss vor dem Speichern gefiltert werden."); return; }
-
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.FileName = GuiFunctions.cleanInput("filteredTree_" + strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.nameFiltered); // Default file name
@@ -425,7 +341,6 @@ namespace GRANTApplication
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show save file dialog box
             Nullable<bool> result = dlg.ShowDialog();
-
             // Process save file dialog box results
             if (result == true)
             {
@@ -437,60 +352,43 @@ namespace GRANTApplication
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            // dlg.FileName = "filteredTree_"; // Default file name
             dlg.DefaultExt = ".grant"; // Default file extension
             dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
-
             // Process open file dialog box results
             if (result == true)
             {
                 guiFunctions.loadGrantProject(dlg.FileName);
-           
-
-            Object tree = grantTrees.filteredTree;
-
-            tvMain.Items.Clear();
-            root.Items.Clear();
-
-           // TreeViewItem root = new TreeViewItem();
-           // root.controlTypeFiltered = "Filtered- Updated- Tree";
-           root.Header = "Filtered - Tree - Updated";
-                //
-               guiFunctions.createTreeForOutput(tree, ref root); tvMain.Items.Add(root);
-            NodeButton.IsEnabled = false;
-            updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
-            SaveButton.IsEnabled = true;
-            //SaveStartButton.IsEnabled = true;
+                Object tree = grantTrees.filteredTree;
+                filteredTreeOutput.Items.Clear();
+                root.Items.Clear();
+                root.Header = "Filtered - Tree - Updated";
+                guiFunctions.createTreeForOutput(tree, ref root); filteredTreeOutput.Items.Add(root);
+                NodeButton.IsEnabled = false;
+                updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
+                SaveButton.IsEnabled = true;
+            }
+        }
+        
+        private void SaveStartButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (outputDesignerWindowOpen == false)
+            {
+                var aboutOutputDesigner = new OutputDesigner();
+                aboutOutputDesigner.Closed += new EventHandler(aboutOutputDesignerWindow_Closed);
+                aboutOutputDesigner.Topmost = true;
+                aboutOutputDesigner.Show();
+                bool TreeLoad = true;
+                SaveStartButton.CommandParameter = TreeLoad;
+                outputDesignerWindowOpen = true;
             }
         }
 
-
-        private void SaveStartButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (outputDesignerWindowOpen == false)
+        void aboutOutputDesignerWindow_Closed(object sender, EventArgs e)
         {
-            var aboutOutputDesigner = new OutputDesigner();
-            aboutOutputDesigner.Closed += new EventHandler(aboutOutputDesignerWindow_Closed);
-            aboutOutputDesigner.Topmost = true;
-            aboutOutputDesigner.Show();
-            bool TreeLoad = true;
-            SaveStartButton.CommandParameter = TreeLoad;
-            
-            outputDesignerWindowOpen = true;
-
+            outputDesignerWindowOpen = false;
         }
-
-        //e.Handled = true;
-        // this.Close();
-
     }
-
-    void aboutOutputDesignerWindow_Closed(object sender, EventArgs e)
-    {
-        outputDesignerWindowOpen = false;
-    }
-}
 }
