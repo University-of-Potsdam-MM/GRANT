@@ -43,7 +43,7 @@ namespace BrailleIOGuiElementRenderer
                 tmpTextBoxView = new BrailleIOViewRange(view.ViewBox.Left + 3, view.ViewBox.Top + 2, view.ViewBox.Width - 5, view.ViewBox.Height - 4);
                 tmpTextBoxView.Name = "_TextBoxText_" + textBoxContent.viewName;
                 tmpTextBoxView.SetText(textBoxContent.text);
-                tmpTextBoxView.ShowScrollbars = textBoxContent.showScrollbar;
+                tmpTextBoxView.ShowScrollbars = textBoxContent.isScrollbarShow;
             }
             
             tmpTextBoxView.SetZIndex(3);

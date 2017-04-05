@@ -71,7 +71,7 @@ namespace BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -88,7 +88,7 @@ namespace BrailleTreeTests
             braille2.isVisible = true;
             braille2.screenName = "TestScreen - 2";
             braille2.viewName = "TestView";
-            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop2 = new GeneralProperties();
             prop2.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop2.controlTypeFiltered = "Text";
@@ -152,7 +152,7 @@ namespace BrailleTreeTests
             braille.isVisible = true;
             braille.screenName = "TestScreen";
             braille.viewName = "TestView";
-            braille.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop = new GeneralProperties();
             prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
             prop.controlTypeFiltered = "Text";
@@ -168,7 +168,7 @@ namespace BrailleTreeTests
             braille2.isVisible = true;
             braille2.screenName = "TestScreen";
             braille2.viewName = "TestView - 2";
-            braille2.screenCategory = VIEWCATEGORYSYMBOLVIEW;
+            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
             GeneralProperties prop2 = new GeneralProperties();
             prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
             prop2.controlTypeFiltered = "Text";

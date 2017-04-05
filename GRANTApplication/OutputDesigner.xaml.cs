@@ -732,7 +732,7 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow6);
 
             dataRow7[0] = "FromGuiElement";
-            dataRow7[1] = osmElement.brailleRepresentation.fromGuiElement == null ? " " : osmElement.brailleRepresentation.fromGuiElement.ToString();  
+            dataRow7[1] = osmElement.brailleRepresentation.displayedGuiElementType == null ? " " : osmElement.brailleRepresentation.displayedGuiElementType.ToString();  
             dataTable.Rows.Add(dataRow7);
 
             dataRow8[0] = "Contrast";
@@ -748,7 +748,7 @@ namespace GRANTApplication
             dataTable.Rows.Add(dataRow10);
 
             dataRow11[0] = "Show Scrollbar";
-            dataRow11[1] = osmElement.brailleRepresentation.showScrollbar.ToString();
+            dataRow11[1] = osmElement.brailleRepresentation.isScrollbarShow.ToString();
             dataTable.Rows.Add(dataRow11);
 
             dataRow12[0] = "UIElementSpecialContent";
@@ -795,15 +795,8 @@ namespace GRANTApplication
                     screenViewIteration(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     #region marked element in filtered tree
                     String connectedFilteredNode = treeOperations.searchNodes.getConnectedFilteredTreenodeId(((GuiFunctions.MenuItem)item.Header).IdGenerated);
-                    var v = ((TreeViewItem)(((TreeViewItem)filteredTreeOutput.Items[0]).Items[0])).Header;
-
-                    var v2 = ((TreeViewItem)(((TreeViewItem)filteredTreeOutput.Items[0]).Items[0])).Items;
-
-                    Type t_v = v.GetType();
-                    Type t_v2 = v2.GetType();
                     if (connectedFilteredNode != null && connectedFilteredNode != "")
                     {
-
                         List<TreeViewItem> menuItem = getMenuItemsById(filteredTreeOutput, connectedFilteredNode);
 
                         TreeViewItem tvi = new TreeViewItem();

@@ -41,7 +41,7 @@ namespace GRANTExample
             {               
                     // String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
                 String path = @"C:\Users\mkarlapp\Desktop\TemplateUi2.xml";
-             //  setDauGui(fromGuiElement);
+             //  setDauGui(displayedGuiElementType);
                /* ITreeStrategy<OSMElement.OSMElement> subtreeNav = strategyMgr.getSpecifiedTreeOperations().getSubtreeOfScreen("A1");
                 if (subtreeNav != null && subtreeNav.Count > 0)
                 {
@@ -230,8 +230,8 @@ namespace GRANTExample
             e1.zoom = 1;
             e1.contrast = 120;
             e1.viewName = "v1";
-            // c1.fromGuiElement = "nameFiltered";
-            e1.showScrollbar = true;
+            // c1.displayedGuiElementType = "nameFiltered";
+            e1.isScrollbarShow = true;
             e1.isVisible = true;
             Rect p1 = new Rect(70, 0, 50, 30);
             proper1.boundingRectangleFiltered = p1;
@@ -249,8 +249,8 @@ namespace GRANTExample
             BrailleRepresentation e2 = new BrailleRepresentation();
             e2.screenName = "A2";
             proper2.valueFiltered = "Hallo 1 Hallo 2 Hallo 3 Hallo 4 Hallo 5";
-          //  c2.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
-            e2.showScrollbar = true;
+          //  c2.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            e2.isScrollbarShow = true;
             e2.viewName = "v2";
             e2.isVisible = true;
             Rect p2 = new Rect(90, 32, 29,15);
@@ -274,10 +274,10 @@ namespace GRANTExample
             BrailleRepresentation e3 = new BrailleRepresentation();
             GeneralProperties proper3 = new GeneralProperties();
             e3.screenName = "A1";
-            e3.showScrollbar = false;
+            e3.isScrollbarShow = false;
             //   c3.text = "Start Text";
-            //c3.fromGuiElement = "nameFiltered";
-            e3.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c3.displayedGuiElementType = "nameFiltered";
+            e3.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e3.viewName = "v3";
             e3.isVisible = false;
             Rect p3 = new Rect(70,30,30,20);
@@ -321,7 +321,7 @@ namespace GRANTExample
             e5.screenName = "A1";
             proper5.valueFiltered = "Button";
            // c5.uiElementContent = "Hallo - Button";
-           // c5.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+           // c5.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e5.viewName = "v5";
             e5.isVisible = true;
             Rect p5 = new Rect(63,12,24,9);
@@ -339,11 +339,11 @@ namespace GRANTExample
             BrailleRepresentation e6 = new BrailleRepresentation();
             GeneralProperties proper6 = new GeneralProperties();
             e6.screenName = "A2";
-            e6.showScrollbar = true;
+            e6.isScrollbarShow = true;
            // c6.text = "Text 1 Text 2 Text 3 Text 4 Text 5 Text 6";
             //object[] otherContent6 = { UiObjectsEnum.TextBox, textBox6 };
-            e6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
-            //c6.showScrollbar = true;
+            e6.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c6.isScrollbarShow = true;
             
             e6.viewName = "v6";
             e6.isVisible = true;            
@@ -374,7 +374,7 @@ namespace GRANTExample
             proper7.valueFiltered = "Datei";
             // object[] otherContent7 = {UiObjectsEnum.DropDownMenuItem, uiElement};
             e7.uiElementSpecialContent = dropDownMenu;
-            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c6.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e7.viewName = "v7";
             Rect p7 = new Rect(0,10,25,10);
             proper7.boundingRectangleFiltered = p7;
@@ -402,7 +402,7 @@ namespace GRANTExample
             proper8.valueFiltered = "Bearbeiten";
            // object[] otherContent8 = { UiObjectsEnum.DropDownMenuItem, dropDownMenu8 };
             e8.uiElementSpecialContent = dropDownMenu8;
-            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c6.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e8.viewName = "v8";
             Rect p8 = new Rect(25, 10,35,10);
             proper8.boundingRectangleFiltered = p8;
@@ -430,7 +430,7 @@ namespace GRANTExample
             proper9.valueFiltered = "Neu";
            // object[] otherContent9 = { UiObjectsEnum.DropDownMenuItem, dropDownMenu9 };
             e9.uiElementSpecialContent = dropDownMenu9;
-            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c6.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e9.viewName = "v9";
             Rect p9 = new Rect(0, 21, 30 , 8);
             proper9.boundingRectangleFiltered = p9;
@@ -459,7 +459,7 @@ namespace GRANTExample
             proper10.valueFiltered = "Beenden";
           //  object[] otherContent10 = { UiObjectsEnum.DropDownMenuItem, dropDownMenu10 };
             e10.uiElementSpecialContent = dropDownMenu10;
-            //c6.fromGuiElement = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
+            //c6.displayedGuiElementType = fromGuiElement3.Equals("") ? "nameFiltered" : fromGuiElement3;
             e10.viewName = "v10";
             Rect p10 = new Rect( 0, 29, 30, 8);
             proper10.boundingRectangleFiltered = p10;

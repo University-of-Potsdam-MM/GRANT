@@ -94,7 +94,7 @@ namespace TemplatesUi
              bool groupViewWithScrollbars = false;
              if (!brailleGroupNode.Equals(new OSMElement.OSMElement()))
              {
-                 groupViewWithScrollbars = brailleGroupNode.brailleRepresentation.showScrollbar;
+                 groupViewWithScrollbars = brailleGroupNode.brailleRepresentation.isScrollbarShow;
              }
              Rect rect;
              if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("TabItem"))
@@ -119,7 +119,7 @@ namespace TemplatesUi
                      int subBoxModel = brailleGroupNode.brailleRepresentation.boarder.Top + brailleGroupNode.brailleRepresentation.boarder.Bottom + brailleGroupNode.brailleRepresentation.margin.Top + brailleGroupNode.brailleRepresentation.margin.Bottom + brailleGroupNode.brailleRepresentation.padding.Top + brailleGroupNode.brailleRepresentation.padding.Bottom;
                      int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                      int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height);
-                     if (braille.groupelementsOfSameType.linebreak == true)
+                     if (braille.groupelementsOfSameType.isLinebreak == true)
                      {
                          column = strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) / elementsProColumn;
                      }
@@ -142,7 +142,7 @@ namespace TemplatesUi
                      int subBoxModel = brailleGroupNode.brailleRepresentation.boarder.Left + brailleGroupNode.brailleRepresentation.boarder.Right + brailleGroupNode.brailleRepresentation.margin.Left + brailleGroupNode.brailleRepresentation.margin.Right + brailleGroupNode.brailleRepresentation.padding.Left + brailleGroupNode.brailleRepresentation.padding.Right;
                      int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                      int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
-                     if (braille.groupelementsOfSameType.linebreak == true)
+                     if (braille.groupelementsOfSameType.isLinebreak == true)
                      {
                          line = strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) / elementsProLine;
                      }
@@ -158,7 +158,7 @@ namespace TemplatesUi
                      {
                          boxStartX = boxStartX + Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
                      }
-                     if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.linebreak == true)
+                     if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.isLinebreak == true)
                      {
                          boxStartY = Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Y) + line * Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height);
                          if (line > 0)

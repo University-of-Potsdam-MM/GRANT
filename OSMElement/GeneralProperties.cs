@@ -12,42 +12,49 @@ namespace OSMElement
     [Serializable]
     public struct GeneralProperties
     {
-        //Link properties uia: https://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx
+        //see properties uia: https://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx and https://msdn.microsoft.com/en-us/library/ff400332%28VS.95%29.aspx
 
-        //General Accessibility / Interaction
-
-        //Anmerkung: laut den Beschreibungen scheint acceleratorKey und accessKey das gleiche zu sein (https://msdn.microsoft.com/en-us/library/ff400332%28VS.95%29.aspx)
-        // -> Es werden aber nicht immer beide Werte zugewiesen
+        /// <summary>
+        /// a string containing the accelerator key combinations for the element.
+        /// </summary>
         public String acceleratorKeyFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// a string containing the access key character for the element.
+        /// </summary>
         public String accessKeyFiltered
         {
             get;
             set;
         }
 
-
-
+        /// <summary>
+        /// a value that indicates whether the element can accept keyboard focus.
+        /// </summary>
         public Boolean? isKeyboardFocusableFiltered
         {
             get;
             set;
         }
 
-        [XmlIgnore] //ist beim neuladen veraltet
+        /// <summary>
+        /// Retrieves the unique identifier assigned to the user interface (UI) item.
+        /// Attention: This value is deprecated after reloading
+        /// </summary>
+        [XmlIgnore]
         public int[] runtimeIDFiltered
         {
             get;
             set;
         }
 
-        // STATE
-
-        // Boolean? => true, false, null
+        /// <summary>
+        /// Gets a value that indicates whether the element is enabled.
+        /// </summary>
         public Boolean? isEnabledFiltered
         {
             get;
@@ -60,19 +67,28 @@ namespace OSMElement
             set;
         }
 
-        //[XmlIgnore] //ist beim neuladen veraltet im gefilterten Baum, aber wird für den Braille Baum  benötigt
+        /// <summary>
+        /// The coordinates of the rectangle that completely encloses the element.
+        /// Attention: This value is deprecated after reloading for the filtered tree but it is necessary for the braille tree.
+        /// </summary>
         public Rect boundingRectangleFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// A value that indicates whether the element is visible on the screen.
+        /// </summary>
         public Boolean? isOffscreenFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The help text associated with the element.
+        /// </summary>
         public String helpTextFiltered
         {
             get;
@@ -214,24 +230,23 @@ namespace OSMElement
         public String fileName { get; set; }
 
         public override string ToString()
-        {//Achtung nur einige Eigenschaften berücksichtigt
+        {
             return String.Format("nameFiltered = {0}, valueFiltered = {1}, controlTypeFiltered = {2},  boundingRectangleFiltered = {3}, id = {4} ", nameFiltered, valueFiltered, controlTypeFiltered, boundingRectangleFiltered.ToString(), IdGenerated);
         }
 
         /// <summary>
-        /// Erstellt eine Liste aller Typen aus <typeparamref name="GeneralProperties"/>
+        /// Gives all Types of <see cref="GeneralProperties"/>
         /// </summary>
-        /// <returns>Liste der Namen aller <typeparamref name="GeneralProperties"/></returns>
-        public static List<String> getAllStringsFor_fromGuiElement()
-        {
-            List<String> fromGuiElementString = new List<string>();
+        /// <returns>list of all Types of <see cref="GeneralProperties"/></returns>
+        public static List<String> getAllTypes()
+        {//displayedGuiElementType
+            List<String> displayedGuiElements = new List<string>();
             var propNames = typeof(GeneralProperties).GetProperties();
             foreach (var name in propNames)
             {
-                fromGuiElementString.Add(name.Name.ToString());
+                displayedGuiElements.Add(name.Name.ToString());
             }
-
-            return fromGuiElementString;
+            return displayedGuiElements;
         }
     }
 

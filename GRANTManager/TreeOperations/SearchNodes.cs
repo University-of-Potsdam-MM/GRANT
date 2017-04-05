@@ -191,7 +191,7 @@ namespace GRANTManager.TreeOperations
             List<String> screens = new List<string>();
             foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if(viewCategory == null || viewCategory.Equals(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory))
+                if(viewCategory == null || viewCategory.Equals(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView))
                 {
                     foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                     {
@@ -212,7 +212,7 @@ namespace GRANTManager.TreeOperations
             List<String> viewCategories = new List<string>();
             foreach (Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                viewCategories.Add(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory);
+                viewCategories.Add(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView);
             }
             return viewCategories;
         }
@@ -301,7 +301,7 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
-            brailleScreen.screenCategory = viewCategory;
+            brailleScreen.typeOfView = viewCategory;
             osmScreen.brailleRepresentation = brailleScreen;
             GeneralProperties prop = new GeneralProperties();
             prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
@@ -311,7 +311,7 @@ namespace GRANTManager.TreeOperations
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return false; }
             foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory.Equals(viewCategory))
+                if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(viewCategory))
                 {
                     foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                     {

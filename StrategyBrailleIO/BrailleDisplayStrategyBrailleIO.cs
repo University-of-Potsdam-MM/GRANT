@@ -325,7 +325,7 @@ namespace StrategyBrailleIO
             /* depending on the UI element and the renderer used, different properties are importent
              * die Angabe des 'UI-Element'-Typs steht bei den Propertys in controlTypeFiltered
              */
-            if (osmElement.properties.isControlElementFiltered == false || osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
+            if (osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
 
             OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
 
@@ -378,7 +378,7 @@ namespace StrategyBrailleIO
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetText(brailleUiElement.text);
-            vr.ShowScrollbars = brailleUiElement.showScrollbar;
+            vr.ShowScrollbars = brailleUiElement.isScrollbarShow;
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
@@ -397,7 +397,7 @@ namespace StrategyBrailleIO
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetMatrix(brailleUiElement.matrix);
-            vr.ShowScrollbars = brailleUiElement.showScrollbar;
+            vr.ShowScrollbars = brailleUiElement.isScrollbarShow;
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
@@ -417,7 +417,7 @@ namespace StrategyBrailleIO
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetBitmap(image);
-            vr.ShowScrollbars = brailleUiElement.showScrollbar;
+            vr.ShowScrollbars = brailleUiElement.isScrollbarShow;
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
@@ -439,7 +439,7 @@ namespace StrategyBrailleIO
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetOtherContent(brailleUiElement, renderer);
-            vr.ShowScrollbars = brailleUiElement.showScrollbar;
+            vr.ShowScrollbars = brailleUiElement.isScrollbarShow;
             vr.SetPadding(paddingToBoxModel(osmElement.brailleRepresentation.padding));
             vr.SetMargin(paddingToBoxModel(osmElement.brailleRepresentation.margin));
             vr.SetBorder(paddingToBoxModel(osmElement.brailleRepresentation.boarder));
@@ -767,7 +767,7 @@ namespace StrategyBrailleIO
             {
                 properties.valueFiltered = "example text example text ...";
                 rect = new Rect(0, 0, 25, 10);
-                brailleR.showScrollbar = true;
+                brailleR.isScrollbarShow = true;
             }
             if (uiElementeTypesBrailleIoEnum.ListItem.ToString().Equals(uiElementType))
             {
@@ -927,7 +927,7 @@ namespace StrategyBrailleIO
             brailleIOElement.isVisible = osmElement.brailleRepresentation.isVisible;
             brailleIOElement.matrix = osmElement.brailleRepresentation.matrix;
             brailleIOElement.screenName = osmElement.brailleRepresentation.screenName;
-            brailleIOElement.showScrollbar = osmElement.brailleRepresentation.showScrollbar;
+            brailleIOElement.isScrollbarShow = osmElement.brailleRepresentation.isScrollbarShow;
             brailleIOElement.text = osmElement.properties.valueFiltered;
             brailleIOElement.uiElementSpecialContent = convertUiElementSpecialContent(osmElement);
             brailleIOElement.viewName = osmElement.brailleRepresentation.viewName;
@@ -938,7 +938,7 @@ namespace StrategyBrailleIO
                 if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
                 {
                     List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();
-                   // brailleIOElement.showScrollbar = true;
+                   // brailleIOElement.isScrollbarShow = true;
                     childList = iteratedChildreen(nodeList[0]);
                     brailleIOElement.child = childList;
                 }

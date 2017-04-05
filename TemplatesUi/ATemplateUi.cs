@@ -82,7 +82,7 @@ namespace TemplatesUi
             GeneralProperties prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
             brailleNode.properties = prop;
-            if(filteredSubtree != null) //(templateObject.osm.brailleRepresentation.fromGuiElement != null && !templateObject.osm.brailleRepresentation.fromGuiElement.Trim().Equals(""))
+            if(filteredSubtree != null) //(templateObject.osm.brailleRepresentation.displayedGuiElementType != null && !templateObject.osm.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
                 List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);

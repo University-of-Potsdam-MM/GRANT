@@ -220,7 +220,7 @@ namespace GRANTManager.TreeOperations
                 Debug.Print("Achtung: Der ausgewählte Renderer existiert nicht! Er wurde auf 'Text' gesetzt.");
                 updatedContentGP.controlTypeFiltered = "Text";
             }
-            if (element.brailleRepresentation.fromGuiElement != null)
+            if (element.brailleRepresentation.displayedGuiElementType != null)
             {
                 updatedContentGP.valueFiltered = getTextForView(element);
             }
@@ -237,10 +237,10 @@ namespace GRANTManager.TreeOperations
                 updatedContentGP.isEnabledFiltered = (bool)isEnable;
             }
             // updatedContentBR.text = updatedText;
-            if (updatedContentBR.fromGuiElement != null && updatedContentBR.fromGuiElement != "" && !GeneralProperties.getAllStringsFor_fromGuiElement().Contains(updatedContentBR.fromGuiElement))
+            if (updatedContentBR.displayedGuiElementType != null && updatedContentBR.displayedGuiElementType != "" && !GeneralProperties.getAllTypes().Contains(updatedContentBR.displayedGuiElementType))
             {
-                Debug.WriteLine("Achtung: Es wurde ein falscher Wert bei 'fromGuiElement' ausgewählt! Deshalb wurd er auf 'Text' gesetzt.");
-                updatedContentBR.fromGuiElement = "Text";
+                Debug.WriteLine("Achtung: Es wurde ein falscher Wert bei 'displayedGuiElementType' ausgewählt! Deshalb wurd er auf 'Text' gesetzt.");
+                updatedContentBR.displayedGuiElementType = "Text";
             }
 
             element.brailleRepresentation = updatedContentBR;
@@ -286,9 +286,9 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
             //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeElement(osmRelationship.FilteredTree, strategyMgr.filteredTree);
             String text = "";
-            if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElement.brailleRepresentation.fromGuiElement.Trim().Equals(""))
+            if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElement.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
-                object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.fromGuiElement, associatedNode.properties);
+                object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.displayedGuiElementType, associatedNode.properties);
                 text = (objectText != null ? objectText.ToString() : "");
             }
             return useAcronymForText( text);
@@ -362,16 +362,16 @@ namespace GRANTManager.TreeOperations
                 Debug.WriteLine("Kein ScreenName angegeben. Es wurde nichts hinzugefügt!"); return null;
             }
             // prüfen, ob es die View auf dem Screen schon gibt
-            if (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName, brailleNode.brailleRepresentation.screenCategory))
+            if (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName, brailleNode.brailleRepresentation.typeOfView))
             {
                 return null;
             }
-            addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.screenCategory);
+            addSubtreeOfScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.typeOfView);
 
             //1. richtige ViewCategorie finden
             foreach (Object viewCategoryNode in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(viewCategoryNode).brailleRepresentation.screenCategory.Equals(brailleNode.brailleRepresentation.screenCategory))
+                if (strategyMgr.getSpecifiedTree().GetData(viewCategoryNode).brailleRepresentation.typeOfView.Equals(brailleNode.brailleRepresentation.typeOfView))
                 {
                     foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategoryNode))
                     {
@@ -425,7 +425,7 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
-            brailleScreen.screenCategory = viewCategory;
+            brailleScreen.typeOfView = viewCategory;
             osmScreen.brailleRepresentation = brailleScreen;
             GeneralProperties propOsmScreen = new GeneralProperties();
             propOsmScreen.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
@@ -437,7 +437,7 @@ namespace GRANTManager.TreeOperations
             {
                 OSMElement.OSMElement osmViewCategory = new OSMElement.OSMElement();
                 BrailleRepresentation brailleViewCategory = new BrailleRepresentation();
-                brailleViewCategory.screenCategory = viewCategory;
+                brailleViewCategory.typeOfView = viewCategory;
                 osmViewCategory.brailleRepresentation = brailleViewCategory;
                 GeneralProperties propViewCategory = new GeneralProperties();
                 propViewCategory.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmViewCategory);
@@ -449,7 +449,7 @@ namespace GRANTManager.TreeOperations
                     //viewCategory suchen
                     foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes( grantTrees.brailleTree))
                     {
-                        if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.screenCategory.Equals(viewCategory))
+                        if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(viewCategory))
                         {
                             viewCategorySubtree = vC;
                         }

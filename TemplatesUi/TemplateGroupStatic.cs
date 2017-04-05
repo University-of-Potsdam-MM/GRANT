@@ -36,7 +36,7 @@ namespace TemplatesUi
             OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( brailleNode));
             foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.screenCategory.Equals(osm.brailleRepresentation.screenCategory))
+                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.typeOfView.Equals(osm.brailleRepresentation.typeOfView))
                 {
                     foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategory))
                     {

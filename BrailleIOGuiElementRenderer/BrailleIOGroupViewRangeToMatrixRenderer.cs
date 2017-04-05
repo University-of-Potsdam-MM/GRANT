@@ -75,7 +75,7 @@ namespace BrailleIOGuiElementRenderer
                    
                    tmpChildView.Name = "_"+child.childBoundingRectangle.ToString(); //child.childUiElement.viewName;
                    tmpChildView.SetText(child.childUiElement.text);
-                   tmpChildView.ShowScrollbars = child.childUiElement.showScrollbar;
+                   tmpChildView.ShowScrollbars = child.childUiElement.isScrollbarShow;
                    bool[,] childMatrix;
                    if (child.renderer != null)
                    {

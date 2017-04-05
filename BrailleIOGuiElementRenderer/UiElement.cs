@@ -9,22 +9,20 @@ using System.Windows;
 
 namespace BrailleIOGuiElementRenderer
 {
-    public struct UiElement //ähnlich OsmElement.BrailleRepresentation
+    public struct UiElement //similar to OsmElement.BrailleRepresentation
     {
-        // public Position position { get; set; }
-
         /// <summary>
-        /// Gibt die View, in welcher der Inhalt angezeigt werden soll an.
+        /// name of the view on which the content will be shown
         /// </summary>
         public String viewName { get; set; }
 
         /// <summary>
-        /// Gibt an, ob der Inhalt/die View sichtbar sein soll
+        /// Determines whether this view is visible.
         /// </summary>
         public bool isVisible { get; set; }
 
         /// <summary>
-        /// Gibt eine matrix die Dargestellt werden soll an.
+        /// Boolean matrix where <code>true</code> represents a shown pin
         /// </summary>
         public bool[,] matrix { get; set; }
 
@@ -32,7 +30,7 @@ namespace BrailleIOGuiElementRenderer
         public double zoom { get; set; }
 
         /// <summary>
-        /// Gibt den Namen des Screens an, auf welchem die View angezeigt werden soll
+        /// name of the screen on which the content will be shown
         /// </summary>
         public String screenName { get; set; }
 
@@ -43,17 +41,19 @@ namespace BrailleIOGuiElementRenderer
 
 
         /// <summary>
-        /// Gibt an, ob das UI-Element deaktiviert ist
+        /// Determines whether a view is disable
         /// </summary>
         public Boolean isDisabled { get; set; }
 
         /// <summary>
-        /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat (falls nicht gesetzt, wird von true ausgegangen)
+        /// Determines whether scrollbar will be shown
+        /// scrollbars are only shown if the view is large enough
         /// </summary>
-        public Boolean showScrollbar { get; set; }
+        public Boolean isScrollbarShow { get; set; }
 
         /// <summary>
-        /// Gibt für UI-Elemente weiteren (speziellen) Inhalt an
+        /// special content for some UI elements
+        /// see e.g <c>UiElements.TabItem</c>
         /// </summary>
         public object uiElementSpecialContent { get; set; }
 

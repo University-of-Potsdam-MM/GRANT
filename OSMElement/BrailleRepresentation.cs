@@ -10,34 +10,50 @@ using System.Windows;
 
 namespace OSMElement
 {
-    [XmlInclude(typeof(DropDownMenuItem))]  //Achtung, jeder Type der bei <c>uiElementSpecialContent</c> verwendet wird muss mittels xmlInclude hinzugefügt werde, damit das Objekt gespeichert werden kann
+    //Attention: Every type wich will be used as <c>uiElementSpecialContent</c> must included here to save this project
+    [XmlInclude(typeof(DropDownMenuItem))]
     [XmlInclude(typeof(ListMenuItem))]
     [XmlInclude(typeof(TabItem))]
     public struct BrailleRepresentation
     {
+        /* 
+         * Relationship between typeOfView, screenName and viewName
+         * There are different type of views (<c>typeOfView</c>) e.g. "symbol view", "layout view" and "text view". For each view many different screens (<c>screenName</c>) can exist. Each screen can contains many different views (<c>viewName</c>).
+         */
+
         /// <summary>
-        /// Gibt die View, in welcher der Inhalt angezeigt werden soll an.
+        /// Category of View e.g. "symbol view", "layout view" and "text view"
+        /// </summary>
+        public String typeOfView { get; set; }
+
+        /// <summary>
+        /// name of the screen on which the content will be shown
+        /// </summary>
+        public String screenName { get; set; }
+
+        /// <summary>
+        /// name of the view on which the content will be shown
         /// </summary>
         public String viewName { get; set; }
 
         /// <summary>
-        /// Gibt an, ob der Inhalt/die View sichtbar sein soll
+        /// Determines whether this view is visible.
         /// </summary>
         public bool isVisible { get; set; }
 
         /// <summary>
-        /// Gibt eine Matrix die dargestellt werden soll an.
+        /// Boolean matrix where <code>true</code> represents a shown pin
         /// </summary>
         [XmlIgnore]
         public bool[,] matrix { get; set; }
 
         /// <summary>
-        /// Wandelt die mehrdimensionale Matrix in eine Jagged-Matrix um diese zu speichern bzw. zu laden
+        /// Converted <c>matrix</c> to a jagged matrix
+        /// this is importent to save and load a project
         /// </summary>
         public bool[][] jaggedMatrix {
             get 
-            {
-                
+            {                
                 if (matrix != null)
                 {
                     bool[][] resultmatrix = new bool[matrix.GetLength(0)][];
@@ -73,85 +89,81 @@ namespace OSMElement
         }
 
         /// <summary>
-        /// Gibt den Bezug zu einem GUI-Element des gefilterten Baums an! Es kann jede der <code>GeneralProperties</code>-Eigenschaften angegeben werden. Der Wert dieser Eigenschaft soll angezeigt werden
+        /// Name of the GUI element type of the filtered tree whose value should be shown in this view!
+        /// Every controltype from <code>GeneralProperties</code> can be used.
         /// </summary>
-        public String fromGuiElement { get; set; }
+        public String displayedGuiElementType { get; set; }
 
         /// <summary>
-        /// gibt für Bilder einen Kontrastwert zwischen 0 und 255 an
+        /// Value of contrast for images 
+        /// it must be between 0 and 255 
         /// </summary>
         public int contrast { get; set; }
 
         /// <summary>
-        /// gibt die Zoomstufe bei Bildern an
+        /// zoom level for images
         /// </summary>
         public double zoom { get; set; }
 
         /// <summary>
-        /// Gibt den Namen des Screens an, auf welchem die View angezeigt werden soll
+        /// Determines whether scrollbar will be shown
+        /// scrollbars are only shown if the view is large enough
         /// </summary>
-        public String screenName { get; set; }
+        public bool isScrollbarShow { get; set; }
 
         /// <summary>
-        /// gibt die Kategorie des Screens an z.B. LayoutView oder SymbolView an
-        /// </summary>
-        public String screenCategory { get; set; }
-
-        /// <summary>
-        /// Gibt an, ob Scrollbalken angezeigt werden sollen, sofern der Inhalt in der View nicht ausreichend Platz hat (falls nicht gesetzt, wird von true ausgegangen)
-        /// </summary>
-        public bool showScrollbar { get; set; }
-
-        /// <summary>
-        /// Gibt für UI-Elemente weiteren (speziellen) Inhalt an
+        /// special content for some UI elements
+        /// see e.g <c>UiElements.TabItem</c>
         /// </summary>
         public object uiElementSpecialContent { get; set; }
+
         public Padding padding { get; set; }
         public Padding margin { get; set; }
         public Padding boarder { get; set; }
 
         /// <summary>
-        /// Gibt den Z-Index an. Ein Element mit einem größeren z-Index liegt weiter oben.
+        /// z-index of the view. A lager z-index overlays a smaller.
         /// </summary>
         public int zIntex { get; set; }
 
         /// <summary>
-        /// Gibt den FullName des Typs des zu  nutzenden Templates für die Kindelemente an;
-        /// wird nur bei Elternelementen von Gruppen benötigt (vgl. isControlElementFiltered)
+        /// fully qualified name of the type for the used template, including its namespace but not its assembly
+        /// It will be used to create childreen elements for groups
         /// </summary>
         public String templateFullName { get; set; }
 
         /// <summary>
-        /// Gibt den Namespace des Typs des zu  nutzenden Templates für die Kindelemente an;
-        /// wird nur bei Elternelementen von Gruppen benötigt (vgl. isControlElementFiltered)
+        /// Simple name of the assembly. This is usually, but not necessarily,
+        /// the file name of the manifest file of the assembly, minus its extension.
+        /// It will be used to create childreen elements for groups
         /// </summary>
         public String templateNamspace { get; set; }
 
         /// <summary>
-        /// Enthält den eine Abkürzung des Texts eines UI-Elements
+        /// Acronym for text
         /// </summary>
         public String textAcronym { get; set; }
 
         public override string ToString()
         {
-            return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}, screenCategory = {3}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString(), screenCategory);
+            return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}, screenCategory = {3}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString(), typeOfView);
         }
 
         /// <summary>
-        /// Gibt eine "Beschreibung" von Gruppenelementen, die sich wärend der Laufzeit ändern können --> Es können Elemente hinzukommen oder verschwinden z.B. ein neuer Tab
+        /// A "description" for groups which are may be change during runtime e.g. a new tab item
         /// </summary>
         public GroupelementsOfSameType groupelementsOfSameType { get; set; }
 
+        /// <summary>
+        /// Determines whether the element is a child of a group.
+        /// </summary>
         public bool isGroupChild { get; set; }
 
     }
 
     public struct GroupelementsOfSameType
     {
-        /// <summary>
-        /// Bei Gruppen-elementen gibt der Wert an, ob am Ende des sichtbaren Bereiches ein Zeilenumbruch (<c>true</c>) erfolgen soll; bei allen anderen Elementen ist der Wert <c>null</c>
-        /// </summary>
-        public Boolean? linebreak { get; set; }
+        public Boolean? isLinebreak { get; set; }
 
        // public Boolean vertical { get; set; }
         public UiElements.Orientation orienataion { get; set; }

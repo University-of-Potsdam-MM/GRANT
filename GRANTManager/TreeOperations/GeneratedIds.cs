@@ -124,12 +124,12 @@ namespace GRANTManager.TreeOperations
             GeneralProperties properties = osmElement.properties;
             BrailleRepresentation braille = osmElement.brailleRepresentation;
             String result = properties.controlTypeFiltered +
-                braille.fromGuiElement +
+                braille.displayedGuiElementType +
                 braille.screenName +
                 braille.viewName +
                 properties.boundingRectangleFiltered.ToString() +
                 properties.controlTypeFiltered+
-                (braille.screenCategory == null? "":braille.screenCategory) +
+                (braille.typeOfView == null? "":braille.typeOfView) +
                 (braille.uiElementSpecialContent == null? "": braille.uiElementSpecialContent.ToString());
             byte[] hash;
             using (var md5 = MD5.Create())

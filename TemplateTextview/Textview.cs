@@ -48,7 +48,7 @@ namespace TemplateTextview
             braille.isVisible = true;
             propBraille.controlTypeFiltered = "Text";
             braille.isGroupChild = true;
-            braille.screenCategory = tvo.viewCategory;
+            braille.typeOfView = tvo.viewCategory;
             braille.screenName = tvo.screenName;
             braille.viewName = "separator";
             propBraille.valueFiltered = separator;
@@ -75,9 +75,9 @@ namespace TemplateTextview
             braille.isVisible = true;
             propBraille.controlTypeFiltered = "Text";
             braille.isGroupChild = true;
-            braille.screenCategory = tvo.viewCategory;
+            braille.typeOfView = tvo.viewCategory;
             braille.screenName = tvo.screenName;
-            braille.fromGuiElement = tve.property;
+            braille.displayedGuiElementType = tve.property;
             braille.viewName = osmFiltered.properties.IdGenerated + "_" + tve.order;
 
             propBraille.boundingRectangleFiltered = new Rect(startXPosition, startYPosition, width, 5);//TODO: richtig machen
@@ -102,7 +102,7 @@ namespace TemplateTextview
             brailleGroup.isVisible = true;
             propGroup.controlTypeFiltered = "GroupElement";
             
-            brailleGroup.screenCategory = grantTrees.TextviewObject.viewCategory;
+            brailleGroup.typeOfView = grantTrees.TextviewObject.viewCategory;
             brailleGroup.screenName = grantTrees.TextviewObject.screenName;
             OSMElement.OSMElement osmFiltered = strategyMgr.getSpecifiedTree().GetData(filteredNode);
             brailleGroup.viewName = osmFiltered.properties.IdGenerated;
@@ -133,7 +133,7 @@ namespace TemplateTextview
                                 {
                                     Object parentGroupelement = strategyMgr.getSpecifiedTree().Parent(o);
                                     OSMElement.OSMElement osmTmp = strategyMgr.getSpecifiedTree().GetData(parentGroupelement);
-                                    if (osmTmp.brailleRepresentation.screenName.Equals(grantTrees.TextviewObject.screenName) && osmTmp.brailleRepresentation.screenCategory.Equals(grantTrees.TextviewObject.viewCategory))
+                                    if (osmTmp.brailleRepresentation.screenName.Equals(grantTrees.TextviewObject.screenName) && osmTmp.brailleRepresentation.typeOfView.Equals(grantTrees.TextviewObject.viewCategory))
                                     {
                                         brailleParentId = strategyMgr.getSpecifiedTree().GetData(parentGroupelement).properties.IdGenerated;
                                         break;
@@ -212,7 +212,7 @@ namespace TemplateTextview
             //else
             foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.screenCategory.Equals(osm.brailleRepresentation.screenCategory))
+                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.typeOfView.Equals(osm.brailleRepresentation.typeOfView))
                 {
                     foreach (Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategory))
                     {

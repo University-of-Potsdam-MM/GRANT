@@ -293,7 +293,7 @@ namespace GRANTManager
                 {
                     if (strategyMgr.getSpecifiedTree().Depth(node) == 0)
                     {
-                        nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenCategory;
+                        nameFiltered = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.typeOfView == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.typeOfView;
 
                     }
                     else if (strategyMgr.getSpecifiedTree().Depth(node) == 1)
@@ -347,7 +347,7 @@ namespace GRANTManager
                             {
                                 if (isFilteredTree)
                                 {
-                                    toolTip += "\n" + conNode.brailleRepresentation.screenCategory +" "+ conNode.brailleRepresentation.screenName+" " + conNode.brailleRepresentation.viewName + " -" +conNode.properties.controlTypeFiltered +  " (" + conNode.properties.IdGenerated + ")";
+                                    toolTip += "\n" + conNode.brailleRepresentation.typeOfView +" "+ conNode.brailleRepresentation.screenName+" " + conNode.brailleRepresentation.viewName + " -" +conNode.properties.controlTypeFiltered +  " (" + conNode.properties.IdGenerated + ")";
                                 }
                                 else
                                 {
@@ -1023,11 +1023,11 @@ namespace GRANTManager
             tactileProp.boundingRectangleFiltered = positionTactile;
             if(filteredNode != null)
             {
-                tactlieRep.fromGuiElement = "nameFiltered";
+                tactlieRep.displayedGuiElementType = "nameFiltered";
             }
             tactlieRep.viewName = viewName != null ? viewName : Guid.NewGuid().ToString();
-            tactlieRep.screenCategory = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
-            tactlieRep.screenName = screenName != null ?  screenName : tactlieRep.screenCategory;
+            tactlieRep.typeOfView = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
+            tactlieRep.screenName = screenName != null ?  screenName : tactlieRep.typeOfView;
             //Attention: when new Controlletypes are added, these should be added here!
             if (controlleType.Equals("DropDownMenuItem"))
             { 

@@ -234,7 +234,7 @@ namespace TemplatesUi
                 childBraille.isGroupChild = true;
                 childBraille.isVisible = true;
                 childBraille.viewName = "_" + s;//TODO
-                childBraille.screenCategory = templateObject.osm.brailleRepresentation.screenCategory;
+                childBraille.typeOfView = templateObject.osm.brailleRepresentation.typeOfView;
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
                 tabView.orientation = templateObject.orientation;
                 childBraille.uiElementSpecialContent = tabView;
@@ -324,7 +324,7 @@ namespace TemplatesUi
             GeneralProperties properties = new GeneralProperties();
             BrailleRepresentation braille = new BrailleRepresentation();
             properties.controlTypeFiltered = "Screenshot";
-           // braille.fromGuiElement = xmlElement.Element("TextFromUIElement").Value;
+           // braille.displayedGuiElementType = xmlElement.Element("TextFromUIElement").Value;
             XElement position = xmlElement.Element("Position");
             bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
             Rect rect = new Rect();
@@ -378,8 +378,8 @@ namespace TemplatesUi
                 }
             }
             braille.contrast = contrast;
-            braille.screenCategory = VIEWCATEGORY_LAYOUTVIEW;
-         //   braille.showScrollbar = Convert.ToBoolean(xmlElement.Element("ShowScrollbar").Value);
+            braille.typeOfView = VIEWCATEGORY_LAYOUTVIEW;
+         //   braille.isScrollbarShow = Convert.ToBoolean(xmlElement.Element("ShowScrollbar").Value);
             templetObject.name = templetObject.Screens != null ? templetObject.Screens[0] : "all"; //TODO: besserer Name
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
@@ -402,10 +402,10 @@ namespace TemplatesUi
             GeneralProperties properties = new GeneralProperties();
             BrailleRepresentation braille = new BrailleRepresentation();
 
-            braille.screenCategory = viewCategory;
+            braille.typeOfView = viewCategory;
             templetObject.allElementsOfType = xmlElement.Element("AllElementsOfType") == null ? false : Boolean.Parse( xmlElement.Element("AllElementsOfType").Value);
             properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
-            braille.fromGuiElement = xmlElement.Element("TextFromUIElement").Value;
+            braille.displayedGuiElementType = xmlElement.Element("TextFromUIElement").Value;
             XElement position = xmlElement.Element("Position");
             bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
             Rect rect = new Rect();
@@ -445,7 +445,7 @@ namespace TemplatesUi
                 templetObject.groupImplementedClassTypeFullName = typeof(TemplateSubtree).FullName;
                 templetObject.groupImplementedClassTypeDllName = typeof(TemplateSubtree).Module.Assembly.GetName().Name; // == Dll-Name
                 GroupelementsOfSameType group = new GroupelementsOfSameType();
-                group.linebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
+                group.isLinebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
                 String orientation = xmlElement.Element("IsGroup").Element("Orientation").Value;
                 group.orienataion = orientation.Equals(OSMElement.UiElements.Orientation.Vertical.ToString()) ? OSMElement.UiElements.Orientation.Vertical :
                     orientation.Equals(OSMElement.UiElements.Orientation.Top.ToString()) ? OSMElement.UiElements.Orientation.Top :
@@ -483,7 +483,7 @@ namespace TemplatesUi
                 templetObject.orientation = (value.Equals( OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left : (value.Equals( OSMElement.UiElements.Orientation.Bottom.ToString()) ? OSMElement.UiElements.Orientation.Bottom : (value.Equals( OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));
                 
             }
-            braille.showScrollbar = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
+            braille.isScrollbarShow = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
             templetObject.name = xmlElement.Attribute("name").Value;
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
@@ -544,7 +544,7 @@ namespace TemplatesUi
             {
                 TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(e, screenCategory);
                 Object tree = strategyMgr.getSpecifiedTree().NewTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
-                if (templateObject.osm.brailleRepresentation.fromGuiElement!= null && !templateObject.osm.brailleRepresentation.fromGuiElement.Equals(""))
+                if (templateObject.osm.brailleRepresentation.displayedGuiElementType!= null && !templateObject.osm.brailleRepresentation.displayedGuiElementType.Equals(""))
                 {
                     // elementE im gefilterten Baum suchen
                     GeneralProperties properties = new GeneralProperties();
@@ -666,8 +666,8 @@ namespace TemplatesUi
             propTempl.controlTypeFiltered = connector.RendererName;
 
             BrailleRepresentation brailleTempl = new BrailleRepresentation();
-            brailleTempl.fromGuiElement = osmNodeFiltered.properties.nameFiltered != null ? "nameFiltered" : "valueFiltered";
-            brailleTempl.screenCategory = "blub";
+            brailleTempl.displayedGuiElementType = osmNodeFiltered.properties.nameFiltered != null ? "nameFiltered" : "valueFiltered";
+            brailleTempl.typeOfView = "blub";
             osmTempl.brailleRepresentation = brailleTempl;
             osmTempl.properties = propTempl;
             templObject.osm = osmTempl;
