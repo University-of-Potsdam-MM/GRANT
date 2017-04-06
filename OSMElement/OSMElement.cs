@@ -10,14 +10,13 @@ namespace OSMElement
     [Serializable]
     public struct OSMElement
     {
-
         public GeneralProperties properties { get; set; }
 
         public Events events { get; set; }
         public BrailleRepresentation brailleRepresentation { get; set; }
 
         public override string ToString()
-        {//Achtung nur einige Eigenschaften berücksichtigt
+        {
             return String.Format("GeneralProperties: {0}, BrailleRepresentation: {1}", properties.ToString(), brailleRepresentation.ToString());
         }
     }

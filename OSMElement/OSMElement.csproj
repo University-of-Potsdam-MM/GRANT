@@ -65,7 +65,6 @@
     <Compile Include="Device.cs" />
     <Compile Include="FilterstrategyOfNode.cs" />
     <Compile Include="GrantProjectObject.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="RendererUiElementConnector.cs" />
     <Compile Include="TextviewObject.cs" />
     <Compile Include="UiElements\DropDownMenuItem.cs" />

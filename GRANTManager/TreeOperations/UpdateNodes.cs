@@ -124,7 +124,7 @@ namespace GRANTManager.TreeOperations
         {
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( grantTrees.filteredTree)).properties.Equals(new GeneralProperties())) { return; }
             String fileNameNew = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByModulName(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.moduleName);
-            if (!fileNameNew.Equals(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.fileName))
+            if (!fileNameNew.Equals(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.appPath))
             {
                 Debug.WriteLine("Der Pfad der Anwendung muss amgepasst werden.");
                 changeFileName(fileNameNew);
@@ -139,7 +139,7 @@ namespace GRANTManager.TreeOperations
         {
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.Equals(new GeneralProperties())) { return; }
             GeneralProperties properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties;
-            properties.fileName = fileNameNew;
+            properties.appPath = fileNameNew;
             changePropertiesOfFilteredNode(properties);
         }
 
@@ -288,7 +288,7 @@ namespace GRANTManager.TreeOperations
             String text = "";
             if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElement.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
-                object objectText = OSMElement.Helper.getGeneralPropertieElement(osmElement.brailleRepresentation.displayedGuiElementType, associatedNode.properties);
+                object objectText = GeneralProperties.getPropertyElement(osmElement.brailleRepresentation.displayedGuiElementType, associatedNode.properties);
                 text = (objectText != null ? objectText.ToString() : "");
             }
             return useAcronymForText( text);
@@ -330,7 +330,7 @@ namespace GRANTManager.TreeOperations
             bool? isEnable = null;
             if (!associatedNode.Equals(new OSMElement.OSMElement()))
             {
-                object objectEnable = OSMElement.Helper.getGeneralPropertieElement("isEnabledFiltered", associatedNode.properties);
+                object objectEnable = GeneralProperties.getPropertyElement("isEnabledFiltered", associatedNode.properties);
                 isEnable = (objectEnable != null ? ((bool?)objectEnable) : null);
             }
             return isEnable;

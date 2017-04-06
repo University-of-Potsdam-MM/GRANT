@@ -8,7 +8,6 @@ using System.Xml.Serialization;
 
 namespace OSMElement
 {
-    //Propertie
     [Serializable]
     public struct GeneralProperties
     {
@@ -265,6 +264,9 @@ namespace OSMElement
         #endregion
 
         #region other properties
+        /// <summary>
+        /// The generated Id of the element
+        /// </summary>
         public String IdGenerated
         {
             get;
@@ -272,25 +274,28 @@ namespace OSMElement
         }
 
         /// <summary>
-        /// gibt die Filter-Strategy an, sofern dieses bei einem Knoten abweichend ist 
-        /// (wird gesetzt beim Update eines Konotens gesetzt, wenn es nicht der selbe Filter wie für die ganze Anwendung ist)
+        /// The name of the filter strategy. It is only set if another is selected than for the root node.
         /// </summary>
         public String grantFilterStrategy { get; set; }
-      //  public String grantFilterStrategyFullName { get; set; }
-      //  public String grantFilterStrategyNamespace { get; set; }
-        
 
         /// <summary>
-        /// Gibt den Namen der Anwendung an -- wird benötigt um die Anwendung später wiederzufinden (modulName != className bzw. nameFiltered)
-        /// (nur für den ersten Knoten wichtig)
+        /// the name of the process module.
+        /// It will be important to reload a screen reader.
+        /// Only set at the first node.
+        /// Attention: modulName != className AND modulName != nameFiltered
         /// </summary>
         public String moduleName { get; set; }
-        public String fileName { get; set; }
+
+        /// <summary>
+        /// The full path (including the name) to the application.
+        /// </summary>
+        public String appPath { get; set; }
 
         public override string ToString()
         {
             return String.Format("nameFiltered = {0}, valueFiltered = {1}, controlTypeFiltered = {2},  boundingRectangleFiltered = {3}, id = {4} ", nameFiltered, valueFiltered, controlTypeFiltered, boundingRectangleFiltered.ToString(), IdGenerated);
         }
+        #endregion
 
         /// <summary>
         /// Gives all Types of <see cref="GeneralProperties"/>
@@ -306,10 +311,26 @@ namespace OSMElement
             }
             return displayedGuiElements;
         }
-        #endregion
+
+        /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="properties">properties of the node</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
+        public static object getPropertyElement(String elementName, GeneralProperties properties)
+        {
+            try
+            { //see http://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection-in-c-sharp#
+                return properties.GetType().GetProperty(elementName).GetValue(properties, null);
+            }
+            catch
+            {
+                throw new Exception("Exception in OSMElement.Helper: An attempt was made to query a non-existent property ('" + elementName + "')");
+            }
+        }
+        
     }
-
-
 }
 
 

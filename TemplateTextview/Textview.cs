@@ -176,7 +176,7 @@ namespace TemplateTextview
                     startXPosition += tve.separator.Length * 3 + 2;
                 }
                 #endregion
-                object objectText = OSMElement.Helper.getGeneralPropertieElement(tve.property, osmFiltered.properties);
+                object objectText = GeneralProperties.getPropertyElement(tve.property, osmFiltered.properties);
                 String text = (objectText != null ? objectText.ToString() : null);
                 text = treeOperation.updateNodes.useAcronymForText(text);
                 int width = (text.Length * 3) < tve.minWidth ? tve.minWidth : (text.Length * 3);

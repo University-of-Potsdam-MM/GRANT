@@ -710,9 +710,9 @@ namespace GRANTManager
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
 
-                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.fileName != null)
+                    if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.appPath != null)
                     {
-                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.fileName);
+                        bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.appPath);
                         if (!openApp)
                         {
                             Debug.WriteLine("Application cann't open! Maybe the path is wrong."); //TODO

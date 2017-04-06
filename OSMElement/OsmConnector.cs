@@ -21,7 +21,7 @@ namespace OSMElement
         }
 
         /// <summary>
-        /// 
+        /// the relationship between "filteredTree" and "brailleTree" based on the generated id
         /// </summary>
         /// <param name="filteredTree">The generated id of the node in the filtered tree.</param>
         /// <param name="brailleTree">The generated id of the node in the braille (output) tree</param>

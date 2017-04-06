@@ -118,7 +118,7 @@ namespace FilteredTreeTest
                 OSMElement.OSMElement osm1 = strategyMgr.getSpecifiedTree().GetData(node);
                 GeneralProperties prop1 = osm1.properties;
                 prop1.boundingRectangleFiltered = new Rect();
-                prop1.fileName = null;
+                prop1.appPath = null;
                 //bei Textfeldern kann sich der Text ändern
                 if (prop1.controlTypeFiltered.Equals("Text"))
                 {
@@ -129,7 +129,7 @@ namespace FilteredTreeTest
                 OSMElement.OSMElement osm2 = strategyMgr.getSpecifiedTree().GetData(associatedNodeList[0]);
                 GeneralProperties prop2 = osm2.properties;
                 prop2.boundingRectangleFiltered = new Rect();
-                prop2.fileName = null;
+                prop2.appPath = null;
                 //bei Textfeldern kann sich der Text ändern
                 if (prop2.controlTypeFiltered.Equals("Text"))
                 {
