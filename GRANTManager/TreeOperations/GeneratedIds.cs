@@ -90,7 +90,7 @@ namespace GRANTManager.TreeOperations
                 properties.isPasswordFiltered +
                 properties.isRequiredForFormFiltered +
                 properties.itemStatusFiltered +
-                properties.labeledbyFiltered +
+                properties.labeledByFiltered +
                 // node.BranchCount +
                 strategyMgr.getSpecifiedTree().BranchIndex(node) +
                 strategyMgr.getSpecifiedTree().Depth(node);

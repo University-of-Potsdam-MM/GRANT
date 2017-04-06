@@ -150,8 +150,8 @@ namespace GRANTApplication
             dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
             dataTable.Rows.Add(dataRow12);
 
-            dataRow13["Property"] = "labeledbyFiltered";
-            dataRow13["Content"] = osmElement.properties.labeledbyFiltered == null ? " " : osmElement.properties.labeledbyFiltered.ToString();
+            dataRow13["Property"] = "labeledByFiltered";
+            dataRow13["Content"] = osmElement.properties.labeledByFiltered == null ? " " : osmElement.properties.labeledByFiltered.ToString();
             dataTable.Rows.Add(dataRow13);
 
             dataRow14["Property"] = "localizedControlTypeFiltered";

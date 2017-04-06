@@ -12,7 +12,8 @@ namespace OSMElement
     [Serializable]
     public struct GeneralProperties
     {
-        //see properties uia: https://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx and https://msdn.microsoft.com/en-us/library/ff400332%28VS.95%29.aspx
+        #region properties similar to UIA
+        //see uia: https://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx and https://msdn.microsoft.com/en-us/library/ff400332%28VS.95%29.aspx
 
         /// <summary>
         /// a string containing the accelerator key combinations for the element.
@@ -95,42 +96,57 @@ namespace OSMElement
             set;
         }
 
-
-        //IDENTIFICATION/Elemttype
-
-        //nicht von UIA
-        public String IdGenerated
-        {
-            get;
-            set;
-        }
-
+        /// <summary>
+        /// a string containing the UI Automation identifier (ID) for the element
+        /// TODO: shouldn't be a property here?
+        /// </summary>
         public String autoamtionIdFiltered
         {
             get;
             set;
         }
 
-
+        /// <summary>
+        /// a string containing the class name of the element as assigned by the control
+        /// </summary>
         public String classNameFiltered
         {
             get;
             set;
         }
 
-        //Anmerkung: ProgrammaticName
+        /// <summary>
+        /// ControlType of the element
+        /// </summary>
         public String controlTypeFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        ///  A localized description of the control type
+        /// </summary>
+        public String localizedControlTypeFiltered
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The name of the underlying UI framework, 
+        /// such as "Win32", "WinForm", or "DirectUI". The default value is an empty string.
+        /// </summary>
         public String frameWorkIdFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The handle of the element's window 
+        /// if one exists; otherwise 0.
+        /// </summary>
         [XmlIgnore]
         public IntPtr hWndFiltered
         {
@@ -138,42 +154,54 @@ namespace OSMElement
             set;
         }
 
+        /// <summary>
+        /// a value that specifies whether the element is a content element
+        /// </summary>
         public Boolean? isContentElementFiltered
         {
             get;
             set;
         }
-        //typ?
-        public String labeledbyFiltered
-        {
+
+        /// <summary>
+        /// the element that contains the text label for this element.
+        /// </summary>
+        public String labeledByFiltered
+        {// Currently not used => for example it will be used in MS Paint (slider zoom)
             get;
             set;
         }
 
+        /// <summary>
+        /// a value that indicates whether the element is viewed as a control.
+        /// </summary>
         public Boolean? isControlElementFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// a value that indicates whether the element contains protected content
+        /// </summary>
         public Boolean? isPasswordFiltered
         {
             get;
             set;
         }
 
-        public String localizedControlTypeFiltered
-        {
-            get;
-            set;
-        }
-
+        /// <summary>
+        /// The name of the user interface (UI) element.
+        /// </summary>
         public String nameFiltered
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// The ID of the process that hosts the element. The default value for the property is 0.
+        /// </summary>
         [XmlIgnore]
         public int processIdFiltered
         {
@@ -181,32 +209,34 @@ namespace OSMElement
             set;
         }
 
+        /// <summary>
+        /// A localized string that describes the item.
+        /// </summary>
         public String itemTypeFiltered
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// A description of the status of an item within an element.
+        /// </summary>
         public String itemStatusFiltered
         {
             get;
             set;
         }
+
+        /// <summary>
+        ///  A value that indicates whether the UI Automation element is required to be filled out on a form.
+        /// </summary>
         public Boolean? isRequiredForFormFiltered
         {
             get;
             set;
         }
 
-        public String valueFiltered { get; set; }
-
-
-        public RangeValue rangeValue
-        {
-            get; set; 
-        }
-
-        public Boolean? isToggleStateOn { get; set; }
-
+        #region properties from pattern
         /// <summary>
         /// Enthält die unterstützten Pattern
         /// </summary>
@@ -214,10 +244,38 @@ namespace OSMElement
         public object[] suportedPatterns { get; set; }
 
         /// <summary>
+        /// the value of the element
+        /// </summary>
+        public String valueFiltered { get; set; }
+
+        /// <summary>
+        /// The RangeValue of the element
+        ///  Conditional Support e.g.: Edit, Progress Bar, Scroll Bar, Slider, Spinner
+        /// </summary>
+        public RangeValue rangeValue
+        {
+            get; set; 
+        }
+
+        /// <summary>
+        /// Determines whether the element is selected, checked, marked or otherwise activated.
+        /// </summary>
+        public Boolean? isToggleStateOn { get; set; }
+        #endregion
+        #endregion
+
+        #region other properties
+        public String IdGenerated
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// gibt die Filter-Strategy an, sofern dieses bei einem Knoten abweichend ist 
         /// (wird gesetzt beim Update eines Konotens gesetzt, wenn es nicht der selbe Filter wie für die ganze Anwendung ist)
         /// </summary>
-         public String grantFilterStrategy { get; set; }
+        public String grantFilterStrategy { get; set; }
       //  public String grantFilterStrategyFullName { get; set; }
       //  public String grantFilterStrategyNamespace { get; set; }
         
@@ -248,9 +306,10 @@ namespace OSMElement
             }
             return displayedGuiElements;
         }
+        #endregion
     }
 
-  
+
 }
 
 

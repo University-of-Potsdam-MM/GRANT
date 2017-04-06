@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace OSMElement
 {
     /// <summary>
-    /// Entspricht dem DatenType System.Windows.Automation.RangeValuePattern; damit dieser aber nicht UIA spezifisch ist, wurde er neu erstellt
+    /// Represents a control that can be set to a value within a range.
+    /// Like System.Windows.Automation.RangeValuePattern
     /// </summary>
     public struct RangeValue
     {
@@ -16,7 +17,6 @@ namespace OSMElement
         public Double minimum { get; set; }
         public Double currentValue { get; set; }
 
-        //brauchen wir die beiden nachfolgenden Werte? Evtl. dann für die Braille-GUI
         public Double largeChange { get; set; }
         public Double smallChange { get; set; }
     }

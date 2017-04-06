@@ -777,9 +777,9 @@ namespace StrategyUIA2
             {
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsContentElementProperty, properties.isContentElementFiltered), resultCondition);
             }
-            if (properties.labeledbyFiltered != null)
+            if (properties.labeledByFiltered != null)
             {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledbyFiltered), resultCondition);
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledByFiltered), resultCondition);
             }
             if (properties.isControlElementFiltered != null)
             {

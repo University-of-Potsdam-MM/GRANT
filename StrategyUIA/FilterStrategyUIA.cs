@@ -280,8 +280,7 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
             }
             try {
-                String tmp = element.Current.ControlType.ProgrammaticName;
-                String[] t =  tmp.Split(new String[]{"."}, StringSplitOptions.RemoveEmptyEntries);
+                String[] t = element.Current.ControlType.ProgrammaticName.Split(new String[]{"."}, StringSplitOptions.RemoveEmptyEntries);
                 elementP.controlTypeFiltered = t[1];
             }
             catch (Exception a)
@@ -759,9 +758,9 @@ namespace StrategyUIA
             {
                 resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsContentElementProperty, properties.isContentElementFiltered), resultCondition);
             }
-            if (properties.labeledbyFiltered != null)
+            if (properties.labeledByFiltered != null)
             {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledbyFiltered), resultCondition);
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledByFiltered), resultCondition);
             }
             if (properties.isControlElementFiltered != null)
             {

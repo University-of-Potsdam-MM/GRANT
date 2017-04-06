@@ -117,8 +117,19 @@ namespace OSMElement
         /// </summary>
         public object uiElementSpecialContent { get; set; }
 
+        /// <summary>
+        /// the padding
+        /// </summary>
         public Padding padding { get; set; }
+
+        /// <summary>
+        /// the margin
+        /// </summary>
         public Padding margin { get; set; }
+
+        /// <summary>
+        /// the boarder
+        /// </summary>
         public Padding boarder { get; set; }
 
         /// <summary>

@@ -189,7 +189,7 @@ namespace GRANTManager
                    set;
                }
                //typ?
-               public String labeledbyFiltered
+               public String labeledByFiltered
                {
                    get;
                    set;
