@@ -289,7 +289,7 @@ namespace GRANTApplication
                 brailleTreeOutput.Items.Clear();
                 brailleRoot.Items.Clear();
                brailleRoot.Header = "Braille-Tree";
-                guiFunctions.createTreeForOutput(tree1, ref brailleRoot);
+                guiFunctions.createTreeForOutput(tree1, ref brailleRoot, false);
                 SaveButton.IsEnabled = true;
                 brailleTreeOutput.Items.Add(brailleRoot);
                 brailleDisplaySimul.Items.Refresh();
