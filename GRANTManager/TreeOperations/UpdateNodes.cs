@@ -301,7 +301,7 @@ namespace GRANTManager.TreeOperations
         /// <returns> eine abgekürzte Version des Textes oder der Text </returns>
         public String useAcronymForText(String text)
         {
-            if (grantTrees.TextviewObject == null || grantTrees.TextviewObject.acronymsOfPropertyContent == null || text == null || text.Equals("")){ return ""; }
+            if (grantTrees.TextviewObject.Equals(new TextviewElement()) || grantTrees.TextviewObject.acronymsOfPropertyContent == null || text == null || text.Equals("")){ return ""; }
             foreach(AcronymsOfPropertyContent aopc in grantTrees.TextviewObject.acronymsOfPropertyContent)
             {
                 if (aopc.name.Equals(text))
@@ -414,8 +414,8 @@ namespace GRANTManager.TreeOperations
         /// Fügt einen 'Zweig' für den Screen an den Root-Knoten an, falls der Screen im Baum noch nicht existiert
         /// </summary>
         /// <param name="screenName">gibt den Namen des Screens an</param>
-        /// <param name="viewCategory">gibt die Kategorie der View an</param>
-        private void addSubtreeOfScreen(String screenName, String viewCategory)
+        /// <param name="typeOfView">gibt die Kategorie der View an</param>
+        private void addSubtreeOfScreen(String screenName, String typeOfView)
         {
             if (screenName == null || screenName.Equals(""))
             {
@@ -425,7 +425,7 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
-            brailleScreen.typeOfView = viewCategory;
+            brailleScreen.typeOfView = typeOfView;
             osmScreen.brailleRepresentation = brailleScreen;
             GeneralProperties propOsmScreen = new GeneralProperties();
             propOsmScreen.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
@@ -437,30 +437,30 @@ namespace GRANTManager.TreeOperations
             {
                 OSMElement.OSMElement osmViewCategory = new OSMElement.OSMElement();
                 BrailleRepresentation brailleViewCategory = new BrailleRepresentation();
-                brailleViewCategory.typeOfView = viewCategory;
+                brailleViewCategory.typeOfView = typeOfView;
                 osmViewCategory.brailleRepresentation = brailleViewCategory;
                 GeneralProperties propViewCategory = new GeneralProperties();
                 propViewCategory.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmViewCategory);
                 osmViewCategory.properties = propViewCategory;
                 Object viewCategorySubtree = null;
-                //die viewCategory existert schon
+                //die typeOfView existert schon
                 if(strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmViewCategory))
                 {
-                    //viewCategory suchen
+                    //typeOfView suchen
                     foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes( grantTrees.brailleTree))
                     {
-                        if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(viewCategory))
+                        if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(typeOfView))
                         {
                             viewCategorySubtree = vC;
                         }
                     }
                 }
-                //die viewCategory existiert noch nicht
+                //die typeOfView existiert noch nicht
                 else
                 {
                     viewCategorySubtree = strategyMgr.getSpecifiedTree().AddChild(grantTrees.brailleTree, osmViewCategory);
                 }                
-                if(viewCategorySubtree == null ) { throw new Exception("Die Containsmethode gab an, dass die ViewCategory schon vorhanden ist, sie konnte im Baum aber nicht gefunden werden!"); }
+                if(viewCategorySubtree == null ) { throw new Exception("Die Containsmethode gab an, dass der TypeOfView schon vorhanden ist, sie konnte im Baum aber nicht gefunden werden!"); }
                 
                 strategyMgr.getSpecifiedTree().AddChild(viewCategorySubtree, osmScreen);
 

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace OSMElement
 {
-    public class TextviewObject
+    public struct TextviewObject
     {
        // public List<TextviewElement> textviewElements { get; set; }
-        public String viewCategory { get; set; }
+        public String typeOfView { get; set; }
         public String screenName { get; set; }
         public String itemEnumerate { get; set; }
         public Orders orders { get; set; }
@@ -18,19 +18,38 @@ namespace OSMElement
 
         public override string ToString()
         {
-            return String.Format("viewCategory={0}, screenName={1}", viewCategory, screenName);
+            return String.Format("typeOfView={0}, screenName={1}", typeOfView, screenName);
         }
     }
 
-    public class Orders
+    /// <summary>
+    /// Specified the order of objects of a text view element.
+    /// </summary>
+    public struct Orders
     {
+        /// <summary>
+        /// Default order of the objects.
+        /// </summary>
         public List<TextviewElement> defaultOrder { get; set; }
+
+        /// <summary>
+        /// List of orders of special objects.
+        /// </summary>
         public List<SpecialOrder> specialOrders { get; set; }
     }
 
-    public class SpecialOrder
+    /// <summary>
+    /// Specified the order of "special" objects of a text view element.
+    /// </summary>
+    public struct SpecialOrder
     {
+        /// <summary>
+        /// Name of the control type
+        /// </summary>
         public String controltypeName { get; set; }
+        /// <summary>
+        /// List with the order.
+        /// </summary>
         public List<TextviewElement> order { get; set; }
 
         public override string ToString()
@@ -40,11 +59,26 @@ namespace OSMElement
         
     }
 
-    public class TextviewElement
+    public struct TextviewElement
     {
+        /// <summary>
+        /// The order of objects (ascending order)
+        /// </summary>
         public int order { get; set; }
+
+        /// <summary>
+        /// The name of the property to shown. Every controltype from <see cref="GeneralProperties"/> can be used. 
+        /// </summary>
         public string property { get; set; }
+
+        /// <summary>
+        /// Minimum width of the view (in pins)
+        /// </summary>
         public int minWidth { get; set; }
+
+        /// <summary>
+        /// String to separate objects
+        /// </summary>
         public String separator { get; set; }
 
         public override string ToString()
@@ -53,7 +87,7 @@ namespace OSMElement
         }
     }
 
-    public class AcronymsOfPropertyContent
+    public struct AcronymsOfPropertyContent
     {
         public String name { get; set; }
         public String acronym { get; set; }
@@ -64,7 +98,7 @@ namespace OSMElement
         }
     }
 
-/*    public class SpecialGroup
+/*    public struct SpecialGroup
     {
         public String controltype { get; set; }
         public String separator { get; set; }

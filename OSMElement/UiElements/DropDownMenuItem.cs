@@ -6,14 +6,25 @@ using System.Threading.Tasks;
 
 namespace OSMElement.UiElements
 {
-
+    /// <summary>
+    /// Specifies the properties of a drop down menu.
+    /// </summary>
     public struct DropDownMenuItem
     {
+        /// <summary>
+        /// Determines whether the menu ias open.
+        /// </summary>
         public bool isOpen { get; set; }
         public bool hasChild { get; set; }
+        /// <summary>
+        /// Determines whether the item is a child.
+        /// </summary>
         public bool isChild { get; set; }
         public bool hasNext { get; set; }
         public bool hasPrevious { get; set; }
+        /// <summary>
+        /// Determines whether the item will be shown vertical.
+        /// </summary>
         public bool isVertical { get; set; }
 
         public override string ToString()

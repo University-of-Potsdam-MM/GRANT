@@ -183,15 +183,15 @@ namespace GRANTManager.TreeOperations
         /// <summary>
         /// Gibt die Namen der vorhandenen Screens im Braille-Baum an
         /// </summary>
-        /// <param name="viewCategory">gibt die viewCategory an</param>
-        /// <returns>Eine Liste der Namen der Screens im Braille-Baum, falls <para>viewCategory</para> angegeben ist, werden nur die Screens dieser viewCategory zurückgegeben</returns>
-        public List<String> getPosibleScreenNames(String viewCategory = null)
+        /// <param name="typeOfView">gibt die typeOfView an</param>
+        /// <returns>Eine Liste der Namen der Screens im Braille-Baum, falls <para>typeOfView</para> angegeben ist, werden nur die Screens dieser typeOfView zurückgegeben</returns>
+        public List<String> getPosibleScreenNames(String typeOfView = null)
         {
             if (grantTrees == null || grantTrees.brailleTree == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return null; }
             List<String> screens = new List<string>();
             foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if(viewCategory == null || viewCategory.Equals(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView))
+                if(typeOfView == null || typeOfView.Equals(strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView))
                 {
                     foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                     {
@@ -203,7 +203,7 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Gibt eine Liste der tatsächlich genutzten Ansichten (viewCategory) zurück vgl <see cref="GRANTManager.Settings.getPossibleViewCategories"/>
+        /// Gibt eine Liste der tatsächlich genutzten Ansichten (typeOfView) zurück vgl <see cref="GRANTManager.Settings.getPossibleViewCategories"/>
         /// </summary>
         /// <returns></returns>
         public List<String> getUsedViewCategories()
@@ -295,13 +295,13 @@ namespace GRANTManager.TreeOperations
         /// <param name="screenName"></param>
         /// <param name="viewName"></param>
         /// <returns></returns>
-        public bool existViewInScreen(String screenName, String viewName, String viewCategory)
+        public bool existViewInScreen(String screenName, String viewName, String typeOfView)
         {
-            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || viewCategory == null || viewCategory.Equals("")) { return false; }
+            if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || typeOfView == null || typeOfView.Equals("")) { return false; }
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
             BrailleRepresentation brailleScreen = new BrailleRepresentation();
             brailleScreen.screenName = screenName;
-            brailleScreen.typeOfView = viewCategory;
+            brailleScreen.typeOfView = typeOfView;
             osmScreen.brailleRepresentation = brailleScreen;
             GeneralProperties prop = new GeneralProperties();
             prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
@@ -311,7 +311,7 @@ namespace GRANTManager.TreeOperations
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return false; }
             foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(viewCategory))
+                if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(typeOfView))
                 {
                     foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                     {

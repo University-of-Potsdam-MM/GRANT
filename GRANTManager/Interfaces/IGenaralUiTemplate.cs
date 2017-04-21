@@ -9,11 +9,11 @@ namespace GRANTManager.Interfaces
     {
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
-        void addNavigationbarForScreen(string pathToXml, String screenName, String viewCategory);
+        void addNavigationbarForScreen(string pathToXml, String screenName, String typeOfView);
         void createUiElementsAllScreens(string pathToXml, String nameOfView);
-        void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory);
+        void createUiElementsNavigationbarScreens(string pathToXml, String typeOfView);
         void generatedUiFromTemplate(string pathToXml);
-        void updateNavigationbarScreens(string pathToXml, String viewCategory);
+        void updateNavigationbarScreens(string pathToXml, String typeOfView);
         /// <summary>
         /// Stellt alle Elemente eines (Teil-)Baumes da.
         /// </summary>

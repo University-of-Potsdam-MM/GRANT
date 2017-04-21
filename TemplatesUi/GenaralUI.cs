@@ -108,13 +108,13 @@ namespace TemplatesUi
         /// <summary>
         /// aktualisiert die Navigationsleisten (Anzahl der Tabs) auf allen Screens, die eine Navigationsleiste anzeigen
         /// </summary>
-        /// <param name="viewCategory">gibt die ViewCategory an, bei der die Navigationsleisten aktualisiert werden sollen</param>
+        /// <param name="typeOfView">gibt die ViewCategory an, bei der die Navigationsleisten aktualisiert werden sollen</param>
         /// <param name="pathToXml"></param>
-        public void updateNavigationbarScreens(string pathToXml, String viewCategory)
+        public void updateNavigationbarScreens(string pathToXml, String typeOfView)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(viewCategory);
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(typeOfView);
             /*
              * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
              * ergänzen
@@ -149,12 +149,12 @@ namespace TemplatesUi
         /// </summary>
         /// <param name="pathToXml">gibt den Pfad zum Template der Navigationsleiste an</param>
         /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
-        /// <param name="viewCategory"gibt die ViewCategory an, auf welcher die Navigationsleiste angezeigt werden soll
-        public void addNavigationbarForScreen(string pathToXml, String screenName, String viewCategory)
+        /// <param name="typeOfView">gibt die ViewCategory an, auf welcher die Navigationsleiste angezeigt werden soll</param>
+        public void addNavigationbarForScreen(string pathToXml, String screenName, String typeOfView)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(viewCategory);
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(typeOfView);
             List<String> screenNavi = new List<string>();
             //screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
             screenNavi.Add(screenName);
@@ -249,8 +249,8 @@ namespace TemplatesUi
         /// Erstellt für die angegebene View-Category für jeden Screen einen Navigationsleiste
         /// </summary>
         /// <param name="pathToXml">gibt den Pfad zum Template an</param>
-        /// <param name="viewCategory">gibt die View-Category an</param>
-        public void createUiElementsNavigationbarScreens(string pathToXml, String viewCategory)
+        /// <param name="typeOfView">gibt die View-Category an</param>
+        public void createUiElementsNavigationbarScreens(string pathToXml, String typeOfView)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
@@ -393,8 +393,9 @@ namespace TemplatesUi
         /// Wandelt ein XElement in ein <c>TemplateUiObject</c> um
         /// </summary>
         /// <param name="xmlElement">gibt ein XElement aus der TemplateUi.xml an</param>
+        /// <param name="typeOfView"></param>
         /// <returns>ein <c>TemplateUiObject</c></returns>
-        private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement, String viewCategory)
+        private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement, String typeOfView)
         {
             TemplateUiObject templetObject = new TemplateUiObject();
             Int32 result;
@@ -402,7 +403,7 @@ namespace TemplatesUi
             GeneralProperties properties = new GeneralProperties();
             BrailleRepresentation braille = new BrailleRepresentation();
 
-            braille.typeOfView = viewCategory;
+            braille.typeOfView = typeOfView;
             templetObject.allElementsOfType = xmlElement.Element("AllElementsOfType") == null ? false : Boolean.Parse( xmlElement.Element("AllElementsOfType").Value);
             properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
             braille.displayedGuiElementType = xmlElement.Element("TextFromUIElement").Value;

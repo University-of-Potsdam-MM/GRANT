@@ -34,11 +34,11 @@ namespace TemplatesUi
         private void addSubtreeInBrailleTree(object brailleNode)
         {
             OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( brailleNode));
-            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            foreach (Object typeOfView in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.typeOfView.Equals(osm.brailleRepresentation.typeOfView))
+                if (strategyMgr.getSpecifiedTree().GetData(typeOfView).brailleRepresentation.typeOfView.Equals(osm.brailleRepresentation.typeOfView))
                 {
-                    foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategory))
+                    foreach(Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(typeOfView))
                     {
                         if (strategyMgr.getSpecifiedTree().GetData(screenSubtree).brailleRepresentation.screenName.Equals(osm.brailleRepresentation.screenName))
                         {

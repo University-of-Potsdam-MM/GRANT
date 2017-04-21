@@ -90,7 +90,7 @@ namespace OSMElement
 
         /// <summary>
         /// Name of the GUI element type of the filtered tree whose value should be shown in this view!
-        /// Every controltype from <code>GeneralProperties</code> can be used.
+        /// Every controltype from <see cref="GeneralProperties"/> can be used.
         /// </summary>
         public String displayedGuiElementType { get; set; }
 

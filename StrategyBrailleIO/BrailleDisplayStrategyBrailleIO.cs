@@ -297,7 +297,7 @@ namespace StrategyBrailleIO
         {
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                //top => node with specification of the name of the viewCategory
+                //top => node with specification of the name of the typeOfView
                 if (!strategyMgr.getSpecifiedTree().IsTop(node))
                 {
                     //Depth == 1 => node with specification of the screen names

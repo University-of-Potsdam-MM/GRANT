@@ -6,10 +6,21 @@ using System.Threading.Tasks;
 
 namespace OSMElement.UiElements
 {
-    public  struct ListMenuItem
+    /// <summary>
+    /// Specifies the properties of a list menu item.
+    /// </summary>
+    public struct ListMenuItem
     {
+        /// <summary>
+        /// Determines whether multiple selected is allowed.
+        /// </summary>
         public bool isMultipleSelection { get; set; }
-        //public bool isSelected { get; set; } // ist in GeneralProperties isToggleStateOn
+
+        //public bool isSelected { get; set; } // see  <see cref="GeneralProperties"/> isToggleStateOn
+
+        /// <summary>
+        /// Indicates if a next item follows.
+        /// </summary>
         public bool hasNext { get; set; }
         public override string ToString()
         {

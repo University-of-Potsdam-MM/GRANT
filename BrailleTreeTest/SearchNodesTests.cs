@@ -119,7 +119,7 @@ namespace BrailleTreeTests
             List<String> usedViewCategories = treeOperation.searchNodes.getUsedViewCategories();
             Assert.AreEqual(1, usedViewCategories.Count, "Der Baum hätte 1 Ansicht enthalten müssen!");
             List<String> possibleViewCategories = Settings.getPossibleViewCategories();
-            Assert.IsTrue(usedViewCategories.Count <= possibleViewCategories.Count, "Es dürfen nicht mehr Ansichten (viewCategory) genutzt werden als in der Config definiert!");
+            Assert.IsTrue(usedViewCategories.Count <= possibleViewCategories.Count, "Es dürfen nicht mehr Ansichten (typeOfView) genutzt werden als in der Config definiert!");
            foreach(String uVC in usedViewCategories)
             {
                 Assert.IsTrue(possibleViewCategories.Contains(uVC), "Der Screen Name '" + uVC + " hätte in der Liste der möglichen Screens aus der Config auftauchen müssen!");

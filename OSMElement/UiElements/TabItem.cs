@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 
 namespace OSMElement.UiElements
 {
+    /// <summary>
+    /// Specifies the properties of a tab item
+    /// </summary>
     public struct TabItem
     {
-       // public bool isVertical { get; set; }
 
         /// <summary>
-        /// Gibt die Orientation der Tab-Leiste an;
-        /// je nach Orientation müssen die Tabs anders geöffnet sein
+        /// Orientation of the tab bar;
+        /// The tabs should be "opened" in different directions depending on their orientation.
         /// </summary>
         public Orientation orientation { get; set; }
-        /// <summary>
-        /// Gibt das Inhaltsobjekt einer Tab-View an
-        /// dies könnte z.B. bei einem Editor mit mehreren Tab das eigentliche (offene) Text-Feld sein
-        /// </summary>
-        // public object content { get; set; } --> TODO?
-        //isDisabled --> Element ist aktiv (kann daher nicht mehr aktiviert werden)
 
         public override string ToString()
         {
@@ -28,5 +24,5 @@ namespace OSMElement.UiElements
         }
     }
 
-    public enum Orientation { Left, Top, Bottom, Right, Vertical, Horizontal }; //TODO: in BrailleRepresentation?
+    public enum Orientation { Left, Top, Bottom, Right, Vertical, Horizontal };
 }

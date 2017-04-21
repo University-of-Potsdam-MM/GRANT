@@ -219,8 +219,8 @@ namespace GRANTExample
         #region Beispielobjekte
         private void setDauGui(String fromGuiElement3)
         {
-            List<String> viewCategory = Settings.getPossibleViewCategories();
-            if (viewCategory == null || viewCategory.Count < 2) { return; }
+            List<String> typeOfview = Settings.getPossibleViewCategories();
+            if (typeOfview == null || typeOfview.Count < 2) { return; }
 
             #region Element 1 Screenshot
             OSMElement.OSMElement osm1 = new OSMElement.OSMElement();

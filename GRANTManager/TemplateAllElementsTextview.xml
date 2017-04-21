@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Textview>
-  <ViewCategory>Textview</ViewCategory>
+  <TypeOfView>Textview</TypeOfView>
   <Screenname>tv</Screenname>
   <ItemEnumerate>?</ItemEnumerate>
   <Orders>
@@ -55,21 +55,6 @@
 		  </SpecialOrder>
 	  </SpecialOrders>
   </Orders>
-  <Orders>
-    <Element>
-      <Order>0</Order>
-      <Property>controlTypeFiltered</Property>
-      <MinWidth>3</MinWidth>
-	  <Separator>=</Separator>
-    </Element>
-    <Element>
-      <Order>1</Order>
-      <Property>nameFiltered</Property>
-      <MinWidth>40</MinWidth>
-	  <Separator>=</Separator>
-    </Element>
-  </Orders>
-
   <Acronyms>
     <Acronym>
       <Name>Button</Name>

@@ -35,7 +35,7 @@ namespace GRANTManager.TreeOperations
                     }
                 }
             }
-            return null;
+            return new SpecialOrder();
         }
     }
 }

@@ -43,7 +43,7 @@ namespace GRANTManager
         public List<FilterstrategyOfNode<String, String, String>> filterstrategiesOfNodes = new List<FilterstrategyOfNode<string, string, string>>();
 
         private TextviewObject textviewobject;
-        public TextviewObject TextviewObject { get { if (textviewobject == null) {loadTemplateAllElementsTextview(); }   return textviewobject;  } set { textviewobject = value; } }
+        public TextviewObject TextviewObject { get { if (textviewobject.Equals(new TextviewObject())) {loadTemplateAllElementsTextview(); }   return textviewobject;  } set { textviewobject = value; } }
 
         #region auslesen aus XML
         /// <summary>
@@ -63,8 +63,10 @@ namespace GRANTManager
             #region default order
             IEnumerable<XElement> uiElementDefaultOrders = xmlDoc.Elements("Orders").Elements("DefaultOrder").Elements("Element");
             if (uiElementDefaultOrders == null || !uiElementDefaultOrders.Any()) { return; }
-            tvo.orders = new Orders();
-            tvo.orders.defaultOrder = new List<TextviewElement>();
+            Orders orders = new Orders();
+            orders.defaultOrder = new List<TextviewElement>();
+            orders.specialOrders = new List<SpecialOrder>();
+            tvo.orders = orders;
             foreach (XElement xmlElement in uiElementDefaultOrders)
             {
                 TextviewElement tve = new TextviewElement();
@@ -82,9 +84,7 @@ namespace GRANTManager
             #endregion
             #region special order
             IEnumerable<XElement> uiElementOrders = xmlDoc.Elements("Orders").Elements("SpecialOrders");
-            if (uiElementOrders == null || !uiElementOrders.Any()) { return; }
-            tvo.orders.specialOrders= new List<SpecialOrder>();
-            
+            if (uiElementOrders == null || !uiElementOrders.Any()) { return; }            
             foreach (XElement xmlElement in uiElementOrders)
             {
                 IEnumerable<XElement> oneSpecialOrder = xmlElement.Elements("SpecialOrder");
@@ -113,7 +113,7 @@ namespace GRANTManager
                 }
             }
             #endregion
-            tvo.viewCategory = xmlDoc.Element("ViewCategory").Value;
+            tvo.typeOfView = xmlDoc.Element("TypeOfView").Value;
             tvo.screenName = xmlDoc.Element("Screenname").Value;
             XElement itemenumarate = xmlDoc.Element("ItemEnumerate");
             if(itemenumarate != null)

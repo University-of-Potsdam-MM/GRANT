@@ -48,7 +48,7 @@ namespace TemplateTextview
             braille.isVisible = true;
             propBraille.controlTypeFiltered = "Text";
             braille.isGroupChild = true;
-            braille.typeOfView = tvo.viewCategory;
+            braille.typeOfView = tvo.typeOfView;
             braille.screenName = tvo.screenName;
             braille.viewName = "separator";
             propBraille.valueFiltered = separator;
@@ -75,7 +75,7 @@ namespace TemplateTextview
             braille.isVisible = true;
             propBraille.controlTypeFiltered = "Text";
             braille.isGroupChild = true;
-            braille.typeOfView = tvo.viewCategory;
+            braille.typeOfView = tvo.typeOfView;
             braille.screenName = tvo.screenName;
             braille.displayedGuiElementType = tve.property;
             braille.viewName = osmFiltered.properties.IdGenerated + "_" + tve.order;
@@ -102,7 +102,7 @@ namespace TemplateTextview
             brailleGroup.isVisible = true;
             propGroup.controlTypeFiltered = "GroupElement";
             
-            brailleGroup.typeOfView = grantTrees.TextviewObject.viewCategory;
+            brailleGroup.typeOfView = grantTrees.TextviewObject.typeOfView;
             brailleGroup.screenName = grantTrees.TextviewObject.screenName;
             OSMElement.OSMElement osmFiltered = strategyMgr.getSpecifiedTree().GetData(filteredNode);
             brailleGroup.viewName = osmFiltered.properties.IdGenerated;
@@ -122,7 +122,7 @@ namespace TemplateTextview
                 {
                     List<string> ids = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(parent).properties.IdGenerated);
                     if (ids != null && ids.Count > 0)
-                    {//die richtige Id raussuchen (screen & viewCategory)
+                    {//die richtige Id raussuchen (screen & typeOfView)
                      //parent (Groupelement)
                         foreach (String id in ids)
                         {
@@ -133,7 +133,7 @@ namespace TemplateTextview
                                 {
                                     Object parentGroupelement = strategyMgr.getSpecifiedTree().Parent(o);
                                     OSMElement.OSMElement osmTmp = strategyMgr.getSpecifiedTree().GetData(parentGroupelement);
-                                    if (osmTmp.brailleRepresentation.screenName.Equals(grantTrees.TextviewObject.screenName) && osmTmp.brailleRepresentation.typeOfView.Equals(grantTrees.TextviewObject.viewCategory))
+                                    if (osmTmp.brailleRepresentation.screenName.Equals(grantTrees.TextviewObject.screenName) && osmTmp.brailleRepresentation.typeOfView.Equals(grantTrees.TextviewObject.typeOfView))
                                     {
                                         brailleParentId = strategyMgr.getSpecifiedTree().GetData(parentGroupelement).properties.IdGenerated;
                                         break;
@@ -155,7 +155,7 @@ namespace TemplateTextview
             Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);
             List<TextviewElement> order;
             SpecialOrder so = treeOperation.templateOperations.textViewspecialOrderContainsControltype(osmFiltered.properties.controlTypeFiltered);
-            if (so != null)
+            if (!so.Equals(new SpecialOrder()))
             {
                 order = so.order;
             }
@@ -209,12 +209,11 @@ namespace TemplateTextview
                     }
                 }
             }
-            //else
-            foreach (Object viewCategory in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            foreach (Object typeOfView in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(viewCategory).brailleRepresentation.typeOfView.Equals(osm.brailleRepresentation.typeOfView))
+                if (strategyMgr.getSpecifiedTree().GetData(typeOfView).brailleRepresentation.typeOfView.Equals(osm.brailleRepresentation.typeOfView))
                 {
-                    foreach (Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(viewCategory))
+                    foreach (Object screenSubtree in strategyMgr.getSpecifiedTree().DirectChildrenNodes(typeOfView))
                     {
                         if (strategyMgr.getSpecifiedTree().GetData(screenSubtree).brailleRepresentation.screenName.Equals(osm.brailleRepresentation.screenName))
                         {
