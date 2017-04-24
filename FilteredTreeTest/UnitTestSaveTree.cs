@@ -74,7 +74,7 @@ namespace FilteredTreeTest
             //String @projectPathTree = Path.GetDirectoryName(projectLoadedPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(projectLoadedPath);
 
 
-            if (!CompareToSavedFilteredTrees(System.IO.Path.Combine(folderPathSave, "filteredTree.xml"),System.IO.Path.Combine(projectLoadedPath, "filteredTree.xml")))
+            if (!CompareToSavedFilteredTrees(System.IO.Path.Combine(folderPathSave, Settings.getFilteredTreeSavedName()),System.IO.Path.Combine(projectLoadedPath, "filteredTree.xml")))
             {
                 Assert.Fail("Der gerade gespeicherte Baum stimmt nicht mit den 'Test-Baum' überein!");
             }

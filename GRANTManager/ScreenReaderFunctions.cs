@@ -13,7 +13,7 @@ namespace GRANTManager
     {
         public Dictionary<String, String> screenreaders;
         StrategyManager strategyMgr;
-        Thread activeApp;
+        //Thread activeApp;
 
         public ScreenReaderFunctions(StrategyManager strategyMgr)
         {
@@ -46,7 +46,7 @@ namespace GRANTManager
             {
                 String projectDirectory = Path.GetDirectoryName(@sr) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@sr);
 
-                String appName = getAppName(@projectDirectory + Path.DirectorySeparatorChar + "filteredTree.xml");
+                String appName = getAppName(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
                 if (appName != null && !appName.Equals(""))
                 {
                     if (!screenreaders.ContainsKey(appName))
@@ -81,7 +81,7 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Unchecked an enabled all siblings
+        /// Unchecked and enabled all siblings
         /// </summary>
         /// <param name="menuItem"><code>System.Windows.Controls.MenuItem</code> which was checked</param>
         public void uncheckedMenuItem(System.Windows.Controls.MenuItem menuItem)

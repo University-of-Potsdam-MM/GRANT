@@ -176,5 +176,45 @@ namespace GRANTManager
             }
             return null;
         }
+
+        public static String getFilteredTreeSavedName()
+        {
+            List<String> name = getPossibleStrategyClasses("filteredTreeSavedName");
+            if (name != null && name.Count == 1)
+            {
+                return name[0];
+            }
+            throw new ArgumentNullException();
+        }
+
+        public static String getBrailleTreeSavedName()
+        {
+            List<String> name = getPossibleStrategyClasses("brailleTreeSavedName");
+            if (name != null && name.Count == 1)
+            {
+                return name[0];
+            }
+            throw new ArgumentNullException();
+        }
+
+        public static String getOsmConectorName()
+        {
+            List<String> name = getPossibleStrategyClasses("osmConectorName");
+            if (name != null && name.Count == 1)
+            {
+                return name[0];
+            }
+            throw new ArgumentNullException();
+        }
+
+        public static String getFilterstrategyFileName()
+        {
+            List<String> name = getPossibleStrategyClasses("filterstrategyFileName");
+            if (name != null && name.Count == 1)
+            {
+                return name[0];
+            }
+            throw new ArgumentNullException();
+        }
     }
 }

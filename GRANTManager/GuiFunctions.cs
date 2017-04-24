@@ -24,10 +24,6 @@ namespace GRANTManager
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
-        private String filteredTreeSavedName = "filteredTree.xml";
-        private String brailleTreeSavedName = "brailleTree.xml";
-        private String osmConectorName = "osmConnector.xml";
-        private String filterstrategyFileName = "filterstrategies.xml";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GuiFunctions"/> class.
@@ -272,19 +268,59 @@ namespace GRANTManager
             }
         }
 
+        private String getTooltip(Object node, bool isFilteredTree = true)
+        {
+            if (grantTrees.brailleTree != null)
+            {
+                Object treeForSearch;
+                List<String> conIds = new List<string>();
+                String toolTip = "Connected node:";
+                if (!isFilteredTree)
+                {
+                    treeForSearch = grantTrees.filteredTree;
+                    conIds.Add(treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
+                }
+                else
+                {
+                    treeForSearch = grantTrees.brailleTree;
+                    conIds = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
+                }
+                if (conIds != null && conIds.Count > 0 && conIds[0] != null)
+                {
+                    foreach (String id in conIds)
+                    {
+                        OSMElement.OSMElement conNode = treeOperation.searchNodes.getAssociatedNodeElement(id, treeForSearch);
+                        if (!conNode.Equals(new OSMElement.OSMElement()))
+                        {
+                            if (isFilteredTree)
+                            {
+                                toolTip += "\n" + conNode.brailleRepresentation.typeOfView + " " + conNode.brailleRepresentation.screenName + " " + conNode.brailleRepresentation.viewName + " -" + conNode.properties.controlTypeFiltered + " (" + conNode.properties.IdGenerated + ")";
+                            }
+                            else
+                            {
+                                toolTip += "\n" + conNode.properties.controlTypeFiltered + " - " + conNode.properties.nameFiltered + " (" + conNode.properties.IdGenerated + ")";
+                            }
+                        }
+                    }
+                    return toolTip;
+                }
+            }
+            return "";
+        }
+
         /// <summary>
-        /// 
+        /// Creates a tree for the UI and adds tooltips for some nodes
         /// </summary>
-        /// <param name="tree">gibt den darzustellenden Baum an</param>
-        /// <param name="root"></param>
-        /// <param name="isFilteredTree">gibt an, ob es sich um den gefilterten Baum handelt</param>
+        /// <param name="tree">the tree object</param>
+        /// <param name="root">the treeViewItem object</param>
+        /// <param name="isFilteredTree">Determines whether the tree object is a filtered tree</param>
         public void createTreeForOutput(Object tree, ref TreeViewItem root, bool isFilteredTree = true)
         {            
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
                  MenuItem child = new MenuItem();
                 TreeViewItem treeViewItem = new TreeViewItem();
-                #region Werte hinzufügen
+                #region add values
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
               
@@ -322,43 +358,11 @@ namespace GRANTManager
                 #endregion
                 treeViewItem.Header = child;
 
-                #region Tooltip für Knotenbeziehungen
-                if (grantTrees.brailleTree != null)
+                String toolTip = getTooltip(node, isFilteredTree);
+                if (toolTip != null && !toolTip.Equals(""))
                 {
-                    Object treeForSearch;
-                    List<String> conIds = new List<string>();
-                    String toolTip = "Connected node:";
-                    if (!isFilteredTree)
-                    {
-                        treeForSearch = grantTrees.filteredTree;
-                        conIds.Add(treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
-                    }
-                    else
-                    {
-                        treeForSearch = grantTrees.brailleTree;
-                        conIds = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
-                    }
-                    if (conIds != null && conIds.Count > 0 && conIds[0] != null)
-                    {
-                        foreach (String id in conIds)
-                        {
-                            OSMElement.OSMElement conNode = treeOperation.searchNodes.getAssociatedNodeElement(id, treeForSearch);
-                            if (!conNode.Equals(new OSMElement.OSMElement()))
-                            {
-                                if (isFilteredTree)
-                                {
-                                    toolTip += "\n" + conNode.brailleRepresentation.typeOfView +" "+ conNode.brailleRepresentation.screenName+" " + conNode.brailleRepresentation.viewName + " -" +conNode.properties.controlTypeFiltered +  " (" + conNode.properties.IdGenerated + ")";
-                                }
-                                else
-                                {
-                                    toolTip += "\n" + conNode.properties.controlTypeFiltered + " - " + conNode.properties.nameFiltered + " (" + conNode.properties.IdGenerated + ")";
-                                }
-                            }
-                            treeViewItem.ToolTip = toolTip;
-                        }
-                    }
+                    treeViewItem.ToolTip = toolTip;
                 }
-                #endregion
                 if (!strategyMgr.getSpecifiedTree().IsRoot(node))
                 {
                     if (!(isFilteredTree && strategyMgr.getSpecifiedTree().IsTop(node)))
@@ -378,7 +382,7 @@ namespace GRANTManager
                     root = treeViewItem;
                 }
             }
-            //geht zurück zum "Root"-MenuItem
+            //go back to "root" menuItem
             while (root.Header != null && root.Header is MenuItem && ((MenuItem)root.Header).parentMenuItem != null)
             {
                 root = ((MenuItem)root.Header).parentMenuItem;
@@ -468,15 +472,15 @@ namespace GRANTManager
             {
                 //temporary deletes  all children from a group and their connections to the braille (output) tree 
                 treeOperation.updateNodes.deleteChildsOfBrailleGroups();
-                saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + filteredTreeSavedName);
+                saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
                 if (grantTrees.brailleTree != null)
                 {
-                    saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + brailleTreeSavedName);
+                    saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
                 }
                 XmlSerializer serializer;
                 if (grantTrees.osmRelationship != null && !grantTrees.osmRelationship.Equals(new OsmConnector<String, String>()) && grantTrees.osmRelationship.Count > 0)
                 {
-                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + osmConectorName))
+                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getOsmConectorName()))
                     {
                         serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
                         serializer.Serialize(writer, grantTrees.osmRelationship);
@@ -484,7 +488,7 @@ namespace GRANTManager
                 }
                 if (grantTrees.filterstrategiesOfNodes != null)
                 {
-                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + filterstrategyFileName))
+                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName()))
                     {
                         serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
                         serializer.Serialize(writer, grantTrees.filterstrategiesOfNodes);
@@ -536,11 +540,11 @@ namespace GRANTManager
             }
             
             //set the OSM connection
-            if (File.Exists(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName))
+            if (File.Exists(@projectDirectory + Path.DirectorySeparatorChar + Settings.getOsmConectorName()))
             {
                 try
                 {
-                    fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + osmConectorName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + Settings.getOsmConectorName(), System.IO.FileMode.Open, System.IO.FileAccess.Read);
 
                     serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
                     using (StreamReader reader = new StreamReader(fs))
@@ -580,9 +584,9 @@ namespace GRANTManager
             // if necessary set the output device
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(grantProjectObject.device);
             //load filtered tree and braille (output) tree -> it will be in a subfolder wich has the same name like the project
-            loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + filterstrategyFileName);
-            loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + filteredTreeSavedName);
-            loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + brailleTreeSavedName);
+            loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName());
+            loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
+            loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
         }
 
         /// <summary>

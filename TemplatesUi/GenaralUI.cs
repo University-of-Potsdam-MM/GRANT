@@ -255,7 +255,7 @@ namespace TemplatesUi
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
             //TODO: mit Events verknüpfen
-            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(VIEWCATEGORY_SYMBOLVIEW);
+            List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(typeOfView);
             ATemplateUi generalUiInstance;
             if (templateObject.Screens == null)
             {
