@@ -43,7 +43,7 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
 
-            List<String> viewCategories = Settings.getPossibleViewCategories();
+            List<String> viewCategories = Settings.getPossibleTypesOfViews();
             if(viewCategories == null) { Assert.Fail("Die ViewCategories sind in der Config nicht richtig angegeben!"); }
             VIEWCATEGORYSYMBOLVIEW = viewCategories[0];
             VIEWCATEGORYLAYOUTVIEW = viewCategories[1];

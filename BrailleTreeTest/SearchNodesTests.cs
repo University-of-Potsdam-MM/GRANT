@@ -51,7 +51,7 @@ namespace BrailleTreeTests
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
             #endregion
 
-            List<String> viewCategories = Settings.getPossibleViewCategories();
+            List<String> viewCategories = Settings.getPossibleTypesOfViews();
             if (viewCategories == null) { Assert.Fail("Die ViewCategories sind in der Config nicht richtig angegeben!"); }
             VIEWCATEGORYSYMBOLVIEW = viewCategories[0];
             VIEWCATEGORYLAYOUTVIEW = viewCategories[1];
@@ -116,9 +116,9 @@ namespace BrailleTreeTests
         public void getUsedViewCategoriesTest()
         {
             initilaizeBrailleTree2Screens();
-            List<String> usedViewCategories = treeOperation.searchNodes.getUsedViewCategories();
+            List<String> usedViewCategories = treeOperation.searchNodes.getUsedTypesOfViews();
             Assert.AreEqual(1, usedViewCategories.Count, "Der Baum hätte 1 Ansicht enthalten müssen!");
-            List<String> possibleViewCategories = Settings.getPossibleViewCategories();
+            List<String> possibleViewCategories = Settings.getPossibleTypesOfViews();
             Assert.IsTrue(usedViewCategories.Count <= possibleViewCategories.Count, "Es dürfen nicht mehr Ansichten (typeOfView) genutzt werden als in der Config definiert!");
            foreach(String uVC in usedViewCategories)
             {

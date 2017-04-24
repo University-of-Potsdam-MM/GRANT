@@ -50,7 +50,7 @@ namespace TemplatesUi
         /// <param name="nodes">gibt eine Liste aller Knoten des gefilterten Baums an von denen der Screenshot erstellt werden soll</param>
         public void createUiScreenshotFromTemplate(TemplateScreenshotObject screenshotObject, List<Object> nodes)
         {
-            List<String> viewCategories = Settings.getPossibleViewCategories();
+            List<String> viewCategories = Settings.getPossibleTypesOfViews();
             if(viewCategories == null || viewCategories.Count > 2) { throw new Exception("Die ViewCategorien wurden in den Settings nicht (ausreichend) angegeben!"); }
             //TODO: verschiedene Screens beachten
             //TODO: Baumbeziehung setzen

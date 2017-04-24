@@ -113,7 +113,7 @@ namespace FilteredTreeTest
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(loadedTree1))
             {
                 node1Id = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
-                List<Object> associatedNodeList = searchNodes.getAssociatedNodeList(node1Id, loadedTree2);
+                List<Object> associatedNodeList = searchNodes.getNodeList(node1Id, loadedTree2);
                 if (associatedNodeList.Count != 1) { Assert.Fail("Die Id '{0}' kommt mehr als ein mal oder keinmal in dem Baum ({1}) vor!", node1Id, path2); return false; }
                 OSMElement.OSMElement osm1 = strategyMgr.getSpecifiedTree().GetData(node);
                 GeneralProperties prop1 = osm1.properties;

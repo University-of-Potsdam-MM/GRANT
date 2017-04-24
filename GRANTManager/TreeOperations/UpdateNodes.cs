@@ -33,7 +33,7 @@ namespace GRANTManager.TreeOperations
             this.grantTrees = grantTrees;
             this.treeOperation = treeOperation;
             
-            List<String> viewCategories = Settings.getPossibleViewCategories();
+            List<String> viewCategories = Settings.getPossibleTypesOfViews();
             if(viewCategories != null) { VIEWCATEGORY_SYMBOLVIEW = viewCategories[0]; }
         }
 
@@ -44,7 +44,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="filteredTreeGeneratedId">gibt die generierte Id des Knotens an</param>
         public void updateNodeOfFilteredTree(String filteredTreeGeneratedId)
         {
-            List<Object> relatedFilteredTreeObject = treeOperation.searchNodes.getAssociatedNodeList(filteredTreeGeneratedId, grantTrees.filteredTree); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
+            List<Object> relatedFilteredTreeObject = treeOperation.searchNodes.getNodeList(filteredTreeGeneratedId, grantTrees.filteredTree); //TODO: in dem Kontext wollen wir eigentlich nur ein Element zurückbekommen
             foreach (ITreeStrategy<OSMElement.OSMElement> treeElement in relatedFilteredTreeObject)
             {
                 //prüfen, ob der Knoten nicht mit dem standard-filterStrategies gefiltert werden soll und ggf. Filter kurzzeitig wechseln
@@ -259,7 +259,7 @@ namespace GRANTManager.TreeOperations
             }
             //OSMElement.OSMElement associatedNode = getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
 
-            List<Object> associatedNodeList = treeOperation.searchNodes.getAssociatedNodeList(osmRelationship.FilteredTree, grantTrees.filteredTree);
+            List<Object> associatedNodeList = treeOperation.searchNodes.getNodeList(osmRelationship.FilteredTree, grantTrees.filteredTree);
             if (associatedNodeList != null && associatedNodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(associatedNodeList[0]))
             {
                 //die Infos ob eine Checkbox ausgewählt ist stehen (zumindest bei meiner Beispielanwendung) im Kindelement
@@ -284,7 +284,7 @@ namespace GRANTManager.TreeOperations
                 return "";
             }
             OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
-            //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeElement(osmRelationship.FilteredTree, strategyMgr.filteredTree);
+            //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getNodeElement(osmRelationship.FilteredTree, strategyMgr.filteredTree);
             String text = "";
             if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElement.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
@@ -326,7 +326,7 @@ namespace GRANTManager.TreeOperations
                 return null;
             }
             OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
-            //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getAssociatedNodeElement(osmRelationship.FilteredTree, strategyMgr.filteredTree);
+            //ITreeStrategy<OSMElement.OSMElement> associatedNode = strategyMgr.getSpecifiedTreeOperations().getNodeElement(osmRelationship.FilteredTree, strategyMgr.filteredTree);
             bool? isEnable = null;
             if (!associatedNode.Equals(new OSMElement.OSMElement()))
             {
@@ -543,7 +543,7 @@ namespace GRANTManager.TreeOperations
                     strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                     strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
                     // Knoten in neuen Baum suchen + filtern und aktualisieren
-                    OSMElement.OSMElement foundNewNode = treeOperation.searchNodes.getAssociatedNodeElement(nodeStrategy.IdGenerated, grantTrees.filteredTree);
+                    OSMElement.OSMElement foundNewNode = treeOperation.searchNodes.getNodeElement(nodeStrategy.IdGenerated, grantTrees.filteredTree);
                     if (!foundNewNode.Equals(new OSMElement.OSMElement()))
                     {
                         OSMElement.GeneralProperties properties = strategyMgr.getSpecifiedFilter().updateNodeContent(foundNewNode);
@@ -645,7 +645,7 @@ namespace GRANTManager.TreeOperations
         {
             Settings settings = new Settings();
             List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.filterstrategiesOfNodes;
-            //ITreeStrategy<OSMElement.OSMElement> subtree = getAssociatedNode(idOfParent, tree);
+            //ITreeStrategy<OSMElement.OSMElement> subtree = getNode(idOfParent, tree);
             if (!strategyMgr.getSpecifiedTree().HasChild(subtree)) { return; }
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(strategyMgr.getSpecifiedTree().Child(subtree)))
             {
@@ -679,16 +679,16 @@ namespace GRANTManager.TreeOperations
                         OsmConnector<String, String> osmRelationship = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
                         if (osmRelationship != null)
                         {
-                            Object subtreeFiltered = treeOperation.searchNodes.getAssociatedNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
+                            Object subtreeFiltered = treeOperation.searchNodes.getNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
                             if (subtreeFiltered == null) { return; }
                             String id = strategyMgr.getSpecifiedTree().GetData(subtreeFiltered).properties.IdGenerated;
                             subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
                             String idParent = changeSubTreeOfFilteredTree(subtreeFiltered, id);
                             Object tree = grantTrees.filteredTree;
                             if (idParent == null || tree == null) { return; }
-                           tree=  treeOperation.generatedIds.generatedIdsOfFilteredSubtree(treeOperation.searchNodes.getAssociatedNode(idParent, tree));
+                           tree=  treeOperation.generatedIds.generatedIdsOfFilteredSubtree(treeOperation.searchNodes.getNode(idParent, tree));
                            grantTrees.filteredTree = tree;
-                            subtreeFiltered = treeOperation.searchNodes.getAssociatedNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
+                            subtreeFiltered = treeOperation.searchNodes.getNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
                             //entfernen des "alten" Braille-Teilbaums
                             if (strategyMgr.getSpecifiedTree().HasParent(node))
                             {
@@ -730,8 +730,7 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="screenName">gibt den namen des Screens an</param>
         /// <param name="isActiv"></param>
-        /// <param name="navigationbarSubstring">gibt einen (Teil-)String des Namens der Navigationsleiste an; wie diese im Baum benannt ist</param>
-        public void setPropertyInNavigationbarForScreen(string screenName, bool isActiv, String navigationbarSubstring = "NavigationBarScreens")
+        public void setPropertyInNavigationbarForScreen(string screenName, bool isActiv)
         {
             /*
              * 1. Knoten mit Screen suchen
@@ -748,7 +747,7 @@ namespace GRANTManager.TreeOperations
             Object navigationBarSubtree = strategyMgr.getSpecifiedTree().NewTree();
             foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(screenTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Contains(navigationbarSubstring))
+                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Contains(Settings.getNavigationbarSubstring()))
                 { //Knoten mit Navigationsleiste gefunden
                     navigationBarSubtree = node;
                     break;

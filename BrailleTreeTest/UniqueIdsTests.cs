@@ -47,7 +47,7 @@ namespace BrailleTreeTest
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
             #endregion
 
-            List<String> viewCategories = Settings.getPossibleViewCategories();
+            List<String> viewCategories = Settings.getPossibleTypesOfViews();
             if (viewCategories == null) { Assert.Fail("Die ViewCategories sind in der Config nicht richtig angegeben!"); }
             VIEWCATEGORYSYMBOLVIEW = viewCategories[0];
             VIEWCATEGORYLAYOUTVIEW = viewCategories[1];

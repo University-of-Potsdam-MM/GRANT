@@ -93,7 +93,7 @@ namespace FilteredTreeTest
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.filteredTree))
             {
-                List<Object> nodes = searchNodes.getAssociatedNodeList(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, loadedTree);
+                List<Object> nodes = searchNodes.getNodeList(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, loadedTree);
                 if (nodes.Count != 1) { Assert.Fail("Es wurde nicht die richtige Anzahl an zugehörigen Knoten im geladenen Baum gefunden! Betrachteter Knoten:\n{0}\n\t Anzahl der gefundenen zugehörigen Knoten im geladenen Baum = {1}", node, nodes.Count); }
                 bool isEqual = hf.compareToNodes(node, nodes[0]);
                 if (!isEqual)
@@ -104,7 +104,7 @@ namespace FilteredTreeTest
             }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(loadedTree))
             {
-                List<Object> nodes = searchNodes.getAssociatedNodeList(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, grantTrees.filteredTree);
+                List<Object> nodes = searchNodes.getNodeList(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, grantTrees.filteredTree);
                 if (nodes.Count != 1) { Assert.Fail("Es wurde nicht die richtige Anzahl an zugehörigen Knoten im gefilterten Baum gefunden! Betrachteter Knoten:\n{0}\n\t Anzahl der gefundenen zugehörigen Knoten im gefilterten Baum = {1}", node, nodes.Count); }
                 bool isEqual = hf.compareToNodes(node, nodes[0]);
                 if (!isEqual)

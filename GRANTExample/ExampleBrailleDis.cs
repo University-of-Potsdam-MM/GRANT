@@ -219,7 +219,7 @@ namespace GRANTExample
         #region Beispielobjekte
         private void setDauGui(String fromGuiElement3)
         {
-            List<String> typeOfview = Settings.getPossibleViewCategories();
+            List<String> typeOfview = Settings.getPossibleTypesOfViews();
             if (typeOfview == null || typeOfview.Count < 2) { return; }
 
             #region Element 1 Screenshot

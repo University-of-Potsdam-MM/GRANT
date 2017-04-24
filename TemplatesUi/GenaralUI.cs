@@ -26,7 +26,7 @@ namespace TemplatesUi
         public GenaralUI(StrategyManager strategyMgr)
         {
             this.strategyMgr = strategyMgr;
-            List<String> viewCategories = Settings.getPossibleViewCategories();
+            List<String> viewCategories = Settings.getPossibleTypesOfViews();
             if(viewCategories == null) { throw new Exception("Es wurden keine ViewCategories in den Settings angegeben!"); }
             VIEWCATEGORY_SYMBOLVIEW = viewCategories[0];
             VIEWCATEGORY_LAYOUTVIEW = viewCategories[1];
@@ -185,7 +185,7 @@ namespace TemplatesUi
                 IEnumerable<XElement> uiElement =
                     from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
                     where (string)el.Element("IsGroup") != null && (string)el.Element("IsGroup") != ""
-                        && (string)el.Attribute("name") == "NavigationBarScreens"
+                        && (string)el.Attribute("name") == Settings.getNavigationbarSubstring()
                     select el;
                 if (uiElement.Count() == 0) { return new TemplateUiObject(); }
 
@@ -537,7 +537,7 @@ namespace TemplatesUi
             if (xmlDoc.Element(screenCategory) == null) { return; }
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Element(screenCategory).Elements("UiElement")
-                where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != "NavigationBarScreens"
+                where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != Settings.getNavigationbarSubstring()
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
             List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames(screenCategory);

@@ -9,6 +9,9 @@ using GRANTManager.Interfaces;
 
 namespace GRANTManager
 {
+    /// <summary>
+    /// Reads Strings from the Strategy.config
+    /// </summary>
     public class Settings
     {
         private static String readAppSettings(String name)
@@ -33,10 +36,10 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Ordnet anhand der Filter.config einen Filter-Anzeigenamen  einen Filter-Klassennamen zu
+        /// Gives the appropriate filter-class-name to a filter-showing-name (depending on the Strategy.config)
         /// </summary>
-        /// <param name="uiElement">gibt den Anzeigenamen an</param>
-        /// <returns>Den Klassenname der Strategy-Klasse als String</returns>
+        /// <param name="strategyUserName">filter-showing-name</param>
+        /// <returns>the filter-class name</returns>
         public String strategyUserNameToClassName(String strategyUserName)
         {
             String classStrategyName = readAppSettings(strategyUserName);
@@ -157,64 +160,45 @@ namespace GRANTManager
         }
 
 
-        public static List<String> getPossibleViewCategories()
+        public static List<String> getPossibleTypesOfViews()
         {
-            String viewCategories = readAppSettings("ListOfViewCategories");
+            String viewCategories = readAppSettings("ListOfTypesOfViews");
             return splitNames(viewCategories);
         }
 
         /// <summary>
-        /// Reads the name of the directory from the config in where are the screen readers are saved
+        /// Reads the name of the directory from the config where are the screen readers are saved
         /// </summary>
         /// <returns></returns>
         public static String getScreenReaderDirectory()
         {
-            List<String> directory = getPossibleStrategyClasses("savedScreenReaderDirectory");
-            if (directory != null && directory.Count == 1)
-            {
-                return directory[0];
-            }
-            return null;
+            return readAppSettings("savedScreenReaderDirectory");
         }
 
         public static String getFilteredTreeSavedName()
         {
-            List<String> name = getPossibleStrategyClasses("filteredTreeSavedName");
-            if (name != null && name.Count == 1)
-            {
-                return name[0];
-            }
-            throw new ArgumentNullException();
+            return readAppSettings("filteredTreeSavedName");
         }
 
         public static String getBrailleTreeSavedName()
         {
-            List<String> name = getPossibleStrategyClasses("brailleTreeSavedName");
-            if (name != null && name.Count == 1)
-            {
-                return name[0];
-            }
-            throw new ArgumentNullException();
+            return readAppSettings("brailleTreeSavedName");
         }
 
         public static String getOsmConectorName()
         {
-            List<String> name = getPossibleStrategyClasses("osmConectorName");
-            if (name != null && name.Count == 1)
-            {
-                return name[0];
-            }
-            throw new ArgumentNullException();
+            return readAppSettings("osmConectorName");
+
         }
 
         public static String getFilterstrategyFileName()
         {
-            List<String> name = getPossibleStrategyClasses("filterstrategyFileName");
-            if (name != null && name.Count == 1)
-            {
-                return name[0];
-            }
-            throw new ArgumentNullException();
+            return readAppSettings("filterstrategyFileName");
+        }
+
+        public static String getNavigationbarSubstring()
+        {
+            return readAppSettings("navigationbarSubstring");
         }
     }
 }

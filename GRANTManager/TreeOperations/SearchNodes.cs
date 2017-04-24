@@ -20,19 +20,18 @@ namespace GRANTManager.TreeOperations
             this.strategyMgr = strategyMgr;
             this.grantTrees = grantTrees;
             this.treeOperation = treeOperation;
-
         }
 
-        ///todo treeKlasse enthält eine Methode namens contains, ist diese in suche nutzbar?  -> Nein, da hier nicht nach einem Element im Baum gesucht werden soll, wo alle Eigenschaften übereinstimmen, sondern nur einige (die anderen haben sich in der zwischenzeit geändert)
         /// <summary>
-        /// Sucht anhand der angegebenen Eigenschaften alle Knoten, welche der Bedingung entsprechen (Tiefensuche). Debei werden nur Eigenschften berücksichtigt, welche angegeben wurden.
+        /// depending on the given properties, all nodes with these properties are searched (depth-first search). 
+        /// Only properties that have been specified are taken into account.
         /// </summary>
-        /// <param name="parentNode">gibt den Baum in welchem gesucht werden soll an</param>
-        /// <param name="properties">gibt alle zu suchenden Eigenschaften an</param>
-        /// <param name="oper">gibt an mit welchem Operator (and, or) die Eigenschaften verknüpft werden sollen</param>
-        /// <returns>Eine Liste aus <code>ITreeStrategy</code>-Knoten mit den Eigenschaften</returns>
+        /// <param name="tree">tree object for search </param>
+        /// <param name="generalProperties">properties for the search</param>
+        /// <param name="oper">Operator for combining the properties (and, or) </param>
+        /// <returns>A list of the found tree objects</returns>
         public List<Object> searchProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
-        {//TODO: hier fehlen noch viele Eigenschaften
+        {//TODO: many properties are still missing
             List<Object> result = new List<Object>();
             if (tree == null) { return result; }
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
@@ -55,7 +54,7 @@ namespace GRANTManager.TreeOperations
                     }
                 }
                 if (OperatorEnum.Equals(oper, OperatorEnum.or))
-                {//TODO: ergänzen
+                {//TODO: add properties
                     if ((generalProperties.localizedControlTypeFiltered != null && propertieLocalizedControlType) ||
                         (generalProperties.nameFiltered != null && propertieName) ||
                         (generalProperties.isEnabledFiltered != null && propertieIsEnabled) ||
@@ -72,12 +71,12 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated
+        /// searches for node with the given id in a tree object
         /// </summary>
-        /// <param name="idGenereted">gibt die generierte Id des Knotens an</param>
-        /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
-        /// <returns>eine Liste mit allen Knoten, bei denen die Id übereinstimmt</returns>
-        public List<Object> getAssociatedNodeList(String idGenereted, Object tree)
+        /// <param name="idGenereted">id of the searched node</param>
+        /// <param name="tree"> Specifies the tree for the search </param>
+        /// <returns>List of all found nodes</returns>
+        public List<Object> getNodeList(String idGenereted, Object tree)
         {
             List<Object> result = new List<Object>();
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
@@ -88,60 +87,55 @@ namespace GRANTManager.TreeOperations
                     result.Add(node);
                 }
             }
-            //printNodeList(result);
             return result;
         }
 
         /// <summary>
-        /// Sucht in dem gefilterten Baum der Anwendung nach einem Knoten mit einer speziellen Id
+        /// In the filtered tree, searches for node with the given id
         /// </summary>
-        /// <param name="idGenerated">gibt die Id des gesuchten Knotens an</param>
-        /// <returns><c>OSMElement.OSMElement</c> mit der gesuchten Id</returns>
+        /// <param name="idGenerated">id of the searched node</param>
+        /// <returns><c>OSMElement.OSMElement</c> with the searched node</returns>
         public OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNodeElement(idGenerated, grantTrees.filteredTree);
+            return getNodeElement(idGenerated, grantTrees.filteredTree);
         }
 
         /// <summary>
-        /// Sucht in dem Braille Baume nach einem Knoten mit einer speziellen Id
+        /// In the braille tree, searches for node with the given id
         /// </summary>
-        /// <param name="idGenerated">gibt die Id des gesuchten Knotens an</param>
-        /// <returns><c>OSMElement.OSMElement</c> mit der gesuchten Id</returns>
+        /// <param name="idGenerated">id of the searched node</param>
+        /// <returns><c>OSMElement.OSMElement</c> with the searched node</returns>
         public OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated)
         {
-            return getAssociatedNodeElement(idGenerated, grantTrees.brailleTree);
+            return getNodeElement(idGenerated, grantTrees.brailleTree);
         }
 
-
         /// <summary>
-        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated 
+        /// searches for node with the given id
         /// </summary>
-        /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
-        /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
-        /// <returns>zugehöriger Knoten</returns>
-        internal OSMElement.OSMElement getAssociatedNodeElement(String idGenerated, Object tree)
+        /// <param name="idGenerated">id of the searched node</param>
+        /// <param name="tree">Specifies the tree for the search</param>
+        /// <returns><c>OSMElement.OSMElement</c> with the searched node</returns>
+        internal OSMElement.OSMElement getNodeElement(String idGenerated, Object tree)
         {
-            if (tree != null)
+            object osmObject = getNode(idGenerated, tree);
+            if(osmObject != null && !osmObject.Equals(new Object()))
             {
-                foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
-                {
-                    if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(idGenerated))
-                    {
-                        return strategyMgr.getSpecifiedTree().GetData(node);
-                    }
-                }
+                return strategyMgr.getSpecifiedTree().GetData(osmObject);
             }
-            return new OSMElement.OSMElement();
-
+            else
+            {
+                return new OSMElement.OSMElement();
+            }
         }
 
         /// <summary>
-        /// Sucht im Baum nach bestimmten Knoten anhand der IdGenerated 
+        /// searches for node with the given id
         /// </summary>
-        /// <param name="idGenerated">gibt die generierte Id des Knotens an</param>
-        /// <param name="parentNode">gibt den Baum an, in dem gesucht werden soll</param>
-        /// <returns>zugehöriger Knoten</returns>
-        internal Object getAssociatedNode(String idGenerated, Object tree)
+        /// <param name="idGenerated">id of the searched node</param>
+        /// <param name="tree">Specifies the tree for the search </param>
+        /// <returns>found tree object</returns>
+        internal Object getNode(String idGenerated, Object tree)
         {
             if (tree == null || idGenerated == null) { return null; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
@@ -152,18 +146,17 @@ namespace GRANTManager.TreeOperations
                 }
             }
             return null;
-
         }
 
         /// <summary>
-        /// Gibt einen Teilbaum zurück, welcher nur die Views eines Screens enthält
+        /// Gives a subtree with all screens of a specified view
         /// </summary>
-        /// <param name="screenName">gibt den Namen des Screens an, zu dem der Teilbaum ermittelt werden soll</param>
-        /// <returns>Teilbaum des Screens oder <c>null</c></returns>
+        /// <param name="screenName">name of the screen</param>
+        /// <returns>subtree object or <c>null</c></returns>
         public Object getSubtreeOfScreen(String screenName)
         {
 
-            if (screenName == null || screenName.Equals("")) { Debug.WriteLine("Kein Name des Screens angegeben"); return null; }
+            if (screenName == null || screenName.Equals("")) { return null; }
             Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
             if (grantTrees.brailleTree == null ) { return null; }
 
@@ -181,10 +174,11 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Gibt die Namen der vorhandenen Screens im Braille-Baum an
+        /// Gives the names of the existing screens
         /// </summary>
-        /// <param name="typeOfView">gibt die typeOfView an</param>
-        /// <returns>Eine Liste der Namen der Screens im Braille-Baum, falls <para>typeOfView</para> angegeben ist, werden nur die Screens dieser typeOfView zurückgegeben</returns>
+        /// <param name="typeOfView">the type of view (<see cref="Settings.getPossibleTypesOfViews"/></param>
+        /// <returns>List with all possible name of screens,
+        /// if <para>typeOfView</para> specified, only screens from this <para>typeOfView</para> are returned</returns>
         public List<String> getPosibleScreenNames(String typeOfView = null)
         {
             if (grantTrees == null || grantTrees.brailleTree == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return null; }
@@ -203,10 +197,10 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Gibt eine Liste der tatsächlich genutzten Ansichten (typeOfView) zurück vgl <see cref="GRANTManager.Settings.getPossibleViewCategories"/>
+        /// A List of used typeOfViews (cf. <see cref="GRANTManager.Settings.getPossibleTypesOfViews"/>)
         /// </summary>
-        /// <returns></returns>
-        public List<String> getUsedViewCategories()
+        /// <returns> A List of used typeOfViews</returns>
+        public List<String> getUsedTypesOfViews()
         {
             if (grantTrees == null || grantTrees.brailleTree == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return null; }
             List<String> viewCategories = new List<string>();
@@ -218,15 +212,15 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Ermittelt den Knoten des BrailleBaums zu einem Punkt
-        /// bei Gruppenknoten wird "versucht" das entsprechende Kind zu ermitteln 
+        /// Calculetes a node (in the braille tree) to a given point 
+        /// it will be searched the child node of a "group node" 
         /// </summary>
-        /// <param name="pointX">gibt die x-Position des Punktes an</param>
-        /// <param name="pointY">gibt die y-Position des Punktes an</param>
-        /// <param name="groupViewName">gibt den View-Namen der Gruppen-View an</param>
-        /// <param name="offsetX">gibt den x-Offset der Gruppen-View an</param>
-        /// <param name="offsetY">ibt den x-Offset der Gruppen-View an</param>
-        /// <returns>den knoten, welcher dem Element entspricht, welches auf der Stifftplatte geklickt wurde oder null</returns>
+        /// <param name="pointX">x coordinat of the point</param>
+        /// <param name="pointY">y coordinat of the point</param>
+        /// <param name="groupViewName">the name of the "group view"</param>
+        /// <param name="offsetX">x offset  of the group view </param>
+        /// <param name="offsetY">y offset  of the group view </param>
+        /// <returns>the searched braille node or <c>null</c></returns>
         public Object getTreeElementOfViewAtPoint(int pointX, int pointY, String groupViewName, int offsetX, int offsetY)
         {
             if (grantTrees == null || groupViewName == null || groupViewName.Equals("")) { return null; }
@@ -270,18 +264,17 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Ermittelt für jeden Screen-Teilbaum, den Knoten mit der Navigationsleiste
+        /// Calculates for every screen the node with the navigationbar 
         /// </summary>
-        /// <param name="navigationbarSubstring">gibt den Teil-String des Namenes für die view der Navigationsleiste an</param>
         /// <returns></returns>
-        public List<Object> getListOfNavigationbars(String navigationbarSubstring = "NavigationBarScreens")
+        public List<Object> getListOfNavigationbars()
         {
             List<Object> result = new List<Object>();
             // ITreeStrategy<OSMElement.OSMElement> brailleTree = grantTrees.brailleTree;
             if (grantTrees.brailleTree == null) { return result; }
             foreach(Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.brailleTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Contains(navigationbarSubstring) && strategyMgr.getSpecifiedTree().HasChild(node))
+                if (strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName != null && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.viewName.Contains(Settings.getNavigationbarSubstring()) && strategyMgr.getSpecifiedTree().HasChild(node))
                 {
                     result.Add(node);
                 }
@@ -290,11 +283,12 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Prüft, ob die Angegebene View für den angegebenen Screen schon existiert
+        /// Determines whether the view is wxisting in the screen
         /// </summary>
-        /// <param name="screenName"></param>
-        /// <param name="viewName"></param>
-        /// <returns></returns>
+        /// <param name="screenName">name of the screen</param>
+        /// <param name="viewName">name of the view</param>
+        /// <param name="typeOfView">name of the type of view</param>
+        /// <returns><c>true</c> if the screen existing, otherwise <c>false</c> </returns>
         public bool existViewInScreen(String screenName, String viewName, String typeOfView)
         {
             if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || typeOfView == null || typeOfView.Equals("")) { return false; }
@@ -323,8 +317,7 @@ namespace GRANTManager.TreeOperations
                                 OSMElement.OSMElement childScreenData = strategyMgr.getSpecifiedTree().GetData(childScreen);
                                 if (childScreenData.brailleRepresentation.viewName != null && childScreenData.brailleRepresentation.viewName.Equals(viewName))
                                 {
-                                    Debug.WriteLine("Achtung: für den Screen '" + screenName + "' existiert schon eine view mit dem Namen '" + viewName + "'!");
-                                    return true;
+                                   return true;
                                 }
                             }
                             return false;
@@ -333,16 +326,14 @@ namespace GRANTManager.TreeOperations
                     return false;
                 }
             }
-
-            
             return false;
         }
 
         /// <summary>
-        /// Gibt die zugehörigen Ids des Braille-Baumes an
+        /// Retuns all connected Braille nodes to a specified (filtered node) id
         /// </summary>
-        /// <param name="idGeneratedFilteredNode">gibt die Id des Knotens des gefilterten Baumes an</param>
-        /// <returns>eine Liste der Ids des Braille-Baumes oder <c>null</c></returns>
+        /// <param name="idGeneratedFilteredNode">id of the node in the filtered tree</param>
+        /// <returns>list with all connected braille nodes or <c>null</c></returns>
         public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
         {
             List<OsmConnector<String, String>> osmRelationships = grantTrees.osmRelationship.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
@@ -359,16 +350,14 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Gibt die zugehörige Id des gefilterten Baumes zurück
+        /// Retuns the connected filtered node to a specified (braille node) id
         /// </summary>
-        /// <param name="idGeneratedBrailleNode">gibt die Id des Knotens des Braille-Baumes an</param>
-        /// <returns>die id des gefilterten Baumes oder <c>null</c></returns>
+        /// <param name="idGeneratedBrailleNode">id of the node in the  braille tree</param>
+        /// <returns>id of the connected filtered tree node or <c>null</c></returns>
         public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
         {
             OsmConnector<String, String> osmRelationship = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
             if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
         }
-
-
     }
 }

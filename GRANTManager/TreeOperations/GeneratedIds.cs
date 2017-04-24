@@ -45,12 +45,12 @@ namespace GRANTManager.TreeOperations
         /// <summary>
         /// Calculates and sets the ids into a subtree of the filtered tree.
         /// </summary>
-        /// <param name="subtree">gibt den Teilbaum an</param>
-        /// <returns>Baum mit den veränderten Ids</returns>
+        /// <param name="subtree">subtree object</param>
+        /// <returns>tree object with new ids</returns>
         public Object generatedIdsOfFilteredSubtree(Object subtree)
         {
             //getFilteredTreeOsmElementById(idOfParent);
-            //Object subtree = getAssociatedNode(idOfParent, tree);
+            //Object subtree = getNode(idOfParent, tree);
             if (subtree == null) { return null ; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(subtree))
             {
@@ -143,7 +143,5 @@ namespace GRANTManager.TreeOperations
             }
             return sb.ToString();
         }
-
-
     }
 }

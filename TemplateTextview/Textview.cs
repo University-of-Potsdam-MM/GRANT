@@ -126,7 +126,7 @@ namespace TemplateTextview
                      //parent (Groupelement)
                         foreach (String id in ids)
                         {
-                            List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(id, grantTrees.brailleTree);
+                            List<Object> nodeList = treeOperation.searchNodes.getNodeList(id, grantTrees.brailleTree);
                             if (nodeList != null && nodeList.Count > 0)
                             {
                                 foreach (object o in nodeList)

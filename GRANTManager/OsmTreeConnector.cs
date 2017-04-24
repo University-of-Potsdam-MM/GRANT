@@ -8,64 +8,65 @@ using OSMElement;
 
 namespace GRANTManager
 {   
-    /* TODO: Brauchen wir hier auch ein Interface?
-     * TODO: Die Klasse sollte woanders hin
+    /* 
+     * TODO: Die Klasse sollte woanders hin?
      */ 
     public class OsmTreeConnector
-    {        
+    {
         /// <summary>
-        /// Fügt eine Osm-Beziehung zwischen einem Knoten des gefilterten Baumes und dem Baum der Braille-Darstellung hinzu falls diese noch nicht vorhanden ist
+        /// Adds an OSM connection (filtered Tree <--> braille tree)
         /// </summary>
-        /// <param name="idFilteredTree">gibt die 'IdGenerated' des Knotens aus dem gefilterten Baum an</param>
-        /// <param name="idBrailleTree">gibt die 'IdGenerated' des Knotens aus dem Baum mit der Braille-Darstellung an</param>
-        /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
-        public static void addOsmConnection(String idFilteredTree, String idBrailleTree, ref List<OsmConnector<String, String>> osmRelationship)
+        /// <param name="idFilteredTree">id of the filtered node</param>
+        /// <param name="idBrailleTree">id of the braille node</param>
+        /// <param name="osmConnection">(previous) OSM connections</param>
+        public static void addOsmConnection(String idFilteredTree, String idBrailleTree, ref List<OsmConnector<String, String>> osmConnection)
         {   //TODO: evtl. noch prüfen, ob die Ids existieren
-            if (idFilteredTree == null || idBrailleTree == null) { Debug.WriteLine("Eine der Ids ist nicht angebene, die OSM-Beziehung wurde nicht erstellt!"); return; }
-            //prüfen, ob die Beziehung schon vorhanden ist
-            if (!osmRelationship.Exists(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree)))
+
+            if (idFilteredTree == null || idBrailleTree == null) { Debug.WriteLine("One of the ids dosn't exist! The relationship wasn't set."); return; }
+            //checks whether the connection already exists
+            if (!osmConnection.Exists(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree)))
             {
                 OsmConnector<String, String> relationship = new OsmConnector<String, String>();
                 relationship.BrailleTree = idBrailleTree;
                 relationship.FilteredTree = idFilteredTree;
-                osmRelationship.Add(relationship);
+                osmConnection.Add(relationship);
             }
         }
 
         /// <summary>
-        /// Setzt eine Osm-Beziehung (die alten werden gelöscht)
+        /// Sets OSM connections and delets the old ones (filtered Tree <--> braille tree)
         /// </summary>
-        /// <param name="idFilteredTree">gibt die 'IdGenerated' des Knotens aus dem gefilterten Baum an</param>
-        /// <param name="idBrailleTree">gibt die 'IdGenerated' des Knotens aus dem Baum mit der Braille-Darstellung an</param>
-        /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
-        public static void setOsmConnection(String idFilteredTree, String idBrailleTree, ref List<OsmConnector<String, String>> osmRelationship)
+        /// <param name="idFilteredTree">id of the filtered node</param>
+        /// <param name="idBrailleTree">id of the braille node</param>
+        /// <param name="osmConnection">(previous) OSM connections</param>
+        public static void setOsmConnection(String idFilteredTree, String idBrailleTree, ref List<OsmConnector<String, String>> osmConnection)
         {
-            if (idFilteredTree == null || idBrailleTree == null) { Debug.WriteLine("Eine der Ids ist nicht angebene, die OSM-Beziehung wurde nicht erstellt!"); return; }
-                //alte Beziehungen löschen
-            osmRelationship.Clear();
+            if (idFilteredTree == null || idBrailleTree == null) { Debug.WriteLine("One of the ids dosn't exist! The relationship wasn't set."); return; }
+            // deletes all old connections
+            osmConnection.Clear();
 
                 OsmConnector<String, String> relationship = new OsmConnector<String, String>();
                 relationship.BrailleTree = idBrailleTree;
                 relationship.FilteredTree = idFilteredTree;
-                osmRelationship.Add(relationship);
+                osmConnection.Add(relationship);
         }
 
         /// <summary>
-        /// Entfernt eine Beziehung zwischen einem Knoten des gefilterten Baumes und dem Baum der Braille-Darstellung 
+        /// Delete an OSM connection
         /// </summary>
-        /// <param name="idFilteredTree">gibt die 'IdGenerated' des Knotens aus dem gefilterten Baum an</param>
-        /// <param name="idBrailleTree">gibt die 'IdGenerated' des Knotens aus dem Baum mit der Braille-Darstellung an</param>
-        /// <param name="osmRelationship">gibt eine Referenz zu den (bisherigen) Bezeihungen an</param>
-        public static void removeOsmConnection(String idFilteredTree, String idBrailleTree, ref List<OsmConnector<String, String>> osmRelationship)
+        /// <param name="idFilteredTree">id of the filtered node</param>
+        /// <param name="idBrailleTree">id of the braille node</param>
+        /// <param name="osmConnection">(previous) OSM connections</param>
+        public static void removeOsmConnection(String idFilteredTree, String idBrailleTree, ref List<OsmConnector<String, String>> osmConnection)
         {
-            if (osmRelationship.Exists(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree)))
+            if (osmConnection.Exists(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree)))
             {
-                OsmConnector<String, String> relationshipToRemove = osmRelationship.Find(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree));
-                osmRelationship.Remove(relationshipToRemove);
+                OsmConnector<String, String> relationshipToRemove = osmConnection.Find(r => r.BrailleTree.Equals(idBrailleTree) && r.FilteredTree.Equals(idFilteredTree));
+                osmConnection.Remove(relationshipToRemove);
             }
             else
             {
-                Console.WriteLine("Die angegebene Beziehung war nicht vorhanden!");
+                Debug.WriteLine("The connection dosn't exist!");
             }
         }
 

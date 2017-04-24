@@ -934,7 +934,7 @@ namespace StrategyBrailleIO
             brailleIOElement.zoom = osmElement.brailleRepresentation.zoom;
             if (grantTrees.brailleTree != null)
             {
-                List<Object> nodeList = treeOperation.searchNodes.getAssociatedNodeList(osmElement.properties.IdGenerated, grantTrees.brailleTree); //TODO. gleich übergeben?
+                List<Object> nodeList = treeOperation.searchNodes.getNodeList(osmElement.properties.IdGenerated, grantTrees.brailleTree); //TODO. gleich übergeben?
                 if (nodeList != null && nodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(nodeList[0]))
                 {
                     List<BrailleIOGuiElementRenderer.Groupelements> childList = new List<BrailleIOGuiElementRenderer.Groupelements>();

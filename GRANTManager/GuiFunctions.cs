@@ -289,7 +289,7 @@ namespace GRANTManager
                 {
                     foreach (String id in conIds)
                     {
-                        OSMElement.OSMElement conNode = treeOperation.searchNodes.getAssociatedNodeElement(id, treeForSearch);
+                        OSMElement.OSMElement conNode = treeOperation.searchNodes.getNodeElement(id, treeForSearch);
                         if (!conNode.Equals(new OSMElement.OSMElement()))
                         {
                             if (isFilteredTree)
