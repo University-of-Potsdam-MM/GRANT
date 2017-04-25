@@ -770,7 +770,7 @@ namespace GRANTManager
         public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
         {
             OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
-            Object subtree = strategyMgr.getSpecifiedFilter().updateFiltering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
+            Object subtree = strategyMgr.getSpecifiedFilter().filtering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
             String idParent = treeOperation.updateNodes.changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
             Object tree = grantTrees.filteredTree;
 

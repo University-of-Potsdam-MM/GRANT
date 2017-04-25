@@ -56,7 +56,7 @@ namespace GRANTManager
             {
                 path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "TemplateAllElementsTextview.xml");
             }
-            if (!File.Exists(path)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
+            if (!File.Exists(path)) { Debug.WriteLine("The XML file dosn't exist!"); return; }
             XElement xmlDoc = XElement.Load(@path);
             //TODO: hier gegen XSD validieren
             TextviewObject tvo = new TextviewObject();
@@ -137,7 +137,6 @@ namespace GRANTManager
             }
             this.TextviewObject = tvo;
         }
-
         #endregion
     }
 }

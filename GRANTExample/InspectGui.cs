@@ -29,7 +29,7 @@ namespace GRANTExample
                     Console.WriteLine("Pointx: " + pointX);
                     Console.WriteLine("Pointy: " + pointY);
 
-                    OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedFilter().setOSMElement(pointX, pointY);
+                    OSMElement.OSMElement osmElement = strategyMgr.getSpecifiedFilter().getOSMElement(pointX, pointY);
                     Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
 
                     // this.Paint += new System.Windows.Forms.PaintEventHandler(this.Window_Paint);

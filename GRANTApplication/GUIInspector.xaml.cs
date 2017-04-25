@@ -253,7 +253,7 @@ namespace GRANTApplication
                         operationSystemStrategy.getCursorPoint(out pointX, out pointY);
                         Console.WriteLine("Pointx: " + pointX);
                         Console.WriteLine("Pointy: " + pointY);
-                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         System.Drawing.Rectangle rect = operationSystemStrategy.getRect(osmElement);
                         if (osmElement.properties.isOffscreenFiltered == false)
                         {

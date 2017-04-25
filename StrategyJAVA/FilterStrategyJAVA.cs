@@ -47,7 +47,7 @@ namespace StrategyJAVA
             return tree;
         }
 
-        public OSMElement.OSMElement setOSMElement(int pointX, int pointY) {
+        public OSMElement.OSMElement getOSMElement(int pointX, int pointY) {
             return new OSMElement.OSMElement();
         }
 
@@ -60,7 +60,7 @@ namespace StrategyJAVA
         }
 
 
-        public Object updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
+        public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
         {
             throw new NotImplementedException();
         }

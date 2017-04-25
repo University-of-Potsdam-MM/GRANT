@@ -194,7 +194,7 @@ namespace GRANTExample
                         int pointY;
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "Screenshot";
                         List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
@@ -237,7 +237,7 @@ namespace GRANTExample
                         int pointY;
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                        OSMElement.OSMElement osmElement = filterStrategy.setOSMElement(pointX, pointY);
+                        OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
                         List<Object> treeElement = treeOperation.searchNodes.searchProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);

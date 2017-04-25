@@ -570,7 +570,7 @@ namespace StrategyUIA2
         /// <param name="osmElementOfFirstNodeOfSubtree">gibt das (alt) OSM-Element an, von dem die neue Filterung ausgeht</param>
         /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
         /// <returns>der gefilterte (Teil-)Baum</returns>
-        public Object updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
+        public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
         {
             AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
             if (au != null)
@@ -654,7 +654,7 @@ namespace StrategyUIA2
             return element;
         }
 
-        public OSMElement.OSMElement setOSMElement(int pointX, int pointY)
+        public OSMElement.OSMElement getOSMElement(int pointX, int pointY)
         {
 
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);

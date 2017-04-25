@@ -68,6 +68,11 @@ namespace StrategyMVBD
             return deviceList;
 
         }
+
+        /// <summary>
+        /// Sets the choosen device in MVBD
+        /// </summary>
+        /// <param name="device"></param>
         protected override void setDevice(Device device)
         {
             // Command 27

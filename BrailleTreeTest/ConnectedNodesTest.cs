@@ -128,7 +128,7 @@ namespace BrailleTreeTests
             int clickY;
             guiFuctions.getScreenshotPointInApplication(nodeAtPoint, pointX, pointY, out clickX, out clickY);
             //nun folgt der Abgleich, ob die richtige Position ermittelt wurde => es sollte der Button '7' auf dem Taschenrechner sein
-            OSMElement.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().setOSMElement(clickX, clickY);
+            OSMElement.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().getOSMElement(clickX, clickY);
             Assert.AreEqual("Button", dataOfPoint.properties.controlTypeFiltered, "Es hätte der Button sein sollen!");
             Assert.AreEqual("7", dataOfPoint.properties.nameFiltered, "auf dem Button hätte die Zahl '7' stehen müssen!");
             List<Object> searchresult = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, dataOfPoint.properties);

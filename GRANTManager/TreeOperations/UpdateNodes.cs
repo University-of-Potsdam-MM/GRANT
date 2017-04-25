@@ -392,7 +392,9 @@ namespace GRANTManager.TreeOperations
                                 // es müssen von diesem Screen-Zweig alle Kinder durchsucht werden um die view mit der parentId zu finden
                                 foreach (object childOfNode in strategyMgr.getSpecifiedTree().DirectChildrenNodes(node))
                                 {
-                                    if (strategyMgr.getSpecifiedTree().GetData(childOfNode).properties.IdGenerated.Equals(parentId))
+                                    OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(childOfNode);
+                                    
+                                    if (!data.properties.Equals(new GeneralProperties()) && data.properties.IdGenerated != null && data.properties.IdGenerated.Equals(parentId))
                                     {
                                         strategyMgr.getSpecifiedTree().AddChild(childOfNode, brailleNodeWithId);
                                         return prop.IdGenerated;
@@ -682,7 +684,7 @@ namespace GRANTManager.TreeOperations
                             Object subtreeFiltered = treeOperation.searchNodes.getNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
                             if (subtreeFiltered == null) { return; }
                             String id = strategyMgr.getSpecifiedTree().GetData(subtreeFiltered).properties.IdGenerated;
-                            subtreeFiltered = strategyMgr.getSpecifiedFilter().updateFiltering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
+                            subtreeFiltered = strategyMgr.getSpecifiedFilter().filtering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
                             String idParent = changeSubTreeOfFilteredTree(subtreeFiltered, id);
                             Object tree = grantTrees.filteredTree;
                             if (idParent == null || tree == null) { return; }

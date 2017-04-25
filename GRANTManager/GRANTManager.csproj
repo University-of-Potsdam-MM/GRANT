@@ -90,7 +90,6 @@
     <Compile Include="TemplateAllElementsSymbol.cs" />
     <Compile Include="TreeOperations\GeneratedIds.cs" />
     <Compile Include="TreeOperations\SearchNodes.cs" />
-    <Compile Include="TreeOperations\TemplateOperations.cs" />
     <Compile Include="TreeOperations\TreeOperation.cs" />
     <Compile Include="TreeScopeEnum.cs" />
     <Compile Include="TreeOperations\UpdateNodes.cs" />

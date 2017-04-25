@@ -17,19 +17,18 @@ namespace GRANTManager.AbstractClasses
         private List<Device> allDevices;
 
         /// <summary>
-        /// Gibt das gewählte ausgabegerät zurück
+        /// Returns the choosen (braille) device
         /// </summary>
-        /// <returns></returns>
+        /// <returns>the choosen device</returns>
         public abstract Device getActiveDevice();
 
         /// <summary>
-        /// Legt die Stiftplatte für die Ausgabe fest (abhängig von diesem wird der Adapter im BrailleIO gewählt)
-        /// ändert ggf. auch die ausgewählte DisplayStrategy
+        /// Sets the (braille) device -> depending on this an adapter is selectet in BrailleIO
+        /// if necessary the <see cref="StrategyManager.specifiedDisplayStrategy"/> is changed
         /// </summary>
-        /// <param name="device">gibt das ausgewählte Ausgabegerät an</param>
+        /// <param name="device">the choosen device</param>
         public void setActiveDevice(Device device)
         {
-            //prüfen, ob es nötig ist
             if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
             {
                 if (device.deviceClassTypeFullName != null && device.deviceClassTypeNamespace != null)
@@ -43,27 +42,26 @@ namespace GRANTManager.AbstractClasses
             }
         }
 
-
         protected abstract void setDevice(Device device);
 
         /// <summary>
-        /// Gibt alle möglichen Ausgabegeräte für den gewählten "Adapter"
+        /// Returns all possible devices for the choosen Adapter
         /// </summary>
-        /// <returns></returns>
+        /// <returns>a list of possible devices for the choosen Adapter</returns>
         public abstract List<Device> getPosibleDevices();
 
         /// <summary>
-        /// Gibt von allen implementierten Adaptern die möglichen Ausgabegeräte
+        /// Returns ALL possible devices (for all implemented Adapters)
         /// </summary>
-        /// <returns>Eine Liste mit allen möglichen Ausgabegeräten</returns>
+        /// <returns>a list of ALL possible devices</returns>
         public List<Device> getAllPosibleDevices()
         {            
-            // müssen nur abgefragt werden, wenn das nicht schon mal pasiert ist
+            // the list of devices are only requested if no list exist
             if (allDevices == null || allDevices.Equals(new List<Device>()))
             {
                 allDevices = new List<Device>();
                 Settings settings = new Settings();
-                // alle Implementierungen der abstrakten Klasse erhalten
+                // gets all implementations of this abstract class
                 List<Strategy> allDisplayStrategys = settings.getPosibleDisplayStrategies();
                 foreach (Strategy st in allDisplayStrategys)
                 {
@@ -71,7 +69,6 @@ namespace GRANTManager.AbstractClasses
                     {
                         Type type = Type.GetType(st.className);
                         if (type == null) { break; }
-                        //beendet ggf. gleich wieder die TCPIP-Verbimdung (Dispose() wird aufgerufen)
                         using (AOutputManager ads = (AOutputManager)Activator.CreateInstance(type, strategyMgr))
                         {
                             List<Device> devices = ads.getPosibleDevices();
@@ -80,24 +77,22 @@ namespace GRANTManager.AbstractClasses
                     }
                     catch (InvalidCastException ic)
                     {
-                        throw new InvalidCastException("Fehler bei GRANTManager.AbstractClasses.getAllPosibleDevices(): " + ic.Message);
+                        throw new InvalidCastException("Exception in GRANTManager.AbstractClasses.getAllPosibleDevices(): " + ic.Message);
                     }
                     catch (ArgumentNullException e)
                     {
-                        throw new ArgumentNullException("Fehler bei GRANTManager.AbstractClasses.getAllPosibleDevices(): " + e.Message);
+                        throw new ArgumentNullException("Exception in GRANTManager.AbstractClasses.getAllPosibleDevices(): " + e.Message);
                     }
                 }
             }
-
-            return allDevices;
-            
+            return allDevices;           
         }
 
         /// <summary>
-        /// Ermittelt von einem Device-String das zugehörige Decice-Objekt
+        /// Seeks the device object to a device name
         /// </summary>
-        /// <param name="deviceString">gibt den String des Devices an</param>
-        /// <returns>ein Device-Objekt</returns>
+        /// <param name="deviceString">the name of a device</param>
+        /// <returns>a device object</returns>
         public Device getDeviceByName(String deviceString)
         {
             List<Device> devices = strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
@@ -111,9 +106,13 @@ namespace GRANTManager.AbstractClasses
             return new Device();
         }
 
-
         public abstract void Dispose();
 
+        /// <summary>
+        /// Determines whether a display strategy is available
+        /// </summary>
+        /// <param name="displayStrategy">the display strategy object</param>
+        /// <returns><c>true</c> if the strategy available, otherwise <c>false</c></returns>
         public bool isDisplayStrategyAvailable(AOutputManager displayStrategy)
         {
             if (displayStrategy.GetType().Namespace != null && displayStrategy.GetType().Namespace.Equals("StrategyMVBD"))
@@ -124,12 +123,12 @@ namespace GRANTManager.AbstractClasses
             {
                 return true;
             }
-
         }
 
+        /// <summary>
+        /// Determines whether a display strategy is available
+        /// </summary>
+        /// <returns><c>true</c> if the strategy available, otherwise <c>false</c></returns>
         protected virtual bool isDisplayStrategyAvailable() { return true; }
     }
-
-        
-
 }

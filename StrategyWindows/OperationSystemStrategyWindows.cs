@@ -167,6 +167,7 @@ namespace StrategyWindows
             try
             {
                 IntPtr hwnd = NativeMethods.WindowFromPoint(Cp);
+                Debug.WriteLine("getHWND: hwnd = {0}", hwnd);
                 return hwnd;
             }
             catch (Exception e)
@@ -186,6 +187,7 @@ namespace StrategyWindows
             try
             {
                 Process p = Process.GetProcessById(processId);
+                Debug.WriteLine("getProcessHwndFromHwnd: p.MainWindowHandle = {0}", p.MainWindowHandle);
                 return p.MainWindowHandle;
             }
             catch (ArgumentException a)

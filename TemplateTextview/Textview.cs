@@ -154,7 +154,7 @@ namespace TemplateTextview
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
             Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);
             List<TextviewElement> order;
-            SpecialOrder so = treeOperation.templateOperations.textViewspecialOrderContainsControltype(osmFiltered.properties.controlTypeFiltered);
+            SpecialOrder so = textViewspecialOrderContainsControltype(osmFiltered.properties.controlTypeFiltered);
             if (!so.Equals(new SpecialOrder()))
             {
                 order = so.order;
@@ -226,6 +226,25 @@ namespace TemplateTextview
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Calculates for a specified controltype the properties to show and its order
+        /// </summary>
+        /// <param name="controltype">name of the vontroltype</param>
+        /// <returns>a <c>SpecialOrder</c> object with the order of the shown properties or <c>null</c></returns>
+        internal SpecialOrder textViewspecialOrderContainsControltype(String controltype)
+        {
+            if (grantTrees.TextviewObject.orders.specialOrders != null)
+            {
+                foreach (SpecialOrder so in grantTrees.TextviewObject.orders.specialOrders)
+                {
+                    if (so.controltypeName.Equals(controltype))
+                    {
+                        return so;
+                    }
+                }
+            }
+            return new SpecialOrder();
+        }
     }
 }

@@ -8,56 +8,64 @@ using GRANTManager.TreeOperations;
 namespace GRANTManager.Interfaces
 {
     /// <summary>
-    /// Das Interface IFilterStrategy enthält die Methoden-Signaturen für die Filterung der Anwendungsdaten. 
+    /// A Interface for filtering application data. 
     /// </summary>
     public interface IFilterStrategy
     {
         /// <summary>
-        /// Filtert ausgehend vom angegebenen Handle die Eigenschaften des GUI-Elementes und all deren Nachfolger
+        /// filters an application depending on a given point (<paramref name="pointX"/>, <paramref name="pointY"/>) and the choosen <paramref name="treeScope"/>
         /// </summary>
-        /// <param name="hwnd">gibt den Handle an, von dem die Filterung starten soll</param>
-        /// <returns>Ein Baum mit den gefilterten Eigenschaften</returns>
-      //  Object filtering(IntPtr hwnd);
+        /// <param name="pointX">x coordinate of the element to filtering</param>
+        /// <param name="pointY">y coordinate of the element to filtering</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        Object filtering(int pointX, int pointY, GRANTManager.TreeScopeEnum treeScope, int depth = -1);
+
 
         /// <summary>
-        /// Filtert ausgehend vom angegebenen Punkt (<paramref name="pointX"/>, <paramref name="pointY"/>) unter Berücksichtigung des angegebenen <code>GRANTManager.TreeScopeEnum</code> Baum
+        /// filters an application depending on a given hwnd
         /// </summary>
-        /// <param name="pointX">gibt die x-koordinate des zu filternden Elements an</param>
-        /// <param name="pointY">gibt die Y-Koordinate des zu filternden Elements an</param>
-        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
-        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <returns>der gefilterte (Teil-)Baum</returns>
-        Object filtering(int pointX, int pointY, GRANTManager.TreeScopeEnum treeScope, int depth = 0);
+        /// <param name="hwnd">the process handle of applicatio/element</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        Object filtering(IntPtr hwnd, TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1);
 
-        //OSMElement.OSMElement filterElement(IntPtr hwnd);
+        /// <summary>
+        /// filters an application depending on a given OSM element
+        /// </summary>
+        /// <param name="osmElementOfFirstNodeOfSubtree">osm element of the to filtered application</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope = TreeScopeEnum.Subtree);
+
+        /// <summary>
+        /// Seeks the process id of a given handle
+        /// </summary>
+        /// <param name="hwnd">the process handle of an element of a application</param>
+        /// <returns>the process id</returns>
         int deliverElementID(IntPtr hwnd);
 
-		//void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height);
-        OSMElement.OSMElement setOSMElement(int pointX, int pointY);
-        
-        //AutomationElement ElementFromCursor(int pointsX, int pointsY);
+        /// <summary>
+        /// Seeks an OSM element to a given point
+        /// </summary>
+        /// <param name="pointX">x coordinate of the element to filtering</param>
+        /// <param name="pointY">y coordinate of the element to filtering</param>
+        /// <returns>the OSM element of the point</returns>
+        OSMElement.OSMElement getOSMElement(int pointX, int pointY);
 
         /// <summary>
-        /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
+        /// Seeks new data for a node
         /// </summary>
-        /// <param name="filteredSubtree">gibt das OSM-Element an welches aktualisiert werden soll</param>
-        /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
+        /// <param name="osmElementFilteredNode">OSM element to update</param>
+        /// <returns>new properties for a node</returns>
         GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode);
-
-
-        /// <summary>
-        /// Filtert eine Anwendung/Teilanwendung ausgehend vom hwnd
-        /// </summary>
-        /// <param name="hwnd">gibt den Handle der zu filternden Anwendung/Element an</param>
-        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
-        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <returns>der gefilterte (Teil-)Baum</returns>
-        Object filtering(IntPtr hwnd,  TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1);
 
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
         StrategyManager getStrategyMgr();
-        Object updateFiltering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum);
+        
     };
 }
