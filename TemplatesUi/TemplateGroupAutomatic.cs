@@ -28,14 +28,14 @@ namespace TemplatesUi
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name, templateObject.osm.brailleRepresentation.typeOfView )) //!templateObject.allElementsOfType ||
+            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.viewName, templateObject.osm.brailleRepresentation.typeOfView )) //!templateObject.allElementsOfType ||
             {
-                braille.viewName = templateObject.name;
+                braille.viewName = templateObject.viewName;
             }
             else
             {
                 int i = 0;
-                String viewName = templateObject.name + "_"+i;
+                String viewName = templateObject.viewName + "_"+i;
                 
                 while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName, templateObject.osm.brailleRepresentation.typeOfView))
                 {

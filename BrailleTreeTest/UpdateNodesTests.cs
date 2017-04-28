@@ -403,7 +403,7 @@ namespace GRANTManager.BrailleTreeTests
             osm2.properties = prop2;
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
-            strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementsNavigationbarScreens(pathToTemplate, braille.typeOfView);
+            strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, braille.typeOfView);
             Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
             Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
             bool foundNavbar = false;
@@ -456,7 +456,7 @@ namespace GRANTManager.BrailleTreeTests
             osm2.properties = prop2;
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
-            strategyMgr.getSpecifiedGeneralTemplateUi().createUiElementsNavigationbarScreens(pathToTemplate, braille.typeOfView);
+            strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, braille.typeOfView);
             //Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
             #region 3. Knoten
             BrailleRepresentation braille3 = new BrailleRepresentation();

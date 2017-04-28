@@ -53,14 +53,14 @@ namespace TemplatesUi
             #endregion
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree(); }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            if (!templateObject.allElementsOfType || !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.name, templateObject.osm.brailleRepresentation.typeOfView))
+            if (!templateObject.allElementsOfType || !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.viewName, templateObject.osm.brailleRepresentation.typeOfView))
             {
-                braille.viewName = templateObject.name;
+                braille.viewName = templateObject.viewName;
             }
             else
             {
                 int i = 0;
-                String viewName = templateObject.name + "_"+i;
+                String viewName = templateObject.viewName + "_"+i;
                 
                 while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName, templateObject.osm.brailleRepresentation.typeOfView))
                 {

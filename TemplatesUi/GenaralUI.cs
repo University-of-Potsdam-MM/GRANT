@@ -27,22 +27,22 @@ namespace TemplatesUi
         {
             this.strategyMgr = strategyMgr;
             List<String> viewCategories = Settings.getPossibleTypesOfViews();
-            if(viewCategories == null) { throw new Exception("Es wurden keine ViewCategories in den Settings angegeben!"); }
+            if(viewCategories == null) { throw new Exception("There isn't a ViewCategory specifies in the Settings!"); }
             VIEWCATEGORY_SYMBOLVIEW = viewCategories[0];
             VIEWCATEGORY_LAYOUTVIEW = viewCategories[1];
         }
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
         public void setTreeOperation(TreeOperation treeOperation) { this.treeOperation = treeOperation; }
         /// <summary>
-        /// Ausgehend vom gefilterten Baum wird für einige UI-Elemente ein Template (<see cref="TemplateUi"/>) angewendet aus dem eine Standard UI erstellt wird.
+        /// Generates Ui elements depending on a template file
         /// </summary>
-        /// <param name="pathToXml">gibt den Pfad zu der XML des Templates für die UI an</param>
+        /// <param name="pathToXml">path of the used template (XML)</param>
         public void generatedUiFromTemplate(String pathToXml) 
         {
-            if (grantTrees == null || grantTrees.filteredTree == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
-            if (pathToXml.Equals("")) { Debug.WriteLine("Keine Xml angegeben!"); return; }
-            if (!File.Exists(@pathToXml)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
-            generatedSymbolViewFromTemplate(@pathToXml);
+            if (grantTrees == null || grantTrees.filteredTree == null) { Debug.WriteLine("There isn't a filtered tree!"); return; }
+            if (pathToXml.Equals("")) { Debug.WriteLine("No xml file specified!"); return; }
+            if (!File.Exists(@pathToXml)) { Debug.WriteLine("The specified XML file dosn't exist!"); return; }
+            generatedSymbolView(@pathToXml);
             generatedLayoutView(@pathToXml);
             Rect rect = new Rect(0, 0, 0, 0);
             
@@ -56,9 +56,9 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Ausgehend vom gefilterten Baum wird für einige Ui-Elemente ein Template für die Layout-Ansicht angewendet.
+        /// Generates Ui elements for the layout view depending on a template file
         /// </summary>
-        /// <param name="pathToTemplate"></param>
+        /// <param name="pathToTemplate">path of the used template (XML)</param>
         public void generatedLayoutView(String pathToTemplate)
         {
             createScreenshotViews(pathToTemplate);
@@ -86,39 +86,36 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Ausgehend vom gefilterten Baum wird für einige Ui-Elemente ein Template für die Symbol-Ansicht angewendet.
+        /// Generates Ui elements for the symbol view depending on a template file
         /// </summary>
-        /// <param name="pathToTemplate">gibt den Pfad zu der XML des Templates für die UI an</param>
-        public void generatedSymbolViewFromTemplate(String pathToTemplate)
+        /// <param name="pathToTemplate">path of the used template (XML)</param>
+        public void generatedSymbolView(String pathToTemplate)
         {
-            if (grantTrees == null || grantTrees.filteredTree == null) { Debug.WriteLine("kein gefilterter Baum vorhanden!"); return; }
-            if (pathToTemplate.Equals("")) { Debug.WriteLine("Keine Xml angegeben!"); return; }
-            if (!File.Exists(@pathToTemplate)) { Debug.WriteLine("Die XML exisitert nicht"); return; }
+            if (grantTrees == null || grantTrees.filteredTree == null) { Debug.WriteLine("There isn't a filtered tree!"); return; }
+            if (pathToTemplate.Equals("")) { Debug.WriteLine("No xml file specified!"); return; }
+            if (!File.Exists(@pathToTemplate)) { Debug.WriteLine("The specified XML file dosn't exist!"); return; }
             createUiElementsWitheNoDependencySymbolView(@pathToTemplate);
-            //Anmerkung: Anstelle hier über den ganzen Baum zu iterrieren, könnte auchmittels der Methode ITreeOperations.searchProperties nach den Elementen gesucht werden, die im Template berücksichtigt werden sollen; aber dann müsste jedesmal über den ganzen Baum iteriert werden
+            //Note: It is also possible to use the function ITreeOperations.searchProperties BUT in this case it would be iterated over the whole tree every time
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
                 createElementTypeOfSymbolView(node, pathToTemplate);
             }
             createUiElementsAllScreens(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
-            createUiElementsNavigationbarScreens(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
+            createNavigationbar(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
             treeOperation.updateNodes.updateBrailleGroups();
         }
 
         /// <summary>
-        /// aktualisiert die Navigationsleisten (Anzahl der Tabs) auf allen Screens, die eine Navigationsleiste anzeigen
+        /// Updates all navigation bars in this type of view
         /// </summary>
-        /// <param name="typeOfView">gibt die ViewCategory an, bei der die Navigationsleisten aktualisiert werden sollen</param>
-        /// <param name="pathToXml"></param>
+        /// <param name="pathToXml">path of the used template(XML)</param>
+        /// <param name="typeOfView">name of the type of view in which the navigation bar should be updated</param>
         public void updateNavigationbarScreens(string pathToXml, String typeOfView)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
             List<String> screens = treeOperation.searchNodes.getPosibleScreenNames(typeOfView);
-            /*
-             * im Braillebaum suchen wo alles eine Navigationsleiste vorhanden ist --> von 
-             * ergänzen
-             */
+            // searches for navigation bars in the braille tree and adds new tabs             
             List<Object> navigationbars = treeOperation.searchNodes.getListOfNavigationbars();
             List<String> screensForShowNavigationbar = new List<string>();
             foreach (Object nbar in navigationbars)
@@ -131,9 +128,9 @@ namespace TemplatesUi
                 screensForShowNavigationbar.Add(strategyMgr.getSpecifiedTree().GetData(nbar).brailleRepresentation.screenName);
             }
             templateObject.Screens = screensForShowNavigationbar;
-            List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
-            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
-            templateObject.groupElementsStatic = groupElementsStatic;
+            List<OSMElement.OSMElement> groupElements = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElements == null || groupElements.Equals(new List<OSMElement.OSMElement>())) { return; }
+            templateObject.groupElements = groupElements;
             Object tree = grantTrees.filteredTree;
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
@@ -145,11 +142,11 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Fügt eine Navigationsleiste für den angegebenen Screen hinzu
+        /// Adds a navigatiobar for the screen
         /// </summary>
-        /// <param name="pathToXml">gibt den Pfad zum Template der Navigationsleiste an</param>
-        /// <param name="subtree">gibt den braille-Teilbaum an, bei welchem eine Navigationsleiste hinzugefügt werden soll</param>
-        /// <param name="typeOfView">gibt die ViewCategory an, auf welcher die Navigationsleiste angezeigt werden soll</param>
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        /// <param name="screenName">name of the screen on wich the navigation bar should be added</param>
+        /// <param name="typeOfView">name of the type of view in which the navigation bar should be added</param>
         public void addNavigationbarForScreen(string pathToXml, String screenName, String typeOfView)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
@@ -161,7 +158,7 @@ namespace TemplatesUi
             templateObject.Screens = screenNavi;
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
-            templateObject.groupElementsStatic = groupElementsStatic;
+            templateObject.groupElements = groupElementsStatic;
             Object tree = grantTrees.filteredTree;
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
@@ -173,10 +170,10 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Ermittelt von einem angegebenen Template das zugehörige Template-Objekt für die Navigationsleiste
+        /// Creates a template object (<see cref="TemplateUiObject"/>) for navigation bars from a template file (XML) 
         /// </summary>
-        /// <param name="pathToXml"></param>
-        /// <returns></returns>
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        /// <returns>a template object for navigation bars</returns>
         private TemplateUiObject getTemplateUiObjectOfNavigationbarScreen(string pathToXml)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
@@ -189,21 +186,21 @@ namespace TemplatesUi
                     select el;
                 if (uiElement.Count() == 0) { return new TemplateUiObject(); }
 
-                return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Es darf nur ein element bei der Suche herauskommen
+                return xmlUiElementToTemplateUiObject(uiElement.First(), VIEWCATEGORY_SYMBOLVIEW); //Only one result should be found
             }
             catch (NullReferenceException e)
             {
-                Debug.WriteLine("Keine Symboleview vorhanden!");
+                Debug.WriteLine("It is not symole view specified in the template!");
                 return new TemplateUiObject();
             }
         }
 
         /// <summary>
-        /// Ermittelt die Positionen der einzelnen "Tabs" in der Navigationsleiste
+        /// Calculates the positions of each tab in a navigation bar
         /// </summary>
-        /// <param name="screens">gibt die Liste der Screens an, die in der Navigationsleiste angezeigt werden sollen</param>
-        /// <param name="templateObject"></param>
-        /// <param name="index">gibt den Index an, ab welchen die (Tab-)Element die Position berechnet werden soll</param>
+        /// <param name="screens">specifies a list of screens to show this navigation bar</param>
+        /// <param name="templateObject">The template object for the navigation bar</param>
+        /// <param name="index">the index where the calculation should be start</param>
         /// <returns></returns>
         private List<OSMElement.OSMElement> calculatePositionOfScreenTab(List<String> screens, TemplateUiObject templateObject, int index = 0)
         {
@@ -214,18 +211,16 @@ namespace TemplatesUi
                 OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
                 GeneralProperties childProp = new GeneralProperties();
                 Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
-                //if (templateObject.orientation != null)
+                
+                if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right))
                 {
-                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right))
-                    {
-                        rect.Y = (rect.Height + 1) * index + rect.Y + 1;
-                    }
-                    if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom))
-                    {
-                        rect.X = (rect.Width + 1) * index + rect.X + 1;
-                    }
+                    rect.Y = (rect.Height + 1) * index + rect.Y + 1;
                 }
-               // Debug.WriteLine("Rect = " + rect);
+                if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom))
+                {
+                    rect.X = (rect.Width + 1) * index + rect.X + 1;
+                }
+   
                 childProp.boundingRectangleFiltered = rect;
                 childProp.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer;
                 childProp.valueFiltered = s;
@@ -246,11 +241,11 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Erstellt für die angegebene View-Category für jeden Screen einen Navigationsleiste
+        /// Creates navigation bars for every screen in this tpye of view
         /// </summary>
-        /// <param name="pathToXml">gibt den Pfad zum Template an</param>
-        /// <param name="typeOfView">gibt die View-Category an</param>
-        public void createUiElementsNavigationbarScreens(string pathToXml, String typeOfView)
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        /// <param name="typeOfView">name of the type of view in which the navigation bars should be added</param>
+        public void createNavigationbar(string pathToXml, String typeOfView)
         {
             TemplateUiObject templateObject = getTemplateUiObjectOfNavigationbarScreen(pathToXml);
             if (templateObject.Equals(new TemplateUiObject())) { return; }
@@ -259,12 +254,12 @@ namespace TemplatesUi
             ATemplateUi generalUiInstance;
             if (templateObject.Screens == null)
             {
-                //wir wollen alle verfügbaren Screens
+                //we use all available screens of this tpye of view
                 templateObject.Screens = screens;
             }
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
-            templateObject.groupElementsStatic = groupElementsStatic;
+            templateObject.groupElements = groupElementsStatic;
             Object tree = grantTrees.filteredTree;
 
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
@@ -278,10 +273,10 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Sofern für das angegebene UI-Element ein Template vorhanden ist wird dieses angewendet
+        /// Converts a filtered (sub-)tree to symbole (for the braille tree) and adds this node
         /// </summary>
-        /// <param name="subtree">gibt den Teilbaum mit dem element, auf welches das Template angewendet werden soll an</param>
-        /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
+        /// <param name="subtree">filtered (sub-)tree to convert as symboles</param>
+        /// <param name="pathToXml">path of the used template (XML)</param>
         private void createElementTypeOfSymbolView(Object subtree, String pathToXml)
         {
             String controlType = strategyMgr.getSpecifiedTree().GetData(subtree).properties.controlTypeFiltered;
@@ -312,10 +307,10 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Wandelt ein XElement in ein <c>TemplateUiObject</c> um
+        /// Converts a <see cref="XElement"/> of a screenshot to a <see cref="TemplateScreenshotObject"/> 
         /// </summary>
-        /// <param name="xmlElement">gibt ein XElement aus der TemplateUi.xml an</param>
-        /// <returns>ein <c>TemplateUiObject</c></returns>
+        /// <param name="xmlElement">a <see cref="XElement"/> from the template file (XML)</param>
+        /// <returns>the TemplateScreenshotObject</returns>
         private TemplateScreenshotObject xmlUiScreenshotToTemplateUiScreenshot(XElement xmlElement)
         {
             TemplateScreenshotObject templetObject = new TemplateScreenshotObject();
@@ -347,7 +342,6 @@ namespace TemplatesUi
                 {
                     templetObject.Screens.Add(s.Value);
                 }
-
             }
             if (!xmlElement.Element("ConnectedFilteredNode").IsEmpty)
             {
@@ -360,12 +354,11 @@ namespace TemplatesUi
                 {
                     Debug.WriteLine(xmlElement.Element("Zoom").Value);
                     Double resultZoom = XmlConvert.ToDouble(xmlElement.Element("Zoom").Value);
-
                     zoom = resultZoom < 0 ? 0 : (resultZoom > 3 ? 3 : resultZoom);
                 }
-                catch (ArgumentNullException e) { Debug.WriteLine("Exception beim Casten des Zoom-Wertes in {}. Fehlerbeschreibung:\n{1}", this.ToString(), e); }
-                catch (FormatException e) { Debug.WriteLine("Exception beim Casten des Zoom-Wertes in {}. Fehlerbeschreibung:\n{1}", this.ToString(), e); }
-                catch (OverflowException e) { Debug.WriteLine("Exception beim Casten des Zoom-Wertes in {}. Fehlerbeschreibung:\n{1}", this.ToString(), e); }
+                catch (ArgumentNullException e) { Debug.WriteLine("Exception at casting the zoom value: {0}", e); }
+                catch (FormatException e) { Debug.WriteLine("Exception at casting the zoom value: {0}", e); }
+                catch (OverflowException e) { Debug.WriteLine("Exception at casting the zoom value: {0}}", e); }
             }
             braille.zoom = zoom;
             int contrast = 0;
@@ -380,7 +373,8 @@ namespace TemplatesUi
             braille.contrast = contrast;
             braille.typeOfView = VIEWCATEGORY_LAYOUTVIEW;
          //   braille.isScrollbarShow = Convert.ToBoolean(xmlElement.Element("ShowScrollbar").Value);
-            templetObject.name = templetObject.Screens != null ? templetObject.Screens[0] : "all"; //TODO: besserer Name
+            templetObject.
+                viewName = templetObject.Screens != null ? templetObject.Screens[0] : "all"; //TODO: besserer Name
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = properties;
@@ -390,11 +384,11 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Wandelt ein XElement in ein <c>TemplateUiObject</c> um
+        /// Converts a <see cref="XElement"/> to a <see cref="TemplateUiObject"/>
         /// </summary>
-        /// <param name="xmlElement">gibt ein XElement aus der TemplateUi.xml an</param>
-        /// <param name="typeOfView"></param>
-        /// <returns>ein <c>TemplateUiObject</c></returns>
+        /// <param name="xmlElement">a <see cref="XElement"/> from the template file (XML)</param>
+        /// <param name="typeOfView">specifies the type of view</param>
+        /// <returns>a TemplateUiObject</returns>
         private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement, String typeOfView)
         {
             TemplateUiObject templetObject = new TemplateUiObject();
@@ -475,17 +469,14 @@ namespace TemplatesUi
                 {
                     templetObject.Screens.Add(s.Value);
                 }
-
             }
             if (xmlElement.Element("Orientation") != null && !xmlElement.Element("Orientation").IsEmpty)
             {
                 String value = xmlElement.Element("Orientation").Value;
-              //  templetObject.orientation = (value == OSMElement.UiElements.Orientation.Left.ToString() ? OSMElement.UiElements.Orientation.Left : (value == OSMElement.UiElements.Orientation.Bottom.ToString() ? OSMElement.UiElements.Orientation.Bottom : (value == OSMElement.UiElements.Orientation.Right.ToString() ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));
-                templetObject.orientation = (value.Equals( OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left : (value.Equals( OSMElement.UiElements.Orientation.Bottom.ToString()) ? OSMElement.UiElements.Orientation.Bottom : (value.Equals( OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));
-                
+                templetObject.orientation = (value.Equals( OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left : (value.Equals( OSMElement.UiElements.Orientation.Bottom.ToString()) ? OSMElement.UiElements.Orientation.Bottom : (value.Equals( OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));                
             }
             braille.isScrollbarShow = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
-            templetObject.name = xmlElement.Attribute("name").Value;
+            templetObject.viewName= xmlElement.Attribute("name").Value;
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
             osm.brailleRepresentation = braille;
             osm.properties = properties;
@@ -497,10 +488,10 @@ namespace TemplatesUi
         /// <summary>
         /// Erstellt Ui-elemente die keine Verbindung zum gefilterten Baum haben für die Symbol-Ansicht
         /// </summary>
-        /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
-        private void createUiElementsWitheNoDependencySymbolView(String pathToXml)
+        /// <param name="pathToTemplate">path of the used template (XML)</param>
+        private void createUiElementsWitheNoDependencySymbolView(String pathToTemplate)
         {
-            XElement xmlDoc = XElement.Load(@pathToXml);
+            XElement xmlDoc = XElement.Load(pathToTemplate);
             if (xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW) == null) { return; }
             IEnumerable<XElement> uiElement =
                 from el in xmlDoc.Element(VIEWCATEGORY_SYMBOLVIEW).Elements("UiElement")
@@ -520,61 +511,55 @@ namespace TemplatesUi
                 {
                     generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
                 }
-
                 Object tree = strategyMgr.getSpecifiedTree().NewTree();
                 generalUiInstance.createUiElementFromTemplate(tree, templateObject);
             }
         }
 
         /// <summary>
-        /// Erstellt die Ui-Elemente, welche auf jedem Screen vorhanden sein sollen
+        /// Creates all Ui elements to be shown on all screens (in this type of view)
         /// </summary>
-        /// <param name="pathToXml">gibt den Pfad zu dem zu nutzenden Template an</param>
-        /// <param name="screenCategory">gibt den Namen der Ansicht an (momentan verfügbar. "SymbolView" und "LayoutView"</param>
-        public void createUiElementsAllScreens(String pathToXml, String screenCategory)
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        /// <param name="typeOfView">name of the type of view in which this elements should be added (current: "SymbolView", "TextView" or "LayoutView")</param>
+        private void createUiElementsAllScreens(String pathToXml, String typeOfView)
         {
             XElement xmlDoc = XElement.Load(@pathToXml);
-            if (xmlDoc.Element(screenCategory) == null) { return; }
+            if (xmlDoc.Element(typeOfView) == null) { return; }
             IEnumerable<XElement> uiElement =
-                from el in xmlDoc.Element(screenCategory).Elements("UiElement")
+                from el in xmlDoc.Element(typeOfView).Elements("UiElement")
                 where (string)el.Element("Screens") != null && (string)el.Element("Screens") == "" && (string)el.Attribute("name") != Settings.getNavigationbarSubstring()
                 select el;
             if (uiElement == null || !uiElement.Any()) { return; }
-            List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames(screenCategory);
+            List<String> screenList = treeOperation.searchNodes.getPosibleScreenNames(typeOfView);
             foreach (XElement e in uiElement)
             {
-                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(e, screenCategory);
-                Object tree = strategyMgr.getSpecifiedTree().NewTree(); // <-- ist nur der Fall, wenn es keinen Zusammenhang zum Baum gibt
+                TemplateUiObject templateObject = xmlUiElementToTemplateUiObject(e, typeOfView);
+                Object tree = strategyMgr.getSpecifiedTree().NewTree(); // this is necessary if the braille node has no connection to a filtered node
                 if (templateObject.osm.brailleRepresentation.displayedGuiElementType!= null && !templateObject.osm.brailleRepresentation.displayedGuiElementType.Equals(""))
                 {
-                    // elementE im gefilterten Baum suchen
                     GeneralProperties properties = new GeneralProperties();
                     properties.controlTypeFiltered = e.Attribute("name").Value;
                     List<Object> treefilteredElements = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, properties, OperatorEnum.and);
                     foreach (Object t in treefilteredElements)
                     {
                         tree = t;
-                        iterateScreensForTemplate(screenList, ref tree, templateObject);
+                        createsBrailleNodeForScreenList(screenList, ref tree, templateObject);
                     }
                 }
                 else
                 {
-                    iterateScreensForTemplate(screenList, ref tree, templateObject);
+                    createsBrailleNodeForScreenList(screenList, ref tree, templateObject);
                 }
-
             }
-        }
-
-      
+        }      
 
         /// <summary>
-        /// Iterriert über alle angegebenen Screens und fügt das Ui-Element ggf. hinzu
+        /// Creates for all screens of the list a braille node depending on the template object
         /// </summary>
-        /// <param name="screenList">gibt die Liste der Screens an, auf die das Ui-Objekt soll</param>
-        /// <param name="tree">gibt den gefilterten Baum an</param>
-        /// <param name="templateObject">gibt das Template-Objekt an</param>
-        /// <param name="typeOfTemplate">gibt den Typ des zu nutzenden Templates an</param>
-        private void iterateScreensForTemplate(List<String> screenList, ref Object tree, TemplateUiObject templateObject)
+        /// <param name="screenList">the list of screen names</param>
+        /// <param name="tree">a filtered tree object</param>
+        /// <param name="templateObject">the template object</param>
+        private void createsBrailleNodeForScreenList(List<String> screenList, ref Object tree, TemplateUiObject templateObject)
         {
             if (screenList == null) { return; }
             ATemplateUi generalUiInstance;
@@ -584,10 +569,8 @@ namespace TemplatesUi
             }
             else
             {
-               // generalUiInstance = new TemplateSubtree(strategyMgr, grantTrees);
                 generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
             }
-           // ATemplateUi generalUiInstance = (ATemplateUi)Activator.CreateInstance(typeOfTemplate, strategyMgr, grantTrees);
             foreach (String screen in screenList)
             {
                 templateObject.Screens = new List<string>();
@@ -597,7 +580,12 @@ namespace TemplatesUi
             }
         }
 
-
+        /// <summary>
+        /// Creates all UI elements for the Braille tree which are specified in the template
+        /// </summary>
+        /// <param name="filteredSubtree">the filtered (sub-)tree</param>
+        /// <param name="templateObject">the template object for the group to created</param>
+        /// <param name="brailleNodeId">Id of the parent element of the group</param>
         public void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
         {
             Type typeOfTemplate = Type.GetType(templateObject.osm.brailleRepresentation.templateFullName + ", " + templateObject.osm.brailleRepresentation.templateNamspace);
@@ -608,16 +596,16 @@ namespace TemplatesUi
             }
         }
 
-        #region alle Elemente als Symbole darstellen
+        #region Dislpay all elements as symboles in the braille tree => Currently it isn't used and it isn't readied
 
         /// <summary>
-        /// Stellt alle Elemente eines (Teil-)Baumes da.
+        /// Adds all elements (of the subtree) as Sysmbols to the braille tree
         /// </summary>
-        /// <param name="subtree">gibt den Darzustellenden (Teil-)Baum an</param>
-        /// <param name="idToIgnore">gibt eine Liste von Ids an, welche Zweige bei der Darstellung ignoriert werden sollen</param>
-        public void visualizedAllElementsAsSymbols(object subtree, ref Rect  lastRect, string[] idToIgnore = null)
+        /// <param name="subtree">subtree to add as Symbols</param>
+        /// <param name="lastRect">position of the last UI element which was added</param>
+        /// <param name="idToIgnore">a list of all (ids of) elements which should NOT be added as symbol</param>
+        public void allElementsAsSymbols(object subtree, ref Rect  lastRect, string[] idToIgnore = null)
         {
-            //Position + Größe des letzten gesetzten Elementes
             ATemplateUi generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
             RendererUiElementConnector defaultRendererUiConnector = new RendererUiElementConnector("Text", "Text", new RendererUiElementConnector.SizeUiElement(5, 21));
             
@@ -633,32 +621,30 @@ namespace TemplatesUi
                     RendererUiElementConnector connector = rendererUiElementConnectorContainsControltype(osmNode.properties.controlTypeFiltered);
                     if (connector == null && strategyMgr.getSpecifiedTree().HasChild(node))
                     {
-                        //Kinder beachten
-                        visualizedAllElementsAsSymbols(node, ref lastRect, idToIgnore);
+                        //consider the children
+                        allElementsAsSymbols(node, ref lastRect, idToIgnore);
                     }
                     else
                     {
                         if(connector == null) { connector = defaultRendererUiConnector; }
-                        //Element erstellen
-
-                        //TODO: je nach element ein anderes Template verwenden?
-                        generalUiInstance.createUiElementFromTemplate(node, createTemplateObjectFromNode(node, connector, ref lastRect));//neue View Category
+                        //TODO: use a diffenent template for every element type?
+                        generalUiInstance.createUiElementFromTemplate(node, createTemplateObjectFromNode(node, connector, ref lastRect));//new type of view
                     }
                 }
             }
         }
 
         private TemplateUiObject createTemplateObjectFromNode(Object nodeFiltered, RendererUiElementConnector connector, ref Rect rectLast, String screenName = null)
-        {//TODO: viele zuweisungen hier sind noch nicht sauber -> sodern erstmal nur zum Testen
+        {//TODO: a lot of assigned of variables are hard coded and only so because of testing
             OSMElement.OSMElement osmNodeFiltered = strategyMgr.getSpecifiedTree().GetData(nodeFiltered);
             TemplateUiObject templObject = new TemplateUiObject();
             List<String> screens = new List<string>();
             screens.Add(screenName == null ? "neuerScreen" : screenName);
             templObject.Screens = screens;
-            templObject.name = osmNodeFiltered.properties.IdGenerated;
+            templObject.viewName = osmNodeFiltered.properties.IdGenerated;
             OSMElement.OSMElement osmTempl = new OSMElement.OSMElement();
             GeneralProperties propTempl = new GeneralProperties();
-            //Achtung: noch sind so alle Elemente untereinander
+            //Attention: currently all elements are below the other
             rectLast.X = 0;
             rectLast.Y = rectLast.Height == 0 ? 0 : rectLast.Y + rectLast.Height + 1;
             rectLast.Height = connector.SizeElement.height;

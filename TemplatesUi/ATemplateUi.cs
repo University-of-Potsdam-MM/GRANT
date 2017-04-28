@@ -64,7 +64,7 @@ namespace TemplatesUi
         private TemplateUiObject CastScreenshotObject(TemplateScreenshotObject screenshotObject)
         {
             TemplateUiObject castedSO = new TemplateUiObject();
-            castedSO.name = screenshotObject.name;
+            castedSO.viewName = screenshotObject.viewName;
             castedSO.Screens = screenshotObject.Screens;
             castedSO.osm = screenshotObject.osm;
 

@@ -9,17 +9,61 @@ namespace GRANTManager.Interfaces
     {
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperation(TreeOperation treeOperation);
-        void addNavigationbarForScreen(string pathToXml, String screenName, String typeOfView);
-        void createUiElementsAllScreens(string pathToXml, String nameOfView);
-        void createUiElementsNavigationbarScreens(string pathToXml, String typeOfView);
-        void generatedUiFromTemplate(string pathToXml);
-        void updateNavigationbarScreens(string pathToXml, String typeOfView);
+
         /// <summary>
-        /// Stellt alle Elemente eines (Teil-)Baumes da.
+        /// Adds a navigatiobar for the screen
         /// </summary>
-        /// <param name="subtree">gibt den Darzustellenden (Teil-)Baum an</param>
-        /// <param name="idToIgnore">gibt eine Liste von Ids an, welche Zweige bei der Darstellung ignoriert werden sollen</param>
-        void visualizedAllElementsAsSymbols(Object subtree, ref Rect lastRect, String[] idToIgnore = null);
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        /// <param name="screenName">name of the screen on wich the navigation bar should be added</param>
+        /// <param name="typeOfView">name of the type of view in which the navigation bar should be added</param>
+        void addNavigationbarForScreen(string pathToXml, String screenName, String typeOfView);
+
+        /// <summary>
+        /// Creates navigation bars for every screen in this tpye of view
+        /// </summary>
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        /// <param name="typeOfView">name of the type of view in which the navigation bars should be added</param>
+        void createNavigationbar(string pathToXml, String typeOfView);
+
+        /// <summary>
+        /// Generates Ui elements depending on a template file
+        /// </summary>
+        /// <param name="pathToXml">path of the used template (XML)</param>
+        void generatedUiFromTemplate(string pathToXml);
+
+        /// <summary>
+        /// Generates Ui elements for the layout view depending on a template file
+        /// </summary>
+        /// <param name="pathToTemplate">path of the used template (XML)</param>
+        void generatedLayoutView(String pathToTemplate);
+
+        /// <summary>
+        /// Generates Ui elements for the symbol view depending on a template file
+        /// </summary>
+        /// <param name="pathToTemplate">path of the used template (XML)</param>
+        void generatedSymbolView(String pathToTemplate);
+
+        /// <summary>
+        /// Updates all navigation bars in this type of view
+        /// </summary>
+        /// <param name="pathToXml">path of the used template(XML)</param>
+        /// <param name="typeOfView">name of the type of view in which the navigation bar should be updated</param>
+        void updateNavigationbarScreens(string pathToXml, String typeOfView);
+
+        /// <summary>
+        /// Adds all elements (of the subtree) as Sysmbols to the braille tree
+        /// </summary>
+        /// <param name="subtree">subtree to add as Symbols</param>
+        /// <param name="lastRect">position of the last UI element which was added</param>
+        /// <param name="idToIgnore">a list of all (ids of) elements which should NOT be added as symbol</param>
+        void allElementsAsSymbols(Object subtree, ref Rect lastRect, String[] idToIgnore = null);
+
+        /// <summary>
+        /// Creates all UI elements for the Braille tree which are specified in the template
+        /// </summary>
+        /// <param name="filteredSubtree">the filtered (sub-)tree</param>
+        /// <param name="templateObject">the template object for the group to created</param>
+        /// <param name="brailleNodeId">Id of the parent element of the group</param>
         void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
     public struct TemplateUiObject
@@ -27,31 +71,41 @@ namespace GRANTManager.Interfaces
         public OSMElement.OSMElement osm { get; set; }
         public String groupImplementedClassTypeFullName { get; set; } //nötig?
         public String groupImplementedClassTypeDllName { get; set; } //nötig?
-        public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
         /// <summary>
-        /// ViewName
+        /// A List of screen names (different to <see cref="OSMElement.BrailleRepresentation"/>)
         /// </summary>
-        public String name { get; set; }
-        public Boolean allElementsOfType { get; set;}
+        public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
+
+        /// <summary>
+        /// The name of the view
+        /// </summary>
+        public String viewName { get; set; }
+
+        /// <summary>
+        /// Determines whether all elements of this type should be added to the Braille tree; if this value <c>false</c> only the first occurrence will be used
+        /// </summary>
+        public Boolean allElementsOfType { get; set; }
+
+        /// <summary>
+        /// Specifies the orientation of the element
+        /// </summary>
         public OSMElement.UiElements.Orientation orientation { get; set; }
 
         /// <summary>
-        /// enthält Elemente, welche einem (OSM-)Element  als Gruppe zugeordnet sind
-        /// die Elemente (Anzahl) dieser Gruppe verändern sich nicht (die inhalte dürfen sich aber ändern)
+        /// Specifies the elements which build a group; e.g. the tabs in the menu bar are a group; The number of elements can be changed during runtime
         /// </summary>
-        /// [XmlIgnore]
-        public List<OSMElement.OSMElement> groupElementsStatic { get; set; }
-
-
-         
+        public List<OSMElement.OSMElement> groupElements { get; set; }
     }
 
     public struct TemplateScreenshotObject
     {
         public OSMElement.OSMElement osm { get; set; }
-        public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
-        public String name { get; set; }
-        public String connectedFilteredNodeControltype { get; set; } //oder lieber auf "name" mtchen?
+        public List<String> Screens { get; set; }
+        public String viewName { get; set; }
+        /// <summary>
+        /// Specifies the control type of the filtered node object from which to create a screenshot
+        /// </summary>
+        public String connectedFilteredNodeControltype { get; set; } 
     }
 
 }

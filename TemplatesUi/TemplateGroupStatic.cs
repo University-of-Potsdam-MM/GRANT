@@ -61,12 +61,12 @@ namespace TemplatesUi
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
             Object  brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, createdParentNode);
             int index = 0;
-            foreach (OSMElement.OSMElement child in templateObject.groupElementsStatic)
+            foreach (OSMElement.OSMElement child in templateObject.groupElements)
             {
                 TemplateUiObject childTemplate = new TemplateUiObject();
                 childTemplate.osm = child;
                 childTemplate.Screens = templateObject.Screens;                
-                OSMElement.OSMElement childOsm = createChildBrailleNode(filteredSubtree, childTemplate, templateObject.name+"_"+index);
+                OSMElement.OSMElement childOsm = createChildBrailleNode(filteredSubtree, childTemplate, templateObject.viewName+"_"+index);
                 if (!childOsm.Equals(new OSMElement.OSMElement()))
                 {
                     strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, childOsm);
@@ -93,7 +93,7 @@ namespace TemplatesUi
                 Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement();
             }
             braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = "_" + templateObject.name + "_groupElementsStatic_Count_" + templateObject.groupElementsStatic.Count();
+            braille.viewName = "_" + templateObject.viewName + "_groupElementsStatic_Count_" + templateObject.groupElements.Count();
             braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
             braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 

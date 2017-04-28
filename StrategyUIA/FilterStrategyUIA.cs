@@ -22,7 +22,6 @@ using Prism.Events;
 
 namespace StrategyUIA
 {
-    #region filterStrategyUIAClass
     public class FilterStrategyUIA : IFilterStrategy
     {
         private StrategyManager strategyMgr;
@@ -35,32 +34,19 @@ namespace StrategyUIA
         public StrategyManager getStrategyMgr() { return strategyMgr; }
 
         /// <summary>
-        /// Erstellt anhand des Handles einer Anwendung den zugehörigen Baum
-        /// Variable mainWindowElement sollte umbenannt werden, da es nicht das mainwindow sein muss, es ist einfach nur ein automationelement, die übergabe des mainwindow erfolgt beim aufruf von filtering
+        /// filters an application depending on a given AutomationElement;
+        /// only if the whole tree is filtered (TreeScopeEnum.Application) the ids for each node will be generated and set
         /// </summary>
-        /// <param name="hwnd">den handle der Anwendung an</param>
-        /// <returns>ein <code>ITree<GeneralProperties></code>-Baum</returns>
-      /*  public Object filtering(IntPtr hwnd)
-        {
-            ////alter Code, geht nicht mehr, prbl abarbeitung ganzer baum
-            //UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-            return filtering(hwnd, TreeScopeEnum.Application, -1);
-        }*/
-
-        /// <summary>
-        /// Filtert eine Anwendung/Teilanwendung ausgehend vom AutomationElement;
-        /// nur wenn der ganze Baum gefiltert wird (TreeScopeEnum.Application) werden die IdGenerated gesetzt
-        /// </summary>
-        /// <param name="automationElement">gibt das AutomationElement an von dem die Filterung ausgeht</param>
-        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
-        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <returns>der gefilterte (Teil-)Baum</returns>
+        /// <param name="automationElement"> the AutomationElement of the filtered element</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
         private Object filtering(AutomationElement automationElement, TreeScopeEnum treeScope, int depth)
         {
             Object tree = getStrategyMgr().getSpecifiedTree().NewTree();
             if (automationElement == null)
             {
-                throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
+                throw new ArgumentException("The AutomationElement is 'null'!");
             }
             switch (treeScope)
             {
@@ -71,9 +57,8 @@ namespace StrategyUIA
                     filterChildren(automationElement, depth, ref tree);
                     break;
                 case TreeScopeEnum.Descendants:
-                    // selbe wie Children bloß alle Kindeskinder
+                    // same like as 'Children' but also all "child children"
                     filterChildren(automationElement, -1, ref tree);
-                   // strategyMgr.getSpecifiedTreeOperations().setFilterstrategyInPropertiesAndObject(this.GetType(), ref parentNode);
                     break;
                 case TreeScopeEnum.Subtree:
                     filterSubtree(automationElement, ref tree);
@@ -83,32 +68,29 @@ namespace StrategyUIA
                     setSpecialPropertiesOfFirstNode(ref tree);
                     break;
                 case TreeScopeEnum.Ancestors:
-                    //selbe wie Parent
+                    // same like parents
                     filterParents(automationElement, ref tree);
                     break;
                 case TreeScopeEnum.Application:
                     filterApplication(automationElement, depth, ref tree);
-                    //beim ersten Knoten die Strategy mit ranschreiben + ModulName
+                    // note by the first node the filter strategy and ModulName
                     setSpecialPropertiesOfFirstNode(ref tree);
                     treeOperation.generatedIds.generatedIdsOfFilteredTree(ref tree);
                     List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.filterstrategiesOfNodes;
                     FilterstrategiesOfTree.addFilterstrategyOfNode(strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated, this.GetType(), ref filterstrategies);
                     grantTrees.filterstrategiesOfNodes = filterstrategies;
                     break;
-            }
-             
+            }             
             return tree;
         }
 
-
-
         /// <summary>
-        /// Filtert eine Anwendung/Teilanwendung ausgehend vom hwnd
+        /// filters an application depending on a given hwnd
         /// </summary>
-        /// <param name="hwnd">gibt den Handle der zu filternden Anwendung/Element an</param>
-        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
-        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <returns>der gefilterte (Teil-)Baum</returns>
+        /// <param name="hwnd">the process handle of applicatio/element</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
         public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1)
         {            
             AutomationElement mainElement = deliverAutomationElementFromHWND(hwnd);
@@ -116,19 +98,19 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Filtert ausgehend vom angegebenen Punkt (<paramref name="pointX"/>, <paramref name="pointY"/>) unter Berücksichtigung des angegebenen <code>StrategyManager.TreeScopeEnum</code> Baum
+        /// filters an application depending on a given point (<paramref name="pointX"/>, <paramref name="pointY"/>) and the choosen <paramref name="treeScope"/>
         /// </summary>
-        /// <param name="pointX">gibt die x-koordinate des zu filternden Elements an</param>
-        /// <param name="pointY">gibt die Y-Koordinate des zu filternden Elements an</param>
-        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
-        /// <param name="depth">gibt für den <paramref name="treeScope"/> von 'Parent', 'Children' und 'Application' die Tiefe an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <returns>der gefilterte (Teil-)Baum</returns>
-        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth = 0)
+        /// <param name="pointX">x coordinate of the element to filtering</param>
+        /// <param name="pointY">y coordinate of the element to filtering</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth = -1)
         {
             AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
             if (mainElement == null)
             {
-                throw new ArgumentException("Main Element in FilterStrategyUIA.filtering nicht gefunden!");
+                throw new ArgumentException("The AutomationElement is 'null'!");
             }
            Object tree = getStrategyMgr().getSpecifiedTree().NewTree();
 
@@ -138,11 +120,11 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Filtert ausgehend von einem <code>AutomationElement</code> der Anwendung, die zugehörige Anwendung bis zur angegebenen Tiefe
+        /// filters an application deppending on a given AutomationElement (to the specified depth)
         /// </summary>
-        /// <param name="element">gibt ein <code>AutomationElement</code> der zu filternden Anwendung an</param>
-        /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe </param>
-        /// <param name="parentNode">referenziert den gefilterten Baum</param>
+        /// <param name="element">the AutomationElement of the filtered element</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <param name="tree">the tree object</param>
         private void filterApplication(AutomationElement element, int depth, ref Object tree)
         {
             IntPtr mainAppHwdn = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(element.Current.ProcessId);
@@ -154,12 +136,13 @@ namespace StrategyUIA
             filterChildren(mainAppAutomationelement, -1, ref top);
         }
 
+        /// <summary>
+        /// filters a subtree
+        /// </summary>
+        /// <param name="element">the AutomationElement of the filtered element</param>
+        /// <param name="tree">the tree object</param>
         private void filterSubtree(AutomationElement element, ref Object tree)
         {
-            //ITreeStrategy<OSMElement.OSMElement> treeTop = parentNode.Copy();
-            //filterElement(element, ref parentNode);
-            //treeTop = parentNode.Root;
-
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(element);
             Object treeTop = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
@@ -169,77 +152,74 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Filtert/Ermittelt die Daten des angegeben Elements
+        /// filters an element
         /// </summary>
-        /// <param name="mainElement">gibt das gewünschte <code>AutomationElement</code> an</param>
-        /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterElement(AutomationElement mainElement, ref Object tree)
+        /// <param name="automationElement">the AutomationElement of the filtered element</param>
+        /// <param name="tree">the tree object</param>
+        private void filterElement(AutomationElement automationElement, ref Object tree)
         {
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
-            osmElement.properties = setProperties(mainElement);
+            osmElement.properties = setProperties(automationElement);
             strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
         }
 
         /// <summary>
-        /// Filtert die Kinder des angegebenen <code>AutomationElements</code>
+        /// filters the children of the AutomationElement
         /// </summary>
-        /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Kinder gefiltert werden sollen</param>
-        /// <param name="depth">gibt die Tiefe der Filterung an, <code>-1</code> steht dabei für die 'komplette' Tiefe</param>
-        /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterChildren(AutomationElement mainElement, int depth, ref Object tree)
+        /// <param name="automationElement">the AutomationElement</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/>;  <code>-1</code> means the whole depth</param>
+        /// <param name="tree">the tree object</param>
+        private void filterChildren(AutomationElement automationElement, int depth, ref Object tree)
         {
            //TODO: oder auch über TreeWalker?
-            AutomationElementCollection collection = mainElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-            findChildrenOfNode(tree, collection, TreeScope.Children, depth);
+            AutomationElementCollection collection = automationElement.FindAll(TreeScope.Children, Condition.TrueCondition);
+            findChildrenOfNode(tree, collection, depth);
         }
 
         /// <summary>
-        /// Filtert die Geschwister des angegebenen <code>AutomationElements</code>
+        /// filters the siblings of the AutomationElement
         /// </summary>
-        /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die geschwister gefiltert werden sollen</param>
-        /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterSibling(AutomationElement mainElement, ref Object tree)
+        /// <param name="automationElement">the AutomationElementn</param>
+        /// <param name="tree">the tree object</param>
+        private void filterSibling(AutomationElement automationElement, ref Object tree)
         {
             //TreeWalker walker = TreeWalker.ControlViewWalker;
             TreeWalker walker = TreeWalker.ContentViewWalker;
-            AutomationElement elementParent = walker.GetParent(mainElement);
+            AutomationElement elementParent = walker.GetParent(automationElement);
             filterChildren(elementParent, 1, ref tree);
-           // Console.WriteLine();
             //oder             walker.GetPreviousSibling(mainElement);             walker.GetNextSibling(mainElement);
         }
 
         /// <summary>
-        /// Filtert die Eltern des angegebenen <code>AutomationElements</code>
+        /// filters the parents of the AutomationElement
         /// </summary>
-        /// <param name="mainElement">gibt das <code>AutomationElement</code> an, von dem die Eltern ermittelt werden sollen</param>
-        /// <param name="parentNode">referenziert den gefilterten Baum</param>
-        private void filterParents(AutomationElement mainElement, ref Object tree)
+        /// <param name="automationElement">the AutomationElement</param>
+        /// <param name="tree">the tree object</param>
+        private void filterParents(AutomationElement automationElement, ref Object tree)
         {
-            if (!(mainElement.Current.ControlType.LocalizedControlType).Equals("Fenster"))// TODO: Root bestimmen
+            if (!(automationElement.Current.ControlType.LocalizedControlType).Equals("Fenster"))// TODO: Root bestimmen
             {
                // TreeWalker walker = TreeWalker.ControlViewWalker;
                 TreeWalker walker = TreeWalker.ContentViewWalker;
-                AutomationElement elementParent = walker.GetParent(mainElement);
+                AutomationElement elementParent = walker.GetParent(automationElement);
                 addParentOfNode(elementParent, ref tree);
-                filterParents(elementParent, ref  tree);
-                
+                filterParents(elementParent, ref  tree);                
             }
         }
 
-
         /// <summary>
         /// todo
-        /// Ordnet die Eigenschaften eines AutomationElements dem <typeparamref name="GeneralProperties"/>-Objekt zu
+        /// AutomationElement-properties to <see cref="OSMElement.GeneralProperties"/>
         /// Desweiteren stellt sich die frage, ob cached abgefragt wird, oder current, wegen geschwindigekti der abfrage
         /// </summary>
-        /// <param name="element">gibt das AutomationElement an</param>
-        /// <returns>Ein <typeparamref name="GeneralProperties"/>-Objekt mit den Eigenschaften des AutomationElements.</returns>
-        private GeneralProperties setProperties(AutomationElement element)
+        /// <param name="automationElement">the AutomationElement</param>
+        /// <returns>A <see cref="GeneralProperties"/> object with the properties of the AutomationELement</returns>
+        private GeneralProperties setProperties(AutomationElement automationElement)
         {
             GeneralProperties elementP = new GeneralProperties();
             try
             {
-            elementP.acceleratorKeyFiltered = element.Current.AcceleratorKey;
+            elementP.acceleratorKeyFiltered = automationElement.Current.AcceleratorKey;
             }
             catch (Exception a)
             {
@@ -247,7 +227,7 @@ namespace StrategyUIA
             }
             try
             {
-            elementP.accessKeyFiltered = element.Current.AccessKey;
+            elementP.accessKeyFiltered = automationElement.Current.AccessKey;
             }
             catch (Exception a)
             {
@@ -255,7 +235,7 @@ namespace StrategyUIA
             }
             try
             {
-            elementP.autoamtionIdFiltered = element.Current.AutomationId;
+            elementP.autoamtionIdFiltered = automationElement.Current.AutomationId;
             }
             catch (Exception a)
             {
@@ -263,9 +243,9 @@ namespace StrategyUIA
             }
 
             try {
-            if (!element.Current.BoundingRectangle.IsEmpty) //Anmerkung: Wenn BoundingRectangle == Empty, dann gibt es Probleme beim Einlesen einer erstellten XML (XmlDeserialize)
-            {
-                elementP.boundingRectangleFiltered = element.Current.BoundingRectangle;
+            if (!automationElement.Current.BoundingRectangle.IsEmpty) //Note: if BoundingRectangle == Empty =>There are problems reading the data from the XML file (XmlDeserialize)
+                {
+                elementP.boundingRectangleFiltered = automationElement.Current.BoundingRectangle;
                 }
             }
             catch (Exception a)
@@ -273,14 +253,14 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (BoundingRectangle) '{0}'", a.ToString());
             }
             try {
-            elementP.classNameFiltered = element.Current.ClassName;
+            elementP.classNameFiltered = automationElement.Current.ClassName;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ClassName) '{0}'", a.ToString());
             }
             try {
-                String[] t = element.Current.ControlType.ProgrammaticName.Split(new String[]{"."}, StringSplitOptions.RemoveEmptyEntries);
+                String[] t = automationElement.Current.ControlType.ProgrammaticName.Split(new String[]{"."}, StringSplitOptions.RemoveEmptyEntries);
                 elementP.controlTypeFiltered = t[1];
             }
             catch (Exception a)
@@ -288,91 +268,91 @@ namespace StrategyUIA
                 Console.WriteLine("Property: (LocalizedControlType) '{0}'", a.ToString());
             }
             try {
-            elementP.frameWorkIdFiltered = element.Current.FrameworkId;
+            elementP.frameWorkIdFiltered = automationElement.Current.FrameworkId;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (FrameworkId) '{0}'", a.ToString());
             }
             try {
-            elementP.hasKeyboardFocusFiltered = element.Current.HasKeyboardFocus;
+            elementP.hasKeyboardFocusFiltered = automationElement.Current.HasKeyboardFocus;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (HasKeyboardFocus) '{0}'", a.ToString());
             }
             try {
-            elementP.helpTextFiltered = element.Current.HelpText;
+            elementP.helpTextFiltered = automationElement.Current.HelpText;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (HelpText) '{0}'", a.ToString());
             }
             try {
-            elementP.hWndFiltered = new IntPtr(element.Current.NativeWindowHandle);
+            elementP.hWndFiltered = new IntPtr(automationElement.Current.NativeWindowHandle);
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (NativeWindowHandle) '{0}'", a.ToString());
             }
             try {
-            elementP.isContentElementFiltered = element.Current.IsContentElement;
+            elementP.isContentElementFiltered = automationElement.Current.IsContentElement;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsContentElement) '{0}'", a.ToString());
             }
             try {
-            elementP.isControlElementFiltered = element.Current.IsControlElement;
+            elementP.isControlElementFiltered = automationElement.Current.IsControlElement;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsControlElement) '{0}'", a.ToString());
             }
             try {
-            elementP.isEnabledFiltered = element.Current.IsEnabled;
+            elementP.isEnabledFiltered = automationElement.Current.IsEnabled;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsEnabled) '{0}'", a.ToString());
             }
             try {
-            elementP.isKeyboardFocusableFiltered = element.Current.IsKeyboardFocusable;
+            elementP.isKeyboardFocusableFiltered = automationElement.Current.IsKeyboardFocusable;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsKeyboardFocusable) '{0}'", a.ToString());
             }
             try {
-            elementP.isOffscreenFiltered = element.Current.IsOffscreen;
+            elementP.isOffscreenFiltered = automationElement.Current.IsOffscreen;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsOffscreen) '{0}'", a.ToString());
             }
             try {
-            elementP.isPasswordFiltered = element.Current.IsPassword;
+            elementP.isPasswordFiltered = automationElement.Current.IsPassword;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsPassword) '{0}'", a.ToString());
             }
             try {
-            elementP.isRequiredForFormFiltered = element.Current.IsRequiredForForm;
+            elementP.isRequiredForFormFiltered = automationElement.Current.IsRequiredForForm;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (IsRequiredForForm) '{0}'", a.ToString());
             }
             try {
-            elementP.itemStatusFiltered = element.Current.ItemStatus;
+            elementP.itemStatusFiltered = automationElement.Current.ItemStatus;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ItemStatus) '{0}'", a.ToString());
             }
             try {
-            elementP.itemTypeFiltered = element.Current.ItemType;
+            elementP.itemTypeFiltered = automationElement.Current.ItemType;
             }
             catch (Exception a)
             {
@@ -380,14 +360,14 @@ namespace StrategyUIA
             }
             try
             {
-                elementP.runtimeIDFiltered = element.GetRuntimeId();
+                elementP.runtimeIDFiltered = automationElement.GetRuntimeId();
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (runtime) '{0}'", a.ToString());
             }
             try {
-            elementP.localizedControlTypeFiltered = element.Current.LocalizedControlType;
+            elementP.localizedControlTypeFiltered = automationElement.Current.LocalizedControlType;
             }
             catch (Exception a)
             {
@@ -395,7 +375,7 @@ namespace StrategyUIA
             }
             try
             {
-                elementP.nameFiltered = element.Current.Name;
+                elementP.nameFiltered = automationElement.Current.Name;
             }
             catch (Exception a)
             {
@@ -403,27 +383,27 @@ namespace StrategyUIA
             }
             try
             {
-            elementP.processIdFiltered = element.Current.ProcessId;
+            elementP.processIdFiltered = automationElement.Current.ProcessId;
             }
             catch (Exception a)
             {
                 Console.WriteLine("Property: (ProcessId) '{0}'", a.ToString());
             }
-            setPropertiesOfPattern(ref elementP, element);
-            setSupportedPatterns(ref elementP, element);
+            setPropertiesOfPattern(ref elementP, automationElement);
+            setSupportedPatterns(ref elementP, automationElement);
             return elementP;
         }
 
         /// <summary>
-        /// Die Mehtode behhandelt die verschiedenen Pattern
+        /// Sets some pattern of the UI element
         /// </summary>
-        /// <param name="properties">gibt die Propertoes des Knotens an</param>
-        /// <param name="element">gibt das AutomationElement des Knotens an</param>
-        private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement element)
+        /// <param name="properties">the properties of the element</param>
+        /// <param name="automationElement">the AutomationElement</param>
+        private void setPropertiesOfPattern(ref GeneralProperties properties, AutomationElement automationElement)
         {//https://msdn.microsoft.com/de-de/library/ms750574(v=vs.110).aspx
 
             object valuePattern = null;
-            if (element.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
+            if (automationElement.TryGetCurrentPattern(ValuePattern.Pattern, out valuePattern))
             {/* 
               * Conditional Support: Combo Box, Data Item, Edit,Hyperlink, List Item, Progress Bar, Slider,Spinner
               */
@@ -431,11 +411,10 @@ namespace StrategyUIA
                 {
                     properties.valueFiltered = (valuePattern as ValuePattern).Current.Value;
                 }
-                catch (System.NullReferenceException) { }
-                
+                catch (System.NullReferenceException) { }                
             }
             object rangeValuePattern = null;
-            if(element.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
+            if(automationElement.TryGetCurrentPattern(RangeValuePattern.Pattern, out rangeValuePattern))
             {
                 /*
                  * Conditional Support: Edit, Progress Bar, Scroll Bar, Slider, Spinner
@@ -450,7 +429,7 @@ namespace StrategyUIA
                 properties.rangeValue = rangeValue;
             }
             object togglePattern;
-            if(element.TryGetCurrentPattern(TogglePattern.Pattern, out togglePattern))
+            if(automationElement.TryGetCurrentPattern(TogglePattern.Pattern, out togglePattern))
             {
                 ToggleState state = (togglePattern as TogglePattern).Current.ToggleState;
                 if (state == ToggleState.On) { properties.isToggleStateOn = true; }
@@ -462,27 +441,24 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Ermittelt die unterstützten Pattern;
-        /// Das zugewiesene Object ist dabei vom Type <code>AutomationPattern[]</code>
+        /// Sets the supported pattern of the UI element
         /// </summary>
-        /// <param name="properties">Eine Referenz zu den gesetzten Properties des Elements</param>
-        /// <param name="element">gibt das AutomationElement des Knotens an</param>
-        private void setSupportedPatterns(ref GeneralProperties properties, AutomationElement element)
+        /// <param name="properties">the properties of the element</param>
+        /// <param name="automationElement">the AutomationElement</param>
+        private void setSupportedPatterns(ref GeneralProperties properties, AutomationElement automationElement)
         {
-            properties.suportedPatterns = element.GetSupportedPatterns().ToArray();
+            properties.suportedPatterns = automationElement.GetSupportedPatterns().ToArray();
         }
 
         /// <summary>
-        /// Setzt für den ersten Knoten spezielle Eigenschaften
+        /// Sets some "special" properties for the first node
         /// </summary>
-        /// <param name="parentNode">gibt eine Referenz auf den bisherigen Baum an</param>
+        /// <param name="tree">the tree object</param>
         private void setSpecialPropertiesOfFirstNode(ref Object tree)
         {
             if (strategyMgr.getSpecifiedTree().HasChild(tree))
             {
                 GeneralProperties prop = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
-             //   prop.grantFilterStrategyFullName = this.GetType().FullName;
-             //   prop.grantFilterStrategyNamespace = this.GetType().Namespace;
                 Settings settings = new Settings();
                 prop.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
                 prop.moduleName = strategyMgr.getSpecifiedOperationSystem().getModulNameOfApplication(prop.processIdFiltered);
@@ -494,12 +470,11 @@ namespace StrategyUIA
                 strategyMgr.getSpecifiedTree().SetData(strategyMgr.getSpecifiedTree().Child(tree), osm);
             }
         }
-
         /// <summary>
-        /// Ermittelt aus dem alten <code>OSMElement</code> eines Knotens die aktualisierten Properties
+        /// Seeks new data for a node
         /// </summary>
-        /// <param name="filteredSubtree">gibt das OSM-Element an welches aktualisiert werden soll</param>
-        /// <returns>gibt für einen Knoten die aktualisierten Properties zurück</returns>
+        /// <param name="osmElementFilteredNode">OSM element to update</param>
+        /// <returns>new properties for a node</returns>
         public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
@@ -512,10 +487,10 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Ermittelt zu einem OSM-Element das zugehörige Automationelement
+        /// Seeks to an <see cref="OSMElement.OSMElement"/> the appropriate <see cref="AutomationElement"/>
         /// </summary>
-        /// <param name="filteredSubtree">gibt das OSM-Element an</param>
-        /// <returns>ein AutomationElement, welches zu dem OSM-Element 'gehört'</returns>
+        /// <param name="osmElement">OSM element</param>
+        /// <returns>the appropriate <see cref="AutomationElement"</returns>
         private AutomationElement getAutomationelementOfOsmElement(OSMElement.OSMElement osmElement)
         {
             AutomationElement au;
@@ -540,18 +515,18 @@ namespace StrategyUIA
                 }
                 else
                 {
-                    au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond); //Achtung hier könnte auch ein anderes Element gefunden werden
+                    au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond); //Attention: it is possible that an other element will be found
                 }
             }
             return au;
         }
 
         /// <summary>
-        /// Filtert ausgehend vom angegebenen OSMElement
+        /// filters an application depending on a given OSM element
         /// </summary>
-        /// <param name="osmElementOfFirstNodeOfSubtree">gibt das (alt) OSM-Element an, von dem die neue Filterung ausgeht</param>
-        /// <param name="treeScope">gibt die 'Art' der Filterung an</param>
-        /// <returns>der gefilterte (Teil-)Baum</returns>
+        /// <param name="osmElementOfFirstNodeOfSubtree">osm element of the to filtered application</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <returns>the filtered (sub-)tree</returns>
         public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
         {
             AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
@@ -569,7 +544,7 @@ namespace StrategyUIA
         /// <param name="top">gibt den Namen des Kindelementes an</param>
         /// <param name="collection">gibt die AutomationElement-Collection an</param>
         /// <param name="depth">gibt an wie tief der Suche ausgehend vom Root-Element an.</param>
-        private void findChildrenOfNode(Object top, AutomationElementCollection collection, TreeScope treeScorpe, int depth)
+        private void findChildrenOfNode(Object top, AutomationElementCollection collection,  int depth)
         {
             foreach (AutomationElement element in collection)
             {
@@ -579,14 +554,18 @@ namespace StrategyUIA
                     osmElement.properties = setProperties(element);
                     Object node = strategyMgr.getSpecifiedTree().AddChild(top, osmElement);
 
-                    AutomationElementCollection c = element.FindAll(treeScorpe, Condition.TrueCondition);
-                    findChildrenOfNode(node, c, treeScorpe, depth);
+                    AutomationElementCollection c = element.FindAll(TreeScope.Children, Condition.TrueCondition);
+                    findChildrenOfNode(node, c, depth);
                 }
             }
         }
 
-        //  AutomationElement vom HWND
-        public static AutomationElement deliverAutomationElementFromHWND(IntPtr hwnd)
+        /// <summary>
+        /// Seeks the AutomationElement depending on a given <paramref name="hwnd"/>
+        /// </summary>
+        /// <param name="hwnd">the process handle of an element of a application</param>
+        /// <returns>a AutomationElement</returns>
+        internal static AutomationElement deliverAutomationElementFromHWND(IntPtr hwnd)
         {
             AutomationElement element;
             try
@@ -595,14 +574,17 @@ namespace StrategyUIA
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                throw new System.ComponentModel.Win32Exception("AutomationElement kann nicht ermittelt werden -- Zugriff verweigert");
+                throw new System.ComponentModel.Win32Exception("Access denied: Can't seeks the AutomationElement");
             }
-            //element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return element;
         }
 
 
-        // ProzessID vom AutomationElement
+        /// <summary>
+        /// Seeks the process id of a given handle
+        /// </summary>
+        /// <param name="hwnd">the process handle of an element of a application</param>
+        /// <returns>the process id</returns>
         public int deliverElementID(IntPtr hwnd)
         {
             //window = WindowFromPoint(cp);
@@ -612,14 +594,14 @@ namespace StrategyUIA
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                throw new System.ComponentModel.Win32Exception("AutomationElement kann nicht ermittelt werden -- Zugriff verweigert");
+                throw new System.ComponentModel.Win32Exception("Access denied: Can't seeks the AutomationElement");
             }
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             Debug.WriteLine("deliverElementID: processIdentifier = {0}", processIdentifier);
             return processIdentifier;
         }
 
-        public AutomationElement deliverAutomationElementFromCursor(int x, int y)
+        private AutomationElement deliverAutomationElementFromCursor(int x, int y)
         {
             // Convert mouse position from System.Drawing.Point to System.Windows.Point.
             System.Windows.Point point = new System.Windows.Point(x, y);
@@ -631,21 +613,23 @@ namespace StrategyUIA
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                throw new System.ComponentModel.Win32Exception("AutomationElement kann nicht ermittelt werden -- Zugriff verweigert");
+                throw new System.ComponentModel.Win32Exception("Access denied: Can't seeks the AutomationElement");
             }
             return element;
         }
 
+        /// <summary>
+        /// Seeks an OSM element to a given point
+        /// </summary>
+        /// <param name="pointX">x coordinate of the element to filtering</param>
+        /// <param name="pointY">y coordinate of the element to filtering</param>
+        /// <returns>the OSM element of the point</returns>
         public OSMElement.OSMElement getOSMElement(int pointX, int pointY)
-        {
-            
+        {            
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
-
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
-
             osmElement.properties = setProperties(mouseElement);
-            
-            //Id setzen
+            //set Id 
             List<Object> node = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
             if (node.Count == 1)
             {
@@ -653,65 +637,17 @@ namespace StrategyUIA
             }
             else
             {
-                Debug.WriteLine("Element im Baum nicht gefunden");
+                Debug.WriteLine("Can't find this element in the filtered tree!");
                 return osmElement;
-            }
-            
+            }            
         }
 
-       /* public void getMouseRect(IntPtr hwnd, int pointX, int pointY, out int x, out int y, out int width, out int height)
-        {
-            //AutomationElement mouseElement = deliverAutomationElementFromHWND(hwnd);
-            AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
-
-            OSMElement.OSMElement filteredSubtree = new OSMElement.OSMElement();
-
-            filteredSubtree.properties = setProperties(mouseElement);
-            
-            //Rect mouseRect = mouseElement.Current.BoundingRectangle;
-            x = (int)filteredSubtree.properties.boundingRectangleFiltered.TopLeft.X;
-            y = (int)mouseElement.Current.BoundingRectangle.TopLeft.Y;
-            int x2 = (int)mouseElement.Current.BoundingRectangle.TopRight.X;
-            int y2 = (int)mouseElement.Current.BoundingRectangle.BottomLeft.Y;
-            int[] runtimes= mouseElement.GetRuntimeId();
-            height = y2 - y;
-            width = x2 - x;
-          
-            Console.WriteLine("hier x: " + x);
-            Console.WriteLine("hier y: " + y);
-            Console.WriteLine("hier w: " + width);
-            Console.WriteLine("hier h: " + height);
-            Console.WriteLine("ElnazHWND: '{0}'", hwnd.ToString());
-        }*/
 
         /// <summary>
-        /// Ermittelt das zugehörige AutomationElement eines Knotens aus dem gefilterten Baum
+        /// Adds a parent element in the tree.
         /// </summary>
-        /// <param name="node">gibt den Knoten an, von dem das zugehörige AutomationElement ermittelt werden soll</param>
-        /// <param name="rootElement"></param> --- hier erst ermitteln
-        /// <returns>das zugehörige AutomationElement des Knotens</returns>
-        private AutomationElement getAutomationElementFromFilteredTree(Object node, AutomationElement rootElement)
-        {
-            Condition condition = setPropertiesCondition(strategyMgr.getSpecifiedTree().GetData(node).properties);
-            AutomationElementCollection foundedAutomationElements = rootElement.FindAll(TreeScope.Descendants, condition);
-            if (foundedAutomationElements.Count == 0)
-            {
-                Console.WriteLine("Kein passendes AutomationElement gefunden!");
-                return null;
-            }
-            if (foundedAutomationElements.Count == 1)
-            {
-                return foundedAutomationElements[0];
-            }
-            //TODO: prüfen, welches das richtige Element ist
-            return foundedAutomationElements[0];
-        }
-
-        /// <summary>
-        /// Fügt ein neues Elternelement einen Baum hinzu.
-        /// </summary>
-        /// <param name="parentElement">gibt das neue Elternelement an</param>
-        /// <param name="parentNode">gibt den "alten" Baum an</param>
+        /// <param name="parentElement">the parent Automation element</param>
+        /// <param name="tree">the tree</param>
         private void addParentOfNode(AutomationElement parentElement, ref Object tree)
         {
             Object tree2 = getStrategyMgr().getSpecifiedTree().NewTree();
@@ -724,14 +660,14 @@ namespace StrategyUIA
         }
 
         /// <summary>
-        /// Erstellt die Condition zum suchen der AutomationElemente anhand der <code>GeneralProperties</code> eines Baum-Knoten
+        /// Creats the condition to search an AutomationElemente depending on <see cref="GeneralProperties"/> object
         /// </summary>
-        /// <param name="properties">gibt die <code>GeneralProperties</code> eines Knoten an</param>
-        /// <returns>Eine Condition</returns>
+        /// <param name="properties">the properties to search</param>
+        /// <returns>a Condition object</returns>
         private Condition setPropertiesCondition(GeneralProperties properties)
         {
             Condition resultCondition;
-            #region von allen auslesbar
+            #region Readable from all
             resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
             // ... ?
             #endregion
@@ -789,14 +725,6 @@ namespace StrategyUIA
             }
             //.. 
             return resultCondition;
-        }
-
-        private Type getTypeOfStrategy(String fullName, String ns)
-        {
-            return Type.GetType(fullName + ", " + ns);
-        }
-
-    }
-    #endregion
-        
+        }        
+    }        
 }
