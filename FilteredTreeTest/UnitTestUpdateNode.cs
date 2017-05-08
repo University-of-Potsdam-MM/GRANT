@@ -66,10 +66,10 @@ namespace FilteredTreeTest
         }
 
         /// <summary>
-        /// Ändert die Anzeige bei Calc und prüft, ob die Änderung ausgelesen wird
+        /// Ändert die Anzeige bei Calc und ließt den Teilbaum neu ein
         /// </summary>
         [TestMethod]
-        public void ChangeContentForNodeTest()
+        public void FilterSubtreeTest()
         {
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
@@ -80,8 +80,30 @@ namespace FilteredTreeTest
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             //Send Key -> Inhalt im Textfeld soll sich ändern
             System.Windows.Forms.SendKeys.SendWait("{DEL}");
-            System.Windows.Forms.SendKeys.SendWait("42");
+            System.Windows.Forms.SendKeys.SendWait("24");
             guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+            OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
+            if (!textNode.properties.nameFiltered.Equals("24")) { Assert.Fail("Der Knoten wurde nicht richtig geändert oder geupdatet!\nBetrachteter Knoten:\n{0}", textNode); }
+        }
+
+        /// <summary>
+        /// Ändert die Anzeige bei Calc und prüft, ob die Änderung ausgelesen wird
+        /// </summary>
+        [TestMethod]
+        public void UpdateNodeTest()
+        {
+            HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
+            hf.filterApplication(applicationName, applicationPathName);
+
+            guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(applicationName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            //Send Key -> Inhalt im Textfeld soll sich ändern
+            System.Windows.Forms.SendKeys.SendWait("{DEL}");
+            System.Windows.Forms.SendKeys.SendWait("42");
+            UpdateNodes up = new UpdateNodes(strategyMgr, grantTrees, treeOperation);
+            up.updateNodeOfFilteredTree(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
             if (!textNode.properties.nameFiltered.Equals("42")) { Assert.Fail("Der Knoten wurde nicht richtig geändert oder geupdatet!\nBetrachteter Knoten:\n{0}", textNode); }
         }

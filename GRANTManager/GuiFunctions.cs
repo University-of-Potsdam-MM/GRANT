@@ -598,7 +598,7 @@ namespace GRANTManager
             
             if (!File.Exists(@filePath))
             {
-                Debug.WriteLine("Die Datei Existiert nicht");
+                Debug.WriteLine("The file doesn't exist!");
                 return;
             }
             System.IO.FileStream fs;
@@ -727,7 +727,7 @@ namespace GRANTManager
                 }
                 else
                 {
-                    treeOperation.updateNodes.compareAndChangeFileName();
+                    treeOperation.updateNodes.changeFilePath();
                     //invoke the application if these was minimised
 
                     strategyMgr.getSpecifiedOperationSystem().showWindow(appIsRunnuing);
@@ -771,7 +771,7 @@ namespace GRANTManager
         {
             OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
             Object subtree = strategyMgr.getSpecifiedFilter().filtering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
-            String idParent = treeOperation.updateNodes.changeSubTreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
+            String idParent = treeOperation.updateNodes.changeSubtreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
             Object tree = grantTrees.filteredTree;
 
             List<Object> searchResultTrees = treeOperation.searchNodes.searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);

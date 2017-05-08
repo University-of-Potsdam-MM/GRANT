@@ -283,7 +283,7 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Determines whether the view is wxisting in the screen
+        /// Determines whether the view is existing in the screen
         /// </summary>
         /// <param name="screenName">name of the screen</param>
         /// <param name="viewName">name of the view</param>

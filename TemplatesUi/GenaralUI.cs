@@ -275,7 +275,7 @@ namespace TemplatesUi
         /// <summary>
         /// Converts a filtered (sub-)tree to symbole (for the braille tree) and adds this node
         /// </summary>
-        /// <param name="subtree">filtered (sub-)tree to convert as symboles</param>
+        /// <param name="subtree">filtered (sub-)tree to convert as symbols</param>
         /// <param name="pathToXml">path of the used template (XML)</param>
         private void createElementTypeOfSymbolView(Object subtree, String pathToXml)
         {
@@ -486,7 +486,7 @@ namespace TemplatesUi
         }
 
         /// <summary>
-        /// Erstellt Ui-elemente die keine Verbindung zum gefilterten Baum haben für die Symbol-Ansicht
+        /// Creates UI elements (braille nodes) for the symbol view which have no connection to the filtered tree
         /// </summary>
         /// <param name="pathToTemplate">path of the used template (XML)</param>
         private void createUiElementsWitheNoDependencySymbolView(String pathToTemplate)
@@ -596,7 +596,7 @@ namespace TemplatesUi
             }
         }
 
-        #region Dislpay all elements as symboles in the braille tree => Currently it isn't used and it isn't readied
+        #region Dislpay all elements as symbols in the braille tree => Currently it isn't used and it isn't readied
 
         /// <summary>
         /// Adds all elements (of the subtree) as Sysmbols to the braille tree
