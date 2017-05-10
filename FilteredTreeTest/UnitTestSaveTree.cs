@@ -60,10 +60,10 @@ namespace FilteredTreeTest
         [TestMethod]
         public void TestSaveTree()
         {
-            String applicationName = "calc.exe";
+            String processName = "calc";
             String applicationPathName = @"C:\Windows\system32\calc.exe";
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
-            hf.filterApplication(applicationName, applicationPathName);
+            hf.filterApplication(processName, applicationPathName);
             if (grantTrees.filteredTree == null) { Assert.Fail("Es ist kein gefilterter Baum vorhanden"); return; }
             Console.WriteLine("m_testContext.DeploymentDirectory: " + m_testContext.DeploymentDirectory);
             String folderPathSave = System.IO.Path.Combine(m_testContext.DeploymentDirectory, "filter_test");

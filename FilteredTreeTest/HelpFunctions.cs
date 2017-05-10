@@ -14,17 +14,17 @@ namespace FilteredTreeTest
             this.grantTrees = grantTrees;
         }
 
-        internal void filterApplication(String applicationName, String applicationPathName)
+        internal void filterApplication(String processName, String applicationPathName)
         {
-            IntPtr appHwnd = startApp(applicationName, applicationPathName);
+            IntPtr appHwnd = startApp(processName, applicationPathName);
             if (appHwnd == IntPtr.Zero) { return; }
             Object filteredTree = strategyMgr.getSpecifiedFilter().filtering(appHwnd);
             grantTrees.filteredTree = filteredTree;
         }
 
-        internal IntPtr startApp(String appMainModulNameCalc, String applicationPathName)
+        internal IntPtr startApp(String processNameCalc, String applicationPathName)
         {
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(appMainModulNameCalc);
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processNameCalc);
             if (appHwnd.Equals(IntPtr.Zero))
             {
                 bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(applicationPathName);
@@ -35,7 +35,7 @@ namespace FilteredTreeTest
                 }
                 else
                 {
-                    appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(appMainModulNameCalc);
+                    appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processNameCalc);
                 }
             }
             else
@@ -82,7 +82,7 @@ namespace FilteredTreeTest
             if (osmNode1.properties.itemTypeFiltered != null && !osmNode1.properties.itemTypeFiltered.Equals(osmNode2.properties.itemTypeFiltered)) { Assert.Fail("Der itemTypeFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (osmNode1.properties.labeledByFiltered != null && !osmNode1.properties.labeledByFiltered.Equals(osmNode2.properties.labeledByFiltered)) { Assert.Fail("Der labeledByFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (!osmNode1.properties.localizedControlTypeFiltered.Equals(osmNode2.properties.localizedControlTypeFiltered)) { Assert.Fail("Der localizedControlTypeFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
-            if (osmNode1.properties.moduleName != null && !osmNode1.properties.moduleName.Equals(osmNode2.properties.moduleName)) { Assert.Fail("Der moduleName der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (osmNode1.properties.processName != null && !osmNode1.properties.processName.Equals(osmNode2.properties.processName)) { Assert.Fail("Der moduleName der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (osmNode1.properties.nameFiltered != null && !osmNode1.properties.nameFiltered.Equals(osmNode2.properties.nameFiltered)) { Assert.Fail("Der nameFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (!osmNode1.properties.rangeValue.Equals(osmNode2.properties.rangeValue)) { Assert.Fail("Der rangeValue der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             return true;

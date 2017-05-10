@@ -15,17 +15,17 @@ namespace BrailleTreeTests
             this.grantTrees = grantTrees;
         }
 
-        internal void filterApplication(String applicationName, String applicationPathName)
+        internal void filterApplication(String processName, String applicationPathName)
         {
-            IntPtr appHwnd = startApp(applicationName, applicationPathName);
+            IntPtr appHwnd = startApp(processName, applicationPathName);
             if (appHwnd == IntPtr.Zero) { return; }
             Object filteredTree = strategyMgr.getSpecifiedFilter().filtering(appHwnd);
             grantTrees.filteredTree = filteredTree;
         }
 
-        protected IntPtr startApp(String appMainModulNameCalc, String applicationPathName)
+        protected IntPtr startApp(String processNameCalc, String applicationPathName)
         {
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(appMainModulNameCalc);
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processNameCalc);
             if (appHwnd.Equals(IntPtr.Zero))
             {
                 bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(applicationPathName);
@@ -36,7 +36,7 @@ namespace BrailleTreeTests
                 }
                 else
                 {
-                    appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(appMainModulNameCalc);
+                    appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processNameCalc);
                 }
             }
             else

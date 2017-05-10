@@ -103,12 +103,12 @@ namespace BrailleTreeTests
         /// </summary>
         private void initilaizeFilteredTree()
         {
-            String moduleName = "calc.exe";
+            String processName = "calc";
             String applicationPathName = @"C:\Windows\system32\calc.exe";
             /* IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(moduleName);
              grantTrees.setFilteredTree(strategyMgr.getSpecifiedFilter().filtering(appHwnd));*/
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
-            hf.filterApplication(moduleName, applicationPathName);
+            hf.filterApplication(processName, applicationPathName);
         }
 
 

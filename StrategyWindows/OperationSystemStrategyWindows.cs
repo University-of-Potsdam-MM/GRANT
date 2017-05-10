@@ -251,16 +251,16 @@ namespace StrategyWindows
         /// <summary>
         /// Ermittelt ob eine Anwendung geöffnet ist
         /// </summary>
-        /// <param name="appMainModulName">gibt den MainModulName der gewünschten Anwendung an</param>
+        /// <param name="processName">gibt den processName der gewünschten Anwendung an</param>
         /// <returns> Handle der Anwendung, falls die Anwendung geöffnet ist; sonst <c>IntPtr.Zero</c></returns>
-        public IntPtr isApplicationRunning(string appMainModulName)
+        public IntPtr isApplicationRunning(string processName)
         {
-            if (appMainModulName == null) { return IntPtr.Zero; }
+            if (processName == null) { return IntPtr.Zero; }
             foreach (Process clsProcess in Process.GetProcesses())
             {
                 try
                 {
-                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.MainModule.ModuleName.Equals(appMainModulName))
+                    if (clsProcess.ProcessName != null && clsProcess.ProcessName.Equals(processName))
                     {
                         return clsProcess.MainWindowHandle;
                     }
@@ -276,7 +276,7 @@ namespace StrategyWindows
         /// </summary>
         /// <param name="name">Prozess Id der Anwendung</param>
         /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
-        public String getModulNameOfApplication(int processId)
+        public String gerProcessNameOfApplication(int processId)
         {
             foreach (Process clsProcess in Process.GetProcesses())
             {
@@ -284,7 +284,7 @@ namespace StrategyWindows
                 {
                     if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.Id.Equals(processId))
                     {
-                        return clsProcess.MainModule.ModuleName;
+                        return clsProcess.ProcessName;
                     }
                 }
                 catch (System.ComponentModel.Win32Exception) { }
@@ -352,7 +352,7 @@ namespace StrategyWindows
                     do
                     {
                         Thread.Sleep(500);
-                        hwnd = isApplicationRunning(p.MainModule.ModuleName);
+                        hwnd = isApplicationRunning(p.ProcessName);
                         i--;
                     }
                     while ((hwnd == null || hwnd.Equals(IntPtr.Zero)) && i> 0);

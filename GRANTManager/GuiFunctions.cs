@@ -582,7 +582,10 @@ namespace GRANTManager
             }
             #endregion
             // if necessary set the output device
-            strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(grantProjectObject.device);
+            if (!grantProjectObject.device.Equals(new Device()))
+            {
+                strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(grantProjectObject.device);
+            }
             //load filtered tree and braille (output) tree -> it will be in a subfolder wich has the same name like the project
             loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName());
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
@@ -705,12 +708,12 @@ namespace GRANTManager
         {
             if (grantTrees != null && grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree))
             {
-                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.moduleName == null)
+                if (strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.Equals(new GeneralProperties()) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName == null)
                 {
                     Debug.WriteLine("No data in the first node.");
                     return false;
                 }
-                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.moduleName);
+                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
 
@@ -745,7 +748,7 @@ namespace GRANTManager
             //it is just necassary when the application was closed  (--> compare hwnd)
             Object loadedTree = grantTrees.filteredTree;
 
-            IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.moduleName);
+            IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.processName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
             treeOperation.updateNodes.updateFilteredTree(hwnd);
         }

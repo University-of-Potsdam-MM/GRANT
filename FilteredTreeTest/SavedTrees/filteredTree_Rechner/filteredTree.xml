@@ -133,7 +133,7 @@
             </rangeValue>
             <isToggleStateOn xsi:nil="true" />
             <grantFilterStrategy>UIA</grantFilterStrategy>
-            <moduleName>calc.exe</moduleName>
+            <processName>calc</processName>
             <fileName>C:\Windows\system32\calc.exe</fileName>
           </properties>
           <events />

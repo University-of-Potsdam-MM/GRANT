@@ -27,7 +27,7 @@ namespace GRANTManager
         {
             Thread.Sleep(3000);
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().getForegroundWindow();
-            String name = strategyMgr.getSpecifiedOperationSystem().getModulNameOfApplication((int)hwnd);
+            String name = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication((int)hwnd);
 
             String file = getScreenReaderFile(name);
           //  Debug.WriteLine("file: " + file);
@@ -46,18 +46,18 @@ namespace GRANTManager
             {
                 String projectDirectory = Path.GetDirectoryName(@sr) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@sr);
 
-                String appName = getAppName(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
-                if (appName != null && !appName.Equals(""))
+                String processName = getProcessName(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
+                if (processName != null && !processName.Equals(""))
                 {
-                    if (!screenreaders.ContainsKey(appName))
+                    if (!screenreaders.ContainsKey(processName))
                     {
-                        screenreaders.Add(appName, sr);
+                        screenreaders.Add(processName, sr);
                     }
                 }
             }
         }
 
-        private String getAppName(String filePath)
+        private String getProcessName(String filePath)
         {
             if (!File.Exists(@filePath))
             {
@@ -67,7 +67,7 @@ namespace GRANTManager
             using (System.IO.FileStream fs = System.IO.File.Open(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
-                return strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.moduleName;
+                return strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.processName;
             }
         }
 

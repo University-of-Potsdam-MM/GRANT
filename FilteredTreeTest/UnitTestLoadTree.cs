@@ -84,9 +84,9 @@ namespace FilteredTreeTest
             }
             Object loadedTree = strategyMgr.getSpecifiedTree().Copy( grantTrees.filteredTree);
             FilterstrategyOfNode<String, String, String> mainFilterstrategyLoaded = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.filteredTree, grantTrees.filterstrategiesOfNodes, strategyMgr.getSpecifiedTree());
-            String moduleName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.moduleName;
+            String processName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName;
             String fileName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.appPath;
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(moduleName); //Die Anwendung sollte schon offen sein, durch das Laden des Baums
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processName); //Die Anwendung sollte schon offen sein, durch das Laden des Baums
             grantTrees.filteredTree =  strategyMgr.getSpecifiedFilter().filtering(appHwnd);
              Debug.WriteLine("\ngrant\n"+strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.filteredTree)+"\n\n");
             Debug.WriteLine("\nloaded\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(loadedTree) + "\n\n");

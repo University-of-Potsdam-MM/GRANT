@@ -13,7 +13,7 @@ namespace FilteredTreeTest
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
         GuiFunctions guiFuctions;
-        private String applicationName = "calc.exe";
+        private String applicationName = "calc";
         private String applicationPathName = @"C:\Windows\system32\calc.exe";
         private String idTextNodeCalc = "F6BC5E5ADD3B17478743923733E4BC8C";
 

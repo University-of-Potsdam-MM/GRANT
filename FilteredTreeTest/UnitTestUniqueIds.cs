@@ -15,7 +15,7 @@ namespace FilteredTreeTest
        // SearchNodes searchNodes;
         TreeOperation treeOperation;
         GuiFunctions guiFuctions;
-        private String applicationName = "calc.exe";
+        private String applicationName = "calc";
         private String applicationPathName = @"C:\Windows\system32\calc.exe";
 
         [TestInitialize]

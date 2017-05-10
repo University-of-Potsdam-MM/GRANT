@@ -60,16 +60,16 @@ namespace GRANTManager.Interfaces
         /// <summary>
         /// Ermittelt ob eine Anwendung geöffnet ist
         /// </summary>
-        /// <param name="appMainModulName">gibt den MainModulName der gewünschten Anwendung an</param>
+        /// <param name="appMainModulName">gibt den processName der gewünschten Anwendung an</param>
         /// <returns> Handle der Anwendung, falls die Anwendung geöffnet ist; sonst <c>IntPtr.Zero</c></returns>
-        IntPtr isApplicationRunning(String appName);
+        IntPtr isApplicationRunning(String processName);
 
         /// <summary>
         /// Ermittelt den Namen der Anwendung zurück
         /// </summary>
         /// <param name="name">Prozess Id der Anwendung</param>
         /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
-        String getModulNameOfApplication(int processId);
+        String gerProcessNameOfApplication(int processId);
 
         /// <summary>
         /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an

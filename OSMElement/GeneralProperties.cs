@@ -279,12 +279,12 @@ namespace OSMElement
         public String grantFilterStrategy { get; set; }
 
         /// <summary>
-        /// the name of the process module.
+        /// the name of the process.
         /// It will be important to reload a screen reader.
         /// Only set at the first node.
-        /// Attention: modulName != className AND modulName != nameFiltered
+        /// Attention: processName != className AND processName != nameFiltered
         /// </summary>
-        public String moduleName { get; set; }
+        public String processName { get; set; }
 
         /// <summary>
         /// The full path (including the name) to the application.
