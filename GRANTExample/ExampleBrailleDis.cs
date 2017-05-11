@@ -154,6 +154,37 @@ namespace GRANTExample
             }
         }
 
+        internal void update()
+        {
+            try
+            {
+                
+                if (strategyMgr.getSpecifiedBrailleDisplay() == null || grantTrees == null || grantTrees.filteredTree == null || grantTrees.brailleTree == null || grantTrees.osmRelationship == null)
+                {
+                    return;
+                }
+                if(!strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree)) { return; }
+                GeneralProperties prop1Node = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties;
+                if(prop1Node.hWndFiltered == null || prop1Node.hWndFiltered.Equals(IntPtr.Zero)) { return; }
+                treeOperation.updateNodes.updateFilteredTree(prop1Node.hWndFiltered);
+                treeOperation.updateNodes.updateBrailleGroups();
+                foreach (Object o in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
+                {
+                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(o);
+                    if (!osm.brailleRepresentation.isGroupChild && !osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
+                    {
+                         treeOperation.updateNodes.updateNodeOfBrailleUi(ref osm);
+                        strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osm);
+                    }
+                }
+                strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: '{0}'", ex);
+            }
+        }
+
         public bool[,] getRendererExample()
         {
             if (grantTrees.filteredTree == null)

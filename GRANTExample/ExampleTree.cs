@@ -37,10 +37,10 @@ namespace GRANTExample
                     int pointY;
                     strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Element, 0);
-                    if (grantTree.filteredTree != null)
+                  /*  if (grantTree.filteredTree != null)
                     {
                         treeOperation.updateNodes.changePropertiesOfFilteredNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties);
-                    }
+                    }*/
                    // strategyMgr.getSpecifiedTreeOperations().printTreeElements(tree, -1);
                     if (strategyMgr.getSpecifiedTree().HasChild(tree)== true)
                     {

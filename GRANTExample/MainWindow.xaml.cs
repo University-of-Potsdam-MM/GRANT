@@ -155,100 +155,35 @@ namespace GRANTExample
             if (e.Key == Key.F1)
             {
                 exampleInspectGui.inspect();
-            }
-            if (e.Key == Key.F2)
-            {
-                exampleBrailleDis.UiBrailleDis(AnzeigeEigenschaftBox.Text);
-            }
-            if (e.Key == Key.F3)
-            {
-                exampleTree.setOSMRelationshipImg();
-            }
-            if (e.Key == Key.F4)
-            {
-                exampleBrailleDis.updateImg();
-            }
-            if (e.Key == Key.F5)
-            {
-                exampleTree.filterTreeOfApplication();
-                /*  System.IO.FileStream fs = System.IO.File.Create("c:\\Users\\mkarlapp\\Desktop\\test211.xml");
-                  StrategyGenericTree.ITree<OSMElement.OSMElement> tree2 = (StrategyGenericTree.ITree<OSMElement.OSMElement>)grantTree.filteredTree.Copy();
-                  StrategyGenericTree.NodeTree<OSMElement.OSMElement> tree3 = (StrategyGenericTree.NodeTree<OSMElement.OSMElement>)grantTree.filteredTree;
-                  tree2.XmlSerialize(fs);
-                  tree2.XmlSerialize(fs);
-                  strategyMgr.getSpecifiedTree().XmlSerialize(fs);
-                  grantTree.filteredTree.XmlSerialize(fs);
-                  fs.Close();*/
-                Debug.WriteLine("F5");
-                //Debug.WriteLine("count =" + strategyMgr.getSpecifiedTree().Count(grantTree.filteredTree));
-              //  Debug.WriteLine("gefilterter Baum:\n{0}", strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.filteredTree));
-                //Debug.WriteLine(strategyMgr.getSpecifiedEventManager().deliverString().ToString());
-            }
-            if (e.Key == Key.F6)
-            {
-                exampleTree.changeFilter();
-            }
-            if (e.Key == Key.F7)
-            {
                 String element = exampleTree.filterNodeOfApplicatione();
                 NodeBox.Text = element;
             }
-            if (e.Key == Key.F8)
+            if (e.Key == Key.F2)
             {
-                String localizedControlTypeFiltered = itemNameTextBox.Text;
-                exampleTree.searchPropertie(localizedControlTypeFiltered);
+                List<String> result = exampleBrailleDis.getPosibleScreens();
+                NodeBox.Text = "Mögliche Screens: \n";
+                NodeBox.Text = result != null ? NodeBox.Text + String.Join(", ", result.Select(p => p.ToString()).ToArray()) : "";
             }
-            if (e.Key == Key.F9)
+            if (e.Key == Key.F3)
             {
-                exampleTree.setOSMRelationship();
+                exampleBrailleDis.changeScreen(Screen.Text);
             }
-            if (e.Key == Key.D1)
+            if(e.Key == Key.F4)
             {
-                NodeBox.Text = exampleDisplay.deviceInfo();
+                exampleBrailleDis.update();
             }
-            if (e.Key == Key.D2)
+            if (e.Key == Key.F5)
             {
                 NodeBox.Text = exampleDisplay.allDevices();
             }
-            if (e.Key == Key.D3)
+            if (e.Key == Key.F6)
             {
-                exampleDisplay.setMVBDDevice();
+                NodeBox.Text = exampleDisplay.deviceInfo();
             }
-            if (e.Key == Key.D4)
-            {
-                exampleDisplay.setBrailleIoSimulatorDevice();
-            }
-            if (e.Key == Key.D5)
-            {
-                exampleDisplay.setBrailleDis();
-            }
-            if (e.Key == Key.D6)
-            {
-                exampleBrailleDis.getRendererExample(itemNameTextBox.Text);
-            }
-            /*  if (e.Key == Key.G)
-             {
-                  List<String> result = exampleBrailleDis.getRendererList();
-                  //String.Join(":", properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray()
-                  NodeBox.Text = String.Join("; ", result.Select(p => p.ToString()).ToArray());
-              }*/
-            if (e.Key == Key.F11)
-            {
-                exampleTree.filterSubtreeOfApplication();
-                Debug.WriteLine("F11");
-            }
-            if (e.Key == Key.D7)
-            {
-                exampleBrailleDis.changeScreen(Screen.Text);
-                Debug.WriteLine("D7");
-            }
-            if (e.Key == Key.D8)
-            {
-                List<String> result = exampleBrailleDis.getPosibleScreens();
-                NodeBox.Text = "MöglichenScreens: \n";
-                NodeBox.Text = result != null ? NodeBox.Text + String.Join(", ", result.Select(p => p.ToString()).ToArray()) : "";
-            }
-            if (e.Key == Key.Left || e.Key == Key.NumPad4)
+            
+            
+
+          /*  if (e.Key == Key.Left || e.Key == Key.NumPad4)
             {
               //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.brailleTree); // => Tabs in Notepad
                // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.brailleTree); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
@@ -330,7 +265,7 @@ namespace GRANTExample
                     guiFuctions.addFilteredNodeToBrailleTree("ListItem", nodeList[0]);
                 }
                 
-            }
+            }*/
 
        }
 
@@ -375,36 +310,9 @@ namespace GRANTExample
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_Screen(object sender, RoutedEventArgs e)
         {
-           if (grantTree == null || grantTree.filteredTree == null) { return; }
-
-
-            TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTree, treeOperation);
-            tempTextView.createTextviewOfSubtree(grantTree.filteredTree);
-
-            //  String path = @"Templates" + System.IO.Path.DirectorySeparatorChar + "TemplateUi.xml";
-            String path = @"C:\Users\mkarlapp\Desktop\TemplateUi.xml";
-
-            if (!GuiFunctions.isTemplateValid(path))
-            {
-                Debug.WriteLine("Template ist nicht valide!");
-                return;
-            }
-            int minDeviceHeight;
-            int minDeviceWidth;
-            if (!guiFuctions.isTemplateUsableForDevice(path, out minDeviceHeight, out minDeviceWidth))
-            {
-                Debug.WriteLine("Das Template ist für eine größere Stifftplatte (min Height = " + minDeviceHeight + " Width = "+minDeviceWidth+") vorgesehen.");
-                return;
-            }
-            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(path);
-
-            if (grantTree.brailleTree != null)
-            {
-                Debug.WriteLineIf(grantTree.brailleTree != null, "Baum-Elemente Anzahl: " + strategyMgr.getSpecifiedTree().Count( grantTree.brailleTree));
-               // Console.WriteLine("Baum:\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(grantTree.brailleTree));
-            }
+            exampleBrailleDis.changeScreen(Screen.Text);
         }
 
         #region Notification

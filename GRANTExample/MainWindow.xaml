@@ -9,23 +9,17 @@
     <Grid Margin="0,0,0,-30" Height="652" VerticalAlignment="Top">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="88*"/>
-            <RowDefinition Height="75*"/>
+            <RowDefinition Height="225*"/>
+            <RowDefinition Height="373*"/>
+            <RowDefinition Height="54*"/>
         </Grid.RowDefinitions>
-        <TextBox Name="itemNameTextBox" HorizontalAlignment="Left" Height="23" Margin="19,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="135" RenderTransformOrigin="0.5,0.5"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="96,21,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBlock HorizontalAlignment="Left" Margin="19,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="254" Width="613"><Run Text="Mögliche &quot;Tests&quot; per  Key-Event:"/><LineBreak/><Run FontStyle="Oblique" Text="F5:"/><Run Text=" Baum filtern -&gt; es wird der Baum gefiltert von der Anwendung wo sich der Mauszeiger befindet"/><LineBreak/><Run FontStyle="Oblique" Text="F1:"/><Run Text=" inspect GUI-Element"/><LineBreak/><Run FontStyle="Oblique" Text="F9:"/><Run Text=" setzt eine Beziehung zu dem GUI-Element unter dem Curser"/><LineBreak/><Run FontStyle="Oblique" Text="F2: "/><Run Text=" Erstellt die UI auf dem BrailleDis bzw. aktualisiert sie"/><LineBreak/><Run Text="F8: Sucht nach 'Schaltfläche' oder dem in der Textbox angegebenen "/><Span Background="White" Foreground="Black" FontSize="12.6666666666667" FontFamily="Consolas"><Run Text="localizedControlTypeFiltered"/></Span><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="F7: Filtert den Knoten unter dem Mauszeiger und gibt einige Eigenschaften aus und aktualisiert den Baum"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="F3: Setzt eine Beziehung zu einem element von dem ein screenshot erstellt werden soll"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="F4: aktualisiert den Screenschot (vgl. F3)"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="F6: wechselt die Filter-Methode (UIA &amp; UIA2)"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="1"/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text=": gibt das ausgewählte Ausgabegerät an"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="2"/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text=": gibt alle möglichen Ausgabegeräte an"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="3"/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text=": setzt ein MVBD-Gerät als ausgabegerät"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="4"/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text=": setzt den BrailleIO-Simulator als Ausgabegerät"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="7"/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text=": zu angegebenen Screen wechseln"/><LineBreak/><Run Background="White" FontSize="12.6666666666667" FontFamily="Consolas" Text="8. möcgliche Screens"/></TextBlock>
-        <Label Content="Sucheigenschaft (F8)" HorizontalAlignment="Left" Height="23" Margin="19,37,0,0" VerticalAlignment="Top" Width="135"/>
-        <TextBox Name= "AnzeigeEigenschaftBox" HorizontalAlignment="Left" Height="23" Margin="363,60,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="190"/>
-        <Label Content="Anzeige-Eigenschaft (F9)" HorizontalAlignment="Left" Margin="363,37,0,0" VerticalAlignment="Top" Width="166" Height="23"/>
-        <TextBlock x:Name="NodeBox" HorizontalAlignment="Left" Margin="10,0,0,-187" TextWrapping="Wrap" VerticalAlignment="Top" Height="487" Width="622" Grid.Row="1"/>
-        <Button Content="Speichern" HorizontalAlignment="Left" Height="22" Margin="402,16,0,0" VerticalAlignment="Top" Width="60" Click="Button_Click_Speichern" RenderTransformOrigin="0.367,2"/>
-        <Button Content="Laden" HorizontalAlignment="Left" Height="22" Margin="467,16,0,0" VerticalAlignment="Top" Width="62" Click="Button_Click_Laden"/>
-        <Button Content="Template" HorizontalAlignment="Left" Margin="557,16,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <TextBox Name="Screen" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap"  VerticalAlignment="Top" Width="84" Margin="171,60,0,0"/>
-        <TextBlock HorizontalAlignment="Left" Height="18" Margin="176,37,0,0" TextWrapping="Wrap" Text="Screen" VerticalAlignment="Top" Width="79"/>
+        <Button Content="wechseln" HorizontalAlignment="Left" Margin="182,57,0,0" VerticalAlignment="Top" Width="74" Height="22" Click="Button_Click_Screen"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="126" Width="613"><Run Text="Mögliche &quot;Tests&quot; per  Key-Event:"/><LineBreak/><Run Text="F1 - inspect GUI-Element"/><LineBreak/><Run Text="F2 - mögliche Screens"/><LineBreak/><Run Text="F3 - zu angegebenen Screen wechseln"/><LineBreak/><Run Text="F4 - aktualisiert den Baum und die Anzeige"/><LineBreak/><Run Text="F5 - gibt alle möglichen Ausgabegeräte an"/><LineBreak/><Run Text="F6 - gibt das ausgewählte Ausgabegerät an"/></TextBlock>
+        <TextBlock x:Name="NodeBox" HorizontalAlignment="Left" Margin="10,0,0,-60" TextWrapping="Wrap" VerticalAlignment="Top" Height="487" Width="622" Grid.Row="1" Grid.RowSpan="2"/>
+        <TextBox Name="Screen" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap"  VerticalAlignment="Top" Width="84" Margin="75,60,0,0" RenderTransformOrigin="-1.53,0.435"/>
+        <TextBlock HorizontalAlignment="Left" Height="18" Margin="19,60,0,0" TextWrapping="Wrap" Text="Screen" VerticalAlignment="Top" Width="51"/>
         <Menu HorizontalAlignment="Left" Height="21" Margin="-2,0,0,0" VerticalAlignment="Top" Width="657">
-           
+
             <MenuItem Header="_File">
                 <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
             </MenuItem>
