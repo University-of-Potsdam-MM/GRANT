@@ -220,7 +220,7 @@ namespace GRANTExample
             }
             if (e.Key == Key.D5)
             {
-                exampleBrailleDis.getRendererExample();
+                exampleDisplay.setBrailleDis();
             }
             if (e.Key == Key.D6)
             {

@@ -29,7 +29,7 @@ namespace GRANTManager.AbstractClasses
         /// <param name="device">the choosen device</param>
         public void setActiveDevice(Device device)
         {
-            if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
+            if (!(this.GetType().FullName.Equals(device.deviceClassTypeFullName) || !this.GetType().Namespace.Equals(device.deviceClassTypeNamespace)))
             {
                 if (device.deviceClassTypeFullName != null && device.deviceClassTypeNamespace != null)
                 {

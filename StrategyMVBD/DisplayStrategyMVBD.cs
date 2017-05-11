@@ -34,7 +34,7 @@ namespace StrategyMVBD
 
         private bool isMvbdRunning()
         {
-            return base.strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD.exe") != IntPtr.Zero ? true : false ;
+            return base.strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD") != IntPtr.Zero ? true : false ;
         }
 
         #region Implementierung der Abstrakten Klasse

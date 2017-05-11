@@ -58,6 +58,23 @@ namespace GRANTExample
             }
         }
 
+        internal void setBrailleDis()
+        {
+            Device device = getDeviceByName("BrailleDis");
+            if (!device.Equals(new Device()))
+            {
+                strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(device);
+                Console.WriteLine("Ausgabegerät auf {0} geändert.", device.ToString());
+            }
+            else
+            {
+                // strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(new Device(64, 30, OrientationEnum.Front, "BrailleDisSimulator", this.GetType()));
+                Settings s = new Settings();
+                strategyMgr.setSpecifiedDisplayStrategy(s.getPosibleDisplayStrategies()[2].className);
+                Console.WriteLine("Ausgabegerät auf 'Simulator-BrailleIO' geändert.");
+            }
+        }
+
         public void setBrailleIoSimulatorDevice()
         {
 
