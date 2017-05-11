@@ -265,8 +265,7 @@ namespace GRANTApplication
                     brailleTreeOutput.Items.Clear();
                     brailleRoot.Items.Clear();
                 }
-                brailleTreeProp.Items.Clear();
-                brailleTreeProp.ItemsSource = "";
+              brailleTreeProp.ItemsSource = "";
                 brailleTreeProp.Items.Refresh();
             }
         }
