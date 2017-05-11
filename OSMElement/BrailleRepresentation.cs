@@ -180,5 +180,10 @@ namespace OSMElement
         public UiElements.Orientation orienataion { get; set; }
         public Rect childBoundingRectangle { get; set; }
         public String renderer { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("childBoundingRectangle: {0}, renderer: {1}",childBoundingRectangle, renderer);
+        }
     }
 }

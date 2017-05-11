@@ -237,6 +237,8 @@ namespace GRANTApplication
                 filteredTreeOutput.Items.Clear();
                 filteredRoot.Items.Clear();
                 guiFunctions.createTreeForOutput(tree, ref filteredRoot);
+                filteredTreeProp.ItemsSource = "";
+                filteredTreeProp.Items.Refresh();
                 SaveButton.IsEnabled = true;
                 LoadTemplate.IsEnabled = true;
                 filteredTreeOutput.Items.Add(filteredRoot);
@@ -256,10 +258,16 @@ namespace GRANTApplication
                     SaveButton.IsEnabled = true;
                     brailleTreeOutput.Items.Add(brailleRoot);
                     brailleDisplaySimul.Items.Refresh();
-                    brailleTreeProp.ItemsSource = "";
-                    brailleTreeProp.Items.Refresh();
+
                     #endregion
+                }else
+                {
+                    brailleTreeOutput.Items.Clear();
+                    brailleRoot.Items.Clear();
                 }
+                brailleTreeProp.Items.Clear();
+                brailleTreeProp.ItemsSource = "";
+                brailleTreeProp.Items.Refresh();
             }
         }
 

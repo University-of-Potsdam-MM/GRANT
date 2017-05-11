@@ -168,10 +168,11 @@ namespace GRANTExample
                 if(prop1Node.hWndFiltered == null || prop1Node.hWndFiltered.Equals(IntPtr.Zero)) { return; }
                 treeOperation.updateNodes.updateFilteredTree(prop1Node.hWndFiltered);
                 treeOperation.updateNodes.updateBrailleGroups();
-                foreach (Object o in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
+                Object tree = grantTrees.brailleTree;
+                foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(tree))
                 {
                     OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(o);
-                    if (!osm.brailleRepresentation.isGroupChild && !osm.brailleRepresentation.groupelementsOfSameType.Equals(new GroupelementsOfSameType()))
+                    if ((!osm.brailleRepresentation.isGroupChild || osm.brailleRepresentation.groupelementsOfSameType.renderer == null) && !osm.properties.boundingRectangleFiltered.Equals(new Rect()))
                     {
                          treeOperation.updateNodes.updateNodeOfBrailleUi(ref osm);
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osm);
