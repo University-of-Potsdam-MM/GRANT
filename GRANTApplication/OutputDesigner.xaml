@@ -54,7 +54,7 @@
              -->
                     <Label  Margin="2,5,5,5" Foreground="White" VerticalAlignment="Top" Content="Choosen Output Device: "/>
                     <Grid>
-                        <ComboBox  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Center"  Name="comboBox2" ItemsSource="{Binding Combobox2items}"   HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
+                        <ComboBox  Margin="5,5,5,5" Foreground="Black" VerticalAlignment="Center"  Name="comboBox2" ItemsSource="{Binding Combobox2items}"   HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"  DropDownOpened="OnDropDownOpened_Devices" />
                     </Grid>
                 </StackPanel>
             </StackPanel>

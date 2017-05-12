@@ -34,6 +34,8 @@ namespace GRANTManager.AbstractClasses
                 if (device.deviceClassTypeFullName != null && device.deviceClassTypeNamespace != null)
                 {
                     strategyMgr.setSpecifiedDisplayStrategy(device.deviceClassTypeFullName + ", " + device.deviceClassTypeNamespace);
+                    strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices();
+
                 }
             }
             if (device.deviceClassTypeNamespace != null && device.deviceClassTypeNamespace.Equals("StrategyMVBD"))

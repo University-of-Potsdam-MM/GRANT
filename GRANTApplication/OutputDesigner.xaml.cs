@@ -363,6 +363,22 @@ namespace GRANTApplication
         }
 
         /// <summary>
+        /// Updates the combobox with possible devices
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnDropDownOpened_Devices(object sender, EventArgs e)
+        {
+            if (comboBox2.IsDropDownOpen == true)
+            {
+                if (strategyMgr.getSpecifiedDisplayStrategy().getAllPosibleDevices().Count != comboBox2.Items.Count)
+                {
+                    ComboBox_Loaded(sender, e as RoutedEventArgs);
+                }
+            }
+        }
+
+        /// <summary>
         /// Displays properties of the marked tree node of the filtered tree in an table.
         /// </summary>
         /// <param name="IdGenerated"></param>
