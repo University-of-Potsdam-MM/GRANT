@@ -713,7 +713,7 @@ namespace GRANTManager
                     Debug.WriteLine("No data in the first node.");
                     return false;
                 }
-                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
+                IntPtr appIsRunnuing = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
                 if (appIsRunnuing.Equals(IntPtr.Zero))
                 {
 
@@ -748,7 +748,7 @@ namespace GRANTManager
             //it is just necassary when the application was closed  (--> compare hwnd)
             Object loadedTree = grantTrees.filteredTree;
 
-            IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.processName);
+            IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.processName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
             treeOperation.updateNodes.updateFilteredTree(hwnd);
         }

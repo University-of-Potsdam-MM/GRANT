@@ -57,12 +57,9 @@ namespace GRANTManager.Interfaces
         /// <returns><c>Rectangle</c> mit der Position des Objektes</returns>
         Rectangle getRect(OSMElement.OSMElement osmElement);
 
-        /// <summary>
-        /// Ermittelt ob eine Anwendung geöffnet ist
-        /// </summary>
-        /// <param name="appMainModulName">gibt den processName der gewünschten Anwendung an</param>
-        /// <returns> Handle der Anwendung, falls die Anwendung geöffnet ist; sonst <c>IntPtr.Zero</c></returns>
-        IntPtr isApplicationRunning(String processName);
+        Boolean isApplicationRunning(String processName);
+
+        IntPtr getHandleOfApplication(string processName);
 
         /// <summary>
         /// Ermittelt den Namen der Anwendung zurück

@@ -24,7 +24,7 @@ namespace FilteredTreeTest
 
         internal IntPtr startApp(String processNameCalc, String applicationPathName)
         {
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processNameCalc);
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(processNameCalc);
             if (appHwnd.Equals(IntPtr.Zero))
             {
                 bool openApp = strategyMgr.getSpecifiedOperationSystem().openApplication(applicationPathName);
@@ -35,7 +35,7 @@ namespace FilteredTreeTest
                 }
                 else
                 {
-                    appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(processNameCalc);
+                    appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(processNameCalc);
                 }
             }
             else

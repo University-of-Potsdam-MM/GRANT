@@ -252,21 +252,40 @@ namespace StrategyWindows
         /// Ermittelt ob eine Anwendung geöffnet ist
         /// </summary>
         /// <param name="processName">gibt den processName der gewünschten Anwendung an</param>
-        /// <returns> Handle der Anwendung, falls die Anwendung geöffnet ist; sonst <c>IntPtr.Zero</c></returns>
-        public IntPtr isApplicationRunning(string processName)
+        /// <returns> <c>true</c> with the application open; otherwise <c>false</c></returns>
+        public Boolean isApplicationRunning(string processName)
         {
-            if (processName == null) { return IntPtr.Zero; }
-            foreach (Process clsProcess in Process.GetProcesses())
+            if (processName == null) { return false; }
+            Process[] processes = Process.GetProcessesByName(processName);
+            if (processes != null && processes.Length == 1)
             {
                 try
                 {
-                    if (clsProcess.ProcessName != null && clsProcess.ProcessName.Equals(processName))
-                    {
-                        return clsProcess.MainWindowHandle;
-                    }
+                    return true;
                 }
-                catch (System.ComponentModel.Win32Exception) { }
-                catch (InvalidOperationException) { }
+                catch (System.ComponentModel.Win32Exception) { return false; }
+                catch (InvalidOperationException) { return false; }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Gibt den Handle der Anwendung zurück, falls diese geöffnet ist
+        /// </summary>
+        /// <param name="processName">gibt den processName der gewünschten Anwendung an</param>
+        /// <returns> Handle der Anwendung, falls die Anwendung geöffnet ist; sonst <c>IntPtr.Zero</c></returns>
+        public IntPtr getHandleOfApplication(string processName)
+        {
+            if (processName == null) { return IntPtr.Zero; }
+            Process[] processes = Process.GetProcessesByName(processName);
+            if (processes != null && processes.Length == 1)
+            {
+                try
+                {
+                    return processes[0].MainWindowHandle;
+                }
+                catch (System.ComponentModel.Win32Exception) { return IntPtr.Zero; }
+                catch (InvalidOperationException) { return IntPtr.Zero; }
             }
             return IntPtr.Zero;
         }
@@ -278,16 +297,13 @@ namespace StrategyWindows
         /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
         public String gerProcessNameOfApplication(int processId)
         {
-            foreach (Process clsProcess in Process.GetProcesses())
+            if (processId != 0)
             {
-                try
+                Process process = Process.GetProcessById(processId);
+                if (process != null)
                 {
-                    if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.Id.Equals(processId))
-                    {
-                        return clsProcess.ProcessName;
-                    }
+                    return process.ProcessName;
                 }
-                catch (System.ComponentModel.Win32Exception) { }
             }
             return null;
         }
@@ -299,16 +315,17 @@ namespace StrategyWindows
         /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
         public String getFileNameOfApplicationByMainWindowTitle(int processId)
         {
-            foreach (Process clsProcess in Process.GetProcesses())
+            if (processId != 0)
             {
-                try
+                Process process = Process.GetProcessById(processId);
+                if (process != null)
                 {
-                      if (!clsProcess.MainWindowHandle.Equals(IntPtr.Zero) && clsProcess.Id.Equals(processId))
+                    try
                     {
-                        return clsProcess.MainModule.FileName;
+                        return process.MainModule.FileName;
                     }
+                    catch (System.ComponentModel.Win32Exception) { return null; }
                 }
-                catch (System.ComponentModel.Win32Exception) { }
             }
             return null;
         }
@@ -352,7 +369,7 @@ namespace StrategyWindows
                     do
                     {
                         Thread.Sleep(500);
-                        hwnd = isApplicationRunning(p.ProcessName);
+                        hwnd = getHandleOfApplication(p.ProcessName);
                         i--;
                     }
                     while ((hwnd == null || hwnd.Equals(IntPtr.Zero)) && i> 0);

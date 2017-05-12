@@ -53,7 +53,7 @@ namespace FilteredTreeTest
         public void filterCalcTest()
         {
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(applicationName);
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             Assert.AreNotEqual(IntPtr.Zero, appHwnd, "Es hätte für die anwendung ein HWND ermittelt werden müssen!");
             Object treeHWND = strategyMgr.getSpecifiedFilter().filtering(appHwnd, TreeScopeEnum.Application, -1);
             Assert.AreNotEqual(null, treeHWND, "Es ist kein gefilterter Baum vorhanden");

@@ -76,7 +76,7 @@ namespace FilteredTreeTest
 
             guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
             
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(applicationName);                
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);                
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             //Send Key -> Inhalt im Textfeld soll sich ändern
             System.Windows.Forms.SendKeys.SendWait("{DEL}");
@@ -97,7 +97,7 @@ namespace FilteredTreeTest
 
             guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
 
-            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().isApplicationRunning(applicationName);
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             //Send Key -> Inhalt im Textfeld soll sich ändern
             System.Windows.Forms.SendKeys.SendWait("{DEL}");
