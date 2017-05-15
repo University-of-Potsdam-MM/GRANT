@@ -343,7 +343,6 @@ namespace GRANTExample
                 {
                     MenuItem i = ((MenuItem)e.Source);
                     ((MenuItem)e.Source).IsEnabled = false;
-                    strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
                     ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
                     srf.uncheckedMenuItem(i);
                     guiFuctions.loadGrantProject(srf.screenreaders[((MenuItem)e.Source).Header as String]);

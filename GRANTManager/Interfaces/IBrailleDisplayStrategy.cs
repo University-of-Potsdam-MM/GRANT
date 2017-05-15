@@ -110,6 +110,9 @@ namespace GRANTManager.Interfaces
         /// <param name="brailleNode">node of the braille (output) tree</param>
         /// <returns>position and offset of a node</returns>
         TactileNodeInfos getTactileNodeInfos(Object brailleNode);
+
+        Type getActiveAdapter();
+        void removeAllViews();
     }
     /// <summary>
     /// Structure for position and offset of a view

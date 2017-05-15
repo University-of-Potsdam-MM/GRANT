@@ -47,9 +47,8 @@ namespace StrategyMVBD
                 // 2. Empfange Ergebnis ist im Thread (Thread_Callback)
                 //warten auf Antwort
                 while (activeDevice.Equals(new Device())) { Task.Delay(10).Wait(); }
-            }
-            
-            return activeDevice;            
+            }            
+            return activeDevice;       
         }
 
         public override List<Device> getPosibleDevices()
@@ -76,10 +75,9 @@ namespace StrategyMVBD
         protected override void setDevice(Device device)
         {
             // Command 27
-            if (device.id == 0) return;
+            if (device.id == 0 || device.id == activeDevice.id) return;
              activeDevice= new Device();
-            SendSetDevice(device.id);
-            
+            SendSetDevice(device.id);            
         }
 
         protected override bool isDisplayStrategyAvailable()
@@ -102,8 +100,6 @@ namespace StrategyMVBD
                         _tcpClient.ReceiveTimeout = 500;
                         _tcpClient.SendTimeout = 500;
                     }
-
-
                     if (!isDisposed && _tcpClient.Connected == false)
                     {
                         TryConnect();
@@ -115,7 +111,6 @@ namespace StrategyMVBD
                     }
                     if (!isDisposed && _tcpClient.Connected == true)
                     {
-
                         if (!isDisposed && _tcpClient.Available > 3)
                         {
                             NetworkStream ns = _tcpClient.GetStream();
@@ -127,7 +122,6 @@ namespace StrategyMVBD
                             byte[] ba = new byte[len];
                             ns.Read(ba, 0, len);
 
-
                             if (cmd == 20) //20 => Device-Info
                             {
                                 setActiveDeviceGrant(ba);
@@ -135,8 +129,7 @@ namespace StrategyMVBD
                             if (cmd == 26)
                             {
                                 deviceList = interpretDeviceList(ba);
-                            }
-                            
+                            }                            
                         }
                     }
                 }
@@ -193,7 +186,6 @@ namespace StrategyMVBD
                 index = index + 4 + 1 + nameLength;
                 deviceList.Add(d);
             }
-
             return deviceList;
         }
 
@@ -269,7 +261,6 @@ namespace StrategyMVBD
             {
                 Debug.Print(ex.Message);
             }
-
         }
 
         private void TryConnect()
@@ -314,8 +305,6 @@ namespace StrategyMVBD
                 _tcpClient = null;
             }
         }
-
-
         #endregion
     }
 }

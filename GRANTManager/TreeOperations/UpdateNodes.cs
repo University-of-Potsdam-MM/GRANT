@@ -166,6 +166,16 @@ namespace GRANTManager.TreeOperations
         /// <summary>
         /// Sets the new braille representaion of the element
         /// </summary>
+        /// <param name="osmElement">the new representation</param>
+        public void setBrailleTreeOsmElement(OSMElement.OSMElement osmElement)
+        {
+            changeBrailleRepresentation(ref osmElement);
+        }
+
+
+        /// <summary>
+        /// Sets the new braille representaion of the element
+        /// </summary>
         /// <param name="element">the new representation</param>
         private void changeBrailleRepresentation(ref OSMElement.OSMElement element)
         {

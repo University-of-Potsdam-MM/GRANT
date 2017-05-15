@@ -38,6 +38,14 @@ namespace StrategyBrailleIO
         public void setTreeOperation(TreeOperation treeOperation) { uiElementList = getUiElements(); this.treeOperation = treeOperation; }
         public BrailleDisplayStrategyBrailleIO() { uiElementList = getUiElements();}
 
+        public Type getActiveAdapter()
+        {
+            if(brailleIOMediator != null && brailleIOMediator.AdapterManager != null && brailleIOMediator.AdapterManager.ActiveAdapter != null)
+            {
+                return BrailleIoAdapterClassTodisplayStrategyClass( brailleIOMediator.AdapterManager.ActiveAdapter.GetType());
+            }else { return null; }
+        }
+
         /// <summary>
         /// Creates a simulator if none exisis
         /// </summary>
@@ -117,7 +125,7 @@ namespace StrategyBrailleIO
         /// <summary>
         /// Removes all views
         /// </summary>
-        private void removeAllViews()
+        public void removeAllViews()
         {
             if (brailleIOMediator == null) { return; }
             foreach (AbstractViewBoxModelBase view in brailleIOMediator.GetViews())
@@ -145,6 +153,7 @@ namespace StrategyBrailleIO
             }
             if (brailleIOMediator != null && brailleIOMediator.AdapterManager != null)
             {
+                
                 AbstractBrailleIOAdapterBase brailleAdapter = displayStrategyClassToBrailleIoAdapterClass(activeDeviceType);
                 brailleIOMediator.AdapterManager.ActiveAdapter = brailleAdapter;
             }
@@ -1027,6 +1036,25 @@ namespace StrategyBrailleIO
                 }
             }
             if (brailleAdapterType != null) { return (AbstractBrailleIOAdapterBase)Activator.CreateInstance(brailleAdapterType, brailleIOMediator.AdapterManager); }
+            return null;
+        }
+
+        private Type BrailleIoAdapterClassTodisplayStrategyClass(Type brailleIOAdapterType)
+        {
+            Type brailleAdapterType = null;
+
+            XElement xmlDoc = XElement.Load(@"displayStrategyType.xml");
+            IEnumerable<XElement> elements = xmlDoc.Elements("Strategy");
+            foreach (XElement strategy in elements)
+            {
+                if (strategy.Element("AdaptClassTypeFullName").Value.Equals(brailleIOAdapterType.FullName))
+                {
+                    if (brailleIOAdapterType.Assembly.FullName.Contains(strategy.Element("AdapterClassTypeDllName").Value))
+                    {
+                        return brailleAdapterType = Type.GetType(strategy.Element("DeviceClassTypeFullName").Value + ", " + strategy.Element("DeviceClassTypeDllName").Value);
+                    }
+                }
+            }
             return null;
         }
         #endregion
