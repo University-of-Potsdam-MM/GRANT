@@ -50,6 +50,9 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+            strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperations);
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
             filteredTreeOutput.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
