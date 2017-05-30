@@ -62,6 +62,24 @@ namespace GRANTManager
             try
             {
                 Type type = Type.GetType(brailleDisplayName);
+                IBrailleDisplayStrategy strategy = getSpecifiedBrailleDisplay();
+                if (strategy != null)
+                {
+                    Type oldAdapter = strategy.getActiveAdapter();
+                    if(oldAdapter!= null)
+                    {
+                        Type newAdapter = Type.GetType(this.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeFullName + ", " + this.getSpecifiedDisplayStrategy().getActiveDevice().deviceClassTypeNamespace);
+                        if (oldAdapter.Equals(newAdapter))
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            this.getSpecifiedBrailleDisplay().removeActiveAdapter();
+                        }
+                    }
+                    
+                }
                 specifiedBrailleDisplay = (IBrailleDisplayStrategy)Activator.CreateInstance(type);
 
             }
@@ -225,12 +243,18 @@ namespace GRANTManager
                 AOutputManager om = (AOutputManager)Activator.CreateInstance(type, this);
                 if (getSpecifiedDisplayStrategy() == null || getSpecifiedDisplayStrategy().isDisplayStrategyAvailable(om))
                 {
-                    specifiedDisplayStrategy = (AOutputManager)Activator.CreateInstance(type, this);
+                    if (this.getSpecifiedBrailleDisplay() != null)
+                    {
+                        this.getSpecifiedBrailleDisplay().removeAllViews();
+                    }
+                    specifiedDisplayStrategy = om;
+
                 }
                 else
                 {
                     Console.WriteLine("Die DisplayStrategy ist nicht verfügbar.");
                     System.Windows.Forms.MessageBox.Show("The chosen display strategy is not available!", "GRANT exception");
+                    om.Dispose();
                 }
             }
             catch (InvalidCastException ic)
