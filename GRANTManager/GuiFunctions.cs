@@ -251,6 +251,209 @@ namespace GRANTManager
             public ObservableCollection<MenuItem> Items { get; set; }
         }
 
+
+        public class BrailleItem
+        {
+            public BrailleItem()
+            {
+                this.Items = new ObservableCollection<BrailleItem>();
+            }
+
+            public override string ToString()
+            {
+                // return String.Format("Id = {0}, controlType = {1}, name = {2}", IdGenerated, controlTypeFiltered, nameFiltered);
+                return String.Format("{0} - {1}", controlTypeFiltered, nameFiltered); //so wird es in der GUI angezeigt
+            }
+
+            public String IdGenerated
+            {
+                get;
+                set;
+            }
+            public String controlTypeFiltered
+            {
+                get;
+                set;
+            }
+            public String nameFiltered
+            {
+                get;
+                set;
+            }
+            public String viewName
+            {
+                get;
+                set;
+            }
+
+            public String screenName
+          {
+              get;
+              set;
+          }
+          public String screenCategory
+          {
+              get;
+              set;
+          }
+            public String acceleratorKeyFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public String accessKeyFiltered
+             {
+                 get;
+                 set;
+             }
+
+
+
+             public Boolean? isKeyboardFocusableFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public int[] runtimeIDFiltered
+             {
+                 get;
+                 set;
+             }
+
+             // STATE
+
+             // Boolean? => true, false, null
+             public Boolean? isEnabledFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public Boolean? hasKeyboardFocusFiltered
+             {
+                 get;
+                 set;
+             }
+
+             // Visibility
+
+             public Rect boundingRectangleFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public Boolean? isOffscreenFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public String helpTextFiltered
+             {
+                 get;
+                 set;
+             }
+
+
+             //IDENTIFICATION/Elemttype
+
+             //nicht von UIA
+
+
+             public String autoamtionIdFiltered
+             {
+                 get;
+                 set;
+             }
+
+
+             public String classNameFiltered
+             {
+                 get;
+                 set;
+             }
+
+             //Anmerkung: ich habe den LocalizedControlType genommen
+
+
+             public String frameWorkIdFiltered
+             {
+                 get;
+                 set;
+             }
+
+             //typ?
+             // Anmerkung: von String zu int geändert
+             public IntPtr hWndFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public Boolean? isContentElementFiltered
+             {
+                 get;
+                 set;
+             }
+             //typ?
+             public String labeledByFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public Boolean? isControlElementFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public Boolean? isPasswordFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public String localizedControlTypeFiltered
+             {
+                 get;
+                 set;
+             }
+
+
+
+             public int processIdFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public String itemTypeFiltered
+             {
+                 get;
+                 set;
+             }
+             public String itemStatusFiltered
+             {
+                 get;
+                 set;
+             }
+             public Boolean? isRequiredForFormFiltered
+             {
+                 get;
+                 set;
+             }
+
+             public String valueFiltered { get; set; }*/
+
+            public ObservableCollection<BrailleItem> Items { get; set; }
+        }
+
+
+
         /// <summary>
         /// flatten a tree
         /// </summary>

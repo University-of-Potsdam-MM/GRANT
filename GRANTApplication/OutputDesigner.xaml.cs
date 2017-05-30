@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Data;
 using GRANTManager.TreeOperations;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace GRANTApplication
 {
@@ -25,6 +26,8 @@ namespace GRANTApplication
         TreeViewItem brailleRoot;
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
+
+       
 
         [System.ComponentModel.BrowsableAttribute(false)]
         public DataGridCell CurrentCell { get; set; }
@@ -67,6 +70,7 @@ namespace GRANTApplication
             screenRoot = new GuiFunctions.MenuItem();
             SaveButton.IsEnabled = false;
             LoadTemplate.IsEnabled = false;
+            
         }
 
         /// <summary>
@@ -271,7 +275,8 @@ namespace GRANTApplication
         }
 
         /// <summary>
-        /// Load existing design template.
+        /// Load existing design template.l#
+        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -691,7 +696,8 @@ namespace GRANTApplication
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
             dataTable.Columns.Add(new DataColumn("Content"));
-            
+            dataTable.Columns.Add(new DataColumn("Unsichtbar"));
+
             DataRow dataRow = dataTable.NewRow();
             DataRow dataRow1 = dataTable.NewRow();
             DataRow dataRow2 = dataTable.NewRow();
@@ -715,75 +721,232 @@ namespace GRANTApplication
             dataRow[0] = "IdGenerated";
             if (osmElement.properties.IdGenerated == null) { return; }
             dataRow[1] = osmElement.properties.IdGenerated.ToString();
+            dataRow[2] = "IdGenerated";
+
             dataTable.Rows.Add(dataRow);
+            // dataRow.RejectChanges();
 
             dataRow1["Property"] = "isEnabledFiltered";
             dataRow1["Content"] = osmElement.properties.isEnabledFiltered == null ? " " : osmElement.properties.isEnabledFiltered.ToString();
+            dataRow1[2] = "isEnabledFiltered";
             dataTable.Rows.Add(dataRow1);
+
 
             dataRow2["Property"] = "boundingRectangleFiltered";
             dataRow2["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
+            dataRow2[2] = "isEnabledFiltered";
             dataTable.Rows.Add(dataRow2);
-            dataTable.Rows.Add();
 
             dataRow3["Property"] = "Value";
             dataRow3["Content"] = osmElement.properties.valueFiltered;
+            dataRow3[2] = "valueFiltered";
             dataTable.Rows.Add(dataRow3);
 
             dataRow4[0] = "ControlType";
             dataRow4[1] = osmElement.properties.controlTypeFiltered;
+            dataRow4[2] = "controlTypeFiltered";
             dataTable.Rows.Add(dataRow4);
-           
+
             dataRow5[0] = "Name";
             dataRow5[1] = osmElement.brailleRepresentation.viewName;
+            dataRow5[2] = "viewName";
             dataTable.Rows.Add(dataRow5);
 
             dataRow6[0] = "Visibility";
-            dataRow6[1] = osmElement.brailleRepresentation.isVisible.ToString(); 
+            dataRow6[1] = osmElement.brailleRepresentation.isVisible.ToString();
+            dataRow6[2] = "isVisible";
             dataTable.Rows.Add(dataRow6);
 
             dataRow7[0] = "displayedGuiElementType";
-            dataRow7[1] = osmElement.brailleRepresentation.displayedGuiElementType == null ? " " : osmElement.brailleRepresentation.displayedGuiElementType.ToString();  
+            dataRow7[1] = osmElement.brailleRepresentation.displayedGuiElementType == null ? " " : osmElement.brailleRepresentation.displayedGuiElementType.ToString();
+            dataRow7[2] = "displayedGuiElementType";
             dataTable.Rows.Add(dataRow7);
 
             dataRow8[0] = "Contrast";
             dataRow8[1] = osmElement.brailleRepresentation.contrast.ToString();
+            dataRow8[2] = "contrast";
             dataTable.Rows.Add(dataRow8);
 
             dataRow9[0] = "Zoom";
             dataRow9[1] = osmElement.brailleRepresentation.zoom.ToString();
+            dataRow9[2] = "zoom";
             dataTable.Rows.Add(dataRow9);
 
             dataRow10[0] = "Screen name";
             dataRow10[1] = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName.ToString();
+            dataRow10[2] = "screenName";
             dataTable.Rows.Add(dataRow10);
 
             dataRow11[0] = "Show Scrollbar";
             dataRow11[1] = osmElement.brailleRepresentation.isScrollbarShow.ToString();
+            dataRow11[2] = "isScrollbarShow";
             dataTable.Rows.Add(dataRow11);
+
 
             dataRow12[0] = "UIElementSpecialContent";
             dataRow12[1] = osmElement.brailleRepresentation.uiElementSpecialContent == null ? " " : osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
+            dataRow12[2] = "uiElementSpecialContent";
             dataTable.Rows.Add(dataRow12);
 
             dataRow13[0] = "Margin";
             dataRow13[1] = osmElement.brailleRepresentation.margin == null ? " " : osmElement.brailleRepresentation.margin.ToString();
+            dataRow13[2] = "margin";
             dataTable.Rows.Add(dataRow13);
 
             dataRow14[0] = "Boarder";
             dataRow14[1] = osmElement.brailleRepresentation.boarder == null ? " " : osmElement.brailleRepresentation.boarder.ToString();
+            dataRow14[2] = "boarder";
             dataTable.Rows.Add(dataRow14);
 
             dataRow17[0] = "ZIndex";
             dataRow17[1] = osmElement.brailleRepresentation.zIntex.ToString();
+            dataRow17[2] = "zIntex";
             dataTable.Rows.Add(dataRow17);
 
             dataRow18[0] = "Padding";
             dataRow18[1] = osmElement.brailleRepresentation.padding == null ? " " : osmElement.brailleRepresentation.padding.ToString();
+            dataRow18[2] = "padding";
             dataTable.Rows.Add(dataRow18);
+
             brailleTreeProp.ItemsSource = dataTable.DefaultView;
         }
 
+
+        /*
+
+        /// <summary>
+        /// Displays properties of the marked tree node of the braille tree in the properties table.
+        /// </summary>
+        /// <param name="IdGenerated"></param>
+        void updateBrailleTable(String IdGenerated)
+        {
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+            DataTable dataTable = new DataTable();
+            DataColumn dc = new DataColumn();
+            dataTable.Columns.Add(new DataColumn("Property"));
+            dataTable.Columns.Add(new DataColumn("Content"));
+            dataTable.Columns.Add(new DataColumn("Unsichtbar"));
+
+            DataRow dataRow = dataTable.NewRow();
+            DataRow dataRow1 = dataTable.NewRow();
+            DataRow dataRow2 = dataTable.NewRow();
+            DataRow dataRow3 = dataTable.NewRow();
+            DataRow dataRow4 = dataTable.NewRow();
+            DataRow dataRow5 = dataTable.NewRow();
+            DataRow dataRow6 = dataTable.NewRow();
+            DataRow dataRow7 = dataTable.NewRow();
+            DataRow dataRow8 = dataTable.NewRow();
+            DataRow dataRow9 = dataTable.NewRow();
+            DataRow dataRow10 = dataTable.NewRow();
+            DataRow dataRow11 = dataTable.NewRow();
+            DataRow dataRow12 = dataTable.NewRow();
+            DataRow dataRow13 = dataTable.NewRow();
+            DataRow dataRow14 = dataTable.NewRow();
+            DataRow dataRow15 = dataTable.NewRow();
+            DataRow dataRow16 = dataTable.NewRow();
+            DataRow dataRow17 = dataTable.NewRow();
+            DataRow dataRow18 = dataTable.NewRow();
+
+            dataRow[0] = "IdGenerated";
+            if (osmElement.properties.IdGenerated == null) { return; }
+            dataRow[1] = osmElement.properties.IdGenerated.ToString();
+            dataRow[2] = "IdGenerated";
+
+            dataTable.Rows.Add(dataRow);
+           // dataRow.RejectChanges();
+
+            dataRow1["Property"] = "isEnabledFiltered";
+            dataRow1["Content"] = osmElement.properties.isEnabledFiltered == null ? " " : osmElement.properties.isEnabledFiltered.ToString();
+            dataRow1[2] = "isEnabledFiltered";
+            dataTable.Rows.Add(dataRow1);
+            
+            
+            dataRow2["Property"] = "boundingRectangleFiltered";
+            dataRow2["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
+            dataRow2[2] = "isEnabledFiltered";
+            dataTable.Rows.Add(dataRow2);
+
+            dataRow3["Property"] = "Value";
+            dataRow3["Content"] = osmElement.properties.valueFiltered;
+            dataRow3[2] = "valueFiltered";
+            dataTable.Rows.Add(dataRow3);
+
+            dataRow4[0] = "ControlType";
+            dataRow4[1] = osmElement.properties.controlTypeFiltered;
+            dataRow4[2] = "controlTypeFiltered";
+            dataTable.Rows.Add(dataRow4);
+           
+            dataRow5[0] = "Name";
+            dataRow5[1] = osmElement.brailleRepresentation.viewName;
+            dataRow5[2] = "viewName";
+            dataTable.Rows.Add(dataRow5);
+
+            dataRow6[0] = "Visibility";
+            dataRow6[1] = osmElement.brailleRepresentation.isVisible.ToString();
+            dataRow6[2] = "isVisible";
+            dataTable.Rows.Add(dataRow6);
+
+            dataRow7[0] = "displayedGuiElementType";
+            dataRow7[1] = osmElement.brailleRepresentation.displayedGuiElementType == null ? " " : osmElement.brailleRepresentation.displayedGuiElementType.ToString();
+            dataRow7[2] = "displayedGuiElementType";
+            dataTable.Rows.Add(dataRow7);
+
+            dataRow8[0] = "Contrast";
+            dataRow8[1] = osmElement.brailleRepresentation.contrast.ToString();
+            dataRow8[2] = "contrast";
+            dataTable.Rows.Add(dataRow8);
+
+            dataRow9[0] = "Zoom";
+            dataRow9[1] = osmElement.brailleRepresentation.zoom.ToString();
+            dataRow9[2] = "zoom";
+            dataTable.Rows.Add(dataRow9);
+
+            dataRow10[0] = "Screen name";
+            dataRow10[1] = osmElement.brailleRepresentation.screenName == null ? " " : osmElement.brailleRepresentation.screenName.ToString();
+            dataRow10[2] = "screenName";
+            dataTable.Rows.Add(dataRow10);
+
+            dataRow11[0] = "Show Scrollbar";
+            dataRow11[1] = osmElement.brailleRepresentation.isScrollbarShow.ToString();
+            dataRow11[2] = "isScrollbarShow";
+            dataTable.Rows.Add(dataRow11);
+            
+
+            dataRow12[0] = "UIElementSpecialContent";
+            dataRow12[1] = osmElement.brailleRepresentation.uiElementSpecialContent == null ? " " : osmElement.brailleRepresentation.uiElementSpecialContent.ToString();
+            dataRow12[2] = "uiElementSpecialContent";
+            dataTable.Rows.Add(dataRow12);
+
+            dataRow13[0] = "Margin";
+            dataRow13[1] = osmElement.brailleRepresentation.margin == null ? " " : osmElement.brailleRepresentation.margin.ToString();
+            dataRow13[2] = "margin";
+            dataTable.Rows.Add(dataRow13);
+
+            dataRow14[0] = "Boarder";
+            dataRow14[1] = osmElement.brailleRepresentation.boarder == null ? " " : osmElement.brailleRepresentation.boarder.ToString();
+            dataRow14[2] = "boarder";
+            dataTable.Rows.Add(dataRow14);
+
+            dataRow17[0] = "ZIndex";
+            dataRow17[1] = osmElement.brailleRepresentation.zIntex.ToString();
+            dataRow17[2] = "zIntex";
+            dataTable.Rows.Add(dataRow17);
+
+            dataRow18[0] = "Padding";
+            dataRow18[1] = osmElement.brailleRepresentation.padding == null ? " " : osmElement.brailleRepresentation.padding.ToString();
+            dataRow18[2] = "padding";
+            dataTable.Rows.Add(dataRow18);
+
+            brailleTreeProp.ItemsSource = dataTable.DefaultView;
+        }*/
+
+        /*  private void brailleTreeProp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+          {
+              if (((brailleTreeProp.Items)e.Row.Item).IsReadOnly)  //IsReadOnly is a property set in the MyCustomObject which is bound to each row
+              {
+                  e.Cancel = true;
+              }
+          }*/
         /// <summary>
         /// If a node of the braille tree is selected the braille display will be updated and also the tabple with the gui properties.
         /// </summary>
