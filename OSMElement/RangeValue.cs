@@ -10,6 +10,7 @@ namespace OSMElement
     /// Represents a control that can be set to a value within a range.
     /// Like System.Windows.Automation.RangeValuePattern
     /// </summary>
+    [Serializable]
     public struct RangeValue
     {
         public Boolean isReadOnly { get; set; }

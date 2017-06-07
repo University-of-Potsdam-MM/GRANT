@@ -9,6 +9,7 @@ namespace OSMElement.UiElements
     /// <summary>
     /// Specifies the properties of a list menu item.
     /// </summary>
+    [Serializable]
     public struct ListMenuItem
     {
         /// <summary>

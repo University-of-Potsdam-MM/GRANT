@@ -16,36 +16,36 @@ namespace TemplatesUi
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
-            GeneralProperties prop = templateObject.osm.properties;
-            BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
+            brailleNode.properties = templateObject.osm.properties;
+            brailleNode.brailleRepresentation = templateObject.osm.brailleRepresentation;
 
-            prop.isEnabledFiltered = false;
-            prop.controlTypeFiltered = "GroupElement";
-            prop.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
-            braille.isVisible = true;
+            brailleNode.properties.isEnabledFiltered = false;
+            brailleNode.properties.controlTypeFiltered = "GroupElement";
+            brailleNode.properties.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
+            brailleNode.brailleRepresentation.isVisible = true;
             if (templateObject.Screens == null) {
                 Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree();
             }
-            braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
+            brailleNode.brailleRepresentation.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            if ( !treeOperation.searchNodes.existViewInScreen(braille.screenName, templateObject.viewName, templateObject.osm.brailleRepresentation.typeOfView )) //!templateObject.allElementsOfType ||
+            if ( !treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, templateObject.viewName, templateObject.osm.brailleRepresentation.typeOfView )) //!templateObject.allElementsOfType ||
             {
-                braille.viewName = templateObject.viewName;
+                brailleNode.brailleRepresentation.viewName = templateObject.viewName;
             }
             else
             {
                 int i = 0;
                 String viewName = templateObject.viewName + "_"+i;
                 
-                while (treeOperation.searchNodes.existViewInScreen(braille.screenName, viewName, templateObject.osm.brailleRepresentation.typeOfView))
+                while (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, viewName, templateObject.osm.brailleRepresentation.typeOfView))
                 {
                     i++;
                     viewName += i;
                 }
-                braille.viewName = viewName;
+                brailleNode.brailleRepresentation.viewName = viewName;
             }
-            braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
-            braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
+            brailleNode.brailleRepresentation.templateFullName = templateObject.groupImplementedClassTypeFullName;
+            brailleNode.brailleRepresentation.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 
             /*if (templateObject.osm.brailleRepresentation.boarder != null)
             {
@@ -59,18 +59,13 @@ namespace TemplatesUi
             {
                 braille.margin = templateObject.osm.brailleRepresentation.margin;
             }*/
- 
-            brailleNode.properties = prop;
-            brailleNode.brailleRepresentation = braille;
 
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
             }
-            prop = brailleNode.properties;
-            prop.IdGenerated = idGenerated;
-            brailleNode.properties = prop;
+            brailleNode.properties.IdGenerated = idGenerated;
 
             List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
             OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);

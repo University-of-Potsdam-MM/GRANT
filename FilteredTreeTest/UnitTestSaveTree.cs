@@ -116,26 +116,22 @@ namespace FilteredTreeTest
                 List<Object> associatedNodeList = searchNodes.getNodeList(node1Id, loadedTree2);
                 if (associatedNodeList.Count != 1) { Assert.Fail("Die Id '{0}' kommt mehr als ein mal oder keinmal in dem Baum ({1}) vor!", node1Id, path2); return false; }
                 OSMElement.OSMElement osm1 = strategyMgr.getSpecifiedTree().GetData(node);
-                GeneralProperties prop1 = osm1.properties;
-                prop1.boundingRectangleFiltered = new Rect();
-                prop1.appPath = null;
                 //bei Textfeldern kann sich der Text ändern
-                if (prop1.controlTypeFiltered.Equals("Text"))
+                if (osm1.properties.controlTypeFiltered.Equals("Text"))
                 {
-                    prop1.nameFiltered = "";
+                    osm1.properties.nameFiltered = "";
                 }
-                osm1.properties = prop1;
+                osm1.properties.boundingRectangleFiltered = new Rect();
+                osm1.properties.appPath = null;
                 strategyMgr.getSpecifiedTree().SetData(node, osm1);
                 OSMElement.OSMElement osm2 = strategyMgr.getSpecifiedTree().GetData(associatedNodeList[0]);
-                GeneralProperties prop2 = osm2.properties;
-                prop2.boundingRectangleFiltered = new Rect();
-                prop2.appPath = null;
                 //bei Textfeldern kann sich der Text ändern
-                if (prop2.controlTypeFiltered.Equals("Text"))
+                if (osm2.properties.controlTypeFiltered.Equals("Text"))
                 {
-                    prop2.nameFiltered = "";
+                    osm2.properties.nameFiltered = "";
                 }
-                osm2.properties = prop2;
+                osm2.properties.boundingRectangleFiltered = new Rect();
+                osm2.properties.appPath = null;
                 strategyMgr.getSpecifiedTree().SetData(associatedNodeList[0], osm2);
                 Assert.AreEqual(true, hf.compareToNodes(node, associatedNodeList[0]), "Die beiden knoten stimmen nicht überein!");
 

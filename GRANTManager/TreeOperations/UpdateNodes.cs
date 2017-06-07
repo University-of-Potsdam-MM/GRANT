@@ -121,46 +121,26 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Changes the <see cref="GeneralProperties"/> of a node;
-        /// but not the "IdGenerated" 
+        /// Changes the <see cref="GeneralProperties"/> of a node
         /// </summary>
         /// <param name="properties">the new properties</param>
-        public void changePropertiesOfFilteredNode(GeneralProperties properties)
+        /// <param name="idGeneratedOld">the old id</param>
+        public void changePropertiesOfFilteredNode(GeneralProperties properties, String idGeneratedOld = null)
         {
-            List<Object> node = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, properties);
-            if (node.Count == 1)
+            // List<Object> node = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, properties);
+            Object node = treeOperation.searchNodes.getNode(properties.IdGenerated, grantTrees.filteredTree);
+            if (node != null)
             {
-                OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(node[0]).brailleRepresentation;
-                osm.events = strategyMgr.getSpecifiedTree().GetData(node[0]).events;
-                properties.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node[0]).properties.IdGenerated;
+                OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
                 osm.properties = properties;
-                strategyMgr.getSpecifiedTree().SetData(node[0], osm);
+                if(idGeneratedOld != null)
+                {
+                    osm.properties.IdGenerated = idGeneratedOld;
+                }
+                strategyMgr.getSpecifiedTree().SetData(node, osm);
                 return;
             }
-            Debug.WriteLine("TODO");
-        }
-
-        /// <summary>
-        /// Changes the <see cref="GeneralProperties"/> of a node and also the "IdGenerated"
-        /// </summary>
-        /// <param name="properties">the new properties</code></param>
-        /// <param name="idGeneratedOld">the old id</param>
-        public void changePropertiesOfFilteredNode(GeneralProperties properties, String idGeneratedOld)
-        {
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
-            {
-                if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(idGeneratedOld))
-                {
-                    OSMElement.OSMElement osm = new OSMElement.OSMElement();
-                    osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation;
-                    osm.events = strategyMgr.getSpecifiedTree().GetData(node).events;
-                    properties.IdGenerated = idGeneratedOld;
-                    osm.properties = properties;
-                    strategyMgr.getSpecifiedTree().SetData(node, osm);
-                    break;
-                }
-            }
+            Debug.WriteLine("Can't find the node!");
         }
 
         /// <summary>
@@ -197,39 +177,35 @@ namespace GRANTManager.TreeOperations
         /// <param name="element">the node which sould be updated</param>
         public void updateNodeOfBrailleUi(ref OSMElement.OSMElement element)
         {            
-            BrailleRepresentation updatedContentBR = element.brailleRepresentation;
-            GeneralProperties updatedContentGP = element.properties;
             if (element.brailleRepresentation.isGroupChild && element.brailleRepresentation.groupelementsOfSameType.renderer != null)
             {
-                updatedContentGP.controlTypeFiltered = element.brailleRepresentation.groupelementsOfSameType.renderer; //TODO: passt das so?
+                element.properties.controlTypeFiltered = element.brailleRepresentation.groupelementsOfSameType.renderer; //TODO: passt das so?
             }
-            if (!strategyMgr.getSpecifiedBrailleDisplay().getAllUiElementRenderer().Contains(updatedContentGP.controlTypeFiltered))
+            if (!strategyMgr.getSpecifiedBrailleDisplay().getAllUiElementRenderer().Contains(element.properties.controlTypeFiltered))
             {
                 Debug.WriteLine("Attention: The chosen renderer dosn't exist. Now the renderer is 'Text'.");
-                updatedContentGP.controlTypeFiltered = "Text";
+                element.properties.controlTypeFiltered = "Text";
             }
             if (element.brailleRepresentation.displayedGuiElementType != null)
             {
-                updatedContentGP.valueFiltered = getTextForView(element);
+                element.properties.valueFiltered = getTextForView(element);
             }
             if (element.brailleRepresentation.uiElementSpecialContent != null && element.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.ListMenuItem)))
             {
                 ListMenuItem listMenuItem = (ListMenuItem)element.brailleRepresentation.uiElementSpecialContent;
-                updatedContentGP.isToggleStateOn = isCheckboxOfAssociatedElementSelected(element);
+                element.properties.isToggleStateOn = isCheckboxOfAssociatedElementSelected(element);
             }            
             bool? isEnable = isUiElementEnable(element);
             if (isEnable != null)
             {
-                updatedContentGP.isEnabledFiltered = (bool)isEnable;
+                element.properties.isEnabledFiltered = (bool)isEnable;
             }
-            if (updatedContentBR.displayedGuiElementType != null && updatedContentBR.displayedGuiElementType != "" && !GeneralProperties.getAllTypes().Contains(updatedContentBR.displayedGuiElementType))
+            if (element.brailleRepresentation.displayedGuiElementType != null && element.brailleRepresentation.displayedGuiElementType != "" && !GeneralProperties.getAllTypes().Contains(element.brailleRepresentation.displayedGuiElementType))
             {
                 Debug.WriteLine("Attention: The chosen property for 'displayedGuiElementType' dosn't exist. Therefore, 'nameFiltered' is set.");
-                updatedContentBR.displayedGuiElementType = "nameFiltered";
+                element.brailleRepresentation.displayedGuiElementType = "nameFiltered";
             }
-
-            element.brailleRepresentation = updatedContentBR;
-            element.properties = updatedContentGP;
+            
             changeBrailleRepresentation(ref element);// here is the element already changed
         }
 
@@ -362,13 +338,11 @@ namespace GRANTManager.TreeOperations
                         if (!strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
                         {
                             OSMElement.OSMElement brailleNodeWithId = brailleNode;
-                            GeneralProperties prop = brailleNode.properties;
-                            prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(brailleNode);
-                            brailleNodeWithId.properties = prop;
+                            brailleNodeWithId.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(brailleNode);
                             if (parentId == null)
                             {
                                 strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
-                                return prop.IdGenerated;
+                                return brailleNodeWithId.properties.IdGenerated;
                             }
                             else
                             {
@@ -379,11 +353,11 @@ namespace GRANTManager.TreeOperations
                                     if (!data.properties.Equals(new GeneralProperties()) && data.properties.IdGenerated != null && data.properties.IdGenerated.Equals(parentId))
                                     {
                                         strategyMgr.getSpecifiedTree().AddChild(childOfNode, brailleNodeWithId);
-                                        return prop.IdGenerated;
+                                        return brailleNodeWithId.properties.IdGenerated;
                                     }
                                 }
                                 strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
-                                return prop.IdGenerated;
+                                return brailleNodeWithId.properties.IdGenerated;
                             }
                         }
                     }
@@ -405,24 +379,21 @@ namespace GRANTManager.TreeOperations
                 return;
             }
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
-            BrailleRepresentation brailleScreen = new BrailleRepresentation();
-            brailleScreen.screenName = screenName;
-            brailleScreen.typeOfView = typeOfView;
-            osmScreen.brailleRepresentation = brailleScreen;
-            GeneralProperties propOsmScreen = new GeneralProperties();
-            propOsmScreen.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
-            osmScreen.properties = propOsmScreen;
+            osmScreen.brailleRepresentation = new BrailleRepresentation();
+            osmScreen.brailleRepresentation.screenName = screenName;
+            osmScreen.brailleRepresentation.typeOfView = typeOfView;
+            osmScreen.properties = new GeneralProperties();
+            osmScreen.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);            
 
-            //the scree dosn't exist
+            //the screen dosn't exist
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmScreen))
             {
                 OSMElement.OSMElement osmViewCategory = new OSMElement.OSMElement();
-                BrailleRepresentation brailleViewCategory = new BrailleRepresentation();
-                brailleViewCategory.typeOfView = typeOfView;
-                osmViewCategory.brailleRepresentation = brailleViewCategory;
-                GeneralProperties propViewCategory = new GeneralProperties();
-                propViewCategory.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmViewCategory);
-                osmViewCategory.properties = propViewCategory;
+                osmViewCategory.brailleRepresentation = new BrailleRepresentation();
+                osmViewCategory.brailleRepresentation.typeOfView = typeOfView;
+                osmViewCategory.properties = new GeneralProperties();
+                osmViewCategory.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmViewCategory);
+                
                 Object typeOfViewSubtree = null;
                 //the typeOfView exist
                 if(strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmViewCategory))
@@ -557,8 +528,9 @@ namespace GRANTManager.TreeOperations
 
                             if (strategyMgr.getSpecifiedTree().BranchIndex(node) == 0)
                             {
-                                strategyMgr.getSpecifiedTree().Remove(grantTrees.filteredTree, strategyMgr.getSpecifiedTree().GetData(node));
-                                strategyMgr.getSpecifiedTree().InsertChild(parentNode, subtree);
+                                //   Object copy = strategyMgr.getSpecifiedTree().DeepCopy(grantTrees.filteredTree);
+                              bool reslut =  strategyMgr.getSpecifiedTree().Remove(grantTrees.filteredTree, strategyMgr.getSpecifiedTree().GetData(node));
+                                strategyMgr.getSpecifiedTree().InsertChild( parentNode, subtree);
                             }
                             else
                             {
@@ -726,17 +698,16 @@ namespace GRANTManager.TreeOperations
             {
                 foreach( Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(navigationBarSubtree))
                 {
-                    GeneralProperties prop = strategyMgr.getSpecifiedTree().GetData(node).properties;
+                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
                     if (strategyMgr.getSpecifiedTree().GetData(node).properties.valueFiltered.Equals(screenName))
                     {
-                        prop.isEnabledFiltered = false;
+                        osm.properties.isEnabledFiltered = false;
                     }
                     else
                     {
-                        prop.isEnabledFiltered = true;
+                        osm.properties.isEnabledFiltered = true;
                     }
-                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
-                    osm.properties = prop;
+                    
                     strategyMgr.getSpecifiedTree().SetData(node, osm);
                 }
                 OSMElement.OSMElement osmScreen = strategyMgr.getSpecifiedTree().GetData(navigationBarSubtree);

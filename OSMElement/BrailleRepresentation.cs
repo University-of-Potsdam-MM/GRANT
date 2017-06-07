@@ -14,7 +14,8 @@ namespace OSMElement
     [XmlInclude(typeof(DropDownMenuItem))]
     [XmlInclude(typeof(ListMenuItem))]
     [XmlInclude(typeof(TabItem))]
-    public struct BrailleRepresentation
+    [Serializable]
+    public class BrailleRepresentation
     {
         /* 
          * Relationship between typeOfView, screenName and viewName
@@ -170,8 +171,72 @@ namespace OSMElement
         /// </summary>
         public bool isGroupChild { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if ((this == null && obj != null) || (this != null && obj == null)) { return false; }
+            if (!obj.GetType().Equals(typeof(BrailleRepresentation))) { return false; }
+            BrailleRepresentation brailleR = (BrailleRepresentation)obj;
+            bool result = true;
+            if(this.boarder != null) { result = this.boarder.Equals(brailleR.boarder); }
+            result = result && this.contrast.Equals(brailleR.contrast);
+            if (this.displayedGuiElementType != null) { result = result && this.displayedGuiElementType.Equals(brailleR.displayedGuiElementType); }
+            if (!this.groupelementsOfSameType.Equals(new GroupelementsOfSameType())) { result = result && this.groupelementsOfSameType.Equals(brailleR.groupelementsOfSameType); }
+            result = result && this.isGroupChild.Equals(brailleR.isGroupChild);
+            result = result && this.isScrollbarShow.Equals(brailleR.isScrollbarShow);
+            result = result && this.isVisible.Equals(brailleR.isVisible);
+          //  if (this.jaggedMatrix != null) { result = result && this.jaggedMatrix.Equals(brailleR.jaggedMatrix); }
+            if (this.margin != null) { result = result && this.margin.Equals(brailleR.margin); }
+            if (this.matrix != null) { result = result && this.matrix.Equals(brailleR.matrix); }
+            if (this.padding != null) { result = result && this.padding.Equals(brailleR.padding); }
+            if (this.screenName != null) { result = result && this.screenName.Equals(brailleR.screenName); }
+            if (this.templateFullName != null) { result = result && this.templateFullName.Equals(brailleR.templateFullName); }
+            if (this.templateNamspace != null) { result = result && this.templateNamspace.Equals(brailleR.templateNamspace); }
+            if (this.textAcronym != null) { result = result && this.textAcronym.Equals(brailleR.textAcronym); }
+            if (this.typeOfView != null) { result = result && this.typeOfView.Equals(brailleR.typeOfView); }
+            if (this.uiElementSpecialContent != null) { result = result && this.uiElementSpecialContent.Equals(brailleR.uiElementSpecialContent); }
+            if (this.viewName != null) { result = result && this.viewName.Equals(brailleR.viewName); }
+            result = result && this.zIntex.Equals(brailleR.zIntex); 
+            result = result && this.zoom.Equals(brailleR.zoom);
+            return result;
+        }
+
+        /// <summary>
+        /// Hash function.
+        /// Attention: The object is mutable, the hash code can change! 
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        { //see: https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
+            unchecked // Overflow is fine, just wrap
+            {
+                int[] primeNumber = new int[] { 56467, 606241 };
+                int hash = primeNumber[0]; // 	prime number 
+                // Suitable nullity checks etc, of course :)
+                hash = hash * primeNumber[1] + (this.boarder != null ? boarder.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + contrast.GetHashCode();
+                hash = hash * primeNumber[1] + (this.displayedGuiElementType != null ? displayedGuiElementType.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (!this.groupelementsOfSameType.Equals(new GroupelementsOfSameType()) ? groupelementsOfSameType.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + isGroupChild.GetHashCode();
+                hash = hash * primeNumber[1] + isScrollbarShow.GetHashCode();
+                hash = hash * primeNumber[1] + isVisible.GetHashCode();
+                hash = hash * primeNumber[1] + (this.margin != null ? margin.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.padding != null ? padding.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.screenName != null ? screenName.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.templateFullName != null ? templateFullName.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.templateNamspace != null ? templateNamspace.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.textAcronym != null ? textAcronym.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.typeOfView != null ? typeOfView.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.uiElementSpecialContent != null ? uiElementSpecialContent.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.viewName != null ? viewName.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + zIntex.GetHashCode();
+                hash = hash * primeNumber[1] + zoom.GetHashCode();
+                return hash;
+            }
+        }
+
     }
 
+    [Serializable]
     public struct GroupelementsOfSameType
     {
         public Boolean? isLinebreak { get; set; }

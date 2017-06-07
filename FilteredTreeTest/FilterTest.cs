@@ -67,7 +67,7 @@ namespace FilteredTreeTest
                     subtreeHWND = strategyMgr.getSpecifiedTree().Child(subtreeHWND);
                 }
             }
-            Assert.AreNotEqual(null, subtreeHWND, "Es hätte ein Teilbung gefunden werden müssen!");
+            Assert.AreNotEqual(null, subtreeHWND, "Es hätte ein Teilbaum gefunden werden müssen!");
             OSMElement.OSMElement dataSubtreeHWND = strategyMgr.getSpecifiedTree().GetData(subtreeHWND);
             #endregion
             Object treePoint = strategyMgr.getSpecifiedFilter().filtering(Convert.ToInt32( dataSubtreeHWND.properties.boundingRectangleFiltered.X), Convert.ToInt32( dataSubtreeHWND.properties.boundingRectangleFiltered.Y), TreeScopeEnum.Application, -1);
@@ -96,6 +96,23 @@ namespace FilteredTreeTest
                     Assert.Fail("Der gefilterte Baum enthält den Knoten folgenden Knoten nicht:\n{0}", strategyMgr.getSpecifiedTree().GetData(node));
                 }
             }
+        }
+
+        [TestMethod]
+        public void setSpecialPropertiesOfFirstNodeTest()
+        {
+            HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+            Assert.AreNotEqual(IntPtr.Zero, appHwnd);
+            Object treeHWND = strategyMgr.getSpecifiedFilter().filtering(appHwnd, TreeScopeEnum.Application, -1);
+            Assert.AreNotEqual(null, treeHWND);
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().HasChild(treeHWND));
+            OSMElement.OSMElement firstNodeData = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeHWND));
+            Assert.IsNotNull(firstNodeData);
+            Assert.IsNotNull(firstNodeData.properties);
+            Assert.IsNotNull(firstNodeData.properties.grantFilterStrategy, "A filter strategy should be set at the first node.");
+            Assert.AreEqual("calc", firstNodeData.properties.processName, "The name of the process should be set at the first node of calc.");
+            Assert.IsNotNull(firstNodeData.properties.appPath, "The path of the application should be set at the first node of calc.");
         }
 
         /// <summary>
@@ -135,6 +152,7 @@ namespace FilteredTreeTest
             if (osmNode1.properties.processName != null && !osmNode1.properties.processName.Equals(osmNode2.properties.processName)) { Assert.Fail("Der moduleName der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (osmNode1.properties.nameFiltered != null && !osmNode1.properties.nameFiltered.Equals(osmNode2.properties.nameFiltered)) { Assert.Fail("Der nameFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (!osmNode1.properties.rangeValue.Equals(osmNode2.properties.rangeValue)) { Assert.Fail("Der rangeValue der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
+            if (!osmNode1.Equals(osmNode2)) { Assert.Fail("The nodes aren't equals."); }
             return true;
         }
     }

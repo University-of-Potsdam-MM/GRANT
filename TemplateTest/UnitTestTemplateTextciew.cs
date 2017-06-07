@@ -1,30 +1,27 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using GRANTManager;
+﻿using GRANTManager;
 using GRANTManager.TreeOperations;
-using BrailleTreeTests;
-using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BrailleTreeTest
+namespace TemplateTest
 {
     [TestClass]
-    public class UniqueIdsTests
+    public class UnitTestTemplateTextciew
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
         TreeOperation treeOperation;
         GuiFunctions guiFuctions;
-        private String pathToTemplate;
-
-        private String VIEWCATEGORYSYMBOLVIEW;
-        private String VIEWCATEGORYLAYOUTVIEW;
 
         [TestInitialize]
         public void Initialize()
         {
             #region initialisieren
-            strategyMgr = new StrategyManager();
+            strategyMgr = new GRANTManager.StrategyManager();
             grantTrees = new GeneratedGrantTrees();
             Settings settings = new Settings();
             treeOperation = new TreeOperation(strategyMgr, grantTrees);
@@ -46,18 +43,10 @@ namespace BrailleTreeTest
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
             #endregion
-
-            List<String> viewCategories = Settings.getPossibleTypesOfViews();
-            if (viewCategories == null) { Assert.Fail("Die ViewCategories sind in der Config nicht richtig angegeben!"); }
-            VIEWCATEGORYSYMBOLVIEW = viewCategories[0];
-            VIEWCATEGORYLAYOUTVIEW = viewCategories[1];
-
-            pathToTemplate = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Template");
-            pathToTemplate = System.IO.Path.Combine(pathToTemplate, "TemplateUiGroups.xml");
-
         }
+
         /// <summary>
-        /// Erstellt einen gefilterten Tree, welcher zum Testen der genutzt werden kann
+        /// Erstellt einen gefilterten Tree, welcher zum Testen der suchen genutzt werden kann
         /// </summary>
         private void initilaizeFilteredTree()
         {
@@ -71,23 +60,16 @@ namespace BrailleTreeTest
 
 
         [TestMethod]
-        public void generatedIdsOfBrailleTreeUniqueTest()
+        public void createTextviewOfSubtreeTest()
         {
             initilaizeFilteredTree();
-            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
-            String nodeId;
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
-            {
-                nodeId = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
-                Assert.AreNotEqual(null, nodeId, "Es hätte eine Id vorhanden sein müssen. Betrachteter Knoten:\n" + node);
-                foreach (Object nodeCopy in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
-                {
-                    if(!strategyMgr.getSpecifiedTree().GetData(node).Equals(strategyMgr.getSpecifiedTree().GetData(nodeCopy)) && nodeId.Equals(strategyMgr.getSpecifiedTree().GetData(nodeCopy).properties.IdGenerated))
-                    {
-                        Assert.Fail("selbe ID :(\n node1 = " + node + "\nnode2 = " + nodeCopy);
-                    }
-                }
-            }
+            TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTrees, treeOperation);
+            List<Object> nodes = treeOperation.searchNodes.getNodeList("41B73937D557B2AB5DA85001ABF0C423", grantTrees.filteredTree); // "41B73937D557B2AB5DA85001ABF0C423" is the Id of the "TitleBar" in MS Calc
+            Assert.AreNotEqual(null, nodes);
+            Assert.AreEqual(1, nodes.Count);
+            tempTextView.createTextviewOfSubtree(nodes[0], 0);
+            Assert.AreNotEqual(null, grantTrees.brailleTree);
+            Assert.AreEqual(38, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); // 6 Views => 3*5 + 3*7 = 15 +21 = 36 ; 36 + 2 (TextView & Screen) = 38 Nodes
         }
     }
 }

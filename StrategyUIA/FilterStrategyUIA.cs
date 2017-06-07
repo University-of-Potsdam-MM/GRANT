@@ -458,15 +458,14 @@ namespace StrategyUIA
         {
             if (strategyMgr.getSpecifiedTree().HasChild(tree))
             {
-                GeneralProperties prop = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
                 Settings settings = new Settings();
-                prop.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
-                prop.processName = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication(prop.processIdFiltered);
-                prop.appPath = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByMainWindowTitle(prop.processIdFiltered);
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
                 osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).brailleRepresentation;
                 osm.events = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).events;
-                osm.properties = prop;
+                osm.properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
+                osm.properties.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
+                osm.properties.processName = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication(osm.properties.processIdFiltered);
+                osm.properties.appPath = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByMainWindowTitle(osm.properties.processIdFiltered);
                 strategyMgr.getSpecifiedTree().SetData(strategyMgr.getSpecifiedTree().Child(tree), osm);
             }
         }
@@ -482,6 +481,7 @@ namespace StrategyUIA
             if (au != null)
             {
                 propertiesUpdated = setProperties(au);
+                propertiesUpdated.IdGenerated = osmElementFilteredNode.properties.IdGenerated;
             }
             return propertiesUpdated;
         }
@@ -597,7 +597,6 @@ namespace StrategyUIA
                 throw new System.ComponentModel.Win32Exception("Access denied: Can't seeks the AutomationElement");
             }
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
-            Debug.WriteLine("deliverElementID: processIdentifier = {0}", processIdentifier);
             return processIdentifier;
         }
 
@@ -630,7 +629,7 @@ namespace StrategyUIA
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mouseElement);
             //set Id 
-            List<Object> node = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
+            List<Object> node = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
             if (node.Count == 1)
             {
                 return strategyMgr.getSpecifiedTree().GetData(node[0]);

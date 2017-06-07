@@ -152,7 +152,16 @@ namespace StrategyGenericTree
         public bool Contains(Object treeOld, T nodeOsm)
         {
             if (treeOld == null || nodeOsm == null) { return false; }
-            return ((ITree<T>)treeOld).Contains(nodeOsm);
+            Object tree = Copy(treeOld);
+            foreach (Object n in AllNodes(tree))
+            {
+                T o = (T)GetData(n);
+                if(o.Equals(nodeOsm))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -486,14 +495,6 @@ namespace StrategyGenericTree
         {
             if (treeObject == null || !(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
             return (IEnumerable<object>)((NodeTree<T>)treeObject).DirectChildren.Nodes;
-        }
-
-
-        public new bool Equals(object node1, object node2)
-        {
-            IEqualityComparer<T> comparer = ((NodeTree<T>)node1).DataComparer;
-            bool result = comparer.Equals(((NodeTree<T>)node1).Data, ((NodeTree<T>)node2).Data);
-            return result;
         }
     }
 }

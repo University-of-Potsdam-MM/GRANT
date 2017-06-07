@@ -34,9 +34,7 @@ namespace GRANTManager.TreeOperations
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null)
                 {
                     OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
-                    GeneralProperties properties = strategyMgr.getSpecifiedTree().GetData(node).properties;
-                    properties.IdGenerated = generatedIdFilteredNode(node);
-                    osm.properties = properties;
+                     osm.properties.IdGenerated = generatedIdFilteredNode(node);
                     strategyMgr.getSpecifiedTree().SetData(node, osm);
                 }
             }
@@ -57,9 +55,7 @@ namespace GRANTManager.TreeOperations
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null)
                 {
                     OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
-                    GeneralProperties properties = strategyMgr.getSpecifiedTree().GetData(node).properties;
-                    properties.IdGenerated = generatedIdFilteredNode(node);
-                    osm.properties = properties;
+                    osm.properties.IdGenerated = generatedIdFilteredNode(node);
                     strategyMgr.getSpecifiedTree().SetData(node, osm);
                 }
             }

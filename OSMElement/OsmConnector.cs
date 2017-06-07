@@ -39,6 +39,11 @@ namespace OSMElement
         /// id of a node in the braille tree
         /// </summary>
         public U BrailleTree { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("OsmConnector -- FilteredTree: {0}, BrailleTree: {1}", FilteredTree, BrailleTree);
+        }
     }
 
 }

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace OSMElement
 {
     //TODO
-    public struct Events
+    [Serializable]
+    public class Events
     {
     }
 }

@@ -23,9 +23,10 @@ namespace TemplatesUi
                 List<String> screenList = templateObject.Screens;
                 foreach (String screen in screenList)
                 {
-                    templateObject.Screens = new List<string>();
-                    templateObject.Screens.Add(screen);
-                    Object brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
+                    TemplateUiObject copyTemplate = templateObject.DeepCopy();
+                    copyTemplate.Screens = new List<string>();
+                    copyTemplate.Screens.Add(screen);
+                    Object brailleNode = createSpecialUiElement(filteredSubtree, copyTemplate);
                     addSubtreeInBrailleTree(brailleNode);
                 }
             }
@@ -81,49 +82,44 @@ namespace TemplatesUi
         private OSMElement.OSMElement createParentBrailleNode(Object filteredSubtree, TemplateUiObject templateObject)
         {
             OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
-            GeneralProperties prop = templateObject.osm.properties;
-            BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
+            brailleNode.brailleRepresentation = templateObject.osm.brailleRepresentation;
+            brailleNode.properties = templateObject.osm.properties;
 
-            prop.isEnabledFiltered = false;
-            prop.controlTypeFiltered = "GroupElement";
-            prop.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
-            braille.isVisible = true;
+            brailleNode.properties.isEnabledFiltered = false;
+            brailleNode.properties.controlTypeFiltered = "GroupElement";
+            brailleNode.properties.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
+            brailleNode.brailleRepresentation.isVisible = true;
             if (templateObject.Screens == null)
             {
                 Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return new OSMElement.OSMElement();
             }
-            braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = "_" + templateObject.viewName + "_groupElementsStatic_Count_" + templateObject.groupElements.Count();
-            braille.templateFullName = templateObject.groupImplementedClassTypeFullName;
-            braille.templateNamspace = templateObject.groupImplementedClassTypeDllName;
+            brailleNode.brailleRepresentation.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
+            brailleNode.brailleRepresentation.viewName = "_" + templateObject.viewName + "_groupElementsStatic_Count_" + templateObject.groupElements.Count();
+            brailleNode.brailleRepresentation.templateFullName = templateObject.groupImplementedClassTypeFullName;
+            brailleNode.brailleRepresentation.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 
             if (templateObject.osm.brailleRepresentation.boarder != null)
             {
-                braille.boarder = templateObject.osm.brailleRepresentation.boarder;
+                brailleNode.brailleRepresentation.boarder = templateObject.osm.brailleRepresentation.boarder;
             }
             if (templateObject.osm.brailleRepresentation.padding != null)
             {
-                braille.padding = templateObject.osm.brailleRepresentation.padding;
+                brailleNode.brailleRepresentation.padding = templateObject.osm.brailleRepresentation.padding;
             }
             if (templateObject.osm.brailleRepresentation.margin != null)
             {
-                braille.margin = templateObject.osm.brailleRepresentation.margin;
+                brailleNode.brailleRepresentation.margin = templateObject.osm.brailleRepresentation.margin;
             }
-
-            brailleNode.properties = prop;
-            brailleNode.brailleRepresentation = braille;
-
+            
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return new OSMElement.OSMElement();
             }
-            prop = brailleNode.properties;
-            prop.IdGenerated = idGenerated;
-            brailleNode.properties = prop;
+            brailleNode.properties.IdGenerated = idGenerated;
 
             List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
-            if (filteredSubtree != null)
+            if (filteredSubtree != null && strategyMgr.getSpecifiedTree().GetData(filteredSubtree) != null)
             {
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
             }

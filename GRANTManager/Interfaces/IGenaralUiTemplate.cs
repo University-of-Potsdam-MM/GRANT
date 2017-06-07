@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using GRANTManager.TreeOperations;
 using System.Windows;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GRANTManager.Interfaces
 {
@@ -66,6 +68,8 @@ namespace GRANTManager.Interfaces
         /// <param name="brailleNodeId">Id of the parent element of the group</param>
         void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
+
+    [Serializable]
     public struct TemplateUiObject
     {
         public OSMElement.OSMElement osm { get; set; }
@@ -106,6 +110,25 @@ namespace GRANTManager.Interfaces
         /// Specifies the control type of the filtered node object from which to create a screenshot
         /// </summary>
         public String connectedFilteredNodeControltype { get; set; } 
+    }
+
+    public static class ExtObject
+    {
+        public static T DeepCopy<T>(this T objectToCopy)
+        { // see:https://softwarebydefault.com/2013/02/10/deep-copy-generics/#comments
+
+            MemoryStream mStream = new MemoryStream();
+            BinaryFormatter bFormatter = new BinaryFormatter();
+            bFormatter.Serialize(mStream, objectToCopy);
+
+            mStream.Position = 0;
+            T returnValue = (T)bFormatter.Deserialize(mStream);
+
+            mStream.Close();
+            mStream.Dispose();
+
+            return returnValue;
+        }
     }
 
 }

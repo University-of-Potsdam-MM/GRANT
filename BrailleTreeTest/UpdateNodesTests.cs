@@ -1,4 +1,5 @@
-﻿using GRANTManager.TreeOperations;
+﻿using BrailleTreeTests;
+using GRANTManager.TreeOperations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OSMElement;
 using System;
@@ -34,6 +35,9 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
             strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
+            strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
+            strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);
+            strategyMgr.getSpecifiedBrailleDisplay().setGeneratedGrantTrees(grantTrees);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
             strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
@@ -64,19 +68,18 @@ namespace GRANTManager.BrailleTreeTests
              *      - ID wurde generiert
              */
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
+            #endregion
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             //Ebenen:  0. Root; 1. SymbolView; 2. Screen; 3. Inhalt
             Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
@@ -84,48 +87,71 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree), "Der Root-Knoten muss gerde denau ein Kind haben. Er hat " + strategyMgr.getSpecifiedTree().DirectChildCount(grantTrees.brailleTree) + " Kinder!");
             object firstChildOfRoot = strategyMgr.getSpecifiedTree().Child(grantTrees.brailleTree);
             Assert.AreEqual(1, strategyMgr.getSpecifiedTree().DirectChildCount(firstChildOfRoot), "Das Kind von Root muss genau ein Kind haben. Es hat aber "+ strategyMgr.getSpecifiedTree().DirectChildCount(firstChildOfRoot) + " Kinder!");
-            Assert.AreEqual("SymbolView", strategyMgr.getSpecifiedTree().GetData(firstChildOfRoot).brailleRepresentation.typeOfView, "Das erste Kind von Root sollte eigentlich angeben, dass es eine SymbolView ist!");
+            Assert.AreEqual(VIEWCATEGORYSYMBOLVIEW, strategyMgr.getSpecifiedTree().GetData(firstChildOfRoot).brailleRepresentation.typeOfView, "Das erste Kind von Root sollte eigentlich angeben, dass es eine SymbolView ist!");
             object firstChildOfChildOfRoot = strategyMgr.getSpecifiedTree().Child(firstChildOfRoot);
             Assert.AreEqual("TestScreen", strategyMgr.getSpecifiedTree().GetData(firstChildOfChildOfRoot).brailleRepresentation.screenName, "Das erste Kind von der 'SymbolView' sollte eigentlich angeben, dass es eine 'TestScreen' ist!");
             Assert.AreNotEqual(null, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(firstChildOfChildOfRoot)).properties.IdGenerated, "Es muss eine Id vorhanden sein!");
+        }
+        [TestMethod]
+        public void addFilteredNodeInBrailleTree_controlltype()
+        {
+            guiFuctions.addFilteredNodeToBrailleTree("Button");
+            Assert.AreNotEqual(3, grantTrees.brailleTree, "It should be 3 nodes in the braille tree.");
+        }
+
+        [TestMethod]
+        public void addFilteredNodeInBrailleTree_tree()
+        {
+            #region filtering tree
+            String processName = "calc";
+            String applicationPathName = @"C:\Windows\system32\calc.exe";
+            HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
+            hf.filterApplication(processName, applicationPathName);
+            Assert.AreNotEqual(null, grantTrees.filteredTree);
+            #endregion
+            #region search node
+            GeneralProperties searchProp = new GeneralProperties();
+            searchProp.controlTypeFiltered = "Button";
+            searchProp.nameFiltered = "2";
+            List<Object> searchedTreeList = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, searchProp);
+            Assert.AreNotEqual(0, searchedTreeList);
+            Assert.AreEqual(1, searchedTreeList.Count);
+            #endregion
+            guiFuctions.addFilteredNodeToBrailleTree("Button", searchedTreeList[0]);
+            Assert.AreNotEqual(3, grantTrees.brailleTree, "It should be 3 nodes in the braille tree.");
         }
 
         [TestMethod()]
         public void add2NodesOfSameScreenInBrailleTreeTest()
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
+            #region 1. node
 
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
+
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen";
-            braille2.viewName = "TestView - 2";
-            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test 2";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen";
+            osm2.brailleRepresentation.viewName = "TestView -2";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test 2";
+
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
@@ -137,20 +163,18 @@ namespace GRANTManager.BrailleTreeTests
         public void addSameNodesOfSameScreenInBrailleTreeTest()
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
+
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             Assert.AreNotEqual(null, grantTrees.brailleTree, "Der BrailleBaum darf nun nicht mehr leer sein!");
@@ -166,37 +190,31 @@ namespace GRANTManager.BrailleTreeTests
         public void add2NodesOfDifferentScreenInBrailleTreeTest()
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
 
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen - 2";
-            braille2.viewName = "TestView";
-            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen - 2";
+            osm2.brailleRepresentation.viewName = "TestView";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
@@ -214,38 +232,32 @@ namespace GRANTManager.BrailleTreeTests
         [TestMethod()]
         public void add2NodesOfDifferentScreenAndViewCategoryInBrailleTreeTest()
         {
-            Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            Assert.AreEqual(null, grantTrees.brailleTree);
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYLAYOUTVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
 
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen - 2";
-            braille2.viewName = "TestView";
-            braille2.typeOfView = VIEWCATEGORYLAYOUTVIEW;
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen - 2";
+            osm2.brailleRepresentation.viewName = "TestView";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
@@ -264,37 +276,32 @@ namespace GRANTManager.BrailleTreeTests
         public void add2NodesOfDifferentViewsInBrailleTreeTest()
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
+
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
 
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen";
-            braille2.viewName = "TestView - 2";
-            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen";
+            osm2.brailleRepresentation.viewName = "TestView - 2";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
 
@@ -316,41 +323,33 @@ namespace GRANTManager.BrailleTreeTests
         [TestMethod()]
         public void addNavigationbarForScreenTest()
         {
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen";
-            braille2.viewName = "TestView - 2";
-            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test 2";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen";
+            osm2.brailleRepresentation.viewName = "TestView -2";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test 2";
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
-            strategyMgr.getSpecifiedGeneralTemplateUi().addNavigationbarForScreen(pathToTemplate, braille.screenName, braille.typeOfView);
+            strategyMgr.getSpecifiedGeneralTemplateUi().addNavigationbarForScreen(pathToTemplate, osm.brailleRepresentation.screenName, osm.brailleRepresentation.typeOfView);
             Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
             Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 7 Knoten haben müssen!");
             bool foundNavbar = false;
@@ -369,41 +368,33 @@ namespace GRANTManager.BrailleTreeTests
         [TestMethod()]
         public void createNavigationbarForScreenTest()
         {
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen";
-            braille2.viewName = "TestView - 2";
-            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test 2";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen";
+            osm2.brailleRepresentation.viewName = "TestView - 2";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test 2";
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
-            strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, braille.typeOfView);
+            strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, osm.brailleRepresentation.typeOfView);
             Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
             Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
             bool foundNavbar = false;
@@ -422,63 +413,50 @@ namespace GRANTManager.BrailleTreeTests
         [TestMethod()]
         public void updateNavigationbarForScreenTest()
         {
-            #region erster Knoten
-            BrailleRepresentation braille = new BrailleRepresentation();
-            braille.isVisible = true;
-            braille.screenName = "TestScreen";
-            braille.viewName = "TestView";
-            braille.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop = new GeneralProperties();
-            prop.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
-            prop.controlTypeFiltered = "Text";
-            prop.valueFiltered = "Test";
-
+            #region 1. node
             OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = prop;
+
+            osm.brailleRepresentation.isVisible = true;
+            osm.brailleRepresentation.screenName = "TestScreen";
+            osm.brailleRepresentation.viewName = "TestView";
+            osm.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm.properties.boundingRectangleFiltered = new Rect(0, 0, 20, 10);
+            osm.properties.controlTypeFiltered = "Text";
+            osm.properties.valueFiltered = "Test";
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
-            #region 2. Knoten
-            BrailleRepresentation braille2 = new BrailleRepresentation();
-            braille2.isVisible = true;
-            braille2.screenName = "TestScreen";
-            braille2.viewName = "TestView - 2";
-            braille2.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop2 = new GeneralProperties();
-            prop2.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
-            prop2.controlTypeFiltered = "Text";
-            prop2.valueFiltered = "Test 2";
-
+            #region 2. node
             OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
-            osm2.brailleRepresentation = braille2;
-            osm2.properties = prop2;
+
+            osm2.brailleRepresentation.isVisible = true;
+            osm2.brailleRepresentation.screenName = "TestScreen";
+            osm2.brailleRepresentation.viewName = "TestView - 2";
+            osm2.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm2.properties.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            osm2.properties.controlTypeFiltered = "Text";
+            osm2.properties.valueFiltered = "Test - 2";
             treeOperation.updateNodes.addNodeInBrailleTree(osm2);
             #endregion
-            strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, braille.typeOfView);
+            strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, osm.brailleRepresentation.typeOfView);
             //Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
-            #region 3. Knoten
-            BrailleRepresentation braille3 = new BrailleRepresentation();
-            braille3.isVisible = true;
-            braille3.screenName = "TestScreen - 3";
-            braille3.viewName = "TestView - 3";
-            braille3.typeOfView = VIEWCATEGORYSYMBOLVIEW;
-
-            GeneralProperties prop3 = new GeneralProperties();
-            prop3.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
-            prop3.controlTypeFiltered = "Text";
-            prop3.valueFiltered = "Test 3";
-
+            #region 3. node
             OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
-            osm3.brailleRepresentation = braille3;
-            osm3.properties = prop3;
+
+            osm3.brailleRepresentation.isVisible = true;
+            osm3.brailleRepresentation.screenName = "TestScreen - 3";
+            osm3.brailleRepresentation.viewName = "TestView - 3";
+            osm3.brailleRepresentation.typeOfView = VIEWCATEGORYSYMBOLVIEW;
+
+            osm3.properties.boundingRectangleFiltered = new Rect(0, 30, 20, 10);
+            osm3.properties.controlTypeFiltered = "Text";
+            osm3.properties.valueFiltered = "Test 3";
             treeOperation.updateNodes.addNodeInBrailleTree(osm3);
             #endregion
-            strategyMgr.getSpecifiedGeneralTemplateUi().updateNavigationbarScreens(pathToTemplate, braille.typeOfView);
+            strategyMgr.getSpecifiedGeneralTemplateUi().updateNavigationbarScreens(pathToTemplate, osm.brailleRepresentation.typeOfView);
             Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
             Assert.AreEqual(9, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 9 Knoten haben müssen!");
-
 
             Object subtreeNavbar = null;
             foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(grantTrees.brailleTree))

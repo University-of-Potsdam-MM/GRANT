@@ -9,6 +9,7 @@ namespace OSMElement.UiElements
     /// <summary>
     /// Specifies the properties of a drop down menu.
     /// </summary>
+    [Serializable]
     public struct DropDownMenuItem
     {
         /// <summary>

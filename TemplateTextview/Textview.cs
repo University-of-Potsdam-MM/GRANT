@@ -30,7 +30,6 @@ namespace TemplateTextview
         //Achtung: gibt noch Probleme, wenn die View zwei mal nacheinander erstellt wird
         public void createTextviewOfSubtree(Object subtree, int startYPosition = 0)
         {
-
              foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(subtree))
              {
                  createBrailleGroupFromFilteredNode(node, ref startYPosition);
@@ -39,25 +38,18 @@ namespace TemplateTextview
 
         private OSMElement.OSMElement addSeparatorElementInBrailleTree(String separator, ref int startX, int startY)
         {
-            TextviewObject tvo = grantTrees.TextviewObject;
-
             OSMElement.OSMElement osmBraille = new OSMElement.OSMElement();
-            GeneralProperties propBraille = new GeneralProperties();
-            BrailleRepresentation braille = new BrailleRepresentation();
 
-            braille.isVisible = true;
-            propBraille.controlTypeFiltered = "Text";
-            braille.isGroupChild = true;
-            braille.typeOfView = tvo.typeOfView;
-            braille.screenName = tvo.screenName;
-            braille.viewName = "separator";
-            propBraille.valueFiltered = separator;
-            propBraille.boundingRectangleFiltered = new Rect(startX, startY, separator.Length *3, 5);//TODO: richtig machen
+            osmBraille.brailleRepresentation.isVisible = true;
+            osmBraille.properties.controlTypeFiltered = "Text";
+            osmBraille.brailleRepresentation.isGroupChild = true;
+            osmBraille.brailleRepresentation.typeOfView = grantTrees.TextviewObject.typeOfView;
+            osmBraille.brailleRepresentation.screenName = grantTrees.TextviewObject.screenName;
+            osmBraille.brailleRepresentation.viewName = "separator";
+            osmBraille.properties.valueFiltered = separator;
+            osmBraille.properties.boundingRectangleFiltered = new Rect(startX, startY, separator.Length *3, 5);//TODO: richtig machen
 
-            osmBraille.properties = propBraille;
-            osmBraille.brailleRepresentation = braille;
-            propBraille.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmBraille);
-            osmBraille.properties = propBraille;
+            osmBraille.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmBraille);
             return osmBraille;
         }
 
@@ -97,28 +89,24 @@ namespace TemplateTextview
         {
             //Erst einen eigenen Teilbaum mit allen Kindern erzeugen und diesen anschließend dem Braille-Baum hinzufügen
             OSMElement.OSMElement osmGroup = new OSMElement.OSMElement();
-            GeneralProperties propGroup = new GeneralProperties();
-            BrailleRepresentation brailleGroup = new BrailleRepresentation();
-            brailleGroup.isVisible = true;
-            propGroup.controlTypeFiltered = "GroupElement";
-            
-            brailleGroup.typeOfView = grantTrees.TextviewObject.typeOfView;
-            brailleGroup.screenName = grantTrees.TextviewObject.screenName;
+            osmGroup.brailleRepresentation.isVisible = true;
+            osmGroup.properties.controlTypeFiltered = "GroupElement";
+            osmGroup.brailleRepresentation.typeOfView = grantTrees.TextviewObject.typeOfView;
+            osmGroup.brailleRepresentation.screenName = grantTrees.TextviewObject.screenName;
+
             OSMElement.OSMElement osmFiltered = strategyMgr.getSpecifiedTree().GetData(filteredNode);
-            brailleGroup.viewName = osmFiltered.properties.IdGenerated;
+            osmGroup.brailleRepresentation.viewName = osmFiltered.properties.IdGenerated;
             int depth = strategyMgr.getSpecifiedTree().Depth(filteredNode) * shiftingPerDepth;
             int startXPosition = depth;
-            propGroup.boundingRectangleFiltered = new Rect(startXPosition, startYPosition, 120 - startXPosition, 5);//TODO: richtig machen
+            osmGroup.properties.boundingRectangleFiltered = new Rect(startXPosition, startYPosition, 120 - startXPosition, 5);//TODO: richtig machen
 
-            osmGroup.brailleRepresentation = brailleGroup;
-            osmGroup.properties = propGroup;
-            propGroup.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmGroup);
+            osmGroup.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmGroup);
             String brailleParentId = null;
-            if (treeOperation.searchNodes.getBrailleTreeOsmElementById(propGroup.IdGenerated).Equals( new OSMElement.OSMElement()))
+            if (treeOperation.searchNodes.getBrailleTreeOsmElementById(osmGroup.properties.IdGenerated).Equals( new OSMElement.OSMElement()))
             {
                 object parent = strategyMgr.getSpecifiedTree().Parent(filteredNode);
                 
-                if(parent != null)
+                if(parent != null && strategyMgr.getSpecifiedTree().GetData(parent) != null)
                 {
                     List<string> ids = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(parent).properties.IdGenerated);
                     if (ids != null && ids.Count > 0)
@@ -148,8 +136,7 @@ namespace TemplateTextview
 
                     }
                 }
-                propGroup.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup, brailleParentId);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
-                osmGroup.properties = propGroup;
+                osmGroup.properties.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup, brailleParentId);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
             }
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
             Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);
@@ -162,7 +149,7 @@ namespace TemplateTextview
             else { order = grantTrees.TextviewObject.orders.defaultOrder; }
             foreach (TextviewElement tve in order)
             {
-                #region Zeichen für Beginn der aufzählung
+                #region Zeichen für Beginn der Aufzählung
                 if (grantTrees.TextviewObject.itemEnumerate != null && !grantTrees.TextviewObject.itemEnumerate.Equals("") && tve.order == 0)
                 {
                     strategyMgr.getSpecifiedTree().AddChild(brailleSubtreeParent, addSeparatorElementInBrailleTree(grantTrees.TextviewObject.itemEnumerate, ref startXPosition, startYPosition));
