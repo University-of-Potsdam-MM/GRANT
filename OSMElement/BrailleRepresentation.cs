@@ -284,7 +284,7 @@ namespace OSMElement
 
         public override string ToString()
         {
-            return String.Format("childBoundingRectangle: {0}, renderer: {1}",childBoundingRectangle, renderer);
+            return (this.Equals(new GroupelementsOfSameType()) ? "" : (String.Format("childBoundingRectangle: {0}, renderer: {1}", childBoundingRectangle, renderer)));
         }
     }
 }

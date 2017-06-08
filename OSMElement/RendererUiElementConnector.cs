@@ -42,7 +42,7 @@ namespace OSMElement
 
         public override string ToString()
         {
-            return String.Format("RendererName = {0},   ControlType = {1}", RendererName, ControlType);
+            return String.Format("RendererName: {0},   ControlType: {1}, SizeElement: {2}", RendererName, ControlType, SizeElement);
         }
 
         /// <summary>

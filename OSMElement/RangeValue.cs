@@ -20,5 +20,10 @@ namespace OSMElement
 
         public Double largeChange { get; set; }
         public Double smallChange { get; set; }
+
+        public override string ToString()
+        {
+            return (this.Equals(new RangeValue()) ? "" : (String.Format("currentValue: {0}, maximum: {1}, minimum: {2}, largeChange: {3}, smallChange: {4} ", currentValue, maximum, minimum, largeChange, smallChange)));
+        }
     }
 }
