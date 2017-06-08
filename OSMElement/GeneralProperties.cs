@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -264,13 +265,26 @@ namespace OSMElement
         #endregion
 
         #region other properties
+        internal String _idGenerated;
+
         /// <summary>
         /// The generated Id of the element
         /// </summary>
         public String IdGenerated
         {
-            get;
-            set;
+            get { return _idGenerated; }
+            set { _idGenerated = value;  }
+          /*  set
+            {
+                if (_idGenerated == null) { _idGenerated = value; }
+                else
+                {
+                    if (!_idGenerated.Equals(value))
+                    {
+                        Debug.WriteLine("");
+                    }
+                }
+            }*/
         }
 
         /// <summary>
@@ -326,7 +340,7 @@ namespace OSMElement
             }
             catch
             {
-                throw new Exception("Exception in OSMElement.Helper: An attempt was made to query a non-existent property ('" + elementName + "')");
+                throw new Exception("Exception in OSMElement.GeneralProperties: An attempt was made to query a non-existent property ('" + elementName + "')");
             }
         }
 

@@ -40,16 +40,14 @@ namespace TemplatesUi
         {
             if (strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewTree(); }
             OSMElement.OSMElement brailleNode = templateObject.osm.DeepCopy();
-            GeneralProperties prop = templateObject.osm.properties.DeepCopy();
-            BrailleRepresentation braille = templateObject.osm.brailleRepresentation.DeepCopy();
-            prop.IdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
-           // prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer; // den Renderer der Kindelemente setzen
-            prop.isEnabledFiltered = false;
-            braille.isVisible = true;
+            brailleNode.properties.IdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
+                                                       // prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer; // den Renderer der Kindelemente setzen
+            brailleNode.properties.isEnabledFiltered = false;
+            brailleNode.brailleRepresentation.isVisible = true;
             if (templateObject.Screens == null) { Debug.WriteLine("Achtung, hier wurde kein Screen angegeben!"); return strategyMgr.getSpecifiedTree().NewTree(); }
-            braille.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
-            braille.viewName = "GroupChild" + strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            braille.isGroupChild = true;
+            brailleNode.brailleRepresentation.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
+            brailleNode.brailleRepresentation.viewName = "GroupChild" + strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
+            brailleNode.brailleRepresentation.isGroupChild = true;
            // if(templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer != null) { 
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("DropDownMenuItem"))
             {
@@ -66,7 +64,7 @@ namespace TemplatesUi
                 if (strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.isChild = true; }
                 dropDownMenu.isOpen = false;
                 dropDownMenu.isVertical = false;
-                braille.uiElementSpecialContent = dropDownMenu;
+                brailleNode.brailleRepresentation.uiElementSpecialContent = dropDownMenu;
             }
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("ListItem"))
             {
@@ -80,17 +78,17 @@ namespace TemplatesUi
                         litItem.isMultipleSelection = true;
                     }
                 }
-                braille.uiElementSpecialContent = litItem;
+                brailleNode.brailleRepresentation.uiElementSpecialContent = litItem;
             }
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("TabItem"))
             {
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
                 tabView.orientation = templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion; //templateObject.orientation;
-                braille.uiElementSpecialContent = tabView;
-//                braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
+                brailleNode.brailleRepresentation.uiElementSpecialContent = tabView;
+                //                brailleNode.brailleRepresentation.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
             }
-            
-             OSMElement.OSMElement brailleGroupNode =  treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNodeId);
+
+            OSMElement.OSMElement brailleGroupNode =  treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNodeId);
              bool groupViewWithScrollbars = false;
              if (!brailleGroupNode.Equals(new OSMElement.OSMElement()) && brailleGroupNode !=null && brailleGroupNode.brailleRepresentation != null)
              {
@@ -119,7 +117,7 @@ namespace TemplatesUi
                      int subBoxModel = (brailleGroupNode == null || brailleGroupNode.brailleRepresentation == null)? 0 : brailleGroupNode.brailleRepresentation.boarder.Top + brailleGroupNode.brailleRepresentation.boarder.Bottom + brailleGroupNode.brailleRepresentation.margin.Top + brailleGroupNode.brailleRepresentation.margin.Bottom + brailleGroupNode.brailleRepresentation.padding.Top + brailleGroupNode.brailleRepresentation.padding.Bottom;
                      int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                      int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height);
-                     if (braille.groupelementsOfSameType.isLinebreak == true)
+                     if (brailleNode.brailleRepresentation.groupelementsOfSameType.isLinebreak == true)
                      {
                          column = strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) / elementsProColumn;
                      }
@@ -142,7 +140,7 @@ namespace TemplatesUi
                      int subBoxModel = (brailleGroupNode == null || brailleGroupNode.brailleRepresentation == null) ? 0 : brailleGroupNode.brailleRepresentation.boarder.Left + brailleGroupNode.brailleRepresentation.boarder.Right + brailleGroupNode.brailleRepresentation.margin.Left + brailleGroupNode.brailleRepresentation.margin.Right + brailleGroupNode.brailleRepresentation.padding.Left + brailleGroupNode.brailleRepresentation.padding.Right;
                      int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                      int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
-                     if (braille.groupelementsOfSameType.isLinebreak == true)
+                     if (brailleNode.brailleRepresentation.groupelementsOfSameType.isLinebreak == true)
                      {
                          line = strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) / elementsProLine;
                      }
@@ -169,10 +167,8 @@ namespace TemplatesUi
                  }
                }
              rect = new System.Windows.Rect(Convert.ToDouble(boxStartX), Convert.ToDouble(boxStartY), Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width), Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height));
-            prop.boundingRectangleFiltered = rect;
-
-            brailleNode.properties = prop;
-            brailleNode.brailleRepresentation = braille;
+            brailleNode.properties.boundingRectangleFiltered = rect;
+            
             if (!strategyMgr.getSpecifiedTree().HasParent(filteredSubtree) ) { return strategyMgr.getSpecifiedTree().NewTree(); }
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode, brailleNodeId);
             
@@ -180,8 +176,7 @@ namespace TemplatesUi
             {
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return strategyMgr.getSpecifiedTree().NewTree();
             }
-            prop = brailleNode.properties;
-            prop.IdGenerated = idGenerated;
+            brailleNode.properties.IdGenerated = idGenerated;
 
             List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
             OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
