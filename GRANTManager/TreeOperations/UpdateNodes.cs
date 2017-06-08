@@ -168,9 +168,17 @@ namespace GRANTManager.TreeOperations
             //TODO: prüfen, ob die Eigenschaft verändert werden darf
             OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(id);
             if (node == new OSMElement.OSMElement()) { return false; }
+            Object propertyValueCurrent = OSMElement.OSMElement.getElement(nameOfProperty, node);
             // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
             OSMElement.OSMElement.setElement(nameOfProperty, newProperty, node);
-            return true;
+            Object propertyValueNew = OSMElement.OSMElement.getElement(nameOfProperty, node);
+            if (propertyValueCurrent == null && propertyValueNew == null) { return false; }
+            if (propertyValueCurrent != null && propertyValueCurrent.Equals(propertyValueNew)) { return false; }
+            else
+            {
+                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.Equals(newProperty)) { return true; }
+            }
+            return false;
         }
 
 

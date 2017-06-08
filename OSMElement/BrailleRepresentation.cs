@@ -216,6 +216,24 @@ namespace OSMElement
         }
 
         /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="propertiesBraille">properties of the node</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
+        public static object getPropertyElement(String elementName, BrailleRepresentation propertiesBraille)
+        {
+            try
+            { //see http://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection-in-c-sharp#
+                return propertiesBraille.GetType().GetProperty(elementName).GetValue(propertiesBraille, null);
+            }
+            catch
+            {
+                throw new Exception("Exception in OSMElement.BrailleRepresentaion: An attempt was made to query a non-existent property ('" + elementName + "')");
+            }
+        }
+
+        /// <summary>
         /// Hash function.
         /// Attention: The object is mutable, the hash code can change! 
         /// </summary>

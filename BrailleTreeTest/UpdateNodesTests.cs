@@ -536,5 +536,26 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreEqual( nodeCopy, node, "Both nodes should have the same values.");
         }
 
+        [TestMethod]
+        public void setBrailleTreePropertyIdTest()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null, "Das grant-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
+            String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            Assert.AreEqual(node.properties.IdGenerated, nodeId);
+            String IdNew = "NewIdValue";
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "IdGenerated", IdNew);
+            Assert.IsFalse(result);
+            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreEqual(nodeCopy.properties.IdGenerated, node.properties.IdGenerated, "Both Id's should have the same values.");
+            Assert.AreEqual(nodeCopy, node, "Both nodes should have the same values.");
+           
+        }
+
     }
 }

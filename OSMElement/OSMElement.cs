@@ -111,6 +111,20 @@ namespace OSMElement
             }
             return;
         }
+
+        public static object getElement(String elementName, OSMElement osmElement)
+        {
+            if (GeneralProperties.getAllTypes().Contains(elementName))
+            {
+                return GeneralProperties.getPropertyElement(elementName, osmElement.properties);
+            }
+            if (BrailleRepresentation.getAllTypes().Contains(elementName))
+            {
+                return BrailleRepresentation.getPropertyElement(elementName, osmElement.brailleRepresentation);
+            }
+            //TODO: Events
+            return null;
+        }
     }
 
 }
