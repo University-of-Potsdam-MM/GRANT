@@ -452,7 +452,36 @@ namespace GRANTManager
             public ObservableCollection<BrailleItem> Items { get; set; }
         }
 
+        public class MyViewModel
+        {
+            public MyViewModel(OSMElement.OSMElement osmElement)
+            {
+                Items = new List<RowDataItem>();
+                
+                for (int i = 0; i < OSMElement.OSMElement.getAllTypes().Count; i++) {
 
+                    object o = OSMElement.OSMElement.getElement(OSMElement.OSMElement.getAllTypes()[i], osmElement);
+
+                  Items.Add(new RowDataItem(OSMElement.OSMElement.getAllTypes()[i], o!= null ? o.ToString() : ""));
+                }
+                ColumnNames = new List<string> { "Name_Titel", "Value_Titel", };
+            }
+
+            public IList<string> ColumnNames { get; private set; }
+
+            public IList<RowDataItem> Items { get; private set; }
+        }
+
+        public class RowDataItem
+        {
+            
+            public RowDataItem(String propName, String propVal)
+            {
+                Values = new List<string> { propName, propVal };
+            }
+
+            public IList<string> Values { get; private set; }
+        }
 
         /// <summary>
         /// flatten a tree

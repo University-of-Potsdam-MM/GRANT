@@ -10,6 +10,7 @@ using System.Data;
 using GRANTManager.TreeOperations;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace GRANTApplication
 {
@@ -68,7 +69,9 @@ namespace GRANTApplication
             screenRoot = new GuiFunctions.MenuItem();
             SaveButton.IsEnabled = false;
             LoadTemplate.IsEnabled = false;
+
             
+
         }
 
         /// <summary>
@@ -692,6 +695,24 @@ namespace GRANTApplication
         void updateBrailleTable(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+
+            var data = new GuiFunctions.MyViewModel(osmElement);
+
+            int columnIndex = 0;
+
+            foreach (var name in data.ColumnNames)
+            {
+                grid.Columns.Add(
+                    new DataGridTextColumn
+                    {
+                        Header = name,
+                        Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
+                    });
+            }
+
+            DataContext = data;
+
+
             DataTable dataTable = new DataTable();
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
