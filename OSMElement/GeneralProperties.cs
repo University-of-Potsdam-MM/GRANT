@@ -265,7 +265,7 @@ namespace OSMElement
         #endregion
 
         #region other properties
-        internal String _idGenerated;
+        private String _idGenerated;
 
         /// <summary>
         /// The generated Id of the element
@@ -273,8 +273,8 @@ namespace OSMElement
         public String IdGenerated
         {
             get { return _idGenerated; }
-            set { _idGenerated = value;  }
-          /*  set
+          //  set { _idGenerated = value;  }
+            set
             {
                 if (_idGenerated == null) { _idGenerated = value; }
                 else
@@ -284,7 +284,14 @@ namespace OSMElement
                         Debug.WriteLine("");
                     }
                 }
-            }*/
+            }
+        }
+
+        [XmlIgnore]
+        public String resetIdGenerated
+        {
+            internal get { return _idGenerated; }
+            set { _idGenerated = null; }
         }
 
         /// <summary>
@@ -321,7 +328,10 @@ namespace OSMElement
             var propNames = typeof(GeneralProperties).GetProperties();
             foreach (var name in propNames)
             {
-                displayedGuiElements.Add(name.Name.ToString());
+                if (!name.Name.ToString().Equals("resetIdGenerated"))
+                {
+                    displayedGuiElements.Add(name.Name.ToString());
+                }
             }
             return displayedGuiElements;
         }
