@@ -181,6 +181,32 @@ namespace GRANTManager.TreeOperations
             return false;
         }
 
+        /// <summary>
+        /// Value of a given Property
+        /// </summary>
+        /// <param name="elementName">the name of the property (<see cref="OSMElement.OSMElement.getAllTypes()"/>)</param>
+        /// <param name="osmElement"></param>
+        /// <returns>Value of a given Property; if <c>value == null</c> the result will be an empty String</returns>
+        public String getProperty(String elementName, OSMElement.OSMElement osmElement)
+        {
+            Object value = OSMElement.OSMElement.getElement(elementName, osmElement);
+            return value != null ? value.ToString() : "";
+        }
+
+        /// <summary>
+        /// Value of a given Property
+        /// </summary>
+        /// <param name="elementName">the name of the property (<see cref="OSMElement.OSMElement.getAllTypes()"/>)</param>
+        /// <param name="idOsmElement">Id of the OSM element</param>
+        /// <returns>Value of a given Property; if the id dosen't exist or <c>value == null</c> the result will be an empty String</returns>
+        public String getProperty(String elementName, String idOsmElement)
+        {
+            OSMElement.OSMElement osmElement = treeOperation.searchNodes.getBrailleTreeOsmElementById(idOsmElement);
+            if (osmElement == new OSMElement.OSMElement()) { return ""; }
+            Object value = OSMElement.OSMElement.getElement(elementName, osmElement);
+            return value != null ? value.ToString() : "";
+        }
+
 
         /// <summary>
         /// Sets the new braille representaion of the element

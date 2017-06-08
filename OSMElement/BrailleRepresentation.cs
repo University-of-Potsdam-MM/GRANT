@@ -181,7 +181,10 @@ namespace OSMElement
             var brailleNames = typeof(BrailleRepresentation).GetProperties();
             foreach (var name in brailleNames)
             {
-                displayedGuiElements.Add(name.Name.ToString());
+                if (!name.Name.ToString().Equals("jaggedMatrix"))
+                {
+                    displayedGuiElements.Add(name.Name.ToString());
+                }
             }
             return displayedGuiElements;
         }

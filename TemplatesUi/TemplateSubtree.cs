@@ -40,7 +40,7 @@ namespace TemplatesUi
         {
             if (strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewTree(); }
             OSMElement.OSMElement brailleNode = templateObject.osm.DeepCopy();
-            brailleNode.properties.IdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
+            brailleNode.properties.resetIdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
                                                        // prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer; // den Renderer der Kindelemente setzen
             brailleNode.properties.isEnabledFiltered = false;
             brailleNode.brailleRepresentation.isVisible = true;
