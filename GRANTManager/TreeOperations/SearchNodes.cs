@@ -30,25 +30,27 @@ namespace GRANTManager.TreeOperations
         /// <param name="generalProperties">properties for the search</param>
         /// <param name="oper">Operator for combining the properties (and, or) </param>
         /// <returns>A list of the found tree objects</returns>
-        public List<Object> searchProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
+        public List<Object> searchNodeByProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
         {//TODO: many properties are still missing
             List<Object> result = new List<Object>();
             if (tree == null) { return result; }
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || strategyMgr.getSpecifiedTree().GetData(node).properties.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
-                Boolean propertieName = generalProperties.nameFiltered == null || strategyMgr.getSpecifiedTree().GetData(node).properties.nameFiltered.Equals(generalProperties.nameFiltered);
-                Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || strategyMgr.getSpecifiedTree().GetData(node).properties.isEnabledFiltered == generalProperties.isEnabledFiltered;
-                Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || strategyMgr.getSpecifiedTree().GetData(node).properties.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
-                Boolean propertieIdGenerated = generalProperties.IdGenerated == null || generalProperties.IdGenerated.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
-                Boolean propertieAccessKey = generalProperties.accessKeyFiltered == null || generalProperties.accessKeyFiltered.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.accessKeyFiltered);
-                Boolean acceleratorKey = generalProperties.acceleratorKeyFiltered == null || generalProperties.acceleratorKeyFiltered.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.acceleratorKeyFiltered);
-                Boolean runtimeId = generalProperties.runtimeIDFiltered == null || Enumerable.SequenceEqual(generalProperties.runtimeIDFiltered, strategyMgr.getSpecifiedTree().GetData(node).properties.runtimeIDFiltered);
-                Boolean automationId = generalProperties.autoamtionIdFiltered == null || generalProperties.autoamtionIdFiltered.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.autoamtionIdFiltered); //ist zumindest bei Skype für ein UI-Element nicht immer gleich
-                Boolean controlType = generalProperties.controlTypeFiltered == null || generalProperties.controlTypeFiltered.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered);
+                OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
+                Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || nodeData.properties.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
+                Boolean propertieName = generalProperties.nameFiltered == null || nodeData.properties.nameFiltered.Equals(generalProperties.nameFiltered);
+                Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || nodeData.properties.isEnabledFiltered == generalProperties.isEnabledFiltered;
+                Boolean propertieBoundingRectangle = generalProperties.boundingRectangleFiltered == new System.Windows.Rect() || nodeData.properties.boundingRectangleFiltered.Equals(generalProperties.boundingRectangleFiltered);
+                Boolean propertieIdGenerated = generalProperties.IdGenerated == null || generalProperties.IdGenerated.Equals(nodeData.properties.IdGenerated);
+                Boolean propertieAccessKey = generalProperties.accessKeyFiltered == null || generalProperties.accessKeyFiltered.Equals(nodeData.properties.accessKeyFiltered);
+                Boolean acceleratorKey = generalProperties.acceleratorKeyFiltered == null || generalProperties.acceleratorKeyFiltered.Equals(nodeData.properties.acceleratorKeyFiltered);
+                Boolean runtimeId = generalProperties.runtimeIDFiltered == null || Enumerable.SequenceEqual(generalProperties.runtimeIDFiltered, nodeData.properties.runtimeIDFiltered);
+                Boolean automationId = generalProperties.autoamtionIdFiltered == null || generalProperties.autoamtionIdFiltered.Equals(nodeData.properties.autoamtionIdFiltered); //ist zumindest bei Skype für ein UI-Element nicht immer gleich
+                Boolean controlType = generalProperties.controlTypeFiltered == null || generalProperties.controlTypeFiltered.Equals(nodeData.properties.controlTypeFiltered);
                 if (OperatorEnum.Equals(oper, OperatorEnum.and))
                 {
-                    if (propertieBoundingRectangle && propertieLocalizedControlType && propertieIdGenerated && propertieAccessKey && acceleratorKey && runtimeId && controlType)
+                    if (propertieBoundingRectangle && propertieLocalizedControlType && propertieIdGenerated && propertieAccessKey && acceleratorKey &&
+                        runtimeId && controlType && propertieName && propertieIsEnabled)
                     {
                         result.Add(node);
                     }
@@ -60,7 +62,10 @@ namespace GRANTManager.TreeOperations
                         (generalProperties.isEnabledFiltered != null && propertieIsEnabled) ||
                         (generalProperties.boundingRectangleFiltered != new System.Windows.Rect() && propertieBoundingRectangle) ||
                         (generalProperties.IdGenerated != null && propertieIdGenerated) ||
-                        (generalProperties.accessKeyFiltered != null && propertieAccessKey)
+                        (generalProperties.accessKeyFiltered != null && propertieAccessKey) ||
+                        (generalProperties.acceleratorKeyFiltered != null && acceleratorKey) ||
+                        (generalProperties.runtimeIDFiltered != null && runtimeId) ||
+                        (generalProperties.controlTypeFiltered != null && controlType)
                         )
                     {
                         result.Add(node);
@@ -293,13 +298,12 @@ namespace GRANTManager.TreeOperations
         {
             if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || typeOfView == null || typeOfView.Equals("")) { return false; }
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
-            BrailleRepresentation brailleScreen = new BrailleRepresentation();
-            brailleScreen.screenName = screenName;
-            brailleScreen.typeOfView = typeOfView;
-            osmScreen.brailleRepresentation = brailleScreen;
-            GeneralProperties prop = new GeneralProperties();
-            prop.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
-            osmScreen.properties = prop;
+            osmScreen.brailleRepresentation = new BrailleRepresentation();
+            osmScreen.brailleRepresentation.screenName = screenName;
+            osmScreen.brailleRepresentation.typeOfView = typeOfView;
+            osmScreen.properties= new GeneralProperties();
+            osmScreen.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
+            //osmScreen.properties = prop;
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmScreen)) { return false; }
 
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return false; }

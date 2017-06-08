@@ -38,7 +38,10 @@ namespace TemplatesUi
                     templateObject.Screens = new List<string>();
                     templateObject.Screens.Add(screen);
                     Object brailleNode = createSpecialUiElement(filteredSubtree, templateObject);
-                    addIdAndRelationship(brailleNode, filteredSubtree, templateObject);
+                    if (!filteredSubtree.Equals(strategyMgr.getSpecifiedTree().NewTree()))
+                    {
+                        addIdAndRelationship(brailleNode, filteredSubtree, templateObject);
+                    }
                 }
             }
         }
@@ -79,10 +82,7 @@ namespace TemplatesUi
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }
             String parentId = idGenerated;
-            GeneralProperties prop = brailleNode.properties;
-            prop.IdGenerated = idGenerated;
-            brailleNode.properties = prop;
-            if(filteredSubtree != null) //(templateObject.osm.brailleRepresentation.displayedGuiElementType != null && !templateObject.osm.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
+            if(filteredSubtree != null && strategyMgr.getSpecifiedTree().Count(filteredSubtree) > 0) //(templateObject.osm.brailleRepresentation.displayedGuiElementType != null && !templateObject.osm.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
                 List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);

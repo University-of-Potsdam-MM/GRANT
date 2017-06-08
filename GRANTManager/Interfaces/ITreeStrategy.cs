@@ -157,6 +157,5 @@ namespace GRANTManager.Interfaces
         //Common.IEnumerableCollection<T> Values { get; }
         void XmlSerialize(object treeOld, Stream stream);
         object XmlDeserialize(Stream stream);
-        bool Equals(object node1, object node2);
     }
 }

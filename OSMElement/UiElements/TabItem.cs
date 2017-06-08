@@ -9,6 +9,7 @@ namespace OSMElement.UiElements
     /// <summary>
     /// Specifies the properties of a tab item
     /// </summary>
+    [Serializable]
     public struct TabItem
     {
 

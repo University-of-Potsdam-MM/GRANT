@@ -50,6 +50,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="HelpFunctions.cs" />
+    <Compile Include="UnitTestTemplateTextciew.cs" />
     <Compile Include="UnitTestValidate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -101,6 +103,10 @@
     <ProjectReference Include="..\TemplatesUi\TemplatesUi.csproj">
       <Project>{f1c8aabe-05d8-45cd-8a52-b3b894e58a5c}</Project>
       <Name>TemplatesUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TemplateTextview\TemplateTextview.csproj">
+      <Project>{9aee5067-3959-4eec-8215-bb562d0025e2}</Project>
+      <Name>TemplateTextview</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

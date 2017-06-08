@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using GRANTManager.TreeOperations;
 using System.Windows;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace GRANTManager.Interfaces
 {
@@ -66,6 +68,8 @@ namespace GRANTManager.Interfaces
         /// <param name="brailleNodeId">Id of the parent element of the group</param>
         void createUiElementFromTemplate(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null);
     }
+
+    [Serializable]
     public struct TemplateUiObject
     {
         public OSMElement.OSMElement osm { get; set; }

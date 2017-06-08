@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 namespace OSMElement
 {
     [Serializable]
-    public struct GeneralProperties
+    public class GeneralProperties
     {
         #region properties similar to UIA
         //see uia: https://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx and https://msdn.microsoft.com/en-us/library/ff400332%28VS.95%29.aspx
@@ -253,7 +253,7 @@ namespace OSMElement
         /// </summary>
         public RangeValue rangeValue
         {
-            get; set; 
+            get; set;
         }
 
         /// <summary>
@@ -329,7 +329,131 @@ namespace OSMElement
                 throw new Exception("Exception in OSMElement.Helper: An attempt was made to query a non-existent property ('" + elementName + "')");
             }
         }
-        
+
+        public bool ItemsEqual(object [] objA, object [] objB)
+        {
+            if ((objA == null && objB != null) || (objA != null && objB == null)) { return false; }
+            if (objA == null && objB == null) { return true; }
+            if (objA.Length != objB.Length) { return false; }
+            if (objA.Length != objB.Length) { return false; }
+            int i = 0;
+            foreach(Object o in objA)
+            {
+                if (!o.Equals(objB[i]))
+                {
+                    return false;
+                }
+                i++;
+            }
+            return true;
+        }
+
+        public bool ItemsEqual(int[] objA, int[] objB)
+        {
+            if((objA == null && objB != null) || (objA != null && objB == null)) { return false; }
+            if(objA == null && objB == null) { return true; }
+            if (objA.Length != objB.Length) { return false; }
+            int i = 0;
+            foreach (Object o in objA)
+            {
+                if (!o.Equals(objB[i]))
+                {
+                    return false;
+                }
+                i++;
+            }
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if ((this == null && obj != null) || (this != null && obj == null)) { return false; }
+            if (!obj.GetType().Equals(typeof(GeneralProperties))) { return false; }
+            GeneralProperties prop = (GeneralProperties)obj;
+            bool result = true;
+            if (this.acceleratorKeyFiltered != null) { result = this.acceleratorKeyFiltered.Equals(prop.acceleratorKeyFiltered); }
+            if (this.accessKeyFiltered != null) { result = result && this.accessKeyFiltered.Equals(prop.accessKeyFiltered); }
+            if (this.appPath != null) { result = result && this.appPath.Equals(prop.appPath); }
+            if (this.autoamtionIdFiltered != null) { result = result && this.autoamtionIdFiltered.Equals(prop.autoamtionIdFiltered); }
+            if (this.boundingRectangleFiltered != null) { result = result && this.boundingRectangleFiltered.Equals(prop.boundingRectangleFiltered); }
+            if (this.classNameFiltered != null) { result = result && this.classNameFiltered.Equals(prop.classNameFiltered); }
+            if (this.controlTypeFiltered != null) { result = result && this.controlTypeFiltered.Equals(prop.controlTypeFiltered); }
+            if (this.frameWorkIdFiltered != null) { result = result && this.frameWorkIdFiltered.Equals(prop.frameWorkIdFiltered); }
+            if (this.grantFilterStrategy != null) { result = result && this.grantFilterStrategy.Equals(prop.grantFilterStrategy); }
+            if (this.hasKeyboardFocusFiltered != null) { result = result && this.hasKeyboardFocusFiltered.Equals(prop.hasKeyboardFocusFiltered); }
+            if (this.helpTextFiltered != null) { result = result && this.helpTextFiltered.Equals(prop.helpTextFiltered); }
+            if (this.hWndFiltered != null) { result = result && this.hWndFiltered.Equals(prop.hWndFiltered); }
+            if (this.IdGenerated != null) { result = result && this.IdGenerated.Equals(prop.IdGenerated); }
+            if (this.isContentElementFiltered != null) { result = result && this.isContentElementFiltered.Equals(prop.isContentElementFiltered); }
+            if (this.isControlElementFiltered != null) { result = result && this.isControlElementFiltered.Equals(prop.isControlElementFiltered); }
+            if (this.isEnabledFiltered != null) { result = result && this.isEnabledFiltered.Equals(prop.isEnabledFiltered); }
+            if (this.isKeyboardFocusableFiltered != null) { result = result && this.isKeyboardFocusableFiltered.Equals(prop.isKeyboardFocusableFiltered); }
+            if (this.isOffscreenFiltered != null) { result = result && this.isOffscreenFiltered.Equals(prop.isOffscreenFiltered); }
+            if (this.isPasswordFiltered != null) { result = result && this.isPasswordFiltered.Equals(prop.isPasswordFiltered); }
+            if (this.isRequiredForFormFiltered != null) { result = result && this.isRequiredForFormFiltered.Equals(prop.isRequiredForFormFiltered); }
+            if (this.isToggleStateOn != null) { result = result && this.isToggleStateOn.Equals(prop.isToggleStateOn); }
+            if (this.itemStatusFiltered != null) { result = result && this.itemStatusFiltered.Equals(prop.itemStatusFiltered); }
+            if (this.itemTypeFiltered != null) { result = result && this.itemTypeFiltered.Equals(prop.itemTypeFiltered); }
+            if (this.labeledByFiltered != null) { result = result && this.labeledByFiltered.Equals(prop.labeledByFiltered); }
+            if (this.localizedControlTypeFiltered != null) { result = result && this.localizedControlTypeFiltered.Equals(prop.localizedControlTypeFiltered); }
+            if (this.nameFiltered != null) { result = result && this.nameFiltered.Equals(prop.nameFiltered); }
+            result = result && this.processIdFiltered.Equals(prop.processIdFiltered);
+            if (this.processName != null) { result = result && this.processName.Equals(prop.processName); }
+            if (!this.rangeValue.Equals(new RangeValue())) { result = result && this.rangeValue.Equals(prop.rangeValue); }
+            // if (this.runtimeIDFiltered != null) { result = result && ItemsEqual( this.runtimeIDFiltered, prop.runtimeIDFiltered); }
+            if (this.suportedPatterns != null) { result = result && ItemsEqual( this.suportedPatterns, prop.suportedPatterns); }
+            if (this.valueFiltered != null) { result = result && this.valueFiltered.Equals(prop.valueFiltered); }
+            return result;
+
+        }
+
+        /// <summary>
+        /// Hash function.
+        /// Attention: The object is mutable, the hash code can change! 
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        { //see: https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
+            unchecked // Overflow is fine, just wrap
+            {
+                int[] primeNumber = new int[] { 56467, 606241 };
+                int hash = primeNumber[0]; // 	prime number 
+                // Suitable nullity checks etc, of course :)
+                hash = hash * primeNumber[1] + (this.acceleratorKeyFiltered != null ? acceleratorKeyFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.accessKeyFiltered != null ? accessKeyFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.appPath != null ? appPath.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.autoamtionIdFiltered != null ? autoamtionIdFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.boundingRectangleFiltered != null ? boundingRectangleFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.classNameFiltered != null ? classNameFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.controlTypeFiltered != null ? controlTypeFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.frameWorkIdFiltered != null ? frameWorkIdFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.grantFilterStrategy != null ? grantFilterStrategy.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.hasKeyboardFocusFiltered != null ? hasKeyboardFocusFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.helpTextFiltered != null ? helpTextFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.hWndFiltered != null ? hWndFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.IdGenerated != null ? IdGenerated.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isContentElementFiltered != null ? isContentElementFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isControlElementFiltered != null ? isControlElementFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isEnabledFiltered != null ? isEnabledFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isKeyboardFocusableFiltered != null ? isKeyboardFocusableFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isOffscreenFiltered != null ? isOffscreenFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isPasswordFiltered != null ? isPasswordFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isRequiredForFormFiltered != null ? isRequiredForFormFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.isToggleStateOn != null ? isToggleStateOn.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.itemStatusFiltered != null ? itemStatusFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.itemTypeFiltered != null ? itemTypeFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.labeledByFiltered != null ? labeledByFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.localizedControlTypeFiltered != null ? localizedControlTypeFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.nameFiltered != null ? nameFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + processIdFiltered.GetHashCode();
+                hash = hash * primeNumber[1] + (this.processName != null ? processName.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (!this.rangeValue.Equals(new RangeValue()) ? rangeValue.GetHashCode() : 0);
+              // hash = hash * primeNumber[1] + (this.runtimeIDFiltered != null ? runtimeIDFiltered.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.suportedPatterns != null ? suportedPatterns.GetHashCode() : 0);
+                hash = hash * primeNumber[1] + (this.valueFiltered != null ? valueFiltered.GetHashCode() : 0);
+                return hash;
+            }
+        }
     }
 }
 

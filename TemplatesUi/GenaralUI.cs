@@ -79,7 +79,7 @@ namespace TemplatesUi
                 TemplateScreenshotObject templateObject = xmlUiScreenshotToTemplateUiScreenshot(element);
                 GeneralProperties prop = new GeneralProperties();
                 prop.controlTypeFiltered = templateObject.connectedFilteredNodeControltype;
-                List<Object> nodes = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, prop); 
+                List<Object> nodes = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, prop); 
           
                 generalUiInstance.createUiScreenshotFromTemplate(templateObject, nodes);
             }
@@ -102,7 +102,7 @@ namespace TemplatesUi
             }
             createUiElementsAllScreens(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
             createNavigationbar(pathToTemplate, VIEWCATEGORY_SYMBOLVIEW);
-            treeOperation.updateNodes.updateBrailleGroups();
+            treeOperation.updateNodes.updateBrailleGroups();           
         }
 
         /// <summary>
@@ -132,11 +132,10 @@ namespace TemplatesUi
             if (groupElements == null || groupElements.Equals(new List<OSMElement.OSMElement>())) { return; }
             templateObject.groupElements = groupElements;
             Object tree = grantTrees.filteredTree;
-            BrailleRepresentation br = templateObject.osm.brailleRepresentation;
-            br.groupelementsOfSameType = new GroupelementsOfSameType();
-            OSMElement.OSMElement osm = templateObject.osm;
-            osm.brailleRepresentation = br;
-            templateObject.osm = osm;
+            
+         //   OSMElement.OSMElement osm = templateObject.osm;
+            templateObject.osm.brailleRepresentation.groupelementsOfSameType = new GroupelementsOfSameType();
+          //  templateObject.osm = osm;
             ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
             generalUiInstance.createUiElementFromTemplate(tree, templateObject);
         }
@@ -209,7 +208,6 @@ namespace TemplatesUi
             foreach (String s in screens)
             {
                 OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
-                GeneralProperties childProp = new GeneralProperties();
                 Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
                 
                 if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right))
@@ -220,20 +218,17 @@ namespace TemplatesUi
                 {
                     rect.X = (rect.Width + 1) * index + rect.X + 1;
                 }
-   
-                childProp.boundingRectangleFiltered = rect;
-                childProp.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer;
-                childProp.valueFiltered = s;
-                childOsm.properties = childProp;
-                BrailleRepresentation childBraille = new BrailleRepresentation();
-                childBraille.isGroupChild = true;
-                childBraille.isVisible = true;
-                childBraille.viewName = "_" + s;//TODO
-                childBraille.typeOfView = templateObject.osm.brailleRepresentation.typeOfView;
+
+                childOsm.properties.boundingRectangleFiltered = rect;
+                childOsm.properties.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer;
+                childOsm.properties.valueFiltered = s;
+                childOsm.brailleRepresentation.isGroupChild = true;
+                childOsm.brailleRepresentation.isVisible = true;
+                childOsm.brailleRepresentation.viewName = "_" + s;//TODO
+                childOsm.brailleRepresentation.typeOfView = templateObject.osm.brailleRepresentation.typeOfView;
                 OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
                 tabView.orientation = templateObject.orientation;
-                childBraille.uiElementSpecialContent = tabView;
-                childOsm.brailleRepresentation = childBraille;
+                childOsm.brailleRepresentation.uiElementSpecialContent = tabView;
                 groupElementsStatic.Add(childOsm);
                 index++;
             }
@@ -259,16 +254,11 @@ namespace TemplatesUi
             }
             List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
             if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
-            templateObject.groupElements = groupElementsStatic;
-            Object tree = grantTrees.filteredTree;
-
-            BrailleRepresentation br = templateObject.osm.brailleRepresentation;
-            br.groupelementsOfSameType = new GroupelementsOfSameType();
-            OSMElement.OSMElement osm = templateObject.osm;
-            osm.brailleRepresentation = br;
-            templateObject.osm = osm;
+            templateObject.groupElements = groupElementsStatic;            
+          //  templateObject.osm = templateObject.osm;
+            templateObject.osm.brailleRepresentation.groupelementsOfSameType = new GroupelementsOfSameType();
             generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
-
+            Object tree = grantTrees.filteredTree;
             generalUiInstance.createUiElementFromTemplate(tree, templateObject);//
         }
 
@@ -316,10 +306,8 @@ namespace TemplatesUi
             TemplateScreenshotObject templetObject = new TemplateScreenshotObject();
             Int32 result;
             result = 0;
-            GeneralProperties properties = new GeneralProperties();
-            BrailleRepresentation braille = new BrailleRepresentation();
-            properties.controlTypeFiltered = "Screenshot";
-           // braille.displayedGuiElementType = xmlElement.Element("TextFromUIElement").Value;
+            templetObject.osm = new OSMElement.OSMElement();
+            templetObject.osm.properties.controlTypeFiltered = "Screenshot";
             XElement position = xmlElement.Element("Position");
             bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
             Rect rect = new Rect();
@@ -332,7 +320,7 @@ namespace TemplatesUi
             rect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - rect.Height);
             if (!isConvertHeight) { rect.Height -= rect.Y; }
             if (!isConvertWidth) { rect.Width -= rect.X; }
-            properties.boundingRectangleFiltered = rect;
+            templetObject.osm.properties.boundingRectangleFiltered = rect;
 
             if (!xmlElement.Element("Screens").IsEmpty)
             {
@@ -352,7 +340,6 @@ namespace TemplatesUi
             {
                 try
                 {
-                    Debug.WriteLine(xmlElement.Element("Zoom").Value);
                     Double resultZoom = XmlConvert.ToDouble(xmlElement.Element("Zoom").Value);
                     zoom = resultZoom < 0 ? 0 : (resultZoom > 3 ? 3 : resultZoom);
                 }
@@ -360,7 +347,7 @@ namespace TemplatesUi
                 catch (FormatException e) { Debug.WriteLine("Exception at casting the zoom value: {0}", e); }
                 catch (OverflowException e) { Debug.WriteLine("Exception at casting the zoom value: {0}}", e); }
             }
-            braille.zoom = zoom;
+            templetObject.osm.brailleRepresentation.zoom = zoom;
             int contrast = 0;
             if (!xmlElement.Element("Contrast").IsEmpty)
             {
@@ -370,15 +357,11 @@ namespace TemplatesUi
                     contrast = resultcontrast < 0 ? 0 : (resultcontrast > 255 ? 255 : resultcontrast);
                 }
             }
-            braille.contrast = contrast;
-            braille.typeOfView = VIEWCATEGORY_LAYOUTVIEW;
+            templetObject.osm.brailleRepresentation.contrast = contrast;
+            templetObject.osm.brailleRepresentation.typeOfView = VIEWCATEGORY_LAYOUTVIEW;
          //   braille.isScrollbarShow = Convert.ToBoolean(xmlElement.Element("ShowScrollbar").Value);
             templetObject.
                 viewName = templetObject.Screens != null ? templetObject.Screens[0] : "all"; //TODO: besserer Name
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = properties;
-            templetObject.osm = osm;
 
             return templetObject;
         }
@@ -392,15 +375,14 @@ namespace TemplatesUi
         private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement, String typeOfView)
         {
             TemplateUiObject templetObject = new TemplateUiObject();
+            templetObject.osm = new OSMElement.OSMElement();
             Int32 result;
             result = 0;
-            GeneralProperties properties = new GeneralProperties();
-            BrailleRepresentation braille = new BrailleRepresentation();
 
-            braille.typeOfView = typeOfView;
+            templetObject.osm.brailleRepresentation.typeOfView = typeOfView;
             templetObject.allElementsOfType = xmlElement.Element("AllElementsOfType") == null ? false : Boolean.Parse( xmlElement.Element("AllElementsOfType").Value);
-            properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
-            braille.displayedGuiElementType = xmlElement.Element("TextFromUIElement").Value;
+            templetObject.osm.properties.controlTypeFiltered = xmlElement.Element("Renderer").Value;
+            templetObject.osm.brailleRepresentation.displayedGuiElementType = xmlElement.Element("TextFromUIElement").Value;
             XElement position = xmlElement.Element("Position");
             bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
             Rect rect = new Rect();
@@ -413,7 +395,7 @@ namespace TemplatesUi
             rect.Y = isConvert ? result : (strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height - rect.Height);
             if (!isConvertHeight) { rect.Height -= rect.Y; }
             if (!isConvertWidth) { rect.Width -= rect.X; }
-            properties.boundingRectangleFiltered = rect;
+            templetObject.osm.properties.boundingRectangleFiltered = rect;
 
             if (!xmlElement.Element("BoxModel").IsEmpty)
             {
@@ -421,17 +403,17 @@ namespace TemplatesUi
                 if (!boxModel.Element("Padding").IsEmpty)
                 {
                     XElement padding = boxModel.Element("Padding");
-                    braille.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Bottom") == null ? 0 : Convert.ToInt32(padding.Element("Bottom").Value));
+                    templetObject.osm.brailleRepresentation.padding = new Padding(padding.Element("Left") == null ? 0 : Convert.ToInt32(padding.Element("Left").Value), padding.Element("Top") == null ? 0 : Convert.ToInt32(padding.Element("Top").Value), padding.Element("Right") == null ? 0 : Convert.ToInt32(padding.Element("Right").Value), padding.Element("Bottom") == null ? 0 : Convert.ToInt32(padding.Element("Bottom").Value));
                 }
                 if (!boxModel.Element("Margin").IsEmpty)
                 {
                     XElement margin = boxModel.Element("Margin");
-                    braille.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Bottom") == null ? 0 : Convert.ToInt32(margin.Element("Bottom").Value));
+                    templetObject.osm.brailleRepresentation.margin = new Padding(margin.Element("Left") == null ? 0 : Convert.ToInt32(margin.Element("Left").Value), margin.Element("Top") == null ? 0 : Convert.ToInt32(margin.Element("Top").Value), margin.Element("Right") == null ? 0 : Convert.ToInt32(margin.Element("Right").Value), margin.Element("Bottom") == null ? 0 : Convert.ToInt32(margin.Element("Bottom").Value));
                 }
                 if (!boxModel.Element("Boarder").IsEmpty)
                 {
                     XElement boarder = boxModel.Element("Boarder");
-                    braille.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Bottom") == null ? 0 : Convert.ToInt32(boarder.Element("Bottom").Value));
+                    templetObject.osm.brailleRepresentation.boarder = new Padding(boarder.Element("Left") == null ? 0 : Convert.ToInt32(boarder.Element("Left").Value), boarder.Element("Top") == null ? 0 : Convert.ToInt32(boarder.Element("Top").Value), boarder.Element("Right") == null ? 0 : Convert.ToInt32(boarder.Element("Right").Value), boarder.Element("Bottom") == null ? 0 : Convert.ToInt32(boarder.Element("Bottom").Value));
                 }
             }
 
@@ -453,13 +435,13 @@ namespace TemplatesUi
                 childRect.Height = isConvertHeight ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 isConvertWidth = Int32.TryParse(position.Element("Width").Value, out result);
                 childRect.Width = isConvertWidth ? result : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
-                childRect.X = rect.X + braille.padding.Left + braille.margin.Left + braille.boarder.Left;
-                childRect.Y = rect.Y + braille.padding.Top + braille.margin.Top + braille.boarder.Top;
+                childRect.X = rect.X + templetObject.osm.brailleRepresentation.padding.Left + templetObject.osm.brailleRepresentation.margin.Left + templetObject.osm.brailleRepresentation.boarder.Left;
+                childRect.Y = rect.Y + templetObject.osm.brailleRepresentation.padding.Top + templetObject.osm.brailleRepresentation.margin.Top + templetObject.osm.brailleRepresentation.boarder.Top;
                 if (!isConvertHeight) { childRect.Height -= childRect.Y; }
                 if (!isConvertWidth) { childRect.Width -= childRect.X; }
                 group.childBoundingRectangle = childRect;
                 group.renderer = xmlElement.Element("Renderer").Value;
-                braille.groupelementsOfSameType = group;
+                templetObject.osm.brailleRepresentation.groupelementsOfSameType = group;
             }
             if (!xmlElement.Element("Screens").IsEmpty)
             {
@@ -475,13 +457,8 @@ namespace TemplatesUi
                 String value = xmlElement.Element("Orientation").Value;
                 templetObject.orientation = (value.Equals( OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left : (value.Equals( OSMElement.UiElements.Orientation.Bottom.ToString()) ? OSMElement.UiElements.Orientation.Bottom : (value.Equals( OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));                
             }
-            braille.isScrollbarShow = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
+            templetObject.osm.brailleRepresentation.isScrollbarShow = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
             templetObject.viewName= xmlElement.Attribute("name").Value;
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
-            osm.brailleRepresentation = braille;
-            osm.properties = properties;
-            templetObject.osm = osm;
-
             return templetObject;
         }
 
@@ -539,7 +516,7 @@ namespace TemplatesUi
                 {
                     GeneralProperties properties = new GeneralProperties();
                     properties.controlTypeFiltered = e.Attribute("name").Value;
-                    List<Object> treefilteredElements = treeOperation.searchNodes.searchProperties(grantTrees.filteredTree, properties, OperatorEnum.and);
+                    List<Object> treefilteredElements = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, properties, OperatorEnum.and);
                     foreach (Object t in treefilteredElements)
                     {
                         tree = t;
@@ -571,12 +548,13 @@ namespace TemplatesUi
             {
                 generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
             }
+            
             foreach (String screen in screenList)
             {
-                templateObject.Screens = new List<string>();
-                templateObject.Screens.Add(screen);
-
-                generalUiInstance.createUiElementFromTemplate(tree, templateObject);
+                TemplateUiObject copyTemp = templateObject.DeepCopy();
+                copyTemp.Screens = new List<string>();
+                copyTemp.Screens.Add(screen);
+                generalUiInstance.createUiElementFromTemplate(tree, copyTemp);
             }
         }
 
@@ -642,22 +620,17 @@ namespace TemplatesUi
             screens.Add(screenName == null ? "neuerScreen" : screenName);
             templObject.Screens = screens;
             templObject.viewName = osmNodeFiltered.properties.IdGenerated;
-            OSMElement.OSMElement osmTempl = new OSMElement.OSMElement();
-            GeneralProperties propTempl = new GeneralProperties();
+            templObject.osm = new OSMElement.OSMElement();
             //Attention: currently all elements are below the other
             rectLast.X = 0;
             rectLast.Y = rectLast.Height == 0 ? 0 : rectLast.Y + rectLast.Height + 1;
             rectLast.Height = connector.SizeElement.height;
             rectLast.Width = connector.SizeElement.width;
-            propTempl.boundingRectangleFiltered = rectLast;
-            propTempl.controlTypeFiltered = connector.RendererName;
+            templObject.osm.properties.boundingRectangleFiltered = rectLast;
+            templObject.osm.properties.controlTypeFiltered = connector.RendererName;
 
-            BrailleRepresentation brailleTempl = new BrailleRepresentation();
-            brailleTempl.displayedGuiElementType = osmNodeFiltered.properties.nameFiltered != null ? "nameFiltered" : "valueFiltered";
-            brailleTempl.typeOfView = "blub";
-            osmTempl.brailleRepresentation = brailleTempl;
-            osmTempl.properties = propTempl;
-            templObject.osm = osmTempl;
+            templObject.osm.brailleRepresentation.displayedGuiElementType = osmNodeFiltered.properties.nameFiltered != null ? "nameFiltered" : "valueFiltered";
+            templObject.osm.brailleRepresentation.typeOfView = "blub";
             return templObject;
         }
 

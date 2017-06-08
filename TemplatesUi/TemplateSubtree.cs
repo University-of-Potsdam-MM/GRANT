@@ -39,9 +39,9 @@ namespace TemplatesUi
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId)
         {
             if (strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewTree(); }
-            OSMElement.OSMElement brailleNode = templateObject.osm;
-            GeneralProperties prop = templateObject.osm.properties;
-            BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
+            OSMElement.OSMElement brailleNode = templateObject.osm.DeepCopy();
+            GeneralProperties prop = templateObject.osm.properties.DeepCopy();
+            BrailleRepresentation braille = templateObject.osm.brailleRepresentation.DeepCopy();
             prop.IdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
            // prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer; // den Renderer der Kindelemente setzen
             prop.isEnabledFiltered = false;
@@ -92,7 +92,7 @@ namespace TemplatesUi
             
              OSMElement.OSMElement brailleGroupNode =  treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNodeId);
              bool groupViewWithScrollbars = false;
-             if (!brailleGroupNode.Equals(new OSMElement.OSMElement()))
+             if (!brailleGroupNode.Equals(new OSMElement.OSMElement()) && brailleGroupNode !=null && brailleGroupNode.brailleRepresentation != null)
              {
                  groupViewWithScrollbars = brailleGroupNode.brailleRepresentation.isScrollbarShow;
              }
@@ -116,7 +116,7 @@ namespace TemplatesUi
                  if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Vertical))
                  {
                      int column = 0;
-                     int subBoxModel = brailleGroupNode.brailleRepresentation.boarder.Top + brailleGroupNode.brailleRepresentation.boarder.Bottom + brailleGroupNode.brailleRepresentation.margin.Top + brailleGroupNode.brailleRepresentation.margin.Bottom + brailleGroupNode.brailleRepresentation.padding.Top + brailleGroupNode.brailleRepresentation.padding.Bottom;
+                     int subBoxModel = (brailleGroupNode == null || brailleGroupNode.brailleRepresentation == null)? 0 : brailleGroupNode.brailleRepresentation.boarder.Top + brailleGroupNode.brailleRepresentation.boarder.Bottom + brailleGroupNode.brailleRepresentation.margin.Top + brailleGroupNode.brailleRepresentation.margin.Bottom + brailleGroupNode.brailleRepresentation.padding.Top + brailleGroupNode.brailleRepresentation.padding.Bottom;
                      int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Height) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                      int elementsProColumn = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Height);
                      if (braille.groupelementsOfSameType.isLinebreak == true)
@@ -139,7 +139,7 @@ namespace TemplatesUi
                  else
                  { //horizontal
                      int line = 0;
-                     int subBoxModel = brailleGroupNode.brailleRepresentation.boarder.Left + brailleGroupNode.brailleRepresentation.boarder.Right + brailleGroupNode.brailleRepresentation.margin.Left + brailleGroupNode.brailleRepresentation.margin.Right + brailleGroupNode.brailleRepresentation.padding.Left + brailleGroupNode.brailleRepresentation.padding.Right;
+                     int subBoxModel = (brailleGroupNode == null || brailleGroupNode.brailleRepresentation == null) ? 0 : brailleGroupNode.brailleRepresentation.boarder.Left + brailleGroupNode.brailleRepresentation.boarder.Right + brailleGroupNode.brailleRepresentation.margin.Left + brailleGroupNode.brailleRepresentation.margin.Right + brailleGroupNode.brailleRepresentation.padding.Left + brailleGroupNode.brailleRepresentation.padding.Right;
                      int max = Convert.ToInt32(templateObject.osm.properties.boundingRectangleFiltered.Width) - (groupViewWithScrollbars == true ? 3 : 0) - subBoxModel;
                      int elementsProLine = max / Convert.ToInt32(templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle.Width);
                      if (braille.groupelementsOfSameType.isLinebreak == true)
@@ -182,7 +182,6 @@ namespace TemplatesUi
             }
             prop = brailleNode.properties;
             prop.IdGenerated = idGenerated;
-            brailleNode.properties = prop;
 
             List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
             OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);

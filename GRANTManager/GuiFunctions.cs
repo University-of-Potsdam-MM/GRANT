@@ -493,13 +493,14 @@ namespace GRANTManager
                     foreach (String id in conIds)
                     {
                         OSMElement.OSMElement conNode = treeOperation.searchNodes.getNodeElement(id, treeForSearch);
-                        if (!conNode.Equals(new OSMElement.OSMElement()))
+                        if (!(conNode == null || conNode.Equals(new OSMElement.OSMElement())))
                         {
-                            if (isFilteredTree)
+                            if (isFilteredTree && conNode.brailleRepresentation != null)
                             {
                                 toolTip += "\n" + conNode.brailleRepresentation.typeOfView + " " + conNode.brailleRepresentation.screenName + " " + conNode.brailleRepresentation.viewName + " -" + conNode.properties.controlTypeFiltered + " (" + conNode.properties.IdGenerated + ")";
                             }
                             else
+                            if(!isFilteredTree && conNode.properties != null)
                             {
                                 toolTip += "\n" + conNode.properties.controlTypeFiltered + " - " + conNode.properties.nameFiltered + " (" + conNode.properties.IdGenerated + ")";
                             }
@@ -980,7 +981,7 @@ namespace GRANTManager
             String idParent = treeOperation.updateNodes.changeSubtreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
             Object tree = grantTrees.filteredTree;
 
-            List<Object> searchResultTrees = treeOperation.searchNodes.searchProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
+            List<Object> searchResultTrees = treeOperation.searchNodes.searchNodeByProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
 
             if (searchResultTrees != null && searchResultTrees.Count == 1)
             {
@@ -1070,6 +1071,7 @@ namespace GRANTManager
             //attention: offset and zoom are still ignore
             applicationX = -1;
             applicationY = -1;
+            if(brailleNode == null) { return; }
             OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(brailleNode);
             if (dataBraille.Equals(new OSMElement.OSMElement())) { return; }
             if (!dataBraille.properties.controlTypeFiltered.Equals("Screenshot")) { Debug.WriteLine("Attention: This function should be only used if the controlltype of the node 'Screenshot'"); return; }
@@ -1222,33 +1224,31 @@ namespace GRANTManager
         private void addFilteredNodeToBrailleTree(String controlleType, object filteredNode = null, String viewName = null, String screenName = null, String screenCategory = null, String parentIdTactlie = null, Rect positionTactile = new Rect())
         {
             OSMElement.OSMElement tactileOsm = new OSMElement.OSMElement();
-            GeneralProperties tactileProp = new GeneralProperties();
-            BrailleRepresentation tactlieRep = new BrailleRepresentation();
+
             if (controlleType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(controlleType))
             {
                 Console.WriteLine("The controlltype does't exist (for this braille device) --> controlltype = 'Text'!");
                 controlleType = "Text";
             }
-            tactileProp.controlTypeFiltered = controlleType;
-            tactileProp.boundingRectangleFiltered = positionTactile;
+            tactileOsm.properties.controlTypeFiltered = controlleType;
+            tactileOsm.properties.boundingRectangleFiltered = positionTactile;
             if(filteredNode != null)
             {
-                tactlieRep.displayedGuiElementType = "nameFiltered";
+                tactileOsm.brailleRepresentation.displayedGuiElementType = "nameFiltered";
             }
-            tactlieRep.viewName = viewName != null ? viewName : Guid.NewGuid().ToString();
-            tactlieRep.typeOfView = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
-            tactlieRep.screenName = screenName != null ?  screenName : tactlieRep.typeOfView;
+            tactileOsm.brailleRepresentation.viewName = viewName != null ? viewName : Guid.NewGuid().ToString();
+            tactileOsm.brailleRepresentation.typeOfView = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
+            tactileOsm.brailleRepresentation.screenName = screenName != null ?  screenName : tactileOsm.brailleRepresentation.typeOfView;
             //Attention: when new Controlletypes are added, these should be added here!
             if (controlleType.Equals("DropDownMenuItem"))
             { 
                 OSMElement.UiElements.DropDownMenuItem dropDownMenuItem = new OSMElement.UiElements.DropDownMenuItem();
                 if (filteredNode != null)
                 {
-                    OSMElement.OSMElement dataNode = strategyMgr.getSpecifiedTree().GetData(filteredNode);
                     dropDownMenuItem.hasChild = strategyMgr.getSpecifiedTree().HasChild(filteredNode);
                     dropDownMenuItem.hasNext = strategyMgr.getSpecifiedTree().HasNext(filteredNode);
                 }
-                tactlieRep.uiElementSpecialContent = dropDownMenuItem;
+                tactileOsm.brailleRepresentation.uiElementSpecialContent = dropDownMenuItem;
             }
             if (controlleType.Equals("ListItem"))
             {
@@ -1260,18 +1260,15 @@ namespace GRANTManager
                         listItem.isMultipleSelection = true;
                     }
                 }
-                tactlieRep.uiElementSpecialContent = listItem;
+                tactileOsm.brailleRepresentation.uiElementSpecialContent = listItem;
             }
             if (controlleType.Equals("TabItem"))
             {
                 OSMElement.UiElements.TabItem tabItem = new OSMElement.UiElements.TabItem();
                 tabItem.orientation = OSMElement.UiElements.Orientation.Top;
-                tactlieRep.uiElementSpecialContent = tabItem;
+                tactileOsm.brailleRepresentation.uiElementSpecialContent = tabItem;
             }
            
-
-            tactileOsm.brailleRepresentation = tactlieRep;
-            tactileOsm.properties = tactileProp;
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(tactileOsm, parentIdTactlie);
 
             if (filteredNode != null)

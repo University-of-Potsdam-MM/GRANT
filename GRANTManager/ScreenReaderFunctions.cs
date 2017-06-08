@@ -30,7 +30,6 @@ namespace GRANTManager
             String name = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication((int)hwnd);
 
             String file = getScreenReaderFile(name);
-          //  Debug.WriteLine("file: " + file);
         }
 
         private void loadScreenReaderHash()

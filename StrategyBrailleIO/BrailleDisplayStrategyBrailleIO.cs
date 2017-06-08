@@ -384,6 +384,7 @@ namespace StrategyBrailleIO
         /// <param name="osmElement">OSM element for this view </param>
         private void createViewText(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
+            if(screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetText(brailleUiElement.text);
@@ -403,6 +404,7 @@ namespace StrategyBrailleIO
         /// <param name="osmElement">OSM element for this view </param>
         private void createViewMatrix(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
         {
+            if (screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetMatrix(brailleUiElement.matrix);
@@ -423,6 +425,7 @@ namespace StrategyBrailleIO
         /// <param name="image">the image</param>
         private void createViewImage(BrailleIOScreen screen,  OSMElement.OSMElement osmElement, System.Drawing.Image image)
         {
+            if (screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetBitmap(image);
@@ -445,6 +448,7 @@ namespace StrategyBrailleIO
         /// <param name="renderer">name of the renderer</param>
         private void createViewOtherContent(BrailleIOScreen screen, OSMElement.OSMElement osmElement, IBrailleIOContentRenderer renderer)
         {
+            if (screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
             BrailleIOViewRange vr = new BrailleIOViewRange((int)osmElement.properties.boundingRectangleFiltered.Left, (int)osmElement.properties.boundingRectangleFiltered.Top, (int)osmElement.properties.boundingRectangleFiltered.Width, (int)osmElement.properties.boundingRectangleFiltered.Height, new bool[0, 0]);
             vr.SetOtherContent(brailleUiElement, renderer);
@@ -721,16 +725,16 @@ namespace StrategyBrailleIO
         {
             #region common properties
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
-            GeneralProperties properties = new GeneralProperties();
-            BrailleRepresentation brailleR = new BrailleRepresentation();
-            properties.controlTypeFiltered = uiElementType;
-            brailleR.screenName = "_tmp_screen_name_";
-            brailleR.viewName = "_tmp_view_name_";
-            brailleR.isVisible = true;
+            osmElement.properties = new GeneralProperties();
+            osmElement.brailleRepresentation = new BrailleRepresentation();
+            osmElement.properties.controlTypeFiltered = uiElementType;
+            osmElement.brailleRepresentation.screenName = "_tmp_screen_name_";
+            osmElement.brailleRepresentation.viewName = "_tmp_view_name_";
+            osmElement.brailleRepresentation.isVisible = true;
             Rect rect = new Rect();
-            properties.isEnabledFiltered = true;
-            properties.IdGenerated = "_tmp_id_";
-            properties.valueFiltered = "example";
+            osmElement.properties.isEnabledFiltered = true;
+            osmElement.properties.IdGenerated = "_tmp_id_";
+            osmElement.properties.valueFiltered = "example";
             #endregion
             #region different properties depending on the type --> if a new renderer added, add a example represemtation here
             if (uiElementeTypesBrailleIoEnum.Button.ToString().Equals(uiElementType))
@@ -747,12 +751,12 @@ namespace StrategyBrailleIO
                 dropDownMenu.isChild = false;
                 dropDownMenu.isOpen = true;
                 dropDownMenu.isVertical = true;
-                brailleR.uiElementSpecialContent = dropDownMenu;
+                osmElement.brailleRepresentation.uiElementSpecialContent = dropDownMenu;
             }
             if (uiElementeTypesBrailleIoEnum.Matrix.ToString().Equals(uiElementType))
             {
                 rect = new Rect(0, 0, 3, 7);
-                brailleR.matrix = new bool[,] { 
+                osmElement.brailleRepresentation.matrix = new bool[,] { 
                     {false, false, true},
                     {true, false, false},
                     {false, true, false},
@@ -765,8 +769,8 @@ namespace StrategyBrailleIO
             if (uiElementeTypesBrailleIoEnum.Screenshot.ToString().Equals(uiElementType))
             {
                 rect = new Rect(0, 0, 20, 10);
-                brailleR.zoom = 1;
-                brailleR.contrast = 120;
+                osmElement.brailleRepresentation.zoom = 1;
+                osmElement.brailleRepresentation.contrast = 120;
             }
             if (uiElementeTypesBrailleIoEnum.Text.ToString().Equals(uiElementType))
             {
@@ -774,31 +778,31 @@ namespace StrategyBrailleIO
             }
             if (uiElementeTypesBrailleIoEnum.TextBox.ToString().Equals(uiElementType))
             {
-                properties.valueFiltered = "example text example text ...";
+                osmElement.properties.valueFiltered = "example text example text ...";
                 rect = new Rect(0, 0, 25, 10);
-                brailleR.isScrollbarShow = true;
+                osmElement.brailleRepresentation.isScrollbarShow = true;
             }
             if (uiElementeTypesBrailleIoEnum.ListItem.ToString().Equals(uiElementType))
             {
-                properties.valueFiltered = "Item 1";
+                osmElement.properties.valueFiltered = "Item 1";
                 rect = new Rect(0, 0, 30, 7);
                 OSMElement.UiElements.ListMenuItem listMenuItem = new ListMenuItem();
                 listMenuItem.hasNext = true;
                 listMenuItem.isMultipleSelection = true;
-                properties.isToggleStateOn = false;
-                brailleR.uiElementSpecialContent = listMenuItem;
+                osmElement.properties.isToggleStateOn = false;
+                osmElement.brailleRepresentation.uiElementSpecialContent = listMenuItem;
             }
             if (uiElementeTypesBrailleIoEnum.TabItem.ToString().Equals(uiElementType))
             {
-                properties.valueFiltered = "TabItem";
+                osmElement.properties.valueFiltered = "TabItem";
                 rect = new Rect(0, 0, 8, 8);
                 OSMElement.UiElements.TabItem tabview = new TabItem();
                 tabview.orientation = OSMElement.UiElements.Orientation.Left;
-                brailleR.uiElementSpecialContent = tabview;
+                osmElement.brailleRepresentation.uiElementSpecialContent = tabview;
             }
             /*if (uiElementeTypesBrailleIoEnum.GroupElement.ToString().Equals(uiElementType))
             {
-                properties.valueFiltered = "Beispiel Beispieltext Beispieltext";//TODO
+                osmElement.properties.valueFiltered = "Beispiel Beispieltext Beispieltext";//TODO
                 rect = new Rect(0, 0, 25, 10);
 
                 OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
@@ -813,13 +817,11 @@ namespace StrategyBrailleIO
                 childOsm.properties = childProp;
                 childOsm.brailleRepresentation = childBraille;
                 
-                brailleR.groupelementsOfSameType = group;
+                osmElement.brailleRepresentation.groupelementsOfSameType = group;
                 
             }*/
             #endregion
-            properties.boundingRectangleFiltered = rect;
-            osmElement.brailleRepresentation = brailleR;
-            osmElement.properties = properties;
+            osmElement.properties.boundingRectangleFiltered = rect;
             return osmElement;
         }
 

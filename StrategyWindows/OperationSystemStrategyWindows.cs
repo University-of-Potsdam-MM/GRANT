@@ -167,7 +167,6 @@ namespace StrategyWindows
             try
             {
                 IntPtr hwnd = NativeMethods.WindowFromPoint(Cp);
-                Debug.WriteLine("getHWND: hwnd = {0}", hwnd);
                 return hwnd;
             }
             catch (Exception e)
@@ -187,7 +186,6 @@ namespace StrategyWindows
             try
             {
                 Process p = Process.GetProcessById(processId);
-                Debug.WriteLine("getProcessHwndFromHwnd: p.MainWindowHandle = {0}", p.MainWindowHandle);
                 return p.MainWindowHandle;
             }
             catch (ArgumentException a)
@@ -375,8 +373,7 @@ namespace StrategyWindows
                     while ((hwnd == null || hwnd.Equals(IntPtr.Zero)) && i> 0);
                     if (i > 0)
                     {
-                        Debug.WriteLine("Geöffnet; hwnd = "+ hwnd+" i= "+ i);
-                        Thread.Sleep(500);
+                       Thread.Sleep(500);
                         return true;
                     }
                     else
@@ -398,11 +395,11 @@ namespace StrategyWindows
         /// <returns><c>true</c>, if the application invoked; otherwiese<c>false</c></returns>
         public bool showWindow(IntPtr hwnd)
         {
-            if (NativeMethods.IsIconic(hwnd))
+            //if (NativeMethods.IsIconic(hwnd))
             {
                 return NativeMethods.ShowWindow(hwnd, 9); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
             }
-            return true;
+            //return true;
         }
 
         /// <summary>
