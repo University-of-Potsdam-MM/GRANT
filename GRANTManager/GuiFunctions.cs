@@ -251,7 +251,7 @@ namespace GRANTManager
             public ObservableCollection<MenuItem> Items { get; set; }
         }
 
-
+        //prüfen mit Tabelle, sind das die bzw im Tree vorhandenen
         public class BrailleItem
         {
             public BrailleItem()
@@ -447,7 +447,7 @@ namespace GRANTManager
                  set;
              }
 
-             public String valueFiltered { get; set; }*/
+             public String valueFiltered { get; set; }
 
             public ObservableCollection<BrailleItem> Items { get; set; }
         }

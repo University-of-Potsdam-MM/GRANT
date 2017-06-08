@@ -27,8 +27,6 @@ namespace GRANTApplication
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
 
-       
-
         [System.ComponentModel.BrowsableAttribute(false)]
         public DataGridCell CurrentCell { get; set; }
 
@@ -689,6 +687,8 @@ namespace GRANTApplication
         /// Displays properties of the marked tree node of the braille tree in the properties table.
         /// </summary>
         /// <param name="IdGenerated"></param>
+        /// 
+        /// diese in die collection übernehmen
         void updateBrailleTable(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
