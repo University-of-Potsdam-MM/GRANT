@@ -112,23 +112,4 @@ namespace GRANTManager.Interfaces
         public String connectedFilteredNodeControltype { get; set; } 
     }
 
-    public static class ExtObject
-    {
-        public static T DeepCopy<T>(this T objectToCopy)
-        { // see:https://softwarebydefault.com/2013/02/10/deep-copy-generics/#comments
-
-            MemoryStream mStream = new MemoryStream();
-            BinaryFormatter bFormatter = new BinaryFormatter();
-            bFormatter.Serialize(mStream, objectToCopy);
-
-            mStream.Position = 0;
-            T returnValue = (T)bFormatter.Deserialize(mStream);
-
-            mStream.Close();
-            mStream.Dispose();
-
-            return returnValue;
-        }
-    }
-
 }

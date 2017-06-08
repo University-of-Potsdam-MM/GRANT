@@ -395,11 +395,11 @@ namespace StrategyWindows
         /// <returns><c>true</c>, if the application invoked; otherwiese<c>false</c></returns>
         public bool showWindow(IntPtr hwnd)
         {
-            if (NativeMethods.IsIconic(hwnd))
+            //if (NativeMethods.IsIconic(hwnd))
             {
                 return NativeMethods.ShowWindow(hwnd, 9); // https://msdn.microsoft.com/de-de/library/windows/desktop/ms633548(v=vs.85).aspx
             }
-            return true;
+            //return true;
         }
 
         /// <summary>

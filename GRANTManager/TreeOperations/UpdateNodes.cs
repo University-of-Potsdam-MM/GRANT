@@ -152,6 +152,27 @@ namespace GRANTManager.TreeOperations
             changeBrailleRepresentation(ref osmElement);
         }
 
+        /// <summary>
+        /// Sets/Changes a property of a node in the braille tree
+        /// </summary>
+        /// <param name="id">the id of the node to change his property</param>
+        /// <param name="nameOfProperty">name of the property (<see cref="OSMElement.OSMElement.getAllTypes()"/>)</param>
+        /// <param name="newProperty">the new value</param>
+        /// <returns><c>true</c> if the property sets, otherwiese <c>false</c></returns>
+        public bool setBrailleTreeProperty(String id, String nameOfProperty, Object newProperty)
+        {
+            if (nameOfProperty == null || !OSMElement.OSMElement.getAllTypes().Contains(nameOfProperty) || id == null || grantTrees.brailleTree == null)
+            {
+                return false;
+            }
+            //TODO: prüfen, ob die Eigenschaft verändert werden darf
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(id);
+            if (node == new OSMElement.OSMElement()) { return false; }
+            // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
+            OSMElement.OSMElement.setElement(nameOfProperty, newProperty, node);
+            return true;
+        }
+
 
         /// <summary>
         /// Sets the new braille representaion of the element

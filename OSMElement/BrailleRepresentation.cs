@@ -171,6 +171,21 @@ namespace OSMElement
         /// </summary>
         public bool isGroupChild { get; set; }
 
+        /// <summary>
+        /// Gives all Types of <see cref="BrailleRepresentation"/>
+        /// </summary>
+        /// <returns>list of all Types of <see cref="BrailleRepresentation"/></returns>
+        public static List<String> getAllTypes()
+        {
+            List<String> displayedGuiElements = new List<string>();
+            var brailleNames = typeof(BrailleRepresentation).GetProperties();
+            foreach (var name in brailleNames)
+            {
+                displayedGuiElements.Add(name.Name.ToString());
+            }
+            return displayedGuiElements;
+        }
+
         public override bool Equals(object obj)
         {
             if ((this == null && obj != null) || (this != null && obj == null)) { return false; }

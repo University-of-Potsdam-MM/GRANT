@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,37 @@ namespace OSMElement
             }
         }
 
+        /// <summary>
+        /// Gives all Types of <see cref="OSMElement"/>
+        /// </summary>
+        /// <returns>list of all Types of <see cref="OSMElement"/></returns>
+        public static List<String> getAllTypes()
+        {
+            List<String> displayedGuiElements = GeneralProperties.getAllTypes();
+            displayedGuiElements.AddRange(BrailleRepresentation.getAllTypes());
+            // displayedGuiElements.AddRange(Events.getAllTypes());
+            return displayedGuiElements;
+        }
 
+        public static void setElement(String elementName, Object property, OSMElement osmElement)
+        { // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
+            if (elementName != null && !osmElement.Equals(new OSMElement()))
+            {
+                PropertyInfo oInfo = osmElement.properties.GetType().GetProperty(elementName);
+                if (oInfo != null)
+                {
+                    oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null);
+                    return;
+                }
+                else { oInfo = osmElement.brailleRepresentation.GetType().GetProperty(elementName); }
+                if (oInfo != null)
+                {
+                    oInfo.SetValue(osmElement.brailleRepresentation, Convert.ChangeType(property, oInfo.PropertyType), null);
+                    return;
+                }
+            }
+            return;
+        }
     }
+
 }
