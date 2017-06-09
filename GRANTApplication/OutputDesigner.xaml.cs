@@ -1020,7 +1020,7 @@ namespace GRANTApplication
         /// </summary>
         /// <param name="treeView"> the treeView in which will be seek</param>
         /// <param name="id">the searched id</param>
-        /// <returns>list of all nodes with have the searched <para>id</para> </returns>
+        /// <returns>list of all nodes which have the searched <para>id</para> </returns>
         private List<TreeViewItem> getMenuItemsById(TreeView treeView, String id)
         {
             foreach (TreeViewItem tvi in treeView.Items)

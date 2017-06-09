@@ -457,12 +457,19 @@ namespace GRANTManager
             public MyViewModel(OSMElement.OSMElement osmElement)
             {
                 Items = new List<RowDataItem>();
-                
+                /*
                 for (int i = 0; i < OSMElement.OSMElement.getAllTypes().Count; i++) {
 
                     object o = OSMElement.OSMElement.getElement(OSMElement.OSMElement.getAllTypes()[i], osmElement);
 
                   Items.Add(new RowDataItem(OSMElement.OSMElement.getAllTypes()[i], o!= null ? o.ToString() : ""));
+                }
+                */
+                List<String> allTypes =  getAllTypes(osmElement);
+                for (int i = 0; i < allTypes.Count; i++)
+                {
+                    object o = OSMElement.OSMElement.getElement(allTypes[i], osmElement);
+                    Items.Add(new RowDataItem(allTypes[i], o != null ? o.ToString() : ""));
                 }
                 ColumnNames = new List<string> { "Name_Titel", "Value_Titel", };
             }
@@ -1309,5 +1316,189 @@ namespace GRANTManager
         }
         #endregion
 
+
+        #region getAllTypes
+        public static List<String> getAllTypes()
+        {
+            return OSMElement.OSMElement.getAllTypes();
+        }
+
+        public static List<String> getAllTypes(OSMElement.OSMElement osm)
+        {
+            if (osm.brailleRepresentation == null && osm.properties == null) { return OSMElement.OSMElement.getAllTypes(); }
+            if (osm.brailleRepresentation == null && osm.properties != null) { return GeneralProperties.getAllTypes(); }
+            if(osm.brailleRepresentation != null)
+            {
+                List<String> allTypes = OSMElement.OSMElement.getAllTypes();
+                removeProperties_NotUsedInBrailleTree(ref allTypes);
+                switch (osm.properties.controlTypeFiltered)
+                {
+                    case "Text":
+                        #region remove
+                        allTypes.Remove("isEnabledFiltered");
+                        allTypes.Remove("isContentElementFiltered");
+                        allTypes.Remove("matrix");
+                        allTypes.Remove("contrast");
+                        allTypes.Remove("zoom");
+                        allTypes.Remove("uiElementSpecialContent");
+                        allTypes.Remove("templateFullName");
+                        allTypes.Remove("templateNamspace");
+                        allTypes.Remove("groupelementsOfSameType");
+                        break;
+                        #endregion
+                    case "Screenshot":
+                        #region remove
+                        allTypes.Remove("isContentElementFiltered");
+                        allTypes.Remove("isPasswordFiltered");
+                        allTypes.Remove("isEnabledFiltered");
+                        allTypes.Remove("valueFiltered");
+                        allTypes.Remove("isToggleStateOn");
+                        allTypes.Remove("matrix");
+                        allTypes.Remove("displayedGuiElementType");
+                        allTypes.Remove("uiElementSpecialContent");
+                        allTypes.Remove("templateFullName");
+                        allTypes.Remove("templateNamspace");
+                        allTypes.Remove("groupelementsOfSameType");
+                        break;
+                        #endregion
+                    case "Matrix":
+                        #region remove
+                        allTypes.Remove("isContentElementFiltered");
+                        allTypes.Remove("isPasswordFiltered");
+                        allTypes.Remove("isEnabledFiltered");
+                        allTypes.Remove("valueFiltered");
+                        allTypes.Remove("isToggleStateOn");
+                        allTypes.Remove("displayedGuiElementType");
+                        allTypes.Remove("contrast");
+                        allTypes.Remove("zoom");
+                        allTypes.Remove("uiElementSpecialContent");
+                        allTypes.Remove("templateFullName");
+                        allTypes.Remove("templateNamspace");
+                        allTypes.Remove("groupelementsOfSameType");
+                        break;
+                        #endregion
+                    case "TextBox":
+                        #region remove
+                        allTypes.Remove("isContentElementFiltered");
+                        allTypes.Remove("isPasswordFiltered");
+                        allTypes.Remove("isToggleStateOn");
+                        allTypes.Remove("matrix");
+                        allTypes.Remove("contrast");
+                        allTypes.Remove("zoom");
+                        allTypes.Remove("boarder");
+                        allTypes.Remove("templateFullName");
+                        allTypes.Remove("templateNamspace");
+                        allTypes.Remove("groupelementsOfSameType");
+                        break;
+                    #endregion
+                    case "GroupElement":
+                        #region remove
+                        allTypes.Remove("isEnabledFiltered");
+                        allTypes.Remove("isPasswordFiltered");
+                        allTypes.Remove("valueFiltered");
+                        allTypes.Remove("isToggleStateOn");
+                        allTypes.Remove("matrix");
+                        allTypes.Remove("displayedGuiElementType");
+                        allTypes.Remove("contrast");
+                        allTypes.Remove("zoom");
+                        allTypes.Remove("uiElementSpecialContent");
+                        allTypes.Remove("boarder");
+                        break;
+                    #endregion
+                    case "Button":
+                        allTypes.Remove("uiElementSpecialContent");
+                        goto case "TabItem";
+                    case "DropDownMenuItem":
+                    case "ListItem":
+                    case "TabItem":
+                        #region remove
+                        allTypes.Remove("isContentElementFiltered");
+                        allTypes.Remove("isPasswordFiltered");
+                        allTypes.Remove("matrix");
+                        allTypes.Remove("contrast");
+                        allTypes.Remove("zoom");
+                        allTypes.Remove("isScrollbarShow");
+                        allTypes.Remove("boarder");
+                        allTypes.Remove("templateFullName");
+                        allTypes.Remove("templateNamspace");
+                        allTypes.Remove("groupelementsOfSameType");
+                        break;
+                    #endregion
+                    case null:
+                        removePropertiesViewCategoryScreen(ref allTypes, osm);
+                        break;
+                    default:
+                        return allTypes;
+                
+                }
+                return allTypes;
+            }
+            return OSMElement.OSMElement.getAllTypes();
+        }
+
+        private static void removePropertiesViewCategoryScreen(ref List<String> propList, OSMElement.OSMElement osm)
+        {
+            removeProperties_NotUsedInBrailleTree(ref propList);
+            propList.Remove("isEnabledFiltered");
+            propList.Remove("boundingRectangleFiltered");
+            propList.Remove("controlTypeFiltered");
+            propList.Remove("isContentElementFiltered");
+            propList.Remove("isPasswordFiltered");
+            propList.Remove("valueFiltered");
+            propList.Remove("isToggleStateOn");
+            propList.Remove("viewName");
+            propList.Remove("isVisible");
+            propList.Remove("matrix");
+            propList.Remove("displayedGuiElementType");
+            propList.Remove("contrast");
+            propList.Remove("zoom");
+            propList.Remove("isScrollbarShow");
+            propList.Remove("uiElementSpecialContent");
+            propList.Remove("padding");
+            propList.Remove("margin");
+            propList.Remove("boarder");
+            propList.Remove("zIntex");
+            propList.Remove("templateFullName");
+            propList.Remove("templateNamspace");
+            propList.Remove("textAcronym");
+            propList.Remove("groupelementsOfSameType");
+            propList.Remove("isGroupChild");
+
+            if (osm.brailleRepresentation.screenName == null) { propList.Remove("screenName"); }
+        }
+
+        /// <summary>
+        /// Removes all properties which aren't use in the Braille Tree
+        /// </summary>
+        /// <param name="propList">List of all Properties (<ref name="GeneralProperties"/> and <ref name="BrailleRepresentation"/></param>
+        private static void removeProperties_NotUsedInBrailleTree(ref List<String> propList)
+        {
+            // Do not check whether the property exist --> the "Remove" methode returns olny "false"
+            propList.Remove("nameFiltered");
+            propList.Remove("acceleratorKeyFiltered");
+            propList.Remove("accessKeyFiltered");
+            propList.Remove("isKeyboardFocusableFiltered");
+            propList.Remove("runtimeIDFiltered");
+            propList.Remove("hasKeyboardFocusFiltered");
+            propList.Remove("isOffscreenFiltered");
+            propList.Remove("helpTextFiltered");
+            propList.Remove("autoamtionIdFiltered");
+            propList.Remove("classNameFiltered");
+            propList.Remove("localizedControlTypeFiltered");
+            propList.Remove("frameWorkIdFiltered");
+            propList.Remove("hWndFiltered");
+            propList.Remove("labeledByFiltered");
+            propList.Remove("isControlElementFiltered");
+            propList.Remove("processIdFiltered");
+            propList.Remove("itemTypeFiltered");
+            propList.Remove("itemStatusFiltered");
+            propList.Remove("isRequiredForFormFiltered");
+            propList.Remove("suportedPatterns");
+            propList.Remove("rangeValue");
+            propList.Remove("grantFilterStrategy");
+            propList.Remove("processName");
+            propList.Remove("appPath");
+        }
+        #endregion
     }
 }
