@@ -363,5 +363,11 @@ namespace GRANTManager.TreeOperations
             OsmConnector<String, String> osmRelationship = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
             if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
         }
+
+        public static Boolean existPropertyName(String propertyName)
+        {
+            List<String> propNames = OSMElement.OSMElement.getAllTypes();
+            return propNames.Contains(propertyName);
+        }
     }
 }

@@ -553,9 +553,64 @@ namespace GRANTManager.BrailleTreeTests
             Assert.IsFalse(result);
             node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
             Assert.AreEqual(nodeCopy.properties.IdGenerated, node.properties.IdGenerated, "Both Id's should have the same values.");
-            Assert.AreEqual(nodeCopy, node, "Both nodes should have the same values.");
-           
+            Assert.AreEqual(nodeCopy, node, "Both nodes should have the same values.");  
         }
 
+        [TestMethod]
+        public void getProperty_Exist_NotNull_Test()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            String propName = "valueFiltered";
+            Assert.IsTrue(SearchNodes.existPropertyName(propName));
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            String value = UpdateNodes.getProperty(propName, node);
+            Assert.AreEqual(node.properties.valueFiltered, value);
+        }
+
+        [TestMethod]
+        public void getProperty_Exist_NotNull2_Test()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            String propName = "valueFiltered";
+            Assert.IsTrue(SearchNodes.existPropertyName(propName));
+            String value = treeOperation.updateNodes.getPropertyofBrailleTree(propName, nodeId);
+            Assert.AreEqual(node.properties.valueFiltered, value);
+        }
+
+        [TestMethod]
+        public void getProperty_Exist_Null_Test()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.IsNull(node.properties.helpTextFiltered);
+            String propName = "helpTextFiltered";
+            String value = UpdateNodes.getProperty(propName, node);
+            Assert.IsTrue(SearchNodes.existPropertyName(propName));
+            Assert.AreEqual("", value);
+        }
+
+        [TestMethod]
+        public void getProperty_NotExist_Test()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            String propName = "NotExistProperty";
+            String value = UpdateNodes.getProperty(propName, node);
+            Assert.IsFalse(SearchNodes.existPropertyName(propName));
+            Assert.AreEqual("", value);
+        }
     }
 }
