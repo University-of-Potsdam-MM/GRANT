@@ -30,6 +30,7 @@ namespace TemplateTextview
         //Achtung: gibt noch Probleme, wenn die View zwei mal nacheinander erstellt wird
         public void createTextviewOfSubtree(Object subtree, int startYPosition = 0)
         {
+            if(subtree == null) { return; }
              foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(subtree))
              {
                  createBrailleGroupFromFilteredNode(node, ref startYPosition);
@@ -136,7 +137,13 @@ namespace TemplateTextview
 
                     }
                 }
-                osmGroup.properties.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup, brailleParentId);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
+              //  osmGroup.properties.IdGenerated = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup, brailleParentId);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
+                String idResult = treeOperation.updateNodes.addNodeInBrailleTree(osmGroup, brailleParentId);//hier wird ggf. nur das Gruppen-(Start-)Element hinzugefügt
+                if(idResult== null)
+                {
+                    return;
+
+                }
             }
             Object brailleSubtree = strategyMgr.getSpecifiedTree().NewTree();
             Object brailleSubtreeParent = strategyMgr.getSpecifiedTree().AddChild(brailleSubtree, osmGroup);

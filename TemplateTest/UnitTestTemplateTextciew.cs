@@ -3,6 +3,7 @@ using GRANTManager.TreeOperations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,6 +71,50 @@ namespace TemplateTest
             tempTextView.createTextviewOfSubtree(nodes[0], 0);
             Assert.AreNotEqual(null, grantTrees.brailleTree);
             Assert.AreEqual(38, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); // 6 Views => 3*5 + 3*7 = 15 +21 = 36 ; 36 + 2 (TextView & Screen) = 38 Nodes
+        }
+
+        [TestMethod]
+        public void create2xTextviewOfSubtreeTest()
+        {
+            initilaizeFilteredTree();
+            TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTrees, treeOperation);
+            List<Object> nodes = treeOperation.searchNodes.getNodeList("41B73937D557B2AB5DA85001ABF0C423", grantTrees.filteredTree); // "41B73937D557B2AB5DA85001ABF0C423" is the Id of the "TitleBar" in MS Calc
+            Assert.AreNotEqual(null, nodes);
+            Assert.AreEqual(1, nodes.Count);
+            tempTextView.createTextviewOfSubtree(nodes[0], 0);
+            object treeCopy = grantTrees.brailleTree.DeepCopy();
+            Assert.AreNotEqual(null, grantTrees.brailleTree);
+            Assert.AreEqual(38, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); // 6 Views => 3*5 + 3*7 = 15 +21 = 36 ; 36 + 2 (TextView & Screen) = 38 Nodes
+            tempTextView.createTextviewOfSubtree(nodes[0], 0);
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeCopy), strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree));
+            //   if (!treeCopy.Equals(grantTrees.brailleTree))
+            if (!strategyMgr.getSpecifiedTree().Equals(grantTrees.brailleTree, treeCopy))//TODO: Equals-Methode für Baum schreiben
+            {
+                Assert.Fail("Both trees should have the same values.");
+            }
+        }
+
+        [TestMethod]
+        public void create2xTextviewTest()
+        {
+            initilaizeFilteredTree();
+            TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTrees, treeOperation);           
+            tempTextView.createTextviewOfSubtree(grantTrees.filteredTree, 0);
+            object treeCopy = grantTrees.brailleTree.DeepCopy();
+            Assert.AreNotEqual(null, grantTrees.brailleTree);
+            //  Assert.AreEqual(38, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); // 6 Views => 3*5 + 3*7 = 15 +21 = 36 ; 36 + 2 (TextView & Screen) = 38 Nodes
+            List<Object> nodes = treeOperation.searchNodes.getNodeList("41B73937D557B2AB5DA85001ABF0C423", grantTrees.filteredTree); // "41B73937D557B2AB5DA85001ABF0C423" is the Id of the "TitleBar" in MS Calc
+            Assert.AreNotEqual(null, nodes);
+            Assert.AreEqual(1, nodes.Count);
+
+            tempTextView.createTextviewOfSubtree(nodes[0], 1*5); 
+       //     tempTextView.createTextviewOfSubtree(grantTrees.filteredTree, 0);
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeCopy), strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree));
+            //   if (!treeCopy.Equals(grantTrees.brailleTree))
+            if (!strategyMgr.getSpecifiedTree().Equals(grantTrees.brailleTree, treeCopy))//TODO: Equals-Methode für Baum schreiben
+            {
+                Assert.Fail("Both trees should have the same values.");
+            }
         }
     }
 }

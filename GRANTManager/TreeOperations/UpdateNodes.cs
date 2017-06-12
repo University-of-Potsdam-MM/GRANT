@@ -389,7 +389,8 @@ namespace GRANTManager.TreeOperations
             {
                 Debug.WriteLine("Attention: No ScreenName is specified in the node. The node wasn't added."); return null;
             }
-            // prüfen, ob es die View auf dem Screen schon gibt
+            // prüfen, ob es die View auf dem Screen schon gibt bzw:
+            // Boolean isContains= strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, brailleNodeWithId);
             if (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, brailleNode.brailleRepresentation.viewName, brailleNode.brailleRepresentation.typeOfView))
             {
                 Debug.WriteLine("Attention: The view is already exists. The node wasn't added."); return null;
@@ -406,12 +407,12 @@ namespace GRANTManager.TreeOperations
                         //2. find parent screen node
                         if (!strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.Equals(new BrailleRepresentation()) && strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName.Equals(brailleNode.brailleRepresentation.screenName))
                         {
-                            OSMElement.OSMElement brailleNodeWithId = brailleNode;
-                            brailleNodeWithId.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(brailleNode);
+                            //   OSMElement.OSMElement brailleNodeWithId = brailleNode;
+                            brailleNode.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(brailleNode);
                             if (parentId == null)
                             {
-                                strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
-                                return brailleNodeWithId.properties.IdGenerated;
+                                strategyMgr.getSpecifiedTree().AddChild(node, brailleNode);
+                                return brailleNode.properties.IdGenerated;
                             }
                             else
                             {
@@ -421,12 +422,12 @@ namespace GRANTManager.TreeOperations
                                     
                                     if (!data.properties.Equals(new GeneralProperties()) && data.properties.IdGenerated != null && data.properties.IdGenerated.Equals(parentId))
                                     {
-                                        strategyMgr.getSpecifiedTree().AddChild(childOfNode, brailleNodeWithId);
-                                        return brailleNodeWithId.properties.IdGenerated;
+                                        strategyMgr.getSpecifiedTree().AddChild(childOfNode, brailleNode);
+                                        return brailleNode.properties.IdGenerated;
                                     }
                                 }
-                                strategyMgr.getSpecifiedTree().AddChild(node, brailleNodeWithId);
-                                return brailleNodeWithId.properties.IdGenerated;
+                                strategyMgr.getSpecifiedTree().AddChild(node, brailleNode);
+                                return brailleNode.properties.IdGenerated;
                             }
                         }
                     }

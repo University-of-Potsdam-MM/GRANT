@@ -14,7 +14,7 @@ namespace GRANTManager
     {
         public static T DeepCopy<T>(this T objectToCopy)
         { 
-
+            if(objectToCopy == null) { return default(T); }
             MemoryStream mStream = new MemoryStream();
             BinaryFormatter bFormatter = new BinaryFormatter();
             bFormatter.Serialize(mStream, objectToCopy);
