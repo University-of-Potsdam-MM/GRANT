@@ -27,7 +27,6 @@ namespace TemplateTextview
             this.treeOperation = treeOperation;
         }
 
-        //Achtung: gibt noch Probleme, wenn die View zwei mal nacheinander erstellt wird
         public void createTextviewOfSubtree(Object subtree, int startYPosition = 0)
         {
             if(subtree == null) { return; }

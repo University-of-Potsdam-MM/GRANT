@@ -226,8 +226,22 @@ namespace OSMElement
         /// <returns>the wanted property from <para>properties</para> </returns>
         public static object getPropertyElement(String elementName, BrailleRepresentation propertiesBraille)
         {
+            Type t;
+           return  getPropertyElement(elementName, propertiesBraille, out t);
+        }
+
+        /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="propertiesBraille">properties of the node</param>
+        /// <param name="propertyType">the datatype of the property</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
+        public static object getPropertyElement(String elementName, BrailleRepresentation propertiesBraille, out Type propertyType)
+        {
             try
             { //see http://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection-in-c-sharp#
+                propertyType = propertiesBraille.GetType().GetProperty(elementName).PropertyType;
                 return propertiesBraille.GetType().GetProperty(elementName).GetValue(propertiesBraille, null);
             }
             catch

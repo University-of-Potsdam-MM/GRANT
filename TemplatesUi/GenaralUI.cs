@@ -292,7 +292,7 @@ namespace TemplatesUi
                 {
                     generalUiInstance = new TemplateGroupAutomatic(strategyMgr, grantTrees, treeOperation);
                 }
-                generalUiInstance.createUiElementFromTemplate(subtree, xmlUiElementToTemplateUiObject(element, VIEWCATEGORY_SYMBOLVIEW));
+                generalUiInstance.createUiElementFromTemplate(subtree, templateObject);
             }
         }
 

@@ -341,17 +341,31 @@ namespace OSMElement
         /// </summary>
         /// <param name="elementName">name of the wanted property</param>
         /// <param name="properties">properties of the node</param>
+        /// <param name="propertyType">the datatype of the property</param>
         /// <returns>the wanted property from <para>properties</para> </returns>
-        public static object getPropertyElement(String elementName, GeneralProperties properties)
+        public static object getPropertyElement(String elementName, GeneralProperties properties, out Type propertyType)
         {
             try
             { //see http://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection-in-c-sharp#
+                propertyType = properties.GetType().GetProperty(elementName).PropertyType;
                 return properties.GetType().GetProperty(elementName).GetValue(properties, null);
             }
             catch
             {
                 throw new Exception("Exception in OSMElement.GeneralProperties: An attempt was made to query a non-existent property ('" + elementName + "')");
             }
+        }
+
+        /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="properties">properties of the node</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
+        public static object getPropertyElement(String elementName, GeneralProperties properties)
+        {
+            Type t;
+            return getPropertyElement(elementName, properties, out t );
         }
 
         public bool ItemsEqual(object [] objA, object [] objB)

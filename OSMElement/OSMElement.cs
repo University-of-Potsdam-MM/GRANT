@@ -112,6 +112,12 @@ namespace OSMElement
             return;
         }
 
+        /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="osmElement">properties of the node</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
         public static object getElement(String elementName, OSMElement osmElement)
         {
             if (GeneralProperties.getAllTypes().Contains(elementName))
@@ -125,6 +131,29 @@ namespace OSMElement
             //TODO: Events
             return null;
         }
+
+        /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="osmElement">properties of the node</param>
+        /// <param name="typeOfProperty">the datatype of the property</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
+        public static object getElement(String elementName, OSMElement osmElement, out Type typeOfProperty)
+        {            
+            if (GeneralProperties.getAllTypes().Contains(elementName))
+            {
+                return GeneralProperties.getPropertyElement(elementName, osmElement.properties, out typeOfProperty);
+            }
+            if (BrailleRepresentation.getAllTypes().Contains(elementName))
+            {
+                return BrailleRepresentation.getPropertyElement(elementName, osmElement.brailleRepresentation, out typeOfProperty);
+            }
+            //TODO: Events
+            typeOfProperty = null;
+            return null;
+        }
+
     }
 
 }
