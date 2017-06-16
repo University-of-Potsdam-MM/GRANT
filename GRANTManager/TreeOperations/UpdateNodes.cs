@@ -169,6 +169,10 @@ namespace GRANTManager.TreeOperations
             OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(id);
             if (node == new OSMElement.OSMElement()) { return false; }
             Object propertyValueCurrent = OSMElement.OSMElement.getElement(nameOfProperty, node);
+            if(nameOfProperty.Equals("typeOfView") || nameOfProperty.Equals("screenName"))
+            {
+                //TODO
+            }
             // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
             OSMElement.OSMElement.setElement(nameOfProperty, newProperty, node);
             Object propertyValueNew = OSMElement.OSMElement.getElement(nameOfProperty, node);

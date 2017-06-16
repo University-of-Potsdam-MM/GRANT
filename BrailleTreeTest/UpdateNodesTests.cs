@@ -518,6 +518,47 @@ namespace GRANTManager.BrailleTreeTests
         }
 
         [TestMethod]
+        public void setBrailleTreePropertydisplayedGuiElementTypeExistTest()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null, "Das grant-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            Assert.AreEqual(node.brailleRepresentation.displayedGuiElementType, "nameFiltered", "Im gespeicherten Baum hätte der displayedGuiElementType-Wert 'nameFiltered' sein sollen!");
+            String displayedGuiElementTypeNew = "helpTextFiltered";
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "displayedGuiElementType", displayedGuiElementTypeNew);
+            Assert.IsTrue(result);
+            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreNotEqual(nodeCopy, node, "Both nodes shouldn't have the same values.");
+            Assert.AreEqual(node.brailleRepresentation.displayedGuiElementType, displayedGuiElementTypeNew, "Der displayedGuiElementType-Wert sollte nun '" + displayedGuiElementTypeNew + "' sein sollen!");
+        }
+
+
+        [TestMethod]
+        public void setBrailleTreePropertydisplayedGuiElementTypeNotExistTest()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null, "Das grant-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            Assert.AreEqual(node.brailleRepresentation.displayedGuiElementType, "nameFiltered", "Im gespeicherten Baum hätte der displayedGuiElementType-Wert 'nameFiltered' sein sollen!");
+            String displayedGuiElementTypeNew = "notExistProperty";
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "displayedGuiElementType", displayedGuiElementTypeNew);
+            Assert.IsFalse(result);
+            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreEqual(nodeCopy, node, "Both nodes should have the same values.");
+            Assert.AreEqual(node.brailleRepresentation.displayedGuiElementType, "nameFiltered", "Im gespeicherten Baum hätte der displayedGuiElementType-Wert 'nameFiltered' sein sollen!");
+        }
+
+        [TestMethod]
         public void setBrailleTreePropertyTest_NotExistingProperty()
         {
             guiFuctions.loadGrantProject(treePath);

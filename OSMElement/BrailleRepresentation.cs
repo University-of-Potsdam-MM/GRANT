@@ -89,11 +89,16 @@ namespace OSMElement
             } 
         }
 
+        private String _displayedGuiElementType;
         /// <summary>
         /// Name of the GUI element type of the filtered tree whose value should be shown in this view!
         /// Every controltype from <see cref="GeneralProperties"/> can be used.
         /// </summary>
-        public String displayedGuiElementType { get; set; }
+        public String displayedGuiElementType
+        {
+            get { return _displayedGuiElementType; }
+            set { if (GeneralProperties.getAllTypes().Contains(value)) { _displayedGuiElementType = value; } }
+        }
 
         /// <summary>
         /// Value of contrast for images 
