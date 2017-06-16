@@ -1500,5 +1500,27 @@ namespace GRANTManager
             propList.Remove("appPath");
         }
         #endregion
+
+        public String openFileDialog(String defaultExt, String filter = null, String initialDirectory = null)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            if (initialDirectory != null)
+            {
+                dlg.InitialDirectory = initialDirectory;
+            }
+            dlg.DefaultExt = defaultExt;
+            if (filter != null)
+            {
+                dlg.Filter = filter; // Filter files by extension
+            }
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (!dlg.CheckPathExists) { return null; }
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+            if(result == true)
+            {
+                return dlg.FileName;
+            }else { return null; }
+        }
     }
 }
