@@ -109,28 +109,63 @@ namespace GRANTManager
         /// <param name="screenReaderName">name of the screen reader (with file extention '.grant' and without the path)</param>
         /// <returns><c>true</c> if the screen reader was deleted; otherwiese <c>false</c></returns>
         public bool deleteScreenReader(String screenReaderName)
-        {//TODO: Löschrechte
+        {
             String fileExtention = ".grant";
             if (!Path.GetExtension(screenReaderName).Equals(fileExtention)) { return false; }
-            bool result;
+            bool result = false;
             if(File.Exists(Path.Combine(Settings.getScreenReaderDirectory(), screenReaderName)))
             {
-                File.Delete(Path.Combine(Settings.getScreenReaderDirectory(), screenReaderName));
-                result = true;
+                try
+                {
+                    File.Delete(Path.Combine(Settings.getScreenReaderDirectory(), screenReaderName));
+                    result = true;
+                }
+                #region catch: IOException, UnauthorizedAccessException, Exception
+                catch (IOException e)
+                {
+                    Debug.WriteLine("IOException in deleteScreenReader:\n" + e);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Debug.WriteLine("UnauthorizedAccessException in deleteScreenReader:\n" + e);
+
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Exception in deleteScreenReader:\n" + e);
+                }
+                #endregion
+                
             }else { result = false; }
             
             String directoryDel = Path.Combine(Settings.getScreenReaderDirectory(), Path.GetFileNameWithoutExtension(screenReaderName));
             if (Directory.Exists(directoryDel))
             {
-                Directory.Delete(directoryDel, true);
-                result = true;
+                try
+                {
+                    Directory.Delete(directoryDel, true);
+                    result = true;
+                }
+                #region catch: IOException, UnauthorizedAccessException, Exception
+                catch (IOException e) {
+                    Debug.WriteLine("IOException in deleteScreenReader:\n"+e);
+                }
+                catch (UnauthorizedAccessException e) {
+                    Debug.WriteLine("UnauthorizedAccessException in deleteScreenReader:\n" + e);
+
+                }
+                catch (Exception e) {
+                    Debug.WriteLine("Exception in deleteScreenReader:\n" + e);
+                }
+                #endregion
+                
             }
             //else { result = result || false; }
             return result;
         }
 
         public bool addScreenReader(String screenReaderPath)
-        { //TODO: Schreibrechte + Leserechte
+        { 
             String fileExtention = ".grant";
             #region check whether all files exist
             String projectDirectory = Path.GetDirectoryName(@screenReaderPath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@screenReaderPath);
@@ -160,7 +195,25 @@ namespace GRANTManager
                 {
                     deleteScreenReader(Path.GetFileName(screenReader.Value));
                 }
-                File.Copy(screenReaderPath, Settings.getScreenReaderDirectory() + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@screenReaderPath) + fileExtention, true);
+                try
+                {
+                    File.Copy(screenReaderPath, Settings.getScreenReaderDirectory() + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@screenReaderPath) + fileExtention, true);
+                }
+                #region catch: IOException, UnauthorizedAccessException, Exception
+                catch (IOException e)
+                {
+                    Debug.WriteLine("IOException in addScreenReader:\n" + e);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Debug.WriteLine("UnauthorizedAccessException in addScreenReader:\n" + e);
+
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Exception in addScreenReader:\n" + e);
+                }
+                #endregion
                 CloneDirectory(projectDirectory, Settings.getScreenReaderDirectory() + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@screenReaderPath));
                 return true;
             }
@@ -176,7 +229,25 @@ namespace GRANTManager
             }
             foreach (var file in Directory.GetFiles(source))
             {
-                File.Copy(file, Path.Combine(dest, Path.GetFileName(file)));
+                try
+                {
+                    File.Copy(file, Path.Combine(dest, Path.GetFileName(file)));
+                }
+                #region catch: IOException, UnauthorizedAccessException, Exception
+                catch (IOException e)
+                {
+                    Debug.WriteLine("IOException in CloneDirectory:\n" + e);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    Debug.WriteLine("UnauthorizedAccessException in CloneDirectory:\n" + e);
+
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("Exception in CloneDirectory:\n" + e);
+                }
+                #endregion
             }
         }
 
