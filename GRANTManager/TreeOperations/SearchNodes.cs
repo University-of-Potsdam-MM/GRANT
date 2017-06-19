@@ -213,7 +213,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="idGenerated">id of the searched node</param>
         /// <param name="tree">Specifies the tree for the search </param>
         /// <returns>found tree object</returns>
-        internal Object getNode(String idGenerated, Object tree)
+        public Object getNode(String idGenerated, Object tree)
         {
             if (tree == null || idGenerated == null) { return null; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))

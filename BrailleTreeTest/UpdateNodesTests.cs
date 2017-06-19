@@ -598,6 +598,50 @@ namespace GRANTManager.BrailleTreeTests
         }
 
         [TestMethod]
+        public void setBrailleTreePropertyViewNameTest()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null, "Das grant-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            Assert.AreEqual(node.brailleRepresentation.viewName, "TitleBar");
+            String viewNameNew = "viewNameNew";
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "viewName", viewNameNew);
+            Assert.IsTrue(result);
+            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreNotEqual(nodeCopy, node, "Both nodes shouldn't have the same values.");
+            Assert.AreEqual(node.brailleRepresentation.viewName, viewNameNew, "Der viewName-Wert sollte nun '" + viewNameNew + "' sein sollen!");
+        }
+
+        [TestMethod]
+        public void setBrailleTreePropertyViewNameExistTest()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null, "Das grant-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
+            Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
+            String nodeId = "766D7B8425177D724B967DE5A55198F0";
+            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            OSMElement.OSMElement nodeCopy = nodeData.DeepCopy();
+            Assert.AreNotEqual(nodeData, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            Assert.AreEqual(nodeData.brailleRepresentation.viewName, "TitleBar");
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().HasNext(nodeObject));
+            Object nextNode = strategyMgr.getSpecifiedTree().Next(nodeObject);
+            OSMElement.OSMElement nextNodeData = strategyMgr.getSpecifiedTree().GetData(nextNode);
+            String viewNameNew = nextNodeData.brailleRepresentation.viewName;
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "viewName", viewNameNew);
+            Assert.IsFalse(result);
+            nodeData = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreEqual(nodeCopy, nodeData, "Both nodes should have the same values.");
+            Assert.AreNotEqual(nodeData.brailleRepresentation.viewName, viewNameNew);
+        }
+
+        [TestMethod]
         public void getProperty_Exist_NotNull_Test()
         {
             guiFuctions.loadGrantProject(treePath);

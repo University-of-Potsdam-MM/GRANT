@@ -173,6 +173,15 @@ namespace GRANTManager.TreeOperations
             {
                 //TODO
             }
+            if (nameOfProperty.Equals("viewName"))
+            {
+                Object nodeObject = treeOperation.searchNodes.getNode(id, grantTrees.brailleTree);
+                Object parent = strategyMgr.getSpecifiedTree().Parent(nodeObject);
+                if(existViewInTree(parent, newProperty as String))
+                {
+                    return false;
+                }
+            }
             // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
             OSMElement.OSMElement.setElement(nameOfProperty, newProperty, node);
             Object propertyValueNew = OSMElement.OSMElement.getElement(nameOfProperty, node);
@@ -181,6 +190,20 @@ namespace GRANTManager.TreeOperations
             else
             {
                 if ((propertyValueNew == null && newProperty == null) || propertyValueNew.Equals(newProperty)) { return true; }
+            }
+            return false;
+        }
+
+        private bool existViewInTree(Object subtree, String viewName)
+        {
+            if(viewName == null || viewName.Equals("")) { return false; }
+            foreach(Object o  in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
+            {
+                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                if(viewName.Equals(data.brailleRepresentation.viewName))
+                {
+                    return true;
+                }
             }
             return false;
         }

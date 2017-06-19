@@ -100,16 +100,24 @@ namespace OSMElement
             set { if (GeneralProperties.getAllTypes().Contains(value)) { _displayedGuiElementType = value; } }
         }
 
+        private int _contrast;
         /// <summary>
         /// Value of contrast for images 
         /// it must be between 0 and 255 
         /// </summary>
-        public int contrast { get; set; }
+        public int contrast {
+            get { return _contrast; }
+            set { if (value >= 0 && value <= 255) { _contrast = value; } }
+        }
 
+        private double _zoom;
         /// <summary>
         /// zoom level for images
         /// </summary>
-        public double zoom { get; set; }
+        public double zoom {
+            get { return _zoom; }
+            set { if (value <= 5) // '5' is the MAX_ZOOM_LEVEL in BrailleIO.BrailleIOViewRange
+                { _zoom = value; } } }
 
         /// <summary>
         /// Determines whether scrollbar will be shown
