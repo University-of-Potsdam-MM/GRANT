@@ -518,5 +518,23 @@ namespace StrategyGenericTree
 
                 return true;
         }
+
+        public bool moveSubtree(Object nodeToMove, Object parentNew)
+        {
+            // 0. checks
+            if(nodeToMove == null || parentNew == null) { return false; }
+            if (Contains(parentNew, nodeToMove)) { return false; }
+            // 1. cut
+            Object cuttedNode;
+            try
+            {
+                cuttedNode = Cut(nodeToMove);
+            }
+            catch (InvalidOperationException) { return false; }
+            if(cuttedNode == null) { return false; }
+            // 2. paste
+            AddChild(parentNew, cuttedNode);
+            return true;
+        }
     }
 }

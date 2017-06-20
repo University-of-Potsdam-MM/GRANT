@@ -158,5 +158,7 @@ namespace GRANTManager.Interfaces
         void XmlSerialize(object treeOld, Stream stream);
         object XmlDeserialize(Stream stream);
         bool Equals(object node1, object node2);
+
+        bool moveSubtree(Object nodeToMove, Object parentNew);
     }
 }
