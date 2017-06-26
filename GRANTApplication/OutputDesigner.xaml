@@ -84,22 +84,35 @@
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="250,10,612,16">
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
+                    <DataGrid x:Name="brailleTreeProp" ItemsSource="{Binding Items}"  
+              AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False"/>
+                   
+                </StackPanel>
+            </ScrollViewer>
+
+        <!--    <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="250,10,612,16">
+                <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
+
                     <Grid>
-                        <Grid.RowDefinitions>
+                     <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition Height="30" />
                         </Grid.RowDefinitions>
-                        <DataGrid Name="brailleTreeProp" ItemsSource="{Binding}" />
-                        <!--<Button Grid.Row="1" Name="BtnDel" Width="100" Content="Delete Row" HorizontalAlignment="Left" Click="BtnDel_Click" />
-                        <Button Grid.Row="1" Name="BtnUpdate" Width="100" Content="Update Row" HorizontalAlignment="Right" Click="BtnUpdate_Click" />
-                    --></Grid>
-                    
-                    
-                  <!--  <DataGrid BorderThickness="1" x:Name="brailleTreeProp" Background="White" Height="273" ItemsSource="{Binding brailleTreePropItems}"
+                        
+
+                    </Grid>-->
+
+
+                    <!-- <Grid> brailleTreeProp
+                        <DataGrid x:Name="grid" ItemsSource="{Binding Items}" 
+              AutoGenerateColumns="False"/>
+                    </Grid>-->
+                    <!--  <DataGrid BorderThickness="1" x:Name="brailleTreeProp" Background="White" Height="273" ItemsSource="{Binding brailleTreePropItems}"
          />-->
-                    <!-- BeginningEdit="brailleTreeProp_BeginningEdit"-->
+                    <!-- BeginningEdit="brailleTreeProp_BeginningEdit"
                 </StackPanel>
-            </ScrollViewer>
+            </ScrollViewer>-->
             <Grid Background="White" Width="589" HorizontalAlignment="Right" Margin="0,42,10,17" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="67*"/>
@@ -214,10 +227,10 @@
                         </Style>
                     </ListBox.Resources>
                 </ListBox>-->
-                <Grid>
-                    <DataGrid x:Name="grid" ItemsSource="{Binding Items}" 
+           <!--     <Grid>
+                    <DataGrid x:Name="brailleTreeProp" ItemsSource="{Binding Items}" 
               AutoGenerateColumns="False"/>
-                </Grid>
+                </Grid>-->
             </StackPanel>
 
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Left"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="249,0,0,15" >
