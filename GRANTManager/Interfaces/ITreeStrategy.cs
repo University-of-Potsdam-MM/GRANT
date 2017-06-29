@@ -110,8 +110,8 @@ namespace GRANTManager.Interfaces
         void SetData(object node, T o);
         System.Collections.Generic.IEqualityComparer<T> DataComparer { get; set; }
         Type DataType(object tree);
-        object DeepCopy(object treeOld); //ITree
-        object DeepCopy(object treeOld, T o); //ITree
+      //  object DeepCopy(object treeOld); //ITree
+       // object DeepCopy(object treeOld, T o); //ITree
         int Depth(object node);
         int DirectChildCount(object node);
         System.Collections.Generic.IEnumerable<Object> DirectChildrenNodes(object treeObject);// Common.IEnumerableCollectionPair<T> DirectChildren { get; }
@@ -157,5 +157,8 @@ namespace GRANTManager.Interfaces
         //Common.IEnumerableCollection<T> Values { get; }
         void XmlSerialize(object treeOld, Stream stream);
         object XmlDeserialize(Stream stream);
+        bool Equals(object node1, object node2);
+
+        bool moveSubtree(Object nodeToMove, Object parentNew);
     }
 }

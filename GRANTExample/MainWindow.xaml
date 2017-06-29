@@ -21,7 +21,9 @@
         <Menu HorizontalAlignment="Left" Height="21" Margin="-2,0,0,0" VerticalAlignment="Top" Width="657">
 
             <MenuItem Header="_File">
-                <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
+                <MenuItem Click="AddScreenReaderCommand"  Header="_Add screen reader" HorizontalAlignment="Left"/>
+                <MenuItem Header="Hide Window" Click="HideWindowCommand" Name="HideWindowMenuItem" IsCheckable="True" IsChecked="False"/>
+                <MenuItem Click="ExitApp" x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left"/>
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
@@ -30,10 +32,6 @@
                 <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
                 <Separator />
                 <MenuItem x:Name="Autor" Header="&amp;Autor" HorizontalAlignment="Left" Width="140"/>
-            </MenuItem>
-
-            <MenuItem Header="_Test">
-                <MenuItem x:Name="t01" Header="t01" HorizontalAlignment="Left" Width="140"/>
             </MenuItem>
         </Menu>
         <Grid>
@@ -45,10 +43,9 @@
                         PopupActivation="RightClick">
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Add screen reader" Click="AddScreenReaderCommand" />
                         <MenuItem Header="Select screen reader" Name="SelectScreenReader" Click="ScreenReaderCommand"/>
                         <Separator />
-                        <MenuItem Header="Hide Window" Click="HideWindowCommand" IsCheckable="True" IsChecked="False"/>
+                        <MenuItem Header="Hide Window" Name="HideWindowNotification" Click="HideWindowCommand" IsCheckable="True" IsChecked="False"/>
                         <MenuItem Header="Exit" Click="ExitApp"/>
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>

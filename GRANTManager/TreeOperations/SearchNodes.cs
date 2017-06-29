@@ -76,6 +76,79 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
+        /// depending on the given properties, all nodes with these properties are searched (depth-first search). 
+        /// Properties which are null or the default value is set are ignore
+        /// </summary>
+        /// <param name="tree">tree object for search </param>
+        /// <param name="properties">properties for the search</param>
+        /// <param name="oper">Operator for combining the properties (and, or) </param>
+        /// <returns>A list of the found tree objects</returns>
+        public List<Object> searchNodeByProperties(Object tree, OSMElement.OSMElement properties, OperatorEnum oper = OperatorEnum.and)
+        {
+            List<Object> result = new List<Object>();
+            if (tree == null) { return result; }
+            List<String> listOfUsedProperties = OSMElement.OSMElement.getAllTypes();
+            listOfUsedProperties = trimListOfProperties(listOfUsedProperties, properties);
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
+            {
+                OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
+                Boolean isToAdd = true;
+                foreach (String s in listOfUsedProperties)
+                {
+                    Boolean resultEquals = false;
+                    var data_1 = OSMElement.OSMElement.getElement(s, nodeData);
+                    var data_2 = OSMElement.OSMElement.getElement(s, properties);
+                    if ((data_1 != null && data_1.Equals(data_2)) || (data_1 == null && data_2 == null))
+                    {
+                        resultEquals = true;
+                    }
+                    else
+                    {
+                        resultEquals = false;
+                    }
+                    
+                    if (OperatorEnum.Equals(oper, OperatorEnum.and))
+                    {
+                        isToAdd = isToAdd && resultEquals;
+                        if (!isToAdd) { break; }
+                    }
+                    else
+                    {
+                        if (OperatorEnum.Equals(oper, OperatorEnum.or))
+                        {
+                            isToAdd = isToAdd || resultEquals;
+                        }
+                    }
+                }
+                if (isToAdd)
+                {
+                    result.Add(node);
+                }
+            }
+            return result;
+        }
+
+        private List<String> trimListOfProperties(List<String> listOfProperties, OSMElement.OSMElement osmValues)
+        {
+            List<String> trimmedList = new List<string>();
+            foreach (String s in listOfProperties)
+            {
+                Type typeOfProperty;
+                var data = OSMElement.OSMElement.getElement(s, osmValues, out typeOfProperty);
+
+                if (data != null)
+                {
+                    var t = ExtObject.GetDefault(typeOfProperty);
+                    if (t == null || !t.Equals(data))
+                    {
+                        trimmedList.Add(s);
+                    }
+                }
+            }
+            return trimmedList;
+        }
+
+        /// <summary>
         /// searches for node with the given id in a tree object
         /// </summary>
         /// <param name="idGenereted">id of the searched node</param>
@@ -140,7 +213,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="idGenerated">id of the searched node</param>
         /// <param name="tree">Specifies the tree for the search </param>
         /// <returns>found tree object</returns>
-        internal Object getNode(String idGenerated, Object tree)
+        public Object getNode(String idGenerated, Object tree)
         {
             if (tree == null || idGenerated == null) { return null; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))

@@ -89,22 +89,35 @@ namespace OSMElement
             } 
         }
 
+        private String _displayedGuiElementType;
         /// <summary>
         /// Name of the GUI element type of the filtered tree whose value should be shown in this view!
         /// Every controltype from <see cref="GeneralProperties"/> can be used.
         /// </summary>
-        public String displayedGuiElementType { get; set; }
+        public String displayedGuiElementType
+        {
+            get { return _displayedGuiElementType; }
+            set { if (GeneralProperties.getAllTypes().Contains(value)) { _displayedGuiElementType = value; } }
+        }
 
+        private int _contrast;
         /// <summary>
         /// Value of contrast for images 
         /// it must be between 0 and 255 
         /// </summary>
-        public int contrast { get; set; }
+        public int contrast {
+            get { return _contrast; }
+            set { if (value >= 0 && value <= 255) { _contrast = value; } }
+        }
 
+        private double _zoom;
         /// <summary>
         /// zoom level for images
         /// </summary>
-        public double zoom { get; set; }
+        public double zoom {
+            get { return _zoom; }
+            set { if (value <= 5) // '5' is the MAX_ZOOM_LEVEL in BrailleIO.BrailleIOViewRange
+                { _zoom = value; } } }
 
         /// <summary>
         /// Determines whether scrollbar will be shown
@@ -226,8 +239,22 @@ namespace OSMElement
         /// <returns>the wanted property from <para>properties</para> </returns>
         public static object getPropertyElement(String elementName, BrailleRepresentation propertiesBraille)
         {
+            Type t;
+           return  getPropertyElement(elementName, propertiesBraille, out t);
+        }
+
+        /// <summary>
+        /// Gets a specified property
+        /// </summary>
+        /// <param name="elementName">name of the wanted property</param>
+        /// <param name="propertiesBraille">properties of the node</param>
+        /// <param name="propertyType">the datatype of the property</param>
+        /// <returns>the wanted property from <para>properties</para> </returns>
+        public static object getPropertyElement(String elementName, BrailleRepresentation propertiesBraille, out Type propertyType)
+        {
             try
             { //see http://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection-in-c-sharp#
+                propertyType = propertiesBraille.GetType().GetProperty(elementName).PropertyType;
                 return propertiesBraille.GetType().GetProperty(elementName).GetValue(propertiesBraille, null);
             }
             catch

@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
 using System.IO;
 using System.Diagnostics;
@@ -180,93 +179,6 @@ namespace GRANTExample
             {
                 NodeBox.Text = exampleDisplay.deviceInfo();
             }
-            
-            
-
-          /*  if (e.Key == Key.Left || e.Key == Key.NumPad4)
-            {
-              //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.brailleTree); // => Tabs in Notepad
-               // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.brailleTree); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = searchNodes.getNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.brailleTree); // => Liste in eigener Beispielanwendung
-               
-                if (nodeList != null && nodeList.Count > 0) 
-                {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangHoricontal(nodeList[0], 15);
-                    Debug.WriteLine("View (" + strategyMgr.getSpecifiedTree().GetData(nodeList[0]).brailleRepresentation.viewName + ") verschoben!");
-                }
-            }
-            if (e.Key == Key.Right || e.Key == Key.NumPad6)
-            {
-              //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.brailleTree); // => Tabs in Notepad
-                //List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.brailleTree); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = searchNodes.getNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.brailleTree); // => Liste in eigener Beispielanwendung
-                if (nodeList != null && nodeList.Count > 0)
-                {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangHoricontal(nodeList[0], -15);
-                    Debug.WriteLine("View (" + strategyMgr.getSpecifiedTree().GetData(nodeList[0]).brailleRepresentation.viewName + ") verschoben!");
-                }
-            }
-            if (e.Key == Key.Up || e.Key == Key.NumPad8)
-            {
-              //  List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.brailleTree); // => Tabs in Notepad
-               // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.brailleTree); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = searchNodes.getNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.brailleTree); // => Liste in eigener Beispielanwendung
-                if (nodeList != null && nodeList.Count > 0)
-                {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangVertical(nodeList[0], 5);
-                    Debug.WriteLine("View (" + strategyMgr.getSpecifiedTree().GetData(nodeList[0]).brailleRepresentation.viewName + ") verschoben!");
-                }
-            }
-            if (e.Key == Key.Down || e.Key == Key.NumPad2)
-            {
-               // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("A04CA705E7BA6B44BD902C9F997A4327", grantTree.brailleTree); // => Tabs in Notepad
-               // List<ITreeStrategy<OSMElement.OSMElement>> nodeList = strategyMgr.getSpecifiedTreeOperations().getNodeList("976DB97BBB2C77A1D9D0347AD3D07CFC", grantTree.brailleTree); // = TextBox "976DB97BBB2C77A1D9D0347AD3D07CFC"
-                List<Object> nodeList = searchNodes.getNodeList("85BA1DC86AD196E006BB0978C40BD171", grantTree.brailleTree); // => Liste in eigener Beispielanwendung
-                if (nodeList != null && nodeList.Count > 0)
-                {
-                    strategyMgr.getSpecifiedBrailleDisplay().moveViewRangVertical(nodeList[0], -5);
-                    Debug.WriteLine("View (" + strategyMgr.getSpecifiedTree().GetData(nodeList[0]).brailleRepresentation.viewName + ") verschoben!");
-                }
-            }
-            if (e.Key == Key.NumPad5)
-            {
-                object node = guiFuctions.getBrailleNodeAtPoint(19, 23);
-                Debug.WriteLine("Braille-Node: " + (node == null ? "null" : strategyMgr.getSpecifiedTree().GetData(node).properties.valueFiltered));
-                NodeBox.Text = strategyMgr.getSpecifiedTree().ToString(node);
-            }
-
-            if (e.Key == Key.NumPad7)
-            {
-
-                List<Object> nodeList = searchNodes.getNodeList("5524107E02B9643EDB67F59CB310C26C", grantTree.filteredTree); //schließen-Button Calc
-                if(nodeList == null)
-                {
-                    nodeList = searchNodes.getNodeList("E317735D2EF01B0E4EF8C1AD47C8F9B8", grantTree.filteredTree); //Notepad++
-                }
-                if (nodeList != null && nodeList.Count > 0)
-                {
-                    // guiFuctions.addFilteredNodeToBrailleTree("Button", nodeList[0], "neu", "tv2", "neu", new Rect(10, 10, 50, 9));
-                 //   guiFuctions.addFilteredNodeToBrailleTree("Button", nodeList[0], null, null, null, new Rect(10, 10, 50, 9));
-                    guiFuctions.addFilteredNodeToBrailleTree("TextBox");
-                    guiFuctions.addFilteredNodeToBrailleTree("Text");
-                    guiFuctions.addFilteredNodeToBrailleTree("Button");
-                    guiFuctions.addFilteredNodeToBrailleTree("TabItem");
-                }
-                nodeList = searchNodes.getNodeList("29E003E8F0AB31A3745C4B944C0254CF", grantTree.filteredTree); //DropDownMenu - notepad++
-
-                if (nodeList != null && nodeList.Count > 0)
-                {
-                    guiFuctions.addFilteredNodeToBrailleTree("DropDownMenuItem",nodeList[0]);
-                }
-                nodeList = searchNodes.getNodeList("58AA232A14172FB8BCD78A576BE94D80", grantTree.filteredTree); //Beispielanwendung - checkbox
-
-                if (nodeList != null && nodeList.Count > 0)
-                {
-                    guiFuctions.addFilteredNodeToBrailleTree("ListItem", nodeList[0]);
-                }
-                
-            }*/
-
        }
 
 
@@ -317,7 +229,12 @@ namespace GRANTExample
 
         #region Notification
         private void AddScreenReaderCommand(object sender, RoutedEventArgs e)
-        { //TODO
+        { 
+            String fileExtention = ".grant";
+            String fileNamePath = guiFuctions.openFileDialog(fileExtention, "GRANT documents (.grant)|*.grant", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            if(fileNamePath == null) { System.Windows.Forms.MessageBox.Show("The chosen screen reader doesn't exist!", "GRANT exception"); return; }
+            ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
+            srf.addScreenReader(@fileNamePath);           
         }
 
         private void posibleScreenreaders()
@@ -336,7 +253,6 @@ namespace GRANTExample
 
         private void ScreenReaderCommand(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("");
             if (e.Source != null && e.Source.GetType().Equals(typeof(MenuItem)))
             {
                 if (((MenuItem)e.Source).Header != null && !((MenuItem)e.Source).Header.Equals("Select screen reader"))
@@ -344,10 +260,29 @@ namespace GRANTExample
                     MenuItem i = ((MenuItem)e.Source);
                     ((MenuItem)e.Source).IsEnabled = false;
                     ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
-                    srf.uncheckedMenuItem(i);
+                    uncheckedMenuItem(i);
                     guiFuctions.loadGrantProject(srf.screenreaders[((MenuItem)e.Source).Header as String]);
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                     
+                }
+            }
+        }
+
+        /// <summary>
+        /// Unchecked and enabled all siblings
+        /// </summary>
+        /// <param name="menuItem"><code>System.Windows.Controls.MenuItem</code> which was checked</param>
+        private void uncheckedMenuItem(System.Windows.Controls.MenuItem menuItem)
+        {
+            if (menuItem.Parent != null)
+            {
+                foreach (System.Windows.Controls.MenuItem siblingMenuitem in ((System.Windows.Controls.MenuItem)menuItem.Parent).Items)
+                {
+                    if (!siblingMenuitem.Equals(menuItem))
+                    {
+                        siblingMenuitem.IsChecked = false;
+                        siblingMenuitem.IsEnabled = true;
+                    }
                 }
             }
         }
@@ -359,10 +294,25 @@ namespace GRANTExample
             if (((MenuItem)sender).IsChecked)
             {
                 strategyMgr.getSpecifiedOperationSystem().hideWindow(hWnd);
+                if (!((MenuItem)sender).Name.Equals("HideWindowNotification"))
+                {
+                    HideWindowNotification.IsChecked = true;
+                }else
+                {
+                    HideWindowMenuItem.IsChecked = true;
+                }
             }
             else
             {
                 strategyMgr.getSpecifiedOperationSystem().showWindow(hWnd);
+                if (!((MenuItem)sender).Name.Equals("HideWindowNotification"))
+                {
+                    HideWindowNotification.IsChecked = false;
+                }
+                else
+                {
+                    HideWindowMenuItem.IsChecked = false;
+                }
             }
         }
         private void ExitApp(object sender, RoutedEventArgs e)

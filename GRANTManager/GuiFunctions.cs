@@ -665,7 +665,11 @@ namespace GRANTManager
             if (grantTrees == null || grantTrees.filteredTree == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); return; }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.filteredTree, fs);
+                try
+                {
+                    strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.filteredTree, fs);
+                }
+                catch (Exception) { }
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -679,7 +683,11 @@ namespace GRANTManager
             if (grantTrees == null || grantTrees.brailleTree == null) { Console.WriteLine("Es ist kein gefilterter Baum vorhanden."); }
             using (System.IO.FileStream fs = System.IO.File.Create(filePath))
             {
-                strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.brailleTree, fs);
+                try
+                {
+                    strategyMgr.getSpecifiedTree().XmlSerialize(grantTrees.brailleTree, fs);
+                }
+                catch (Exception) { }
                 //fs.Close(); <- nicht benötigt da using
             }
         }
@@ -711,41 +719,45 @@ namespace GRANTManager
             projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
             #endregion
             //creates a directory for the project
-            DirectoryInfo di = Directory.CreateDirectory(directoryPath);
-            if (di.Exists)
+            try
             {
-                //temporary deletes  all children from a group and their connections to the braille (output) tree 
-                treeOperation.updateNodes.deleteChildsOfBrailleGroups();
-                saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
-                if (grantTrees.brailleTree != null)
+                DirectoryInfo di = Directory.CreateDirectory(directoryPath);
+                if (di.Exists)
                 {
-                    saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
-                }
-                XmlSerializer serializer;
-                if (grantTrees.osmRelationship != null && !grantTrees.osmRelationship.Equals(new OsmConnector<String, String>()) && grantTrees.osmRelationship.Count > 0)
-                {
-                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getOsmConectorName()))
+                    //temporary deletes  all children from a group and their connections to the braille (output) tree 
+                    treeOperation.updateNodes.deleteChildsOfBrailleGroups();
+                    saveFilteredTree(directoryPath + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
+                    if (grantTrees.brailleTree != null)
                     {
-                        serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
-                        serializer.Serialize(writer, grantTrees.osmRelationship);
+                        saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
                     }
-                }
-                if (grantTrees.filterstrategiesOfNodes != null)
-                {
-                    using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName()))
+                    XmlSerializer serializer;
+                    if (grantTrees.osmRelationship != null && !grantTrees.osmRelationship.Equals(new OsmConnector<String, String>()) && grantTrees.osmRelationship.Count > 0)
                     {
-                        serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
-                        serializer.Serialize(writer, grantTrees.filterstrategiesOfNodes);
+                        using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getOsmConectorName()))
+                        {
+                            serializer = new XmlSerializer(typeof(List<OsmConnector<String, String>>));
+                            serializer.Serialize(writer, grantTrees.osmRelationship);
+                        }
                     }
+                    if (grantTrees.filterstrategiesOfNodes != null)
+                    {
+                        using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName()))
+                        {
+                            serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
+                            serializer.Serialize(writer, grantTrees.filterstrategiesOfNodes);
+                        }
+                    }
+                    using (StreamWriter writer = new StreamWriter(projectFilePath))
+                    {
+                        serializer = new XmlSerializer(typeof(GrantProjectObject));
+                        serializer.Serialize(writer, projectObject);
+                    }
+                    //rebuilds all children elements from a group and their connections to the braille tree
+                    treeOperation.updateNodes.updateBrailleGroups();
                 }
-                using (StreamWriter writer = new StreamWriter(projectFilePath))
-                {
-                    serializer = new XmlSerializer(typeof(GrantProjectObject));
-                    serializer.Serialize(writer, projectObject);
-                }
-                //rebuilds all children elements from a group and their connections to the braille tree
-                treeOperation.updateNodes.updateBrailleGroups();
-            }            
+            }
+            catch (Exception e) { Debug.WriteLine("Exception by saveProject:\n",e); }
         }
 
         /// <summary>
@@ -1504,5 +1516,27 @@ namespace GRANTManager
             propList.Remove("appPath");
         }
         #endregion
+
+        public String openFileDialog(String defaultExt, String filter = null, String initialDirectory = null)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            if (initialDirectory != null)
+            {
+                dlg.InitialDirectory = initialDirectory;
+            }
+            dlg.DefaultExt = defaultExt;
+            if (filter != null)
+            {
+                dlg.Filter = filter; // Filter files by extension
+            }
+            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            if (!dlg.CheckPathExists) { return null; }
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+            if(result == true)
+            {
+                return dlg.FileName;
+            }else { return null; }
+        }
     }
 }

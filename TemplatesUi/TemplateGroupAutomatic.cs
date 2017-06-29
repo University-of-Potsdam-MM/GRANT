@@ -19,7 +19,7 @@ namespace TemplatesUi
             brailleNode.properties = templateObject.osm.properties;
             brailleNode.brailleRepresentation = templateObject.osm.brailleRepresentation;
 
-            brailleNode.properties.isEnabledFiltered = false;
+            
             brailleNode.properties.controlTypeFiltered = "GroupElement";
             brailleNode.properties.isContentElementFiltered = false; //-> es ist Elternteil einer Gruppe
             brailleNode.brailleRepresentation.isVisible = true;
@@ -28,22 +28,7 @@ namespace TemplatesUi
             }
             brailleNode.brailleRepresentation.screenName = templateObject.Screens[0]; // hier wird immer nur ein Screen-Name übergeben
             //braille.viewName = templateObject.name+"_"+ strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
-            if ( !treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, templateObject.viewName, templateObject.osm.brailleRepresentation.typeOfView )) //!templateObject.allElementsOfType ||
-            {
-                brailleNode.brailleRepresentation.viewName = templateObject.viewName;
-            }
-            else
-            {
-                int i = 0;
-                String viewName = templateObject.viewName + "_"+i;
-                
-                while (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, viewName, templateObject.osm.brailleRepresentation.typeOfView))
-                {
-                    i++;
-                    viewName += i;
-                }
-                brailleNode.brailleRepresentation.viewName = viewName;
-            }
+
             brailleNode.brailleRepresentation.templateFullName = templateObject.groupImplementedClassTypeFullName;
             brailleNode.brailleRepresentation.templateNamspace = templateObject.groupImplementedClassTypeDllName;
 
@@ -60,6 +45,38 @@ namespace TemplatesUi
                 braille.margin = templateObject.osm.brailleRepresentation.margin;
             }*/
 
+            List<Object>  existingNodesWithProperties = treeOperation.searchNodes.searchNodeByProperties(grantTrees.brailleTree, brailleNode);
+            if(existingNodesWithProperties != null && !existingNodesWithProperties.Equals(new List<Object>()))
+            {               
+                String idOsmFilteredSubtree = strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
+                foreach (Object o in existingNodesWithProperties)
+                {
+                    OSMElement.OSMElement tmpOsmBraille = strategyMgr.getSpecifiedTree().GetData(o);
+                    String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(tmpOsmBraille.properties.IdGenerated);
+                    if (connectedIdFilteredTree.Equals(idOsmFilteredSubtree))
+                    {
+                        Debug.WriteLine("The node is already exist.");
+                        return strategyMgr.getSpecifiedTree().NewTree(); ;
+                    }
+                }
+            }
+            brailleNode.properties.isEnabledFiltered = false;
+            if (!treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, templateObject.viewName, templateObject.osm.brailleRepresentation.typeOfView)) //!templateObject.allElementsOfType ||
+            {
+                brailleNode.brailleRepresentation.viewName = templateObject.viewName;
+            }
+            else
+            {
+                int i = 0;
+                String viewName = templateObject.viewName + "_" + i;
+
+                while (treeOperation.searchNodes.existViewInScreen(brailleNode.brailleRepresentation.screenName, viewName, templateObject.osm.brailleRepresentation.typeOfView))
+                {
+                    i++;
+                    viewName += i;
+                }
+                brailleNode.brailleRepresentation.viewName = viewName;
+            }
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null)
             {

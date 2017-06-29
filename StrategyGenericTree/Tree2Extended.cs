@@ -7,6 +7,7 @@ using GRANTManager.Interfaces;
 using GRANTManager;
 using Common;
 using System.IO;
+using System.Diagnostics;
 
 namespace StrategyGenericTree
 {
@@ -231,7 +232,7 @@ namespace StrategyGenericTree
             return ((ITree<T>)tree).DataType; 
         }
 
-        public Object DeepCopy(Object treeOld)
+    /*    public Object DeepCopy(Object treeOld)
         {
             return ((ITree<T>)treeOld).DeepCopy();
         }
@@ -240,7 +241,7 @@ namespace StrategyGenericTree
         {
             return ((ITree<T>)treeOld).DeepCopy(o);
         }
-
+        */
         public int Depth(Object node)
         {
            return ((INode<T>)node).Depth;
@@ -495,6 +496,45 @@ namespace StrategyGenericTree
         {
             if (treeObject == null || !(treeObject.GetType().Equals(typeof(NodeTree<T>)) || treeObject.GetType().BaseType.Equals(typeof(NodeTree<T>)))) { return null; }
             return (IEnumerable<object>)((NodeTree<T>)treeObject).DirectChildren.Nodes;
+        }
+        public new bool Equals(object node1, object node2)
+        {
+            if (Count(node1) != Count(node2)){ return false; }
+            foreach (object o in AllNodes(node1))
+            {
+                if (o.GetType().Equals(typeof( NodeTree<T>)))
+                {
+                    //((NodeTree<T>)o).
+                    var v = ((NodeTree<T>)node2)[((NodeTree<T>)o).Data]; // nur die ID wird beachtet?
+                    if (v == null) { return false; }
+                    Boolean result = v.Data.Equals(((NodeTree<T>)o).Data);
+                    if (!result) { return false; }
+                }else
+                {
+                    Debug.WriteLine("unknown type!");
+                    return false;
+                }
+            }
+
+                return true;
+        }
+
+        public bool moveSubtree(Object nodeToMove, Object parentNew)
+        {
+            // 0. checks
+            if(nodeToMove == null || parentNew == null) { return false; }
+            if (Contains(parentNew, nodeToMove)) { return false; }
+            // 1. cut
+            Object cuttedNode;
+            try
+            {
+                cuttedNode = Cut(nodeToMove);
+            }
+            catch (InvalidOperationException) { return false; }
+            if(cuttedNode == null) { return false; }
+            // 2. paste
+            AddChild(parentNew, cuttedNode);
+            return true;
         }
     }
 }
