@@ -123,7 +123,7 @@ namespace TemplatesUi
                 if (strategyMgr.getSpecifiedTree().HasChild(nbar))
                 {
                     treeOperation.updateNodes.removeChildNodeInBrailleTree(nbar);
-                    treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(nbar));
+                    treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(nbar).properties.IdGenerated);
                 }
                 screensForShowNavigationbar.Add(strategyMgr.getSpecifiedTree().GetData(nbar).brailleRepresentation.screenName);
             }

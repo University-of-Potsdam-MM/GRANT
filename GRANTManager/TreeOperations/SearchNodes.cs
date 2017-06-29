@@ -227,7 +227,7 @@ namespace GRANTManager.TreeOperations
         }
 
         /// <summary>
-        /// Gives a subtree with all screens of a specified view
+        /// Gives a subtree of a specified screen
         /// </summary>
         /// <param name="screenName">name of the screen</param>
         /// <returns>subtree object or <c>null</c></returns>
@@ -250,6 +250,29 @@ namespace GRANTManager.TreeOperations
             }
             return null;
         }
+
+        /// <summary>
+        /// Gives a subtree of a specified typeOfView
+        /// </summary>
+        /// <param name="typeOfViewName">name of the typeOfView</param>
+        /// <returns>subtree object or <c>null</c></returns>
+        public Object getSubtreeOfTypeOfView(String typeOfViewName)
+        {
+
+            if (typeOfViewName == null || typeOfViewName.Equals("")) { return null; }
+            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
+            if (grantTrees.brailleTree == null) { return null; }
+
+            foreach (Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            {
+                if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(typeOfViewName))
+                {
+                    return vC;
+                }
+            }
+            return null;
+        }
+
 
         /// <summary>
         /// Gives the names of the existing screens
