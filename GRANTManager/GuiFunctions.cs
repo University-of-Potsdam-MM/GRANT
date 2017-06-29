@@ -15,6 +15,7 @@ using GRANTManager.Interfaces;
 using OSMElement;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace GRANTManager
 {
@@ -452,19 +453,18 @@ namespace GRANTManager
             public ObservableCollection<BrailleItem> Items { get; set; }
         }
 
-        public class MyViewModel
+        public class MyViewModel 
         {
+            public MyViewModel()
+            {
+                Items = null;
+            }
+
             public MyViewModel(OSMElement.OSMElement osmElement)
             {
+                Items = null;
                 Items = new List<RowDataItem>();
-                /*
-                for (int i = 0; i < OSMElement.OSMElement.getAllTypes().Count; i++) {
-
-                    object o = OSMElement.OSMElement.getElement(OSMElement.OSMElement.getAllTypes()[i], osmElement);
-
-                  Items.Add(new RowDataItem(OSMElement.OSMElement.getAllTypes()[i], o!= null ? o.ToString() : ""));
-                }
-                */
+            
                 List<String> allTypes =  getAllTypes(osmElement);
                 for (int i = 0; i < allTypes.Count; i++)
                 {
@@ -477,6 +477,10 @@ namespace GRANTManager
             public IList<string> ColumnNames { get; private set; }
 
             public IList<RowDataItem> Items { get; private set; }
+
+            
+
+          
         }
 
         public class RowDataItem
