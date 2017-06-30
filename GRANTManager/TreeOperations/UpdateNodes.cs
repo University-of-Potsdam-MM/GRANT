@@ -316,9 +316,40 @@ namespace GRANTManager.TreeOperations
             Object parent = strategyMgr.getSpecifiedTree().Parent(nodeObject);
             if (nodeData.brailleRepresentation != null && nodeData.brailleRepresentation.viewName == null && nodeData.brailleRepresentation.isVisible == false)
             {
+                Object existScreen;
                 // => 'root' of a screen branch => rename all children
-                if(existScreenInTree(parent, screenNameNew)) { return false; }
-                foreach(Object o in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
+                if (existScreenInTree(parent, screenNameNew, out existScreen))
+                {
+                    foreach (Object view in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(view);
+                        if (treeOperation.searchNodes.existViewInScreen(screenNameNew, data.brailleRepresentation.viewName, data.brailleRepresentation.typeOfView))
+                        {
+                            return false;
+                        }
+                    }
+                    //  Screen exist BUT the viewS doesn't exist
+                    //rename + move every view
+                    foreach (Object view in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(view);
+                        data.brailleRepresentation.screenName = screenNameNew;
+                    }
+                    while (strategyMgr.getSpecifiedTree().HasChild(nodeObject))
+                    {
+                        strategyMgr.getSpecifiedTree().moveSubtree(strategyMgr.getSpecifiedTree().Child(nodeObject), existScreen);
+                    }
+                    if (!strategyMgr.getSpecifiedTree().HasPrevious(nodeObject) && !strategyMgr.getSpecifiedTree().HasNext(nodeObject) && strategyMgr.getSpecifiedTree().HasParent(nodeObject))
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(strategyMgr.getSpecifiedTree().Parent(nodeObject));
+                    }
+                    else
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(nodeObject);
+                    }
+                    return true;
+                }
+                foreach (Object o in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
                 {
                     OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                     data.brailleRepresentation.screenName = screenNameNew;

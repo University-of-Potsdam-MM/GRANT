@@ -708,7 +708,7 @@ namespace GRANTManager.BrailleTreeTests
         public void setBrailleTreePropertyScreenName_ScreenExistTest()
         {
             /*
-             * Try to rename a screen (and all children) --> it dosn't work because it already exists a screen with the same name 
+             * Try to rename a screen (screen-branch) (and all children) --> it dosn't work because it already exists a screen with the same name wich has some views with the same name
              */
             guiFuctions.loadGrantProject(treePath2);
             Assert.AreNotEqual(grantTrees, null);
@@ -728,6 +728,42 @@ namespace GRANTManager.BrailleTreeTests
             if (!strategyMgr.getSpecifiedTree().Equals(grantTrees.brailleTree, treeCopy)) 
             {
                 Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void setBrailleTreePropertyScreenName_ScreenExistTest2()
+        {
+            /* 
+             * Integrate a screen-branch by rename a screen (screen-branch) (and all children) --> the new screen-branch already exists  BUT all all views has different names
+             */
+            guiFuctions.loadGrantProject(treePath2);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            Assert.AreNotEqual(grantTrees.brailleTree, null);
+            String nodeId = "64258A7F603E99810EC9D9CC836D8087";
+            //del node --> this view-names are exist in the new screen-branch
+            Boolean result = treeOperation.updateNodes.removeNodeInBrailleTree("5D91B25288C6011F4591D0CB66C5CE78"); //TilteBar
+            Assert.IsTrue(result);
+            result = treeOperation.updateNodes.removeNodeInBrailleTree("FFEBEB75CD31AF733A6E5F3A2279DC3C"); //NavigationBar
+            Assert.IsTrue(result);
+            result = treeOperation.updateNodes.removeNodeInBrailleTree("AEB7F45DB342BE948B1257BC247F7C36"); //StatusBar
+            Assert.IsTrue(result);
+            String oldScreenName = "b";
+            Object nodeObjectScreen_old = treeOperation.searchNodes.getSubtreeOfScreen(oldScreenName).DeepCopy();
+            String screenNameNew = "a1";
+            Object nodeObjectNewScreen_old = treeOperation.searchNodes.getSubtreeOfScreen(screenNameNew).DeepCopy();
+            OSMElement.OSMElement nodeData = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreNotEqual(nodeData, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreEqual(nodeData.brailleRepresentation.screenName, oldScreenName);
+            
+            result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew);
+            Assert.IsTrue(result);
+            Object nodeObjectNewScreen_new = treeOperation.searchNodes.getSubtreeOfScreen(screenNameNew);
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(nodeObjectScreen_old) + strategyMgr.getSpecifiedTree().Count(nodeObjectNewScreen_old) - 1, strategyMgr.getSpecifiedTree().Count(nodeObjectNewScreen_new));
+            foreach(String screenName in treeOperation.searchNodes.getPosibleScreenNames(strategyMgr.getSpecifiedTree().GetData(nodeObjectScreen_old).brailleRepresentation.typeOfView))
+            {
+                Assert.IsFalse(screenName.Equals(nodeObjectScreen_old));
             }
         }
 
