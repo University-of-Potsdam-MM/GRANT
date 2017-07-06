@@ -170,7 +170,7 @@ namespace GRANTManager.TreeOperations
             Object propertyValueCurrent = OSMElement.OSMElement.getElement(nameOfProperty, node);
             if(nameOfProperty.Equals("typeOfView"))
             {
-                //TODO
+                return changeTypeOfView(id, newProperty as String);
             }
             if (nameOfProperty.Equals("screenName"))
             {
@@ -197,17 +197,159 @@ namespace GRANTManager.TreeOperations
             return false;
         }
 
+        private bool changeTypeOfView(String id, String typeOfViewNew)
+        {
+            Object nodeObject = treeOperation.searchNodes.getNode(id, grantTrees.brailleTree);
+            OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            //checks the position of the node
+            if (!strategyMgr.getSpecifiedTree().HasParent(nodeObject))
+            {
+                // the node is a "root" branch of a type of view
+                if (!existTypeOfViewInTree(grantTrees.brailleTree, typeOfViewNew))
+                {
+                    //rename this node and all children
+                    foreach (Object o in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                        data.brailleRepresentation.typeOfView = typeOfViewNew;
+                    }
+                    return true;
+                }
+                else { return false; }
+            }
+            else
+            {
+                Object existTypeOfView;
+                if (!existTypeOfViewInTree(grantTrees.brailleTree, typeOfViewNew, out existTypeOfView))
+                {
+                    //add typeOfView, rename & move
+                    addScreenInBrailleTree(nodeData.brailleRepresentation.screenName, typeOfViewNew);
+                    nodeData.brailleRepresentation.typeOfView = typeOfViewNew;
+                    strategyMgr.getSpecifiedTree().moveSubtree(nodeObject, existTypeOfView);
+                    return true;
+                }
+                Object existScreen;
+                if (!existScreenInTree(existTypeOfView, nodeData.brailleRepresentation.screenName, out existScreen) && nodeData.brailleRepresentation.viewName == null)
+                {
+                    // viewName == null
+                    // screen dosn't exist in the 'new' typeOfView => rename & move
+                    foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(node);
+                        data.brailleRepresentation.typeOfView = typeOfViewNew;
+                    }
+                    strategyMgr.getSpecifiedTree().moveSubtree(nodeObject, existTypeOfView);
+                    return true;
+                }
+                Object existView = null;
+                if (nodeData.brailleRepresentation.viewName != null && !existViewInTree(existTypeOfView, nodeData.brailleRepresentation.viewName, out existView) && existScreen == null)
+                {
+                    // viewName != null
+                    // screen dosn't exist in the 'new' typeOfView => rename & move
+                    nodeData.brailleRepresentation.typeOfView = typeOfViewNew;
+                    Object removeScreenOfView = null;
+                    if (!strategyMgr.getSpecifiedTree().HasPrevious(nodeObject) && !strategyMgr.getSpecifiedTree().HasNext(nodeObject))
+                    {
+                        removeScreenOfView = strategyMgr.getSpecifiedTree().Parent(nodeObject);
+                    }
+                    //Add screen
+                    Object screenNew;
+                    addScreenInBrailleTree(nodeData.brailleRepresentation.screenName, typeOfViewNew, out screenNew);
+                    strategyMgr.getSpecifiedTree().moveSubtree(nodeObject, screenNew);
+                    //remove the screen-node if no sisters exists
+                    if (removeScreenOfView != null)
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(removeScreenOfView);
+                    }
+                    return true;
+                }
+                if (existScreen != null && nodeData.brailleRepresentation.viewName != null && existView == null)
+                {
+                    // typeOfView + Screen exist BUT view doesn't exist
+                    // rename & move
+                    nodeData.brailleRepresentation.typeOfView = typeOfViewNew;
+                    Boolean b = strategyMgr.getSpecifiedTree().moveSubtree(nodeObject, existScreen);
+                    return true;
+                }
+                if (existScreen != null && nodeData.brailleRepresentation.viewName == null) 
+                {
+                    // checks whether no view (of the screen-branch) exist in the new screen
+                    foreach (object v in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement viewData = strategyMgr.getSpecifiedTree().GetData(v);
+                        if (treeOperation.searchNodes.existViewInScreen(viewData.brailleRepresentation.screenName, viewData.brailleRepresentation.viewName, typeOfViewNew))
+                        {
+                            return false;
+                        }
+                    }
+
+                    // typeOfView + Screen exist BUT the viewS doesn't exist
+                    foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(node);
+                        data.brailleRepresentation.typeOfView = typeOfViewNew;
+                    }
+                    while (strategyMgr.getSpecifiedTree().HasChild(nodeObject))
+                    {
+                        strategyMgr.getSpecifiedTree().moveSubtree(strategyMgr.getSpecifiedTree().Child(nodeObject), existScreen);
+                    }
+                    if (!strategyMgr.getSpecifiedTree().HasPrevious(nodeObject) && !strategyMgr.getSpecifiedTree().HasNext(nodeObject) && strategyMgr.getSpecifiedTree().HasParent(nodeObject))
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(strategyMgr.getSpecifiedTree().Parent(nodeObject));
+                    }
+                    else
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(nodeObject);
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private bool changeScreenName(String id, String screenNameNew)
         {
             Object nodeObject = treeOperation.searchNodes.getNode(id, grantTrees.brailleTree);
             OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(nodeObject);
             //checks the position of the node
+            if (!strategyMgr.getSpecifiedTree().HasParent(nodeObject)) { return false; }
             Object parent = strategyMgr.getSpecifiedTree().Parent(nodeObject);
             if (nodeData.brailleRepresentation != null && nodeData.brailleRepresentation.viewName == null && nodeData.brailleRepresentation.isVisible == false)
             {
+                Object existScreen;
                 // => 'root' of a screen branch => rename all children
-                if(existScreenInTree(parent, screenNameNew)) { return false; }
-                foreach(Object o in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
+                if (existScreenInTree(parent, screenNameNew, out existScreen))
+                {
+                    foreach (Object view in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(view);
+                        if (treeOperation.searchNodes.existViewInScreen(screenNameNew, data.brailleRepresentation.viewName, data.brailleRepresentation.typeOfView))
+                        {
+                            return false;
+                        }
+                    }
+                    //  Screen exist BUT the viewS doesn't exist
+                    //rename + move every view
+                    foreach (Object view in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject))
+                    {
+                        OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(view);
+                        data.brailleRepresentation.screenName = screenNameNew;
+                    }
+                    while (strategyMgr.getSpecifiedTree().HasChild(nodeObject))
+                    {
+                        strategyMgr.getSpecifiedTree().moveSubtree(strategyMgr.getSpecifiedTree().Child(nodeObject), existScreen);
+                    }
+                    if (!strategyMgr.getSpecifiedTree().HasPrevious(nodeObject) && !strategyMgr.getSpecifiedTree().HasNext(nodeObject) && strategyMgr.getSpecifiedTree().HasParent(nodeObject))
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(strategyMgr.getSpecifiedTree().Parent(nodeObject));
+                    }
+                    else
+                    {
+                        strategyMgr.getSpecifiedTree().Remove(nodeObject);
+                    }
+                    return true;
+                }
+                foreach (Object o in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
                 {
                     OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                     data.brailleRepresentation.screenName = screenNameNew;
@@ -259,6 +401,22 @@ namespace GRANTManager.TreeOperations
             return false;
         }
 
+        private bool existViewInTree(Object subtree, String viewName, out Object view)
+        {
+            view = null;
+            if (viewName == null || viewName.Equals("")) { return false; }
+            foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
+            {
+                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                if (viewName.Equals(data.brailleRepresentation.viewName))
+                {
+                    view = o;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private bool existScreenInTree(Object subtree, String screenName)
         {
             object screen;
@@ -280,6 +438,29 @@ namespace GRANTManager.TreeOperations
             }
             return false;
         }
+
+        private bool existTypeOfViewInTree(Object tree, String typeOfViewName)
+        {
+            Object typeOfView;
+            return existTypeOfViewInTree(tree, typeOfViewName, out typeOfView);
+        }
+
+        private bool existTypeOfViewInTree(Object tree, String typeOfViewName, out Object typeOfView)
+        {
+            typeOfView = null;
+            if(typeOfViewName == null || typeOfViewName.Equals("")) { return false; }
+            foreach (Object o in strategyMgr.getSpecifiedTree().DirectChildrenNodes(tree))
+            {
+                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                if (typeOfViewName.Equals(data.brailleRepresentation.typeOfView))
+                {
+                    typeOfView = o;
+                    return true;
+                }
+            }
+            return false;
+
+            }
 
         /// <summary>
         /// Value of a given Property
@@ -536,6 +717,26 @@ namespace GRANTManager.TreeOperations
             return null;
         }
 
+        private void addTypeOfViewInBrailleTree(String typeOfViewName)
+        {
+            Object typeOfViewSubtree;
+            addTypeOfViewInBrailleTree(typeOfViewName, out typeOfViewSubtree);
+        }
+
+        private void addTypeOfViewInBrailleTree(String typeOfViewName, out Object typeOfViewSubtree)
+        {
+            typeOfViewSubtree = null;
+            if(typeOfViewName == null || typeOfViewName.Equals("")) { return; }
+            OSMElement.OSMElement osmTypeOfView = new OSMElement.OSMElement();
+            osmTypeOfView.brailleRepresentation.typeOfView = typeOfViewName;
+            osmTypeOfView.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmTypeOfView);
+            if (strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmTypeOfView))
+            {
+                return;
+            }
+            typeOfViewSubtree = strategyMgr.getSpecifiedTree().AddChild(grantTrees.brailleTree, osmTypeOfView);
+        }
+
         private void addScreenInBrailleTree(String screenName, String typeOfView)
         {
             Object subtreeScreen;
@@ -556,10 +757,8 @@ namespace GRANTManager.TreeOperations
                 return;
             }
             OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
-            osmScreen.brailleRepresentation = new BrailleRepresentation();
             osmScreen.brailleRepresentation.screenName = screenName;
             osmScreen.brailleRepresentation.typeOfView = typeOfView;
-            osmScreen.properties = new GeneralProperties();
             osmScreen.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);            
 
             //the screen dosn't exist
@@ -596,25 +795,37 @@ namespace GRANTManager.TreeOperations
             subtreeScreen = null;
         }
 
-
         /// <summary>
-        /// Removes a node of the braille tree
+        /// Remove a node (and his children) in the Braille tree
         /// </summary>
-        /// <param name="brailleNode">the OSM element of the node to remove</param>
-        public void removeNodeInBrailleTree(OSMElement.OSMElement brailleNode)
+        /// <param name="nodeId">the id of the node to remove</param>
+        /// <returns><c>true</c> if the was removed, otherwise <c>false</c></returns>
+        public bool removeNodeInBrailleTree(String nodeId)
         {
-            if (grantTrees.brailleTree == null)
+            Object nodeToRemove = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            if (nodeToRemove == null) { return false; }
+            OSMElement.OSMElement dataOfNodeToRemove = strategyMgr.getSpecifiedTree().GetData(nodeToRemove);
+            if (dataOfNodeToRemove.Equals(new OSMElement.OSMElement())) { return false; }
+            // "if"s are not necessary (but it's more understandable to me)
+            if (dataOfNodeToRemove.brailleRepresentation.viewName != null)
             {
-                Debug.WriteLine("The tree is empty"); return;
+                // just remove the view
+                strategyMgr.getSpecifiedTree().Remove(nodeToRemove);
+                return true;
             }
-
-            //checks whether the node exist
-            OSMElement.OSMElement nodeToRemove = treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNode.properties.IdGenerated);
-            if (nodeToRemove.Equals(new OSMElement.OSMElement()))
+            if(dataOfNodeToRemove.brailleRepresentation.screenName != null)
             {
-                Debug.WriteLine("The node dosen't exist!"); return;
+                // remove the screen-node and all children
+                strategyMgr.getSpecifiedTree().Remove(nodeToRemove);
+                return true;
             }
-            strategyMgr.getSpecifiedTree().Remove(grantTrees.brailleTree, nodeToRemove);
+            if(dataOfNodeToRemove.brailleRepresentation.typeOfView != null)
+            {
+                // remove the typeOfView and all children
+                strategyMgr.getSpecifiedTree().Remove(nodeToRemove);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -840,7 +1051,7 @@ namespace GRANTManager.TreeOperations
                     {
                         List<OsmConnector<String, String>> conector = grantTrees.osmRelationship;
                         OsmTreeConnector.removeOsmConnection(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
-                        removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(node));
+                        removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                     }
                 }
             }
