@@ -393,5 +393,14 @@ namespace GRANTApplication
         {
             outputDesignerWindowOpen = false;
         }
+
+        private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Console.WriteLine("HIER!!!!!!xxx: ");
+            DataGrid dataGrid = sender as DataGrid;
+            DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+            string myCellValue = rowView.Row[0].ToString();
+            Console.WriteLine("AUSGABE: " + myCellValue);
+        }
     }
 }

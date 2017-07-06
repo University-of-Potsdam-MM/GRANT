@@ -85,7 +85,7 @@
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
                     <DataGrid x:Name="brailleTreeProp" ItemsSource="{Binding Items}"  
-              AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False"/>
+              AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False" CellEditEnding="brailleTreeProp_CellEditEnding"/>
                    
                 </StackPanel>
             </ScrollViewer>
@@ -238,10 +238,8 @@
 
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="322" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree Properties"  Height="31"/>
-                    <DataGrid BorderThickness="1" x:Name="filteredTreeProp" Background="White" Height="291" />
+                    <DataGrid BorderThickness="1" x:Name="filteredTreeProp" Background="White" Height="291"   />
                 </StackPanel>
-
-
             </ScrollViewer>
         </Grid>
     </DockPanel>

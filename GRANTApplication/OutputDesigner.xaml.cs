@@ -9,7 +9,6 @@ using System.Windows.Media;
 using System.Data;
 using GRANTManager.TreeOperations;
 using System.Linq;
-using System.Collections.ObjectModel;
 using System.Windows.Data;
 
 namespace GRANTApplication
@@ -28,6 +27,7 @@ namespace GRANTApplication
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
         GuiFunctions.MyViewModel braillePropRoot;
+        String globalID;
 
         [System.ComponentModel.BrowsableAttribute(false)]
         public DataGridCell CurrentCell { get; set; }
@@ -64,7 +64,7 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperations);
             filteredTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             brailleTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleTreeOutput_SelectedItemChanged);
-            brailleTreeProp.CellEditEnding += brailleTreeProp_CellEditEnding;
+     //       brailleTreeProp.CellEditEnding += brailleTreeProp_CellEditEnding;
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
             filteredRoot = new TreeViewItem();
             brailleRoot = new TreeViewItem();
@@ -72,6 +72,8 @@ namespace GRANTApplication
             SaveButton.IsEnabled = false;
             LoadTemplate.IsEnabled = false;
             braillePropRoot = new GuiFunctions.MyViewModel();
+
+          
 
 
         }
@@ -708,6 +710,7 @@ namespace GRANTApplication
         /// diese in die collection übernehmen
         void updateBrailleTable(String IdGenerated)
         {
+            globalID = IdGenerated;
             brailleTreeProp.Columns.Clear();
            
 
@@ -717,7 +720,7 @@ namespace GRANTApplication
             this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
 
             int columnIndex = 0;
-
+        
             foreach (var name in this.braillePropRoot.ColumnNames)
             {
                 brailleTreeProp.Columns.Add(
@@ -732,6 +735,8 @@ namespace GRANTApplication
             
 
         }
+
+       
 
         /*  DataTable dataTable = new DataTable();
           DataColumn dc = new DataColumn();
@@ -1052,42 +1057,264 @@ namespace GRANTApplication
             return null;
         }
 
-     
 
-void brailleTreeProp_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        void brailleTreeProp_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            Console.WriteLine("Stufe 1:");
-            if (e.EditAction == DataGridEditAction.Commit)
-            {
-                Console.WriteLine("Stufe 2:");
-                var column = e.Column as DataGridBoundColumn;
-                if (column != null)
-                {
-                    Console.WriteLine("Stufe 3:");
-                    var bindingPath = (column.Binding as Binding).Path.Path;
-                    if (bindingPath == "Value_Titel")
+           //   var p = (sender as DataGrid).CurrentItem;
+           
+            //MessageBox.Show("p:" + p);
+
+
+              DataGrid grid = (DataGrid)sender;
+              if (e.EditAction == DataGridEditAction.Commit)
+              {
+                  var column = e.Column as DataGridBoundColumn;
+                  if (column != null)
+                  {
+                    //var bindingPath = (column.Binding as Binding).Path.Path;
+                    int rowIndex = e.Row.GetIndex();
+                    int rowIndex1 = e.Row.GetIndex()-1;
+                    
+                    var el = e.EditingElement as TextBox;
+
+                    int columns = grid.CurrentCell.Column.DisplayIndex;
+                    int columns1 = columns - 1;
+
+                    //Variante 1
+                    //TextBlock x = grid.Columns[0].GetCellContent(grid.Items[rowIndex1]) as TextBlock;
+                    //if (x != null)
+                    //    MessageBox.Show(x.Text);
+
+                    
+                    //var cellInfo = grid.CurrentCell;
+
+                    var dataGridCellInfo = new DataGridCellInfo(grid.Items[rowIndex], grid.Columns[columns1]);
+                    if (dataGridCellInfo != null)
                     {
-                        Console.WriteLine("Stufe 4:");
-                        int rowIndex = e.Row.GetIndex();
-                        var el = e.EditingElement as TextBox;
-                        Console.WriteLine("rowindex:" + rowIndex);
-                        Console.WriteLine(" text:" + el.Text);
-                        // rowIndex has the row index
-                        // bindingPath has the column's binding
-                        // el.Text has the new, user-entered value
+                        var columni = dataGridCellInfo.Column as DataGridBoundColumn;
+           
+                        if (columni != null)
+                        {
+                            var element = new FrameworkElement() { DataContext = dataGridCellInfo.Item };
+                            BindingOperations.SetBinding(element, FrameworkElement.TagProperty, columni.Binding);
+                            var cellValue= element.Tag;
+                            Console.WriteLine(" celle:" + cellValue);
+
+
+                             treeOperations.updateNodes.setBrailleTreeProperty(globalID, cellValue.ToString(), el.Text);
+                            // updateBrailleTable(globalID);
+                            // screenViewIteration(globalID);
+                            
+                            brailleTreeOutput.Items.Clear();
+                            brailleRoot.Items.Clear();
+                            brailleRoot.Header = "Braille-Tree";
+                            guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false);
+                            SaveButton.IsEnabled = true;
+                            brailleTreeOutput.Items.Add(brailleRoot);
+                            brailleDisplaySimul.Items.Refresh();
+                            brailleTreeProp.DataContext = "";
+                            brailleTreeProp.Items.Refresh();
+                        }
+                    }
+
+
+                    
+                  }
+
+
+                //screenViewIteration
+                //Update Table
+              //  e.Row.UpdateLayout();
+            }
+
+        }
+
+
+        private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid dataGrid = sender as DataGrid;
+            DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+            string myCellValue = rowView.Row[0].ToString();
+            Console.WriteLine("AUSGABE: " + myCellValue);
+        }
+
+        private void brailleTreeProp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            DataGrid grid = (DataGrid)sender;
+
+            int columns = grid.CurrentCell.Column.DisplayIndex;
+            int columns1 = columns - 1;
+
+            FrameworkElement element_2 = grid.Columns[columns].GetCellContent(e.Row);
+            var text2 = ((TextBox)element_2).Text;
+
+            FrameworkElement element_3 = grid.Columns[columns1].GetCellContent(e.Row);
+            var text3 = ((TextBox)element_3).Text;
+
+            Console.WriteLine(" text3:" + text3);
+            Console.WriteLine(" ID:" + globalID);
+            Console.WriteLine(" text2:" + text2);
+
+
+            //treeOperations.updateNodes.setBrailleTreeProperty(globalID, text2, el.Text);
+            //updateBrailleTable(globalID);
+            //screenViewIteration(globalID);
+
+            e.Row.HeaderTemplate = (DataTemplate)grid.FindResource("IdGenerated");
+            e.Row.UpdateLayout();
+        }
+
+        private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            DataGrid grid = (DataGrid)sender;
+
+            int columns = grid.CurrentCell.Column.DisplayIndex;
+            int columns1 = columns - 1;
+
+            //FrameworkElement element_2 = grid.Columns[columns].GetCellContent(e.Row);
+            //var text2 = ((TextBox)element_2).Text;
+
+
+
+            var _emp = e.Row.Item;
+            Console.WriteLine(" emp:" + _emp);
+
+            //FrameworkElement element_3 = grid.Columns[columns1].GetCellContent(e.Row);
+            //var text3 = ((TextBox)element_3).Text;
+            //var text2 = element_3 as TextBox;
+
+
+            /*      Console.WriteLine(" text3:" + text3);
+                  Console.WriteLine(" ID:" + globalID);
+                  Console.WriteLine(" text2:" + text2);
+                  */
+            //treeOperations.updateNodes.setBrailleTreeProperty(globalID, text2, el.Text);
+            //updateBrailleTable(globalID);
+            //screenViewIteration(globalID);
+
+            e.Row.HeaderTemplate = (DataTemplate)grid.FindResource("IdGenerated");
+            e.Row.UpdateLayout();
+        }
+
+    
+
+
+
+
+
+        /*
+        void brailleTreeProp_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+                {
+                    DataGrid grid = (DataGrid)sender;
+                    Console.WriteLine("Stufe 1:");
+                    if (e.EditAction == DataGridEditAction.Commit)
+                    {
+                        Console.WriteLine("Stufe 2:");
+                        var column = e.Column as DataGridBoundColumn;
+                        if (column != null)
+                        {
+                            Console.WriteLine("Stufe 3:");
+                            var bindingPath = (column.Binding as Binding).Path.Path;
+                           // if (bindingPath == "Value_Titel")
+                            //{
+
+                                int rowIndex = e.Row.GetIndex();
+                            int rowIndex1 = e.Row.GetIndex()-1;
+                            var el = e.EditingElement as TextBox;
+
+                            var dataGridCellInfo = new DataGridCellInfo(grid.Items[rowIndex1], grid.Columns[0]);
+                            Console.WriteLine(" cellinfo:" + dataGridCellInfo);
+
+
+
+                            DataGridRow row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(rowIndex1);
+                            Console.WriteLine("row" + row);
+
+
+                            //  var currentRowIndex = grid.Items.IndexOf(grid.CurrentItem);
+
+                            Console.WriteLine(" text:" + el.Text);
+                            Console.WriteLine(" ID:" + globalID);
+
+                            int ColumnIndex = e.Column.DisplayIndex;
+                               // Double amount = Double.Parse(((TextBox)e.EditingElement).Text);
+
+                                Console.WriteLine("ColumnIndex:" + ColumnIndex);
+                                Console.WriteLine("AUSGABE: " + DataGridEditingUnit.Row.ToString());
+
+
+
+
+                            //   this.braillePropRoot.Items.Where
+
+                            //  int colIndex = brailleTreeProp.Columns.IndexOf(brailleTreeProp.Columns[IdGenerated]);
+                            //  DataRow dtr = ((System.Data.DataRowView)(DataGrid1.SelectedValue)).Row;
+
+                            //string strEID = _DataGrid.SelectedCells[0].Item.ToString();
+                            // this.braillePropRoot.ColumnNames.Select()
+
+                            // rowIndex has the row index
+                            // bindingPath has the column's binding
+                            // el.Text has the new, user-entered value
+                            //}
+                        }
                     }
                 }
-            }
-        }
+
+                private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+                {
+                    DataGrid dataGrid = sender as DataGrid;
+                    DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+                    string myCellValue = rowView.Row[0].ToString();
+                    Console.WriteLine("AUSGABE: " + myCellValue);
+                }
+
+                private void brailleTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+                {
+                    DataGrid dataGrid = sender as DataGrid;
+                    DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+                    string myCellValue = rowView.Row[0].ToString();
+                    Console.WriteLine("AUSGABE: " + myCellValue);
+                }
+
+
+
+                private bool isManualEditCommit;
+                private void brailleTreeProp_CellEditEnding_1(object sender, DataGridCellEditEndingEventArgs e)
+                {
+                    if (!isManualEditCommit)
+                    {
+                        isManualEditCommit = true;
+                        DataGrid grid = (DataGrid)sender;
+                        grid.CommitEdit(DataGridEditingUnit.Row, true);
+                        isManualEditCommit = false;
+
+
+
+
+
+                        Console.WriteLine("AUSGABE: " + DataGridEditingUnit.Row.ToString());
+
+                    }
+                }
+
+
+
+                */
+
+
+
+
+
         /*
-       private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-       {
-           if(e.EditAction == DataGridEditAction.Commit)
-           {
+private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+{
+if(e.EditAction == DataGridEditAction.Commit)
+{
 
 
-           }
-       }*/
+}
+}*/
     }
 }
 
