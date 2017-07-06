@@ -192,7 +192,7 @@ namespace GRANTManager.TreeOperations
             if (propertyValueCurrent != null && propertyValueCurrent.Equals(propertyValueNew)) { return false; }
             else
             {
-                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.Equals(newProperty)) { return true; }
+                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.ToString().Equals(newProperty.ToString())) { return true; }
             }
             return false;
         }

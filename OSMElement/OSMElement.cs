@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Serialization;
 
 namespace OSMElement
@@ -96,9 +97,16 @@ namespace OSMElement
         { // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
             if (elementName != null && !osmElement.Equals(new OSMElement()))
             {
+                // TODO: komplexe Datentypen beachten
                 PropertyInfo oInfo = osmElement.properties.GetType().GetProperty(elementName);
                 if (oInfo != null)
                 {
+                    if (elementName.Equals("boundingRectangleFiltered"))
+                    {
+                       osmElement.properties.setRect(property as String);
+                        return;
+
+                    }
                     oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null);
                     return;
                 }

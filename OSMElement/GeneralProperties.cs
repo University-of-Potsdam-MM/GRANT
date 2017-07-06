@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
@@ -76,6 +77,22 @@ namespace OSMElement
         {
             get;
             set;
+        }
+
+        internal bool setRect(String rString)
+        {
+            if(Regex.IsMatch(rString, @"\d+,\d+,\d+,\d+"))
+            {
+                this.boundingRectangleFiltered = Rect.Parse(rString);
+                return true;
+            }
+            if (Regex.IsMatch(rString, @"\d+;\d+;\d+;\d+"))
+            {
+                rString = rString.Replace(";", ",");
+                this.boundingRectangleFiltered = Rect.Parse(rString);
+                return true;
+            }  
+            return false; 
         }
 
         /// <summary>

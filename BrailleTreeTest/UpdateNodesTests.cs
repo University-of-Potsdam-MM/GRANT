@@ -1160,6 +1160,27 @@ namespace GRANTManager.BrailleTreeTests
                 Assert.Fail();
             }
         }
+
+        [TestMethod]
+        public void setBrailleTreeProperty_position()
+        {
+            // Change the position
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            Assert.AreNotEqual(grantTrees.brailleTree, null);
+            String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElement.OSMElement());
+            Assert.AreEqual(node.properties.boundingRectangleFiltered.ToString(), "0;7;120;53");
+            String rectNew = "10;7;120;53";
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "boundingRectangleFiltered", rectNew);
+            Assert.IsTrue(result);
+            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreNotEqual(nodeCopy, node, "Both nodes shouldn't have the same values.");
+            Assert.AreEqual(node.properties.boundingRectangleFiltered.ToString(), rectNew);
+        }
         #endregion
 
         [TestMethod]
