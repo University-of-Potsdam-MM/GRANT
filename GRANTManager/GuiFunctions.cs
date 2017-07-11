@@ -471,7 +471,7 @@ namespace GRANTManager
                     object o = OSMElement.OSMElement.getElement(allTypes[i], osmElement);
                     Items.Add(new RowDataItem(allTypes[i], o != null ? o.ToString() : ""));
                 }
-                ColumnNames = new List<string> { "Name_Titel", "Value_Titel", };
+                ColumnNames = new List<string> { "Property", "Content", };
             }
 
             public IList<string> ColumnNames { get; private set; }

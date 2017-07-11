@@ -27,7 +27,6 @@ namespace GRANTApplication
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
         GuiFunctions.MyViewModel braillePropRoot;
-        String globalID;
 
         [System.ComponentModel.BrowsableAttribute(false)]
         public DataGridCell CurrentCell { get; set; }
@@ -168,7 +167,6 @@ namespace GRANTApplication
             {
                 DataRow row1 = dataTable.NewRow();
                 dataTable.Rows.Add(row1);
-                System.Console.WriteLine(" ROW: " + row1);
             }
             dataGrid.ItemsSource = dataTable.AsDataView();
         }
@@ -710,30 +708,25 @@ namespace GRANTApplication
         /// diese in die collection übernehmen
         void updateBrailleTable(String IdGenerated)
         {
-            globalID = IdGenerated;
-            brailleTreeProp.Columns.Clear();
-           
-
-            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
-
-
-            this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
-
-            int columnIndex = 0;
-        
-            foreach (var name in this.braillePropRoot.ColumnNames)
+           OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+           this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
+            
+            if (brailleTreeProp.Columns.Count == 0)
             {
-                brailleTreeProp.Columns.Add(
-                    new DataGridTextColumn
-                    {
-                        Header = name,
-                        Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
-                    });
+                brailleTreeProp.Columns.Clear();
+                int columnIndex = 0;
+                foreach (var name in this.braillePropRoot.ColumnNames)
+                {
+                    brailleTreeProp.Columns.Add(
+                        new DataGridTextColumn
+                        {
+                            Header = name,
+                            Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
+                        });
+                }
             }
            // brailleTreeProp.ItemsSource = data;
             brailleTreeProp.DataContext = this.braillePropRoot;
-            
-
         }
 
        
@@ -1017,13 +1010,7 @@ namespace GRANTApplication
                     String connectedFilteredNode = treeOperations.searchNodes.getConnectedFilteredTreenodeId(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     if (connectedFilteredNode != null && connectedFilteredNode != "")
                     {
-                        List<TreeViewItem> menuItem = getMenuItemsById(filteredTreeOutput, connectedFilteredNode);
-                        TreeViewItem tvi = new TreeViewItem();
-                        if (menuItem != null && menuItem.Count == 1)
-                        {
-                            menuItem[0].IsSelected = true;
-                            menuItem[0].BringIntoView();
-                        }
+                        markedElementInTree(filteredTreeOutput, connectedFilteredNode);
                     }
                     else
                     {
@@ -1041,6 +1028,21 @@ namespace GRANTApplication
         }
 
         /// <summary>
+        /// Marked an element in a <see cref="TreeView"/>
+        /// </summary>
+        /// <param name="treeViewElement">the TreeView element e.g. 'brailleTreeOutput' or 'filteredTreeOutput'</param>
+        /// <param name="elementId">the id of the element in the TreeView</param>
+        private void markedElementInTree(TreeView treeViewElement, String elementId)
+        {
+            List<TreeViewItem> menuItem = getMenuItemsById(treeViewElement, elementId);
+            if (menuItem != null && menuItem.Count == 1)
+            {
+                menuItem[0].IsSelected = true;
+                menuItem[0].BringIntoView();
+            }
+        }
+
+        /// <summary>
         /// seek all nodes with a special id
         /// </summary>
         /// <param name="treeView"> the treeView in which will be seek</param>
@@ -1050,13 +1052,12 @@ namespace GRANTApplication
         {
             foreach (TreeViewItem tvi in treeView.Items)
             {
-                var result = GuiFunctions.Flatten(tvi).Where(t => t.Header != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
+                var result = GuiFunctions.Flatten(tvi).Where(t => t.Header != null && t.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)) && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
                 if (result != null && result.Count<TreeViewItem>() > 0)
                     return result.ToList<TreeViewItem>();
             }
             return null;
         }
-
 
         void brailleTreeProp_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -1100,8 +1101,8 @@ namespace GRANTApplication
                             var cellValue= element.Tag;
                             Console.WriteLine(" celle:" + cellValue);
 
-
-                             treeOperations.updateNodes.setBrailleTreeProperty(globalID, cellValue.ToString(), el.Text);
+                            String braillePropId = braillePropRoot.Items.First(p => p.Values[0].Equals("IdGenerated")).Values[1];
+                            treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
                             // updateBrailleTable(globalID);
                             // screenViewIteration(globalID);
                             
@@ -1114,11 +1115,10 @@ namespace GRANTApplication
                             brailleDisplaySimul.Items.Refresh();
                             brailleTreeProp.DataContext = "";
                             brailleTreeProp.Items.Refresh();
+
+                            markedElementInTree(brailleTreeOutput, braillePropId);
                         }
                     }
-
-
-                    
                   }
 
 
@@ -1152,7 +1152,7 @@ namespace GRANTApplication
             var text3 = ((TextBox)element_3).Text;
 
             Console.WriteLine(" text3:" + text3);
-            Console.WriteLine(" ID:" + globalID);
+            Console.WriteLine(" ID:" + braillePropRoot.Items.First(p => p.Values[0].Equals("IdGenerated")).Values[1]);
             Console.WriteLine(" text2:" + text2);
 
 
