@@ -28,6 +28,7 @@ namespace GRANTApplication
         GuiFunctions.MenuItem screenRoot;
         GuiFunctions guiFunctions;
         GuiFunctions.MyViewModel braillePropRoot;
+        GuiFunctions.MyViewModel filteredPropRoot;
 
         [System.ComponentModel.BrowsableAttribute(false)]
         public DataGridCell CurrentCell { get; set; }
@@ -73,7 +74,7 @@ namespace GRANTApplication
             LoadTemplate.IsEnabled = false;
             AddNodeButton.IsEnabled = false;
             braillePropRoot = new GuiFunctions.MyViewModel();
-
+            filteredPropRoot = new GuiFunctions.MyViewModel();
           
 
 
@@ -246,7 +247,7 @@ namespace GRANTApplication
                 filteredTreeOutput.Items.Clear();
                 filteredRoot.Items.Clear();
                 guiFunctions.createTreeForOutput(tree, ref filteredRoot);
-                filteredTreeProp.ItemsSource = "";
+              //  filteredTreeProp.ItemsSource = "";
                 filteredTreeProp.Items.Refresh();
                 SaveButton.IsEnabled = true;
                 LoadTemplate.IsEnabled = true;
@@ -394,11 +395,36 @@ namespace GRANTApplication
             }
         }
 
-        /// <summary>
-        /// Displays properties of the marked tree node of the filtered tree in an table.
-        /// </summary>
-        /// <param name="IdGenerated"></param>
         void updateFilteredTable(String IdGenerated)
+        {
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+            this.filteredPropRoot = new GuiFunctions.MyViewModel(osmElement);
+
+            if (filteredTreeProp.Columns.Count == 0)
+            {
+                filteredTreeProp.Columns.Clear();
+                int columnIndex = 0;
+                foreach (var name in this.filteredPropRoot.ColumnNames)
+                {
+                    filteredTreeProp.Columns.Add(
+                        new DataGridTextColumn
+                        {
+                            Header = name,
+                            Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
+                        });
+                }
+            }
+            filteredTreeProp.DataContext = this.filteredPropRoot;
+
+            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+        }
+
+            /// <summary>
+            /// Displays properties of the marked tree node of the filtered tree in an table.
+            /// </summary>
+            /// <param name="IdGenerated"></param>
+            void updateFilteredTable_alt(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             DataTable dataTable = new DataTable();
@@ -1010,6 +1036,7 @@ namespace GRANTApplication
                     }
                     else
                     {
+                        clearTable(filteredTreeProp);
                         if (((TreeViewItem)filteredTreeOutput.SelectedItem) != null)
                         {
                             ((TreeViewItem)filteredTreeOutput.SelectedItem).IsSelected = false;
@@ -1030,11 +1057,11 @@ namespace GRANTApplication
         /// <param name="elementId">the id of the element in the TreeView</param>
         private void markedElementInTree(TreeView treeViewElement, String elementId)
         {
-            List<TreeViewItem> menuItem = getMenuItemsById(treeViewElement, elementId);
-            if (menuItem != null && menuItem.Count == 1)
+            TreeViewItem menuItem = getMenuItemById(treeViewElement, elementId);
+            if (menuItem != null)
             {
-                menuItem[0].IsSelected = true;
-                menuItem[0].BringIntoView();
+                menuItem.IsSelected = true;
+                menuItem.BringIntoView();
             }
         }
 
@@ -1044,13 +1071,15 @@ namespace GRANTApplication
         /// <param name="treeView"> the treeView in which will be seek</param>
         /// <param name="id">the searched id</param>
         /// <returns>list of all nodes which have the searched <para>id</para> </returns>
-        private List<TreeViewItem> getMenuItemsById(TreeView treeView, String id)
+        private TreeViewItem getMenuItemById(TreeView treeView, String id)
         {
             foreach (TreeViewItem tvi in treeView.Items)
             {
-                var result = GuiFunctions.Flatten(tvi).Where(t => t.Header != null && t.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)) && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
-                if (result != null && result.Count<TreeViewItem>() > 0)
-                    return result.ToList<TreeViewItem>();
+                TreeViewItem result = GuiFunctions.Flatten(tvi).First(t => t.Header != null && t.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)) && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
+                if (result != null)
+                {
+                    return result;
+                }
             }
             return null;
         }
@@ -1115,6 +1144,12 @@ namespace GRANTApplication
 
         }
 
+        private void clearTable(DataGrid table)
+        {
+            table.DataContext = "";
+            table.Items.Refresh();
+        }
+
         private void reloadTrees(String markedFilteredNodeId = null, String markedBrailleNodeId = null)
         {
             #region reload filtered tree
@@ -1124,8 +1159,7 @@ namespace GRANTApplication
                 filteredRoot.Items.Clear();
                 guiFunctions.createTreeForOutput(grantTrees.filteredTree, ref filteredRoot, true);
                 filteredTreeOutput.Items.Add(filteredRoot);
-                filteredTreeProp.DataContext = "";
-                filteredTreeProp.Items.Refresh();
+                clearTable(filteredTreeProp);
             }
             #endregion
 
@@ -1138,8 +1172,7 @@ namespace GRANTApplication
                 guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false);
                 brailleTreeOutput.Items.Add(brailleRoot);
                 brailleDisplaySimul.Items.Refresh();
-                brailleTreeProp.DataContext = "";
-                brailleTreeProp.Items.Refresh();
+                clearTable(brailleTreeProp);
             }
             #endregion
             if (markedFilteredNodeId != null && !markedFilteredNodeId.Equals(""))
@@ -1257,6 +1290,30 @@ namespace GRANTApplication
             }
             //refresh + select new node
             reloadTrees(null, brailleNodeIdNew);
+        }
+
+        private void ClearSelection_Click(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem selectedItem_filteredTree = filteredTreeOutput.SelectedItem as TreeViewItem;
+            if (selectedItem_filteredTree != null)
+            {
+                if (selectedItem_filteredTree.Header != null && selectedItem_filteredTree.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)))
+                {
+                   TreeViewItem itemFiltered = getMenuItemById(filteredTreeOutput, ((GuiFunctions.MenuItem)selectedItem_filteredTree.Header).IdGenerated);
+                    itemFiltered.IsSelected = false;
+                }
+                clearTable(filteredTreeProp);
+            }
+            TreeViewItem selectedItem_brailleTree = brailleTreeOutput.SelectedItem as TreeViewItem;
+            if (selectedItem_brailleTree != null)
+            {
+                if (selectedItem_brailleTree.Header != null && selectedItem_brailleTree.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)))
+                {
+                    TreeViewItem itemBraille = getMenuItemById(brailleTreeOutput, ((GuiFunctions.MenuItem)selectedItem_brailleTree.Header).IdGenerated);
+                    itemBraille.IsSelected = false;
+                }
+                clearTable(brailleTreeProp);
+            }
         }
 
 

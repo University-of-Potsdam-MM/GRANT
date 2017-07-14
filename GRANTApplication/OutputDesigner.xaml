@@ -142,6 +142,7 @@
         <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" VerticalAlignment="Top" Background="Gray" Height="40" Margin="0,0,0,10">
             <Label Foreground="White" VerticalAlignment="Center" Content="Load Default Gui template or custom template : " Margin="20,7"/>
             <Button Content="Load Template" Click="LoadTemplate_Click" x:Name="LoadTemplate"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" IsEnabled="{Binding TEnabled}"/>
+            <Button Content="Clear selections" x:Name="ClearSelectionsButton" Click="ClearSelection_Click" Margin="160,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"  Width="101" IsEnabled="{Binding SEnabled}" />
         </StackPanel>
         <Grid DockPanel.Dock="Left" Margin="0,5,0,0" Width="1150">
             <!-- Left-->
@@ -239,7 +240,7 @@
 
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="322" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Filtered Tree Properties"  Height="31"/>
-                    <DataGrid BorderThickness="1" x:Name="filteredTreeProp" Background="White" Height="291"   />
+                    <DataGrid BorderThickness="1" x:Name="filteredTreeProp" Background="White" Height="291"   ItemsSource="{Binding Items}" AutoGenerateColumns="False" IsReadOnly="True" />
                 </StackPanel>
             </ScrollViewer>
         </Grid>

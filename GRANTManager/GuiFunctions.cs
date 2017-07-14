@@ -1354,9 +1354,9 @@ namespace GRANTManager
 
         public static List<String> getAllTypes(OSMElement.OSMElement osm)
         {
-            if (osm.brailleRepresentation == null && osm.properties == null) { return OSMElement.OSMElement.getAllTypes(); }
-            if (osm.brailleRepresentation == null && osm.properties != null) { return GeneralProperties.getAllTypes(); }
-            if(osm.brailleRepresentation != null)
+            if (osm.Equals(new OSMElement.OSMElement()) ||( !osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties()))) { return OSMElement.OSMElement.getAllTypes(); }
+            if (!osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties())) { return GeneralProperties.getAllTypes(); }
+            if(!osm.brailleRepresentation.Equals(new BrailleRepresentation()))
             {
                 List<String> allTypes = OSMElement.OSMElement.getAllTypes();
                 removeProperties_NotUsedInBrailleTree(ref allTypes);
