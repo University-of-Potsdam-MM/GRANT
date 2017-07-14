@@ -872,8 +872,10 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
             OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy(); // => typeOfView-node
             Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "typeOfViewNameNew";
@@ -887,6 +889,14 @@ namespace GRANTManager.BrailleTreeTests
                 OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
             }
+
+            Object parentParentOld_new = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentOld_old).properties.IdGenerated, grantTrees.brailleTree);
+            Object nodeObjectNew = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            Object parentParentNew_New = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObjectNew));
+            Object parentParentNew_Old = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentNew_New).properties.IdGenerated, strategyMgr.getSpecifiedTree().Root(parentParentOld_old));
+            Assert.IsNull(parentParentNew_Old);
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentOld_old) == 1 + strategyMgr.getSpecifiedTree().Count(parentParentOld_new)); // 1 --> view 
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentNew_New) == 3); // 1 (TypeOfView) + 1 (Screen) + 1 (View)
         }
 
         [TestMethod]

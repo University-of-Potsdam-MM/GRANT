@@ -224,9 +224,7 @@ namespace GRANTManager.TreeOperations
                 {
                     //add typeOfView, rename & move
                     addScreenInBrailleTree(nodeData.brailleRepresentation.screenName, typeOfViewNew);
-                    nodeData.brailleRepresentation.typeOfView = typeOfViewNew;
-                    strategyMgr.getSpecifiedTree().moveSubtree(nodeObject, existTypeOfView);
-                    return true;
+                    existTypeOfViewInTree(grantTrees.brailleTree, typeOfViewNew, out existTypeOfView); // now the typeOfView node exists
                 }
                 Object existScreen;
                 if (!existScreenInTree(existTypeOfView, nodeData.brailleRepresentation.screenName, out existScreen) && nodeData.brailleRepresentation.viewName == null)
