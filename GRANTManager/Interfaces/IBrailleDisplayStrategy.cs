@@ -113,6 +113,14 @@ namespace GRANTManager.Interfaces
 
         Type getActiveAdapter();
         void removeAllViews();
+
+        /// <summary>
+        /// Returns the default size of the control type
+        /// </summary>
+        /// <param name="uiElementType">the name of the control type</param>
+        /// <param name="heightMin">the minimum height</param>
+        /// <param name="widthMin">the minimum width</param>
+        void getSizeOfUiElementType(String uiElementType, out int heightMin, out int widthMin);
     }
     /// <summary>
     /// Structure for position and offset of a view

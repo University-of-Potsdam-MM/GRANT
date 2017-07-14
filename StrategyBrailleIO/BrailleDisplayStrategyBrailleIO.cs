@@ -514,6 +514,24 @@ namespace StrategyBrailleIO
         /// </summary>
         private enum uiElementeTypesBrailleIoEnum { Matrix, Text, Screenshot, Button, DropDownMenuItem, TextBox, ListItem, GroupElement, TabItem }
 
+        /// <summary>
+        /// Returns the default size of the control type
+        /// </summary>
+        /// <param name="uiElementType">the name of the control type</param>
+        /// <param name="heightMin">the minimum height</param>
+        /// <param name="widthMin">the minimum width</param>
+        public void getSizeOfUiElementType(String uiElementType, out int heightMin, out int widthMin)
+        {
+            heightMin = 5;
+            widthMin = 5;
+            uiElementsTypeStruct uiElement =  uiElementList.Find(ue => ue.uiElementType.Equals(uiElementType));
+            if(!uiElement.Equals( new uiElementsTypeStruct()))
+            {
+                heightMin = uiElement.heightMin;
+                widthMin = uiElement.widthMin *3;
+            }
+        }
+
         private struct uiElementsTypeStruct
         {
             public String uiElementType { get; set; }

@@ -78,7 +78,7 @@ namespace GRANTManager
                 get;
                 set;
             }
-            public String screenCategory
+            public String typeOfView
             {
                 get;
                 set;
@@ -1230,26 +1230,24 @@ namespace GRANTManager
         /// Adds a node to the braille (output) tree
         /// </summary>
         /// <param name="filteredNode">filtered node which should be added</param>
-        public void addFilteredNodeToBrailleTree(Object filteredNode)
+        /// <returns>the id of the new braille node</returns>
+        public String addFilteredNodeToBrailleTree(Object filteredNode)
         {
-            addFilteredNodeToBrailleTree("", filteredNode, null, null, null, null, new Rect());
+            return addFilteredNodeToBrailleTree("", filteredNode, null, null, null, null, new Rect());
         }
 
         /// <summary>
         /// Adds a node to the braille (output) tree
         /// </summary>
-        /// <param name="controlleType">The controlle type which should be used for the tactile representation</param>
-        /// <param name="filteredNode">corresponding filtered node which should be added</param>
-        public void addFilteredNodeToBrailleTree(String controlleType, object filteredNode = null)
+        /// <param name="controlTyp">The control type which should be used for the tactile representation</param>
+        /// <param name="filteredNode">>corresponding filtered node which should be added</param>
+        /// <param name="screenName"></param>
+        /// <param name="typeOfView"></param>
+        /// <returns>the id of the new braille node</returns>
+        public String addFilteredNodeToBrailleTree(String controlTyp, Object filteredNode = null, String screenName = null, String typeOfView = null)
         {
-            addFilteredNodeToBrailleTree(controlleType, filteredNode, null, null, null, null, new Rect());
+            return addFilteredNodeToBrailleTree(controlTyp, filteredNode, null, screenName, typeOfView);
         }
-
-        /* nicht endeutig
-         * public void addFilteredNodeToBrailleTree(String parentIdTactlie, String screenName, String screenCategory, String viewName = null, Rect positionTactile = new Rect())
-        {
-            addFilteredNodeToBrailleTree("", null, viewName, screenName, screenCategory, parentIdTactlie, positionTactile);
-        }*/
 
         /// <summary>
         /// Adds a node to the braille (output) tree
@@ -1258,41 +1256,55 @@ namespace GRANTManager
         /// <param name="screenCategory">screen category of the new node</param>
         /// <param name="viewName">view name of the new node</param>
         /// <param name="positionTactile">tactile position from the new node</param>
-        public void addFilteredNodeToBrailleTree( String screenName, String screenCategory, String viewName = null, Rect positionTactile = new Rect())
+        /// <returns>the id of the new braille node</returns>
+        public String addFilteredNodeToBrailleTree( String screenName, String typeOfView, String viewName = null, Rect positionTactile = new Rect())
         {
-            addFilteredNodeToBrailleTree("", null, viewName, screenName, screenCategory, null, positionTactile);
+            return addFilteredNodeToBrailleTree("", null, viewName, screenName, typeOfView, null, positionTactile);
         }
 
         /// <summary>
         /// Adds a node to the braille (output) tree
         /// </summary>
-        /// <param name = "controlleType" > The controlle type which should be used for the tactile representation</param>
+        /// <param name = "controlType" > The control type which should be used for the tactile representation</param>
         /// <param name="filteredNode">corresponding filtered node which should be added</param>
         /// <param name="viewName">view name of the new node</param>
         /// <param name="screenName">name of the screen to which the new node should be added</param>
-        /// <param name="screenCategory">screen category of the new node</param>
+        /// <param name="typeOfView">screen category of the new node</param>
         /// <param name="parentIdTactlie">id of the parent node in the braille (output) tree</param>
         /// <param name="positionTactile">tactile position from the new node</param>
-        private void addFilteredNodeToBrailleTree(String controlleType, object filteredNode = null, String viewName = null, String screenName = null, String screenCategory = null, String parentIdTactlie = null, Rect positionTactile = new Rect())
+        /// <returns>the id of the new braille node</returns>
+        private String addFilteredNodeToBrailleTree(String controlType, object filteredNode = null, String viewName = null, String screenName = null, String typeOfView = null, String parentIdTactlie = null, Rect positionTactile = new Rect())
         {
+            // a temporary view name and if necessary a typeOfView and screen nme will be created
+
             OSMElement.OSMElement tactileOsm = new OSMElement.OSMElement();
 
-            if (controlleType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(controlleType))
+            if (controlType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(controlType))
             {
                 Console.WriteLine("The controlltype does't exist (for this braille device) --> controlltype = 'Text'!");
-                controlleType = "Text";
+                controlType = "Text";
             }
-            tactileOsm.properties.controlTypeFiltered = controlleType;
-            tactileOsm.properties.boundingRectangleFiltered = positionTactile;
+            tactileOsm.properties.controlTypeFiltered = controlType;
+            if (positionTactile == null || positionTactile == new Rect())
+            {
+                int height;
+                int width;
+                strategyMgr.getSpecifiedBrailleDisplay().getSizeOfUiElementType(controlType, out height, out width);
+                tactileOsm.properties.boundingRectangleFiltered = new Rect(0, 0, width, height);
+            }
+            else
+            {
+                tactileOsm.properties.boundingRectangleFiltered = positionTactile;
+            }
             if(filteredNode != null)
             {
                 tactileOsm.brailleRepresentation.displayedGuiElementType = "nameFiltered";
             }
-            tactileOsm.brailleRepresentation.viewName = viewName != null ? viewName : Guid.NewGuid().ToString();
-            tactileOsm.brailleRepresentation.typeOfView = screenCategory != null ? screenCategory : Guid.NewGuid().ToString();
-            tactileOsm.brailleRepresentation.screenName = screenName != null ?  screenName : tactileOsm.brailleRepresentation.typeOfView;
+            tactileOsm.brailleRepresentation.viewName = viewName != null ? viewName : controlType + "_"+Guid.NewGuid().ToString();
+            tactileOsm.brailleRepresentation.typeOfView = typeOfView != null ? typeOfView : "_newTypeOfView";
+            tactileOsm.brailleRepresentation.screenName = screenName != null ?  screenName : "_newScreenName";
             //Attention: when new Controlletypes are added, these should be added here!
-            if (controlleType.Equals("DropDownMenuItem"))
+            if (controlType.Equals("DropDownMenuItem"))
             { 
                 OSMElement.UiElements.DropDownMenuItem dropDownMenuItem = new OSMElement.UiElements.DropDownMenuItem();
                 if (filteredNode != null)
@@ -1302,7 +1314,7 @@ namespace GRANTManager
                 }
                 tactileOsm.brailleRepresentation.uiElementSpecialContent = dropDownMenuItem;
             }
-            if (controlleType.Equals("ListItem"))
+            if (controlType.Equals("ListItem"))
             {
                 OSMElement.UiElements.ListMenuItem listItem = new OSMElement.UiElements.ListMenuItem();
                 if(filteredNode != null)
@@ -1314,7 +1326,7 @@ namespace GRANTManager
                 }
                 tactileOsm.brailleRepresentation.uiElementSpecialContent = listItem;
             }
-            if (controlleType.Equals("TabItem"))
+            if (controlType.Equals("TabItem"))
             {
                 OSMElement.UiElements.TabItem tabItem = new OSMElement.UiElements.TabItem();
                 tabItem.orientation = OSMElement.UiElements.Orientation.Top;
@@ -1329,6 +1341,7 @@ namespace GRANTManager
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.IdGenerated, idGenerated, ref relationship);
                 treeOperation.updateNodes.updateNodeOfBrailleUi(ref tactileOsm);
             }
+            return idGenerated;
         }
         #endregion
 

@@ -10,6 +10,7 @@ using System.Data;
 using GRANTManager.TreeOperations;
 using System.Linq;
 using System.Windows.Data;
+using System.Diagnostics;
 
 namespace GRANTApplication
 {
@@ -70,6 +71,7 @@ namespace GRANTApplication
             screenRoot = new GuiFunctions.MenuItem();
             SaveButton.IsEnabled = false;
             LoadTemplate.IsEnabled = false;
+            AddNodeButton.IsEnabled = false;
             braillePropRoot = new GuiFunctions.MyViewModel();
 
           
@@ -255,6 +257,7 @@ namespace GRANTApplication
                 int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
                 int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
                 createBrailleDisplay(dWidth, dHeight, brailleDisplaySimul);
+                AddNodeButton.IsEnabled = true;
                 if(grantTrees.brailleTree != null)
                 {
                     #region Braille-Baum Darstellung  (Kopie von Template laden => Funktion)
@@ -304,24 +307,17 @@ namespace GRANTApplication
             if (result == true)
             {
                 strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(dlg.FileName);
-                Object tree1 = grantTrees.brailleTree;
+
                 #region Marlene testet
                 TemplateTextview.Textview tempTextView = new TemplateTextview.Textview(strategyMgr, grantTrees, treeOperations);
                 tempTextView.createTextviewOfSubtree(grantTrees.filteredTree);
                 #endregion 
-                brailleTreeOutput.Items.Clear();
-                brailleRoot.Items.Clear();
-               brailleRoot.Header = "Braille-Tree";
-                guiFunctions.createTreeForOutput(tree1, ref brailleRoot, false);
-                SaveButton.IsEnabled = true;
-                brailleTreeOutput.Items.Add(brailleRoot);
-                brailleDisplaySimul.Items.Refresh();
-                brailleTreeProp.DataContext = "";
-                brailleTreeProp.Items.Refresh();
                 // brailleTreeProp.ItemsSource = "";
                 // brailleTreeProp.Items.Refresh();
                 //   grid.ItemsSource = "";
                 //    grid.Items.Refresh();
+
+                reloadTrees();
             }
         }
 
@@ -1105,18 +1101,8 @@ namespace GRANTApplication
                             treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
                             // updateBrailleTable(globalID);
                             // screenViewIteration(globalID);
-                            
-                            brailleTreeOutput.Items.Clear();
-                            brailleRoot.Items.Clear();
-                            brailleRoot.Header = "Braille-Tree";
-                            guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false);
-                            SaveButton.IsEnabled = true;
-                            brailleTreeOutput.Items.Add(brailleRoot);
-                            brailleDisplaySimul.Items.Refresh();
-                            brailleTreeProp.DataContext = "";
-                            brailleTreeProp.Items.Refresh();
 
-                            markedElementInTree(brailleTreeOutput, braillePropId);
+                            reloadTrees(null, braillePropId);
                         }
                     }
                   }
@@ -1129,6 +1115,42 @@ namespace GRANTApplication
 
         }
 
+        private void reloadTrees(String markedFilteredNodeId = null, String markedBrailleNodeId = null)
+        {
+            #region reload filtered tree
+            if (grantTrees.filteredTree != null)
+            {
+                filteredTreeOutput.Items.Clear();
+                filteredRoot.Items.Clear();
+                guiFunctions.createTreeForOutput(grantTrees.filteredTree, ref filteredRoot, true);
+                filteredTreeOutput.Items.Add(filteredRoot);
+                filteredTreeProp.DataContext = "";
+                filteredTreeProp.Items.Refresh();
+            }
+            #endregion
+
+            #region reload braille tree
+            if (grantTrees.brailleTree != null)
+            {
+                brailleTreeOutput.Items.Clear();
+                brailleRoot.Items.Clear();
+                brailleRoot.Header = "Braille-Tree";
+                guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false);
+                brailleTreeOutput.Items.Add(brailleRoot);
+                brailleDisplaySimul.Items.Refresh();
+                brailleTreeProp.DataContext = "";
+                brailleTreeProp.Items.Refresh();
+            }
+            #endregion
+            if (markedFilteredNodeId != null && !markedFilteredNodeId.Equals(""))
+            {
+                markedElementInTree(filteredTreeOutput, markedFilteredNodeId);
+            }
+            if (markedBrailleNodeId != null && !markedBrailleNodeId.Equals(""))
+            {
+                markedElementInTree(brailleTreeOutput, markedBrailleNodeId);
+            }
+        }
 
         private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -1196,10 +1218,46 @@ namespace GRANTApplication
             e.Row.UpdateLayout();
         }
 
-    
+        private void AddNode_Click(object sender, RoutedEventArgs e)
+        {
+            if(grantTrees.filteredTree == null) { return; }
+            TreeViewItem selectedItem_filteredTree = filteredTreeOutput.SelectedItem as TreeViewItem;
+            String selectedFilteredItemId = "";
+            String selectedBrailleItemId = "";
+            if (selectedItem_filteredTree != null)
+            {
+                //Add node & connection to filteredTree
+                if (selectedItem_filteredTree.Header != null && selectedItem_filteredTree.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)))
+                {
+                    selectedFilteredItemId = ((GuiFunctions.MenuItem)selectedItem_filteredTree.Header).IdGenerated;
+                }
 
+            }
+            TreeViewItem selectedItem_brailleTree = brailleTreeOutput.SelectedItem as TreeViewItem;
+            if (selectedItem_brailleTree != null)
+            {
+                if (selectedItem_brailleTree.Header != null && selectedItem_brailleTree.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)))
+                {
+                    selectedBrailleItemId = ((GuiFunctions.MenuItem)selectedItem_brailleTree.Header).IdGenerated;
+                }
+            }
+            String guiControlTypeSelected = listBox_GuiElements.SelectedItem as String;
 
-
+            Object filteredNodeObject = selectedFilteredItemId.Equals("") ? null : treeOperations.searchNodes.getNode(selectedFilteredItemId, grantTrees.filteredTree);
+            Object brailleNodeObject = selectedBrailleItemId.Equals("") ? null : treeOperations.searchNodes.getNode(selectedBrailleItemId, grantTrees.brailleTree);
+            String brailleNodeIdNew;
+            if (brailleNodeObject == null)
+            {
+                brailleNodeIdNew = guiFunctions.addFilteredNodeToBrailleTree(guiControlTypeSelected, filteredNodeObject);
+            }
+            else
+            {
+                OSMElement.OSMElement brailleNodeObject_osm = strategyMgr.getSpecifiedTree().GetData(brailleNodeObject);
+                brailleNodeIdNew = guiFunctions.addFilteredNodeToBrailleTree(guiControlTypeSelected, filteredNodeObject, brailleNodeObject_osm.brailleRepresentation.screenName, brailleNodeObject_osm.brailleRepresentation.typeOfView);
+            }
+            //refresh + select new node
+            reloadTrees(null, brailleNodeIdNew);
+        }
 
 
         /*

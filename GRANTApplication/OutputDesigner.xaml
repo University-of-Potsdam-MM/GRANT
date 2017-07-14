@@ -201,8 +201,9 @@
                         </DataGrid>
                     </ScrollViewer>
                 </Grid>
-                <StackPanel Background="lIGHTGray" Margin="0,0,0,0" >
-                    <Slider x:Name="_zoom1" Minimum="0.3" Maximum="2.5" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Height="30" Width="265" Margin="4,4,0,0" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                    <Slider Background="lIGHTGray" x:Name="_zoom1" Minimum="0.3" Maximum="2.5" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal" Height="22" Width="183" Margin="10,5,5,5" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True"/>
+                    <Button Content="Add Node" x:Name="AddNodeButton" Click="AddNode_Click" Width="71" Margin="10,5,0,5" IsEnabled="{Binding SEnabled}" />
                 </StackPanel>
             </StackPanel>
             <StackPanel DockPanel.Dock="Left"   Background="White" Width="302" HorizontalAlignment="Center" Margin="826,0,22,0" Height="323" VerticalAlignment="Top">
