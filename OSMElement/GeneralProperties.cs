@@ -258,7 +258,7 @@ namespace OSMElement
         /// Enthält die unterstützten Pattern
         /// </summary>
         [XmlIgnore]
-        public object[] suportedPatterns { get; set; }
+        public String[] suportedPatterns { get; set; }
 
         /// <summary>
         /// the value of the element

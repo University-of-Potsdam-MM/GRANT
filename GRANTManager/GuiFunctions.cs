@@ -16,6 +16,8 @@ using OSMElement;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.ComponentModel;
+using System.Linq;
+using System.Collections;
 
 namespace GRANTManager
 {
@@ -468,8 +470,17 @@ namespace GRANTManager
                 List<String> allTypes =  getAllTypes(osmElement);
                 for (int i = 0; i < allTypes.Count; i++)
                 {
-                    object o = OSMElement.OSMElement.getElement(allTypes[i], osmElement);
-                    Items.Add(new RowDataItem(allTypes[i], o != null ? o.ToString() : ""));
+                    var o = OSMElement.OSMElement.getElement(allTypes[i], osmElement);
+                    String valueString = null;
+                    if (o != null && !o.ToString().Equals(""))
+                    {
+                        if (o.GetType().BaseType.Name.Equals("Array"))
+                        {
+                            String[] valueString_tmp = (o as IEnumerable).Cast<object>().Select(p => p.ToString()).ToArray();
+                            valueString = String.Join(" : ", valueString_tmp.Select(p => p.ToString()).ToArray());
+                        }
+                    }
+                    Items.Add(new RowDataItem(allTypes[i], valueString != null ? valueString :(  o != null ? o.ToString() : "")));
                 }
                 ColumnNames = new List<string> { "Property", "Content" };
             }
@@ -1354,7 +1365,7 @@ namespace GRANTManager
 
         public static List<String> getAllTypes(OSMElement.OSMElement osm)
         {
-            if (osm.Equals(new OSMElement.OSMElement()) ||( !osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties()))) { return OSMElement.OSMElement.getAllTypes(); }
+            if (osm.Equals(new OSMElement.OSMElement())) { return OSMElement.OSMElement.getAllTypes(); }
             if (osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties())) { return GeneralProperties.getAllTypes(); }
             if(!osm.brailleRepresentation.Equals(new BrailleRepresentation()))
             {

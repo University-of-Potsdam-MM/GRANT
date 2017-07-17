@@ -447,7 +447,7 @@ namespace StrategyUIA
         /// <param name="automationElement">the AutomationElement</param>
         private void setSupportedPatterns(ref GeneralProperties properties, AutomationElement automationElement)
         {
-            properties.suportedPatterns = automationElement.GetSupportedPatterns().ToArray();
+            properties.suportedPatterns = automationElement.GetSupportedPatterns().Select(p => p.ProgrammaticName).ToArray();  //  automationElement.GetSupportedPatterns().ToArray();
         }
 
         /// <summary>

@@ -1057,6 +1057,10 @@ namespace GRANTApplication
                         if (var1 < 0) { var1 = listBox_GuiElements.Items.IndexOf("Text"); }
                         listBox_GuiElements.SelectedIndex = var1;
                     }
+                }else
+                {
+                    clearTable(brailleTreeProp);
+                    clearTable(filteredTreeProp);
                 }
             }
         }
