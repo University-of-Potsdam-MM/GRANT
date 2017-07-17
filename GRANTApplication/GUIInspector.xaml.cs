@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Data;
 using System.Linq;
 using GRANTManager.TreeOperations;
+using System.Windows.Data;
 
 namespace GRANTApplication
 {
@@ -24,6 +25,7 @@ namespace GRANTApplication
         GuiFunctions guiFunctions;
         bool filterWindowOpen = false;
         bool outputDesignerWindowOpen = false;
+        GuiFunctions.MyViewModel filteredPropRoot;
 
         public GUIInspector()
         {
@@ -59,13 +61,46 @@ namespace GRANTApplication
             root = new TreeViewItem();
             NodeButton.IsEnabled = false;
             SaveButton.IsEnabled = false;
+            filteredPropRoot = new GuiFunctions.MyViewModel();
+        }
+
+        /// <summary>
+        /// Displays properties of the marked tree node of the filtered tree in an table.
+        /// </summary>
+        /// <param name="IdGenerated"></param>
+        void updatePropertiesTable(String IdGenerated)
+        {
+            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+            this.filteredPropRoot = new GuiFunctions.MyViewModel(osmElement);
+
+            if (filteredTreeProp.Columns.Count == 0)
+            {
+                filteredTreeProp.Columns.Clear();
+                int columnIndex = 0;
+                foreach (var name in this.filteredPropRoot.ColumnNames)
+                {
+                    filteredTreeProp.Columns.Add(
+                        new DataGridTextColumn
+                        {
+                            Header = name,
+                            Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
+                        });
+                }
+            }
+            filteredTreeProp.DataContext = this.filteredPropRoot;
+            foreach(DataGridColumn c in filteredTreeProp.Columns)
+            {
+                System.Diagnostics.Debug.WriteLine(c.Header);
+            }
+            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
+            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
         }
 
         /// <summary>
         /// Displays properties of the selected tree node of the filtered tree in the properties table.
         /// </summary>
         /// <param name="IdGenerated">Id of the Gui element of the selected node in the filtered tree.</param>
-        void updatePropertiesTable(String IdGenerated)
+        void updatePropertiesTable_alt(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             DataTable dataTable = new DataTable();
@@ -396,9 +431,11 @@ namespace GRANTApplication
 
         private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Überflüssig ?!
             Console.WriteLine("HIER!!!!!!xxx: ");
             DataGrid dataGrid = sender as DataGrid;
             DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+            if(rowView == null) { return; }
             string myCellValue = rowView.Row[0].ToString();
             Console.WriteLine("AUSGABE: " + myCellValue);
         }

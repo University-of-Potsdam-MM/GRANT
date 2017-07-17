@@ -471,7 +471,7 @@ namespace GRANTManager
                     object o = OSMElement.OSMElement.getElement(allTypes[i], osmElement);
                     Items.Add(new RowDataItem(allTypes[i], o != null ? o.ToString() : ""));
                 }
-                ColumnNames = new List<string> { "Property", "Content", };
+                ColumnNames = new List<string> { "Property", "Content" };
             }
 
             public IList<string> ColumnNames { get; private set; }
@@ -1355,7 +1355,7 @@ namespace GRANTManager
         public static List<String> getAllTypes(OSMElement.OSMElement osm)
         {
             if (osm.Equals(new OSMElement.OSMElement()) ||( !osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties()))) { return OSMElement.OSMElement.getAllTypes(); }
-            if (!osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties())) { return GeneralProperties.getAllTypes(); }
+            if (osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties())) { return GeneralProperties.getAllTypes(); }
             if(!osm.brailleRepresentation.Equals(new BrailleRepresentation()))
             {
                 List<String> allTypes = OSMElement.OSMElement.getAllTypes();

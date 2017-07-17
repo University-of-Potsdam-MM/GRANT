@@ -395,6 +395,10 @@ namespace GRANTApplication
             }
         }
 
+        /// <summary>
+        /// Displays properties of the marked tree node of the filtered tree in an table.
+        /// </summary>
+        /// <param name="IdGenerated"></param>
         void updateFilteredTable(String IdGenerated)
         {
             OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
@@ -749,6 +753,13 @@ namespace GRANTApplication
             }
            // brailleTreeProp.ItemsSource = data;
             brailleTreeProp.DataContext = this.braillePropRoot;
+
+            if (this.brailleTreeProp.Items.Count > 0)
+            {
+                var dataGridCellInfo = new DataGridCellInfo(this.brailleTreeProp.Items[0], this.brailleTreeProp.Columns[0]);
+                DataGridBoundColumn columni = dataGridCellInfo.Column as DataGridBoundColumn;
+                columni.IsReadOnly = true;
+            }
         }
 
        
@@ -1113,7 +1124,7 @@ namespace GRANTApplication
 
                     
                     //var cellInfo = grid.CurrentCell;
-
+                    if(columns1 < 0) { return; }
                     var dataGridCellInfo = new DataGridCellInfo(grid.Items[rowIndex], grid.Columns[columns1]);
                     if (dataGridCellInfo != null)
                     {
@@ -1135,8 +1146,6 @@ namespace GRANTApplication
                         }
                     }
                   }
-
-
                 //screenViewIteration
                 //Update Table
               //  e.Row.UpdateLayout();
