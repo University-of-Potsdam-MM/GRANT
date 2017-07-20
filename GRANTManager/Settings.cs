@@ -230,10 +230,9 @@ namespace GRANTManager
             return readAppSettings("brailleTreeSavedName");
         }
 
-        public static String getOsmConectorName()
+        public static String getOsmTreeConectorName()
         {
-            return readAppSettings("osmConectorName");
-
+            return readAppSettings("osmTreeConectorName");
         }
 
         public static String getFilterstrategyFileName()

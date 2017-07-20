@@ -86,7 +86,7 @@ namespace BrailleTreeTests
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(25, 25);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
             OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
-            OsmConnector<String, String> osmRelationships = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
+            OsmTreeConnectorTuple<String, String> osmRelationships = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
             Assert.AreNotEqual(null, osmRelationships, "Es hätte ein zugehöriger Knoten im gefilterten Baum gefunden werden müssen.");
 
             OSMElement.OSMElement dataFiltere = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);

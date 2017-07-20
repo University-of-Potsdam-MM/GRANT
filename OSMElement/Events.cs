@@ -10,5 +10,6 @@ namespace OSMElement
     [Serializable]
     public class Events
     {
+        public String Id { get; set; }
     }
 }

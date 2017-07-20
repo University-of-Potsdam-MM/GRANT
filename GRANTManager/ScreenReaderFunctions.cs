@@ -173,7 +173,7 @@ namespace GRANTManager
             existFiles = File.Exists(projectDirectory + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
             existFiles = existFiles && File.Exists(projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
             existFiles = existFiles && File.Exists(projectDirectory + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName());
-            existFiles = existFiles && File.Exists(projectDirectory + Path.DirectorySeparatorChar + Settings.getOsmConectorName());
+            existFiles = existFiles && File.Exists(projectDirectory + Path.DirectorySeparatorChar + Settings.getOsmTreeConectorName());
             if (existFiles == false) { System.Windows.Forms.MessageBox.Show("The chosen screen reader doesn't exist!", "GRANT exception"); return false; }
             #endregion
             #region check whether the screen reader exist in the used screen reader directory

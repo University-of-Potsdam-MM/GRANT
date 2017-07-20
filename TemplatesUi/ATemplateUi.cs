@@ -84,7 +84,7 @@ namespace TemplatesUi
             String parentId = idGenerated;
             if(filteredSubtree != null && strategyMgr.getSpecifiedTree().Count(filteredSubtree) > 0) //(templateObject.osm.brailleRepresentation.displayedGuiElementType != null && !templateObject.osm.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
-                List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
+                List<OsmTreeConnectorTuple<String, String>> relationship = grantTrees.osmTreeConnections;
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
                 treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
             }

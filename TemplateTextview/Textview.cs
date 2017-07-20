@@ -78,7 +78,7 @@ namespace TemplateTextview
             osmBraille.brailleRepresentation = braille;
             propBraille.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmBraille);
             osmBraille.properties = propBraille;
-            List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
+            List<OsmTreeConnectorTuple<String, String>> relationship = grantTrees.osmTreeConnections;
             OsmTreeConnector.addOsmConnection(osmFiltered.properties.IdGenerated, propBraille.IdGenerated, ref relationship);
             treeOperation.updateNodes.updateNodeOfBrailleUi(ref osmBraille);
             return osmBraille;

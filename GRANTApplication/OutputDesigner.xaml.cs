@@ -284,12 +284,13 @@ namespace GRANTApplication
                     brailleTreeOutput.Items.Clear();
                     brailleRoot.Items.Clear();
                 }
-                
-               // brailleTreeProp.DataContext = data;
+                clearTable(brailleTreeProp);
+                clearTable(filteredTreeProp);
+                // brailleTreeProp.DataContext = data;
                 // brailleTreeProp.ItemsSource = "";
                 //  brailleTreeProp.Items.Refresh();
-             //   brailleTreeProp.DataContext = "";
-             //   brailleTreeProp.Items.Refresh();
+                //   brailleTreeProp.DataContext = "";
+                //   brailleTreeProp.Items.Refresh();
                 /////oder grid
 
                 //     grid.ItemsSource = "";

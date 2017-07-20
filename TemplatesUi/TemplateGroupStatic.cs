@@ -118,7 +118,7 @@ namespace TemplatesUi
             }
             brailleNode.properties.IdGenerated = idGenerated;
 
-            List<OsmConnector<String, String>> relationship = grantTrees.osmRelationship;
+            List<OsmTreeConnectorTuple<String, String>> relationship = grantTrees.osmTreeConnections;
             if (filteredSubtree != null && strategyMgr.getSpecifiedTree().GetData(filteredSubtree) != null)
             {
                 OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);

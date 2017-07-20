@@ -82,6 +82,7 @@
     <Compile Include="Interfaces\IGenaralUiTemplate.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
     <Compile Include="OsmTreeConnector.cs" />
+    <Compile Include="OSMNodeEventActionConnector.cs" />
     <Compile Include="PRISMHandler_Class.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="ScreenReaderFunctions.cs" />
