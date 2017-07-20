@@ -144,6 +144,51 @@ namespace GRANTManager
             return eventManager;
         }
 
+        public List<Strategy> getPossibleEventManager2()
+        {
+            List<Strategy> eventManager = new List<Strategy>();
+            List<String> eventManagerNames = getPossibleStrategyClasses("PossibleEventManager2");
+            if (eventManagerNames == null) { return eventManager; }
+            Strategy f = new Strategy();
+            foreach (String fName in eventManagerNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                eventManager.Add(f);
+            }
+            return eventManager;
+        }
+
+        public List<Strategy> getPossibleEventAction()
+        {
+            List<Strategy> eventAction = new List<Strategy>();
+            List<String> eventActionNames = getPossibleStrategyClasses("PossibleEventAction");
+            if (eventActionNames == null) { return eventAction; }
+            Strategy f = new Strategy();
+            foreach (String fName in eventActionNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                eventAction.Add(f);
+            }
+            return eventAction;
+        }
+
+        public List<Strategy> getPossibleEventProcessor()
+        {
+            List<Strategy> eventProcessor = new List<Strategy>();
+            List<String> eventProcessorNames = getPossibleStrategyClasses("PossibleEventProcessor");
+            if (eventProcessorNames == null) { return eventProcessor; }
+            Strategy f = new Strategy();
+            foreach (String fName in eventProcessorNames)
+            {
+                f.userName = fName;
+                f.className = strategyUserNameToClassName(fName);
+                eventProcessor.Add(f);
+            }
+            return eventProcessor;
+        }
+
         public List<Strategy> getPossibleUiTemplateStrategies()
         {
             List<Strategy> templates = new List<Strategy>();

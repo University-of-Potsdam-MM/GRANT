@@ -146,6 +146,10 @@
       <Project>{3b5c2d5a-23a6-4c0c-9f06-d7ef60766c3c}</Project>
       <Name>StrategyEventManager_AggregatorPRISM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StrategyEvent\StrategyEvent.csproj">
+      <Project>{9af4ee26-5e2d-4bcc-b4e3-a55f8937a783}</Project>
+      <Name>StrategyEvent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
       <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
       <Name>StrategyGenericTree</Name>

@@ -63,6 +63,14 @@ namespace GRANTApplication
             strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperations);
+
+            #region setzen der neuen (Juni 2017) Event Interfaces
+            strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
+            strategyMgr.getSpecifiedEventAction().setGrandTrees(grantTrees);
+            strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
+            strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
+            #endregion
+
             filteredTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             brailleTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleTreeOutput_SelectedItemChanged);
      //       brailleTreeProp.CellEditEnding += brailleTreeProp_CellEditEnding;

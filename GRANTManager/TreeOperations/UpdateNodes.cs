@@ -102,7 +102,7 @@ namespace GRANTManager.TreeOperations
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) || strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child( grantTrees.filteredTree)).properties.Equals(new GeneralProperties())) { return; }
             String fileNameNew = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByModulName(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
             GeneralProperties child = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties;
-            if (child.appPath != null && !fileNameNew.Equals(child.appPath))
+            if (child.appPath != null  && !child.appPath.Equals(fileNameNew))
             {
                 changeFilePath(fileNameNew);
             }

@@ -56,6 +56,14 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedGeneralTemplateUi().setTreeOperation(treeOperations);
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className); // muss dynamisch ermittelt werden
+
+            #region setzen der neuen (Juni 2017) Event Interfaces
+            strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
+            strategyMgr.getSpecifiedEventAction().setGrandTrees(grantTrees);
+            strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
+            strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
+            #endregion
+
             filteredTreeOutput.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
             root = new TreeViewItem();
@@ -94,6 +102,7 @@ namespace GRANTApplication
             }
             System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
+            NodeButton.CommandParameter = IdGenerated;
         }
 
         /// <summary>
@@ -355,6 +364,7 @@ namespace GRANTApplication
 
         private void Node_Click(object sender, RoutedEventArgs e)
         {
+            if(((Button)sender).CommandParameter == null) { return; }
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
             guiFunctions.filterAndAddSubtreeOfApplication(((Button)sender).CommandParameter.ToString());
             Object tree = grantTrees.filteredTree;

@@ -117,7 +117,5 @@ namespace GRANTManager.Interfaces
 
         void InitializeWindows_EventsMonitor();
 
-        void setStrategyMgr(StrategyManager strategyManager);
-
     }
 }
