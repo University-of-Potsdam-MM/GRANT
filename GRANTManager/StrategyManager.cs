@@ -18,10 +18,87 @@ namespace GRANTManager
         private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
         private AOutputManager specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
 
+        private IEventAction specifiedEventAction;
+        private IEventManager specifiedEventManager2;
+        private IEventProcessor specifiedEventProcessor;
+
         private IEventManagerStrategy eventManager;
 
         private IGenaralUiTemplate generalUiTemplate;
-        
+
+
+        public void setSpecifiedEventAction(String eventActionClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(eventActionClassName);
+                specifiedEventAction = (IEventAction)Activator.CreateInstance(type, this);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Exception in StrategyManager_setSpecifiedEventAction: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Exception in StrategyManager_setSpecifiedEventAction: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Exception in StrategyManager_setSpecifiedEventAction: " + e.Message);
+            }
+        }
+
+        public IEventAction getSpecifiedEventAction() { return specifiedEventAction; }
+
+        public void setSpecifiedEventProcessor(String eventProcessorClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(eventProcessorClassName);
+                specifiedEventProcessor = (IEventProcessor)Activator.CreateInstance(type, this);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Exception in StrategyManager_setSpecifiedEventProcessor: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Exception in StrategyManager_setSpecifiedEventProcessor: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Exception in StrategyManager_setSpecifiedEventProcessor: " + e.Message);
+            }
+        }
+
+        public IEventProcessor getSpecifiedEventProcessor() { return specifiedEventProcessor; }
+
+        public void setSpecifiedEventManager2(String eventManagerClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(eventManagerClassName);
+                specifiedEventManager2 = (IEventManager)Activator.CreateInstance(type, this);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Exception in StrategyManager_setSpecifiedEventManager2: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Exception in StrategyManager_setSpecifiedEventManager2: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Exception in StrategyManager_setSpecifiedEventManager2: " + e.Message);
+            }
+        }
+
+        public IEventManager getSpecifiedEventManager2() { return specifiedEventManager2; }
+
         /// <summary>
         /// </summary>
         /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
@@ -157,20 +234,20 @@ namespace GRANTManager
             {
                 Type type = Type.GetType(operationSystemClassName);
                 specifiedOperationSystem = (IOperationSystemStrategy)Activator.CreateInstance(type, this);
-                specifiedOperationSystem.setStrategyMgr(this); //damit beim Filter-Wechsel nicht der Setter vergessen wird
+                //specifiedOperationSystem.setStrategyMgr(this); //damit beim Filter-Wechsel nicht der Setter vergessen wird           
             }
             catch (InvalidCastException ic)
             {
-                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedFilter: " + ic.Message);
+                throw new InvalidCastException("Fehler bei StrategyManager_setSpecifiedOperationSystem: " + ic.Message);
             }
             catch (ArgumentException ae)
             {
-                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedFilter: " + ae.Message);
+                throw new ArgumentException("Fehler bei StrategyManager_setSpecifiedOperationSystem: " + ae.Message);
 
             }
             catch (Exception e)
             {
-                throw new Exception("Fehler bei StrategyManager_setSpecifiedFilter: " + e.Message);
+                throw new Exception("Fehler bei StrategyManager_setSpecifiedOperationSystem: " + e.Message);
             }
 
         }

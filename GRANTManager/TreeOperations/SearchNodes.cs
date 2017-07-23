@@ -436,11 +436,11 @@ namespace GRANTManager.TreeOperations
         /// <returns>list with all connected braille nodes or <c>null</c></returns>
         public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
         {
-            List<OsmConnector<String, String>> osmRelationships = grantTrees.osmRelationship.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
+            List<OsmTreeConnectorTuple<String, String>> osmRelationships = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
             if (osmRelationships != null)
             {
                 List<String> result = new List<string>();
-                foreach(OsmConnector<String, String> r in osmRelationships)
+                foreach(OsmTreeConnectorTuple<String, String> r in osmRelationships)
                 {
                     result.Add(r.BrailleTree);
                 }
@@ -456,7 +456,7 @@ namespace GRANTManager.TreeOperations
         /// <returns>id of the connected filtered tree node or <c>null</c></returns>
         public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
         {
-            OsmConnector<String, String> osmRelationship = grantTrees.osmRelationship.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
+            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
             if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
         }
 

@@ -461,7 +461,6 @@ namespace StrategyUIA
                 Settings settings = new Settings();
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
                 osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).brailleRepresentation;
-                osm.events = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).events;
                 osm.properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
                 osm.properties.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
                 osm.properties.processName = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication(osm.properties.processIdFiltered);

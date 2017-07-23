@@ -102,7 +102,14 @@ namespace GRANTExample
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
             strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
 
-            
+            #region setzen der neuen (Juni 2017) Event Interfaces
+            strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
+            strategyMgr.getSpecifiedEventAction().setGrandTrees(grantTree);
+            strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
+            strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
+            #endregion
+
+
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));

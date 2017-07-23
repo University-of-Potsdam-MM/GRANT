@@ -29,7 +29,12 @@ namespace GRANTManager
         /// <summary>
         /// Specifies the relationship between "filteredTree" and "brailleTree" based on the generated id
         /// </summary>
-        public List<OsmConnector<String, String>> osmRelationship = new List<OsmConnector<string, string>>();
+        public List<OsmTreeConnectorTuple<String, String>> osmTreeConnections = new List<OsmTreeConnectorTuple<string, string>>();
+
+        /// <summary>
+        /// Specifies the connection between a Node of a Tree (filtered tree or Braille tree) <--> Event <--> Action
+        /// </summary>
+        public List<OSMTreeEvenActionConnectorTriple> osmTreeEventActionConnection = new List<OSMTreeEvenActionConnectorTriple>();
 
         /// <summary>
         /// A list with the default renderer for the controlle types.

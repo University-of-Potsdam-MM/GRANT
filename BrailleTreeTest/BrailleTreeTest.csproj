@@ -129,7 +129,7 @@
     <Content Include="SavedTrees\calc2\filterstrategies.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SavedTrees\calc2\osmConnector.xml">
+    <Content Include="SavedTrees\calc2\osmTreeConnector.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SavedTrees\calc\brailleTree.xml">
@@ -141,7 +141,7 @@
     <Content Include="SavedTrees\calc\filterstrategies.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SavedTrees\calc\osmConnector.xml">
+    <Content Include="SavedTrees\calc\osmTreeConnector.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Template\TemplateUiGroups.xml">

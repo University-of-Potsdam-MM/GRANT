@@ -13,13 +13,6 @@ namespace StrategyWindows
     {
         private StrategyManager strategyMgr;
         Thread paintRecThread;
-        
-        /// <summary>
-        /// Methode aus Interface IOperationSystemStrategy
-        /// </summary>
-        /// <param name="manager"></param>
-        public void setStrategyMgr(StrategyManager manager) 
-        { strategyMgr = manager; }
 
         //todo warum wird methode windowsEventsHandler.setStrategyMgr aufgerfuen und gleichzeitig übergabe des strategymgr in windowseventhandler? z38 auskommentiert
         /// <summary>
