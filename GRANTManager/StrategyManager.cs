@@ -21,6 +21,7 @@ namespace GRANTManager
         private IEventManagerStrategy eventManager;
 
         private IGenaralUiTemplate generalUiTemplate;
+        
         /// <summary>
         /// </summary>
         /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
@@ -54,6 +55,7 @@ namespace GRANTManager
         {
             return eventManager;
         }
+
         /// Setzt die gewählte Klasse für die Braille-Ausgabe
         /// </summary>
         /// <param name="brailleDisplayName"></param>

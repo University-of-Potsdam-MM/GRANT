@@ -82,6 +82,7 @@ namespace StrategyWindows
         {
             Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
 
+            //liefert prismeventaggregator-klasse über interface zurück, nicht die prism_handler-Class, mit dem umbenannten event
             prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
 
 
@@ -96,7 +97,7 @@ namespace StrategyWindows
             ///nächster test subscribe des event dieser klasse in ganz anderem teilprojekt!
             prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
 
-            
+            //generateOSMmwxamlTest("asd");
 
     ////////Aufruf direkt von globalem prismeventaggregator
     //////prismEventAggregator.GetEvent<stringOSMEvent>().Publish(mouseKeyEventType);
@@ -106,7 +107,7 @@ namespace StrategyWindows
             //ea.prismEventAggregatorClass.GetEvent<>().
         }
 
-        public void generateOSMmwxaml(string osm)
+        public void generateOSMmwxamlTest(string osm)
         {
             Console.WriteLine("winevent verarbeitet in wineventhandler" + osm);
             //osm = "werhers";

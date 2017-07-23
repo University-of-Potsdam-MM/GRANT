@@ -69,19 +69,23 @@ namespace GRANTExample
         //    //me.Subscribe();
         //}
 
-
+//todo inti der prismeventaggreagtorclass in grantapplication einbauen
         public IEventAggregator prismEventAggregatorClass = new EventAggregator();
 
         public void eventTest()
         {
+            //erhalt des prismaggregator über interface
             prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
 
             prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
+
+            //Console.WriteLine("test winevent verarbeitet in mainwindowxaml_");
+
         }
 
         public void generateOSMmwxaml(string osm)
         {
-            Console.WriteLine("winevent verarbeitet in mainwindowxaml_" + osm);
+            Debug.WriteLine("winevent verarbeitet in mainwindowxaml_" + osm);
             //osm = "werhers";
         }
 
@@ -296,10 +300,10 @@ namespace GRANTExample
                 strategyMgr.getSpecifiedOperationSystem().hideWindow(hWnd);
                 if (!((MenuItem)sender).Name.Equals("HideWindowNotification"))
                 {
-                    HideWindowNotification.IsChecked = true;
+                    //HideWindowNotification.IsChecked = true;
                 }else
                 {
-                    HideWindowMenuItem.IsChecked = true;
+                    //HideWindowMenuItem.IsChecked = true;
                 }
             }
             else
@@ -307,11 +311,11 @@ namespace GRANTExample
                 strategyMgr.getSpecifiedOperationSystem().showWindow(hWnd);
                 if (!((MenuItem)sender).Name.Equals("HideWindowNotification"))
                 {
-                    HideWindowNotification.IsChecked = false;
+                    //HideWindowNotification.IsChecked = false;
                 }
                 else
                 {
-                    HideWindowMenuItem.IsChecked = false;
+                    //HideWindowMenuItem.IsChecked = false;
                 }
             }
         }

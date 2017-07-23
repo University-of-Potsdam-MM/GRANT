@@ -18,11 +18,11 @@ namespace OSMElement
         {
             properties = new GeneralProperties();
             brailleRepresentation = new BrailleRepresentation();
-            events = new Events();
+            events = new OSMEvents();
         }
         public GeneralProperties properties { get; set; }
 
-        public Events events { get; set; }
+        public OSMEvents events { get; set; }
         public BrailleRepresentation brailleRepresentation { get; set; }
 
         public override string ToString()

@@ -8,7 +8,7 @@ namespace OSMElement
 {
     //TODO
     [Serializable]
-    public class Events
+    public class OSMEvents
     {
     }
 }

@@ -100,6 +100,8 @@ namespace StrategyWindows
             //keyboard
             keyboardMouseEventSelection[0] = true;
             //wenn true dann machen
+
+            //methode der verarbeitung des event, also der handler ist onkeyup
             if (keyboardMouseEventSelection[0]) m_MouseKeyEvents.KeyUp += eventHandlerWindows.onKeyUp;
 
             //mouse
