@@ -19,9 +19,11 @@ namespace OSMElement
         {
             properties = new GeneralProperties();
             brailleRepresentation = new BrailleRepresentation();
+            //events = new OSMEvents();
         }
         public GeneralProperties properties { get; set; }
 
+        //public OSMEvents events { get; set; }
         public BrailleRepresentation brailleRepresentation { get; set; }
 
         public override string ToString()
@@ -75,6 +77,7 @@ namespace OSMElement
                 // Suitable nullity checks etc, of course :)
                 hash = hash * primeNumber[1] + (this.properties != null ? properties.GetHashCode() : 0); 
                 hash = hash * primeNumber[1] + (this.brailleRepresentation != null ? brailleRepresentation.GetHashCode() : 0);
+                //hash = hash * primeNumber[1] + (this.events != null ? events.GetHashCode() : 0);
                 return hash;
             }
         }

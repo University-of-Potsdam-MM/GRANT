@@ -15,6 +15,8 @@ namespace GRANTManager
         //Kreierung des events direkt in wineventhanlderklasse
         //public class stringOSMEventTest : PubSubEvent<string> { }
 
+            // eigene pubsubeventklasse erzeugt, welche nur anders heisst, damit nicht jeder einfach diese pubsubevents empfangen könnte
+
         public class updateOSMEvent : PubSubEvent<string>
         {
             //void get()

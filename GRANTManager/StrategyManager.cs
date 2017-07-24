@@ -132,6 +132,7 @@ namespace GRANTManager
         {
             return eventManager;
         }
+
         /// Setzt die gewählte Klasse für die Braille-Ausgabe
         /// </summary>
         /// <param name="brailleDisplayName"></param>
@@ -233,6 +234,7 @@ namespace GRANTManager
             {
                 Type type = Type.GetType(operationSystemClassName);
                 specifiedOperationSystem = (IOperationSystemStrategy)Activator.CreateInstance(type, this);
+                //specifiedOperationSystem.setStrategyMgr(this); //damit beim Filter-Wechsel nicht der Setter vergessen wird           
             }
             catch (InvalidCastException ic)
             {
