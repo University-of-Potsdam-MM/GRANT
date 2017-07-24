@@ -192,7 +192,11 @@ namespace GRANTManager.TreeOperations
             if (propertyValueCurrent != null && propertyValueCurrent.Equals(propertyValueNew)) { return false; }
             else
             {
-                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.ToString().Equals(newProperty.ToString())) { return true; }
+                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.ToString().Equals(newProperty.ToString()))
+                {
+                    updateNodeOfBrailleUi(ref node);
+                    return true;
+                }
             }
             return false;
         }
@@ -536,7 +540,9 @@ namespace GRANTManager.TreeOperations
             }
             if (element.brailleRepresentation.displayedGuiElementType != null)
             {
-                element.properties.valueFiltered = getTextForView(element);
+
+                 String text = getTextForView(element);
+                element.properties.valueFiltered = text ?? element.properties.valueFiltered; // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-conditional-operator
             }
             if (element.brailleRepresentation.uiElementSpecialContent != null && element.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.ListMenuItem)))
             {
@@ -592,7 +598,7 @@ namespace GRANTManager.TreeOperations
             if (osmRelationship == null)
             {
                 Console.WriteLine("No matching object found.");
-                return "";
+                return null;
             }
             OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
             String text = "";

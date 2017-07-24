@@ -353,6 +353,21 @@ namespace OSMElement
             return displayedGuiElements;
         }
 
+        public static List<DataTypeOSMElement> getAllTypes_possibleValues()
+        {
+            List<DataTypeOSMElement> displayedGuiElements = new List<DataTypeOSMElement>();
+            var propNames = typeof(GeneralProperties).GetProperties();
+            foreach (var name in propNames)
+            {
+                if (!name.Name.ToString().Equals("resetIdGenerated"))
+                {
+                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.GetType(), null));
+                }
+            }
+            return displayedGuiElements;
+        }     
+
+
         /// <summary>
         /// Gets a specified property
         /// </summary>

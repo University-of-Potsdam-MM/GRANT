@@ -202,6 +202,32 @@ namespace OSMElement
             return displayedGuiElements;
         }
 
+        public static List<DataTypeOSMElement> getAllTypes_possibleValues()
+        {
+            List<DataTypeOSMElement> displayedGuiElements = new List<DataTypeOSMElement>();
+            var brailleNames = typeof(BrailleRepresentation).GetProperties();
+            foreach (var name in brailleNames)
+            {
+                if (!name.Name.ToString().Equals("jaggedMatrix"))
+                {
+                    // displayedGuiElements.Add(name.Name.ToString());
+                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.GetType(), getPosibleValuesOfProperty(name.Name.ToString())));
+                }
+            }
+            return displayedGuiElements;
+        }
+
+        private static List<String> getPosibleValuesOfProperty(String propertyName)
+        {
+            switch (propertyName)
+            {
+                case "displayedGuiElementType":
+                    return GeneralProperties.getAllTypes();
+                default:
+                    return null;
+            }
+        }
+
         public override bool Equals(object obj)
         {
             if ((this == null && obj != null) || (this != null && obj == null)) { return false; }

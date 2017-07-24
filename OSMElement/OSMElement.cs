@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -81,12 +82,18 @@ namespace OSMElement
         /// <summary>
         /// Gives all Types of <see cref="OSMElement"/>
         /// </summary>
-        /// <returns>list of all Types of <see cref="OSMElement"/></returns>
+        /// <returns>list of all Types of <see cref="OSMElement"/> with possible values OR range</returns>
         public static List<String> getAllTypes()
         {
             List<String> displayedGuiElements = GeneralProperties.getAllTypes();
             displayedGuiElements.AddRange(BrailleRepresentation.getAllTypes());
-            // displayedGuiElements.AddRange(Events.getAllTypes());
+            return displayedGuiElements;
+        }
+
+        public static List<DataTypeOSMElement> getAllTypes_possibleValues()
+        {
+            List<DataTypeOSMElement> displayedGuiElements = GeneralProperties.getAllTypes_possibleValues();
+            displayedGuiElements.AddRange(BrailleRepresentation.getAllTypes_possibleValues());
             return displayedGuiElements;
         }
 
@@ -104,13 +111,21 @@ namespace OSMElement
                         return;
 
                     }
-                    oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null);
+                    try
+                    {
+                        oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null);
+                    }
+                    catch (InvalidCastException e) { Debug.WriteLine("InvalidCast by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
                     return;
                 }
                 else { oInfo = osmElement.brailleRepresentation.GetType().GetProperty(elementName); }
                 if (oInfo != null)
                 {
-                    oInfo.SetValue(osmElement.brailleRepresentation, Convert.ChangeType(property, oInfo.PropertyType), null);
+                    try
+                    {
+                        oInfo.SetValue(osmElement.brailleRepresentation, Convert.ChangeType(property, oInfo.PropertyType), null);
+                    }
+                    catch (InvalidCastException e) { Debug.WriteLine("InvalidCast by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
                     return;
                 }
             }

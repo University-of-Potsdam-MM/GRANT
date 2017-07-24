@@ -416,16 +416,31 @@ namespace GRANTApplication
             if (filteredTreeProp.Columns.Count == 0)
             {
                 filteredTreeProp.Columns.Clear();
-                int columnIndex = 0;
-                foreach (var name in this.filteredPropRoot.ColumnNames)
-                {
-                    filteredTreeProp.Columns.Add(
-                        new DataGridTextColumn
-                        {
-                            Header = name,
-                            Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
-                        });
-                }
+                /*   int columnIndex = 0;
+                   foreach (var name in this.filteredPropRoot.ColumnNames)
+                   {
+                       filteredTreeProp.Columns.Add(
+                           new DataGridTextColumn
+                           {
+                               Header = name,
+                               Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
+                           });
+                   }*/
+                filteredTreeProp.Columns.Add(
+                     new DataGridTextColumn
+                     {
+                        Header = "Property",
+                        // Binding = new Binding(string.Format("Values", 0)),
+                        Binding = new Binding("Values.Name")
+                     }
+                 );
+                filteredTreeProp.Columns.Add(
+                    new DataGridTextColumn
+                    {
+                        Header = "Content",
+                        Binding = new Binding("Values.currentValue")
+                    }
+                );
             }
             filteredTreeProp.DataContext = this.filteredPropRoot;
 
@@ -745,7 +760,7 @@ namespace GRANTApplication
         {
            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
            this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
-            
+         /*   
             if (brailleTreeProp.Columns.Count == 0)
             {
                 brailleTreeProp.Columns.Clear();
@@ -759,16 +774,17 @@ namespace GRANTApplication
                             Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
                         });
                 }
-            }
+            }*/
            // brailleTreeProp.ItemsSource = data;
             brailleTreeProp.DataContext = this.braillePropRoot;
-
+            
             if (this.brailleTreeProp.Items.Count > 0)
             {
                 var dataGridCellInfo = new DataGridCellInfo(this.brailleTreeProp.Items[0], this.brailleTreeProp.Columns[0]);
                 DataGridBoundColumn columni = dataGridCellInfo.Column as DataGridBoundColumn;
                 columni.IsReadOnly = true;
             }
+            
         }
 
        
@@ -1118,17 +1134,27 @@ namespace GRANTApplication
               DataGrid grid = (DataGrid)sender;
               if (e.EditAction == DataGridEditAction.Commit)
               {
-                  var column = e.Column as DataGridBoundColumn;
+                var column = e.Column as DataGridComboBoxColumn;// as DataGridBoundColumn;
+                Type t = e.Column.GetType();
                   if (column != null)
                   {
                     //var bindingPath = (column.Binding as Binding).Path.Path;
                     int rowIndex = e.Row.GetIndex();
                     int rowIndex1 = e.Row.GetIndex()-1;
                     
-                    var el = e.EditingElement as TextBox;
-
+                    var el = e.EditingElement as ComboBox;
+                    if(el == null || el.Text == null) { return; }
+                    if (el.Items.CurrentItem.Equals(el.Text))
+                    {
+                        Debug.WriteLine("The item wouldn't change!");
+                        return;
+                    }
+                   
                     int columns = grid.CurrentCell.Column.DisplayIndex;
                     int columns1 = columns - 1;
+
+
+
 
                     //Variante 1
                     //TextBlock x = grid.Columns[0].GetCellContent(grid.Items[rowIndex1]) as TextBlock;
@@ -1150,8 +1176,9 @@ namespace GRANTApplication
                             var cellValue= element.Tag;
                             Console.WriteLine(" celle:" + cellValue);
 
-                            String braillePropId = braillePropRoot.Items.First(p => p.Values[0].Equals("IdGenerated")).Values[1];
+                            String braillePropId = braillePropRoot.Items.First(p =>   p.Values.Name.Equals("IdGenerated")).Values.currentValue;
                             treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
+                            
                             // updateBrailleTable(globalID);
                             // screenViewIteration(globalID);
 
@@ -1168,7 +1195,7 @@ namespace GRANTApplication
 
         private void clearTable(DataGrid table)
         {
-            table.DataContext = "";
+            table.DataContext = new GuiFunctions.MyViewModel();
             table.Items.Refresh();
         }
 
@@ -1229,7 +1256,7 @@ namespace GRANTApplication
             var text3 = ((TextBox)element_3).Text;
 
             Console.WriteLine(" text3:" + text3);
-            Console.WriteLine(" ID:" + braillePropRoot.Items.First(p => p.Values[0].Equals("IdGenerated")).Values[1]);
+            Console.WriteLine(" ID:" + braillePropRoot.Items.First(p => p.Values.Name.Equals("IdGenerated")).Values.currentValue);
             Console.WriteLine(" text2:" + text2);
 
 

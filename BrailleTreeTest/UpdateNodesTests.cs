@@ -518,7 +518,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.IsTrue(result);
             node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
             Assert.AreNotEqual(nodeCopy, node, "Both nodes shouldn't have the same values.");
-            Assert.AreEqual(node.properties.valueFiltered, valueFilteredNew, "Der valueFiltered-Wert sollte nun '" + valueFilteredNew + "' sein sollen!");
+            Assert.AreEqual(valueFilteredNew, node.properties.valueFiltered, "Der valueFiltered-Wert sollte nun '" + valueFilteredNew + "' sein sollen!");
         }
 
         [TestMethod]

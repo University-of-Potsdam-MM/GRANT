@@ -84,22 +84,34 @@ namespace GRANTApplication
             if (filteredTreeProp.Columns.Count == 0)
             {
                 filteredTreeProp.Columns.Clear();
-                int columnIndex = 0;
-                foreach (var name in this.filteredPropRoot.ColumnNames)
-                {
-                    filteredTreeProp.Columns.Add(
-                        new DataGridTextColumn
-                        {
-                            Header = name,
-                            Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
-                        });
-                }
+                /*   int columnIndex = 0;
+                   foreach (var name in this.filteredPropRoot.ColumnNames)
+                   {
+                       filteredTreeProp.Columns.Add(
+                           new DataGridTextColumn
+                           {
+                               Header = name,
+                               Binding = new Binding(string.Format("Values[{0}]", columnIndex++))
+                           });
+                   }*/
+                filteredTreeProp.Columns.Add(
+                     new DataGridTextColumn
+                     {
+                         Header = "Property",
+                         // Binding = new Binding(string.Format("Values", 0)),
+                         Binding = new Binding("Values.Name")
+                     }
+                 );
+                filteredTreeProp.Columns.Add(
+                    new DataGridTextColumn
+                    {
+                        Header = "Content",
+                        Binding = new Binding("Values.currentValue")
+                    }
+                );
             }
             filteredTreeProp.DataContext = this.filteredPropRoot;
-            foreach(DataGridColumn c in filteredTreeProp.Columns)
-            {
-                System.Diagnostics.Debug.WriteLine(c.Header);
-            }
+
             System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
             NodeButton.CommandParameter = IdGenerated;
