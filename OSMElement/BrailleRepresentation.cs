@@ -97,7 +97,7 @@ namespace OSMElement
         public String displayedGuiElementType
         {
             get { return _displayedGuiElementType; }
-            set { if (GeneralProperties.getAllTypes().Contains(value)) { _displayedGuiElementType = value; } }
+            set { if (value == null || GeneralProperties.getAllTypes().Contains(value)) { _displayedGuiElementType = value; } }
         }
 
         private int _contrast;

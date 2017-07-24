@@ -185,6 +185,20 @@ namespace GRANTManager.TreeOperations
                     return false;
                 }
             }
+            if (nameOfProperty.Equals("valueFiltered"))
+            {
+                //if a connection to a filtered exsisting => delete this
+                if (node.brailleRepresentation.displayedGuiElementType != null)
+                {
+                    node.brailleRepresentation.displayedGuiElementType = null;
+                    String connectedFilteredTreeId = treeOperation.searchNodes.getConnectedFilteredTreenodeId(node.properties.IdGenerated);
+                    if (connectedFilteredTreeId != null)
+                    {
+                        List<OsmTreeConnectorTuple<String, String>> conector = grantTrees.osmTreeConnections;
+                        OsmTreeConnector.removeOsmConnection(connectedFilteredTreeId, node.properties.IdGenerated, ref conector);
+                    }
+                }
+            }
             // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
             OSMElement.OSMElement.setElement(nameOfProperty, newProperty, node);
             Object propertyValueNew = OSMElement.OSMElement.getElement(nameOfProperty, node);
@@ -566,17 +580,17 @@ namespace GRANTManager.TreeOperations
         /// <summary>
         /// Determines whether connected checkbox of a braille node is selected 
         /// </summary>
-        /// <param name="element">the OSM element of the braille tree</param>
+        /// <param name="elementBraille">the OSM element of the braille tree</param>
         /// <returns><c>true</c> if the checkbox in the connected filtered node selected</returns>
-        private bool isCheckboxOfAssociatedElementSelected(OSMElement.OSMElement element)
+        private bool isCheckboxOfAssociatedElementSelected(OSMElement.OSMElement elementBraille)
         {
-            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(element.properties.IdGenerated));
-            if (osmRelationship == null)
+            String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(elementBraille.properties.IdGenerated);
+            if (connectedIdFilteredTree == null)
             {
                 Debug.WriteLine("No matching object found.");
                 return false;
             }
-            List<Object> associatedNodeList = treeOperation.searchNodes.getNodeList(osmRelationship.FilteredTree, grantTrees.filteredTree);
+            List<Object> associatedNodeList = treeOperation.searchNodes.getNodeList(connectedIdFilteredTree, grantTrees.filteredTree);
             if (associatedNodeList != null && associatedNodeList.Count == 1 && strategyMgr.getSpecifiedTree().HasChild(associatedNodeList[0]))
             {
                 //the information wether an element is selected will be found in the child element (at least in my example application)
@@ -590,21 +604,21 @@ namespace GRANTManager.TreeOperations
         /// Seeks the displayed text for a (braille) view;
         /// exists an acronym for this text this will be used
         /// </summary>
-        /// <param name="filteredSubtree">gibt das OSM-Element des anzuzeigenden GUI-Elementes an</param>
+        /// <param name="osmElementBraille">the osmElement of the Braille Tree</param>
         /// <returns>the text to display</returns>
-        private String getTextForView(OSMElement.OSMElement osmElement)
+        private String getTextForView(OSMElement.OSMElement osmElementBraille)
         {
-            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated));
-            if (osmRelationship == null)
+            String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(osmElementBraille.properties.IdGenerated);
+            if (connectedIdFilteredTree == null)
             {
                 Console.WriteLine("No matching object found.");
                 return null;
             }
-            OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
+            OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
             String text = "";
-            if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElement.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
+            if (!associatedNode.Equals(new OSMElement.OSMElement()) && !osmElementBraille.brailleRepresentation.displayedGuiElementType.Trim().Equals(""))
             {
-                object objectText = GeneralProperties.getPropertyElement(osmElement.brailleRepresentation.displayedGuiElementType, associatedNode.properties);
+                object objectText = GeneralProperties.getPropertyElement(osmElementBraille.brailleRepresentation.displayedGuiElementType, associatedNode.properties);
                 text = (objectText != null ? objectText.ToString() : "");
             }
             return useAcronymForText( text);
@@ -631,17 +645,17 @@ namespace GRANTManager.TreeOperations
         /// <summary>
         /// Determines whether an connected element is enable
         /// </summary>
-        /// <param name="osmElement">the OSM element of the braille tree</param>
+        /// <param name="osmElementBraille">the OSM element of the braille tree</param>
         /// <returns><code>true</code> if the connected element enable; otherwise <code>false</code> (If the value can not be determined, <code>null</code> is returned)</returns>
-        private bool? isUiElementEnable(OSMElement.OSMElement osmElement)
+        private bool? isUiElementEnable(OSMElement.OSMElement osmElementBraille)
         {
-            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(osmElement.properties.IdGenerated));
-            if (osmRelationship == null)
+            String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(osmElementBraille.properties.IdGenerated);
+            if (connectedIdFilteredTree == null)
             {
                 Console.WriteLine("No matching object found.");
                 return null;
             }
-            OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationship.FilteredTree);
+            OSMElement.OSMElement associatedNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
             if (!associatedNode.Equals(new OSMElement.OSMElement()))
             {                
                 return associatedNode.properties.isEnabledFiltered;
@@ -1013,10 +1027,10 @@ namespace GRANTManager.TreeOperations
                         templateobject.osm = strategyMgr.getSpecifiedTree().GetData(node);
                         templateobject.Screens = new List<string>();
                         templateobject.Screens.Add(strategyMgr.getSpecifiedTree().GetData(node).brailleRepresentation.screenName);
-                        OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
-                        if (osmRelationship != null)
+                        String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
+                        if (connectedIdFilteredTree != null)
                         {
-                            Object subtreeFiltered = treeOperation.searchNodes.getNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
+                            Object subtreeFiltered = treeOperation.searchNodes.getNode(connectedIdFilteredTree, grantTrees.filteredTree);
                             if (subtreeFiltered == null) { return; }
                             String id = strategyMgr.getSpecifiedTree().GetData(subtreeFiltered).properties.IdGenerated;
                             subtreeFiltered = strategyMgr.getSpecifiedFilter().filtering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
@@ -1025,7 +1039,7 @@ namespace GRANTManager.TreeOperations
                             if (idParent == null || tree == null) { return; }
                             tree = treeOperation.generatedIds.generatedIdsOfFilteredSubtree(treeOperation.searchNodes.getNode(idParent, tree));
                             grantTrees.filteredTree = tree;
-                            subtreeFiltered = treeOperation.searchNodes.getNode(osmRelationship.FilteredTree, grantTrees.filteredTree);
+                            subtreeFiltered = treeOperation.searchNodes.getNode(connectedIdFilteredTree, grantTrees.filteredTree);
                             if (strategyMgr.getSpecifiedTree().HasParent(node))
                             {
                                 removeChildNodeInBrailleTree(node);
@@ -1050,11 +1064,11 @@ namespace GRANTManager.TreeOperations
             {
                 if (strategyMgr.getSpecifiedTree().HasParent(node) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Parent(node)).properties.isContentElementFiltered == false)
                 {
-                    OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated));
-                    if (osmRelationship != null)
+                    String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
+                    if (connectedIdFilteredTree != null)
                     {
                         List<OsmTreeConnectorTuple<String, String>> conector = grantTrees.osmTreeConnections;
-                        OsmTreeConnector.removeOsmConnection(osmRelationship.FilteredTree, osmRelationship.BrailleTree, ref conector);
+                        OsmTreeConnector.removeOsmConnection(connectedIdFilteredTree, strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, ref conector);
                         removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                     }
                 }

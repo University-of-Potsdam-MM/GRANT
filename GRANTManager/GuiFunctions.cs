@@ -1180,10 +1180,9 @@ namespace GRANTManager
             //TODO: checks whether the point is into the rectange of the node
             #endregion
             #region mappes the point on the braille device to a point in the application
-            OsmTreeConnectorTuple<String, String> osmRelationships = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(dataBraille.properties.IdGenerated));
-            OSMElement.OSMElement dataFiltered = treeOperation.searchNodes.getFilteredTreeOsmElementById(osmRelationships.FilteredTree);
-            if (osmRelationships == null) { return; }
-
+            String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(dataBraille.properties.IdGenerated);
+            if (connectedIdFilteredTree == null) { return; }
+            OSMElement.OSMElement dataFiltered = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
             if (nodeinfos.Equals(new TactileNodeInfos()))
             {
                 return;
