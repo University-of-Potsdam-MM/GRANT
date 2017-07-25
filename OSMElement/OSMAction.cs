@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace OSMElement
 {
     [Serializable]
-    public class OSMActrion
+    public class OSMAction
     {
         public String Id { get; set; }
     }

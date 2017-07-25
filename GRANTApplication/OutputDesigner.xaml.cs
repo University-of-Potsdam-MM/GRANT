@@ -66,7 +66,7 @@ namespace GRANTApplication
 
             #region setzen der neuen (Juni 2017) Event Interfaces
             strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
-            strategyMgr.getSpecifiedEventAction().setGrandTrees(grantTrees);
+            strategyMgr.getSpecifiedEventAction().setGrantTrees(grantTrees);
             strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
             #endregion

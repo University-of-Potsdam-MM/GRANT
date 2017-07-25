@@ -17,7 +17,7 @@ namespace StrategyEvent
         {
             strategyManager = strategyMgr;
         }
-        public void setGrandTrees(GeneratedGrantTrees trees) { grantTrees = trees; }
+        public void setGrantTrees(GeneratedGrantTrees trees) { grantTrees = trees; }
 
         public void refreshBrailleView(string viewId)
         {
@@ -30,6 +30,11 @@ namespace StrategyEvent
         }
 
         public void changeBrailleScreen(string screenName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void changeWholeOSMElement()
         {
             throw new NotImplementedException();
         }
