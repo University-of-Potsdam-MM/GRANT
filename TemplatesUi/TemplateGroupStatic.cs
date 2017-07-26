@@ -45,7 +45,8 @@ namespace TemplatesUi
                         {
                             if(strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osm))
                             {
-                                strategyMgr.getSpecifiedTree().Remove(grantTrees.brailleTree, osm);
+                                //strategyMgr.getSpecifiedTree().Remove(grantTrees.brailleTree, osm);
+                                treeOperation.updateNodes.RemoveNodeAndConnection(osm);
                             }
                             strategyMgr.getSpecifiedTree().AddChild(screenSubtree, brailleNode);
                             return;

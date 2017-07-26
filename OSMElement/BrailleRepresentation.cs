@@ -171,7 +171,7 @@ namespace OSMElement
 
         public override string ToString()
         {
-            return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}, screenCategory = {3}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString(), typeOfView);
+            return String.Format("screenName = {0}, viewName = {1},  uiElementSpecialContent = {2}, typeOfView = {3}", screenName, viewName, uiElementSpecialContent == null ? "" : uiElementSpecialContent.ToString(), typeOfView);
         }
 
         /// <summary>

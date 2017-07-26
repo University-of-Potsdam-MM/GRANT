@@ -70,5 +70,9 @@ namespace GRANTManager
             }
         }
 
+        internal static void removeOsmConnection(OsmTreeConnectorTuple<string, string> connectionToDel, ref List<OsmTreeConnectorTuple<string, string>> existingConnections)
+        {
+            existingConnections.Remove(connectionToDel);
+        }
     }
 }

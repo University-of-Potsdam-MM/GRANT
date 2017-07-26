@@ -180,7 +180,6 @@ namespace TemplateTest
             Assert.AreEqual(12, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); //  1 (TypeOfView = SymbolView) + 1 (Screen = b) + 5 Views (TitleBar, Statusbar, Navigationbar_Group, Menubar_Group, Menubar_Group) + 5 (children of the groups) = 12 Nodes
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
             strategyMgr.getSpecifiedGeneralTemplateUi().generatedSymbolView(pathToTemplate);
-            Debug.WriteLine(strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
             Assert.AreEqual(12, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); //  1 (TypeOfView = SymbolView) + 1 (Screen = b) + 5 Views (TitleBar, Statusbar, Navigationbar_Group, Menubar_Group, Menubar_Group) + 5 (children of the groups) = 12 Nodes
             if (!strategyMgr.getSpecifiedTree().Equals(grantTrees.brailleTree, treeCopy))
             {

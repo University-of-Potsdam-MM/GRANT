@@ -193,6 +193,7 @@ namespace StrategyGenericTree
         /// <returns>number of nodes</returns>
         public int Count(Object tree)
         {
+            if(tree == null) { return 0; }
             return((ITree<T>)tree).Count; 
         }
 

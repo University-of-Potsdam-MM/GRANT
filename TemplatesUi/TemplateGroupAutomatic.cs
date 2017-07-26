@@ -53,7 +53,7 @@ namespace TemplatesUi
                 {
                     OSMElement.OSMElement tmpOsmBraille = strategyMgr.getSpecifiedTree().GetData(o);
                     String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(tmpOsmBraille.properties.IdGenerated);
-                    if (connectedIdFilteredTree.Equals(idOsmFilteredSubtree))
+                    if (connectedIdFilteredTree != null && connectedIdFilteredTree.Equals(idOsmFilteredSubtree))
                     {
                         Debug.WriteLine("The node is already exist.");
                         return strategyMgr.getSpecifiedTree().NewTree(); ;

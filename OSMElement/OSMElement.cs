@@ -116,7 +116,7 @@ namespace OSMElement
                     }
                     try
                     {
-                        oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null);
+                        oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null); //TODO: https://stackoverflow.com/questions/3531318/convert-changetype-fails-on-nullable-types
                     }
                     catch (InvalidCastException e) { Debug.WriteLine("InvalidCast by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
                     return;

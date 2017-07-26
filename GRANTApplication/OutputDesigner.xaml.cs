@@ -631,6 +631,7 @@ namespace GRANTApplication
             }
         }
 
+        /* not used
         /// <summary>
         /// Display all gui elements of one view on the simulated braille display
         /// </summary>
@@ -676,7 +677,7 @@ namespace GRANTApplication
                     }
                 }
             }
-        }
+        } */
 
         /// <summary>
         /// Display all GUI elements of an braille view on the simulated braille display.
@@ -1115,11 +1116,16 @@ namespace GRANTApplication
         {
             foreach (TreeViewItem tvi in treeView.Items)
             {
-                TreeViewItem result = GuiFunctions.Flatten(tvi).First(t => t.Header != null && t.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)) && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
-                if (result != null)
+                Type typ = tvi.Header.GetType();
+                try
                 {
-                    return result;
+                    TreeViewItem result = GuiFunctions.Flatten(tvi).First(t => t != null && t.Header != null && t.Header.GetType().Equals(typeof(GuiFunctions.MenuItem)) && ((GuiFunctions.MenuItem)t.Header).IdGenerated != null && ((GuiFunctions.MenuItem)t.Header).IdGenerated.Equals(id));
+                    if (result != null)
+                    {
+                        return result;
+                    }
                 }
+                catch (InvalidOperationException) { }
             }
             return null;
         }
@@ -1149,7 +1155,7 @@ namespace GRANTApplication
                         Debug.WriteLine("The item wouldn't change!");
                         return;
                     }
-                   
+                   if(grid.CurrentCell.Column == null) { return; }
                     int columns = grid.CurrentCell.Column.DisplayIndex;
                     int columns1 = columns - 1;
 
@@ -1199,6 +1205,11 @@ namespace GRANTApplication
             table.Items.Refresh();
         }
 
+        /// <summary>
+        /// Reload the TreeView of the filtered tree and the Braille tree
+        /// </summary>
+        /// <param name="markedFilteredNodeId">id of the node in the filtered tree which should be marked</param>
+        /// <param name="markedBrailleNodeId">id of the node in the Braille tree which should be marked</param>
         private void reloadTrees(String markedFilteredNodeId = null, String markedBrailleNodeId = null)
         {
             #region reload filtered tree

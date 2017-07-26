@@ -233,7 +233,6 @@ namespace GRANTManager.TreeOperations
         /// <returns>subtree object or <c>null</c></returns>
         public Object getSubtreeOfScreen(String screenName)
         {
-
             if (screenName == null || screenName.Equals("")) { return null; }
             Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
             if (grantTrees.brailleTree == null ) { return null; }
