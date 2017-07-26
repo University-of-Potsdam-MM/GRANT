@@ -71,7 +71,7 @@
     <Compile Include="RendererUiElementConnector.cs" />
     <Compile Include="TextviewObject.cs" />
     <Compile Include="UiElements\DropDownMenuItem.cs" />
-    <Compile Include="Events.cs" />
+    <Compile Include="OSMEvents.cs" />
     <Compile Include="GeneralProperties.cs" />
     <Compile Include="OSMElement.cs" />
     <Compile Include="OsmTreeConnectorTuple.cs" />
