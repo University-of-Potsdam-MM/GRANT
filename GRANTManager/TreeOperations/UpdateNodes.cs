@@ -292,7 +292,7 @@ namespace GRANTManager.TreeOperations
                             // addScreenInBrailleTree(nodeData.brailleRepresentation.screenName, typeOfViewNew, out existTypOfView);
                             addTypeOfViewInBrailleTree(typeOfViewNew, out existTypeOfView);
                         }
-                        foreach(Object n in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
+                        foreach(Object n in strategyMgr.getSpecifiedTree().AllNodes(nodeParentObject))
                         {
                             OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(n);
                             osm.brailleRepresentation.typeOfView = typeOfViewNew;
@@ -389,7 +389,11 @@ namespace GRANTManager.TreeOperations
                 {
                     screenToRemove = strategyMgr.getSpecifiedTree().Parent(nodeObject);
                 }
-                nodeData.brailleRepresentation.screenName = screenNameNew;
+                foreach(Object view in strategyMgr.getSpecifiedTree().AllNodes(nodeObject))
+                {
+                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(view);
+                    osm.brailleRepresentation.screenName = screenNameNew;
+                }
                 strategyMgr.getSpecifiedTree().moveSubtree(nodeObject, screenBranchNew);
                 if(screenToRemove != null)
                 {
