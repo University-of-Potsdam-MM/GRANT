@@ -805,7 +805,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "B3E21CB6354236C12E53DD34DC343A45";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId); //MenuBar-View (viewName = "MenuBar")
             OSMElement.OSMElement nodeCopy = node.DeepCopy();
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
             Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
@@ -830,6 +830,25 @@ namespace GRANTManager.BrailleTreeTests
             Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(subtreeBOld) > strategyMgr.getSpecifiedTree().Count(subtreeBNew));
             Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(subtreeA1New) > strategyMgr.getSpecifiedTree().Count(subtreeA1Old));
             Assert.AreEqual((strategyMgr.getSpecifiedTree().Count(subtreeBOld) - strategyMgr.getSpecifiedTree().Count(subtreeBNew)) + strategyMgr.getSpecifiedTree().Count(subtreeA1Old), strategyMgr.getSpecifiedTree().Count(subtreeA1New));
+        }
+
+        [TestMethod]
+        public void setBrailleTreePropertyScreenName_moveView3()
+        {
+            /*
+             * Try to Move a view-node to an other existing screen-branch -> the screen-node exist in an other typeOfView --> the node can't move
+             */
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            Assert.AreNotEqual(grantTrees.brailleTree, null);
+            String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
+            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject); // controlTypeFiltered = Screenshot; has no siblings
+            Object treeCopy = grantTrees.brailleTree.DeepCopy();
+            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", "sv");
+            Assert.IsFalse(result);
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().Equals(treeCopy, grantTrees.brailleTree));
         }
 
         #region TypeOfView
@@ -866,7 +885,7 @@ namespace GRANTManager.BrailleTreeTests
         public void setBrailleTreePropertyTypeOfView_newTypeOfView()
         {
             /*
-             * Move the view-node to a new typeOfView
+             * Move the view-node to a new typeOfView --> the viewNode hasn't siblings
              */
             guiFuctions.loadGrantProject(treePath);
             Assert.AreNotEqual(grantTrees, null);
@@ -875,6 +894,15 @@ namespace GRANTManager.BrailleTreeTests
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
             Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
             OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            // remove all but one nodes of this screen
+            while (strategyMgr.getSpecifiedTree().HasPrevious(nodeObject))
+            {
+                treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Previous(nodeObject)).properties.IdGenerated);
+            }
+            while (strategyMgr.getSpecifiedTree().HasNext(nodeObject))
+            {
+                treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(nodeObject)).properties.IdGenerated);
+            }
             OSMElement.OSMElement nodeCopy = node.DeepCopy();
             Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy(); // => typeOfView-node
             Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
@@ -896,7 +924,7 @@ namespace GRANTManager.BrailleTreeTests
             Object parentParentNew_New = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObjectNew));
             Object parentParentNew_Old = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentNew_New).properties.IdGenerated, strategyMgr.getSpecifiedTree().Root(parentParentOld_old));
             Assert.IsNull(parentParentNew_Old);
-            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentOld_old) == 1 + strategyMgr.getSpecifiedTree().Count(parentParentOld_new)); // 1 --> view 
+            Assert.IsNull(parentParentOld_new);
             Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentNew_New) == 3); // 1 (TypeOfView) + 1 (Screen) + 1 (View)
         }
 
@@ -929,96 +957,6 @@ namespace GRANTManager.BrailleTreeTests
         }
 
         [TestMethod]
-        public void setBrailleTreePropertyTypeOfView_moveScreen2()
-        {
-            /*
-             * Move a screen-node (and all children) to an other existing typeOfView (the screen-node exist in this typeOfView BUT all view-names are different)
-             */
-            guiFuctions.loadGrantProject(treePath);
-            Assert.AreNotEqual(grantTrees, null);
-            Assert.AreNotEqual(grantTrees.filteredTree, null);
-            Assert.AreNotEqual(grantTrees.brailleTree, null);
-            String nodeId = "B2013A50995FC1DC806B5BB29DEDC18A"; //screen-node
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            
-            //change screenName
-            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", "lv");
-            Assert.IsTrue(result);
-            //del node
-            result = treeOperation.updateNodes.removeNodeInBrailleTree("4B84E4829D9CEFB70618B14F87589030");
-            Assert.IsTrue(result);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
-            String typeOfViewNameOld = "SymbolView";
-            Assert.AreEqual(node.brailleRepresentation.typeOfView, typeOfViewNameOld);
-            object nodeObject_old = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree).DeepCopy();
-            Object patentObject_old = strategyMgr.getSpecifiedTree().Parent(nodeObject_old);
-            String typeOfViewNameNew = "LayoutView";
-            result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
-            Assert.IsTrue(result);
-            Object subTreeTypeOfViewNew_New = treeOperation.searchNodes.getSubtreeOfTypeOfView(typeOfViewNameNew);
-            Object subtreeTypeOfViewNew_Old = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(subTreeTypeOfViewNew_New).properties.IdGenerated, strategyMgr.getSpecifiedTree().Root(nodeObject_old));
-            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(subtreeTypeOfViewNew_Old) + strategyMgr.getSpecifiedTree().Count(nodeObject_old) -1, strategyMgr.getSpecifiedTree().Count(subTreeTypeOfViewNew_New)); // -1 => the screen-node is used only once
-            Object subTreeScreenNew = treeOperation.searchNodes.getSubtreeOfScreen("lv");
-            foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(subTreeTypeOfViewNew_New))
-            {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
-                Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
-            }
-            //Each view-node from the old "typeOfView/Screen" must be in the new one
-            foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(nodeObject_old))
-            {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
-                Boolean bt = treeOperation.searchNodes.existViewInScreen(data.brailleRepresentation.screenName, data.brailleRepresentation.viewName, typeOfViewNameNew);
-                Assert.IsTrue( treeOperation.searchNodes.existViewInScreen(data.brailleRepresentation.screenName, data.brailleRepresentation.viewName, typeOfViewNameNew));
-            }
-            
-            foreach(String s in treeOperation.searchNodes.getUsedTypesOfViews())
-            {
-                Assert.AreNotEqual(typeOfViewNameOld, s);
-            }
-        }
-
-        [TestMethod]
-        public void setBrailleTreePropertyTypeOfView_moveScreen3()
-        {
-            /*
-             * Try to move a screen-node (and all children) to an other existing typeOfView (the screen-node exist in this typeOfView AND SOME view-names are EQUAL)
-             */
-            guiFuctions.loadGrantProject(treePath);
-            Assert.AreNotEqual(grantTrees, null);
-            Assert.AreNotEqual(grantTrees.filteredTree, null);
-            Assert.AreNotEqual(grantTrees.brailleTree, null);
-            String nodeId = "B2013A50995FC1DC806B5BB29DEDC18A"; //screen-node
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-
-            //change screenName
-            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", "lv");
-            Assert.IsTrue(result);
-            //del node
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
-            String typeOfViewNameOld = "SymbolView";
-            Assert.AreEqual(node.brailleRepresentation.typeOfView, typeOfViewNameOld);
-            object nodeObject_old = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree).DeepCopy();
-            Object patentObject_old = strategyMgr.getSpecifiedTree().Parent(nodeObject_old);
-            String typeOfViewNameNew = "LayoutView";
-            result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
-            Assert.IsFalse(result);
-            Object subTreeTypeOfViewNew_New = treeOperation.searchNodes.getSubtreeOfTypeOfView(typeOfViewNameNew);
-            Object subtreeTypeOfViewNew_Old = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(subTreeTypeOfViewNew_New).properties.IdGenerated, strategyMgr.getSpecifiedTree().Root(nodeObject_old));
-            if (!strategyMgr.getSpecifiedTree().Equals(subTreeTypeOfViewNew_New, subtreeTypeOfViewNew_Old))
-            {
-                Assert.Fail();
-            }
-            Object nodeObject_new = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            if (!strategyMgr.getSpecifiedTree().Equals(nodeObject_new, nodeObject_old))
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
         public void setBrailleTreePropertyTypeOfView_moveView()
         {
             /*
@@ -1029,30 +967,17 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
-            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree); //controlType = "Screenshot"; the node has siblings
             OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            Object treeCopy = grantTrees.brailleTree.DeepCopy();
             
             Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy();
             Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "SymbolView";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
-            Assert.IsTrue(result);
-            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            Assert.AreNotEqual(nodeCopy, node, "Both nodes shouldn't have the same values.");
-            Object subTreeTypeOfScreenNew = treeOperation.searchNodes.getNode(node.properties.IdGenerated, grantTrees.brailleTree);
-            foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(subTreeTypeOfScreenNew))
-            {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
-                Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
-            }
-            Object parentParentOld_new = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentOld_old).properties.IdGenerated, grantTrees.brailleTree);
-            Object nodeObjectNew = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            Object parentParentNew_New = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObjectNew));
-            Object parentParentNew_Old = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentNew_New).properties.IdGenerated, strategyMgr.getSpecifiedTree().Root(parentParentOld_old));
-            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentOld_old) == 1 + strategyMgr.getSpecifiedTree().Count(parentParentOld_new));
-            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentNew_Old) + 2 ==strategyMgr.getSpecifiedTree().Count(parentParentNew_New)); // 2 -> view + screen
+            Assert.IsFalse(result); // in differend typeOfView-branches coundn't exist screen-branches with the same name
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().Equals(grantTrees.brailleTree, treeCopy));
 
         }
 
@@ -1060,14 +985,14 @@ namespace GRANTManager.BrailleTreeTests
         public void setBrailleTreePropertyTypeOfView_moveView2()
         {
             /*
-             * Move a view-node to an other existing typeOfView (the screen-node do exist in this typeOfView), after rename the screen (and typeOfView) branch is empty -> both must be deleted
+             * Move a view-node to an other existing typeOfView, after rename the screen (and the typeOfView) branch is empty -> both must be deleted
              */
             guiFuctions.loadGrantProject(treePath);
             Assert.AreNotEqual(grantTrees, null);
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF"; // view-node -> controlType = Screenshot
-            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
+            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree); //view-node
             OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
             OSMElement.OSMElement nodeCopy = node.DeepCopy();
 
@@ -1104,74 +1029,6 @@ namespace GRANTManager.BrailleTreeTests
 
         }
 
-        [TestMethod]
-        public void setBrailleTreePropertyTypeOfView_moveView3()
-        {
-            /*
-             * Move a view-node to an other existing typeOfView (the screen-node exist in this typeOfView, but in this screen-branch doesn't exist this view-node)
-             */
-            guiFuctions.loadGrantProject(treePath);
-            Assert.AreNotEqual(grantTrees, null);
-            Assert.AreNotEqual(grantTrees.filteredTree, null);
-            Assert.AreNotEqual(grantTrees.brailleTree, null);
-            String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
-            Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject); // controlTypeFiltered = Screenshot; has no siblings
-            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", "sv"); // rename the 'screenName' --> so the screen with this view exist in the typeOfView (SymbolView) --> but not the view
-            Assert.IsTrue(result);
-            nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy(); // => typeOfView-node
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
-            Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
-            String typeOfViewNameNew = "SymbolView";
-            result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
-            Assert.IsTrue(result);
-            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            Assert.AreNotEqual(nodeCopy, node, "Both nodes shouldn't have the same values.");
-            
-            Object parentParentOld_new = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentOld_old).properties.IdGenerated, grantTrees.brailleTree);
-            Object nodeObjectNew = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            Object parentParentNew_New = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObjectNew));
-            Object parentParentNew_Old = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentNew_New).properties.IdGenerated, strategyMgr.getSpecifiedTree().Root(parentParentOld_old));
-            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentOld_old) == 2 + strategyMgr.getSpecifiedTree().Count(parentParentOld_new)); // 2 --> view + screen
-            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(parentParentNew_Old) + 1 == strategyMgr.getSpecifiedTree().Count(parentParentNew_New)); // 1- view
-            foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(parentParentNew_New))
-            {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
-                Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
-            }
-        }
-
-        [TestMethod]
-        public void setBrailleTreePropertyTypeOfView_viewExists()
-        {
-            /*
-            * Try to move a view to an other existing typeOfView  --> it doesn't work because in the existing typeOfView exist a screen-view-combination with the same name
-            */
-            guiFuctions.loadGrantProject(treePath);
-            Assert.AreNotEqual(grantTrees, null);
-            Assert.AreNotEqual(grantTrees.filteredTree, null);
-            Assert.AreNotEqual(grantTrees.brailleTree, null);
-            String nodeId = "766D7B8425177D724B967DE5A55198F0"; //TODO: (Eltern-)Screen vorher Umbenennen, damit der Fall eintrifft
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
-            Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
-            Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", "sv"); // rename the 'screenName' --> so the screen with this view exist in the typeOfView (SymbolView)
-            Assert.IsTrue(result);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Object treeCopy = grantTrees.brailleTree.DeepCopy();
-            String typeOfViewNameNew = "SymbolView";
-            result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
-            Assert.IsFalse(result);
-            node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            Assert.AreEqual(nodeCopy, node, "Both nodes should have the same values.");
-            if (!strategyMgr.getSpecifiedTree().Equals(grantTrees.brailleTree, treeCopy))
-            {
-                Assert.Fail();
-            }
-        }
         #endregion
 
         [TestMethod]

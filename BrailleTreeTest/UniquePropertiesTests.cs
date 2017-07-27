@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace BrailleTreeTest
 {
     [TestClass]
-    public class UniqueIdsTests
+    public class UniquePropertiesTests
     {
         StrategyManager strategyMgr;
         GeneratedGrantTrees grantTrees;
@@ -79,15 +79,44 @@ namespace BrailleTreeTest
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
             {
                 nodeId = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
-                Assert.AreNotEqual(null, nodeId, "Es hätte eine Id vorhanden sein müssen. Betrachteter Knoten:\n" + node);
+                Assert.AreNotEqual(null, nodeId, "Id is missing! Node:\n" + node);
                 foreach (Object nodeCopy in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.brailleTree))
                 {
                     if(!strategyMgr.getSpecifiedTree().GetData(node).Equals(strategyMgr.getSpecifiedTree().GetData(nodeCopy)) && nodeId.Equals(strategyMgr.getSpecifiedTree().GetData(nodeCopy).properties.IdGenerated))
                     {
-                        Assert.Fail("selbe ID :(\n node1 = " + node + "\nnode2 = " + nodeCopy);
+                        Assert.Fail("same ID :(\n node1 = " + node + "\nnode2 = " + nodeCopy);
                     }
                 }
             }
+        }
+
+        [TestMethod]
+        public void uniqueScreenNames()
+        {
+            initilaizeFilteredTree();
+            strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(pathToTemplate);
+            HashSet<String> screenNames = new HashSet<string>();
+            Debug.WriteLine("\nBraille-Tree:\n"+ strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.brailleTree));
+            foreach(Object typeOfView in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            {
+                foreach(Object screen in strategyMgr.getSpecifiedTree().DirectChildrenNodes(typeOfView))
+                {
+                    bool isUnique = screenNames.Add(strategyMgr.getSpecifiedTree().GetData(screen).brailleRepresentation.screenName);
+                    Assert.IsTrue(isUnique, "The screen '" + strategyMgr.getSpecifiedTree().GetData(screen).brailleRepresentation.screenName + "' isn't unique!");
+                }
+            }            
+        }
+
+        [TestMethod]
+        public void uniqueScreenNames_AddExistingScreenName()
+        {
+            initilaizeFilteredTree();
+            Assert.IsNull(grantTrees.brailleTree);
+            guiFuctions.addFilteredNodeToBrailleTree("screenName_1", "typeOfView_1", "viewName_1");
+            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count( grantTrees.brailleTree)); // 3 => typeOfView-Node + Screen-Node + View-Node
+            String idResult = guiFuctions.addFilteredNodeToBrailleTree("screenName_1", "typeOfView_2", "viewName_2"); // Same screenName
+            Assert.IsNull(idResult);
+            Assert.AreEqual(3, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree)); // the node wasn't added
         }
     }
 }

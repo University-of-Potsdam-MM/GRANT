@@ -382,13 +382,45 @@ namespace GRANTManager.TreeOperations
             return result;
         }
 
+        #region exist: view, screen, typeOfView
+        
+        internal bool existViewInTree(Object subtree, String viewName)
+        {
+            if (viewName == null || viewName.Equals("")) { return false; }
+            foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
+            {
+                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                if (viewName.Equals(data.brailleRepresentation.viewName))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal bool existViewInTree(Object subtree, String viewName, out Object view)
+        {
+            view = null;
+            if (viewName == null || viewName.Equals("")) { return false; }
+            foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
+            {
+                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                if (viewName.Equals(data.brailleRepresentation.viewName))
+                {
+                    view = o;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Determines whether the view is existing in the screen
         /// </summary>
         /// <param name="screenName">name of the screen</param>
         /// <param name="viewName">name of the view</param>
         /// <param name="typeOfView">name of the type of view</param>
-        /// <returns><c>true</c> if the screen existing, otherwise <c>false</c> </returns>
+        /// <returns><c>true</c> if the view existing, otherwise <c>false</c> </returns>
         public bool existViewInScreen(String screenName, String viewName, String typeOfView)
         {
             if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || typeOfView == null || typeOfView.Equals("")) { return false; }
@@ -396,13 +428,13 @@ namespace GRANTManager.TreeOperations
             osmScreen.brailleRepresentation = new BrailleRepresentation();
             osmScreen.brailleRepresentation.screenName = screenName;
             osmScreen.brailleRepresentation.typeOfView = typeOfView;
-            osmScreen.properties= new GeneralProperties();
+            osmScreen.properties = new GeneralProperties();
             osmScreen.properties.IdGenerated = treeOperation.generatedIds.generatedIdBrailleNode(osmScreen);
             //osmScreen.properties = prop;
             if (!strategyMgr.getSpecifiedTree().Contains(grantTrees.brailleTree, osmScreen)) { return false; }
 
             if (!strategyMgr.getSpecifiedTree().HasChild(grantTrees.brailleTree)) { return false; }
-            foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            foreach (Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
                 if (strategyMgr.getSpecifiedTree().GetData(vC).brailleRepresentation.typeOfView.Equals(typeOfView))
                 {
@@ -416,7 +448,7 @@ namespace GRANTManager.TreeOperations
                                 OSMElement.OSMElement childScreenData = strategyMgr.getSpecifiedTree().GetData(childScreen);
                                 if (childScreenData.brailleRepresentation.viewName != null && childScreenData.brailleRepresentation.viewName.Equals(viewName))
                                 {
-                                   return true;
+                                    return true;
                                 }
                             }
                             return false;
@@ -427,6 +459,64 @@ namespace GRANTManager.TreeOperations
             }
             return false;
         }
+
+        /// <summary>
+        /// Determines whether the screen is existing
+        /// </summary>
+        /// <param name="screenName">the name of the screen</param>
+        /// <returns><c>true</c> if the screen existing, otherwise <c>false</c> </returns>
+        internal bool existScreenInTree(String screenName)
+        {
+            object screen;
+            return existScreenInTree(screenName, out screen);
+        }
+
+        internal bool existScreenInTree( String screenName, out Object screen)
+        {
+            screen = null;
+            if (screenName == null || screenName.Equals("")) { return false; }
+            foreach (Object typOfView in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            { //typeOfView-Branch
+                foreach (Object screenBranch in strategyMgr.getSpecifiedTree().DirectChildrenNodes(typOfView))
+                { // screen-Branch
+                    OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(screenBranch);
+                    if (screenName.Equals(data.brailleRepresentation.screenName))
+                    {
+                        screen = screenBranch;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        internal bool existTypeOfViewInTree(String typeOfViewName)
+        {
+            Object typeOfView;
+            return existTypeOfViewInTree(typeOfViewName, out typeOfView);
+        }
+
+        internal bool existTypeOfViewInTree(String typeOfViewName, out Object typeOfView)
+        {
+            typeOfView = null;
+            if (typeOfViewName == null || typeOfViewName.Equals("")) { return false; }
+            foreach (Object o in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
+            {
+                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                if (typeOfViewName.Equals(data.brailleRepresentation.typeOfView))
+                {
+                    typeOfView = o;
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
+
+
+
+        #endregion
 
         /// <summary>
         /// Retuns all connected Braille nodes to a specified (filtered node) id
