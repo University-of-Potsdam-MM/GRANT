@@ -9,13 +9,18 @@ using GRANTManager.Interfaces;
 
 using Prism.Events;
 
-using System.Drawing;
-//using GRANTApplication;
-using OSMElement;
-//using GRANTManager;
-//using GRANTManager.Interfaces;
-//using TemplatesUi;
-using GRANTManager.TreeOperations;
+//using System.Drawing;
+////using GRANTApplication;
+//using OSMElement;
+////using GRANTManager;
+////using GRANTManager.Interfaces;
+////using TemplatesUi;
+//using GRANTManager.TreeOperations;
+
+//todo: test ob hier, in keymouseklasse oder das prism-pakcage istalliert/eingebunden sein muss
+
+//todo: unsubscribe für das uia-event in klasse setzen, da es sonst bei jedem neuen erstellen einer instanz neu subscribed wird, oder reicht das unsubscribe in der Windowsvenetsmonitor.cs
+//Frage: es wird dann mehrfach geworfen, da es bei jdem auslösen des buttonevent ein erneutes subscriben und erstellen des prismevent gibt?
 
 
 namespace StrategyWindows
@@ -24,89 +29,40 @@ namespace StrategyWindows
     {
         #region windowsEventsHandler
 
-        //direktes erstellen des prismeventaggregator oder über methode strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass()
-        public IEventAggregator prismEventAggregator;// = new EventAggregator();
-
+        public IEventAggregator prismEventAggregatorClass;
         public StrategyManager strategyMgr;
-
-        //public EventAggregatorPRISM_GRANTManager ea = new EventAggregatorPRISM_GRANTManager();
 
         public Windows_EventsHandler(StrategyManager manager)
         {
             strategyMgr = manager;
-
-            //prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+            prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
         }
 
-        //todo unklar ob das hier gebraucht wird...
-        //public void setStrategyMgr(StrategyManager manager) { strategyMgr = manager; }
-
+        /// <summary>
+        /// Methode der Eventverarbeitung beim Wurf eines Key-Events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void onKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e != null)
             {
                 Console.WriteLine("KeyUp (Info aus WindowsKlasse)  \t\t {0}\n", e.KeyCode, DateTime.Now.ToString());
-                //return e.KeyValue.ToString();
-                //der wurf soll hier nicht erfolgen???, es erfolgt ein aufruf einer methode in rprimsklasse und die parameter werde von hier mit übergeben, 
-                //in prism klasse erfolgt der publish
-                //diese methode hat als parameter einfach alle infos zu dem event und kann immer dieselbe bezeichnung haben
-                //cea.agg.GetEvent<stringOSMEvent>().Publish("Wurf aus windowskeyEventsMonitorKlasse")
-
-                //prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
-
                 mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), DateTime.Now.ToString());
             }
         }
 
-        //gibt info des eventwurf an prism weiter , es passiert hier das publish    
+        //gibt Infos des Eventwurfs an PRISM weiter, Publish    
         public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string dateTimeNow)
         {
-            Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
+            //Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
 
-            //liefert prismeventaggregator-klasse über interface zurück, nicht die prism_handler-Class, mit dem umbenannten event
-            prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
-
-            //prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
-
-            //Publish
-            //aufruf mittels übergebenem prismeventaggregator
-            //prismEventAggregator.GetEvent<stringOSMEventTest>().Publish(mouseKeyEventType + mouseKeyEventValue);
-
-            ///todo hier ist klasse des event aus prism direkt aus grantmanager, globale klasse, genutzt, ohne instanzbildung
-            ///nächster test subscribe des event dieser klasse in ganz anderem teilprojekt!
-
-            //prismEventAggregator.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent_PRISMHandler_GrantManager>().Publish(mouseKeyEventType + mouseKeyEventValue);
-            prismEventAggregator.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
-
-            //StrategyEventManager_AggregatorPRISM.updateOSMEvent;
-
-
-            //generateOSMmwxamlTest("asd");
-
-            ////////Aufruf direkt von globalem prismeventaggregator
-            //////prismEventAggregator.GetEvent<stringOSMEvent>().Publish(mouseKeyEventType);
-
-            //ea.prismEventAggregatorClass.GetEvent<>().Publish(dateTimeNow);
-            //ea = this.ea;
-            //ea.prismEventAggregatorClass.GetEvent<>().
+            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
         }
-
-        //todo???
-        //problem unsubscribe fehlt in auslösen und anmeldung für das event in uia, 
-        // es wird dann mehrfach geworfen, da es bei jdem auslösen des buttonevent ein erneutes subscriben und erstellen des prismevent gibt?
-
     }
-
-    ////Kreierung des events
-    //public class stringOSMEventTest : PubSubEvent<string> { }
-
-    ////timerEvent
-    //public class stringTimeEvent : PubSubEvent<string> { }
-    
     #endregion
 
-    //todo test ob hier, in keymouseklasse prism-pakcage istalliert sein muss
-    #region eventsHandler
+    #region oldEventsHandler
     //public IEventAggregator prismEventAggregator = new EventAggregator();
 
 

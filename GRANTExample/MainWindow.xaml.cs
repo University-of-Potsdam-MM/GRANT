@@ -103,10 +103,9 @@ namespace GRANTExample
             // Setzen des Eventmanager
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
 
-
+            //abfrage der klassen, debugnamen, des typ für eintragung in strategy.confog - datei für entsprechende erstellung der klasse hier im manager
             //IEvent_PRISMStrategy test = new StrategyEvent_PRISM.Event_PRISM();
             //Type t = test.GetType();
-
 
             strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
 

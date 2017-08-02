@@ -125,14 +125,12 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Gibt den verwendeten eventmanager zurück
+        /// Gibt den verwendeten PRISM_Eventmanager zurück
         /// </summary>
         /// <returns></returns>
         public IEvent_PRISMStrategy getSpecifiedEventManager()
         {
             return eventManagerStrategy;
-            //strategyMgr.getSpecifiedEventManager().
-                //getSpecifiedEventManagerClass();
         }
 
         /// Setzt die gewählte Klasse für die Braille-Ausgabe

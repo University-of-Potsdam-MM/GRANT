@@ -16,7 +16,7 @@ namespace StrategyWindows
         public Windows_EventsMonitor(Windows_EventsHandler eventHandlerWindows)
         {
             this.eventHandlerWindows = eventHandlerWindows;
-            
+
             //todo diese methode in globaler eventklasse aufrufen und festelegen, welche keymouseevents von welcher applikation abgefangen werden sollen!
             subscribeWindowsEvents();
         }
@@ -39,11 +39,11 @@ namespace StrategyWindows
 
         /// ToDo: Events einer ausgewählten App abfangen und anderen Events ignorieren, Dies in eigenes EventMonitor-Projekt auslagern
         /// http://stackoverflow.com/questions/32119658/mouse-key-hook-key-listener-not-firing
-        
+
         /// ToDo: Nutzung des Paket Screna: https://github.com/MathewSachin/Screna
         /// Capturing des Screen/Audio/Video/...
         /// </summary>
-        
+
         private static IKeyboardMouseEvents m_MouseKeyEvents;
 
         //todo
@@ -120,7 +120,7 @@ namespace StrategyWindows
             // if (e.Buttons == MouseButtons.Middle) { e.Handled = true; }
         }
 
-        
+
         //todo hier können alle unsubscribet werden, auch wenn sie gar nicht subscribed wurden???
         public void unsubscribeKeyboardMouse()
         {
@@ -144,70 +144,71 @@ namespace StrategyWindows
 
         #endregion
 
-        //Anmeldung der verschiedenen events, welche MouseKeyHook unterstützt
-        public void Subscribe()
-        {
-            //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
-            //if (m_GlobalHook != null) throw new InvalidOperationException("Can't hook more than once");
+        #region ungenutztBeispiel
+        //    //Anmeldung der verschiedenen events, welche MouseKeyHook unterstützt
+        //    public void Subscribe()
+        //    {
+        //        //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
+        //        //if (m_GlobalHook != null) throw new InvalidOperationException("Can't hook more than once");
 
-            // Note: for the application hook, use the Hook.AppEvents() instead
-            m_MouseKeyEvents = Hook.GlobalEvents();
+        //        // Note: for the application hook, use the Hook.AppEvents() instead
+        //        m_MouseKeyEvents = Hook.GlobalEvents();
 
-            m_MouseKeyEvents.MouseDownExt += GlobalHookMouseDownExt;
-            // keypress wirft kein event bei pfeiltasten
-            //m_GlobalHook.KeyPress += GlobalHookKeyPress; 
-            m_MouseKeyEvents.KeyUp += OnKeyUp;
+        //        m_MouseKeyEvents.MouseDownExt += GlobalHookMouseDownExt;
+        //        // keypress wirft kein event bei pfeiltasten
+        //        //m_GlobalHook.KeyPress += GlobalHookKeyPress; 
+        //        m_MouseKeyEvents.KeyUp += OnKeyUp;
 
-            Console.WriteLine("Subscribe des Hook");
-        }
+        //        Console.WriteLine("Subscribe des Hook");
+        //    }
 
-        private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
-        {
-            Console.WriteLine("KeyPress: \t{0}", e.KeyChar.ToString());
-        }
+        //    private void GlobalHookKeyPress(object sender, KeyPressEventArgs e)
+        //    {
+        //        Console.WriteLine("KeyPress: \t{0}", e.KeyChar.ToString());
+        //    }
 
-        //private void OnKeyDown(object sender, KeyPressEventArgs e)
-        //{
-        //    Console.WriteLine("KeyPress: \t{0}", e.KeyChar);
-        //}
+        //    //private void OnKeyDown(object sender, KeyPressEventArgs e)
+        //    //{
+        //    //    Console.WriteLine("KeyPress: \t{0}", e.KeyChar);
+        //    //}
 
-        private void OnKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            Console.WriteLine("KeyUp_WEM  \t\t {0}\n", e.KeyValue);
-            Console.WriteLine("KeyUp_WEM  \t\t {0}\n", e.KeyCode);
-            //return e.KeyValue.ToString();
-        }
+        //    private void OnKeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        //    {
+        //        Console.WriteLine("KeyUp_WEM  \t\t {0}\n", e.KeyValue);
+        //        Console.WriteLine("KeyUp_WEM  \t\t {0}\n", e.KeyCode);
+        //        //return e.KeyValue.ToString();
+        //    }
 
-        //todo wie event nach deren wurf behandeln?
-        //für nutzung in grantexample eine globale variable festlegen, welche info über das geworfene event enthält
-        // derzeit in grantmanager:         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        public string keyValue(string key)
-        {
-            //OnKeyUp
-            return key;
-        }
+        //    //todo wie event nach deren wurf behandeln?
+        //    //für nutzung in grantexample eine globale variable festlegen, welche info über das geworfene event enthält
+        //    // derzeit in grantmanager:         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        //    public string keyValue(string key)
+        //    {
+        //        //OnKeyUp
+        //        return key;
+        //    }
 
-        private void GlobalHookMouseDownExt(object sender, MouseEventExtArgs e)
-        {
-            Console.WriteLine("MouseDown: \t{0}; \t System Timestamp: \t{1}", e.Button, e.Timestamp);
+        //    private void GlobalHookMouseDownExt(object sender, MouseEventExtArgs e)
+        //    {
+        //        Console.WriteLine("MouseDown: \t{0}; \t System Timestamp: \t{1}", e.Button, e.Timestamp);
 
-            // uncommenting the following line will suppress the middle mouse button click
-            // if (e.Buttons == MouseButtons.Middle) { e.Handled = true; }
-        }
+        //        // uncommenting the following line will suppress the middle mouse button click
+        //        // if (e.Buttons == MouseButtons.Middle) { e.Handled = true; }
+        //    }
 
-        public void Unsubscribe()
-        {
-            //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
-            if (m_MouseKeyEvents == null) return;
+        //    public void Unsubscribe()
+        //    {
+        //        //from: http://stackoverflow.com/questions/9957544/callbackoncollecteddelegate-in-globalkeyboardhook-was-detected
+        //        if (m_MouseKeyEvents == null) return;
 
-            m_MouseKeyEvents.MouseDownExt -= GlobalHookMouseDownExt;
-            //m_GlobalHook.KeyPress -= GlobalHookKeyPress;
-            m_MouseKeyEvents.KeyUp -= OnKeyUp;
+        //        m_MouseKeyEvents.MouseDownExt -= GlobalHookMouseDownExt;
+        //        //m_GlobalHook.KeyPress -= GlobalHookKeyPress;
+        //        m_MouseKeyEvents.KeyUp -= OnKeyUp;
 
-            //It is recommened to dispose it
-            m_MouseKeyEvents.Dispose();
-        }
+        //        //It is recommened to dispose it
+        //        m_MouseKeyEvents.Dispose();
+        //    }
 
+        #endregion
     }
-
-}
+    }
