@@ -54,7 +54,7 @@ namespace GRANTExample
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
         GuiFunctions guiFuctions;
-        
+
         ///// <summary>
         ///// Initialisierung der Eventverfolgung des NuGet-Package MousekeyHook
         ///// diese muss in diesem Projekt und in StrategyWindows eingebunden sein
@@ -69,17 +69,19 @@ namespace GRANTExample
         //    //me.Subscribe();
         //}
 
-//todo inti der prismeventaggreagtorclass in grantapplication einbauen
-        public IEventAggregator prismEventAggregatorClass = new EventAggregator();
+        //todo inti der prismeventaggreagtorclass in grantapplication einbauen
+        public IEventAggregator prismEventAggregatorClass;// = new EventAggregator();
 
         public void eventTest()
         {
             //erhalt des prismaggregator über interface
             prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
 
-            prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
+            //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent_PRISMHandler_GrantManager>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
+            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
 
             //Console.WriteLine("test winevent verarbeitet in mainwindowxaml_");
+            
 
         }
 
@@ -100,6 +102,12 @@ namespace GRANTExample
 
             // Setzen des Eventmanager
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
+
+
+            //IEvent_PRISMStrategy test = new StrategyEvent_PRISM.Event_PRISM();
+            //Type t = test.GetType();
+
+
             strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
 
             #region setzen der neuen (Juni 2017) Event Interfaces

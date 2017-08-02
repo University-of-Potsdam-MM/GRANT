@@ -113,6 +113,7 @@ namespace StrategyWindows
 
         private void onMouseUpExt(object sender, MouseEventExtArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("MouseUp: \t{0}; \t System Timestamp: \t{1}", e.Button, e.Timestamp);
             Console.WriteLine("MouseUp: \t{0}; \t System Timestamp: \t{1}", e.Button, e.Timestamp);
 
             // uncommenting the following line will suppress the middle mouse button click

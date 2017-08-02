@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyUIA", "StrategyUIA\StrategyUIA.csproj", "{F181E453-0EBE-4775-9CC1-1CE26CDC4ED2}"
 EndProject
@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRANTManager", "GRANTManage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatesUi", "TemplatesUi\TemplatesUi.csproj", "{F1C8AABE-05D8-45CD-8A52-B3B894E58A5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyEventManager_AggregatorPRISM", "StrategyEventManager_AggregatorPRISM\StrategyEventManager_AggregatorPRISM.csproj", "{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyEvent_PRISM", "StrategyEventManager_AggregatorPRISM\StrategyEvent_PRISM.csproj", "{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilteredTreeTest", "FilteredTreeTest\FilteredTreeTest.csproj", "{B9F72583-F444-496A-809E-1BBD2FB12C6C}"
 EndProject
