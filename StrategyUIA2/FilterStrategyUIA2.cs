@@ -77,7 +77,6 @@ namespace StrategyUIA2
         /// <returns>the filtered (sub-)tree</returns>
         public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
         {
-            Debug.WriteLine("\n in UIA: " + osmElementOfFirstNodeOfSubtree.ToString());
             AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
             if (au != null)
             {

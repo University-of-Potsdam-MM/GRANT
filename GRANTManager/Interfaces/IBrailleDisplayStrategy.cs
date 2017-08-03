@@ -86,6 +86,12 @@ namespace GRANTManager.Interfaces
         String getVisibleScreen();
 
         /// <summary>
+        /// Returns the Id of the visible Screen
+        /// </summary>
+        /// <returns>id of the visible screen or <c>null</c></returns>
+        String getVisibleScreenId();
+
+        /// <summary>
         /// moves a (group of) view(s) horizontal
         /// </summary>
         /// <param name="viewNode">the name of the view</param>

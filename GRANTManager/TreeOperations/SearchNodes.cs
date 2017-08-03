@@ -22,6 +22,8 @@ namespace GRANTManager.TreeOperations
             this.treeOperation = treeOperation;
         }
 
+        #region search by giving properties
+
         /// <summary>
         /// depending on the given properties, all nodes with these properties are searched (depth-first search). 
         /// Only properties that have been specified are taken into account.
@@ -147,6 +149,9 @@ namespace GRANTManager.TreeOperations
             }
             return trimmedList;
         }
+        #endregion
+
+        #region search by id
 
         /// <summary>
         /// searches for node with the given id in a tree object
@@ -226,6 +231,44 @@ namespace GRANTManager.TreeOperations
             return null;
         }
 
+        #endregion
+
+        #region connected nodes (Filtered tree + braille tree)
+
+        /// <summary>
+        /// Retuns all connected Braille nodes to a specified (filtered node) id
+        /// </summary>
+        /// <param name="idGeneratedFilteredNode">id of the node in the filtered tree</param>
+        /// <returns>list with all connected braille nodes or <c>null</c></returns>
+        public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
+        {
+            List<OsmTreeConnectorTuple<String, String>> osmRelationships = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
+            if (osmRelationships != null)
+            {
+                List<String> result = new List<string>();
+                foreach (OsmTreeConnectorTuple<String, String> r in osmRelationships)
+                {
+                    result.Add(r.BrailleTree);
+                }
+                return result;
+            }
+            else { return null; }
+        }
+
+        /// <summary>
+        /// Retuns the connected filtered node to a specified (braille node) id
+        /// </summary>
+        /// <param name="idGeneratedBrailleNode">id of the node in the  braille tree</param>
+        /// <returns>id of the connected filtered tree node or <c>null</c></returns>
+        public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
+        {
+            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
+            if (osmRelationship != null) { return osmRelationship.FilteredTree; } else { return null; }
+        }
+        #endregion
+
+        #region subtree
+
         /// <summary>
         /// Gives a subtree of a specified screen
         /// </summary>
@@ -234,7 +277,6 @@ namespace GRANTManager.TreeOperations
         public Object getSubtreeOfScreen(String screenName)
         {
             if (screenName == null || screenName.Equals("")) { return null; }
-            Object tree = strategyMgr.getSpecifiedTree().Copy(grantTrees.brailleTree);
             if (grantTrees.brailleTree == null ) { return null; }
 
             foreach(Object vC in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
@@ -272,6 +314,31 @@ namespace GRANTManager.TreeOperations
             return null;
         }
 
+        private Object getSubtreeOfView(String viewName, Object subtree)
+        {
+            //TODO. hier sollten auch die direkten Kinder von subtree reichen durchzugehen
+            if (subtree == null) { return null; }
+            if (strategyMgr.getSpecifiedTree().HasChild(subtree))
+            {
+                subtree = strategyMgr.getSpecifiedTree().Child(subtree);
+                if (strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.viewName.Equals(viewName))
+                {
+                    return subtree;
+                }
+            }
+            else { return null; }
+            while (strategyMgr.getSpecifiedTree().HasNext(subtree))
+            {
+                subtree = strategyMgr.getSpecifiedTree().Next(subtree);
+                if (strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.viewName.Equals(viewName))
+                {
+                    return subtree;
+                }
+            }
+            return null;
+        }
+
+        #endregion
 
         /// <summary>
         /// Gives the names of the existing screens
@@ -337,30 +404,6 @@ namespace GRANTManager.TreeOperations
                 }
             }
             return screenTree;
-        }
-
-        private Object getSubtreeOfView(String viewName, Object subtree)
-        {
-            //TODO. hier sollten auch die direkten Kinder von subtree reichen durchzugehen
-            if (subtree == null) { return null; }
-            if (strategyMgr.getSpecifiedTree().HasChild(subtree))
-            {
-                subtree = strategyMgr.getSpecifiedTree().Child(subtree);
-                if (strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.viewName.Equals(viewName))
-                {
-                    return subtree;
-                }
-            }
-            else { return null; }
-            while (strategyMgr.getSpecifiedTree().HasNext(subtree))
-            {
-                subtree = strategyMgr.getSpecifiedTree().Next(subtree);
-                if (strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.viewName.Equals(viewName))
-                {
-                    return subtree;
-                }
-            }
-            return null;
         }
 
         /// <summary>
@@ -517,37 +560,6 @@ namespace GRANTManager.TreeOperations
 
 
         #endregion
-
-        /// <summary>
-        /// Retuns all connected Braille nodes to a specified (filtered node) id
-        /// </summary>
-        /// <param name="idGeneratedFilteredNode">id of the node in the filtered tree</param>
-        /// <returns>list with all connected braille nodes or <c>null</c></returns>
-        public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
-        {
-            List<OsmTreeConnectorTuple<String, String>> osmRelationships = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
-            if (osmRelationships != null)
-            {
-                List<String> result = new List<string>();
-                foreach(OsmTreeConnectorTuple<String, String> r in osmRelationships)
-                {
-                    result.Add(r.BrailleTree);
-                }
-                return result;
-            }
-            else { return null; }
-        }
-
-        /// <summary>
-        /// Retuns the connected filtered node to a specified (braille node) id
-        /// </summary>
-        /// <param name="idGeneratedBrailleNode">id of the node in the  braille tree</param>
-        /// <returns>id of the connected filtered tree node or <c>null</c></returns>
-        public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
-        {
-            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
-            if(osmRelationship != null) { return osmRelationship.FilteredTree; }else { return null; }
-        }
 
         public static Boolean existPropertyName(String propertyName)
         {

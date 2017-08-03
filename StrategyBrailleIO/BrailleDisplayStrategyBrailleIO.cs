@@ -1144,6 +1144,24 @@ namespace StrategyBrailleIO
         }
 
         /// <summary>
+        /// Returns the Id of the visible Screen
+        /// </summary>
+        /// <returns>id of the visible screen or <c>null</c></returns>
+        public String getVisibleScreenId()
+        {
+            String screenName = getVisibleScreen();
+            if(screenName != null)
+            {
+                Object visibleScreen = treeOperation.searchNodes.getSubtreeOfScreen(screenName);
+                if(visibleScreen != null)
+                {
+                    return strategyMgr.getSpecifiedTree().GetData(visibleScreen).properties.IdGenerated;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// moves a (group of) view(s) horizontal
         /// </summary>
         /// <param name="viewNode">the name of the view</param>
