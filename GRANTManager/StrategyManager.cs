@@ -22,7 +22,7 @@ namespace GRANTManager
         private IEventManager specifiedEventManager2;
         private IEventProcessor specifiedEventProcessor;
 
-        private IEventManagerStrategy eventManager;
+        private IEvent_PRISMStrategy eventManagerStrategy;
 
         private IGenaralUiTemplate generalUiTemplate;
 
@@ -107,8 +107,8 @@ namespace GRANTManager
             try
             {
                 Type type = Type.GetType(eventManagerClassName);
-                eventManager = (IEventManagerStrategy)Activator.CreateInstance(type);
-                eventManager.setStrategyMgr(this); //damit beim Manager-Wechsel nicht der Setter vergessen wird
+                eventManagerStrategy = (IEvent_PRISMStrategy)Activator.CreateInstance(type);
+                eventManagerStrategy.setStrategyMgr(this); //damit beim Manager-Wechsel nicht der Setter vergessen wird
             }
             catch (InvalidCastException ic)
             {
@@ -125,12 +125,12 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Gibt den verwendeten eventmanager zurück
+        /// Gibt den verwendeten PRISM_Eventmanager zurück
         /// </summary>
         /// <returns></returns>
-        public IEventManagerStrategy getSpecifiedEventManager()
+        public IEvent_PRISMStrategy getSpecifiedEventManager()
         {
-            return eventManager;
+            return eventManagerStrategy;
         }
 
         /// Setzt die gewählte Klasse für die Braille-Ausgabe

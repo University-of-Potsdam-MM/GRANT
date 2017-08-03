@@ -7,8 +7,8 @@
     <ProjectGuid>{3B5C2D5A-23A6-4C0C-9F06-D7EF60766C3C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StrategyEventManager_AggregatorPRISM</RootNamespace>
-    <AssemblyName>StrategyEventManager_AggregatorPRISM</AssemblyName>
+    <RootNamespace>StrategyEvent_PRISM</RootNamespace>
+    <AssemblyName>StrategyEvent_PRISM</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,18 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventAggregatorPRISM.cs" />
-    <Compile Include="EventAggregatorPRISMSubscribe.cs" />
+    <Compile Include="Event_PRISM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GRANTManager\GRANTManager.csproj">
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>GRANTManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StrategyWindows\StrategyWindows.csproj">
-      <Project>{8635b65c-13f9-4a97-88f6-e0507bd73d8d}</Project>
-      <Name>StrategyWindows</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

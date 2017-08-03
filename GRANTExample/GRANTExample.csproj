@@ -164,9 +164,9 @@
       <Project>{7765dc51-ff98-42eb-868b-582a0c2ba0aa}</Project>
       <Name>StrategyBrailleIO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\StrategyEventManager_AggregatorPRISM\StrategyEventManager_AggregatorPRISM.csproj">
+    <ProjectReference Include="..\StrategyEventManager_AggregatorPRISM\StrategyEvent_PRISM.csproj">
       <Project>{3b5c2d5a-23a6-4c0c-9f06-d7ef60766c3c}</Project>
-      <Name>StrategyEventManager_AggregatorPRISM</Name>
+      <Name>StrategyEvent_PRISM</Name>
     </ProjectReference>
     <ProjectReference Include="..\StrategyEvent\StrategyEvent.csproj">
       <Project>{9af4ee26-5e2d-4bcc-b4e3-a55f8937a783}</Project>

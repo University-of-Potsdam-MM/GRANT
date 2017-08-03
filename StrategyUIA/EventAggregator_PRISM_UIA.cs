@@ -19,27 +19,47 @@ namespace StrategyUIA
 
     #region eventAggregator
 
-    class EventAggregator_PRISM_UIA
+    public class EventAggregator_PRISM_UIA
 
     //todo wie kriege ich das hier öffentlich? ich muss prinzipien/konzepte der klassen/objektorientierung verstehen/wissen
 
     {
-            //readonly IEventAggregator agg = new EventAggregator();
-            public IEventAggregator agg = new EventAggregator();
 
-            //todo was bringt token für vorteile?
+        //direktes erstellen des prismeventaggregator oder über methode strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass()
+        public IEventAggregator prismEventAggregatorClass = new EventAggregator();
 
-            //public SubscriptionToken objSubToken;
-            //public SubscriptionToken stringSubToken;
+        //public StrategyManager strategyMgr;
 
-            //nur einmaliges subscriben erlauben von einer klasse aus, nicht mehrmalig für dasselbe event anmelden!
-            public void aggSubscribe()
+        ////public EventAggregatorPRISM_GRANTManager ea = new EventAggregatorPRISM_GRANTManager();
+
+        //public EventAggregator_PRISM_UIA(StrategyManager manager)
+        //{
+        //    strategyMgr = manager;
+        //    prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+
+        //    //prismEventAggregator = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+        //}
+
+        //readonly IEventAggregator agg = new EventAggregator();
+        //public IEventAggregator prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+        //new EventAggregator();
+
+        //todo prism-klasse aus manager holen, nicht selbst prism-klasse erstellen!
+        //prismEventAggregatorClass = strategyMgr.getSpecifiedEventManager().getSpecifiedEventManagerClass();
+
+        //todo was bringt token für vorteile?
+
+        //public SubscriptionToken objSubToken;
+        //public SubscriptionToken stringSubToken;
+
+        //nur einmaliges subscriben erlauben von einer klasse aus, nicht mehrmalig für dasselbe event anmelden!
+        public void aggSubscribe()
             {
-                agg.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM);
+                prismEventAggregatorClass.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM);
                 ////agg.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM_2);
 
 
-                agg.GetEvent<stringOSMEvent>().Subscribe(generateOSM);
+                prismEventAggregatorClass.GetEvent<stringOSMEvent>().Subscribe(generateOSM);
                 Console.WriteLine("Für Button Event in Prism subscribed");
 
                 //agg.GetEvent<stringOSMEvent>().Subscribe(generateOSM, ThreadOption.UIThread);
@@ -64,7 +84,7 @@ namespace StrategyUIA
                 //public class UIAEventMonitor
 
                 //dazu verstehen, wie methoden in anderen klassen aufgerfuen werden und wie dies in grant läuft! mit strategy
-                agg.GetEvent<stringOSMEvent>().Publish("Wurf aus EventAggregator_PRISM.cs");
+                prismEventAggregatorClass.GetEvent<stringOSMEvent>().Publish("Wurf aus EventAggregator_PRISM.cs");
 
                 Console.WriteLine("event gepublished in EventAggregator_Prism ");
             }
@@ -76,7 +96,7 @@ namespace StrategyUIA
             public void Dispose()
             {
                 //unsub
-                agg.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM);
+                prismEventAggregatorClass.GetEvent<stringOSMEvent>().Unsubscribe(generateOSM);
             }
         }
 

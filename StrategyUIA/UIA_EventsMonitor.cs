@@ -93,7 +93,11 @@ namespace StrategyUIA
         //Angabe in welcher Ebene des Baumes gesucht werden soll, bzw. hier von welchem automationelement in der GUI aus weitere elementereignisse betrachtete werden sollen
         TreeScope treeScope = TreeScope.Element;
 
-        EventAggregator_PRISM_UIA cea = new EventAggregator_PRISM_UIA();
+        //public StrategyManager strategyMgr;
+
+        //public EventAggregator_PRISM_UIA cea = new EventAggregator_PRISM_UIA(strategyMgr);
+
+        public EventAggregator_PRISM_UIA cea = new EventAggregator_PRISM_UIA();
 
         /// <summary>
         /// Register an event handler for InvokedEvent on the specified element.
