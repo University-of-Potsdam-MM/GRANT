@@ -931,11 +931,26 @@ namespace GRANTManager.TreeOperations
             String mainFilterstrategy = treeOperation.searchNodes.getMainFilterstrategyOfTree();
             String mainFS_userName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeLoaded)).properties.grantFilterStrategy;
             List<String> fsChildren = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeLoaded)).properties.grantFilterStrategiesChildren;
-            filterChild(treeLoaded, ref treeNew, mainFS_userName, fsChildren);
+            filterChild(treeLoaded,  mainFS_userName, fsChildren);
             
         }
 
-        protected void filterChild(Object subtreeOld, ref Object treeNew, String fs_main, List<String> fs_children)
+        public void updateFilteredSubtree(String idGenerated)
+        {
+            Object treeLoaded = grantTrees.filteredTree.DeepCopy();
+            Object treeNew = strategyMgr.getSpecifiedFilter().filtering(idGenerated, TreeScopeEnum.Subtree);
+            /* treeOperation.generatedIds.generatedIdsOfFilteredTree(ref treeNew);
+             grantTrees.filteredTree = treeNew;*/
+            changeSubtreeOfFilteredTree(treeNew, idGenerated);
+
+            if (treeNew.Equals(strategyMgr.getSpecifiedTree().NewTree()) || !strategyMgr.getSpecifiedTree().HasChild(treeNew)) { throw new Exception("The application cann't be filtered."); }
+            String mainFilterstrategy = treeOperation.searchNodes.getMainFilterstrategyOfTree();
+            String mainFS_userName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeLoaded)).properties.grantFilterStrategy;
+            List<String> fsChildren = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeLoaded)).properties.grantFilterStrategiesChildren;
+            filterChild(treeLoaded,  mainFS_userName, fsChildren);
+        }
+
+        protected void filterChild(Object subtreeOld, String fs_main, List<String> fs_children)
         {
             if (fs_children == null || fs_children.Count == 0 || (fs_children.Count == 1 && fs_children[0].Equals(fs_main)))
             {
@@ -956,7 +971,7 @@ namespace GRANTManager.TreeOperations
                         /*      subtree = treeOperation.generatedIds.generatedIdsOfFilteredSubtree(subtree);
                               strategyMgr.getSpecifiedTree().ReplaceSubtree(ref treeNew, subtree);*/
                         changeSubtreeOfFilteredTree(subtree, osmNode.properties.IdGenerated);
-                        filterChild(node, ref treeNew, osmNode.properties.grantFilterStrategy, osmNode.properties.grantFilterStrategiesChildren);
+                        filterChild(node, osmNode.properties.grantFilterStrategy, osmNode.properties.grantFilterStrategiesChildren);
                         changeFilter(fs_main);
                     }
                     else
@@ -964,7 +979,7 @@ namespace GRANTManager.TreeOperations
                        // if (!(osmNode.properties.grantFilterStrategiesChildren == null || osmNode.properties.grantFilterStrategiesChildren.Count == 0 || (osmNode.properties.grantFilterStrategiesChildren.Count == 1 && osmNode.properties.grantFilterStrategiesChildren[0].Equals(fs_main))))
                         {
                             // schleife Kinder prüfen
-                            filterChild(node, ref treeNew, fs_main, osmNode.properties.grantFilterStrategiesChildren);
+                            filterChild(node, fs_main, osmNode.properties.grantFilterStrategiesChildren);
                         }
                     }
                 }
@@ -1063,9 +1078,10 @@ namespace GRANTManager.TreeOperations
                         {
                             Object subtreeFiltered = treeOperation.searchNodes.getNode(connectedIdFilteredTree, grantTrees.filteredTree);
                             if (subtreeFiltered == null) { return; }
-                            String id = strategyMgr.getSpecifiedTree().GetData(subtreeFiltered).properties.IdGenerated;
-                            subtreeFiltered = strategyMgr.getSpecifiedFilter().filtering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
-                            String idParent = changeSubtreeOfFilteredTree(subtreeFiltered, id);
+                        /*    String id = strategyMgr.getSpecifiedTree().GetData(subtreeFiltered).properties.IdGenerated;
+                             subtreeFiltered = strategyMgr.getSpecifiedFilter().filtering(strategyMgr.getSpecifiedTree().GetData(subtreeFiltered), TreeScopeEnum.Subtree);
+                             String idParent = changeSubtreeOfFilteredTree(subtreeFiltered, id); */
+                            updateFilteredSubtree(connectedIdFilteredTree);
                             subtreeFiltered = treeOperation.searchNodes.getNode(connectedIdFilteredTree, grantTrees.filteredTree);
                             if (strategyMgr.getSpecifiedTree().HasParent(node))
                             {
