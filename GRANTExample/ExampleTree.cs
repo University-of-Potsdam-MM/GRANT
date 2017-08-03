@@ -128,6 +128,10 @@ namespace GRANTExample
             {
                 resultString = resultString + "valueFiltered: " + properties.valueFiltered + "\n";
             }
+            if(properties.grantFilterStrategiesChildren != null)
+            {
+                resultString = resultString + "grantFilterStrategiesChildren" + String.Join(" : ", properties.grantFilterStrategiesChildren.Select(p => p.ToString()).ToArray());
+            }
             return resultString;
         }
 
@@ -268,8 +272,7 @@ namespace GRANTExample
         public void changeFilter()
         {
             Type currentFilter = strategyMgr.getSpecifiedFilter().GetType();
-            Settings settings = new Settings();
-            List<Strategy> possibleFilter = settings.getPossibleFilters();
+            List<Strategy> possibleFilter = Settings.getPossibleFilters();
             if (currentFilter == Type.GetType(possibleFilter[0].className))
             {
                 strategyMgr.setSpecifiedFilter(possibleFilter[2].className);

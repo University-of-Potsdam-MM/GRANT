@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 
 namespace OSMElement
 {
+    [XmlInclude(typeof(List<String>))]
     [Serializable]
     public class GeneralProperties
     {
@@ -315,6 +316,11 @@ namespace OSMElement
         /// The name of the filter strategy. It is only set if another is selected than for the root node.
         /// </summary>
         public String grantFilterStrategy { get; set; }
+
+        /// <summary>
+        /// A List of all used filter strategies of the children nodes
+        /// </summary>
+        public List<String> grantFilterStrategiesChildren { get; set; }
 
         /// <summary>
         /// the name of the process.

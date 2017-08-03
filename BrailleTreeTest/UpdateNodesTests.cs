@@ -36,7 +36,7 @@ namespace GRANTManager.BrailleTreeTests
             List<Strategy> str = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
-            strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
+            strategyMgr.setSpecifiedFilter(Settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
             strategyMgr.getSpecifiedBrailleDisplay().setTreeOperation(treeOperation);

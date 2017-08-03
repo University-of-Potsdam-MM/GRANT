@@ -160,5 +160,12 @@ namespace GRANTManager.Interfaces
         bool Equals(object node1, object node2);
 
         bool moveSubtree(Object nodeToMove, Object parentNew);
+
+        /// <summary>
+        /// Replace and "old" subtree withe a new one
+        /// </summary>
+        /// <param name="subtreeOld">the old subtree</param>
+        /// <param name="subtreeNew">the new subtree</param>
+        void ReplaceSubtree(ref object subtreeOld, object subtreeNew);
     }
 }

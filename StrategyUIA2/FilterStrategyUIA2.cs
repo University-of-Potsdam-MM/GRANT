@@ -22,9 +22,6 @@ using GRANTManager.TreeOperations;
 
 namespace StrategyUIA2
 {
-    /// <summary>
-    /// Das ist eine Kopie von StrategyUIA.FilterStrategyUIA um das Filtern von Knoten mit unterschiedlichen Filtern zu testen
-    /// </summary>
     public class FilterStrategyUIA2 : IFilterStrategy
     {
         private StrategyManager strategyMgr;
@@ -35,6 +32,65 @@ namespace StrategyUIA2
         public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees) { this.grantTrees = grantTrees; }
 
         public StrategyManager getStrategyMgr() { return strategyMgr; }
+
+        #region filtering
+        /// <summary>
+        /// filters an application depending on a given hwnd
+        /// </summary>
+        /// <param name="hwnd">the process handle of applicatio/element</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1)
+        {
+            AutomationElement mainElement = deliverAutomationElementFromHWND(hwnd);
+            return filtering(mainElement, treeScope, depth);
+        }
+
+        /// <summary>
+        /// filters an application depending on a given point (<paramref name="pointX"/>, <paramref name="pointY"/>) and the choosen <paramref name="treeScope"/>
+        /// </summary>
+        /// <param name="pointX">x coordinate of the element to filtering</param>
+        /// <param name="pointY">y coordinate of the element to filtering</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth = -1)
+        {
+            AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
+            if (mainElement == null)
+            {
+                throw new ArgumentException("The AutomationElement is 'null'!");
+            }
+            Object tree = getStrategyMgr().getSpecifiedTree().NewTree();
+
+        //    UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
+         //   uiaEvents.eventsUIA_withAutomationElement(mainElement);
+            return filtering(mainElement, treeScope, depth);
+        }
+
+        /// <summary>
+        /// filters an application depending on a given OSM element
+        /// </summary>
+        /// <param name="osmElementOfFirstNodeOfSubtree">osm element of the to filtered application</param>
+        /// <param name="treeScope">kind of filtering</param>
+        /// <returns>the filtered (sub-)tree</returns>
+        public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
+        {
+            Debug.WriteLine("\n in UIA: " + osmElementOfFirstNodeOfSubtree.ToString());
+            AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
+            if (au != null)
+            {
+                return filtering(au, treeScope, -1);
+            }
+            return null;
+        }
+
+        public Object filtering(String generatedNodeId, TreeScopeEnum treeScope)
+        {
+            if (generatedNodeId == null) { return null; }
+            return filtering(treeOperation.searchNodes.getFilteredTreeOsmElementById(generatedNodeId), treeScope);
+        }
 
         /// <summary>
         /// filters an application depending on a given AutomationElement;
@@ -79,47 +135,9 @@ namespace StrategyUIA2
                     // note by the first node the filter strategy and ModulName
                     setSpecialPropertiesOfFirstNode(ref tree);
                     treeOperation.generatedIds.generatedIdsOfFilteredTree(ref tree);
-                    List<FilterstrategyOfNode<String, String, String>> filterstrategies = grantTrees.filterstrategiesOfNodes;
-                    FilterstrategiesOfTree.addFilterstrategyOfNode(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated, this.GetType(), ref filterstrategies);
-                    grantTrees.filterstrategiesOfNodes = filterstrategies;
                     break;
             }
             return tree;
-        }
-
-        /// <summary>
-        /// filters an application depending on a given hwnd
-        /// </summary>
-        /// <param name="hwnd">the process handle of applicatio/element</param>
-        /// <param name="treeScope">kind of filtering</param>
-        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
-        /// <returns>the filtered (sub-)tree</returns>
-        public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope = TreeScopeEnum.Application, int depth = -1)
-        {
-            AutomationElement mainElement = deliverAutomationElementFromHWND(hwnd);
-            return filtering(mainElement, treeScope, depth);
-        }
-
-        /// <summary>
-        /// filters an application depending on a given point (<paramref name="pointX"/>, <paramref name="pointY"/>) and the choosen <paramref name="treeScope"/>
-        /// </summary>
-        /// <param name="pointX">x coordinate of the element to filtering</param>
-        /// <param name="pointY">y coordinate of the element to filtering</param>
-        /// <param name="treeScope">kind of filtering</param>
-        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
-        /// <returns>the filtered (sub-)tree</returns>
-        public Object filtering(int pointX, int pointY, TreeScopeEnum treeScope, int depth = -1)
-        {
-            AutomationElement mainElement = deliverAutomationElementFromCursor(pointX, pointY);
-            if (mainElement == null)
-            {
-                throw new ArgumentException("The AutomationElement is 'null'!");
-            }
-            Object tree = getStrategyMgr().getSpecifiedTree().NewTree();
-
-           // UIAEventsMonitor uiaEvents = new UIAEventsMonitor();
-           // uiaEvents.eventsUIA_withAutomationElement(mainElement);
-            return filtering(mainElement, treeScope, depth);
         }
 
         /// <summary>
@@ -135,6 +153,7 @@ namespace StrategyUIA2
 
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mainAppAutomationelement);
+
             Object top = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
             filterChildren(mainAppAutomationelement, -1, ref top);
         }
@@ -148,6 +167,7 @@ namespace StrategyUIA2
         {
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(element);
+
             Object treeTop = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
 
             filterChildren(element, -1, ref treeTop);
@@ -209,6 +229,9 @@ namespace StrategyUIA2
                 filterParents(elementParent, ref tree);
             }
         }
+        #endregion
+
+        #region properties
 
         /// <summary>
         /// todo
@@ -220,6 +243,9 @@ namespace StrategyUIA2
         private GeneralProperties setProperties(AutomationElement automationElement)
         {
             GeneralProperties elementP = new GeneralProperties();
+            elementP.grantFilterStrategy = Settings.filterStrategyTypeToUserName(this.GetType());
+            /*     elementP.grantFilterStrategiesChildren = new List<string>();
+                 elementP.grantFilterStrategiesChildren.Add(elementP.grantFilterStrategy);*/
             try
             {
                 elementP.acceleratorKeyFiltered = automationElement.Current.AcceleratorKey;
@@ -478,16 +504,88 @@ namespace StrategyUIA2
         {
             if (strategyMgr.getSpecifiedTree().HasChild(tree))
             {
-                Settings settings = new Settings();
+                //  Settings settings = new Settings();
                 OSMElement.OSMElement osm = new OSMElement.OSMElement();
                 osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).brailleRepresentation;
                 osm.properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
-                osm.properties.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
+                //   osm.properties.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
                 osm.properties.processName = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication(osm.properties.processIdFiltered);
                 osm.properties.appPath = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByMainWindowTitle(osm.properties.processIdFiltered);
                 strategyMgr.getSpecifiedTree().SetData(strategyMgr.getSpecifiedTree().Child(tree), osm);
             }
         }
+
+
+        /// <summary>
+        /// Creats the condition to search an AutomationElemente depending on <see cref="GeneralProperties"/> object
+        /// </summary>
+        /// <param name="properties">the properties to search</param>
+        /// <returns>a Condition object</returns>
+        private Condition setPropertiesCondition(GeneralProperties properties)
+        {
+            Condition resultCondition;
+            #region Readable from all
+            resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
+            // ... ?
+            #endregion
+            if (properties.localizedControlTypeFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.localizedControlTypeFiltered), resultCondition);
+            }
+            if (properties.acceleratorKeyFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AcceleratorKeyProperty, properties.acceleratorKeyFiltered), resultCondition);
+            }
+            if (properties.accessKeyFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AccessKeyProperty, properties.accessKeyFiltered), resultCondition);
+            }
+            if (properties.runtimeIDFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.RuntimeIdProperty, properties.runtimeIDFiltered), resultCondition);
+            }
+            if (properties.frameWorkIdFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.FrameworkIdProperty, properties.frameWorkIdFiltered), resultCondition);
+            }
+            if (properties.isContentElementFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsContentElementProperty, properties.isContentElementFiltered), resultCondition);
+            }
+            if (properties.labeledByFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledByFiltered), resultCondition);
+            }
+            if (properties.isControlElementFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsControlElementProperty, properties.isControlElementFiltered), resultCondition);
+            }
+            if (properties.isPasswordFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsPasswordProperty, properties.isPasswordFiltered), resultCondition);
+            }
+            if (properties.itemTypeFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.ItemTypeProperty, properties.itemTypeFiltered), resultCondition);
+            }
+            if (properties.itemStatusFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.ItemStatusProperty, properties.itemStatusFiltered), resultCondition);
+            }
+            if (properties.isRequiredForFormFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsRequiredForFormProperty, properties.isRequiredForFormFiltered), resultCondition);
+            }
+            if (properties.autoamtionIdFiltered != null)
+            {
+                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered), resultCondition);
+            }
+            //.. 
+            return resultCondition;
+        }
+
+        #endregion
+
         /// <summary>
         /// Seeks new data for a node
         /// </summary>
@@ -541,30 +639,28 @@ namespace StrategyUIA2
         }
 
         /// <summary>
-        /// filters an application depending on a given OSM element
-        /// </summary>
-        /// <param name="osmElementOfFirstNodeOfSubtree">osm element of the to filtered application</param>
-        /// <param name="treeScope">kind of filtering</param>
-        /// <returns>the filtered (sub-)tree</returns>
-        public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
-        {
-            AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
-            if (au != null)
-            {
-                return filtering(au, treeScope, -1);
-            }
-            return null;
-        }
-
-        /// <summary>
         /// todo bzw. nachfrage: geht die methode findall nicht alleine alle elemente der collection durch? wird in der foreach-schleife dadurch nicht doppelt gearbeitet?
         /// Sucht rekusiv alle Kindelemente eines Knotens und ermittelt dessen Eingenschaften
         /// </summary>
-        /// <param name="top">gibt den Namen des Kindelementes an</param>
+        /// <param name="top">teh current tree object</param>
         /// <param name="collection">gibt die AutomationElement-Collection an</param>
         /// <param name="depth">gibt an wie tief der Suche ausgehend vom Root-Element an.</param>
         private void findChildrenOfNode(Object top, AutomationElementCollection collection, int depth)
         {
+            #region set grantFilterStrategiesChildren
+            if (collection != null && collection.Count > 0)
+            {
+                OSMElement.OSMElement osmTop = strategyMgr.getSpecifiedTree().GetData(top);
+                if (osmTop.properties.grantFilterStrategiesChildren == null)
+                {
+                    osmTop.properties.grantFilterStrategiesChildren = new List<string>();
+                }
+                if (!osmTop.properties.grantFilterStrategiesChildren.Contains(Settings.filterStrategyTypeToUserName(this.GetType())))
+                {
+                    osmTop.properties.grantFilterStrategiesChildren.Add(Settings.filterStrategyTypeToUserName(this.GetType()));
+                }
+            }
+            #endregion
             foreach (AutomationElement element in collection)
             {
                 if (strategyMgr.getSpecifiedTree().Depth(top) < depth || depth <= -1)
@@ -672,78 +768,28 @@ namespace StrategyUIA2
             Object tree2 = getStrategyMgr().getSpecifiedTree().NewTree();
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(parentElement);
+            #region set grantFilterStrategiesChildren
+            if (tree != null)
+            {
+                OSMElement.OSMElement osmChild = strategyMgr.getSpecifiedTree().GetData(tree);
+                if (osmChild != null && !osmChild.Equals(new OSMElement.OSMElement()))
+                {
+                    if (osmChild.properties.grantFilterStrategiesChildren != null)
+                    {
+                        osmElement.properties.grantFilterStrategiesChildren = osmChild.properties.grantFilterStrategiesChildren;
+                    }
+                    else
+                    {
+                        osmElement.properties.grantFilterStrategiesChildren = new List<string>();
+                        osmElement.properties.grantFilterStrategiesChildren.Add(osmChild.properties.grantFilterStrategy);
+                    }
+                }
+            }
+            #endregion
             Object node = strategyMgr.getSpecifiedTree().AddChild(tree2, osmElement);
             strategyMgr.getSpecifiedTree().AddChild(node, tree);
             strategyMgr.getSpecifiedTree().Clear(tree);
             strategyMgr.getSpecifiedTree().AddChild(tree, tree2);
-        }
-
-        /// <summary>
-        /// Creats the condition to search an AutomationElemente depending on <see cref="GeneralProperties"/> object
-        /// </summary>
-        /// <param name="properties">the properties to search</param>
-        /// <returns>a Condition object</returns>
-        private Condition setPropertiesCondition(GeneralProperties properties)
-        {
-            Condition resultCondition;
-            #region Readable from all
-            resultCondition = new PropertyCondition(AutomationElement.ClassNameProperty, properties.classNameFiltered);
-            // ... ?
-            #endregion
-            if (properties.localizedControlTypeFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LocalizedControlTypeProperty, properties.localizedControlTypeFiltered), resultCondition);
-            }
-            if (properties.acceleratorKeyFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AcceleratorKeyProperty, properties.acceleratorKeyFiltered), resultCondition);
-            }
-            if (properties.accessKeyFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AccessKeyProperty, properties.accessKeyFiltered), resultCondition);
-            }
-            if (properties.runtimeIDFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.RuntimeIdProperty, properties.runtimeIDFiltered), resultCondition);
-            }
-            if (properties.frameWorkIdFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.FrameworkIdProperty, properties.frameWorkIdFiltered), resultCondition);
-            }
-            if (properties.isContentElementFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsContentElementProperty, properties.isContentElementFiltered), resultCondition);
-            }
-            if (properties.labeledByFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.LabeledByProperty, properties.labeledByFiltered), resultCondition);
-            }
-            if (properties.isControlElementFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsControlElementProperty, properties.isControlElementFiltered), resultCondition);
-            }
-            if (properties.isPasswordFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsPasswordProperty, properties.isPasswordFiltered), resultCondition);
-            }
-            if (properties.itemTypeFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.ItemTypeProperty, properties.itemTypeFiltered), resultCondition);
-            }
-            if (properties.itemStatusFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.ItemStatusProperty, properties.itemStatusFiltered), resultCondition);
-            }
-            if (properties.isRequiredForFormFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.IsRequiredForFormProperty, properties.isRequiredForFormFiltered), resultCondition);
-            }
-            if (properties.autoamtionIdFiltered != null)
-            {
-                resultCondition = new AndCondition(new PropertyCondition(AutomationElement.AutomationIdProperty, properties.autoamtionIdFiltered), resultCondition);
-            }
-            //.. 
-            return resultCondition;
         }
     }
 }

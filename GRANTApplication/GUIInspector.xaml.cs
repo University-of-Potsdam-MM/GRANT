@@ -41,14 +41,14 @@ namespace GRANTApplication
             strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
-            strategyMgr.setSpecifiedOperationSystem(settings.strategyUserNameToClassName(cUserOperationSystemName));
+            strategyMgr.setSpecifiedOperationSystem(Settings.strategyUserNameToClassName(cUserOperationSystemName));
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
             List<Strategy> possibleTrees = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
             ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
-            List<Strategy> possibleFilter = settings.getPossibleFilters();
+            List<Strategy> possibleFilter = Settings.getPossibleFilters();
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+            strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(cUserFilterName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
             IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
@@ -334,12 +334,12 @@ namespace GRANTApplication
                     {
                         //Filtermethode
                         IntPtr points = operationSystemStrategy.getHWND();
-                        List<Strategy> possibleFilter = settings.getPossibleFilters();
+                        List<Strategy> possibleFilter = Settings.getPossibleFilters();
                         if (strategyMgr.getSpecifiedFilter() == null)
                         {
                             // auslesen aus GUI..... 
                             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
-                            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(cUserFilterName));
+                            strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(cUserFilterName));
                             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
                             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
                         }
@@ -354,6 +354,8 @@ namespace GRANTApplication
                         filteredTreeOutput.Items.Add(root);
                         NodeButton.IsEnabled = false;
                         updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
+                        ((TreeViewItem)filteredTreeOutput.Items[0]).IsSelected = true;
+                        ((TreeViewItem)filteredTreeOutput.Items[0]).IsExpanded = true;
                     }
 
                     catch (Exception ex)
@@ -369,7 +371,7 @@ namespace GRANTApplication
             var button = sender as RadioButton;
             // ... Display button content as title.
             String titleName = button.Content.ToString();
-            strategyMgr.setSpecifiedFilter(settings.strategyUserNameToClassName(titleName));
+            strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(titleName));
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperations);
         }

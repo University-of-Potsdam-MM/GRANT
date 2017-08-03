@@ -42,12 +42,6 @@ namespace GRANTManager
         /// </summary>
         public List<RendererUiElementConnector> rendererUiElementConnection { get; set; }
 
-        /// <summary>
-        /// Filter strategy  of node
-        /// If no strategy is specified the strategy of the root node is used
-        /// </summary>
-        public List<FilterstrategyOfNode<String, String, String>> filterstrategiesOfNodes = new List<FilterstrategyOfNode<string, string, string>>();
-
         private TextviewObject textviewobject;
         public TextviewObject TextviewObject { get { if (textviewobject.Equals(new TextviewObject())) {loadTemplateAllElementsTextview(); }   return textviewobject;  } set { textviewobject = value; } }
 

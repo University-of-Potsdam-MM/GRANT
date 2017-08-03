@@ -127,16 +127,11 @@
     </None>
     <None Include="SavedTrees\filteredTree_Rechner\filteredTree.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SavedTrees\filteredTree_Rechner\filterstrategies.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="SavedTrees\filteredTree_RechnerUIA\filteredTree.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SavedTrees\filteredTree_RechnerUIA\filterstrategies.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

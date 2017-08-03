@@ -30,7 +30,7 @@ namespace FilteredTreeTest
             treeOperation = new TreeOperation(strategyMgr, grantTrees);
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
-            strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
+            strategyMgr.setSpecifiedFilter(Settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
             strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
@@ -60,17 +60,16 @@ namespace FilteredTreeTest
             {
                 Assert.Fail("Der gefilterte Baum hätte 45 Knoten haben müssen -- er hat {0} Knoten!", strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree));
             }
-            FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.filteredTree, grantTrees.filterstrategiesOfNodes, strategyMgr.getSpecifiedTree());
-            if (!mainFilterstrategy.FilterstrategyFullName.Equals("StrategyUIA.FilterStrategyUIA"))
+            String mainFilterstrategy = treeOperation.searchNodes.getMainFilterstrategyOfTree();
+            if (!mainFilterstrategy.Equals("StrategyUIA.FilterStrategyUIA, StrategyUIA"))
             {
-                Assert.Fail("Der 1. Knoten hätte mit 'StrategyUIA.FilterStrategyUIA' gefiltert werden sollen -- genutzter Filter ist '{0}'", mainFilterstrategy.FilterstrategyFullName);
+                Assert.Fail("Der 1. Knoten hätte mit 'StrategyUIA.FilterStrategyUIA' gefiltert werden sollen -- genutzter Filter ist '{0}'", mainFilterstrategy);
             }
-            FilterstrategyOfNode<String, String, String> node_ED842B72B012E86CE468B73FA1378361 = FilterstrategiesOfTree.getFilterstrategyOfNode("ED842B72B012E86CE468B73FA1378361", grantTrees.filterstrategiesOfNodes);
-            if (!node_ED842B72B012E86CE468B73FA1378361.FilterstrategyFullName.Equals("StrategyUIA2.FilterStrategyUIA2"))
+            String nodeFS_ED842B72B012E86CE468B73FA1378361 = treeOperation.searchNodes.getFilteredTreeOsmElementById("ED842B72B012E86CE468B73FA1378361").properties.grantFilterStrategy;
+            if (!Settings.strategyUserNameToClassName(nodeFS_ED842B72B012E86CE468B73FA1378361).Equals("StrategyUIA2.FilterStrategyUIA2, StrategyUIA2"))
             {
-                Assert.Fail("Der Knoten mit der Id 'ED842B72B012E86CE468B73FA1378361' hätte mit 'StrategyUIA2.FilterStrategyUIA2' gefiltert werden sollen -- genutzter Filter ist '{1}'", node_ED842B72B012E86CE468B73FA1378361.FilterstrategyFullName);
+                Assert.Fail("Der Knoten mit der Id 'ED842B72B012E86CE468B73FA1378361' hätte mit 'StrategyUIA2.FilterStrategyUIA2' gefiltert werden sollen -- genutzter Filter ist '{0}'", nodeFS_ED842B72B012E86CE468B73FA1378361);
             }
-            Debug.WriteLine(node_ED842B72B012E86CE468B73FA1378361.FilterstrategyFullName);
             guiFuctions.deleteGrantTrees();
         }
 
@@ -83,7 +82,6 @@ namespace FilteredTreeTest
                 Assert.Fail("Es ist kein gefilterter Baum vorhanden!");
             }
             Object loadedTree = strategyMgr.getSpecifiedTree().Copy( grantTrees.filteredTree);
-            FilterstrategyOfNode<String, String, String> mainFilterstrategyLoaded = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.filteredTree, grantTrees.filterstrategiesOfNodes, strategyMgr.getSpecifiedTree());
             String processName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName;
             String fileName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.appPath;
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(processName); //Die Anwendung sollte schon offen sein, durch das Laden des Baums

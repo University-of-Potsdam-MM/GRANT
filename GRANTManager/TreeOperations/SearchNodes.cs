@@ -554,5 +554,18 @@ namespace GRANTManager.TreeOperations
             List<String> propNames = OSMElement.OSMElement.getAllTypes();
             return propNames.Contains(propertyName);
         }
+
+        /// <summary>
+        /// Returns the main filter strategy for filtering nodes
+        /// </summary>
+        public String getMainFilterstrategyOfTree()
+        {
+            if (grantTrees == null || grantTrees.filteredTree == null || !strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree))
+            {
+                Debug.WriteLine("Can't find a filter strategy in this tree!");
+                return null;
+            }
+            return Settings.strategyUserNameToClassName(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.grantFilterStrategy);
+        }
     }
 }

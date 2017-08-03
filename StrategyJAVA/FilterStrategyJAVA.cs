@@ -64,6 +64,11 @@ namespace StrategyJAVA
         {
             throw new NotImplementedException();
         }
+
+        public object filtering(string generatedNodeId, TreeScopeEnum treeScope)
+        {
+            throw new NotImplementedException();
+        }
     }
     
 }

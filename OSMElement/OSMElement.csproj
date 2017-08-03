@@ -64,7 +64,6 @@
     <Compile Include="BrailleRepresentation.cs" />
     <Compile Include="DataTypeOSMElement.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="FilterstrategyOfNode.cs" />
     <Compile Include="GrantProjectObject.cs" />
     <Compile Include="OSMAction.cs" />
     <Compile Include="OSMTreeEvenActionConnectorTriple.cs" />

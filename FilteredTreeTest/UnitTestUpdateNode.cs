@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GRANTManager;
 using GRANTManager.TreeOperations;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FilteredTreeTest
 {
@@ -16,6 +17,7 @@ namespace FilteredTreeTest
         private String applicationName = "calc";
         private String applicationPathName = @"C:\Windows\system32\calc.exe";
         private String idTextNodeCalc = "F6BC5E5ADD3B17478743923733E4BC8C";
+        private String treePathUia2;
 
         [TestInitialize]
         public void Initialize()
@@ -28,7 +30,7 @@ namespace FilteredTreeTest
 
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
-            strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
+            strategyMgr.setSpecifiedFilter(Settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
             strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
@@ -37,6 +39,9 @@ namespace FilteredTreeTest
             strategyMgr.setSpecifiedOperationSystem(settings.getPossibleOperationSystems()[0].className);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
+            String projectPath;
+            projectPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SavedTrees");
+            treePathUia2 = System.IO.Path.Combine(projectPath, "filteredTree_Rechner.grant");
         }
 
 
@@ -47,8 +52,7 @@ namespace FilteredTreeTest
             hf.filterApplication(applicationName, applicationPathName);
             
             guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
-            Settings settings = new Settings();
-            List<Strategy> filterStrategys = settings.getPossibleFilters();
+            List<Strategy> filterStrategys = Settings.getPossibleFilters();
             Type currentFilter = strategyMgr.getSpecifiedFilter().GetType();
             int indexNewFilterStrategy = 0;
             foreach (Strategy strategy in filterStrategys)
@@ -60,6 +64,8 @@ namespace FilteredTreeTest
                 indexNewFilterStrategy++;
             }
             strategyMgr.setSpecifiedFilter(filterStrategys[indexNewFilterStrategy].className);
+            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
+            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
             if (textNode.properties.grantFilterStrategy == null || !filterStrategys[indexNewFilterStrategy].userName.Equals(textNode.properties.grantFilterStrategy)) { Assert.Fail("Die Filterstrategie wurde für den Knoten (richtig) nicht geändert!\nBtrachtet wurde der Knoten  {0}\nDer filter hätte '{1}' sein sollen", textNode, filterStrategys[indexNewFilterStrategy].userName); }
@@ -106,6 +112,26 @@ namespace FilteredTreeTest
             up.updateNodeOfFilteredTree(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
             if (!textNode.properties.nameFiltered.Equals("42")) { Assert.Fail("Der Knoten wurde nicht richtig geändert oder geupdatet!\nBetrachteter Knoten:\n{0}", textNode); }
+        }
+
+        [TestMethod]
+        public void UpdateNodeTest_grantFilterstrategyChildren()
+        {
+            String idPaneNode = "417F2ACC323396E993B4DC2AD2515D5E";
+            guiFuctions.loadGrantProject(treePathUia2);
+            OSMElement.OSMElement paneNodeOld = treeOperation.searchNodes.getFilteredTreeOsmElementById(idPaneNode).DeepCopy();
+
+            UpdateNodes up = new UpdateNodes(strategyMgr, grantTrees, treeOperation);
+            up.updateNodeOfFilteredTree(idPaneNode);
+            OSMElement.OSMElement paneNodeNew = treeOperation.searchNodes.getFilteredTreeOsmElementById(idPaneNode);
+            Assert.AreEqual(paneNodeOld.properties.grantFilterStrategy, paneNodeNew.properties.grantFilterStrategy);
+            //Assert.AreEqual(paneNodeOld.properties.grantFilterStrategiesChildren, paneNodeNew.properties.grantFilterStrategiesChildren);
+            if (!paneNodeOld.properties.grantFilterStrategiesChildren.All(p => paneNodeNew.properties.grantFilterStrategiesChildren.Contains(p))) // check whether 'osmParent.properties.grantFilterStrategiesChildren' is a subset of filterStrategiesChildren
+            {
+                Assert.Fail("The update of the 'grantFilterStrategiesChildren' wasn't correct!");
+            }
+
+
         }
     }
 }

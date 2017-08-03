@@ -474,7 +474,7 @@ namespace GRANTManager
                     String valueString = null;
                     if (o != null && !o.ToString().Equals(""))
                     {
-                        if (o.GetType().BaseType.Name.Equals("Array"))
+                        if (o.GetType().BaseType.Name.Equals("Array") || o.GetType().Name.Contains("List"))
                         {
                             //https://stackoverflow.com/questions/37713998/convert-an-object-to-string-array-at-runtime
                             String[] valueString_tmp = (o as IEnumerable).Cast<object>().Select(p => p.ToString()).ToArray();
@@ -782,14 +782,6 @@ namespace GRANTManager
                             serializer.Serialize(writer, grantTrees.osmTreeConnections);
                         }
                     }
-                    if (grantTrees.filterstrategiesOfNodes != null)
-                    {
-                        using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName()))
-                        {
-                            serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
-                            serializer.Serialize(writer, grantTrees.filterstrategiesOfNodes);
-                        }
-                    }
                     using (StreamWriter writer = new StreamWriter(projectFilePath))
                     {
                         serializer = new XmlSerializer(typeof(GrantProjectObject));
@@ -885,7 +877,6 @@ namespace GRANTManager
                 strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(grantProjectObject.device);
             }
             //load filtered tree and braille (output) tree -> it will be in a subfolder wich has the same name like the project
-            loadFilterstrategies(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilterstrategyFileName());
             loadFilteredTree(projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
             loadBrailleTree(projectDirectory + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
         }
@@ -931,33 +922,6 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Loads the strategy of filtering for a node
-        /// </summary>
-        /// <param name="filePath">path of the directory and file inclusive the file extension</param>
-        private void loadFilterstrategies(String filePath)
-        {
-            if (File.Exists(@filePath))
-            {
-                System.IO.FileStream fs = null;
-                try{ fs = System.IO.File.Open(@filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<FilterstrategyOfNode<String, String, String>>));
-                    using (StreamReader reader = new StreamReader(fs))
-                    {
-                        fs = null;
-                        List<FilterstrategyOfNode<String, String, String>> filterstrategies = (List<FilterstrategyOfNode<String, String, String>>)serializer.Deserialize(reader);
-                        grantTrees.filterstrategiesOfNodes = filterstrategies;
-                    }
-                }
-                finally { if (fs != null) { fs.Dispose(); } }
-            }
-            else
-            {
-                Debug.WriteLine("The file with the strategies of filtering doesn't exist!");
-            }
-        }
-
-        /// <summary>
         /// Loads a filtered tree and stores the result into the <c>GeneratedGrantTrees</c> object
         /// </summary>
         /// <param name="filePath">path of the directory and file inclusive the file extension</param>
@@ -972,26 +936,7 @@ namespace GRANTManager
             {
                 Object loadedTree = strategyMgr.getSpecifiedTree().XmlDeserialize(fs);
                 grantTrees.filteredTree =loadedTree;
-            }
-
-            if (grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).Equals(new OSMElement.OSMElement()) && !strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.Equals(new GeneralProperties()))
-            {
-                FilterstrategyOfNode<String, String, String> mainFilterstrategy = FilterstrategiesOfTree.getMainFilterstrategyOfTree(grantTrees.filteredTree, grantTrees.filterstrategiesOfNodes, strategyMgr.getSpecifiedTree());
-                if ( mainFilterstrategy != null)
-                {
-                    strategyMgr.setSpecifiedFilter(mainFilterstrategy.FilterstrategyFullName+ ", " + mainFilterstrategy.FilterstrategyDll);
-                    strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
-                    strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
-                }
-                else
-                {
-                    throw new Exception("Their isn't a filtering strategy in the first node! It can not be filtered.");
-                }
-            }
-            else
-            {
-                throw new Exception("The Tree isn't sufficiently specified!");
-            }
+            }           
             if (openAppOfFilteredTree())
             {
                 filteredLoadedApplication();
@@ -1058,34 +1003,22 @@ namespace GRANTManager
         {
             //grantTrees = new GeneratedGrantTrees();
             grantTrees.osmTreeConnections =new List<OsmTreeConnectorTuple<String, String>>();
-            grantTrees.filterstrategiesOfNodes = new List<FilterstrategyOfNode<String, String, String>>();
             Object treeNew = strategyMgr.getSpecifiedTree().NewTree();
             grantTrees.filteredTree = null;
             grantTrees.brailleTree = null;
         }
 
         /// <summary>
-        /// filtered a subtree and updates the tree object in the <c>GrantProjectObject</c> object
+        /// filtered a subtree and updates the tree object in the <c>GrantProjectObject</c> object;
+        /// it will be filtering with the current selectet filter library
         /// </summary>
         /// <param name="idGeneratedOfFirstNodeOfSubtree">id of the node of the subtree to be updated</param>
         public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
         {
             OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
-            Object subtree = strategyMgr.getSpecifiedFilter().filtering(osmElementOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
+            Object subtree = strategyMgr.getSpecifiedFilter().filtering(idGeneratedOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
             String idParent = treeOperation.updateNodes.changeSubtreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
-            Object tree = grantTrees.filteredTree;
-
-            List<Object> searchResultTrees = treeOperation.searchNodes.searchNodeByProperties(tree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(subtree)).properties, OperatorEnum.and);
-
-            if (searchResultTrees != null && searchResultTrees.Count == 1)
-            {
-                treeOperation.generatedIds.generatedIdsOfFilteredSubtree(searchResultTrees[0]);
-                treeOperation.updateNodes.setFilterstrategyInPropertiesAndObject(strategyMgr.getSpecifiedFilter().GetType(), searchResultTrees[0]);
-            }
-            else
-            {
-                Debug.WriteLine("TODO");
-            }
+            
         }
 
         /// <summary>

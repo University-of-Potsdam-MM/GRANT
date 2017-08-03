@@ -537,5 +537,36 @@ namespace StrategyGenericTree
             AddChild(parentNew, cuttedNode);
             return true;
         }
+
+        /// <summary>
+        /// Replace and "old" subtree withe a new one
+        /// </summary>
+        /// <param name="subtreeOld">the old subtree</param>
+        /// <param name="subtreeNew">the new subtree</param>
+        public void ReplaceSubtree(ref object subtreeOld, object subtreeNew)
+        {
+            // remove + insert (depending on the position)
+            if (HasPrevious(subtreeOld))
+            {
+                Object previous = Previous(subtreeOld);
+                Remove(subtreeOld);
+                InsertNext(previous, subtreeNew);
+                return;
+            }
+            if (HasNext(subtreeOld))
+            {
+                Object next = Next(subtreeOld);
+                Remove(subtreeOld);
+                InsertPrevious(next, subtreeNew);
+                return;
+            }
+            if (HasParent(subtreeOld))
+            {
+                object parent = Parent(subtreeOld);
+                Remove(subtreeOld);
+                InsertChild(parent, subtreeNew);
+            }
+            Debug.WriteLine("Attention: The node couldn't replace!");
+        }
     }
 }

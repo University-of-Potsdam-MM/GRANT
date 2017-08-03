@@ -40,13 +40,13 @@ namespace GRANTManager
         /// </summary>
         /// <param name="strategyUserName">filter-showing-name</param>
         /// <returns>the filter-class name</returns>
-        public String strategyUserNameToClassName(String strategyUserName)
+        public static String strategyUserNameToClassName(String strategyUserName)
         {
             String classStrategyName = readAppSettings(strategyUserName);
             return classStrategyName;
         }
 
-        public String filterStrategyTypeToUserName(Type strategyType)
+        public static String filterStrategyTypeToUserName(Type strategyType)
         {
             List<Strategy> filterStrategies = getPossibleFilters();
             Strategy filterFind = filterStrategies.Find(f => f.className.Equals(strategyType.FullName+", "+strategyType.Namespace));
@@ -54,7 +54,7 @@ namespace GRANTManager
 
         }
 
-        public List<Strategy> getPossibleFilters()
+        public static List<Strategy> getPossibleFilters()
         {
             List<Strategy> filter = new List<Strategy>();
             List<String> filterNames = getPossibleStrategyClasses("PossibleFilters");
@@ -233,11 +233,6 @@ namespace GRANTManager
         public static String getOsmTreeConectorName()
         {
             return readAppSettings("osmTreeConectorName");
-        }
-
-        public static String getFilterstrategyFileName()
-        {
-            return readAppSettings("filterstrategyFileName");
         }
 
         public static String getNavigationbarSubstring()

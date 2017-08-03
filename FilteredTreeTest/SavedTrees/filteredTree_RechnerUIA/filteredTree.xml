@@ -1,90 +1,6 @@
 <?xml version="1.0"?>
-<Tree xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="1">
+<Tree xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1">
   <Root Version="1">
-    <Data>
-      <properties>
-        <isKeyboardFocusableFiltered xsi:nil="true" />
-        <isEnabledFiltered xsi:nil="true" />
-        <hasKeyboardFocusFiltered xsi:nil="true" />
-        <boundingRectangleFiltered>
-          <Location>
-            <X>0</X>
-            <Y>0</Y>
-          </Location>
-          <Size>
-            <Width>0</Width>
-            <Height>0</Height>
-          </Size>
-          <X>0</X>
-          <Y>0</Y>
-          <Width>0</Width>
-          <Height>0</Height>
-        </boundingRectangleFiltered>
-        <isOffscreenFiltered xsi:nil="true" />
-        <isContentElementFiltered xsi:nil="true" />
-        <isControlElementFiltered xsi:nil="true" />
-        <isPasswordFiltered xsi:nil="true" />
-        <isRequiredForFormFiltered xsi:nil="true" />
-        <rangeValue>
-          <isReadOnly>false</isReadOnly>
-          <maximum>0</maximum>
-          <minimum>0</minimum>
-          <currentValue>0</currentValue>
-          <largeChange>0</largeChange>
-          <smallChange>0</smallChange>
-        </rangeValue>
-        <isToggleStateOn xsi:nil="true" />
-      </properties>
-      <events />
-      <brailleRepresentation>
-        <isVisible>false</isVisible>
-        <jaggedMatrix />
-        <contrast>0</contrast>
-        <zoom>0</zoom>
-        <showScrollbar>false</showScrollbar>
-        <padding>
-          <All>-1</All>
-          <Bottom>0</Bottom>
-          <Left>0</Left>
-          <Right>0</Right>
-          <Top>0</Top>
-        </padding>
-        <margin>
-          <All>-1</All>
-          <Bottom>0</Bottom>
-          <Left>0</Left>
-          <Right>0</Right>
-          <Top>0</Top>
-        </margin>
-        <boarder>
-          <All>-1</All>
-          <Bottom>0</Bottom>
-          <Left>0</Left>
-          <Right>0</Right>
-          <Top>0</Top>
-        </boarder>
-        <zIntex>0</zIntex>
-        <groupelementsOfSameType>
-          <linebreak xsi:nil="true" />
-          <orienataion>Left</orienataion>
-          <childBoundingRectangle>
-            <Location>
-              <X>0</X>
-              <Y>0</Y>
-            </Location>
-            <Size>
-              <Width>0</Width>
-              <Height>0</Height>
-            </Size>
-            <X>0</X>
-            <Y>0</Y>
-            <Width>0</Width>
-            <Height>0</Height>
-          </childBoundingRectangle>
-        </groupelementsOfSameType>
-        <isGroupChild>false</isGroupChild>
-      </brailleRepresentation>
-    </Data>
     <Children>
       <Node Version="1">
         <Data>
@@ -96,29 +12,28 @@
             <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
             <boundingRectangleFiltered>
               <Location>
-                <X>1375</X>
-                <Y>343</Y>
+                <X>1</X>
+                <Y>2</Y>
               </Location>
               <Size>
                 <Width>228</Width>
                 <Height>322</Height>
               </Size>
-              <X>1375</X>
-              <Y>343</Y>
+              <X>1</X>
+              <Y>2</Y>
               <Width>228</Width>
               <Height>322</Height>
             </boundingRectangleFiltered>
             <isOffscreenFiltered>false</isOffscreenFiltered>
             <helpTextFiltered />
-            <IdGenerated>29567A6D5962C2D9DD9E359AECE86E39</IdGenerated>
             <autoamtionIdFiltered />
             <classNameFiltered>CalcFrame</classNameFiltered>
             <controlTypeFiltered>Window</controlTypeFiltered>
+            <localizedControlTypeFiltered>Fenster</localizedControlTypeFiltered>
             <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
             <isContentElementFiltered>true</isContentElementFiltered>
             <isControlElementFiltered>true</isControlElementFiltered>
             <isPasswordFiltered>false</isPasswordFiltered>
-            <localizedControlTypeFiltered>Fenster</localizedControlTypeFiltered>
             <nameFiltered>Rechner</nameFiltered>
             <itemTypeFiltered />
             <itemStatusFiltered />
@@ -132,17 +47,20 @@
               <smallChange>0</smallChange>
             </rangeValue>
             <isToggleStateOn xsi:nil="true" />
+            <IdGenerated>29567A6D5962C2D9DD9E359AECE86E39</IdGenerated>
             <grantFilterStrategy>UIA</grantFilterStrategy>
+            <grantFilterStrategiesChildren>
+              <string>UIA</string>
+            </grantFilterStrategiesChildren>
             <processName>calc</processName>
-            <fileName>C:\Windows\system32\calc.exe</fileName>
+            <appPath>C:\Windows\SysWOW64\calc.exe</appPath>
           </properties>
-          <events />
           <brailleRepresentation>
             <isVisible>false</isVisible>
             <jaggedMatrix />
             <contrast>0</contrast>
             <zoom>0</zoom>
-            <showScrollbar>false</showScrollbar>
+            <isScrollbarShow>false</isScrollbarShow>
             <padding>
               <All>-1</All>
               <Bottom>0</Bottom>
@@ -166,7 +84,7 @@
             </boarder>
             <zIntex>0</zIntex>
             <groupelementsOfSameType>
-              <linebreak xsi:nil="true" />
+              <isLinebreak xsi:nil="true" />
               <orienataion>Left</orienataion>
               <childBoundingRectangle>
                 <Location>
@@ -197,29 +115,28 @@
                 <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                 <boundingRectangleFiltered>
                   <Location>
-                    <X>1383</X>
-                    <Y>393</Y>
+                    <X>9</X>
+                    <Y>52</Y>
                   </Location>
                   <Size>
                     <Width>212</Width>
                     <Height>264</Height>
                   </Size>
-                  <X>1383</X>
-                  <Y>393</Y>
+                  <X>9</X>
+                  <Y>52</Y>
                   <Width>212</Width>
                   <Height>264</Height>
                 </boundingRectangleFiltered>
                 <isOffscreenFiltered>false</isOffscreenFiltered>
                 <helpTextFiltered />
-                <IdGenerated>417F2ACC323396E993B4DC2AD2515D5E</IdGenerated>
                 <autoamtionIdFiltered />
                 <classNameFiltered>CalcFrame</classNameFiltered>
                 <controlTypeFiltered>Pane</controlTypeFiltered>
+                <localizedControlTypeFiltered>Bereich</localizedControlTypeFiltered>
                 <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                 <isContentElementFiltered>true</isContentElementFiltered>
                 <isControlElementFiltered>true</isControlElementFiltered>
                 <isPasswordFiltered>false</isPasswordFiltered>
-                <localizedControlTypeFiltered>Bereich</localizedControlTypeFiltered>
                 <nameFiltered />
                 <itemTypeFiltered />
                 <itemStatusFiltered />
@@ -233,14 +150,18 @@
                   <smallChange>0</smallChange>
                 </rangeValue>
                 <isToggleStateOn xsi:nil="true" />
+                <IdGenerated>417F2ACC323396E993B4DC2AD2515D5E</IdGenerated>
+                <grantFilterStrategy>UIA</grantFilterStrategy>
+                <grantFilterStrategiesChildren>
+                  <string>UIA</string>
+                </grantFilterStrategiesChildren>
               </properties>
-              <events />
               <brailleRepresentation>
                 <isVisible>false</isVisible>
                 <jaggedMatrix />
                 <contrast>0</contrast>
                 <zoom>0</zoom>
-                <showScrollbar>false</showScrollbar>
+                <isScrollbarShow>false</isScrollbarShow>
                 <padding>
                   <All>-1</All>
                   <Bottom>0</Bottom>
@@ -264,7 +185,7 @@
                 </boarder>
                 <zIntex>0</zIntex>
                 <groupelementsOfSameType>
-                  <linebreak xsi:nil="true" />
+                  <isLinebreak xsi:nil="true" />
                   <orienataion>Left</orienataion>
                   <childBoundingRectangle>
                     <Location>
@@ -295,29 +216,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>403</Y>
+                        <X>20</X>
+                        <Y>62</Y>
                       </Location>
                       <Size>
                         <Width>190</Width>
                         <Height>50</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>403</Y>
+                      <X>20</X>
+                      <Y>62</Y>
                       <Width>190</Width>
                       <Height>50</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5565233BB0C4FFCB772934C37D4BE5E8</IdGenerated>
                     <autoamtionIdFiltered>160</autoamtionIdFiltered>
                     <classNameFiltered>Static</classNameFiltered>
                     <controlTypeFiltered>Image</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Bild</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Bild</localizedControlTypeFiltered>
                     <nameFiltered />
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -331,14 +251,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5565233BB0C4FFCB772934C37D4BE5E8</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -362,7 +283,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -394,29 +315,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1398</X>
-                        <Y>406</Y>
+                        <X>24</X>
+                        <Y>65</Y>
                       </Location>
                       <Size>
                         <Width>182</Width>
                         <Height>13</Height>
                       </Size>
-                      <X>1398</X>
-                      <Y>406</Y>
+                      <X>24</X>
+                      <Y>65</Y>
                       <Width>182</Width>
                       <Height>13</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>ED842B72B012E86CE468B73FA1378361</IdGenerated>
                     <autoamtionIdFiltered>404</autoamtionIdFiltered>
                     <classNameFiltered>Static</classNameFiltered>
                     <controlTypeFiltered>Text</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
                     <nameFiltered>Verlauf ausführen</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -430,14 +350,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>ED842B72B012E86CE468B73FA1378361</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -461,7 +382,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -493,29 +414,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>428</Y>
+                        <X>20</X>
+                        <Y>87</Y>
                       </Location>
                       <Size>
                         <Width>14</Width>
                         <Height>18</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>428</Y>
+                      <X>20</X>
+                      <Y>87</Y>
                       <Width>14</Width>
                       <Height>18</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>92EAF80B1F79D203E45557785DE2F882</IdGenerated>
                     <autoamtionIdFiltered>401</autoamtionIdFiltered>
                     <classNameFiltered>Static</classNameFiltered>
                     <controlTypeFiltered>Text</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
                     <nameFiltered>Arbeitsspeicher</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -529,14 +449,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>92EAF80B1F79D203E45557785DE2F882</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -560,7 +481,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -592,30 +513,29 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1412</X>
-                        <Y>418</Y>
+                        <X>38</X>
+                        <Y>77</Y>
                       </Location>
                       <Size>
                         <Width>167</Width>
                         <Height>28</Height>
                       </Size>
-                      <X>1412</X>
-                      <Y>418</Y>
+                      <X>38</X>
+                      <Y>77</Y>
                       <Width>167</Width>
                       <Height>28</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>F6BC5E5ADD3B17478743923733E4BC8C</IdGenerated>
                     <autoamtionIdFiltered>150</autoamtionIdFiltered>
                     <classNameFiltered>Static</classNameFiltered>
                     <controlTypeFiltered>Text</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
-                    <nameFiltered>0</nameFiltered>
+                    <nameFiltered>42</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
                     <isRequiredForFormFiltered>false</isRequiredForFormFiltered>
@@ -628,14 +548,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>F6BC5E5ADD3B17478743923733E4BC8C</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -659,7 +580,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -691,30 +612,29 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1412</X>
-                        <Y>421</Y>
+                        <X>38</X>
+                        <Y>80</Y>
                       </Location>
                       <Size>
                         <Width>167</Width>
                         <Height>30</Height>
                       </Size>
-                      <X>1412</X>
-                      <Y>421</Y>
+                      <X>38</X>
+                      <Y>80</Y>
                       <Width>167</Width>
                       <Height>30</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>3DD9A53C1DC2324B4E259155228BB3D1</IdGenerated>
                     <autoamtionIdFiltered>158</autoamtionIdFiltered>
                     <classNameFiltered>Static</classNameFiltered>
                     <controlTypeFiltered>Text</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Text</localizedControlTypeFiltered>
-                    <nameFiltered>0</nameFiltered>
+                    <nameFiltered>42</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
                     <isRequiredForFormFiltered>false</isRequiredForFormFiltered>
@@ -727,14 +647,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>3DD9A53C1DC2324B4E259155228BB3D1</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -758,7 +679,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -790,29 +711,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>458</Y>
+                        <X>20</X>
+                        <Y>117</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>458</Y>
+                      <X>20</X>
+                      <Y>117</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>F97C3B1B79E30F47A8A3D36978E51043</IdGenerated>
                     <autoamtionIdFiltered>122</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Memory clear</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -826,14 +746,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>F97C3B1B79E30F47A8A3D36978E51043</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -857,7 +778,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -889,29 +810,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>490</Y>
+                        <X>20</X>
+                        <Y>149</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>490</Y>
+                      <X>20</X>
+                      <Y>149</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5D58F709553580F698F60B6E28DEEB21</IdGenerated>
                     <autoamtionIdFiltered>83</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Rücktaste</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -925,14 +845,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5D58F709553580F698F60B6E28DEEB21</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -956,7 +877,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -988,29 +909,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>522</Y>
+                        <X>20</X>
+                        <Y>181</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>522</Y>
+                      <X>20</X>
+                      <Y>181</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>A9A7D0FE695603D3C776914E7B3CFB39</IdGenerated>
                     <autoamtionIdFiltered>137</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>7</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1024,14 +944,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>A9A7D0FE695603D3C776914E7B3CFB39</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1055,7 +976,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1087,29 +1008,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>554</Y>
+                        <X>20</X>
+                        <Y>213</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>554</Y>
+                      <X>20</X>
+                      <Y>213</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5CBA7163A6ED30F5A9812EA472E1BA25</IdGenerated>
                     <autoamtionIdFiltered>134</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>4</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1123,14 +1043,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5CBA7163A6ED30F5A9812EA472E1BA25</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1154,7 +1075,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1186,29 +1107,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>586</Y>
+                        <X>20</X>
+                        <Y>245</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>586</Y>
+                      <X>20</X>
+                      <Y>245</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>B152DDB00601A1715F7C52EF41AC5AA9</IdGenerated>
                     <autoamtionIdFiltered>131</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>1</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1222,14 +1142,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>B152DDB00601A1715F7C52EF41AC5AA9</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1253,7 +1174,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1285,29 +1206,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1394</X>
-                        <Y>618</Y>
+                        <X>20</X>
+                        <Y>277</Y>
                       </Location>
                       <Size>
                         <Width>73</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1394</X>
-                      <Y>618</Y>
+                      <X>20</X>
+                      <Y>277</Y>
                       <Width>73</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>C1EB32A022B4475193903727A803F388</IdGenerated>
                     <autoamtionIdFiltered>130</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>0</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1321,14 +1241,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>C1EB32A022B4475193903727A803F388</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1352,7 +1273,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1384,29 +1305,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1433</X>
-                        <Y>458</Y>
+                        <X>59</X>
+                        <Y>117</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1433</X>
-                      <Y>458</Y>
+                      <X>59</X>
+                      <Y>117</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>24F091DC1D519CC439698B29A07DF34C</IdGenerated>
                     <autoamtionIdFiltered>123</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Memory recall</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1420,14 +1340,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>24F091DC1D519CC439698B29A07DF34C</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1451,7 +1372,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1483,29 +1404,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1433</X>
-                        <Y>490</Y>
+                        <X>59</X>
+                        <Y>149</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1433</X>
-                      <Y>490</Y>
+                      <X>59</X>
+                      <Y>149</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>55A5D427C65E96534B699627CDD3EEFD</IdGenerated>
                     <autoamtionIdFiltered>82</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Clear entry</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1519,14 +1439,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>55A5D427C65E96534B699627CDD3EEFD</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1550,7 +1471,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1582,29 +1503,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1433</X>
-                        <Y>522</Y>
+                        <X>59</X>
+                        <Y>181</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1433</X>
-                      <Y>522</Y>
+                      <X>59</X>
+                      <Y>181</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>8FE3667EA36822E0C6DC22FBB0C4C5BE</IdGenerated>
                     <autoamtionIdFiltered>138</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>8</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1618,14 +1538,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>8FE3667EA36822E0C6DC22FBB0C4C5BE</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1649,7 +1570,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1681,29 +1602,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1433</X>
-                        <Y>554</Y>
+                        <X>59</X>
+                        <Y>213</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1433</X>
-                      <Y>554</Y>
+                      <X>59</X>
+                      <Y>213</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>6A5DF12A521C37CC4A1C27F772920749</IdGenerated>
                     <autoamtionIdFiltered>135</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>5</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1717,14 +1637,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>6A5DF12A521C37CC4A1C27F772920749</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1748,7 +1669,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1780,29 +1701,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1433</X>
-                        <Y>586</Y>
+                        <X>59</X>
+                        <Y>245</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1433</X>
-                      <Y>586</Y>
+                      <X>59</X>
+                      <Y>245</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>2C5A69D90B3D1B2D5ADA53D850531F70</IdGenerated>
                     <autoamtionIdFiltered>132</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>2</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1816,14 +1736,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>2C5A69D90B3D1B2D5ADA53D850531F70</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1847,7 +1768,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1879,29 +1800,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1472</X>
-                        <Y>458</Y>
+                        <X>98</X>
+                        <Y>117</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1472</X>
-                      <Y>458</Y>
+                      <X>98</X>
+                      <Y>117</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>EB4594C32C9841BDF1E6DCDC97FF9821</IdGenerated>
                     <autoamtionIdFiltered>124</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Memory store</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -1915,14 +1835,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>EB4594C32C9841BDF1E6DCDC97FF9821</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -1946,7 +1867,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -1978,29 +1899,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1472</X>
-                        <Y>490</Y>
+                        <X>98</X>
+                        <Y>149</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1472</X>
-                      <Y>490</Y>
+                      <X>98</X>
+                      <Y>149</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>8F91E7B1028ED51B3E2C23F507D98DED</IdGenerated>
                     <autoamtionIdFiltered>81</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Löschen</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2014,14 +1934,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>8F91E7B1028ED51B3E2C23F507D98DED</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2045,7 +1966,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2077,29 +1998,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1472</X>
-                        <Y>522</Y>
+                        <X>98</X>
+                        <Y>181</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1472</X>
-                      <Y>522</Y>
+                      <X>98</X>
+                      <Y>181</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>DAFC227FD606E8662159F9816B25A6C3</IdGenerated>
                     <autoamtionIdFiltered>139</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>9</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2113,14 +2033,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>DAFC227FD606E8662159F9816B25A6C3</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2144,7 +2065,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2176,29 +2097,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1472</X>
-                        <Y>554</Y>
+                        <X>98</X>
+                        <Y>213</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1472</X>
-                      <Y>554</Y>
+                      <X>98</X>
+                      <Y>213</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5043CFA2B1DBF3689D605B29B810A955</IdGenerated>
                     <autoamtionIdFiltered>136</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>6</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2212,14 +2132,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5043CFA2B1DBF3689D605B29B810A955</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2243,7 +2164,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2275,29 +2196,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1472</X>
-                        <Y>586</Y>
+                        <X>98</X>
+                        <Y>245</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1472</X>
-                      <Y>586</Y>
+                      <X>98</X>
+                      <Y>245</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>80BD08801E32E573655987C37367354E</IdGenerated>
                     <autoamtionIdFiltered>133</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>3</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2311,14 +2231,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>80BD08801E32E573655987C37367354E</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2342,7 +2263,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2374,29 +2295,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1472</X>
-                        <Y>618</Y>
+                        <X>98</X>
+                        <Y>277</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1472</X>
-                      <Y>618</Y>
+                      <X>98</X>
+                      <Y>277</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>1BD9AC8FB169921055A85148583CEA29</IdGenerated>
                     <autoamtionIdFiltered>84</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Decimal separator</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2410,14 +2330,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>1BD9AC8FB169921055A85148583CEA29</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2441,7 +2362,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2473,29 +2394,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1511</X>
-                        <Y>458</Y>
+                        <X>137</X>
+                        <Y>117</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1511</X>
-                      <Y>458</Y>
+                      <X>137</X>
+                      <Y>117</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>F9AEC347BEE5AC63EF203A0EF4126026</IdGenerated>
                     <autoamtionIdFiltered>125</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Memory add</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2509,14 +2429,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>F9AEC347BEE5AC63EF203A0EF4126026</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2540,7 +2461,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2572,29 +2493,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1511</X>
-                        <Y>490</Y>
+                        <X>137</X>
+                        <Y>149</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1511</X>
-                      <Y>490</Y>
+                      <X>137</X>
+                      <Y>149</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>798154BB53F2A45333251C3F2807AA71</IdGenerated>
                     <autoamtionIdFiltered>80</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Negate</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2608,14 +2528,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>798154BB53F2A45333251C3F2807AA71</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2639,7 +2560,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2671,29 +2592,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1511</X>
-                        <Y>522</Y>
+                        <X>137</X>
+                        <Y>181</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1511</X>
-                      <Y>522</Y>
+                      <X>137</X>
+                      <Y>181</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>13F501A14CBAF0D5F5E8DDF3499326BD</IdGenerated>
                     <autoamtionIdFiltered>91</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Divide</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2707,14 +2627,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>13F501A14CBAF0D5F5E8DDF3499326BD</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2738,7 +2659,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2770,29 +2691,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1511</X>
-                        <Y>554</Y>
+                        <X>137</X>
+                        <Y>213</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1511</X>
-                      <Y>554</Y>
+                      <X>137</X>
+                      <Y>213</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>EDFF8C7389CDA06ACFCAF884EFCAAFF8</IdGenerated>
                     <autoamtionIdFiltered>92</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Multiply</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2806,14 +2726,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>EDFF8C7389CDA06ACFCAF884EFCAAFF8</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2837,7 +2758,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2869,29 +2790,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1511</X>
-                        <Y>586</Y>
+                        <X>137</X>
+                        <Y>245</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1511</X>
-                      <Y>586</Y>
+                      <X>137</X>
+                      <Y>245</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>B0D2142AC2E81292B7FA023F1266B300</IdGenerated>
                     <autoamtionIdFiltered>94</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Subtract</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -2905,14 +2825,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>B0D2142AC2E81292B7FA023F1266B300</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -2936,7 +2857,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -2968,29 +2889,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1511</X>
-                        <Y>618</Y>
+                        <X>137</X>
+                        <Y>277</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1511</X>
-                      <Y>618</Y>
+                      <X>137</X>
+                      <Y>277</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>C54FAA9A94006A4BA7AA7C2C61D33ADA</IdGenerated>
                     <autoamtionIdFiltered>93</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Add</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3004,14 +2924,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>C54FAA9A94006A4BA7AA7C2C61D33ADA</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3035,7 +2956,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3067,29 +2988,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1550</X>
-                        <Y>458</Y>
+                        <X>176</X>
+                        <Y>117</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1550</X>
-                      <Y>458</Y>
+                      <X>176</X>
+                      <Y>117</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>E336A1FA157AE66634A3507F6A4CA2CB</IdGenerated>
                     <autoamtionIdFiltered>126</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Memory subtract</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3103,14 +3023,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>E336A1FA157AE66634A3507F6A4CA2CB</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3134,7 +3055,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3166,29 +3087,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1550</X>
-                        <Y>490</Y>
+                        <X>176</X>
+                        <Y>149</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1550</X>
-                      <Y>490</Y>
+                      <X>176</X>
+                      <Y>149</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>4BA0B72D1E656DF26431B639CC532C31</IdGenerated>
                     <autoamtionIdFiltered>110</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Square root</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3202,14 +3122,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>4BA0B72D1E656DF26431B639CC532C31</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3233,7 +3154,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3265,29 +3186,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1550</X>
-                        <Y>522</Y>
+                        <X>176</X>
+                        <Y>181</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1550</X>
-                      <Y>522</Y>
+                      <X>176</X>
+                      <Y>181</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5923AEBB4BB03B479E20208EF76C1361</IdGenerated>
                     <autoamtionIdFiltered>118</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Percentage</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3301,14 +3221,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5923AEBB4BB03B479E20208EF76C1361</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3332,7 +3253,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3364,29 +3285,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1550</X>
-                        <Y>554</Y>
+                        <X>176</X>
+                        <Y>213</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>27</Height>
                       </Size>
-                      <X>1550</X>
-                      <Y>554</Y>
+                      <X>176</X>
+                      <Y>213</Y>
                       <Width>34</Width>
                       <Height>27</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>41CD95EEA5BCCA29A82EAE2886CB26F0</IdGenerated>
                     <autoamtionIdFiltered>114</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Reciprocal</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3400,14 +3320,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>41CD95EEA5BCCA29A82EAE2886CB26F0</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3431,7 +3352,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3463,29 +3384,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1550</X>
-                        <Y>586</Y>
+                        <X>176</X>
+                        <Y>245</Y>
                       </Location>
                       <Size>
                         <Width>34</Width>
                         <Height>59</Height>
                       </Size>
-                      <X>1550</X>
-                      <Y>586</Y>
+                      <X>176</X>
+                      <Y>245</Y>
                       <Width>34</Width>
                       <Height>59</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>18FD08CBE16B5E8B687737A83CC46904</IdGenerated>
                     <autoamtionIdFiltered>121</autoamtionIdFiltered>
                     <classNameFiltered>Button</classNameFiltered>
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Equals</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3499,14 +3419,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>18FD08CBE16B5E8B687737A83CC46904</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3530,7 +3451,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3564,29 +3485,28 @@
                 <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                 <boundingRectangleFiltered>
                   <Location>
-                    <X>1383</X>
-                    <Y>351</Y>
+                    <X>9</X>
+                    <Y>10</Y>
                   </Location>
                   <Size>
                     <Width>212</Width>
                     <Height>22</Height>
                   </Size>
-                  <X>1383</X>
-                  <Y>351</Y>
+                  <X>9</X>
+                  <Y>10</Y>
                   <Width>212</Width>
                   <Height>22</Height>
                 </boundingRectangleFiltered>
                 <isOffscreenFiltered>false</isOffscreenFiltered>
                 <helpTextFiltered />
-                <IdGenerated>41B73937D557B2AB5DA85001ABF0C423</IdGenerated>
                 <autoamtionIdFiltered>TitleBar</autoamtionIdFiltered>
                 <classNameFiltered />
                 <controlTypeFiltered>TitleBar</controlTypeFiltered>
+                <localizedControlTypeFiltered>Titelleiste</localizedControlTypeFiltered>
                 <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                 <isContentElementFiltered>false</isContentElementFiltered>
                 <isControlElementFiltered>true</isControlElementFiltered>
                 <isPasswordFiltered>false</isPasswordFiltered>
-                <localizedControlTypeFiltered>Titelleiste</localizedControlTypeFiltered>
                 <nameFiltered>Rechner</nameFiltered>
                 <itemTypeFiltered />
                 <itemStatusFiltered />
@@ -3600,14 +3520,18 @@
                   <smallChange>0</smallChange>
                 </rangeValue>
                 <isToggleStateOn xsi:nil="true" />
+                <IdGenerated>41B73937D557B2AB5DA85001ABF0C423</IdGenerated>
+                <grantFilterStrategy>UIA</grantFilterStrategy>
+                <grantFilterStrategiesChildren>
+                  <string>UIA</string>
+                </grantFilterStrategiesChildren>
               </properties>
-              <events />
               <brailleRepresentation>
                 <isVisible>false</isVisible>
                 <jaggedMatrix />
                 <contrast>0</contrast>
                 <zoom>0</zoom>
-                <showScrollbar>false</showScrollbar>
+                <isScrollbarShow>false</isScrollbarShow>
                 <padding>
                   <All>-1</All>
                   <Bottom>0</Bottom>
@@ -3631,7 +3555,7 @@
                 </boarder>
                 <zIntex>0</zIntex>
                 <groupelementsOfSameType>
-                  <linebreak xsi:nil="true" />
+                  <isLinebreak xsi:nil="true" />
                   <orienataion>Left</orienataion>
                   <childBoundingRectangle>
                     <Location>
@@ -3662,29 +3586,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1383</X>
-                        <Y>351</Y>
+                        <X>9</X>
+                        <Y>10</Y>
                       </Location>
                       <Size>
                         <Width>21</Width>
                         <Height>21</Height>
                       </Size>
-                      <X>1383</X>
-                      <Y>351</Y>
+                      <X>9</X>
+                      <Y>10</Y>
                       <Width>21</Width>
                       <Height>21</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>64F0B07DC49A4B0EB53D35E17FCDE74F</IdGenerated>
                     <autoamtionIdFiltered>SystemMenuBar</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>MenuBar</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Menüleiste</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Menüleiste</localizedControlTypeFiltered>
                     <nameFiltered>Systemmenüleiste</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3698,14 +3621,18 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>64F0B07DC49A4B0EB53D35E17FCDE74F</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
+                    <grantFilterStrategiesChildren>
+                      <string>UIA</string>
+                    </grantFilterStrategiesChildren>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3729,7 +3656,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3760,29 +3687,28 @@
                         <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                         <boundingRectangleFiltered>
                           <Location>
-                            <X>1383</X>
-                            <Y>351</Y>
+                            <X>9</X>
+                            <Y>10</Y>
                           </Location>
                           <Size>
                             <Width>21</Width>
                             <Height>21</Height>
                           </Size>
-                          <X>1383</X>
-                          <Y>351</Y>
+                          <X>9</X>
+                          <Y>10</Y>
                           <Width>21</Width>
                           <Height>21</Height>
                         </boundingRectangleFiltered>
                         <isOffscreenFiltered>false</isOffscreenFiltered>
                         <helpTextFiltered />
-                        <IdGenerated>F362FA7A44713049AE32C44E575CFD12</IdGenerated>
                         <autoamtionIdFiltered>Item 1</autoamtionIdFiltered>
                         <classNameFiltered />
                         <controlTypeFiltered>MenuItem</controlTypeFiltered>
+                        <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                         <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                         <isContentElementFiltered>true</isContentElementFiltered>
                         <isControlElementFiltered>true</isControlElementFiltered>
                         <isPasswordFiltered>false</isPasswordFiltered>
-                        <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                         <nameFiltered>System</nameFiltered>
                         <itemTypeFiltered />
                         <itemStatusFiltered />
@@ -3796,14 +3722,15 @@
                           <smallChange>0</smallChange>
                         </rangeValue>
                         <isToggleStateOn xsi:nil="true" />
+                        <IdGenerated>F362FA7A44713049AE32C44E575CFD12</IdGenerated>
+                        <grantFilterStrategy>UIA</grantFilterStrategy>
                       </properties>
-                      <events />
                       <brailleRepresentation>
                         <isVisible>false</isVisible>
                         <jaggedMatrix />
                         <contrast>0</contrast>
                         <zoom>0</zoom>
-                        <showScrollbar>false</showScrollbar>
+                        <isScrollbarShow>false</isScrollbarShow>
                         <padding>
                           <All>-1</All>
                           <Bottom>0</Bottom>
@@ -3827,7 +3754,7 @@
                         </boarder>
                         <zIntex>0</zIntex>
                         <groupelementsOfSameType>
-                          <linebreak xsi:nil="true" />
+                          <isLinebreak xsi:nil="true" />
                           <orienataion>Left</orienataion>
                           <childBoundingRectangle>
                             <Location>
@@ -3861,29 +3788,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1492</X>
-                        <Y>344</Y>
+                        <X>118</X>
+                        <Y>3</Y>
                       </Location>
                       <Size>
                         <Width>29</Width>
                         <Height>20</Height>
                       </Size>
-                      <X>1492</X>
-                      <Y>344</Y>
+                      <X>118</X>
+                      <Y>3</Y>
                       <Width>29</Width>
                       <Height>20</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5A787794E93213808B1CE7394DE2403D</IdGenerated>
                     <autoamtionIdFiltered>Minimize</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Minimieren</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3897,14 +3823,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5A787794E93213808B1CE7394DE2403D</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -3928,7 +3855,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -3960,29 +3887,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1521</X>
-                        <Y>344</Y>
+                        <X>147</X>
+                        <Y>3</Y>
                       </Location>
                       <Size>
                         <Width>27</Width>
                         <Height>20</Height>
                       </Size>
-                      <X>1521</X>
-                      <Y>344</Y>
+                      <X>147</X>
+                      <Y>3</Y>
                       <Width>27</Width>
                       <Height>20</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>CA79E377B6F6C039361BC81339B7F1BC</IdGenerated>
                     <autoamtionIdFiltered>Maximize</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Maximieren</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -3996,14 +3922,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>CA79E377B6F6C039361BC81339B7F1BC</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -4027,7 +3954,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -4059,29 +3986,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1548</X>
-                        <Y>344</Y>
+                        <X>174</X>
+                        <Y>3</Y>
                       </Location>
                       <Size>
                         <Width>49</Width>
                         <Height>20</Height>
                       </Size>
-                      <X>1548</X>
-                      <Y>344</Y>
+                      <X>174</X>
+                      <Y>3</Y>
                       <Width>49</Width>
                       <Height>20</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>5524107E02B9643EDB67F59CB310C26C</IdGenerated>
                     <autoamtionIdFiltered>Close</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>Button</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Schaltfläche</localizedControlTypeFiltered>
                     <nameFiltered>Schließen</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -4095,14 +4021,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>5524107E02B9643EDB67F59CB310C26C</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -4126,7 +4053,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -4160,29 +4087,28 @@
                 <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                 <boundingRectangleFiltered>
                   <Location>
-                    <X>1383</X>
-                    <Y>373</Y>
+                    <X>9</X>
+                    <Y>32</Y>
                   </Location>
                   <Size>
                     <Width>212</Width>
                     <Height>19</Height>
                   </Size>
-                  <X>1383</X>
-                  <Y>373</Y>
+                  <X>9</X>
+                  <Y>32</Y>
                   <Width>212</Width>
                   <Height>19</Height>
                 </boundingRectangleFiltered>
                 <isOffscreenFiltered>false</isOffscreenFiltered>
                 <helpTextFiltered />
-                <IdGenerated>6E62984FEFA9C92727332C5B6D08820F</IdGenerated>
                 <autoamtionIdFiltered>MenuBar</autoamtionIdFiltered>
                 <classNameFiltered />
                 <controlTypeFiltered>MenuBar</controlTypeFiltered>
+                <localizedControlTypeFiltered>Menüleiste</localizedControlTypeFiltered>
                 <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                 <isContentElementFiltered>false</isContentElementFiltered>
                 <isControlElementFiltered>true</isControlElementFiltered>
                 <isPasswordFiltered>false</isPasswordFiltered>
-                <localizedControlTypeFiltered>Menüleiste</localizedControlTypeFiltered>
                 <nameFiltered>Anwendung</nameFiltered>
                 <itemTypeFiltered />
                 <itemStatusFiltered />
@@ -4196,14 +4122,18 @@
                   <smallChange>0</smallChange>
                 </rangeValue>
                 <isToggleStateOn xsi:nil="true" />
+                <IdGenerated>6E62984FEFA9C92727332C5B6D08820F</IdGenerated>
+                <grantFilterStrategy>UIA</grantFilterStrategy>
+                <grantFilterStrategiesChildren>
+                  <string>UIA</string>
+                </grantFilterStrategiesChildren>
               </properties>
-              <events />
               <brailleRepresentation>
                 <isVisible>false</isVisible>
                 <jaggedMatrix />
                 <contrast>0</contrast>
                 <zoom>0</zoom>
-                <showScrollbar>false</showScrollbar>
+                <isScrollbarShow>false</isScrollbarShow>
                 <padding>
                   <All>-1</All>
                   <Bottom>0</Bottom>
@@ -4227,7 +4157,7 @@
                 </boarder>
                 <zIntex>0</zIntex>
                 <groupelementsOfSameType>
-                  <linebreak xsi:nil="true" />
+                  <isLinebreak xsi:nil="true" />
                   <orienataion>Left</orienataion>
                   <childBoundingRectangle>
                     <Location>
@@ -4258,29 +4188,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1383</X>
-                        <Y>373</Y>
+                        <X>9</X>
+                        <Y>32</Y>
                       </Location>
                       <Size>
                         <Width>54</Width>
                         <Height>19</Height>
                       </Size>
-                      <X>1383</X>
-                      <Y>373</Y>
+                      <X>9</X>
+                      <Y>32</Y>
                       <Width>54</Width>
                       <Height>19</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>7AAC639188D50CAE4C0D12C8CB56D745</IdGenerated>
                     <autoamtionIdFiltered>Item 1</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>MenuItem</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                     <nameFiltered>Ansicht</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -4294,14 +4223,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>7AAC639188D50CAE4C0D12C8CB56D745</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -4325,7 +4255,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -4357,29 +4287,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1437</X>
-                        <Y>373</Y>
+                        <X>63</X>
+                        <Y>32</Y>
                       </Location>
                       <Size>
                         <Width>70</Width>
                         <Height>19</Height>
                       </Size>
-                      <X>1437</X>
-                      <Y>373</Y>
+                      <X>63</X>
+                      <Y>32</Y>
                       <Width>70</Width>
                       <Height>19</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>C8B18DFACD2F1C1982BA19264FB6BC77</IdGenerated>
                     <autoamtionIdFiltered>Item 2</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>MenuItem</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                     <nameFiltered>Bearbeiten</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -4393,14 +4322,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>C8B18DFACD2F1C1982BA19264FB6BC77</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -4424,7 +4354,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>
@@ -4456,29 +4386,28 @@
                     <hasKeyboardFocusFiltered>false</hasKeyboardFocusFiltered>
                     <boundingRectangleFiltered>
                       <Location>
-                        <X>1507</X>
-                        <Y>373</Y>
+                        <X>133</X>
+                        <Y>32</Y>
                       </Location>
                       <Size>
                         <Width>19</Width>
                         <Height>19</Height>
                       </Size>
-                      <X>1507</X>
-                      <Y>373</Y>
+                      <X>133</X>
+                      <Y>32</Y>
                       <Width>19</Width>
                       <Height>19</Height>
                     </boundingRectangleFiltered>
                     <isOffscreenFiltered>false</isOffscreenFiltered>
                     <helpTextFiltered />
-                    <IdGenerated>058C55B2589F80EBD53824C36BA68F2B</IdGenerated>
                     <autoamtionIdFiltered>Item 3</autoamtionIdFiltered>
                     <classNameFiltered />
                     <controlTypeFiltered>MenuItem</controlTypeFiltered>
+                    <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                     <frameWorkIdFiltered>Win32</frameWorkIdFiltered>
                     <isContentElementFiltered>true</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <localizedControlTypeFiltered>Menüelement</localizedControlTypeFiltered>
                     <nameFiltered>?</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
@@ -4492,14 +4421,15 @@
                       <smallChange>0</smallChange>
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
+                    <IdGenerated>058C55B2589F80EBD53824C36BA68F2B</IdGenerated>
+                    <grantFilterStrategy>UIA</grantFilterStrategy>
                   </properties>
-                  <events />
                   <brailleRepresentation>
                     <isVisible>false</isVisible>
                     <jaggedMatrix />
                     <contrast>0</contrast>
                     <zoom>0</zoom>
-                    <showScrollbar>false</showScrollbar>
+                    <isScrollbarShow>false</isScrollbarShow>
                     <padding>
                       <All>-1</All>
                       <Bottom>0</Bottom>
@@ -4523,7 +4453,7 @@
                     </boarder>
                     <zIntex>0</zIntex>
                     <groupelementsOfSameType>
-                      <linebreak xsi:nil="true" />
+                      <isLinebreak xsi:nil="true" />
                       <orienataion>Left</orienataion>
                       <childBoundingRectangle>
                         <Location>

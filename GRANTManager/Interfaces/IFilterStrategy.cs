@@ -8,10 +8,11 @@ using GRANTManager.TreeOperations;
 namespace GRANTManager.Interfaces
 {
     /// <summary>
-    /// A Interface for filtering application data. 
+    /// An Interface for filtering application data. 
     /// </summary>
     public interface IFilterStrategy
     {
+        #region filtering
         /// <summary>
         /// filters an application depending on a given point (<paramref name="pointX"/>, <paramref name="pointY"/>) and the choosen <paramref name="treeScope"/>
         /// </summary>
@@ -21,7 +22,6 @@ namespace GRANTManager.Interfaces
         /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
         /// <returns>the filtered (sub-)tree</returns>
         Object filtering(int pointX, int pointY, GRANTManager.TreeScopeEnum treeScope, int depth = -1);
-
 
         /// <summary>
         /// filters an application depending on a given hwnd
@@ -39,6 +39,9 @@ namespace GRANTManager.Interfaces
         /// <param name="treeScope">kind of filtering</param>
         /// <returns>the filtered (sub-)tree</returns>
         Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope = TreeScopeEnum.Subtree);
+
+        Object filtering(String generatedNodeId, TreeScopeEnum treeScope);
+        #endregion
 
         /// <summary>
         /// Seeks the process id of a given handle

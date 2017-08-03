@@ -27,7 +27,7 @@ namespace TemplateTest
             treeOperation = new TreeOperation(strategyMgr, grantTrees);
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager()[0].className);
-            strategyMgr.setSpecifiedFilter(settings.getPossibleFilters()[0].className);
+            strategyMgr.setSpecifiedFilter(Settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedDisplayStrategy(settings.getPosibleDisplayStrategies()[0].className);
             strategyMgr.setSpecifiedGeneralTemplateUi(settings.getPossibleUiTemplateStrategies()[0].className);
             strategyMgr.getSpecifiedGeneralTemplateUi().setGeneratedGrantTrees(grantTrees);
