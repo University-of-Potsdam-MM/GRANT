@@ -190,60 +190,97 @@ namespace FilteredTreeTest
         public void filteredTree_Application_changeModus_test()
         {
             /*
-             * chekcs whether the descendants was updatet --> open "Bearbeiten" --> new nodes should be added
+             * chekcs whether the descendants was updatet --> change mode --> new nodes should be added
              * 
              */
             guiFuctions.loadGrantProject(treePathUia2);
-            String id_WindowNode = "29567A6D5962C2D9DD9E359AECE86E39"; // = root
             String id_edit = "C8B18DFACD2F1C1982BA19264FB6BC77";
             String id_Pane = "417F2ACC323396E993B4DC2AD2515D5E";
             Object treeLoaded = grantTrees.filteredTree.DeepCopy();
+            Object paneNodeOld = treeOperation.searchNodes.getNode(id_Pane, grantTrees.filteredTree).DeepCopy();
             Object editNodeOld = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree).DeepCopy();
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             System.Windows.Forms.SendKeys.SendWait("^u"); // => Crlt + u => change calc modus
-
+            System.Threading.Thread.Sleep(200);
             treeOperation.updateNodes.filteredTree(id_Pane, TreeScopeEnum.Application);
-            //System.Windows.Forms.SendKeys.SendWait("{ESC}");
+            System.Windows.Forms.SendKeys.SendWait("^{F4}"); // normal modus
             Object editNodeNew = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree);
+            Object paneNodeNew = treeOperation.searchNodes.getNode(id_Pane, grantTrees.filteredTree);
             Assert.AreNotEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree),  "some nodes should be added"); 
-            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "the numbers of nodes should be the same like before because only the 'edit' node was updated");
+        }
+
+        [TestMethod]
+        public void filteredTree_Descendants_changeModus_test()
+        {
+            /*
+             * chekcs whether the descendants was updatet --> change mode + select "Ansicht" (MenuBar) --> new nodes should be added But the MenuBar shouldn't filtered
+             * 
+             */
+            guiFuctions.loadGrantProject(treePathUia2);
+            String id_WindowNode = "29567A6D5962C2D9DD9E359AECE86E39"; // = root
+            String id_menuBar = "6E62984FEFA9C92727332C5B6D08820F";
+            String id_Pane = "417F2ACC323396E993B4DC2AD2515D5E";
+            Object treeLoaded = grantTrees.filteredTree.DeepCopy();
+            Object paneNodeOld = treeOperation.searchNodes.getNode(id_Pane, grantTrees.filteredTree).DeepCopy();
+            Object menuBarNodeOld = treeOperation.searchNodes.getNode(id_menuBar, grantTrees.filteredTree).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("^u"); // => Crlt + u => change calc modus
+            System.Threading.Thread.Sleep(200);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("%"); // => Alt => focus menu
+            System.Threading.Thread.Sleep(200);
+            treeOperation.updateNodes.filteredTree(id_Pane, TreeScopeEnum.Descendants);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("^{F4}"); // normal modus
+            Object menuBarNodeNew = treeOperation.searchNodes.getNode(id_menuBar, grantTrees.filteredTree);
+            Object paneNodeNew = treeOperation.searchNodes.getNode(id_Pane, grantTrees.filteredTree);
+            Assert.AreNotEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "some nodes should be added");
+            //Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "the numbers of nodes should be the same like before because only the 'edit' node was updated");
+            Assert.IsTrue( strategyMgr.getSpecifiedTree().Equals(menuBarNodeOld, menuBarNodeNew), "The MenuBar branch wasn't filtered, so there shouldn't be changes.");
         }
 
         [TestMethod]
         public void filteredTree_Descendants2_test()
         {
             /*
-             * chekcs whether the descendants was updatet --> open "Bearbeiten" --> new nodes should be added
+             * chekcs whether the descendants was updatet --> focus "Bearbeiten" --> new nodes should be added
              * 
              */
             guiFuctions.loadGrantProject(treePathUia2);
             String id_WindowNode = "29567A6D5962C2D9DD9E359AECE86E39"; // = root
             String id_edit = "C8B18DFACD2F1C1982BA19264FB6BC77";
+            String id_menuBar = "6E62984FEFA9C92727332C5B6D08820F";
             Object treeLoaded = grantTrees.filteredTree.DeepCopy();
             Object editNodeOld = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree).DeepCopy();
+            Object menuBarNodeOld = treeOperation.searchNodes.getNode(id_menuBar, grantTrees.filteredTree).DeepCopy();
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
-            System.Windows.Forms.SendKeys.SendWait("%B"); // => Alt + B => opened the edit ("Bearbeiten") menu
-
+            System.Windows.Forms.SendKeys.SendWait("%");
+            System.Windows.Forms.SendKeys.SendWait("{RIGHT}"); // => Alt + arrow right => focus the edit ("Bearbeiten") menu
+            System.Threading.Thread.Sleep(200);
             treeOperation.updateNodes.filteredTree(id_WindowNode, TreeScopeEnum.Descendants);
             System.Windows.Forms.SendKeys.SendWait("{ESC}");
             Object editNodeNew = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree);
+            Object menuBarNodeNew = treeOperation.searchNodes.getNode(id_menuBar, grantTrees.filteredTree);
             Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree));
             Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(editNodeOld, editNodeNew)); // hasKeyboardFocusFiltered has changed from "false" to "true"
             Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "the numbers of nodes should be the same like before because only the 'edit' node was updated");
+            Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(menuBarNodeOld, menuBarNodeNew), "The MenuBar branch was filtered, so there should be changes.");
         }
 
-        [TestCleanup]
-        public void clean()
-        {
-            if(grantTrees.filteredTree != null)
-            {
-                IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
-                strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
-                System.Windows.Forms.SendKeys.SendWait("{ESC}");
-                System.Windows.Forms.SendKeys.SendWait("^{F4}"); // normal modus
-            }
-        }
+            [TestCleanup]
+             public void clean()
+             {
+                 if(grantTrees.filteredTree != null)
+                 {
+                     IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+                     strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+                     System.Windows.Forms.SendKeys.SendWait("{ESC}");
+                     System.Threading.Thread.Sleep(1000);
+                     System.Windows.Forms.SendKeys.SendWait("^{F4}"); // normal modus
+                 }
+             }
     }
 }

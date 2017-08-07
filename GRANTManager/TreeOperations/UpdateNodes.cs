@@ -299,7 +299,7 @@ namespace GRANTManager.TreeOperations
                 return;
             }
             else
-            { //TODO: so werden neue Knoten ignoriert
+            {
                 foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(subtreeOld))
                 {
                     OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node).DeepCopy();

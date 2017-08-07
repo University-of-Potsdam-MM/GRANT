@@ -600,6 +600,7 @@ namespace StrategyUIA
                 IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(osmElement.properties.hWndFiltered));
                 AutomationElement mainWindowElement = deliverAutomationElementFromHWND(pointer);
                 //au = mainWindowElement.FindFirst(TreeScope.Children, cond);
+                if(mainWindowElement == null) { return null; }
                 au = mainWindowElement.FindFirst(TreeScope.Subtree, cond); 
             }
             else
@@ -663,6 +664,7 @@ namespace StrategyUIA
         /// <returns>a AutomationElement</returns>
         internal static AutomationElement deliverAutomationElementFromHWND(IntPtr hwnd)
         {
+            if(IntPtr.Zero.Equals(hwnd) || hwnd == null) { return null; }
             AutomationElement element;
             try
             {
@@ -691,6 +693,10 @@ namespace StrategyUIA
             catch (System.ComponentModel.Win32Exception)
             {
                 throw new System.ComponentModel.Win32Exception("Access denied: Can't seeks the AutomationElement");
+            }catch(ElementNotAvailableException e)
+            {
+                Debug.WriteLine("The element isn't available.");
+                return -1;
             }
             int processIdentifier = (int)element.GetCurrentPropertyValue(AutomationElement.ProcessIdProperty);
             return processIdentifier;

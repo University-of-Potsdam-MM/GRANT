@@ -176,6 +176,7 @@ namespace StrategyWindows
         /// <returns>Main-Handel des angegebenen Prozesses</returns>
         public IntPtr getProcessHwndFromHwnd(int processId)
         {
+            if(processId == -1) { return IntPtr.Zero; }
             try
             {
                 Process p = Process.GetProcessById(processId);
