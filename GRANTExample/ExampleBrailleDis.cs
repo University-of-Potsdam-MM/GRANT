@@ -103,7 +103,7 @@ namespace GRANTExample
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        treeOperation.updateNodes.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                        treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTree);
 
                     OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
                     if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
@@ -143,7 +143,7 @@ namespace GRANTExample
             if(osmRelationships != null)
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                treeOperation.updateNodes.updateNodeOfFilteredTree(osmRelationships.FilteredTree);
+                treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTree);
 
                 OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
                 if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
@@ -165,7 +165,7 @@ namespace GRANTExample
                 if(!strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree)) { return; }
                 GeneralProperties prop1Node = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties;
                 if(prop1Node.hWndFiltered == null || prop1Node.hWndFiltered.Equals(IntPtr.Zero)) { return; }
-                treeOperation.updateNodes.updateFilteredTree(prop1Node.hWndFiltered);
+                treeOperation.updateNodes.filteredTreeOfApplication(prop1Node.hWndFiltered);
                 treeOperation.updateNodes.updateBrailleGroups();
                 Object tree = grantTrees.brailleTree;
                 foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(tree))

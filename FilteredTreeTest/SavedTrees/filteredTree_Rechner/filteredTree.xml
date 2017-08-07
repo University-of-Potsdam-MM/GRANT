@@ -537,7 +537,7 @@
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <nameFiltered>42</nameFiltered>
+                    <nameFiltered>48</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
                     <isRequiredForFormFiltered>false</isRequiredForFormFiltered>
@@ -636,7 +636,7 @@
                     <isContentElementFiltered>false</isContentElementFiltered>
                     <isControlElementFiltered>true</isControlElementFiltered>
                     <isPasswordFiltered>false</isPasswordFiltered>
-                    <nameFiltered>42</nameFiltered>
+                    <nameFiltered>48</nameFiltered>
                     <itemTypeFiltered />
                     <itemStatusFiltered />
                     <isRequiredForFormFiltered>false</isRequiredForFormFiltered>
@@ -4128,6 +4128,7 @@
                 <grantFilterStrategy>UIA</grantFilterStrategy>
                 <grantFilterStrategiesChildren>
                   <string>UIA</string>
+                  <string>UIA2</string>
                 </grantFilterStrategiesChildren>
               </properties>
               <brailleRepresentation>
@@ -4325,7 +4326,7 @@
                     </rangeValue>
                     <isToggleStateOn xsi:nil="true" />
                     <IdGenerated>C8B18DFACD2F1C1982BA19264FB6BC77</IdGenerated>
-                    <grantFilterStrategy>UIA</grantFilterStrategy>
+                    <grantFilterStrategy>UIA2</grantFilterStrategy>
                   </properties>
                   <brailleRepresentation>
                     <isVisible>false</isVisible>

@@ -148,6 +148,7 @@ namespace GRANTManager.Interfaces
         object Previous(object node); //INode
         void Remove(object treeOld);
         bool Remove(object treeOld, T o);
+        bool RemoveAllDescendants(Object treeOld, Object parentOfRemovedDescendants);
         object Root(object node); //INode
         //   Object this[T item] { get; } //INode
         object Top(object node); //INOde

@@ -67,6 +67,7 @@ namespace GRANTApplication
             #region setzen der neuen (Juni 2017) Event Interfaces
             strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
             strategyMgr.getSpecifiedEventAction().setGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperations);
             strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
             #endregion
@@ -314,7 +315,7 @@ namespace GRANTApplication
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
             // Process open file dialog box results
-            if (result == true)
+            if (result == true && GuiFunctions.isTemplateValid(dlg.FileName))
             {
                 strategyMgr.getSpecifiedGeneralTemplateUi().generatedUiFromTemplate(dlg.FileName);
 

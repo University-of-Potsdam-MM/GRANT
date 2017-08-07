@@ -409,6 +409,21 @@ namespace StrategyGenericTree
             return ((INode<T>)treeOld).Remove(o);
         }
 
+        public bool RemoveAllDescendants(Object treeOld, Object parentOfRemovedDescendants)
+        {
+            if(treeOld == null || parentOfRemovedDescendants == null) { return false; }
+            while (HasChild(parentOfRemovedDescendants))
+            {
+                Remove(treeOld, GetData(Child(parentOfRemovedDescendants)));
+
+            }
+            /*foreach(Object child in DirectChildrenNodes(parentOfRemovedDescendants))
+            {
+                if(!Remove(treeOld, GetData(child))) { return false; }
+            }*/
+            return true;
+        }
+
         public Object Root(Object node)
         {
             return ((INode<T>)node).Root; 

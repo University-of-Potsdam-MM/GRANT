@@ -75,7 +75,7 @@ namespace GRANTExample
                         if (result.Count == 1)
                         {
                             GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
-                            guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTree().GetData(result[0]).properties.IdGenerated);
+                            treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(strategyMgr.getSpecifiedTree().GetData(result[0]).properties.IdGenerated);
 
                           // guiFunctions.filterAndAddSubtreeOfApplication(strategyMgr.getSpecifiedTreeOperations().getFilteredTreeOsmElementById("7CA0B5B9845D7906E3BD235A600F3546"));
                         }

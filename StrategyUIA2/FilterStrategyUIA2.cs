@@ -647,7 +647,7 @@ namespace StrategyUIA2
         private void findChildrenOfNode(Object top, AutomationElementCollection collection, int depth)
         {
             #region set grantFilterStrategiesChildren
-            if (collection != null && collection.Count > 0)
+            if (collection != null && collection.Count > 0 && !strategyMgr.getSpecifiedTree().IsRoot(top))
             {
                 OSMElement.OSMElement osmTop = strategyMgr.getSpecifiedTree().GetData(top);
                 if (osmTop.properties.grantFilterStrategiesChildren == null)

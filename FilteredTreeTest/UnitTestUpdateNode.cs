@@ -51,7 +51,7 @@ namespace FilteredTreeTest
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
             
-            guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+            treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(idTextNodeCalc);
             List<Strategy> filterStrategys = Settings.getPossibleFilters();
             Type currentFilter = strategyMgr.getSpecifiedFilter().GetType();
             int indexNewFilterStrategy = 0;
@@ -66,7 +66,7 @@ namespace FilteredTreeTest
             strategyMgr.setSpecifiedFilter(filterStrategys[indexNewFilterStrategy].className);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
-            guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+            treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
             if (textNode.properties.grantFilterStrategy == null || !filterStrategys[indexNewFilterStrategy].userName.Equals(textNode.properties.grantFilterStrategy)) { Assert.Fail("Die Filterstrategie wurde für den Knoten (richtig) nicht geändert!\nBtrachtet wurde der Knoten  {0}\nDer filter hätte '{1}' sein sollen", textNode, filterStrategys[indexNewFilterStrategy].userName); }
         }
@@ -80,14 +80,14 @@ namespace FilteredTreeTest
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
 
-            guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+            treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(idTextNodeCalc);
             
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);                
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             //Send Key -> Inhalt im Textfeld soll sich ändern
             System.Windows.Forms.SendKeys.SendWait("{DEL}");
             System.Windows.Forms.SendKeys.SendWait("24");
-            guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+            treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
             if (!textNode.properties.nameFiltered.Equals("24")) { Assert.Fail("Der Knoten wurde nicht richtig geändert oder geupdatet!\nBetrachteter Knoten:\n{0}", textNode); }
         }
@@ -101,7 +101,7 @@ namespace FilteredTreeTest
             HelpFunctions hf = new HelpFunctions(strategyMgr, grantTrees);
             hf.filterApplication(applicationName, applicationPathName);
 
-            guiFuctions.filterAndAddSubtreeOfApplication(idTextNodeCalc);
+            treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(idTextNodeCalc);
 
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
@@ -109,7 +109,7 @@ namespace FilteredTreeTest
             System.Windows.Forms.SendKeys.SendWait("{DEL}");
             System.Windows.Forms.SendKeys.SendWait("42");
             UpdateNodes up = new UpdateNodes(strategyMgr, grantTrees, treeOperation);
-            up.updateNodeOfFilteredTree(idTextNodeCalc);
+            up.filteredNodeElementOfApplication(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
             if (!textNode.properties.nameFiltered.Equals("42")) { Assert.Fail("Der Knoten wurde nicht richtig geändert oder geupdatet!\nBetrachteter Knoten:\n{0}", textNode); }
         }
@@ -122,7 +122,7 @@ namespace FilteredTreeTest
             OSMElement.OSMElement paneNodeOld = treeOperation.searchNodes.getFilteredTreeOsmElementById(idPaneNode).DeepCopy();
 
             UpdateNodes up = new UpdateNodes(strategyMgr, grantTrees, treeOperation);
-            up.updateNodeOfFilteredTree(idPaneNode);
+            up.filteredNodeElementOfApplication(idPaneNode);
             OSMElement.OSMElement paneNodeNew = treeOperation.searchNodes.getFilteredTreeOsmElementById(idPaneNode);
             Assert.AreEqual(paneNodeOld.properties.grantFilterStrategy, paneNodeNew.properties.grantFilterStrategy);
             //Assert.AreEqual(paneNodeOld.properties.grantFilterStrategiesChildren, paneNodeNew.properties.grantFilterStrategiesChildren);
@@ -130,8 +130,120 @@ namespace FilteredTreeTest
             {
                 Assert.Fail("The update of the 'grantFilterStrategiesChildren' wasn't correct!");
             }
+        }
+
+        [TestMethod]
+        public void filteredTree_Children_test()
+        {
+            /*
+             * chekcs whether the children was updatet --> change the textfeld but the textfeld isn't part of the children nodes (it's a descendants)
+             * 
+             */
+            guiFuctions.loadGrantProject(treePathUia2);
+            String id_WindowNode = "29567A6D5962C2D9DD9E359AECE86E39"; // = root
+            String id_Pane = "417F2ACC323396E993B4DC2AD2515D5E";
+            String id_titlebar = "41B73937D557B2AB5DA85001ABF0C423";
+            String id_text = "F6BC5E5ADD3B17478743923733E4BC8C";
+            OSMElement.OSMElement osm_textNodeOld = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_text).DeepCopy();
+            OSMElement.OSMElement osm_paneNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_Pane).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("{DEL}");
+            System.Windows.Forms.SendKeys.SendWait(osm_textNodeOld.properties.nameFiltered + "{+}" + "3" + "{ENTER}");
+            treeOperation.updateNodes.filteredTree(id_WindowNode, TreeScopeEnum.Children);
+            OSMElement.OSMElement osm_textNodeNew = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_text);
+            Assert.IsTrue(osm_textNodeOld.Equals(osm_textNodeNew), "this node shouldn't updated");
+            OSMElement.OSMElement osm_paneNodeNew = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_Pane);
+            OSMElement.OSMElement osm_TitlebarNodeNew = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_titlebar);
+            List<String> grantFSList = new List<string>() { "UIA", "UIA2" };
+            Assert.AreEqual(2, osm_paneNodeNew.properties.grantFilterStrategiesChildren.Count());
+            Assert.AreEqual(1, osm_TitlebarNodeNew.properties.grantFilterStrategiesChildren.Count());
+            if (!osm_paneNodeNew.properties.grantFilterStrategiesChildren.Contains("UIA")) { Assert.Fail(); }
+            if (!osm_paneNodeNew.properties.grantFilterStrategiesChildren.Contains("UIA2")) { Assert.Fail(); }
+            if (!osm_TitlebarNodeNew.properties.grantFilterStrategiesChildren.Contains("UIA")) { Assert.Fail(); }
+        }
 
 
+        [TestMethod]
+        public void filteredTree_Element_test()
+        {
+            /*
+             * chekcs whether the element was updatet --> open "Bearbeiten"
+             * 
+             */
+            guiFuctions.loadGrantProject(treePathUia2);
+            String id_edit = "C8B18DFACD2F1C1982BA19264FB6BC77";
+            Object treeLoaded = grantTrees.filteredTree.DeepCopy();
+            Object editNodeOld = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("%B"); // => Alt + B => opened the edit ("Bearbeiten") menu
+            treeOperation.updateNodes.filteredTree(id_edit, TreeScopeEnum.Element);
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
+            Object editNodeNew = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree);
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree));
+            Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(editNodeOld, editNodeNew)); // hasKeyboardFocusFiltered has changed from "false" to "true"
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "the numbers of nodes should be the same like before because only the 'edit' node was updated"); 
+        }
+
+        [TestMethod]
+        public void filteredTree_Application_changeModus_test()
+        {
+            /*
+             * chekcs whether the descendants was updatet --> open "Bearbeiten" --> new nodes should be added
+             * 
+             */
+            guiFuctions.loadGrantProject(treePathUia2);
+            String id_WindowNode = "29567A6D5962C2D9DD9E359AECE86E39"; // = root
+            String id_edit = "C8B18DFACD2F1C1982BA19264FB6BC77";
+            String id_Pane = "417F2ACC323396E993B4DC2AD2515D5E";
+            Object treeLoaded = grantTrees.filteredTree.DeepCopy();
+            Object editNodeOld = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("^u"); // => Crlt + u => change calc modus
+
+            treeOperation.updateNodes.filteredTree(id_Pane, TreeScopeEnum.Application);
+            //System.Windows.Forms.SendKeys.SendWait("{ESC}");
+            Object editNodeNew = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree);
+            Assert.AreNotEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree),  "some nodes should be added"); 
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "the numbers of nodes should be the same like before because only the 'edit' node was updated");
+        }
+
+        [TestMethod]
+        public void filteredTree_Descendants2_test()
+        {
+            /*
+             * chekcs whether the descendants was updatet --> open "Bearbeiten" --> new nodes should be added
+             * 
+             */
+            guiFuctions.loadGrantProject(treePathUia2);
+            String id_WindowNode = "29567A6D5962C2D9DD9E359AECE86E39"; // = root
+            String id_edit = "C8B18DFACD2F1C1982BA19264FB6BC77";
+            Object treeLoaded = grantTrees.filteredTree.DeepCopy();
+            Object editNodeOld = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("%B"); // => Alt + B => opened the edit ("Bearbeiten") menu
+
+            treeOperation.updateNodes.filteredTree(id_WindowNode, TreeScopeEnum.Descendants);
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
+            Object editNodeNew = treeOperation.searchNodes.getNode(id_edit, grantTrees.filteredTree);
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree));
+            Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(editNodeOld, editNodeNew)); // hasKeyboardFocusFiltered has changed from "false" to "true"
+            Assert.AreEqual(strategyMgr.getSpecifiedTree().Count(treeLoaded), strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "the numbers of nodes should be the same like before because only the 'edit' node was updated");
+        }
+
+        [TestCleanup]
+        public void clean()
+        {
+            if(grantTrees.filteredTree != null)
+            {
+                IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
+                strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+                System.Windows.Forms.SendKeys.SendWait("{ESC}");
+                System.Windows.Forms.SendKeys.SendWait("^{F4}"); // normal modus
+            }
         }
     }
 }

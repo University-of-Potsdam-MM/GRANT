@@ -97,7 +97,7 @@ namespace StrategyUIA
         /// </summary>
         /// <param name="automationElement"> the AutomationElement of the filtered element</param>
         /// <param name="treeScope">kind of filtering</param>
-        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Parent', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
+        /// <param name="depth">depth of filtering for the <paramref name="treeScope"/> of 'Ancestors', 'Children' and 'Application';  <code>-1</code> means the whole depth</param>
         /// <returns>the filtered (sub-)tree</returns>
         private Object filtering(AutomationElement automationElement, TreeScopeEnum treeScope, int depth)
         {
@@ -594,14 +594,13 @@ namespace StrategyUIA
         {
             AutomationElement au;
             Condition cond = setPropertiesCondition(osmElement.properties);
-
             if (osmElement.properties.hWndFiltered != IntPtr.Zero)
             {
                 //ist der Weg wirklich schneller?
                 IntPtr pointer = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(deliverElementID(osmElement.properties.hWndFiltered));
                 AutomationElement mainWindowElement = deliverAutomationElementFromHWND(pointer);
                 //au = mainWindowElement.FindFirst(TreeScope.Children, cond);
-                au = mainWindowElement.FindFirst(TreeScope.Subtree, cond);
+                au = mainWindowElement.FindFirst(TreeScope.Subtree, cond); 
             }
             else
             {
@@ -614,7 +613,7 @@ namespace StrategyUIA
                 }
                 else
                 {
-                    au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond); //Attention: it is possible that an other element will be found
+                    au = AutomationElement.RootElement.FindFirst(TreeScope.Descendants, cond); //Attention: it is possible that another element will be found
                 }
             }
             return au;
@@ -630,7 +629,7 @@ namespace StrategyUIA
         private void findChildrenOfNode(Object top, AutomationElementCollection collection,  int depth)
         {
             #region set grantFilterStrategiesChildren
-            if (collection != null && collection.Count > 0)
+            if (collection != null && collection.Count > 0 && !strategyMgr.getSpecifiedTree().IsRoot(top))
             {
                 OSMElement.OSMElement osmTop = strategyMgr.getSpecifiedTree().GetData(top);
                 if (osmTop.properties.grantFilterStrategiesChildren == null)

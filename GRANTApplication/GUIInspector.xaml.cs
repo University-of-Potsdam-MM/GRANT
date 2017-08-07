@@ -60,6 +60,7 @@ namespace GRANTApplication
             #region setzen der neuen (Juni 2017) Event Interfaces
             strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
             strategyMgr.getSpecifiedEventAction().setGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperations);
             strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
             #endregion
@@ -380,7 +381,7 @@ namespace GRANTApplication
         {
             if(((Button)sender).CommandParameter == null) { return; }
             System.Console.WriteLine(" ID: " + ((Button)sender).CommandParameter.ToString());
-            guiFunctions.filterAndAddSubtreeOfApplication(((Button)sender).CommandParameter.ToString());
+            treeOperations.updateNodes.filterSubtreeWithCurrentFilterStrtegy(((Button)sender).CommandParameter.ToString());
             Object tree = grantTrees.filteredTree;
             filteredTreeOutput.Items.Clear();
             root.Items.Clear();

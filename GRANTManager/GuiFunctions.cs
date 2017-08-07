@@ -993,7 +993,7 @@ namespace GRANTManager
 
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(loadedTree)).properties.processName);
             if (hwnd.Equals(IntPtr.Zero)) { throw new Exception("Der HWND der Anwendung konnte nicht gefunden werden!"); }
-            treeOperation.updateNodes.updateFilteredTree(hwnd);
+            treeOperation.updateNodes.filteredTreeOfApplication(hwnd);
         }
 
         /// <summary>
@@ -1006,19 +1006,6 @@ namespace GRANTManager
             Object treeNew = strategyMgr.getSpecifiedTree().NewTree();
             grantTrees.filteredTree = null;
             grantTrees.brailleTree = null;
-        }
-
-        /// <summary>
-        /// filtered a subtree and updates the tree object in the <c>GrantProjectObject</c> object;
-        /// it will be filtering with the current selectet filter library
-        /// </summary>
-        /// <param name="idGeneratedOfFirstNodeOfSubtree">id of the node of the subtree to be updated</param>
-        public void filterAndAddSubtreeOfApplication(String idGeneratedOfFirstNodeOfSubtree)
-        {
-            OSMElement.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
-            Object subtree = strategyMgr.getSpecifiedFilter().filtering(idGeneratedOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
-            String idParent = treeOperation.updateNodes.changeSubtreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
-            
         }
 
         /// <summary>
@@ -1511,6 +1498,7 @@ namespace GRANTManager
             allTypesRemove("suportedPatterns", ref propList);
             allTypesRemove("rangeValue", ref propList);
             allTypesRemove("grantFilterStrategy", ref propList);
+            allTypesRemove("grantFilterStrategiesChildren", ref propList);
             allTypesRemove("processName", ref propList);
             allTypesRemove("appPath", ref propList);
         }
