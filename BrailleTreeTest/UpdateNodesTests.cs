@@ -1109,5 +1109,140 @@ namespace GRANTManager.BrailleTreeTests
             Assert.IsFalse(SearchNodes.existPropertyName(propName));
             Assert.AreEqual("", value);
         }
+
+        [TestMethod]
+        public void refreshBrailleOsm_element_activeScreen_Test()
+        {
+            /*
+             * 1. Braille Knoten der "Rechnung" holen
+             * 2. entsprechenden gefilterten Knoten ändern + Verlauf
+             * 3. für die verschiedenen TreeScopeEnums ein update durchführen (einzelne Testfälle) 
+             * 3.1 je nach TreeScopeEnum hat sich im gefilterten Baum etwas geändert
+             * 
+             * 1. Knoten ohne Verbindung ändern -> keine Braille Änderung
+             * 
+             */
+            guiFuctions.loadGrantProject(treePath);
+            Assert.IsTrue(grantTrees.filteredTree != null && !strategyMgr.getSpecifiedTree().NewTree().Equals(grantTrees.filteredTree));
+            String idFiltered_resultNode = "3DD9A53C1DC2324B4E259155228BB3D1";
+            String idBraille_resultNode1_sv = "D1D4A1B452D748A31DEF18367A3EFBD9";
+            String idBraille_resultNode2_sv = "563DA28620F9BD1744C05A08E5B4E81D";
+
+            strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("sv");
+            Object brailleTree_Copy = grantTrees.brailleTree.DeepCopy();
+            OSMElement.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait(osmFiltered_resultNode_old.properties.nameFiltered + "{+}" + osmFiltered_resultNode_old.properties.nameFiltered+"1");
+
+            treeOperation.updateNodes.filteredTree(idFiltered_resultNode, TreeScopeEnum.Element);
+            treeOperation.updateNodes.refreshBrailleOSM(idFiltered_resultNode, TreeScopeEnum.Element, true);
+
+            OSMElement.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
+            List<String> connectedBrailleNodes_resultNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_resultNode);
+            Assert.IsFalse(connectedBrailleNodes_resultNode == null || connectedBrailleNodes_resultNode.Count < 1);
+            int expectedValue = Convert.ToInt32(osmFiltered_resultNode_old.properties.nameFiltered + "1");
+            foreach (String id in connectedBrailleNodes_resultNode)
+            {
+                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                if (!id.Equals(idBraille_resultNode1_sv) && !id.Equals(idBraille_resultNode2_sv))
+                {
+                    Assert.IsTrue(osmOld.Equals(osmNew));
+                }else
+                {
+                    Assert.IsFalse(osmOld.Equals(osmNew));
+                    Assert.AreEqual(expectedValue, Convert.ToInt32(osmNew.properties.valueFiltered));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void refreshBrailleOsm_element_Test()
+        {
+            // all Braille Screens
+            guiFuctions.loadGrantProject(treePath);
+            Assert.IsTrue(grantTrees.filteredTree != null && !strategyMgr.getSpecifiedTree().NewTree().Equals(grantTrees.filteredTree));
+            String idFiltered_resultNode = "3DD9A53C1DC2324B4E259155228BB3D1";
+
+            strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("sv");
+            Object brailleTree_Copy = grantTrees.brailleTree.DeepCopy();
+            OSMElement.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait(osmFiltered_resultNode_old.properties.nameFiltered + "{+}" + osmFiltered_resultNode_old.properties.nameFiltered + "1");
+
+            treeOperation.updateNodes.filteredTree(idFiltered_resultNode, TreeScopeEnum.Element);
+            treeOperation.updateNodes.refreshBrailleOSM(idFiltered_resultNode, TreeScopeEnum.Element, false);
+
+            OSMElement.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
+            List<String> connectedBrailleNodes_resultNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_resultNode);
+            Assert.IsFalse(connectedBrailleNodes_resultNode == null || connectedBrailleNodes_resultNode.Count < 1);
+            int expectedValue =  Convert.ToInt32(osmFiltered_resultNode_old.properties.nameFiltered + "1");
+            foreach (String id in connectedBrailleNodes_resultNode)
+            {
+                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                if (osmOld.brailleRepresentation.displayedGuiElementType.Equals("nameFiltered"))
+                {
+                    Assert.IsFalse(osmOld.Equals(osmNew));
+                    Assert.AreEqual(expectedValue, Convert.ToInt32(osmNew.properties.valueFiltered));
+                }
+            }
+        }
+
+        [TestMethod]
+        public void refreshBrailleOsm_sibling_activeScreen_Test()
+        {
+            // all Braille Screens
+            guiFuctions.loadGrantProject(treePath);
+            Assert.IsTrue(grantTrees.filteredTree != null && !strategyMgr.getSpecifiedTree().NewTree().Equals(grantTrees.filteredTree));
+            String idFiltered_resultNode = "3DD9A53C1DC2324B4E259155228BB3D1";
+            String idFiltered_VerlaufNode = "ED842B72B012E86CE468B73FA1378361";
+
+            strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
+            strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("sv");
+            Object brailleTree_Copy = grantTrees.brailleTree.DeepCopy();
+            OSMElement.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("{ESC}"); 
+            System.Windows.Forms.SendKeys.SendWait(osmFiltered_resultNode_old.properties.nameFiltered + "{+}" + osmFiltered_resultNode_old.properties.nameFiltered + "1");
+
+            treeOperation.updateNodes.filteredTree(idFiltered_resultNode, TreeScopeEnum.Application); // TreeScopeEnum.Sibling
+            treeOperation.updateNodes.refreshBrailleOSM(idFiltered_resultNode, TreeScopeEnum.Sibling, false);
+
+            OSMElement.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
+            List<String> connectedBrailleNodes_resultNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_resultNode);
+            List<String> connectedBrailleNodes_verlaufNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_VerlaufNode);
+            Assert.IsFalse(connectedBrailleNodes_resultNode == null || connectedBrailleNodes_resultNode.Count < 1);
+            
+            foreach (String id in connectedBrailleNodes_resultNode)
+            {
+                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                if (osmOld.brailleRepresentation.displayedGuiElementType.Equals("nameFiltered"))
+                {
+                    Assert.IsTrue(osmOld.Equals(osmNew));
+                }
+            }
+            String expectedValue = osmFiltered_resultNode_old.properties.nameFiltered+ " +";
+            foreach (String id in connectedBrailleNodes_verlaufNode)
+            {
+                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                if (osmOld.brailleRepresentation.displayedGuiElementType.Equals("nameFiltered"))
+                {
+                    if (osmOld.Equals(osmNew))
+                    {
+                        Debug.WriteLine("Problem: " + osmNew.ToString());
+                    }
+                    Assert.IsFalse(osmOld.Equals(osmNew));
+                    Assert.AreEqual(expectedValue, osmNew.properties.valueFiltered);
+                }
+            }
+        }
     }
 }

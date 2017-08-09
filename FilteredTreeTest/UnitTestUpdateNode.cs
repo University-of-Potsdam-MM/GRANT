@@ -85,7 +85,7 @@ namespace FilteredTreeTest
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);                
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             //Send Key -> Inhalt im Textfeld soll sich ändern
-            System.Windows.Forms.SendKeys.SendWait("{DEL}");
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
             System.Windows.Forms.SendKeys.SendWait("24");
             treeOperation.updateNodes.filterSubtreeWithCurrentFilterStrtegy(idTextNodeCalc);
             OSMElement.OSMElement textNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(idTextNodeCalc);
@@ -106,7 +106,7 @@ namespace FilteredTreeTest
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             //Send Key -> Inhalt im Textfeld soll sich ändern
-            System.Windows.Forms.SendKeys.SendWait("{DEL}");
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
             System.Windows.Forms.SendKeys.SendWait("42");
             UpdateNodes up = new UpdateNodes(strategyMgr, grantTrees, treeOperation);
             up.filteredNodeElementOfApplication(idTextNodeCalc);
@@ -148,7 +148,7 @@ namespace FilteredTreeTest
             OSMElement.OSMElement osm_paneNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_Pane).DeepCopy();
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(applicationName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
-            System.Windows.Forms.SendKeys.SendWait("{DEL}");
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
             System.Windows.Forms.SendKeys.SendWait(osm_textNodeOld.properties.nameFiltered + "{+}" + "3" + "{ENTER}");
             treeOperation.updateNodes.filteredTree(id_WindowNode, TreeScopeEnum.Children);
             OSMElement.OSMElement osm_textNodeNew = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_text);

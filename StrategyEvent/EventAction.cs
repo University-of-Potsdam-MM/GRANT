@@ -67,9 +67,15 @@ namespace StrategyEvent
         #endregion
 
         #region Output/Braille
-        public void refreshBrailleOSM(string idGeneratedOffilteredNode, TreeScopeEnum treescopeOfFilteredNode, bool onlyActiveScreen = true)
+        /// <summary>
+        /// Refreshs all Braille OSM elements depending on the given id of a node in the filtered tree; it wouldn't be filtered 
+        /// </summary>
+        /// <param name="idGeneratedOfFilteredNode">a node id of the filtered tree; the connected (Braille) nodes will be refreshed</param>
+        /// <param name="treescopeOfFilteredNode">the tree scope for updating based on the filtered tree</param>
+        /// <param name="onlyActiveScreen"><c>true</c> if only the Braille nodes on the active scree shold be updated, otherwise all connected Braille nodes will be updated</param>
+        public void refreshBrailleOSM(string idGeneratedOfFilteredNode, TreeScopeEnum treescopeOfFilteredNode, bool onlyActiveScreen = true)
         {
-            throw new NotImplementedException();
+            treeOperations.updateNodes.refreshBrailleOSM(idGeneratedOfFilteredNode, treescopeOfFilteredNode, onlyActiveScreen);
         }
 
         #endregion

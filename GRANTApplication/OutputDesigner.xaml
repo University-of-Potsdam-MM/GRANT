@@ -45,7 +45,8 @@
                     <Grid>
                         <ComboBox Name="comboBox2" ItemsSource="{Binding Combobox2items}"  VerticalAlignment="Center" HorizontalAlignment="Center"   Width="320" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
                     </Grid>-->
-                    <Label Foreground="White" Margin="475,5,5,5" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
+                    <Label Content="Loaded project name:" x:Name="loadedProjectName" VerticalAlignment="Center" Margin="40,5,5,5" Foreground="White" Width="400" />
+                    <Label Foreground="White" Margin="20,5,5,5" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Save Filtered Tree + Output Device + GUI-Elements: "/>
                     <Button Content="Save Project"   VerticalAlignment="Center" Width="140" Click="SaveProject_Click" x:Name="SaveButton" IsEnabled="{Binding SEnabled}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal"  Background="Coral" Margin="0,0,0,0">

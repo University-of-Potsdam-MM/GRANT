@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfOsmConnectorOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<ArrayOfOsmTreeConnectorTupleOfStringString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <OsmTreeConnectorTupleOfStringString>
     <FilteredTree>417F2ACC323396E993B4DC2AD2515D5E</FilteredTree>
     <BrailleTree>A6D9585C648ED99D8186BF979170FEA6</BrailleTree>
@@ -512,4 +512,4 @@
     <FilteredTree>058C55B2589F80EBD53824C36BA68F2B</FilteredTree>
     <BrailleTree>ECB8CBAC756374744FAF64E4C576C265</BrailleTree>
   </OsmTreeConnectorTupleOfStringString>
-</ArrayOfOsmConnectorOfStringString>
+</ArrayOfOsmTreeConnectorTupleOfStringString>

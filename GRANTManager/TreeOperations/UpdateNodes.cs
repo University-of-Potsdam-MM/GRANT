@@ -373,25 +373,200 @@ namespace GRANTManager.TreeOperations
 
             changeBrailleRepresentation(ref element);// here is the element already changed
         }
-       
+        
+        #region refreshBrailleOSM
+        /// <summary>
+        /// Refreshs all Braille OSM elements depending on the given id of a node in the filtered tree
+        /// </summary>
+        /// <param name="idGeneratedOfFilteredNode">a node id of the filtered tree; the connected (Braille) nodes will be refreshed</param>
+        /// <param name="treescopeOfFilteredNode">the tree scope for updating based on the filtered tree</param>
+        /// <param name="onlyActiveScreen"><c>true</c> if only the Braille nodes on the active scree shold be updated, otherwise all connected Braille nodes will be updated</param>
+        public void refreshBrailleOSM(string idGeneratedOfFilteredNode, TreeScopeEnum treescopeOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            switch (treescopeOfFilteredNode)
+            {
+                case TreeScopeEnum.Ancestors:
+                    throw new NotImplementedException();
+                case TreeScopeEnum.Application:
+                    refreshBrailleOSM_Application(idGeneratedOfFilteredNode, onlyActiveScreen);
+                    break;
+                case TreeScopeEnum.Children:
+                    refreshBrailleOSM_Children(idGeneratedOfFilteredNode, onlyActiveScreen);
+                    break;
+                case TreeScopeEnum.Descendants:
+                    refreshBrailleOSM_Descendants(idGeneratedOfFilteredNode, onlyActiveScreen);
+                    break;
+                case TreeScopeEnum.Element:
+                    refreshBrailleOSM_Element(idGeneratedOfFilteredNode, onlyActiveScreen);
+                    break;
+                case TreeScopeEnum.Sibling:
+                    refreshBrailleOSM_Siblings(idGeneratedOfFilteredNode, onlyActiveScreen);
+                    break;
+                case TreeScopeEnum.Subtree:
+                    refreshBrailleOSM_subtree(idGeneratedOfFilteredNode, onlyActiveScreen);
+                    break;
+                default:
+                    throw new Exception("For the TreeScopeEnum '" + treescopeOfFilteredNode + "' didn't exist a refresh methode.");
+            }
+        }
+
+        private void refreshBrailleOSM_Application(string idGeneratedOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            Object subtreeBraille = null;
+            if (onlyActiveScreen)
+            {
+                String activeScreenId = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreenId();
+                subtreeBraille = treeOperation.searchNodes.getNode(activeScreenId, grantTrees.brailleTree);
+            }
+            Object subtreeFiltered = treeOperation.searchNodes.getNode(idGeneratedOfFilteredNode, grantTrees.filteredTree);
+            List<String> connectedBrailleNodes = new List<string>();
+            foreach(var con in grantTrees.osmTreeConnections)
+            {
+                connectedBrailleNodes.Add(con.BrailleTree);
+            }
+            if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
+            refreshBrailleOSM(connectedBrailleNodes, subtreeBraille ?? grantTrees.brailleTree);
+        }
+
+        private void refreshBrailleOSM_Children(string idGeneratedOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            Object subtreeBraille = null;
+            if (onlyActiveScreen)
+            {
+                String activeScreenId = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreenId();
+                subtreeBraille = treeOperation.searchNodes.getNode(activeScreenId, grantTrees.brailleTree);
+            }
+            Object subtreeFiltered = treeOperation.searchNodes.getNode(idGeneratedOfFilteredNode, grantTrees.filteredTree);
+            List<String> connectedBrailleNodes = new List<string>();
+            foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(subtreeFiltered))
+            {
+                OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
+                List<String> tmpConnectetList = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(osmNode.properties.IdGenerated);
+                if (tmpConnectetList != null)
+                {
+                    connectedBrailleNodes.AddRange(tmpConnectetList);
+                }
+            }
+            if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
+            refreshBrailleOSM(connectedBrailleNodes, subtreeBraille ?? grantTrees.brailleTree);
+        }
+
+        private void refreshBrailleOSM_Siblings(string idGeneratedOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            Object subtreeBraille = null;
+            if (onlyActiveScreen)
+            {
+                String activeScreenId = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreenId();
+                subtreeBraille = treeOperation.searchNodes.getNode(activeScreenId, grantTrees.brailleTree);
+            }
+            Object subtreeFiltered = treeOperation.searchNodes.getNode(idGeneratedOfFilteredNode, grantTrees.filteredTree);
+            if (!strategyMgr.getSpecifiedTree().HasParent(subtreeFiltered)) { return; }
+            Object subtreeFilteredParent = strategyMgr.getSpecifiedTree().Parent(subtreeFiltered);
+            List <String> connectedBrailleNodes = new List<string>();
+            foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(subtreeFilteredParent))
+            {
+                if (!node.Equals(subtreeFiltered))
+                {
+                    OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
+                    List<String> tmpConnectetList = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(osmNode.properties.IdGenerated);
+                    if (tmpConnectetList != null)
+                    {
+                        connectedBrailleNodes.AddRange(tmpConnectetList);
+                    }
+                }
+            }
+            if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
+            refreshBrailleOSM(connectedBrailleNodes, subtreeBraille ?? grantTrees.brailleTree);
+        }
+
+
+        private void refreshBrailleOSM_Descendants(string idGeneratedOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            Object subtreeBraille = null;
+            if (onlyActiveScreen)
+            {
+                String activeScreenId = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreenId();
+                subtreeBraille = treeOperation.searchNodes.getNode(activeScreenId, grantTrees.brailleTree);
+            }
+            Object subtreeFiltered = treeOperation.searchNodes.getNode(idGeneratedOfFilteredNode, grantTrees.filteredTree);
+            List<String> connectedBrailleNodes = new List<string>();
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtreeFiltered))
+            {
+                OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
+                List<String> tmpConnectetList = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(osmNode.properties.IdGenerated);
+                if (tmpConnectetList != null)
+                {
+                    connectedBrailleNodes.AddRange(tmpConnectetList);
+                }
+            }
+            if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
+            refreshBrailleOSM(connectedBrailleNodes, subtreeBraille ?? grantTrees.brailleTree);
+        }
+
+        private void refreshBrailleOSM_subtree(string idGeneratedOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            Object subtreeBraille = null;
+            if (onlyActiveScreen)
+            {
+                String activeScreenId = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreenId();
+                subtreeBraille = treeOperation.searchNodes.getNode(activeScreenId, grantTrees.brailleTree);
+            }
+            Object subtreeFiltered = treeOperation.searchNodes.getNode(idGeneratedOfFilteredNode, grantTrees.filteredTree);
+            List<String> connectedBrailleNodes = new List<string>();
+            foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(subtreeFiltered))
+            {
+                OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
+                List<String> tmpConnectetList = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(osmNode.properties.IdGenerated);
+                if(tmpConnectetList != null)
+                {
+                    connectedBrailleNodes.AddRange(tmpConnectetList);
+                }
+            }
+            if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
+            refreshBrailleOSM(connectedBrailleNodes, subtreeBraille ?? grantTrees.brailleTree);
+        }
+
+        private void refreshBrailleOSM_Element(string idGeneratedOfFilteredNode, bool onlyActiveScreen = true)
+        {
+            Object subtree = null;
+            if (onlyActiveScreen)
+            {
+                String activeScreenId = strategyMgr.getSpecifiedBrailleDisplay().getVisibleScreenId();
+                subtree = treeOperation.searchNodes.getNode(activeScreenId, grantTrees.brailleTree);
+            }
+            List<String> connectedBrailleNodes = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idGeneratedOfFilteredNode);
+            if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
+            refreshBrailleOSM(connectedBrailleNodes, subtree ?? grantTrees.brailleTree); // ??-Operator https://docs.microsoft.com/dotnet/csharp/language-reference/operators/null-conditional-operator
+        }
+
+        private void refreshBrailleOSM(List<String> brailleNodeIds, Object brailleSubtree)
+        {
+            if(brailleNodeIds == null || brailleSubtree == null) { return; }
+            foreach(String BId in brailleNodeIds)
+            {
+                OSMElement.OSMElement osmNode = treeOperation.searchNodes.getNodeElement(BId, brailleSubtree);
+                if(osmNode != null && !osmNode.Equals(new OSMElement.OSMElement()))
+                {
+                    updateNodeOfBrailleUi(ref osmNode);
+                    strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osmNode);
+                }
+            }
+        }
+        #endregion
+
         /// <summary>
         /// Sets the new braille representaion of the element
         /// </summary>
         /// <param name="element">the new representation</param>
         private void changeBrailleRepresentation(ref OSMElement.OSMElement element)
         {
-            Object brailleTree = grantTrees.brailleTree;
-            if (brailleTree == null) { return; }
-            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(brailleTree))
+            if (grantTrees.brailleTree == null) { return; }
+            Object node = treeOperation.searchNodes.getNode(element.properties.IdGenerated, grantTrees.brailleTree);
+            if(node != null)
             {
-                if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated != null && strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated.Equals(element.properties.IdGenerated))
-                {
-                    strategyMgr.getSpecifiedTree().SetData(node, element);
-                    break;
-                }
+                strategyMgr.getSpecifiedTree().SetData(node, element);
             }
         }
-
         #endregion
 
         #region properties

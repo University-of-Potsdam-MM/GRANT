@@ -230,6 +230,8 @@ namespace GRANTApplication
                 // Save document
                 // guiFunctions.saveFilteredTree(dlg.FileName);
                 guiFunctions.saveProject(dlg.FileName);
+                loadedProjectName.Content = "Loaded project name: " + dlg.SafeFileName.ToString();
+                loadedProjectName.ToolTip = dlg.FileName.ToString();
             }
         }
 
@@ -252,6 +254,9 @@ namespace GRANTApplication
             if (result == true)
             {
                 guiFunctions.loadGrantProject(dlg.FileName);
+
+                loadedProjectName.Content = "Loaded project name: " + dlg.SafeFileName.ToString();
+                loadedProjectName.ToolTip = dlg.FileName.ToString();
                 Object tree = grantTrees.filteredTree;
                 filteredTreeOutput.Items.Clear();
                 filteredRoot.Items.Clear();

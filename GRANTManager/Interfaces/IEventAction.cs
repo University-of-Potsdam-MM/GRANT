@@ -29,6 +29,12 @@ namespace GRANTManager.Interfaces
         #endregion
 
         #region Output/Braille
+        /// <summary>
+        /// Refreshs all Braille OSM elements depending on the given id of a node in the filtered tree
+        /// </summary>
+        /// <param name="idGeneratedOffilteredNode">a node id of the filtered tree; the connected (Braille) nodes will be refreshed</param>
+        /// <param name="treescopeOfFilteredNode">the tree scope for updating based on the filtered tree</param>
+        /// <param name="onlyActiveScreen"><c>true</c> if only the Braille nodes on the active scree shold be updated, otherwise all connected Braille nodes will be updated</param>
         void refreshBrailleOSM(String idGeneratedOffilteredNode, TreeScopeEnum treescopeOfFilteredNode, Boolean onlyActiveScreen = true);
         #endregion
     }
