@@ -13,11 +13,6 @@ namespace GRANTManager.Interfaces
         void setGrantTrees(GeneratedGrantTrees trees);
         void setTreeOperation(TreeOperation treeOperation);
 
-        void refreshBrailleView(String viewId);
-        void refreshBrailleScreen(String screenId);
-        void changeBrailleScreen(String screenName);
-        void changeWholeOSMElement();
-
         #region filter
         /// <summary>
         /// Filtered an OSM node (and depending on the <para>treescope</para> his sibilings, parents children etc. ) and updates the filtered tree object
@@ -36,6 +31,11 @@ namespace GRANTManager.Interfaces
         /// <param name="treescopeOfFilteredNode">the tree scope for updating based on the filtered tree</param>
         /// <param name="onlyActiveScreen"><c>true</c> if only the Braille nodes on the active scree shold be updated, otherwise all connected Braille nodes will be updated</param>
         void refreshBrailleOSM(String idGeneratedOffilteredNode, TreeScopeEnum treescopeOfFilteredNode, Boolean onlyActiveScreen = true);
+
+        void refreshBrailleView(String viewId);
+        void refreshBrailleScreen(String screenId);
+        void changeBrailleScreen(String screenName);
+        void changeBrailleScreenById(string screenId);
         #endregion
     }
 }

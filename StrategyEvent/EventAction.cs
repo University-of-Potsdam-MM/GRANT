@@ -21,26 +21,7 @@ namespace StrategyEvent
         }
         public void setGrantTrees(GeneratedGrantTrees trees) { grantTrees = trees; }
         public void setTreeOperation(TreeOperation treeOperation) { this.treeOperations = treeOperation; }
-
-        public void refreshBrailleView(string viewId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void refreshBrailleScreen(string screenId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void changeBrailleScreen(string screenName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void changeWholeOSMElement()
-        {
-            throw new NotImplementedException();
-        }
+       
         #region filter
         /// <summary>
         /// Filtered an OSM node (and depending on the <para>treescope</para> his sibilings, parents children etc. ) and updates the filtered tree object
@@ -76,6 +57,41 @@ namespace StrategyEvent
         public void refreshBrailleOSM(string idGeneratedOfFilteredNode, TreeScopeEnum treescopeOfFilteredNode, bool onlyActiveScreen = true)
         {
             treeOperations.updateNodes.refreshBrailleOSM(idGeneratedOfFilteredNode, treescopeOfFilteredNode, onlyActiveScreen);
+        }
+
+        public void refreshBrailleView(string viewId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void refreshBrailleScreen(string screenId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// change the visible screen
+        /// </summary>
+        /// <param name="screenName">name of the new visible screen</param>
+        public void changeBrailleScreen(string screenName)
+        {
+            if (screenName == null || screenName.Equals("")) { return; }
+            if (strategyManager.getSpecifiedBrailleDisplay() == null) { return; }
+            if (treeOperations.searchNodes.getPosibleScreenNames().Contains(screenName))
+            {
+                strategyManager.getSpecifiedBrailleDisplay().setVisibleScreen(screenName);
+            }
+        }
+
+        /// <summary>
+        /// change the visible screen
+        /// </summary>
+        /// <param name="screenId">id of the new visible screen OR a node id of the new visible screen branch</param>
+        public void changeBrailleScreenById(string screenId)
+        {
+            String screenName = treeOperations.searchNodes.getScreenIdToScreenName(screenId);
+            if(screenName == null) { return; }
+            changeBrailleScreen(screenName);
         }
 
         #endregion

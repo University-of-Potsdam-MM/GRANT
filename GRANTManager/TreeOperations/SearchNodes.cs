@@ -341,7 +341,7 @@ namespace GRANTManager.TreeOperations
         #endregion
 
         /// <summary>
-        /// Gives the names of the existing screens
+        /// Gives the names of all existing screens
         /// </summary>
         /// <param name="typeOfView">the type of view (<see cref="Settings.getPossibleTypesOfViews"/></param>
         /// <returns>List with all possible name of screens,
@@ -361,6 +361,19 @@ namespace GRANTManager.TreeOperations
                 }
             }
             return screens;
+        }
+
+        /// <summary>
+        /// Determinates the screen name to a given screen id
+        /// </summary>
+        /// <param name="screenId">the id of the screen</param>
+        /// <returns>Returns the screen name OR <c>null</c></returns>
+        public String getScreenIdToScreenName(String screenId)
+        {
+            if(screenId == null) { return null; }
+            OSMElement.OSMElement osm = getBrailleTreeOsmElementById(screenId);
+            if(osm == null || osm.Equals(new OSMElement.OSMElement()) || osm.brailleRepresentation == null) { return null; }
+            return osm.brailleRepresentation.screenName;
         }
 
         /// <summary>
