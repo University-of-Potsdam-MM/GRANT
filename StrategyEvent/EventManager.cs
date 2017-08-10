@@ -17,5 +17,15 @@ namespace StrategyEvent
             strategyManager = strategyMgr;
         }
 
+        //erhalt der subscriptions auf ein event
+        //https://msdn.microsoft.com/en-us/library/microsoft.practices.prism.pubsubevents.eventbase.subscriptions(v=pandp.50).aspx
+        //https://stackoverflow.com/questions/45410678/eventaggregator-get-list-of-subscribers
+
+        public void deliverActionListForEvent(string eventID)
+        {
+
+        }
+
+
     }
 }

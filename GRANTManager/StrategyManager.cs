@@ -19,7 +19,7 @@ namespace GRANTManager
         private AOutputManager specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
 
         private IEventAction specifiedEventAction;
-        private IEventManager specifiedEventManager2;
+        private IEventManager specifiedEventManager;
         private IEventProcessor specifiedEventProcessor;
 
         private IEvent_PRISMStrategy eventManagerStrategy;
@@ -75,34 +75,34 @@ namespace GRANTManager
 
         public IEventProcessor getSpecifiedEventProcessor() { return specifiedEventProcessor; }
 
-        public void setSpecifiedEventManager2(String eventManagerClassName)
+        public void setSpecifiedEventManager(String eventManagerClassName)
         {
             try
             {
                 Type type = Type.GetType(eventManagerClassName);
-                specifiedEventManager2 = (IEventManager)Activator.CreateInstance(type, this);
+                specifiedEventManager = (IEventManager)Activator.CreateInstance(type, this);
             }
             catch (InvalidCastException ic)
             {
-                throw new InvalidCastException("Exception in StrategyManager_setSpecifiedEventManager2: " + ic.Message);
+                throw new InvalidCastException("Exception in StrategyManager_setSpecifiedEventManager: " + ic.Message);
             }
             catch (ArgumentException ae)
             {
-                throw new ArgumentException("Exception in StrategyManager_setSpecifiedEventManager2: " + ae.Message);
+                throw new ArgumentException("Exception in StrategyManager_setSpecifiedEventManager: " + ae.Message);
 
             }
             catch (Exception e)
             {
-                throw new Exception("Exception in StrategyManager_setSpecifiedEventManager2: " + e.Message);
+                throw new Exception("Exception in StrategyManager_setSpecifiedEventManager: " + e.Message);
             }
         }
 
-        public IEventManager getSpecifiedEventManager2() { return specifiedEventManager2; }
+        public IEventManager getSpecifiedEventManager() { return specifiedEventManager; }
 
         /// <summary>
         /// </summary>
         /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
-        public void setSpecifiedEventManager(String eventManagerClassName)
+        public void setSpecifiedEventManagerStrategy(String eventManagerClassName)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace GRANTManager
         /// Gibt den verwendeten PRISM_Eventmanager zurück
         /// </summary>
         /// <returns></returns>
-        public IEvent_PRISMStrategy getSpecifiedEventManager()
+        public IEvent_PRISMStrategy getSpecifiedEventManagerStrategy()
         {
             return eventManagerStrategy;
         }
