@@ -42,7 +42,7 @@ namespace GRANTApplication
             treeOperations = new TreeOperation(strategyMgr, grantTrees);
             // Setzen des Eventmanager
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
-            strategyMgr.setSpecifiedEventManager(possibleEventManager[0].className);
+            strategyMgr.setSpecifiedEventManagerStrategy(possibleEventManager[0].className);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(Settings.strategyUserNameToClassName(cUserOperationSystemName));
@@ -68,7 +68,7 @@ namespace GRANTApplication
             strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);
             strategyMgr.getSpecifiedEventAction().setGrantTrees(grantTrees);
             strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperations);
-            strategyMgr.setSpecifiedEventManager2(settings.getPossibleEventManager2()[0].className);
+            strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
             #endregion
 

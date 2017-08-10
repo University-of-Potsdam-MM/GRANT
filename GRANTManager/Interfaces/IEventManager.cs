@@ -8,6 +8,6 @@ namespace GRANTManager.Interfaces
 {
     public interface IEventManager
     {
-        
+        void deliverActionListForEvent(string eventID);
     }
 }
