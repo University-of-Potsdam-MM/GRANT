@@ -106,6 +106,42 @@ namespace GRANTManager.TreeOperations
             return sb.ToString();
         }
 
+
+        internal String generatedIdFilteredNode(object node, int depth, int branchIndex, String parentId)
+        {
+            GeneralProperties properties = strategyMgr.getSpecifiedTree().GetData(node).properties;
+            String result =
+                properties.controlTypeFiltered +
+                properties.itemTypeFiltered +
+                properties.accessKeyFiltered +
+                properties.acceleratorKeyFiltered +
+                properties.frameWorkIdFiltered +
+                properties.isContentElementFiltered +
+                properties.isControlElementFiltered +
+                properties.isKeyboardFocusableFiltered +
+                properties.isPasswordFiltered +
+                properties.isRequiredForFormFiltered +
+                properties.itemStatusFiltered +
+                properties.labeledByFiltered +
+                // node.BranchCount +
+                branchIndex +
+                depth;
+
+            if (parentId != null) { result += parentId; }
+            byte[] hash;
+            using (var md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(Encoding.UTF8.GetBytes(result));
+            }
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Generates an id for one node of the braille (output) tree.
         /// </summary>
