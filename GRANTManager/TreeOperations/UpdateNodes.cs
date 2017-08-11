@@ -705,7 +705,7 @@ namespace GRANTManager.TreeOperations
             if (propertyValueCurrent != null && propertyValueCurrent.Equals(propertyValueNew)) { return false; }
             else
             {
-                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.ToString().Equals(newProperty.ToString()))
+                if ((propertyValueNew == null && (newProperty == null || newProperty.ToString().Trim().Equals(""))) || propertyValueNew.ToString().Equals(newProperty.ToString()))
                 {
                     updateNodeOfBrailleUi(ref node);
                     return true;

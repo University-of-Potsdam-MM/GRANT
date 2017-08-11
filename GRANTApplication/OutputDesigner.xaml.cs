@@ -1197,11 +1197,14 @@ namespace GRANTApplication
                             Console.WriteLine(" celle:" + cellValue);
 
                             String braillePropId = braillePropRoot.Items.First(p =>   p.Values.Name.Equals("IdGenerated")).Values.currentValue;
-                            treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
-
-                            // updateBrailleTable(globalID);
-                            // screenViewIteration(globalID);
-                            reloadTrees(null, braillePropId);
+                            bool result =treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
+                            if (result)
+                            {
+                                reloadTrees(null, braillePropId);
+                            }else
+                            {
+                                System.Windows.Forms.MessageBox.Show("The property coudn't change!", "Error");
+                            }
                         }
                     }
                   }
