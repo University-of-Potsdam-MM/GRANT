@@ -146,7 +146,7 @@
                 </Grid.RowDefinitions>
             -->
                 <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Width="589" Height="271" Grid.RowSpan="2" VerticalAlignment="Top">
-                    <DataGrid CanUserResizeRows="False" Margin="0,10,0,0" IsReadOnly="False" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="brailleDisplaySimul" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                    <DataGrid CanUserResizeRows="False" Margin="0,10,0,0" IsReadOnly="True" CanUserDeleteRows="False" CanUserResizeColumns="False" CanUserAddRows="False" AreRowDetailsFrozen="False" HeadersVisibility="None" SelectionUnit="Cell" EnableRowVirtualization="False" EnableColumnVirtualization="False" HorizontalAlignment="Center" BorderThickness="1" x:Name="brailleDisplaySimul" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ScrollViewer.VerticalScrollBarVisibility="Hidden">
                         <DataGrid.LayoutTransform>
                             <ScaleTransform ScaleX="{Binding Path=Value, ElementName=_zoom}" ScaleY="{Binding Path=Value, ElementName=_zoom}" CenterX="0" CenterY="0" />
                         </DataGrid.LayoutTransform>
