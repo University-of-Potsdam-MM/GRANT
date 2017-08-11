@@ -129,6 +129,7 @@ namespace OSMElement
                         oInfo.SetValue(osmElement.brailleRepresentation, Convert.ChangeType(property, oInfo.PropertyType), null);
                     }
                     catch (InvalidCastException e) { Debug.WriteLine("InvalidCast by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
+                    catch(FormatException e) { Debug.WriteLine("FormatException by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
                     return;
                 }
             }

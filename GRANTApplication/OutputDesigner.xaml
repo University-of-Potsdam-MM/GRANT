@@ -86,7 +86,7 @@
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
                     <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31"/>
                     <DataGrid x:Name="brailleTreeProp" ItemsSource="{Binding Items}"  
-              AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False" CellEditEnding="brailleTreeProp_CellEditEnding">
+              AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False" BeginningEdit="brailleTreeProp_BeginningEdit" CellEditEnding="brailleTreeProp_CellEditEnding">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Values.Name}" Header="Propertys"  IsReadOnly="True"/>
                             <DataGridComboBoxColumn Header="Content" SelectedValueBinding="{Binding Values.currentValue }" SelectedItemBinding="{Binding Values.currentValue }"  >
