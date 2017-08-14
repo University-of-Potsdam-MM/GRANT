@@ -785,17 +785,16 @@ namespace GRANTApplication
             }*/
            // brailleTreeProp.ItemsSource = data;
             brailleTreeProp.DataContext = this.braillePropRoot;
-            
+
             if (this.brailleTreeProp.Items.Count > 0)
             {
                 var dataGridCellInfo = new DataGridCellInfo(this.brailleTreeProp.Items[0], this.brailleTreeProp.Columns[0]);
                 DataGridBoundColumn columni = dataGridCellInfo.Column as DataGridBoundColumn;
-                columni.IsReadOnly = true;
+                //columni.IsReadOnly = true;
             }
-            
         }
 
-       
+
 
         /*  DataTable dataTable = new DataTable();
           DataColumn dc = new DataColumn();
@@ -1164,14 +1163,8 @@ namespace GRANTApplication
                     int rowIndex = e.Row.GetIndex();
                     int rowIndex1 = e.Row.GetIndex()-1;
                     
-                    var el = e.EditingElement as ComboBox;
-                    if(el == null || el.Text == null) { return; }
-                    // if (el.Items.CurrentItem.Equals(el.Text))
-                    if (((GuiFunctions.RowDataItem)(((DataGrid)(sender)).CurrentItem)).Values.Name.Equals(el.Text))
-                     {
-                        Debug.WriteLine("The item wouldn't change!");
-                        return;
-                    }
+
+
                    if(grid.CurrentCell.Column == null) { return; }
                     int columns = grid.CurrentCell.Column.DisplayIndex;
                     int columns1 = columns - 1;
@@ -1193,9 +1186,17 @@ namespace GRANTApplication
                         {
                             var element = new FrameworkElement() { DataContext = dataGridCellInfo.Item };
                             BindingOperations.SetBinding(element, FrameworkElement.TagProperty, columni.Binding);
+                            var el = e.EditingElement as ComboBox;
+                            if (el == null) { return; }
+                            var currentValue = ((GuiFunctions.RowDataItem)(element.DataContext)).Values.currentValue;
+                            if ((currentValue != null && currentValue.Equals(el.Text)) || (currentValue == null && el.Text == null))
+                            {
+                                Debug.WriteLine("The item wouldn't change!");
+                                return;
+                            }
                             var cellValue= element.Tag;
-                            Console.WriteLine(" celle:" + cellValue);
-
+                           // Console.WriteLine(" celle:" + cellValue);
+                            
                             String braillePropId = braillePropRoot.Items.First(p =>   p.Values.Name.Equals("IdGenerated")).Values.currentValue;
                             bool result =treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
                             if (result)
@@ -1295,6 +1296,7 @@ namespace GRANTApplication
             e.Row.UpdateLayout();
         }*/
 
+            /*
         private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
             DataGrid grid = (DataGrid)sender;
@@ -1315,17 +1317,17 @@ namespace GRANTApplication
             //var text2 = element_3 as TextBox;
 
 
-            /*      Console.WriteLine(" text3:" + text3);
-                  Console.WriteLine(" ID:" + globalID);
-                  Console.WriteLine(" text2:" + text2);
-                  */
+            //      Console.WriteLine(" text3:" + text3);
+            //      Console.WriteLine(" ID:" + globalID);
+            //      Console.WriteLine(" text2:" + text2);
+                  
             //treeOperations.updateNodes.setBrailleTreeProperty(globalID, text2, el.Text);
             //updateBrailleTable(globalID);
             //screenViewIteration(globalID);
 
             e.Row.HeaderTemplate = (DataTemplate)grid.FindResource("IdGenerated");
             e.Row.UpdateLayout();
-        }
+        } */
 
         private void AddNode_Click(object sender, RoutedEventArgs e)
         {
