@@ -786,12 +786,12 @@ namespace GRANTApplication
            // brailleTreeProp.ItemsSource = data;
             brailleTreeProp.DataContext = this.braillePropRoot;
 
-            if (this.brailleTreeProp.Items.Count > 0)
+            /*if (this.brailleTreeProp.Items.Count > 0)
             {
                 var dataGridCellInfo = new DataGridCellInfo(this.brailleTreeProp.Items[0], this.brailleTreeProp.Columns[0]);
                 DataGridBoundColumn columni = dataGridCellInfo.Column as DataGridBoundColumn;
-                //columni.IsReadOnly = true;
-            }
+                columni.IsReadOnly = true;
+            }*/
         }
 
 
@@ -1180,23 +1180,25 @@ namespace GRANTApplication
                     var dataGridCellInfo = new DataGridCellInfo(grid.Items[rowIndex], grid.Columns[columns1]);
                     if (dataGridCellInfo != null)
                     {
-                        var columni = dataGridCellInfo.Column as DataGridBoundColumn;
+                        var columni = dataGridCellInfo.Column as DataGridTemplateColumn;
            
                         if (columni != null)
                         {
-                            var element = new FrameworkElement() { DataContext = dataGridCellInfo.Item };
-                            BindingOperations.SetBinding(element, FrameworkElement.TagProperty, columni.Binding);
+                         //   var element = new FrameworkElement() { DataContext = dataGridCellInfo.Item };
+                         //   BindingOperations.SetBinding(element, FrameworkElement.TagProperty, columni.Binding);
                             var el = e.EditingElement as ComboBox;
                             if (el == null) { return; }
-                            var currentValue = ((GuiFunctions.RowDataItem)(element.DataContext)).Values.currentValue;
+                            var currentValue = ((GuiFunctions.RowDataItem)(dataGridCellInfo.Item)).Values.currentValue;
                             if ((currentValue != null && currentValue.Equals(el.Text)) || (currentValue == null && el.Text == null))
                             {
                                 Debug.WriteLine("The item wouldn't change!");
                                 return;
                             }
-                            var cellValue= element.Tag;
+                            //var cellValue= element.Tag;
+                            var cellValue = ((GuiFunctions.RowDataItem)(dataGridCellInfo.Item)).Values.Name;
+                            if(cellValue == null) { return; }
                            // Console.WriteLine(" celle:" + cellValue);
-                            
+
                             String braillePropId = braillePropRoot.Items.First(p =>   p.Values.Name.Equals("IdGenerated")).Values.currentValue;
                             bool result =treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
                             if (result)
@@ -1218,8 +1220,18 @@ namespace GRANTApplication
 
         private void clearTable(DataGrid table)
         {
-            table.DataContext = new GuiFunctions.MyViewModel();
-            table.Items.Refresh();
+            try
+            {
+                table.DataContext = new GuiFunctions.MyViewModel();
+                table.Items.Refresh();
+            }
+            catch (InvalidOperationException)
+            { // http://www.solutionsss.de/index.php/kontakt/blog/item/11-sorting-ist-waehrend-einer-addnew-oder-edititem-transaktion-nicht-zulaessig
+                table.CommitEdit();
+                table.CancelEdit();
+                table.DataContext = new GuiFunctions.MyViewModel();
+                table.Items.Refresh();
+            }
         }
 
         /// <summary>

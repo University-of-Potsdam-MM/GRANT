@@ -88,7 +88,14 @@
                     <DataGrid x:Name="brailleTreeProp" ItemsSource="{Binding Items}"  
               AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False" BeginningEdit="brailleTreeProp_BeginningEdit" CellEditEnding="brailleTreeProp_CellEditEnding">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Values.Name}" Header="Propertys"  IsReadOnly="True"/>
+                            <DataGridTemplateColumn Header="Propertys" CanUserSort="True" SortMemberPath="Values.Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock  Text="{Binding Values.Name}" ToolTipService.ToolTip="{Binding   RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow} }, Path=DataContext.Values.tooltip}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!-- DataGridTextColumn Binding="{Binding Values.Name}" Header="Propertys"  IsReadOnly="True" / -->
                             <DataGridComboBoxColumn Header="Content" SelectedValueBinding="{Binding Values.currentValue }" SelectedItemBinding="{Binding Values.currentValue }"  >
                                 <DataGridComboBoxColumn.EditingElementStyle> <!-- Without this the combobox is empty by opening -->
                                     <Style TargetType="{x:Type ComboBox}">

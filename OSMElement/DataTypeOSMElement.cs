@@ -12,30 +12,34 @@ namespace OSMElement
         public Type DataType { get; internal set; }
         public List<String> Values { get; set; }
         public Range Range { get; internal set; }
+        public String Tooltip { get; internal set; }
 
-        public DataTypeOSMElement(String oSMName, Type dataType, List<String> values, int minRange, int maxRange)
+        public DataTypeOSMElement(String oSMName, Type dataType, String tooltip, List<String> values, int minRange, int maxRange)
         {
             OSMName = oSMName;
             DataType = dataType;
             setValues(dataType, ref values);
             Values = values;
             Range = new Range(minRange, maxRange);
+            Tooltip = tooltip;
         }
 
-        public DataTypeOSMElement(String oSMName, Type dataType, List<String> values)
+        public DataTypeOSMElement(String oSMName, Type dataType, String tooltip, List<String> values)
         {
             OSMName = oSMName;
             DataType = dataType;
             setValues(dataType, ref values);
             Values = values;
+            Tooltip = tooltip;
             
         }
 
-      public DataTypeOSMElement(String oSMName, Type dataType, int minRange, int maxRange)
+      public DataTypeOSMElement(String oSMName, Type dataType, String tooltip, int minRange, int maxRange)
         {
             OSMName = oSMName;
             DataType = dataType;
             Range = new Range(minRange, maxRange);
+            Tooltip = tooltip;
         }
 
         public bool Remove(String name)

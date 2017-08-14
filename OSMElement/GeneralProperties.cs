@@ -367,7 +367,7 @@ namespace OSMElement
             {
                 if (!name.Name.ToString().Equals("resetIdGenerated"))
                 {
-                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.PropertyType, null));
+                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.PropertyType, getToolTipOfProperty(name.Name.ToString()), null));
                 }
             }
             return displayedGuiElements;
@@ -384,6 +384,20 @@ namespace OSMElement
                     return null;
             }
         }
+
+        private static string getToolTipOfProperty(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case "boundingRectangleFiltered":
+                    return "Position of the element.\nFormat: X; Y; Width; Height";
+                case "controlTypeFiltered":
+                    return "Specifies the style of the braille element. See  'GUI-Elements' in the frame top."; // the description is just for the braille tree
+                default:
+                    return null;
+            }
+        }
+
 
 
         /// <summary>
