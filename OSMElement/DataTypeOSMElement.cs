@@ -10,13 +10,14 @@ namespace OSMElement
     {
         public String OSMName { get; internal set; }
         public Type DataType { get; internal set; }
-        public List<String> Values { get; internal set; }
+        public List<String> Values { get; set; }
         public Range Range { get; internal set; }
 
         public DataTypeOSMElement(String oSMName, Type dataType, List<String> values, int minRange, int maxRange)
         {
             OSMName = oSMName;
             DataType = dataType;
+            setValues(dataType, ref values);
             Values = values;
             Range = new Range(minRange, maxRange);
         }
@@ -25,10 +26,12 @@ namespace OSMElement
         {
             OSMName = oSMName;
             DataType = dataType;
+            setValues(dataType, ref values);
             Values = values;
+            
         }
 
-        public DataTypeOSMElement(String oSMName, Type dataType, int minRange, int maxRange)
+      public DataTypeOSMElement(String oSMName, Type dataType, int minRange, int maxRange)
         {
             OSMName = oSMName;
             DataType = dataType;
@@ -38,6 +41,25 @@ namespace OSMElement
         public bool Remove(String name)
         {
             return false;
+        }
+
+        private void setValues(Type dataType, ref List<String> values)
+        {
+            if (dataType.Equals(typeof(Boolean)) || dataType.Equals(typeof(bool)))
+            {
+                values = new List<string>(new String[] { "True", "False" });
+            }
+            else
+            {
+                if (dataType.Equals(typeof(Boolean?)) || dataType.Equals(typeof(bool?)))
+                {
+                    values = new List<string>(new String[] { "True", "False", "" });
+                }
+                else
+                {
+                    Values = values;
+                }
+            }
         }
     }
 

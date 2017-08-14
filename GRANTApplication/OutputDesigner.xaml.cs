@@ -767,6 +767,7 @@ namespace GRANTApplication
         {
            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
            this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
+           this.braillePropRoot.Items =  guiFunctions.addPossibleValuesByAllTypes(this.braillePropRoot.Items, true);
          /*   
             if (brailleTreeProp.Columns.Count == 0)
             {
@@ -1136,6 +1137,15 @@ namespace GRANTApplication
             return null;
         }
 
+        void brailleTreeProp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            //http://andora.us/blog/2011/07/17/wpf-datagrid-read-only-row/
+            if (((GuiFunctions.RowDataItem)(((DataGrid)(sender)).CurrentItem)).Values.Name.Equals("IdGenerated"))
+            {
+                e.Cancel = true;
+            }
+        }
+
         void brailleTreeProp_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
            //   var p = (sender as DataGrid).CurrentItem;
@@ -1156,17 +1166,15 @@ namespace GRANTApplication
                     
                     var el = e.EditingElement as ComboBox;
                     if(el == null || el.Text == null) { return; }
-                    if (el.Items.CurrentItem.Equals(el.Text))
-                    {
+                    // if (el.Items.CurrentItem.Equals(el.Text))
+                    if (((GuiFunctions.RowDataItem)(((DataGrid)(sender)).CurrentItem)).Values.Name.Equals(el.Text))
+                     {
                         Debug.WriteLine("The item wouldn't change!");
                         return;
                     }
                    if(grid.CurrentCell.Column == null) { return; }
                     int columns = grid.CurrentCell.Column.DisplayIndex;
                     int columns1 = columns - 1;
-
-
-
 
                     //Variante 1
                     //TextBlock x = grid.Columns[0].GetCellContent(grid.Items[rowIndex1]) as TextBlock;
@@ -1189,12 +1197,14 @@ namespace GRANTApplication
                             Console.WriteLine(" celle:" + cellValue);
 
                             String braillePropId = braillePropRoot.Items.First(p =>   p.Values.Name.Equals("IdGenerated")).Values.currentValue;
-                            treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
-                            
-                            // updateBrailleTable(globalID);
-                            // screenViewIteration(globalID);
-
-                            reloadTrees(null, braillePropId);
+                            bool result =treeOperations.updateNodes.setBrailleTreeProperty(braillePropId, cellValue.ToString(), el.Text);
+                            if (result)
+                            {
+                                reloadTrees(null, braillePropId);
+                            }else
+                            {
+                                System.Windows.Forms.MessageBox.Show("The property coudn't change!", "Error");
+                            }
                         }
                     }
                   }
@@ -1259,7 +1269,7 @@ namespace GRANTApplication
             Console.WriteLine("AUSGABE: " + myCellValue);
         }
 
-        private void brailleTreeProp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+  /*      private void brailleTreeProp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             DataGrid grid = (DataGrid)sender;
 
@@ -1283,7 +1293,7 @@ namespace GRANTApplication
 
             e.Row.HeaderTemplate = (DataTemplate)grid.FindResource("IdGenerated");
             e.Row.UpdateLayout();
-        }
+        }*/
 
         private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {

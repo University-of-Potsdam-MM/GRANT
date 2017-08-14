@@ -34,7 +34,17 @@ namespace GRANTManager.Interfaces
 
         void refreshBrailleView(String viewId);
         void refreshBrailleScreen(String screenId);
+
+        /// <summary>
+        /// change the visible screen
+        /// </summary>
+        /// <param name="screenName">name of the new visible screen</param>
         void changeBrailleScreen(String screenName);
+
+        /// <summary>
+        /// change the visible screen
+        /// </summary>
+        /// <param name="screenId">id of the new visible screen OR a node id of the new visible screen branch</param>
         void changeBrailleScreenById(string screenId);
         #endregion
     }

@@ -367,11 +367,23 @@ namespace OSMElement
             {
                 if (!name.Name.ToString().Equals("resetIdGenerated"))
                 {
-                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.GetType(), null));
+                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.PropertyType, null));
                 }
             }
             return displayedGuiElements;
-        }     
+        }
+
+        private static List<String> getPosibleValuesOfProperty(String propertyName)
+        {
+            switch (propertyName)
+            {
+                // Cann't get the possible 'controlTypeFiltered' for the Braille-tree --> get this 'outsite' (in GuiFunctions)
+                case "controlTypeFiltered":
+                    return null;
+                default:
+                    return null;
+            }
+        }
 
 
         /// <summary>

@@ -211,7 +211,7 @@ namespace OSMElement
                 if (!name.Name.ToString().Equals("jaggedMatrix"))
                 {
                     // displayedGuiElements.Add(name.Name.ToString());
-                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.GetType(), getPosibleValuesOfProperty(name.Name.ToString())));
+                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.PropertyType, getPosibleValuesOfProperty(name.Name.ToString())));
                 }
             }
             return displayedGuiElements;

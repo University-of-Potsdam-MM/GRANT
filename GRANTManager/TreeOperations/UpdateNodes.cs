@@ -72,6 +72,11 @@ namespace GRANTManager.TreeOperations
             filterChild(treeLoaded, mainFS_userName, fsChildren);
         }
 
+        /// <summary>
+        /// Filtered an OSM node (and depending on the <para>treescope</para> his sibilings, parents children etc. ) and updates the filtered tree object
+        /// </summary>
+        /// <param name="generatedId">the generated id of a node in the filtered tree</param>
+        /// <param name="treescope">the scope for filtering</param>
         public void filteredTree(String idGenerated, TreeScopeEnum treescope)
         {
             if(grantTrees.filteredTree == null) { return; }
@@ -89,9 +94,14 @@ namespace GRANTManager.TreeOperations
                 filteredNodeElementOfApplication(idGenerated);
                 return;
             }
-            if (TreeScopeEnum.Ancestors.Equals( treescope) || TreeScopeEnum.Sibling.Equals(treescope) )
+            if (TreeScopeEnum.Ancestors.Equals( treescope))
             {
                 throw new NotImplementedException();
+            }
+            if (TreeScopeEnum.Sibling.Equals(treescope))
+            {
+                filteredSiblingsOfNode(idGenerated);
+                return;
             }
 
             Object treeObjectOfIdGenerated = treeOperation.searchNodes.getNode(idGenerated, grantTrees.filteredTree).DeepCopy();
@@ -104,7 +114,7 @@ namespace GRANTManager.TreeOperations
                 filterChild2(treeObjectOfIdGenerated);
             }
             else
-            {
+            { // treescope == Subtree or Descendants
                 bool changeFilter = false;
                 if (mainFS_userName != null && !treeOperation.searchNodes.getMainFilterstrategyOfTree().Equals(Settings.strategyUserNameToClassName(mainFS_userName)))
                 {
@@ -191,9 +201,7 @@ namespace GRANTManager.TreeOperations
             Object subtreeObjectOld = treeOperation.searchNodes.getNode(idOfFirstNode, grantTrees.filteredTree);
             strategyMgr.getSpecifiedTree().RemoveAllDescendants(grantTrees.filteredTree, subtreeObjectOld);
             strategyMgr.getSpecifiedTree().InsertChild(subtreeObjectOld, subtreeNew);
-
             
-
             treeOperation.generatedIds.generatedIdsOfFilteredSubtree(subtreeObjectOld);
             #region grantFilterstrategy
             //TODO: Methode (setGrantFilterStrategiesChildren) erweitern, dass Treescope mit angegeben wird
@@ -203,7 +211,6 @@ namespace GRANTManager.TreeOperations
                 treeOperation.updateNodes.setGrantFilterStrategiesChildren(OSM.properties.IdGenerated);
             }
             #endregion
-
         }
 
         /// <summary>
@@ -278,7 +285,7 @@ namespace GRANTManager.TreeOperations
                 {
                     OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node).DeepCopy();
                     changeFilter(osmNode.properties.grantFilterStrategy);
-                    // neu Filtern
+                    // new filtering
                     filteredNodeElementOfApplication(osmNode.properties.IdGenerated);
                 }
                 changeFilter(mainFS_userName);
@@ -290,7 +297,7 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="subtreeOld">the old subtree object --> this will be importent to get the filterstrategy of each node; the subtreeOld object will be the start point for filtering the children</param>
         /// <param name="fs_main">the main filterstrategy (or the the parent filterstrategy) --> this will be importent to know whether the node was already filtered with the correct strategy </param>
-        /// <param name="fs_children"></param>
+        /// <param name="fs_children">a list of the filter strategies of the children nodes</param>
         private void filterChild(Object subtreeOld, String fs_main, List<String> fs_children)
         {
             if (fs_children == null || fs_children.Count == 0 || (fs_children.Count == 1 && fs_children[0].Equals(fs_main)))
@@ -322,10 +329,83 @@ namespace GRANTManager.TreeOperations
             }
         }
 
+        private void filteredSiblingsOfNode(String nodeIdGenerated)
+        {
+            // use first the filterstrategy of the parent node for filtering
+            object nodeObject = treeOperation.searchNodes.getNode(nodeIdGenerated, grantTrees.filteredTree);
+            if(nodeObject == null) { return; }
+            if (!strategyMgr.getSpecifiedTree().HasParent(nodeObject)) { return; }
+            int branchIndexNode = strategyMgr.getSpecifiedTree().BranchIndex(nodeObject);
+            Object parent = strategyMgr.getSpecifiedTree().Parent(nodeObject);
+            Object parent_Old = strategyMgr.getSpecifiedTree().Parent(nodeObject).DeepCopy();
+            OSMElement.OSMElement osmParent = strategyMgr.getSpecifiedTree().GetData(parent);
+            String fs_parent = osmParent.properties.grantFilterStrategy;
+            changeFilter(fs_parent);
+            Object siblingNodesNew = strategyMgr.getSpecifiedFilter().filtering(nodeIdGenerated, TreeScopeEnum.Sibling);
+            
+            int depth = strategyMgr.getSpecifiedTree().Depth(parent) +1;
+
+            foreach( Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(siblingNodesNew))
+            { 
+                OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
+                List<object> possibleOldNodes = treeOperation.searchNodes.searchNodeByProperties(parent_Old, osm.properties);
+                if (possibleOldNodes != null && possibleOldNodes.Count == 1)
+                {
+                    //use the old id
+                    osm.properties.IdGenerated = strategyMgr.getSpecifiedTree().GetData(possibleOldNodes[0]).properties.IdGenerated;
+                }
+                else
+                {
+                    int bi = strategyMgr.getSpecifiedTree().BranchIndex(node);
+                    if (bi >= branchIndexNode) { bi++; }
+                    osm.properties.IdGenerated = treeOperation.generatedIds.generatedIdFilteredNode(node, depth, bi, osmParent.properties.IdGenerated);
+                }
+                Object oldNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(osm.properties.IdGenerated);
+                if (oldNode != null && !oldNode.Equals(new OSMElement.OSMElement()))
+                {
+                    changePropertiesOfFilteredNode(osm.properties);
+                }else
+                {
+                    //Attention: new siblings are possible                    
+                    strategyMgr.getSpecifiedTree().AddChild(parent, osm); // TODO: ggf. muss noch die richtige "Stelle" (BranchIndex) bestimmt werden
+                }
+            }
+            if (osmParent.properties.grantFilterStrategiesChildren.Count == 1 && osmParent.properties.grantFilterStrategiesChildren[0].Equals(fs_parent))
+            {
+                // all siblings should be filteredt with the same filterstrategy like his parent node --> :)
+            }
+            else
+            {
+                // new filtering
+                foreach (Object nodeOld in strategyMgr.getSpecifiedTree().DirectChildrenNodes(parent_Old))
+                { //Attention: it could be a problem to identify the correct node
+                    OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(nodeOld);
+                    if (!fs_parent.Equals(osmOld.properties.grantFilterStrategy))
+                    {
+                        changeFilter(osmOld.properties.grantFilterStrategy);
+
+                        GeneralProperties prop = strategyMgr.getSpecifiedFilter().updateNodeContent(osmOld);
+                        prop.IdGenerated = osmOld.properties.IdGenerated;
+                        if (osmOld.properties.grantFilterStrategiesChildren != null && prop.grantFilterStrategiesChildren == null)
+                        {
+                            prop.grantFilterStrategiesChildren = osmOld.properties.grantFilterStrategiesChildren;
+                        }
+                        changePropertiesOfFilteredNode(prop);
+                    }
+                }
+            }
+            changeFilter(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.grantFilterStrategy); // main FilterStrategy
+
+            setGrantFilterStrategiesChildren(nodeIdGenerated);
+        }
+
         protected void changeFilter(String filterUserName)
         {
-            //TODO: check if necessary
-            strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(filterUserName));
+            // check if necessary
+            String strategyClassName = Settings.strategyUserNameToClassName(filterUserName);
+            String currentStrategy = strategyMgr.getSpecifiedFilter().GetType().FullName + ", " + strategyMgr.getSpecifiedFilter().GetType().Namespace;
+            if (currentStrategy.Equals(strategyClassName)) { return; }
+            strategyMgr.setSpecifiedFilter(strategyClassName);
             strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTrees);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
         }
@@ -625,7 +705,7 @@ namespace GRANTManager.TreeOperations
             if (propertyValueCurrent != null && propertyValueCurrent.Equals(propertyValueNew)) { return false; }
             else
             {
-                if ((propertyValueNew == null && newProperty == null) || propertyValueNew.ToString().Equals(newProperty.ToString()))
+                if ((propertyValueNew == null && (newProperty == null || newProperty.ToString().Trim().Equals(""))) || propertyValueNew.ToString().Equals(newProperty.ToString()))
                 {
                     updateNodeOfBrailleUi(ref node);
                     return true;
@@ -678,8 +758,7 @@ namespace GRANTManager.TreeOperations
         /// Changes the <see cref="GeneralProperties"/> of a node
         /// </summary>
         /// <param name="properties">the new properties</param>
-        /// <param name="idGeneratedOld">the old id</param>
-        internal void changePropertiesOfFilteredNode(GeneralProperties properties, String idGeneratedOld = null)
+        internal void changePropertiesOfFilteredNode(GeneralProperties properties)
         {
             // List<Object> node = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, properties);
             Object node = treeOperation.searchNodes.getNode(properties.IdGenerated, grantTrees.filteredTree);
@@ -691,10 +770,6 @@ namespace GRANTManager.TreeOperations
                     properties.grantFilterStrategiesChildren = osm.properties.grantFilterStrategiesChildren;
                 }
                 osm.properties = properties;
-                if (idGeneratedOld != null)
-                {
-                    osm.properties.IdGenerated = idGeneratedOld;
-                }
 
                 strategyMgr.getSpecifiedTree().SetData(node, osm);
                 return;

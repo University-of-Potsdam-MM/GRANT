@@ -102,32 +102,37 @@ namespace OSMElement
 
         public static void setElement(String elementName, Object property, OSMElement osmElement)
         { // https://stackoverflow.com/questions/1089123/setting-a-property-by-reflection-with-a-string-value
+            // TODO: komplexe Datentypen beachten
             if (elementName != null && !osmElement.Equals(new OSMElement()))
             {
-                // TODO: komplexe Datentypen beachten
-                PropertyInfo oInfo = osmElement.properties.GetType().GetProperty(elementName);
-                if (oInfo != null)
+                if (elementName.Equals("boundingRectangleFiltered"))
                 {
-                    if (elementName.Equals("boundingRectangleFiltered"))
-                    {
-                       osmElement.properties.setRect(property as String);
-                        return;
-
-                    }
-                    try
-                    {
-                        oInfo.SetValue(osmElement.properties, Convert.ChangeType(property, oInfo.PropertyType), null); //TODO: https://stackoverflow.com/questions/3531318/convert-changetype-fails-on-nullable-types
-                    }
-                    catch (InvalidCastException e) { Debug.WriteLine("InvalidCast by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
+                    osmElement.properties.setRect(property as String);
                     return;
                 }
-                else { oInfo = osmElement.brailleRepresentation.GetType().GetProperty(elementName); }
-                if (oInfo != null)
+                Object valuePB = osmElement.properties;
+                PropertyInfo oInfo = osmElement.properties.GetType().GetProperty(elementName);
+                if(oInfo == null)
                 {
+                    oInfo = osmElement.brailleRepresentation.GetType().GetProperty(elementName);
+                    valuePB = osmElement.brailleRepresentation;
+                }
+                if (oInfo != null)
+                {                    
                     try
                     {
-                        oInfo.SetValue(osmElement.brailleRepresentation, Convert.ChangeType(property, oInfo.PropertyType), null);
+                        Type t = Nullable.GetUnderlyingType(oInfo.PropertyType) ?? oInfo.PropertyType;
+                        if (property.ToString().Trim().Equals("") && oInfo.PropertyType.Name.Contains("Nullable") && t.Equals(typeof(Boolean)))
+                        {
+                            oInfo.SetValue(valuePB, null, null);
+                        }
+                        else
+                        {
+                            oInfo.SetValue(valuePB, (property == null) ? null : Convert.ChangeType(property, t), null); // https://stackoverflow.com/questions/3531318/convert-changetype-fails-on-nullable-types
+                            //oInfo.SetValue(valuePB, Convert.ChangeType(property, oInfo.PropertyType), null); 
+                        }
                     }
+                    catch (FormatException e) { Debug.WriteLine("FormatException by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
                     catch (InvalidCastException e) { Debug.WriteLine("InvalidCast by OSMElement  -- try to cast '{0}' to an element of the type '{1}'", property, elementName); }
                     return;
                 }

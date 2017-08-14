@@ -208,8 +208,24 @@ namespace StrategyUIA
             //TreeWalker walker = TreeWalker.ControlViewWalker;
             TreeWalker walker = TreeWalker.ContentViewWalker;
             AutomationElement elementParent = walker.GetParent(automationElement);
-            filterChildren(elementParent, 1, ref tree);
+            int depth = 0;
+      //      filterChildren(elementParent, 0, ref tree); // depth is null  ==> all siblings will be "top nodes" (see https://www.codeproject.com/Articles/12476/A-Generic-Tree-Collection )
             //oder             walker.GetPreviousSibling(mainElement);             walker.GetNextSibling(mainElement);
+
+            AutomationElementCollection collection = elementParent.FindAll(TreeScope.Children, Condition.TrueCondition);
+            //findChildrenOfNode(tree, collection, depth);
+
+            foreach (AutomationElement element in collection)
+            {
+                if (!element.Equals(automationElement) && (strategyMgr.getSpecifiedTree().Depth(tree) < depth || depth <= -1))
+                {
+                    OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+                    osmElement.properties = setProperties(element);
+                    Object node = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
+
+                    AutomationElementCollection c = element.FindAll(TreeScope.Children, Condition.TrueCondition);
+                }
+            }
         }
 
         /// <summary>

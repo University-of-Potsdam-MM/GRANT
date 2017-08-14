@@ -488,7 +488,7 @@ namespace GRANTManager
 
             public IList<string> ColumnNames { get; private set; }
 
-            public IList<RowDataItem> Items { get; private set; }
+            public List<RowDataItem> Items { get; set; }
 
             
 
@@ -1330,8 +1330,7 @@ namespace GRANTManager
             if (osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties())) { return GeneralProperties.getAllTypes_possibleValues(); }
             if (!osm.brailleRepresentation.Equals(new BrailleRepresentation()))
             {
-                List<DataTypeOSMElement> allTypes = OSMElement.OSMElement.getAllTypes_possibleValues();
-                
+                List<DataTypeOSMElement> allTypes = OSMElement.OSMElement.getAllTypes_possibleValues().OrderBy(o => o.OSMName).ToList();
                 removeProperties_NotUsedInBrailleTree(ref allTypes);
                 switch (osm.properties.controlTypeFiltered)
                 {
@@ -1430,12 +1429,38 @@ namespace GRANTManager
                         removePropertiesViewCategoryScreen(ref allTypes, osm);
                         break;
                     default:
-                        return allTypes;
-
+                        break;
                 }
                 return allTypes;
             }
             return OSMElement.OSMElement.getAllTypes_possibleValues();
+        }
+
+        public List<DataTypeOSMElement> addPossibleValuesByAllTypes(List<DataTypeOSMElement> allTypes, Boolean isUseForBrailleTree)
+        { // some possible values cann't added in OSMElement.OSMElement
+            if (isUseForBrailleTree)
+            {
+                if (allTypes.Exists(p => p.OSMName.Equals("controlTypeFiltered")))
+                {
+                    DataTypeOSMElement controlType = allTypes.Find(p => p.OSMName.Equals("controlTypeFiltered"));
+                    controlType.Values = strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer();
+                }
+            }
+            return allTypes;
+        }
+
+        public List<RowDataItem> addPossibleValuesByAllTypes(List<RowDataItem> allTypes, Boolean isUseForBrailleTree)
+        { // same possible values cann't added in OSMElement.OSMElement
+            if (isUseForBrailleTree)
+            {
+                if (allTypes.Exists(p => p.Values.Name.Equals("controlTypeFiltered")))
+                {
+                    RowDataItem controlType = allTypes.Find(p => p.Values.Name.Equals("controlTypeFiltered"));
+                    controlType.Values.PossibleValues = strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer();
+
+                }
+            }
+            return allTypes;
         }
 
         private static void removePropertiesViewCategoryScreen(ref List<DataTypeOSMElement> propList, OSMElement.OSMElement osm)

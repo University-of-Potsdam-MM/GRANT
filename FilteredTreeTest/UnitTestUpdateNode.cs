@@ -4,6 +4,7 @@ using GRANTManager;
 using GRANTManager.TreeOperations;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 namespace FilteredTreeTest
 {
@@ -270,7 +271,69 @@ namespace FilteredTreeTest
             Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(menuBarNodeOld, menuBarNodeNew), "The MenuBar branch was filtered, so there should be changes.");
         }
 
-            [TestCleanup]
+        [TestMethod]
+        public void filteredTree_Siblings_test()
+        {
+            /*
+             * 1. change "Textfield"
+             * 2. change modus
+             * 3. filter siblings of "Textfild"
+             * 4. new nodes from new modus should be added BUT textfilt contend shouldn't be changed
+             */
+            String id_text_filtered = "F6BC5E5ADD3B17478743923733E4BC8C";
+            String idFiltered_VerlaufNode_filtered = "ED842B72B012E86CE468B73FA1378361";
+            guiFuctions.loadGrantProject(treePathUia2);
+            Object treeCopy = grantTrees.filteredTree.DeepCopy();
+            OSMElement.OSMElement osm_editNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_text_filtered).DeepCopy();
+            OSMElement.OSMElement osm_VerlaufNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_VerlaufNode_filtered).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
+            System.Windows.Forms.SendKeys.SendWait(osm_editNode_old.properties.nameFiltered + "{+}" + osm_editNode_old.properties.nameFiltered + "1");
+            System.Windows.Forms.SendKeys.SendWait("^u"); // => Crlt + u => change calc modus
+            treeOperation.updateNodes.filteredTree(id_text_filtered, TreeScopeEnum.Sibling);
+            Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(treeCopy, grantTrees.filteredTree), "The tree shold be changed.");
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(treeCopy) < strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "Some nodes should be added for the 'new' mode!");
+            OSMElement.OSMElement osm_editNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_text_filtered);
+            OSMElement.OSMElement osm_VerlaufNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_VerlaufNode_filtered);
+            Assert.IsFalse(osm_VerlaufNode_old.Equals(osm_VerlaufNode_new));
+            Assert.IsTrue(osm_editNode_old.Equals(osm_editNode_new));
+        }
+
+        [TestMethod]
+        public void filteredTree_Siblings_checksFilterstrategy_test()
+        {
+            String id_text_filtered = "F6BC5E5ADD3B17478743923733E4BC8C";
+            guiFuctions.loadGrantProject(treePathUia2);
+            Object treeCopy = grantTrees.filteredTree.DeepCopy();
+            OSMElement.OSMElement osm_editNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(id_text_filtered).DeepCopy();
+            IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
+            strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
+            System.Windows.Forms.SendKeys.SendWait("{ESC}");
+            System.Windows.Forms.SendKeys.SendWait(osm_editNode_old.properties.nameFiltered + "{+}" + osm_editNode_old.properties.nameFiltered + "1");
+            System.Windows.Forms.SendKeys.SendWait("^u"); // => Crlt + u => change calc modus
+            System.Threading.Thread.Sleep(200);
+            treeOperation.updateNodes.filteredTree(id_text_filtered, TreeScopeEnum.Sibling);
+            Assert.IsFalse(strategyMgr.getSpecifiedTree().Equals(treeCopy, grantTrees.filteredTree), "The tree shold be changed.");
+            Assert.IsTrue(strategyMgr.getSpecifiedTree().Count(treeCopy) < strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree), "Some nodes should be added for the 'new' mode!");
+
+            foreach(Object nodeObject_old in strategyMgr.getSpecifiedTree().AllNodes(treeCopy))
+            {
+                OSMElement.OSMElement osm_old = strategyMgr.getSpecifiedTree().GetData(nodeObject_old);
+                OSMElement.OSMElement osm_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(osm_old.properties.IdGenerated);
+                if(osm_new != null && !osm_new.Equals(new OSMElement.OSMElement()))
+                {
+                    Assert.AreEqual(osm_old.properties.grantFilterStrategy, osm_new.properties.grantFilterStrategy);
+                    if (osm_old.properties.grantFilterStrategiesChildren != null)
+                    {
+                        Assert.IsTrue(osm_old.properties.grantFilterStrategiesChildren.All(osm_new.properties.grantFilterStrategiesChildren.Contains), "Both 'grantFilterStrategiesChildren' should have the same values! The node withe the id '" + osm_new.properties.IdGenerated + "' hasn't the correct 'grantFilterStrategiesChildren'!"); // Assert.AreEqual(osm_old.properties.grantFilterStrategiesChildren, osm_new.properties.grantFilterStrategiesChildren);
+                    }
+                }
+
+            }
+        }
+
+        [TestCleanup]
              public void clean()
              {
                  if(grantTrees.filteredTree != null)
