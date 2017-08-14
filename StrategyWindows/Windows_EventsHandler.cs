@@ -35,7 +35,7 @@ namespace StrategyWindows
         public Windows_EventsHandler(StrategyManager manager)
         {
             strategyMgr = manager;
-            prismEventAggregatorClass = strategyMgr.getSpecifiedEventManagerStrategy().getSpecifiedEventManagerClass();
+            prismEventAggregatorClass = strategyMgr.getSpecifiedEventStrategy().getSpecifiedEventManagerClass();
         }
 
         /// <summary>

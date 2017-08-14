@@ -22,7 +22,7 @@ namespace GRANTManager
         private IEventManager specifiedEventManager;
         private IEventProcessor specifiedEventProcessor;
 
-        private IEvent_PRISMStrategy eventManagerStrategy;
+        private IEventStrategy_PRISM eventStrategy_PRISM;
 
         private IGenaralUiTemplate generalUiTemplate;
 
@@ -97,18 +97,21 @@ namespace GRANTManager
             }
         }
 
-        public IEventManager getSpecifiedEventManager() { return specifiedEventManager; }
+        public IEventManager getSpecifiedEventManager()
+        {
+            return specifiedEventManager;
+        }
 
         /// <summary>
         /// </summary>
         /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
-        public void setSpecifiedEventManagerStrategy(String eventManagerClassName)
+        public void setSpecifiedEventStrategy(String eventManagerClassName)
         {
             try
             {
                 Type type = Type.GetType(eventManagerClassName);
-                eventManagerStrategy = (IEvent_PRISMStrategy)Activator.CreateInstance(type);
-                eventManagerStrategy.setStrategyMgr(this); //damit beim Manager-Wechsel nicht der Setter vergessen wird
+                eventStrategy_PRISM = (IEventStrategy_PRISM)Activator.CreateInstance(type);
+                eventStrategy_PRISM.setStrategyMgr(this); //damit beim Manager-Wechsel nicht der Setter vergessen wird
             }
             catch (InvalidCastException ic)
             {
@@ -125,12 +128,12 @@ namespace GRANTManager
         }
 
         /// <summary>
-        /// Gibt den verwendeten PRISM_Eventmanager zurück
+        /// Gibt die verwendete EventManagerStrategy PRISM zurück
         /// </summary>
         /// <returns></returns>
-        public IEvent_PRISMStrategy getSpecifiedEventManagerStrategy()
+        public IEventStrategy_PRISM getSpecifiedEventStrategy()
         {
-            return eventManagerStrategy;
+            return eventStrategy_PRISM;
         }
 
         /// Setzt die gewählte Klasse für die Braille-Ausgabe

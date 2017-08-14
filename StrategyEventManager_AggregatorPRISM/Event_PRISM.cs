@@ -17,7 +17,7 @@ using Prism.Events;
 
 namespace StrategyEvent_PRISM
 {
-    public class Event_PRISM : IEvent_PRISMStrategy
+    public class Event_PRISM : IEventStrategy_PRISM
     {
         //Erhallt der Instanz des StrategyManager für Nutzung
         //Im Interface IEventManagerStrategy wird es gefordert, aber hier in der Klasse wird der StrategyManager nicht benötigt: Er könnte also auch gelöscht werden
@@ -31,7 +31,7 @@ namespace StrategyEvent_PRISM
         public IEventAggregator prismEventAggregatorClass = new EventAggregator();
 
         //Abruf der PRISM.Instanz, diese muss in den anderen Klassen nicht instanziiert werden
-        IEventAggregator IEvent_PRISMStrategy.getSpecifiedEventManagerClass()
+        IEventAggregator IEventStrategy_PRISM.getSpecifiedEventManagerClass()
         {
             return prismEventAggregatorClass;
         }
