@@ -211,10 +211,21 @@ namespace OSMElement
                 if (!name.Name.ToString().Equals("jaggedMatrix"))
                 {
                     // displayedGuiElements.Add(name.Name.ToString());
-                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.PropertyType, getPosibleValuesOfProperty(name.Name.ToString())));
+                    displayedGuiElements.Add(new DataTypeOSMElement(name.Name.ToString(), name.PropertyType, getToolTipOfProperty(name.Name.ToString()), getPosibleValuesOfProperty(name.Name.ToString())));
                 }
             }
             return displayedGuiElements;
+        }
+
+        private static string getToolTipOfProperty(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case "displayedGuiElementType":
+                    return "Defines which property of the 'Filtered Tree' should be shown. To show this property a 'tree connection' must be set.";
+                default:
+                    return null;
+            }
         }
 
         private static List<String> getPosibleValuesOfProperty(String propertyName)

@@ -481,7 +481,7 @@ namespace GRANTManager
                             valueString = String.Join(" : ", valueString_tmp.Select(p => p.ToString()).ToArray());
                         }
                     }
-                    Items.Add(new RowDataItem(allTypes[i].OSMName, valueString != null ? valueString :(  o != null ? o.ToString() : ""), allTypes[i].Values));
+                    Items.Add(new RowDataItem(allTypes[i].OSMName, valueString != null ? valueString :(  o != null ? o.ToString() : ""), allTypes[i].Tooltip, allTypes[i].Values));
                 }
                 ColumnNames = new List<string> { "Property", "Content" };
             }
@@ -505,7 +505,7 @@ namespace GRANTManager
 
                public IList<string> Values { get; private set; }
                */
-            public RowDataItem(String propName, String propVal, List<String> possibleValues = null)
+            public RowDataItem(String propName, String propVal, String tooltip = null, List<String> possibleValues = null)
             {
                 //Values = new List<string> { propName, propVal };
 
@@ -521,17 +521,19 @@ namespace GRANTManager
                     rowItem.PossibleValues.Add(""); //empty row to add own value
 
                 }
+                rowItem.tooltip = tooltip;
                 rowItem.currentValue = propVal;
                 Values = rowItem;
             }
 
             public Row Values { get; private set; }
 
-            public class Row
+            public class Row // OSMElement.DataTypeOSMElement  könne auch verwendet werden
             {
                 public String Name { get; set; } // the getter & setter are very important for the binding
                 public IList<String> PossibleValues { get; set; }
                 public String currentValue { get; set; }
+                public String tooltip { get; set; }
             }
         }
         #endregion
