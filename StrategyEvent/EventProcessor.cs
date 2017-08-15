@@ -47,9 +47,19 @@ namespace StrategyEvent
             Debug.WriteLine("winevent verarbeitet in eventprocessor" + todo);
             //osm = "werhers";
 
+            //Aufruf eienr Methode aus EventAction über startegymanager
+            //strategyManager.getSpecifiedEventAction().filterOSM();
+
+            //strategyManager.getSpecifiedEventManager().deliverActionListForEvent();
+
 
             //strategyManager.getSpecifiedEventManager()
             //id des events ermittelt
+        }
+
+        public void eventManagerActionList()
+        {
+
         }
 
 
