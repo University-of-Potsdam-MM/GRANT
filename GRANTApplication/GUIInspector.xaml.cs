@@ -38,7 +38,7 @@ namespace GRANTApplication
 
             // Setzen des Eventmanager
             List<Strategy> possibleEventManager = settings.getPossibleEventManager();
-            strategyMgr.setSpecifiedEventManagerStrategy(possibleEventManager[0].className);
+            strategyMgr.setSpecifiedEventStrategy(possibleEventManager[0].className);
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedOperationSystem(Settings.strategyUserNameToClassName(cUserOperationSystemName));

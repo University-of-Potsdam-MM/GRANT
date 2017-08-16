@@ -75,7 +75,7 @@ namespace GRANTExample
         public void eventTest()
         {
             //erhalt des prismaggregator über interface
-            prismEventAggregatorClass = strategyMgr.getSpecifiedEventManagerStrategy().getSpecifiedEventManagerClass();
+            prismEventAggregatorClass = strategyMgr.getSpecifiedEventStrategy().getSpecifiedEventManagerClass();
 
             //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent_PRISMHandler_GrantManager>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
             prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
@@ -107,7 +107,7 @@ namespace GRANTExample
             //IEvent_PRISMStrategy test = new StrategyEvent_PRISM.Event_PRISM();
             //Type t = test.GetType();
 
-            strategyMgr.setSpecifiedEventManagerStrategy(possibleEventManager[0].className);
+            strategyMgr.setSpecifiedEventStrategy(possibleEventManager[0].className);
 
             #region setzen der neuen (Juni 2017) Event Interfaces
             strategyMgr.setSpecifiedEventAction(settings.getPossibleEventAction()[0].className);

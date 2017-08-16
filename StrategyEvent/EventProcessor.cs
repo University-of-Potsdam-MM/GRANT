@@ -30,7 +30,7 @@ namespace StrategyEvent
         public void eventTest()
         {
             //erhalt des prismaggregator über interface
-            prismEventAggregatorClass = strategyManager.getSpecifiedEventManagerStrategy().getSpecifiedEventManagerClass();
+            prismEventAggregatorClass = strategyManager.getSpecifiedEventStrategy().getSpecifiedEventManagerClass();
 
             //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent_PRISMHandler_GrantManager>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
             prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Subscribe(eventValueParsing); ///hier muss ein subscribe hin
@@ -47,9 +47,19 @@ namespace StrategyEvent
             Debug.WriteLine("winevent verarbeitet in eventprocessor" + todo);
             //osm = "werhers";
 
+            //Aufruf eienr Methode aus EventAction über startegymanager
+            //strategyManager.getSpecifiedEventAction().filterOSM();
+
+            //strategyManager.getSpecifiedEventManager().deliverActionListForEvent();
+
 
             //strategyManager.getSpecifiedEventManager()
             //id des events ermittelt
+        }
+
+        public void eventManagerActionList()
+        {
+
         }
 
 

@@ -35,7 +35,7 @@ namespace GRANTManager.BrailleTreeTests
             List<GRANTManager.Strategy> posibleOS = settings.getPossibleOperationSystems();
             List<Strategy> str = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(settings.getPossibleTrees()[0].className);
-            strategyMgr.setSpecifiedEventManagerStrategy(settings.getPossibleEventManager()[0].className);
+            strategyMgr.setSpecifiedEventStrategy(settings.getPossibleEventManager()[0].className);
             strategyMgr.setSpecifiedFilter(Settings.getPossibleFilters()[0].className);
             strategyMgr.setSpecifiedBrailleDisplay(settings.getPossibleBrailleDisplays()[0].className);
             strategyMgr.getSpecifiedBrailleDisplay().setStrategyMgr(strategyMgr);
