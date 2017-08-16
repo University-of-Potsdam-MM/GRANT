@@ -59,7 +59,17 @@ namespace OSMElement
 
         public override string ToString()
         {
-            return (String.Format(" name: {0}, height = {1}, width = {2} ({3})", name, height, width, orientation));
+            String result = String.Format("name: {0}", name);
+            if(height > 0)
+            {
+                result = result + String.Format(", height = {0}", height);
+            }
+            if (width > 0)
+            {
+                result = result + String.Format(", width = {0}", width);
+            }
+            result = result + String.Format(" ({0})", orientation);
+            return result;
         }
     }
 

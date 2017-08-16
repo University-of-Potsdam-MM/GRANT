@@ -435,9 +435,9 @@ namespace GRANTApplication
                 filteredTreeProp.Columns.Add(
                      new DataGridTextColumn
                      {
-                        Header = "Property",
-                        // Binding = new Binding(string.Format("Values", 0)),
-                        Binding = new Binding("Values.Name")
+                         Header = "Property",
+                         // Binding = new Binding(string.Format("Values", 0)),
+                         Binding = new Binding("Values.Name")                    
                      }
                  );
                 filteredTreeProp.Columns.Add(
@@ -448,8 +448,14 @@ namespace GRANTApplication
                     }
                 );
             }
+            List<GuiFunctions.RowDataItem> rowItems = filteredPropRoot.Items;
+            guiFunctions.addConnectedElementIdsByAllTypes(ref rowItems, osmElement);
+            filteredPropRoot.Items = rowItems;
             filteredTreeProp.DataContext = this.filteredPropRoot;
-
+            foreach (var column in filteredTreeProp.Columns)
+            {
+                column.Width = DataGridLength.SizeToCells;
+            }
             System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
         }
@@ -767,7 +773,10 @@ namespace GRANTApplication
         {
            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
            this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
-           this.braillePropRoot.Items =  guiFunctions.addPossibleValuesByAllTypes(this.braillePropRoot.Items, true);
+            List<GuiFunctions.RowDataItem> rowDataItem = this.braillePropRoot.Items;
+           guiFunctions.addPossibleValuesByAllTypes(ref rowDataItem, true);
+            guiFunctions.addConnectedElementIdsByAllTypes(ref rowDataItem, osmElement);
+            this.braillePropRoot.Items = rowDataItem;
          /*   
             if (brailleTreeProp.Columns.Count == 0)
             {
@@ -785,6 +794,10 @@ namespace GRANTApplication
             }*/
            // brailleTreeProp.ItemsSource = data;
             brailleTreeProp.DataContext = this.braillePropRoot;
+            foreach(var column in brailleTreeProp.Columns)
+            {
+                column.Width = DataGridLength.SizeToCells;
+            }
 
             /*if (this.brailleTreeProp.Items.Count > 0)
             {

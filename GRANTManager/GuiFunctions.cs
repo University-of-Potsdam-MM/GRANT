@@ -555,6 +555,12 @@ namespace GRANTManager
             }
         }
 
+        /// <summary>
+        /// Search all connection of the given node and creates a <c>String</c> of this connections
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="isFilteredTree"></param>
+        /// <returns></returns>
         private String getTooltip(Object node, bool isFilteredTree = true)
         {
             if (grantTrees.brailleTree != null)
@@ -1438,7 +1444,7 @@ namespace GRANTManager
             return OSMElement.OSMElement.getAllTypes_possibleValues();
         }
 
-        public List<DataTypeOSMElement> addPossibleValuesByAllTypes(List<DataTypeOSMElement> allTypes, Boolean isUseForBrailleTree)
+        public void addPossibleValuesByAllTypes(ref List<DataTypeOSMElement> allTypes, Boolean isUseForBrailleTree)
         { // some possible values cann't added in OSMElement.OSMElement
             if (isUseForBrailleTree)
             {
@@ -1448,10 +1454,9 @@ namespace GRANTManager
                     controlType.Values = strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer();
                 }
             }
-            return allTypes;
         }
 
-        public List<RowDataItem> addPossibleValuesByAllTypes(List<RowDataItem> allTypes, Boolean isUseForBrailleTree)
+        public void addPossibleValuesByAllTypes(ref List<RowDataItem> allTypes, Boolean isUseForBrailleTree)
         { // same possible values cann't added in OSMElement.OSMElement
             if (isUseForBrailleTree)
             {
@@ -1462,7 +1467,49 @@ namespace GRANTManager
 
                 }
             }
-            return allTypes;
+        }
+
+        public void addConnectedElementIdsByAllTypes(ref List<RowDataItem> allTypes, OSMElement.OSMElement osmNode)
+        {
+            List<String> connection = getConnectedElementIds(osmNode);
+            if(connection != null && connection.Count > 0)
+            {
+                RowDataItem rowItem = new RowDataItem("connectedElementId", String.Join(" , ", connection.Select(p => p.ToString()).ToArray()));
+                allTypes.Add(rowItem);
+                allTypes = allTypes.OrderBy(o => o.Values.Name).ToList();
+            }else
+            {
+                if(osmNode.brailleRepresentation != null && !osmNode.brailleRepresentation.Equals(new BrailleRepresentation())) // --> braille Tree
+                {
+                    String displayedGuiElement = "displayedGuiElementType";
+                    if (allTypes.Exists(p => p.Values.Name.Equals(displayedGuiElement)))
+                    {
+                        RowDataItem removedItem = allTypes.Find(p => p.Values.Name.Equals(displayedGuiElement));
+                        if (removedItem != null)
+                        {
+                            allTypes.Remove(removedItem);
+                        }
+                    }
+                }
+            }
+        }
+
+        private List<String> getConnectedElementIds(OSMElement.OSMElement node)
+        {
+            List<String> conIds = new List<string>();
+            if (node.brailleRepresentation != null && !node.brailleRepresentation.Equals(new BrailleRepresentation()))  // --> braille Tree // !isFilteredTree)
+            {
+                String connection = treeOperation.searchNodes.getConnectedFilteredTreenodeId(node.properties.IdGenerated);
+                if (connection != null)
+                {
+                    conIds.Add(connection);
+                }
+            }
+            else // filtered Tree
+            {
+                conIds = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(node.properties.IdGenerated);
+            }
+            return conIds;
         }
 
         private static void removePropertiesViewCategoryScreen(ref List<DataTypeOSMElement> propList, OSMElement.OSMElement osm)

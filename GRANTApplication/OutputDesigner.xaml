@@ -84,7 +84,7 @@
             </ScrollViewer>
             <ScrollViewer Background="GhostWhite" HorizontalAlignment="Center"  BorderBrush="AliceBlue" BorderThickness="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Width="280" Margin="250,10,612,16">
                 <StackPanel Background="White"  Width="280" VerticalAlignment="Top" Height="304" MaxHeight="478">
-                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31" ToolTip="To change the properties of the selected node, click into the content column." />
+                    <Label BorderThickness="1" BorderBrush="Gray" Background="Gold" FontSize="14" FontWeight="Bold" Content="Braille Tree Properties"  Height="31" ToolTip="To change the properties of the selected node, click into the 'Content' column." />
                     <DataGrid x:Name="brailleTreeProp" ItemsSource="{Binding Items}"  
               AutoGenerateColumns="False" Background="White" Height="273" Width="273"  BorderThickness="1" IsReadOnly="False" BeginningEdit="brailleTreeProp_BeginningEdit" CellEditEnding="brailleTreeProp_CellEditEnding">
                         <DataGrid.Columns>
