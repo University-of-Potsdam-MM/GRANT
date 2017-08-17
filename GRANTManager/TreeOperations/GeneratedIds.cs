@@ -11,7 +11,7 @@ namespace GRANTManager.TreeOperations
 {
     public class GeneratedIds
     {
-        StrategyManager strategyMgr;
+        private StrategyManager strategyMgr;
         #region Constructor
         /// <summary>
         /// Initializes a new instance of the <see cref="GeneratedIds"/> class.

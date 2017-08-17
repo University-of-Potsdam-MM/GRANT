@@ -24,9 +24,9 @@ namespace GRANTManager
 
     public class GuiFunctions
     {
-        StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTrees;
-        TreeOperation treeOperation;
+        private StrategyManager strategyMgr;
+        private GeneratedGrantTrees grantTrees;
+        private  TreeOperation treeOperation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GuiFunctions"/> class.

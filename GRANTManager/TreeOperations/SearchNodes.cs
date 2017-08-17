@@ -11,8 +11,8 @@ namespace GRANTManager.TreeOperations
 {
     public class SearchNodes
     {
-        StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTrees;
+        private StrategyManager strategyMgr;
+        private GeneratedGrantTrees grantTrees;
         private TreeOperation treeOperation;
 
         public SearchNodes(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation)

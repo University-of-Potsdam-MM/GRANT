@@ -25,7 +25,7 @@ namespace GRANTManager
         /// <summary>
         /// braille (output) tree object
         /// </summary>
-        public Object brailleTree;
+        public Object brailleTree { get; set; }
         
         /// <summary>
         /// Specifies the relationship between "filteredTree" and "brailleTree" based on the generated id
