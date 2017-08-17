@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GRANTManager.TreeOperations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,9 @@ namespace GRANTManager.Interfaces
 {
     public interface IEventProcessor
     {
+        void setGrantTrees(GeneratedGrantTrees grantTrees);
+        void setTreeOperations(TreeOperation treeOperations);
+
+        void EventExample();
     }
 }

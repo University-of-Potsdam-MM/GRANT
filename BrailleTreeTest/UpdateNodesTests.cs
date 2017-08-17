@@ -120,7 +120,7 @@ namespace GRANTManager.BrailleTreeTests
             GeneralProperties searchProp = new GeneralProperties();
             searchProp.controlTypeFiltered = "Button";
             searchProp.nameFiltered = "2";
-            List<Object> searchedTreeList = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, searchProp);
+            List<Object> searchedTreeList = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, searchProp);
             Assert.AreNotEqual(0, searchedTreeList);
             Assert.AreEqual(1, searchedTreeList.Count);
             #endregion

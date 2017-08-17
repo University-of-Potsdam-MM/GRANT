@@ -45,7 +45,7 @@ namespace TemplatesUi
                 braille.margin = templateObject.osm.brailleRepresentation.margin;
             }*/
 
-            List<Object>  existingNodesWithProperties = treeOperation.searchNodes.searchNodeByProperties(grantTrees.brailleTree, brailleNode);
+            List<Object>  existingNodesWithProperties = treeOperation.searchNodes.getNodesByProperties(grantTrees.brailleTree, brailleNode);
             if(existingNodesWithProperties != null && !existingNodesWithProperties.Equals(new List<Object>()))
             {               
                 String idOsmFilteredSubtree = strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;

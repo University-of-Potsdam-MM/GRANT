@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GRANTManager</RootNamespace>
-    <AssemblyName>StrategyManager</AssemblyName>
+    <AssemblyName>GRANTManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -81,7 +81,7 @@
     <Compile Include="Interfaces\IGenaralUiTemplate.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
     <Compile Include="OsmTreeConnector.cs" />
-    <Compile Include="OSMNodeEventActionConnector.cs" />
+    <Compile Include="TreeOperations\OSMNodeEventActionConnector.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="ScreenReaderFunctions.cs" />
     <Compile Include="Settings.cs" />
@@ -98,9 +98,9 @@
     <Compile Include="TreeOperations\UpdateNodes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OSMElement\OSMElement.csproj">
+    <ProjectReference Include="..\OSMElement\OSMElements.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
-      <Name>OSMElement</Name>
+      <Name>OSMElements</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -92,7 +92,7 @@ namespace GRANTExample
                     }
                     GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<Object> treeElement = treeOperation.searchNodes.searchNodeByProperties(grantTrees.brailleTree, propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTrees.brailleTree, propertiesForSearch, OperatorEnum.and);
                         String brailleId = "";
                         if (treeElement.Count > 0)
                         {
@@ -133,7 +133,7 @@ namespace GRANTExample
             String brailleId = "";
             GeneralProperties propertiesForSearch = new GeneralProperties();
             propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<Object> treeElement = treeOperation.searchNodes.searchNodeByProperties(grantTrees.brailleTree, propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTrees.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
                             brailleId = strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
@@ -239,7 +239,7 @@ namespace GRANTExample
            Object subnodesOfScreen = treeOperation.searchNodes.getSubtreeOfScreen(name);
            GeneralProperties prop = new GeneralProperties();
            prop.controlTypeFiltered = "Screenshot";
-           List<Object> screenshotNodes = treeOperation.searchNodes.searchNodeByProperties(subnodesOfScreen, prop);
+           List<Object> screenshotNodes = treeOperation.searchNodes.getNodesByProperties(subnodesOfScreen, prop);
            foreach (Object node in screenshotNodes)
            {
                OSMElement.OSMElement osmScreenshot = strategyMgr.getSpecifiedTree().GetData(node);

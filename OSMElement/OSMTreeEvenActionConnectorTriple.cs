@@ -10,23 +10,23 @@ namespace OSMElement
     public class OSMTreeEvenActionConnectorTriple
     {
         public OSMTreeEvenActionConnectorTriple() { }
-        public OSMTreeEvenActionConnectorTriple(String Tree, String Event, String Action)
+        public OSMTreeEvenActionConnectorTriple(String TreeId, String EventId, List<String> ActionId)
         {
-            this.Tree = Tree;
-            this.Event = Event;
-            this.Action = Action;
+            this.TreeId = TreeId;
+            this.EventId = EventId;
+            this.ActionIds = ActionId;
         }
 
         /// <summary>
         /// id of a node in the tree (filtered tree or grand tree)
         /// </summary>
-        public String Tree { get; set; }
-        public String Event { get; set; }
-        public String Action { get; set; }
+        public String TreeId { get; set; }
+        public String EventId { get; set; }
+        public List<String> ActionIds { get; set; }
 
         public override string ToString()
         {
-            return String.Format("OSMTreEvenActionConnector -- Tree: {0}, Event: {1}, Action: {2}", Tree, Event, Action);
+            return String.Format("OSMTreEvenActionConnector -- TreeId: {0}, EventId: {1}, ActionIds: {2}", TreeId, EventId, String.Join(", ", ActionIds) );
         }
     }
 }

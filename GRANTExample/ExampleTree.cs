@@ -71,7 +71,7 @@ namespace GRANTExample
                     Object tree = filterStrategy.filtering(pointX, pointY, TreeScopeEnum.Descendants, -1);
                     if (grantTree.filteredTree != null)
                     {
-                        List<Object> result = treeOperation.searchNodes.searchNodeByProperties(grantTree.filteredTree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
+                        List<Object> result = treeOperation.searchNodes.getNodesByProperties(grantTree.filteredTree, strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties, OperatorEnum.and);
                         if (result.Count == 1)
                         {
                             GuiFunctions guiFunctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
@@ -172,7 +172,7 @@ namespace GRANTExample
             //  searchedProperties.nameFiltered = "";
 
             Console.Write("Gesuchte Eigenschaften ");
-            treeOperation.searchNodes.searchNodeByProperties(grantTree.filteredTree, searchedProperties, OperatorEnum.or);
+            treeOperation.searchNodes.getNodesByProperties(grantTree.filteredTree, searchedProperties, OperatorEnum.or);
 
         }
 
@@ -201,7 +201,7 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "Screenshot";
-                        List<Object> treeElement = treeOperation.searchNodes.searchNodeByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
                             List<OsmTreeConnectorTuple<String, String>> relationshipList = grantTree.osmTreeConnections;
@@ -244,7 +244,7 @@ namespace GRANTExample
                         OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
-                        List<Object> treeElement = treeOperation.searchNodes.searchNodeByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
+                        List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
                             List<OsmTreeConnectorTuple<String, String>> relationshipList = grantTree.osmTreeConnections;

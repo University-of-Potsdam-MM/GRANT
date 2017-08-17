@@ -134,9 +134,9 @@
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>GRANTManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OSMElement\OSMElement.csproj">
+    <ProjectReference Include="..\OSMElement\OSMElements.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
-      <Name>OSMElement</Name>
+      <Name>OSMElements</Name>
     </ProjectReference>
     <ProjectReference Include="..\StrategyBrailleIO\StrategyBrailleIO.csproj">
       <Project>{7765dc51-ff98-42eb-868b-582a0c2ba0aa}</Project>

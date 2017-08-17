@@ -32,7 +32,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="generalProperties">properties for the search</param>
         /// <param name="oper">Operator for combining the properties (and, or) </param>
         /// <returns>A list of the found tree objects</returns>
-        public List<Object> searchNodeByProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
+        public List<Object> getNodesByProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
         {//TODO: many properties are still missing
             List<Object> result = new List<Object>();
             if (tree == null) { return result; }
@@ -85,7 +85,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="properties">properties for the search</param>
         /// <param name="oper">Operator for combining the properties (and, or) </param>
         /// <returns>A list of the found tree objects</returns>
-        public List<Object> searchNodeByProperties(Object tree, OSMElement.OSMElement properties, OperatorEnum oper = OperatorEnum.and)
+        public List<Object> getNodesByProperties(Object tree, OSMElement.OSMElement properties, OperatorEnum oper = OperatorEnum.and)
         {
             List<Object> result = new List<Object>();
             if (tree == null) { return result; }
@@ -231,6 +231,37 @@ namespace GRANTManager.TreeOperations
             return null;
         }
 
+        /// <summary>
+        /// searches a filtered node (in <c>grantTrees.filteredTree</c> ) by a given HWND
+        /// </summary>
+        /// <param name="hwnd">a hwnd of a node</param>
+        /// <returns>the node object OR <c>null</c></returns>
+        public Object getFilteredNodeByHwnd(IntPtr hwnd)
+        {
+            if (IntPtr.Zero.Equals(hwnd)) { return null; }
+            foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
+            {
+                OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
+                if (hwnd.Equals(osmData.properties.hWndFiltered))
+                {
+                    return node;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// searches a filtered node ID (in <c>grantTrees.filteredTree</c> ) by a given HWND
+        /// </summary>
+        /// <param name="hwnd">a hwnd of a node</param>
+        /// <returns>the node ID OR <c>null</c></returns>
+        public String getIdFilteredNodeByHwnd(IntPtr hwnd)
+        {
+            Object node = getFilteredNodeByHwnd(hwnd);
+            if(node == null) { return null; }
+            OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
+            return osmData.properties.IdGenerated;
+        }
         #endregion
 
         #region connected nodes (Filtered tree + braille tree)

@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleRenderer", "..\Brail
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyBrailleIO", "StrategyBrailleIO\StrategyBrailleIO.csproj", "{7765DC51-FF98-42EB-868B-582A0C2BA0AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSMElement", "OSMElement\OSMElement.csproj", "{6EAFEFC6-7479-4591-A8D7-0F5EC7802F16}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSMElements", "OSMElement\OSMElements.csproj", "{6EAFEFC6-7479-4591-A8D7-0F5EC7802F16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrailleIOBraillDisAdapter", "..\BrailleIO\BrailleDis\BrailleIOBraillDisAdapter\BrailleIOBraillDisAdapter.csproj", "{4306FCD9-4DD1-42CE-B449-07ABAB7FD8F7}"
 EndProject

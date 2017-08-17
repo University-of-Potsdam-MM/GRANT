@@ -348,7 +348,7 @@ namespace GRANTManager.TreeOperations
             foreach( Object node in strategyMgr.getSpecifiedTree().AllChildrenNodes(siblingNodesNew))
             { 
                 OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
-                List<object> possibleOldNodes = treeOperation.searchNodes.searchNodeByProperties(parent_Old, osm.properties);
+                List<object> possibleOldNodes = treeOperation.searchNodes.getNodesByProperties(parent_Old, osm.properties);
                 if (possibleOldNodes != null && possibleOldNodes.Count == 1)
                 {
                     //use the old id

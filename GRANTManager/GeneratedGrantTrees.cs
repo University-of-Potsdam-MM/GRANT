@@ -12,7 +12,7 @@ using System.Diagnostics;
 namespace GRANTManager
 {
     /// <summary>
-    /// Object with the generated trees and there OSM connections;
+    /// Object with the generated trees, there OSM connections and there events;
     /// Übergabe aller OSM-Bäume und -Verbindungen: OSM-Original, OSM-Braille - Verbindung OSMTreeConnection; OSM-Event OSM-Action und Verbindung zwischen diesen und OSM-Original/Braille: OSMNodeEventActionConnector
     /// </summary>
     public class GeneratedGrantTrees
@@ -26,6 +26,10 @@ namespace GRANTManager
         /// braille (output) tree object
         /// </summary>
         public Object brailleTree { get; set; }
+
+        public List<OSMEvent> osmEvents { get; set; }
+
+        public List<OSMAction> osmActions { get; set; }
         
         /// <summary>
         /// Specifies the relationship between "filteredTree" and "brailleTree" based on the generated id

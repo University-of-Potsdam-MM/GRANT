@@ -79,7 +79,7 @@ namespace TemplatesUi
                 TemplateScreenshotObject templateObject = xmlUiScreenshotToTemplateUiScreenshot(element);
                 GeneralProperties prop = new GeneralProperties();
                 prop.controlTypeFiltered = templateObject.connectedFilteredNodeControltype;
-                List<Object> nodes = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, prop); 
+                List<Object> nodes = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, prop); 
           
                 generalUiInstance.createUiScreenshotFromTemplate(templateObject, nodes);
             }
@@ -516,7 +516,7 @@ namespace TemplatesUi
                 {
                     GeneralProperties properties = new GeneralProperties();
                     properties.controlTypeFiltered = e.Attribute("name").Value;
-                    List<Object> treefilteredElements = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, properties, OperatorEnum.and);
+                    List<Object> treefilteredElements = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, properties, OperatorEnum.and);
                     foreach (Object t in treefilteredElements)
                     {
                         tree = t;

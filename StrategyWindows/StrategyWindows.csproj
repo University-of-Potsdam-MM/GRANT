@@ -82,9 +82,9 @@
       <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
       <Name>GRANTManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OSMElement\OSMElement.csproj">
+    <ProjectReference Include="..\OSMElement\OSMElements.csproj">
       <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
-      <Name>OSMElement</Name>
+      <Name>OSMElements</Name>
     </ProjectReference>
     <ProjectReference Include="..\StrategyEventManager_AggregatorPRISM\StrategyEvent_PRISM.csproj">
       <Project>{3b5c2d5a-23a6-4c0c-9f06-d7ef60766c3c}</Project>

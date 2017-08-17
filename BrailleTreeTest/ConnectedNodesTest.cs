@@ -131,7 +131,7 @@ namespace BrailleTreeTests
             OSMElement.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().getOSMElement(clickX, clickY);
             Assert.AreEqual("Button", dataOfPoint.properties.controlTypeFiltered, "Es hätte der Button sein sollen!");
             Assert.AreEqual("7", dataOfPoint.properties.nameFiltered, "auf dem Button hätte die Zahl '7' stehen müssen!");
-            List<Object> searchresult = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, dataOfPoint.properties);
+            List<Object> searchresult = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, dataOfPoint.properties);
             Assert.AreNotEqual(null, searchresult, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen!");
             Assert.AreNotEqual(new List<Object>(), searchresult, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen!");
             Assert.AreEqual(1, searchresult.Count, "Es hätte genau ein Knoten gefunden werden müssen!");

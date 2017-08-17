@@ -63,6 +63,8 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperations);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
+            strategyMgr.getSpecifiedEventProcessor().setGrantTrees(grantTrees);
+            strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperations);
             #endregion
 
             filteredTreeOutput.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);

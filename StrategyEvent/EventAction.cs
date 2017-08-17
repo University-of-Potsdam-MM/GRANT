@@ -11,9 +11,9 @@ namespace StrategyEvent
 {
     public class EventAction : IEventAction
     {
-        StrategyManager strategyManager;
-        GeneratedGrantTrees grantTrees;
-        TreeOperation treeOperations;
+        private StrategyManager strategyManager;
+        private GeneratedGrantTrees grantTrees;
+        private TreeOperation treeOperations;
 
         public EventAction(StrategyManager strategyMgr)
         {

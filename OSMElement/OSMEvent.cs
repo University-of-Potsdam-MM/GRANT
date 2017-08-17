@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace OSMElement
 {
+    //TODO
     [Serializable]
-    public class OSMAction
+    public class OSMEvent
     {
         public String Id { get; set; }
         public String Name { get; set; }
@@ -15,11 +16,12 @@ namespace OSMElement
         public int Priority { get; set; }
     }
 
-    public enum ActionTypes
+    public enum EventTypes
     {
-        FilterAction,
-        OutputAction,
-        ApplicationAction,
-        SoundAction
+        Maus,
+        Keyboard,
+        Application,
+        BrailleDisplay,
+        Sound
     }
 }

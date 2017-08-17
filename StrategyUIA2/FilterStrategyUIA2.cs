@@ -760,7 +760,7 @@ namespace StrategyUIA2
             OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
             osmElement.properties = setProperties(mouseElement);
             //set Id 
-            List<Object> node = treeOperation.searchNodes.searchNodeByProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
+            List<Object> node = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
             if (node.Count == 1)
             {
                 return strategyMgr.getSpecifiedTree().GetData(node[0]);

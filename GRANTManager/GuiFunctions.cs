@@ -1469,6 +1469,11 @@ namespace GRANTManager
             }
         }
 
+        /// <summary>
+        /// Adds the connected element id(s) to a list of <typeparamref name="RowDataItem"/> for the output in the GUI
+        /// </summary>
+        /// <param name="allTypes"></param>
+        /// <param name="osmNode"></param>
         public void addConnectedElementIdsByAllTypes(ref List<RowDataItem> allTypes, OSMElement.OSMElement osmNode)
         {
             List<String> connection = getConnectedElementIds(osmNode);

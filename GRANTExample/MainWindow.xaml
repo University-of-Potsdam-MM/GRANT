@@ -50,6 +50,7 @@
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
             </tb:TaskbarIcon>
+            <Button x:Name="button_eventProcessorTest" Click="button_eventProcessorTest_Click"  Content="Test EventProzessor" HorizontalAlignment="Left" Margin="518,60,0,0" VerticalAlignment="Top" Width="123"/>
         </Grid>
     </Grid>
 

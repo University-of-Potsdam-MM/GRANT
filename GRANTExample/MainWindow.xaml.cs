@@ -115,6 +115,8 @@ namespace GRANTExample
             strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperation);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
+            strategyMgr.getSpecifiedEventProcessor().setGrantTrees(grantTree);
+            strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperation);
             #endregion
 
 
@@ -340,5 +342,11 @@ namespace GRANTExample
         }
 
         #endregion
+        
+
+        private void button_eventProcessorTest_Click(object sender, RoutedEventArgs e)
+        {
+            strategyMgr.getSpecifiedEventProcessor().EventExample();
+        }
     }
 }
