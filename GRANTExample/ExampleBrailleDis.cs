@@ -79,7 +79,7 @@ namespace GRANTExample
                 strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                 if (grantTrees.osmTreeConnections == null)
                 {                    
-                    List<OsmTreeConnectorTuple<String, String>> relationship = ExampleTree.setOsmRelationship();
+                    List<OsmTreeConnectorTuple> relationship = ExampleTree.setOsmRelationship();
                     grantTrees.osmTreeConnections =relationship;
                     
                 }
@@ -99,13 +99,13 @@ namespace GRANTExample
                             brailleId =strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
-                    OsmTreeConnectorTuple<String, String> osmRelationships = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId));
+                    OsmTreeConnectorTuple osmRelationships = grantTrees.osmTreeConnections.Find(r => r.BrailleTreeId.Equals(brailleId) || r.FilteredTreeId.Equals(brailleId));
                     if (osmRelationships != null)
                     {
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                        treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTree);
+                        treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTreeId);
 
-                    OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                    OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTreeId);
                     if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                     {
                         treeOperation.updateNodes.updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
@@ -139,13 +139,13 @@ namespace GRANTExample
                             brailleId = strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated;
                         }
                         if (brailleId.Equals("")) { return; }
-            OsmTreeConnectorTuple<String, String> osmRelationships = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(brailleId) || r.FilteredTree.Equals(brailleId)); 
+            OsmTreeConnectorTuple osmRelationships = grantTrees.osmTreeConnections.Find(r => r.BrailleTreeId.Equals(brailleId) || r.FilteredTreeId.Equals(brailleId)); 
             if(osmRelationships != null)
             {
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
-                treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTree);
+                treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTreeId);
 
-                OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTree);
+                OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTreeId);
                 if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
                 {
                     strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);

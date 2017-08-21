@@ -118,11 +118,10 @@ namespace TemplatesUi
                 Debug.WriteLine("Es konnte keine Id erstellt werden."); return new OSMElement.OSMElement();
             }
             brailleNode.properties.IdGenerated = idGenerated;
-
-            List<OsmTreeConnectorTuple<String, String>> relationship = grantTrees.osmTreeConnections;
+            
             if (filteredSubtree != null && strategyMgr.getSpecifiedTree().GetData(filteredSubtree) != null)
             {
-                OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated, ref relationship);
+                treeOperation.osmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated, idGenerated);
             }
             treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
 

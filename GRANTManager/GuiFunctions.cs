@@ -782,11 +782,11 @@ namespace GRANTManager
                         saveBrailleTree(directoryPath + Path.DirectorySeparatorChar + Settings.getBrailleTreeSavedName());
                     }
                     XmlSerializer serializer;
-                    if (grantTrees.osmTreeConnections != null && !grantTrees.osmTreeConnections.Equals(new OsmTreeConnectorTuple<String, String>()) && grantTrees.osmTreeConnections.Count > 0)
+                    if (grantTrees.osmTreeConnections != null && !grantTrees.osmTreeConnections.Equals(new OsmTreeConnectorTuple()) && grantTrees.osmTreeConnections.Count > 0)
                     {
                         using (StreamWriter writer = new StreamWriter(directoryPath + Path.DirectorySeparatorChar + Settings.getOsmTreeConectorName()))
                         {
-                            serializer = new XmlSerializer(typeof(List<OsmTreeConnectorTuple<String, String>>));
+                            serializer = new XmlSerializer(typeof(List<OsmTreeConnectorTuple>));
                             serializer.Serialize(writer, grantTrees.osmTreeConnections);
                         }
                     }
@@ -844,13 +844,13 @@ namespace GRANTManager
                 {
                     fs = System.IO.File.Open(@projectDirectory + Path.DirectorySeparatorChar + Settings.getOsmTreeConectorName(), System.IO.FileMode.Open, System.IO.FileAccess.Read);
 
-                    serializer = new XmlSerializer(typeof(List<OsmTreeConnectorTuple<String, String>>));
+                    serializer = new XmlSerializer(typeof(List<OsmTreeConnectorTuple>));
                     using (StreamReader reader = new StreamReader(fs))
                     {
                         fs = null;
                         try
                         {
-                            List<OsmTreeConnectorTuple<String, String>> osmConector = (List<OsmTreeConnectorTuple<String, String>>)serializer.Deserialize(reader);
+                            List<OsmTreeConnectorTuple> osmConector = (List<OsmTreeConnectorTuple>)serializer.Deserialize(reader);
                             grantTrees.osmTreeConnections = osmConector;
                         }
                         catch (InvalidOperationException e) { Console.WriteLine("Exception when loading a OSM connection: {0}", e); }
@@ -918,12 +918,12 @@ namespace GRANTManager
         /// </summary>
         private void updateConnectedBrailleNodes()
         {
-            List<OsmTreeConnectorTuple<String, String>> osmConector =  grantTrees.osmTreeConnections;
+            List<OsmTreeConnectorTuple> osmConector =  grantTrees.osmTreeConnections;
             if (osmConector != null)
             {
-                foreach (OsmTreeConnectorTuple<String, String> con in osmConector)
+                foreach (OsmTreeConnectorTuple con in osmConector)
                 {
-                    OSMElement.OSMElement brailleNode = treeOperation.searchNodes.getBrailleTreeOsmElementById(con.BrailleTree);
+                    OSMElement.OSMElement brailleNode = treeOperation.searchNodes.getBrailleTreeOsmElementById(con.BrailleTreeId);
                     treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
                 }
             }
@@ -1010,7 +1010,7 @@ namespace GRANTManager
         public void deleteGrantTrees()
         {
             //grantTrees = new GeneratedGrantTrees();
-            grantTrees.osmTreeConnections =new List<OsmTreeConnectorTuple<String, String>>();
+            grantTrees.osmTreeConnections =new List<OsmTreeConnectorTuple>();
             Object treeNew = strategyMgr.getSpecifiedTree().NewTree();
             grantTrees.filteredTree = null;
             grantTrees.brailleTree = null;
@@ -1306,8 +1306,7 @@ namespace GRANTManager
 
             if (filteredNode != null)
             {
-                List<OsmTreeConnectorTuple<String, String>> relationship = grantTrees.osmTreeConnections;
-                OsmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.IdGenerated, idGenerated, ref relationship);
+                treeOperation.osmTreeConnector.addOsmConnection(strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.IdGenerated, idGenerated);
                 treeOperation.updateNodes.updateNodeOfBrailleUi(ref tactileOsm);
             }
             return idGenerated;

@@ -502,7 +502,7 @@ namespace GRANTManager.TreeOperations
             List<String> connectedBrailleNodes = new List<string>();
             foreach(var con in grantTrees.osmTreeConnections)
             {
-                connectedBrailleNodes.Add(con.BrailleTree);
+                connectedBrailleNodes.Add(con.BrailleTreeId);
             }
             if (connectedBrailleNodes == null || connectedBrailleNodes == new List<string>()) { Debug.WriteLine("There wasn't a connected Braille node!"); return; }
             refreshBrailleOSM(connectedBrailleNodes, subtreeBraille ?? grantTrees.brailleTree);
@@ -693,8 +693,7 @@ namespace GRANTManager.TreeOperations
                     String connectedFilteredTreeId = treeOperation.searchNodes.getConnectedFilteredTreenodeId(node.properties.IdGenerated);
                     if (connectedFilteredTreeId != null)
                     {
-                        List<OsmTreeConnectorTuple<String, String>> conector = grantTrees.osmTreeConnections;
-                        OsmTreeConnector.removeOsmConnection(connectedFilteredTreeId, node.properties.IdGenerated, ref conector);
+                        treeOperation.osmTreeConnector.removeOsmConnection(connectedFilteredTreeId, node.properties.IdGenerated);
                     }
                 }
             }
@@ -1521,8 +1520,7 @@ namespace GRANTManager.TreeOperations
                     String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                     if (connectedIdFilteredTree != null)
                     {
-                        List<OsmTreeConnectorTuple<String, String>> conector = grantTrees.osmTreeConnections;
-                        OsmTreeConnector.removeOsmConnection(connectedIdFilteredTree, strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated, ref conector);
+                        treeOperation.osmTreeConnector.removeOsmConnection(connectedIdFilteredTree, strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                         removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated);
                     }
                 }
@@ -1542,12 +1540,11 @@ namespace GRANTManager.TreeOperations
             {
                 // filtered node
                 List<String> connectedIdsBrailleTree = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(osmNode.properties.IdGenerated);
-                List<OsmTreeConnectorTuple<String, String>> osmTreeConnections = grantTrees.osmTreeConnections; ;
-                if (connectedIdsBrailleTree != null && osmTreeConnections != null)
+                if (connectedIdsBrailleTree != null && treeOperation.osmTreeConnector != null)
                 {
                     foreach (String id in connectedIdsBrailleTree)
                     {
-                        OsmTreeConnector.removeOsmConnection(osmNode.properties.IdGenerated, id, ref osmTreeConnections);
+                        treeOperation.osmTreeConnector.removeOsmConnection(osmNode.properties.IdGenerated, id);
                     }
                 }
                 strategyMgr.getSpecifiedTree().Remove(grantTrees.filteredTree, osmNode);
@@ -1556,10 +1553,9 @@ namespace GRANTManager.TreeOperations
             {
                 // braille node
                 String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(osmNode.properties.IdGenerated);
-                List<OsmTreeConnectorTuple<String, String>> osmTreeConnections = grantTrees.osmTreeConnections; ;
-                if (connectedIdFilteredTree != null && osmTreeConnections != null)
+                if (connectedIdFilteredTree != null && treeOperation.osmTreeConnector != null)
                 {
-                    OsmTreeConnector.removeOsmConnection(osmNode.properties.IdGenerated, connectedIdFilteredTree, ref osmTreeConnections);
+                    treeOperation.osmTreeConnector.removeOsmConnection(osmNode.properties.IdGenerated, connectedIdFilteredTree);
                 }
                 strategyMgr.getSpecifiedTree().Remove(grantTrees.brailleTree, osmNode);
             }
@@ -1578,8 +1574,7 @@ namespace GRANTManager.TreeOperations
                 //determinates which kind of tree 
                 OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(nodeObject);
                 if (osm == null) { return; }
-                List<OsmTreeConnectorTuple<String, String>> existingConnections = grantTrees.osmTreeConnections;
-                List<OsmTreeConnectorTuple<String, String>> connectionsToDel;
+                List<OsmTreeConnectorTuple> connectionsToDel;
                 if (osm.brailleRepresentation.Equals(new BrailleRepresentation()))
                 {
                     // filtered tree
@@ -1590,25 +1585,25 @@ namespace GRANTManager.TreeOperations
                     // braille tree
                     connectionsToDel = getAllConnectionsOfSubtree(nodeObject, false);
                 }
-                if (connectionsToDel != null && !connectionsToDel.Equals(new List<OsmTreeConnectorTuple<String, String>>()))
+                if (connectionsToDel != null && !connectionsToDel.Equals(new List<OsmTreeConnectorTuple>()))
                 {
-                    foreach (OsmTreeConnectorTuple<String, String> connection in connectionsToDel)
+                    foreach (OsmTreeConnectorTuple connection in connectionsToDel)
                     {
-                        OsmTreeConnector.removeOsmConnection(connection, ref existingConnections);
+                        treeOperation.osmTreeConnector.removeOsmConnection(connection);
                     }
                 }
                 strategyMgr.getSpecifiedTree().Remove(nodeObject);
 
             }
         }
-        private List<OsmTreeConnectorTuple<String, String>> getAllConnectionsOfSubtree(Object subtree, bool isFilteredTree)
+        private List<OsmTreeConnectorTuple> getAllConnectionsOfSubtree(Object subtree, bool isFilteredTree)
         {
-            List<OsmTreeConnectorTuple<String, String>> connections = new List<OsmTreeConnectorTuple<string, string>>();
+            List<OsmTreeConnectorTuple> connections = new List<OsmTreeConnectorTuple>();
             if (isFilteredTree) {
                 foreach (Object obj in strategyMgr.getSpecifiedTree().AllNodes(subtree))
                 {
                     //treeOperation.searchNodes.getConnectedBrailleTreenodeIds(strategyMgr.getSpecifiedTree().GetData(obj).properties.IdGenerated);
-                    List<OsmTreeConnectorTuple<String, String>> tmpConnections = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTree.Equals(strategyMgr.getSpecifiedTree().GetData(obj).properties.IdGenerated));
+                    List<OsmTreeConnectorTuple> tmpConnections = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTreeId.Equals(strategyMgr.getSpecifiedTree().GetData(obj).properties.IdGenerated));
                     if (tmpConnections != null)
                     {
                         connections.AddRange(tmpConnections);
@@ -1619,8 +1614,8 @@ namespace GRANTManager.TreeOperations
             {
                 foreach (Object obj in strategyMgr.getSpecifiedTree().AllNodes(subtree))
                 {
-                    OsmTreeConnectorTuple<String, String> tmpConnection = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(strategyMgr.getSpecifiedTree().GetData(obj).properties.IdGenerated));
-                    if (tmpConnection != null && !tmpConnection.Equals(new OsmTreeConnectorTuple<String, String>()))
+                    OsmTreeConnectorTuple tmpConnection = grantTrees.osmTreeConnections.Find(r => r.BrailleTreeId.Equals(strategyMgr.getSpecifiedTree().GetData(obj).properties.IdGenerated));
+                    if (tmpConnection != null && !tmpConnection.Equals(new OsmTreeConnectorTuple()))
                     {
                         connections.Add(tmpConnection);
                     }

@@ -204,9 +204,7 @@ namespace GRANTExample
                         List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         {
-                            List<OsmTreeConnectorTuple<String, String>> relationshipList = grantTree.osmTreeConnections;
-                            OsmTreeConnector.addOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated, ref relationshipList);
-                            grantTree.osmTreeConnections = relationshipList;
+                            treeOperation.osmTreeConnector.addOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated);
                         }
                     }
 
@@ -247,12 +245,10 @@ namespace GRANTExample
                         List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
                         if (treeElement.Count > 0)
                         { //für Testzwecke wird einfach das erste Element genutzt
-                            List<OsmTreeConnectorTuple<String, String>> relationshipList = grantTree.osmTreeConnections;
                             //   OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_3", ref relationship);
                             //  OsmTreeRelationship.addOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_5", ref relationship);
-                            OsmTreeConnector.setOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated, ref relationshipList);
+                            treeOperation.osmTreeConnector.setOsmConnection(osmElement.properties.IdGenerated, strategyMgr.getSpecifiedTree().GetData(treeElement[0]).properties.IdGenerated);
                             //  OsmTreeRelationship.setOsmConnection(filteredSubtree.properties.IdGenerated, "braille123_11", ref relationshipList);
-                            grantTree.osmTreeConnections = relationshipList;
                         }
 
                       
@@ -308,18 +304,18 @@ namespace GRANTExample
             return strategyMgr.osmRelationship;
         }*/
 
-        public static List<OsmTreeConnectorTuple<String, String>> setOsmRelationship()
+        public static List<OsmTreeConnectorTuple> setOsmRelationship()
         {
-            List<OsmTreeConnectorTuple<String, String>> relationships = new List<OsmTreeConnectorTuple<String, String>>();
-            OsmTreeConnectorTuple<String, String> r1 = new OsmTreeConnectorTuple<String, String>();
-            r1.FilteredTree = "461FD37218F2E2BCBE4C5486629A2FC6"; //Notepad;
-            r1.BrailleTree = "braille123_1";
-            OsmTreeConnectorTuple<String, String> r2 = new OsmTreeConnectorTuple<String, String>();
-            r2.FilteredTree = "gui123_2";
-            r2.BrailleTree = "braille123_2";
-            OsmTreeConnectorTuple<String, String> r3 = new OsmTreeConnectorTuple<String, String>();
-            r3.FilteredTree = "6941463181BDAA498DBC02B4164EF1AA";
-            r3.BrailleTree = "braille123_3";
+            List<OsmTreeConnectorTuple> relationships = new List<OsmTreeConnectorTuple>();
+            OsmTreeConnectorTuple r1 = new OsmTreeConnectorTuple();
+            r1.FilteredTreeId = "461FD37218F2E2BCBE4C5486629A2FC6"; //Notepad;
+            r1.BrailleTreeId = "braille123_1";
+            OsmTreeConnectorTuple r2 = new OsmTreeConnectorTuple();
+            r2.FilteredTreeId = "gui123_2";
+            r2.BrailleTreeId = "braille123_2";
+            OsmTreeConnectorTuple r3 = new OsmTreeConnectorTuple();
+            r3.FilteredTreeId = "6941463181BDAA498DBC02B4164EF1AA";
+            r3.BrailleTreeId = "braille123_3";
 
             relationships.Add(r1);
             // relationships.Add(r2);

@@ -11,10 +11,8 @@ namespace OSMElement
     /// Specifies the relationship between "filteredTree" and "brailleTree" based on the generated id
     /// http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
     /// </summary>
-    /// <typeparam name="T">The generated id of the node in the filtered tree.</typeparam>
-    /// <typeparam name="U">The generated id of the node in the braille (output) tree</typeparam>
     [Serializable]
-    public class OsmTreeConnectorTuple<T, U>
+    public class OsmTreeConnectorTuple
     {
         public OsmTreeConnectorTuple()
         {
@@ -25,24 +23,24 @@ namespace OSMElement
         /// </summary>
         /// <param name="filteredTree">The generated id of the node in the filtered tree.</param>
         /// <param name="brailleTree">The generated id of the node in the braille (output) tree</param>
-        public OsmTreeConnectorTuple(T filteredTree, U brailleTree)
+        public OsmTreeConnectorTuple(String filteredTree, String brailleTree)
         {
-            this.FilteredTree = filteredTree;
-            this.BrailleTree = brailleTree;
+            this.FilteredTreeId = filteredTree;
+            this.BrailleTreeId = brailleTree;
         }
 
         /// <summary>
         /// id of a node in the filtered tree
         /// </summary>
-        public T FilteredTree { get; set; }
+        public String FilteredTreeId { get; set; }
         /// <summary>
         /// id of a node in the braille tree
         /// </summary>
-        public U BrailleTree { get; set; }
+        public String BrailleTreeId { get; set; }
 
         public override string ToString()
         {
-            return String.Format("OsmTreeConnector -- FilteredTree: {0}, BrailleTree: {1}", FilteredTree, BrailleTree);
+            return String.Format("OsmTreeConnector -- FilteredTree: {0}, BrailleTree: {1}", FilteredTreeId, BrailleTreeId);
         }
     }
 

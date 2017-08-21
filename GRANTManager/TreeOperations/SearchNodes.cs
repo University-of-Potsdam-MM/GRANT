@@ -273,13 +273,13 @@ namespace GRANTManager.TreeOperations
         /// <returns>list with all connected braille nodes or <c>null</c></returns>
         public List<String> getConnectedBrailleTreenodeIds(String idGeneratedFilteredNode)
         {
-            List<OsmTreeConnectorTuple<String, String>> osmRelationships = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTree.Equals(idGeneratedFilteredNode));
+            List<OsmTreeConnectorTuple> osmRelationships = grantTrees.osmTreeConnections.FindAll(r => r.FilteredTreeId.Equals(idGeneratedFilteredNode));
             if (osmRelationships != null)
             {
                 List<String> result = new List<string>();
-                foreach (OsmTreeConnectorTuple<String, String> r in osmRelationships)
+                foreach (OsmTreeConnectorTuple r in osmRelationships)
                 {
-                    result.Add(r.BrailleTree);
+                    result.Add(r.BrailleTreeId);
                 }
                 return result;
             }
@@ -293,8 +293,8 @@ namespace GRANTManager.TreeOperations
         /// <returns>id of the connected filtered tree node or <c>null</c></returns>
         public String getConnectedFilteredTreenodeId(String idGeneratedBrailleNode)
         {
-            OsmTreeConnectorTuple<String, String> osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTree.Equals(idGeneratedBrailleNode));
-            if (osmRelationship != null) { return osmRelationship.FilteredTree; } else { return null; }
+            OsmTreeConnectorTuple osmRelationship = grantTrees.osmTreeConnections.Find(r => r.BrailleTreeId.Equals(idGeneratedBrailleNode));
+            if (osmRelationship != null) { return osmRelationship.FilteredTreeId; } else { return null; }
         }
         #endregion
 

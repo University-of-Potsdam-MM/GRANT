@@ -80,7 +80,7 @@
     <Compile Include="Interfaces\IEventProcessor.cs" />
     <Compile Include="Interfaces\IGenaralUiTemplate.cs" />
     <Compile Include="Interfaces\ITreeStrategy.cs" />
-    <Compile Include="OsmTreeConnector.cs" />
+    <Compile Include="TreeOperations\OsmTreeConnector.cs" />
     <Compile Include="TreeOperations\OSMNodeEventActionConnector.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="ScreenReaderFunctions.cs" />
