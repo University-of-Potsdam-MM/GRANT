@@ -71,16 +71,16 @@ namespace StrategyEvent
         {
             #region create example Event
             OSMEvent osmEvent1 = new OSMEvent();
-            osmEvent1.Id = "e_abc"; //TODO: generate id
             osmEvent1.Name = "Event1";
             osmEvent1.Priority = 1;
             osmEvent1.Type = EventTypes.Keyboard;
+            osmEvent1.Id = treeOperations.generatedIds.generatedIdOsmEvent(osmEvent1);
 
             OSMEvent osmEvent2 = new OSMEvent();
-            osmEvent2.Id = "e_def"; //TODO: generate id
             osmEvent2.Name = "Event2";
             osmEvent2.Priority = 1;
             osmEvent2.Type = EventTypes.BrailleDisplay;
+            osmEvent2.Id = treeOperations.generatedIds.generatedIdOsmEvent(osmEvent2);
 
             grantTrees.osmEvents = new List<OSMEvent>();
             grantTrees.osmEvents.Add(osmEvent1);
@@ -89,27 +89,28 @@ namespace StrategyEvent
 
             #region create example actions
             OSMAction osmAction1 = new OSMAction();
-            osmAction1.Id = "a_abc"; //TODO: generate id
             osmAction1.Name = "filterOSM";
             osmAction1.Priority = 1;
             osmAction1.Type = EventTypes.Application;
+            osmAction1.Id = treeOperations.generatedIds.generatedIdOsmAction(osmAction1);
 
             OSMAction osmAction2 = new OSMAction();
-            osmAction2.Id = "a_def"; //TODO: generate id
             osmAction2.Name = "refreshBrailleOSM";
             osmAction2.Priority = 1;
             osmAction2.Type = EventTypes.BrailleDisplay;
+            osmAction2.Id = treeOperations.generatedIds.generatedIdOsmAction(osmAction2);
 
             OSMAction osmAction3 = new OSMAction();
-            osmAction3.Id = "a_ghj"; //TODO: generate id
             osmAction3.Name = "changeBrailleScreen";
             osmAction3.Priority = 1;
             osmAction3.Type = EventTypes.BrailleDisplay;
+            osmAction3.Id = treeOperations.generatedIds.generatedIdOsmAction(osmAction3);
 
             grantTrees.osmActions = new List<OSMAction>();
             grantTrees.osmActions.Add(osmAction1);
             grantTrees.osmActions.Add(osmAction2);
             grantTrees.osmActions.Add(osmAction3);
+
             #endregion
             // alle existierenden Verbindungen:
             List<OSMTreeEvenActionConnectorTriple> osmTreeEventActionConnection = grantTrees.osmTreeEventActionConnection;
@@ -127,7 +128,7 @@ namespace StrategyEvent
             List<OSMTreeEvenActionConnectorTriple> listOfConnections_Node = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByTree(nodeIdFilteredTree);
             Debug.WriteLine("Alle Verbindungen, die zu dem Knoten mit der Id {0} gehören:\n{1}", nodeIdFilteredTree, String.Join(", ", listOfConnections_Node));
             // alle Knoten zu einer Actions ID
-            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Action = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByActrion(osmAction1.Id);
+            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Action = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByActrion(osmAction3.Id);
             Debug.WriteLine("Alle Verbindungen, die zu der Action mit der Id {0} gehören:\n{1}\n", nodeIdFilteredTree, String.Join(", ", listOfConnections_Action) );
 
             //

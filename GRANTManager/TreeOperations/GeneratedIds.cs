@@ -175,5 +175,49 @@ namespace GRANTManager.TreeOperations
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Generates an id for an <c>OSMEvent</c> object
+        /// </summary>
+        /// <param name="osmEvent">an <c>OSMEvent</c> object</param>
+        /// <returns>the generated id</returns>
+        public String generatedIdOsmEvent(OSMEvent osmEvent)
+        {
+            String result = osmEvent.Name + osmEvent.Type.ToString();
+            byte[] hash;
+            using (var md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(Encoding.UTF8.GetBytes(result));
+            }
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Generates an id for an <c>OSMAction</c> object
+        /// </summary>
+        /// <param name="osmAction">an <c>OSMAction</c> object</param>
+        /// <returns>the generated id</returns>
+        public String generatedIdOsmAction(OSMAction osmAction)
+        {
+            String result = osmAction.Name + osmAction.Type.ToString();
+            byte[] hash;
+            using (var md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(Encoding.UTF8.GetBytes(result));
+            }
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
+            return sb.ToString();
+        }
     }
 }
