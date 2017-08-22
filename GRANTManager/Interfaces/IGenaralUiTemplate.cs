@@ -58,7 +58,7 @@ namespace GRANTManager.Interfaces
         /// <param name="subtree">subtree to add as Symbols</param>
         /// <param name="lastRect">position of the last UI element which was added</param>
         /// <param name="idToIgnore">a list of all (ids of) elements which should NOT be added as symbol</param>
-        void allElementsAsSymbols(Object subtree, ref Rect lastRect, String[] idToIgnore = null);
+        void addsAllElementsAsSymbols(Object subtree, ref Rect lastRect, String[] idToIgnore = null);
 
         /// <summary>
         /// Creates all UI elements for the Braille tree which are specified in the template

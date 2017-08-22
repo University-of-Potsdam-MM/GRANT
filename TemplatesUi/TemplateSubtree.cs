@@ -12,10 +12,10 @@ namespace TemplatesUi
 {
     class TemplateSubtree : ATemplateUi
     {
-        int? boxStartX;
-        int? boxStartY;
-        int deviceWidth;
-        int deviceHeight;
+        private int? boxStartX;
+        private int? boxStartY;
+        private int deviceWidth;
+        private int deviceHeight;
         public TemplateSubtree(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation) : base(strategyMgr, grantTrees, treeOperation)
         {
             deviceWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;

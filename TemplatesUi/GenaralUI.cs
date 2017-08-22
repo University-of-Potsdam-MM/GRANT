@@ -18,9 +18,9 @@ namespace TemplatesUi
 {
     public class GenaralUI : IGenaralUiTemplate
     {
-        StrategyManager strategyMgr;
-        GeneratedGrantTrees grantTrees;
-        TreeOperation treeOperation;
+        private StrategyManager strategyMgr;
+        private GeneratedGrantTrees grantTrees;
+        private TreeOperation treeOperation;
         private String VIEWCATEGORY_SYMBOLVIEW;
         private String VIEWCATEGORY_LAYOUTVIEW;
         public GenaralUI(StrategyManager strategyMgr)
@@ -582,7 +582,7 @@ namespace TemplatesUi
         /// <param name="subtree">subtree to add as Symbols</param>
         /// <param name="lastRect">position of the last UI element which was added</param>
         /// <param name="idToIgnore">a list of all (ids of) elements which should NOT be added as symbol</param>
-        public void allElementsAsSymbols(object subtree, ref Rect  lastRect, string[] idToIgnore = null)
+        public void addsAllElementsAsSymbols(object subtree, ref Rect  lastRect, string[] idToIgnore = null)
         {
             ATemplateUi generalUiInstance = new TemplateNode(strategyMgr, grantTrees, treeOperation);
             RendererUiElementConnector defaultRendererUiConnector = new RendererUiElementConnector("Text", "Text", new RendererUiElementConnector.SizeUiElement(5, 21));
@@ -600,7 +600,7 @@ namespace TemplatesUi
                     if (connector == null && strategyMgr.getSpecifiedTree().HasChild(node))
                     {
                         //consider the children
-                        allElementsAsSymbols(node, ref lastRect, idToIgnore);
+                        addsAllElementsAsSymbols(node, ref lastRect, idToIgnore);
                     }
                     else
                     {
@@ -624,8 +624,8 @@ namespace TemplatesUi
             //Attention: currently all elements are below the other
             rectLast.X = 0;
             rectLast.Y = rectLast.Height == 0 ? 0 : rectLast.Y + rectLast.Height + 1;
-            rectLast.Height = connector.SizeElement.height;
-            rectLast.Width = connector.SizeElement.width;
+            rectLast.Height = connector.SizeElement.Height;
+            rectLast.Width = connector.SizeElement.Width;
             templObject.osm.properties.boundingRectangleFiltered = rectLast;
             templObject.osm.properties.controlTypeFiltered = connector.RendererName;
 

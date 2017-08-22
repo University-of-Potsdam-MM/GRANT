@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRANTManager;
-using GRANTManager.AbstractClasses;
 using OSMElement;
 
 namespace StrategyBrailleIO
 {
     public class DisplayStrategyBrailleDis : AOutputManager
     {
-        Device activeDevice;
+        private Device activeDevice;
 
         public DisplayStrategyBrailleDis(StrategyManager strategyMgr) : base(strategyMgr)
         {
