@@ -287,7 +287,7 @@ namespace StrategyWindows
         /// </summary>
         /// <param name="name">Prozess Id der Anwendung</param>
         /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
-        public String gerProcessNameOfApplication(int processId)
+        public String getProcessNameOfApplication(int processId)
         {
             if (processId != 0)
             {

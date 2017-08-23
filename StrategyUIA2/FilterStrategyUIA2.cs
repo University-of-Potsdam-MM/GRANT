@@ -524,7 +524,7 @@ namespace StrategyUIA2
                 osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).brailleRepresentation;
                 osm.properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
                 //   osm.properties.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
-                osm.properties.processName = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication(osm.properties.processIdFiltered);
+                osm.properties.processName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication(osm.properties.processIdFiltered);
                 osm.properties.appPath = strategyMgr.getSpecifiedOperationSystem().getFileNameOfApplicationByMainWindowTitle(osm.properties.processIdFiltered);
                 strategyMgr.getSpecifiedTree().SetData(strategyMgr.getSpecifiedTree().Child(tree), osm);
             }

@@ -66,7 +66,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="name">Prozess Id der Anwendung</param>
         /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
-        String gerProcessNameOfApplication(int processId);
+        String getProcessNameOfApplication(int processId);
 
         /// <summary>
         /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an

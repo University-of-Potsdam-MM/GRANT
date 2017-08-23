@@ -9,6 +9,8 @@ using GRANTManager.Interfaces;
 
 using Prism.Events;
 
+using System.Threading;
+
 //using System.Drawing;
 ////using GRANTApplication;
 //using OSMElement;
@@ -47,17 +49,27 @@ namespace StrategyWindows
         {
             if (e != null)
             {
-                Console.WriteLine("KeyUp (Info aus WindowsKlasse)  \t\t {0}\n", e.KeyCode, DateTime.Now.ToString());
-                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), DateTime.Now.ToString());
+                String applicationName;
+                IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().getForegroundWindow();
+                if (hwnd == IntPtr.Zero) { return; }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("hwnd " + hwnd.ToString());
+                applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)hwnd);
+                Thread.Sleep(1000);
+                }
+
+                Console.WriteLine("KeyUp (Info aus WindowsKlasse)  \t\t {0}\n", e.KeyCode, applicationName ,DateTime.Now.ToString());
+                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), applicationName, DateTime.Now.ToString());
             }
         }
 
         //gibt Infos des Eventwurfs an PRISM weiter, Publish    
-        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string dateTimeNow)
+        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string applicationName, string dateTimeNow)
         {
             //Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
 
-            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue);
+            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue + applicationName + dateTimeNow);
         }
     }
     #endregion
