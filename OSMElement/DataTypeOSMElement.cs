@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OSMElement
 {
+    /// <summary>
+    /// Properties of an OSMElement for the "DAu" UI
+    /// </summary>
     public class DataTypeOSMElement
     {
         public String OSMName { get; internal set; }
@@ -41,12 +44,7 @@ namespace OSMElement
             Range = new Range(minRange, maxRange);
             Tooltip = tooltip;
         }
-
-        public bool Remove(String name)
-        {
-            return false;
-        }
-
+        
         private void setValues(Type dataType, ref List<String> values)
         {
             if (dataType.Equals(typeof(Boolean)) || dataType.Equals(typeof(bool)))

@@ -52,17 +52,17 @@ namespace OSMElement
         {
             public SizeUiElement(int height, int width)
             {
-                this.height = height;
-                this.width = width;
+                this.Height = height;
+                this.Width = width;
             }
 
-            public int height { get; set; }
-            public int width { get; set; }
+            public int Height { get; set; }
+            public int Width { get; set; }
             //TODO: Padding etc.
 
             public override string ToString()
             {
-                return String.Format("height = {0},   width = {1}", height, width);
+                return String.Format("height = {0},   width = {1}", Height, Width);
             }
         }
 

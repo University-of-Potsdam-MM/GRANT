@@ -68,7 +68,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractClasses\AOutputManager.cs" />
+    <Compile Include="AOutputManager.cs" />
     <Compile Include="EnumClass.cs" />
     <Compile Include="ExtObject.cs" />
     <Compile Include="GeneratedGrantTrees.cs" />
@@ -116,6 +116,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

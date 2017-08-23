@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GRANTManager.AbstractClasses;
 using GRANTManager;
 using OSMElement;
 
@@ -11,7 +10,7 @@ namespace StrategyBrailleIO
 {
     public class DisplayStrategyBrailleIoSimulator : AOutputManager
     {
-        Device activeDevice;
+        private Device activeDevice;
 
         public DisplayStrategyBrailleIoSimulator(StrategyManager strategyMgr) : base(strategyMgr)
         {
