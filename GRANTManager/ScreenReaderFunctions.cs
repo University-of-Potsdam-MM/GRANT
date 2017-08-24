@@ -27,7 +27,7 @@ namespace GRANTManager
         {
             Thread.Sleep(3000);
             IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().getForegroundWindow();
-            String name = strategyMgr.getSpecifiedOperationSystem().gerProcessNameOfApplication((int)hwnd);
+            String name = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)hwnd);
 
             String file = getScreenReaderFile(name);
         }
