@@ -53,7 +53,7 @@ namespace GRANTExample
         InspectGui exampleInspectGui;
         ExampleBrailleDis exampleBrailleDis;
         ExampleDisplayStrategy exampleDisplay;
-        GuiFunctions guiFuctions;
+        GuiFunctions guiFunctions;
 
         ///// <summary>
         ///// Initialisierung der Eventverfolgung des NuGet-Package MousekeyHook
@@ -88,6 +88,24 @@ namespace GRANTExample
         public void generateOSMmwxaml(string osm)
         {
             Debug.WriteLine("winevent verarbeitet in mainwindowxaml_" + osm);
+            string pattern = "_";
+            string[] substrings = System.Text.RegularExpressions.Regex.Split(osm, pattern);
+            //NodeBox.Text = ("osm" + osm + " " + substrings[0]);
+
+            IntPtr test;
+            //test = (IntPtr)Convert.ToInt32(substrings[1]);
+            test = strategyMgr.getSpecifiedOperationSystem().getHWNDByInt32String(substrings[2]);
+            //string applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)test);
+            Debug.WriteLine("");
+
+            //String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(osmData.properties.hWndFiltered);
+            String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(test);
+
+            //NodeBox.Text = ("osm" + osm + " " + substrings[1] + " x " + foundId);
+            NodeBox.Text = ("foundid " + foundId);
+
+
+            Debug.WriteLine("");
             //osm = "werhers";
         }
 
@@ -163,7 +181,7 @@ namespace GRANTExample
             exampleBrailleDis = new ExampleBrailleDis(strategyMgr, grantTree, treeOperation);
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
-            guiFuctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
+            guiFunctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
             
         }
 
@@ -200,7 +218,35 @@ namespace GRANTExample
             {
                 NodeBox.Text = exampleDisplay.deviceInfo();
             }
-       }
+            if (e.Key == Key.F7)
+            {
+                if (strategyMgr.getSpecifiedOperationSystem().deliverCursorPosition())
+                {
+                    try
+                    {
+                        //Filtermethode
+                        IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWNDByCursorPosition();
+                        List<Strategy> possibleFilter = Settings.getPossibleFilters();
+                        if (strategyMgr.getSpecifiedFilter() == null)
+                        {
+                            // auslesen aus GUI..... 
+                            String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
+                            strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(cUserFilterName));
+                            strategyMgr.getSpecifiedFilter().setGeneratedGrantTrees(grantTree);
+                            strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
+                        }
+                        guiFunctions.deleteGrantTrees();
+                        IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
+                        grantTree.filteredTree = filterStrategy.filtering(strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));
+                    }
+
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("An error occurred: '{0}'", ex);
+                    }
+                }
+            }
+        }
 
 
         private void Button_Click_Speichern(object sender, RoutedEventArgs e)
@@ -222,7 +268,7 @@ namespace GRANTExample
             {
                 // Save document
                 // guiFunctions.saveFilteredTree(dlg.FileName);
-                guiFuctions.saveProject(dlg.FileName);
+                guiFunctions.saveProject(dlg.FileName);
             }
         }
 
@@ -239,7 +285,7 @@ namespace GRANTExample
             // Process open file dialog box results
             if (result == true)
             {
-                guiFuctions.loadGrantProject(dlg.FileName);
+                guiFunctions.loadGrantProject(dlg.FileName);
             }
         }
 
@@ -252,7 +298,7 @@ namespace GRANTExample
         private void AddScreenReaderCommand(object sender, RoutedEventArgs e)
         { 
             String fileExtention = ".grant";
-            String fileNamePath = guiFuctions.openFileDialog(fileExtention, "GRANT documents (.grant)|*.grant", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            String fileNamePath = guiFunctions.openFileDialog(fileExtention, "GRANT documents (.grant)|*.grant", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             if(fileNamePath == null) { System.Windows.Forms.MessageBox.Show("The chosen screen reader doesn't exist!", "GRANT exception"); return; }
             ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
             srf.addScreenReader(@fileNamePath);           
@@ -282,7 +328,7 @@ namespace GRANTExample
                     ((MenuItem)e.Source).IsEnabled = false;
                     ScreenReaderFunctions srf = new ScreenReaderFunctions(strategyMgr);
                     uncheckedMenuItem(i);
-                    guiFuctions.loadGrantProject(srf.screenreaders[((MenuItem)e.Source).Header as String]);
+                    guiFunctions.loadGrantProject(srf.screenreaders[((MenuItem)e.Source).Header as String]);
                     strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
                     
                 }

@@ -21,7 +21,7 @@ namespace GRANTManager.Interfaces
         /// Ermittelt den Handle der CursorPostion 
         /// </summary>
         /// <returns>Gib Handle an CursorPostion zurück</returns>
-        IntPtr getHWND();
+        IntPtr getHWNDByCursorPosition();
 
         // Main WindowHandle vom Prozess
         /// <summary>
@@ -62,7 +62,7 @@ namespace GRANTManager.Interfaces
         IntPtr getHandleOfApplication(string processName);
 
         /// <summary>
-        /// Ermittelt den Namen der Anwendung zurück
+        /// Gibt den Namen der Anwendung zurück
         /// </summary>
         /// <param name="name">Prozess Id der Anwendung</param>
         /// <returns>gibt den Modul-Namen der Anwendung zurück</returns>
@@ -81,6 +81,13 @@ namespace GRANTManager.Interfaces
         /// <param name="name">gibt den Modul-Namen der Anwendung an</param>
         /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
         String getFileNameOfApplicationByModulName(String modulName);
+
+        /// <summary>
+        /// Ermittelt Namen inkl. Pfad der gefilterten Anwendung an
+        /// </summary>
+        /// <param name="name">gibt den Modul-Namen der Anwendung an</param>
+        /// <returns>Namen inkl. Pfad der gefilterten Anwendung</returns>
+        IntPtr getHWNDByInt32String(string int32String);
 
         /// <summary>
         /// Startete eine Anwendung

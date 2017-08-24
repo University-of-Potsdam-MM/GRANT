@@ -49,27 +49,47 @@ namespace StrategyWindows
         {
             if (e != null)
             {
-                String applicationName;
+                String HWNDString = "Null";
                 IntPtr hwnd = strategyMgr.getSpecifiedOperationSystem().getForegroundWindow();
                 if (hwnd == IntPtr.Zero) { return; }
                 else
                 {
+                    //Thread.Sleep(1000);
+
                     System.Diagnostics.Debug.WriteLine("hwnd " + hwnd.ToString());
-                applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)hwnd);
-                Thread.Sleep(1000);
+                    //applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)hwnd);
+                    HWNDString = hwnd.ToString();
+
+                    IntPtr test;
+                    test = strategyMgr.getSpecifiedOperationSystem().getHWNDByInt32String(HWNDString);
+
+                    //HWNDString += "-";
+                    //HWNDString += test.ToString();
+                    //HWNDString += "-";
+
+
+
+                    //Thread.Sleep(1000);
                 }
 
-                Console.WriteLine("KeyUp (Info aus WindowsKlasse)  \t\t {0}\n", e.KeyCode, applicationName ,DateTime.Now.ToString());
-                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), applicationName, DateTime.Now.ToString());
+                Console.WriteLine("KeyUp (Info aus WindowsKlasse)  \t\t {0}\n", e.KeyCode, HWNDString ,DateTime.Now.ToString());
+                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), HWNDString, DateTime.Now.ToString());
             }
         }
 
         //gibt Infos des Eventwurfs an PRISM weiter, Publish    
-        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string applicationName, string dateTimeNow)
+        /// <summary>
+        /// sonderzeichen bei Stringübergabe in prims ist "_"
+        /// </summary>
+        /// <param name="mouseKeyEventType"></param>
+        /// <param name="mouseKeyEventValue"></param>
+        /// <param name="HWNDString"></param>
+        /// <param name="dateTimeNow"></param>
+        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string HWNDString, string dateTimeNow)
         {
             //Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
 
-            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + mouseKeyEventValue + applicationName + dateTimeNow);
+            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + "_" + mouseKeyEventValue + "_" + HWNDString + "_" + dateTimeNow);
         }
     }
     #endregion

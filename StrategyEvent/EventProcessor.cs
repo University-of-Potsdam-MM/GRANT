@@ -47,9 +47,9 @@ namespace StrategyEvent
 
         //Aufschlüsselung der Informationen aus dem Event-String in ein OSMEvent-Format für die weitere Verarbeitung
         //liefert den string, die eventid
-        public void eventValueParsing(string todo)
+        public void eventValueParsing(string osm)
         {
-            Debug.WriteLine("winevent verarbeitet in eventprocessor" + todo);
+            Debug.WriteLine("winevent verarbeitet in eventprocessor" + osm);
             //osm = "werhers";
 
             //Aufruf eienr Methode aus EventAction über startegymanager
@@ -60,6 +60,23 @@ namespace StrategyEvent
 
             //strategyManager.getSpecifiedEventManager()
             //id des events ermittelt
+
+            Debug.WriteLine("winevent verarbeitet in mainwindowxaml_" + osm);
+            string pattern = "_";
+            string[] substrings = System.Text.RegularExpressions.Regex.Split(osm, pattern);
+            //NodeBox.Text = ("osm" + osm + " " + substrings[0]);
+
+            IntPtr test;
+            test = (IntPtr)Convert.ToInt32(substrings[2]);
+            //string applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)test);
+            Debug.WriteLine("");
+
+            //id nur aus bereits gefiltertem osm-baum erhaltbar mit der methode getidfilterednodebyhwnd
+            //dazu muss hier  auch der baum hier  in treeoperation abfragbar sein, siehe InitializeFilterComponent in mainwindowxamls.cs von grantexample
+
+            //String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(osmData.properties.hWndFiltered);
+            //String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(test);
+
         }
 
         public void eventManagerActionList()
