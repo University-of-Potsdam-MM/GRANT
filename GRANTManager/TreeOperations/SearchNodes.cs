@@ -238,7 +238,7 @@ namespace GRANTManager.TreeOperations
         /// <returns>the node object OR <c>null</c></returns>
         public Object getFilteredNodeByHwnd(IntPtr hwnd)
         {
-            if (IntPtr.Zero.Equals(hwnd)) { return null; }
+            if (IntPtr.Zero.Equals(hwnd) || grantTrees.filteredTree == null) { return null; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
                 OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);

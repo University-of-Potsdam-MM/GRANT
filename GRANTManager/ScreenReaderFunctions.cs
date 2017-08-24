@@ -11,8 +11,8 @@ namespace GRANTManager
 {
     public class ScreenReaderFunctions
     {
-        public Dictionary<String, String> screenreaders;
-        StrategyManager strategyMgr;
+        public Dictionary<String, String> screenreaders { get; set; }
+        private StrategyManager strategyMgr;
         //Thread activeApp;
 
         public ScreenReaderFunctions(StrategyManager strategyMgr)
@@ -45,7 +45,7 @@ namespace GRANTManager
             {
                 String projectDirectory = Path.GetDirectoryName(@sr) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(@sr);
 
-                String processName = getProcessName(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
+                String processName = getProcessNameOfSceenreaderFile(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
                 if (processName != null && !processName.Equals(""))
                 {
                     if (!screenreaders.ContainsKey(processName))
@@ -56,7 +56,7 @@ namespace GRANTManager
             }
         }
 
-        private String getProcessName(String filePath)
+        private String getProcessNameOfSceenreaderFile(String filePath)
         {
             if (!File.Exists(@filePath))
             {
@@ -88,7 +88,7 @@ namespace GRANTManager
         public Boolean existScreenReader(String projectDirectory, out KeyValuePair<String,String> screenReader)
         {
             screenReader = new KeyValuePair<string, string>();
-            String screenReaderProcessName = getProcessName(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
+            String screenReaderProcessName = getProcessNameOfSceenreaderFile(@projectDirectory + Path.DirectorySeparatorChar + Settings.getFilteredTreeSavedName());
             if (screenReaderProcessName == null || screenReaderProcessName.Equals(""))
             {
                 return false;
