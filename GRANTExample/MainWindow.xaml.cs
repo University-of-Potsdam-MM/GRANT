@@ -94,9 +94,9 @@ namespace GRANTExample
 
             IntPtr test;
             //test = (IntPtr)Convert.ToInt32(substrings[1]);
-            test = strategyMgr.getSpecifiedOperationSystem().getHWNDByInt32String(substrings[2]);
+            test = strategyMgr.getSpecifiedOperationSystem().getHWNDByInt32String(substrings[3]);
             //string applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)test);
-            Debug.WriteLine("");
+            Debug.WriteLine("test" + test.ToString());
 
             //String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(osmData.properties.hWndFiltered);
             String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(test);
@@ -105,7 +105,7 @@ namespace GRANTExample
             NodeBox.Text = ("foundid " + foundId);
 
 
-            Debug.WriteLine("");
+            Debug.WriteLine("foundid " + foundId);
             //osm = "werhers";
         }
 
@@ -133,8 +133,15 @@ namespace GRANTExample
             strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperation);
             strategyMgr.setSpecifiedEventManager(settings.getPossibleEventManager2()[0].className);
             strategyMgr.setSpecifiedEventProcessor(settings.getPossibleEventProcessor()[0].className);
+
             strategyMgr.getSpecifiedEventProcessor().setGrantTrees(grantTree);
             strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperation);
+
+            //todo: neu, nur in example, noch an application machen
+            strategyMgr.getSpecifiedEventManager().setGrantTrees(grantTree);
+            strategyMgr.getSpecifiedEventManager().setTreeOperations(treeOperation);
+            //test
+            strategyMgr.getSpecifiedEventManager().EventExample();
             #endregion
 
 
@@ -392,7 +399,7 @@ namespace GRANTExample
 
         private void button_eventProcessorTest_Click(object sender, RoutedEventArgs e)
         {
-            strategyMgr.getSpecifiedEventProcessor().EventExample();
+            strategyMgr.getSpecifiedEventManager().EventExample();
         }
     }
 }

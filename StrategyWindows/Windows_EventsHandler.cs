@@ -73,7 +73,7 @@ namespace StrategyWindows
                 }
 
                 Console.WriteLine("KeyUp (Info aus WindowsKlasse)  \t\t {0}\n", e.KeyCode, HWNDString ,DateTime.Now.ToString());
-                mouseKeyHookEventHandler("KeyUp", e.KeyCode.ToString(), HWNDString, DateTime.Now.ToString());
+                mouseKeyHookEventHandler("Keyboard", "KeyUp", e.KeyCode.ToString(), HWNDString, DateTime.Now.ToString());
             }
         }
 
@@ -81,15 +81,16 @@ namespace StrategyWindows
         /// <summary>
         /// sonderzeichen bei Stringübergabe in prims ist "_"
         /// </summary>
+        /// <param name="eventType"></param>
         /// <param name="mouseKeyEventType"></param>
         /// <param name="mouseKeyEventValue"></param>
         /// <param name="HWNDString"></param>
         /// <param name="dateTimeNow"></param>
-        public void mouseKeyHookEventHandler(string mouseKeyEventType, string mouseKeyEventValue, string HWNDString, string dateTimeNow)
+        public void mouseKeyHookEventHandler(string eventType, string mouseKeyEventType, string mouseKeyEventValue, string HWNDString, string dateTimeNow)
         {
             //Console.WriteLine("(Info aus WindowsKlasse) Publish für Prismklasse erfolgt jetzt " + mouseKeyEventType + mouseKeyEventValue + dateTimeNow);
 
-            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(mouseKeyEventType + "_" + mouseKeyEventValue + "_" + HWNDString + "_" + dateTimeNow);
+            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Publish(eventType + "_" + mouseKeyEventType + "_" + mouseKeyEventValue + "_" + HWNDString + "_" + dateTimeNow);
         }
     }
     #endregion
