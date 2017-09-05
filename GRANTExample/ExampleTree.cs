@@ -31,7 +31,7 @@ namespace GRANTExample
             {
                 try
                 {
-                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWND();
+                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWNDByCursorPosition();
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                     int pointX;
                     int pointY;
@@ -63,7 +63,7 @@ namespace GRANTExample
             {
                 try
                 {
-                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWND();
+                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWNDByCursorPosition();
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                     int pointX;
                     int pointY;
@@ -142,7 +142,7 @@ namespace GRANTExample
             {
                 try
                 {
-                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWND();
+                    IntPtr points = strategyMgr.getSpecifiedOperationSystem().getHWNDByCursorPosition();
                     IFilterStrategy filterStrategy = strategyMgr.getSpecifiedFilter();
                    // filterStrategy.setStrategyMgr(strategyMgr);
                     //ITreeStrategy<OSMElement.OSMElement> tree1 = filterStrategy.filtering(operationSystemStrategy.getProcessHwndFromHwnd(filterStrategy.deliverElementID(points)));

@@ -336,7 +336,7 @@ namespace GRANTApplication
                     try
                     {
                         //Filtermethode
-                        IntPtr points = operationSystemStrategy.getHWND();
+                        IntPtr points = operationSystemStrategy.getHWNDByCursorPosition();
                         List<Strategy> possibleFilter = Settings.getPossibleFilters();
                         if (strategyMgr.getSpecifiedFilter() == null)
                         {

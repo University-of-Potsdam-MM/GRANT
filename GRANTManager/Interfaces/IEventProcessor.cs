@@ -12,6 +12,5 @@ namespace GRANTManager.Interfaces
         void setGrantTrees(GeneratedGrantTrees grantTrees);
         void setTreeOperations(TreeOperation treeOperations);
 
-        void EventExample();
     }
 }

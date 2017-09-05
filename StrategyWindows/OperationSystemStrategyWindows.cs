@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using GRANTManager;
+using OSMElements;
 
 namespace StrategyWindows
 {
@@ -152,10 +153,10 @@ namespace StrategyWindows
 
         // Fehlerbehandlung wie?
         /// <summary>
-        /// Ermittelt den Handle der CursorPostion 
+        /// Ermittelt den Handle anhand der CursorPostion der Maus
         /// </summary>
         /// <returns>Gib Handle an CursorPostion zurück</returns>
-        public IntPtr getHWND()
+        public IntPtr getHWNDByCursorPosition()
         {
             try
             {
@@ -197,7 +198,7 @@ namespace StrategyWindows
         /// </summary>
         /// <param name="osmElement">gibt das <c>OSMElement an</c></param>
         /// <returns><c>Rectangle</c> mit der Position des Objektes</returns>
-        public Rectangle getRect(OSMElements.OSMElement osmElement)
+        public Rectangle getRect(OSMElement osmElement)
         {
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
             int y = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.Y;
@@ -261,6 +262,7 @@ namespace StrategyWindows
             return false;
         }
 
+        // todo was ist der unterschied dieser methodoe zu getProcessHwndFromHwnd
         /// <summary>
         /// Gibt den Handle der Anwendung zurück, falls diese geöffnet ist
         /// </summary>
@@ -291,16 +293,16 @@ namespace StrategyWindows
         {
             if (processId != 0)
             {
+                System.Diagnostics.Process process = null;
                 try
                 {
-                    Process process = Process.GetProcessById(processId);
-                    if (process != null)
-                    {
-                        return process.ProcessName;
-                    }
-                }catch(ArgumentException e)
+                    process = Process.GetProcessById(processId); //.GetCurrentProcess();
+                }
+                catch (Exception)
+                { }
+                if (process != null)
                 {
-                    Debug.WriteLine("ArgumentException by getProcessNameOfApplication!");
+                    return process.ProcessName;
                 }
             }
             return null;
@@ -347,6 +349,18 @@ namespace StrategyWindows
                 catch (System.ComponentModel.Win32Exception){}
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gibt den hWnd anhand des Strings int32String zurück, welcher aus hWnd.toString() ermittelt wurde
+        /// </summary>
+        /// <param name="int32String"></param>
+        /// <returns></returns>
+        public IntPtr getHWNDByInt32String (string int32String)
+        {
+            IntPtr hWnd;
+            hWnd = (IntPtr)Convert.ToInt32(int32String);
+            return hWnd;
         }
 
         /// <summary>
@@ -445,8 +459,6 @@ namespace StrategyWindows
             ////mouseKeyHookClass mk = new mouseKeyHookClass();
             ////mk.Subscribe();
         }
-
-
     }
     
 }

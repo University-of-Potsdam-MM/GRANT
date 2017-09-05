@@ -13,9 +13,15 @@ using GRANTManager.TreeOperations;
 
 namespace StrategyEvent
 {
-    
+    /// <summary>
+    /// Verarbeitung der Events:
+    /// 1. Parsen des PRISM
+    /// 2. EventManagerDaten abfragen
+    /// 3. Actions ausführen
+    /// </summary>
     public class EventProcessor : IEventProcessor
     {
+        //folgende Variablen müssen gesetzt werden
         private StrategyManager strategyManager;
         private GeneratedGrantTrees grantTrees;
         private TreeOperation treeOperations;
@@ -23,13 +29,12 @@ namespace StrategyEvent
         public EventProcessor(StrategyManager strategyMgr)
         {
             strategyManager = strategyMgr;
-
             eventTest();
         }
         public void setGrantTrees(GeneratedGrantTrees trees) { grantTrees = trees; }
-        public void setTreeOperations(TreeOperation treeOperations) { this.treeOperations = treeOperations; }
+        public void setTreeOperations(TreeOperation treeOperation) { this.treeOperations = treeOperation; }
 
-        //todo inti der prismeventaggreagtorclass in grantapplication einbauen
+        //todo init der prismeventaggreagtorclass in grantapplication einbauen
         public IEventAggregator prismEventAggregatorClass;// = new EventAggregator();
 
         public void eventTest()
@@ -37,19 +42,15 @@ namespace StrategyEvent
             //erhalt des prismaggregator über interface
             prismEventAggregatorClass = strategyManager.getSpecifiedEventStrategy().getSpecifiedEventManagerClass();
 
-            //prismEventAggregatorClass.GetEvent<GRANTManager.PRISMHandler_Class.updateOSMEvent_PRISMHandler_GrantManager>().Subscribe(generateOSMmwxaml); ///hier muss ein subscribe hin
-            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Subscribe(eventValueParsing); ///hier muss ein subscribe hin
-
-            //Console.WriteLine("test winevent verarbeitet in mainwindowxaml_");
-
-
+            //Anmeldung für zu verarbeitenden Events
+            prismEventAggregatorClass.GetEvent<StrategyEvent_PRISM.updateOSMEvent>().Subscribe(EventValueParsing); 
         }
 
         //Aufschlüsselung der Informationen aus dem Event-String in ein OSMEvent-Format für die weitere Verarbeitung
         //liefert den string, die eventid
-        public void eventValueParsing(string todo)
+        public void EventValueParsing(string osm)
         {
-            Debug.WriteLine("winevent verarbeitet in eventprocessor" + todo);
+            Debug.WriteLine("winevent verarbeitet in eventprocessor" + osm);
             //osm = "werhers";
 
             //Aufruf eienr Methode aus EventAction über startegymanager
@@ -60,79 +61,141 @@ namespace StrategyEvent
 
             //strategyManager.getSpecifiedEventManager()
             //id des events ermittelt
+
+            Debug.WriteLine("winevent verarbeitet in mainwindowxaml_" + osm);
+            string pattern = "_";
+            string[] substrings = System.Text.RegularExpressions.Regex.Split(osm, pattern);
+            //NodeBox.Text = ("osm" + osm + " " + substrings[0]);
+
+            IntPtr test;
+            test = (IntPtr)Convert.ToInt32(substrings[3]);
+            //string applicationName = strategyMgr.getSpecifiedOperationSystem().getProcessNameOfApplication((int)test);
+            Debug.WriteLine("osmpat"+ test.ToString());
+
+            //id nur aus bereits gefiltertem osm-baum erhaltbar mit der methode getidfilterednodebyhwnd
+            //dazu muss hier  auch der baum hier  in treeoperation abfragbar sein, siehe InitializeFilterComponent in mainwindowxamls.cs von grantexample
+
+            //String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(osmData.properties.hWndFiltered);
+            String foundId = treeOperations.searchNodes.getIdFilteredNodeByHwnd(test);
+
+            Debug.WriteLine("osmpat2" + test.ToString() + " " + foundId);
+
+            EventTypes t = EventTypes.Keyboard;
+
+            Debug.WriteLine("Keyhandler" + t.ToString("G") + " " + Enum.GetName(typeof(EventTypes), EventTypes.Maus));
+
+
+
         }
 
-        public void eventManagerActionList()
+        public void PrismStringHandler(string prismString)
         {
+            string eventType = PrismStringSplitter(prismString, 0);
 
+            switch (eventType)
+            {
+                //case ((Enum.GetName(typeof(EventTypes), EventTypes.Keyboard).ToString();)):
+                case ("Keyboard"):
+                    //Keyhandler
+                    /// <param name="eventType"></param>
+                    /// <param name="mouseKeyEventType"></param>
+                    /// <param name="mouseKeyEventValue"></param>
+                    /// <param name="HWNDString"></param>
+                    /// <param name="dateTimeNow"></param>
+                    Debug.WriteLine("Keyhandler");
+                    KeyHandler(prismString);
+                    //Abfrage der festegeleten Actions anhand der eventid aus eventmanager, vorher eventid aus prismstring ermitteln
+                    //actionliste weitergeben an ausführende methode
+                    //actions ausführen aus eventaction
+                    break;
+                case ("UIA"):
+                    Debug.WriteLine("UIA Handler");
+                    break;
+                default:
+                    Debug.WriteLine("No Handler");
+                    break;
+            }
         }
 
-        public void EventExample()
+        public void KeyHandler(string prismString)
         {
-            #region create example Event
+            //getActions for the event - actiongetter
+            //doactions - actionhandler
+        }
+
+        public void ActionHandler(string actionString)
+        {
+            string actionType = PrismStringSplitter(actionString, 0);
+
+            switch (actionType)
+            {
+                case ("Keyboard"):
+
+                    //einstellung in keymanager nachsehen
+
+                    //enstprechende action aufrufen!
+
+                    //Keyhandler
+                    /// <param name="eventType"></param>
+                    /// <param name="mouseKeyEventType"></param>
+                    /// <param name="mouseKeyEventValue"></param>
+                    /// <param name="HWNDString"></param>
+                    /// <param name="dateTimeNow"></param>
+                    /// 
+
+                    EventTypes t = EventTypes.Keyboard;
+
+                    Debug.WriteLine("Keyhandler" + t.ToString("G") + " " + Enum.GetName(typeof(EventTypes), EventTypes.Maus));
+                    KeyHandler(actionString);
+
+                    //hwnd id bei eventvalueparsing methode
+                    //String foundId = treeOperations.searchNodes.getIdFilteredNodeByHwnd(test);
+
+                    break;
+                case ("UIA"):
+                    Debug.WriteLine("UIA Handler");
+                    break;
+                default:
+                    Debug.WriteLine("No Handler");
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// liefert den Wert an der Stelle X im primsString, Trennung des Pattern durch "_"
+        /// </summary>
+        /// <param name="prismString"></param>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public string PrismStringSplitter(string prismString, int x)
+        {
+            string pattern = "_";
+            string[] subStrings = System.Text.RegularExpressions.Regex.Split(prismString, pattern);
+
+            return subStrings[x];
+        }
+
+        public void GetEventManagerData()
+        {
             OSMEvent osmEvent1 = new OSMEvent();
             osmEvent1.Name = "Event1";
             osmEvent1.Priority = 1;
             osmEvent1.Type = EventTypes.Keyboard;
             osmEvent1.Id = treeOperations.generatedIds.generatedIdOsmEvent(osmEvent1);
 
-            OSMEvent osmEvent2 = new OSMEvent();
-            osmEvent2.Name = "Event2";
-            osmEvent2.Priority = 1;
-            osmEvent2.Type = EventTypes.BrailleDisplay;
-            osmEvent2.Id = treeOperations.generatedIds.generatedIdOsmEvent(osmEvent2);
-
-            grantTrees.osmEvents = new List<OSMEvent>();
-            grantTrees.osmEvents.Add(osmEvent1);
-            grantTrees.osmEvents.Add(osmEvent2);
-            #endregion
-
-            #region create example actions
-            OSMAction osmAction1 = new OSMAction();
-            osmAction1.Name = "filterOSM";
-            osmAction1.Priority = 1;
-            osmAction1.Type = EventTypes.Application;
-            osmAction1.Id = treeOperations.generatedIds.generatedIdOsmAction(osmAction1);
-
-            OSMAction osmAction2 = new OSMAction();
-            osmAction2.Name = "refreshBrailleOSM";
-            osmAction2.Priority = 1;
-            osmAction2.Type = EventTypes.BrailleDisplay;
-            osmAction2.Id = treeOperations.generatedIds.generatedIdOsmAction(osmAction2);
-
-            OSMAction osmAction3 = new OSMAction();
-            osmAction3.Name = "changeBrailleScreen";
-            osmAction3.Priority = 1;
-            osmAction3.Type = EventTypes.BrailleDisplay;
-            osmAction3.Id = treeOperations.generatedIds.generatedIdOsmAction(osmAction3);
-
-            grantTrees.osmActions = new List<OSMAction>();
-            grantTrees.osmActions.Add(osmAction1);
-            grantTrees.osmActions.Add(osmAction2);
-            grantTrees.osmActions.Add(osmAction3);
-
-            #endregion
-            // alle existierenden Verbindungen:
-            List<OSMTreeEvenActionConnectorTriple> osmTreeEventActionConnection = grantTrees.osmTreeEventActionConnection;
-
-
-            String nodeIdFilteredTree = "417F2ACC323396E993B4DC2AD2515D5E";
-            String nodeIdBrailleTree = "692CD3C3D18675DC98C98130F6CDAD3E";
-            treeOperations.oSMNodeEventActionConnector.addOsmNodeEventActionConnection(nodeIdFilteredTree, osmEvent1.Id, new List<string>() { osmAction1.Id, osmAction2.Id });
-            treeOperations.oSMNodeEventActionConnector.addOsmNodeEventActionConnection(nodeIdBrailleTree, osmEvent2.Id, new List<string>() { osmAction3.Id });
-            
             // alle Knoten zu einer Event ID
             List<OSMTreeEvenActionConnectorTriple> listOfConnections_Event = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEvent(osmEvent1.Id);
-            Debug.WriteLine("\nAlle Verbindungen, die zu dem Event mit der Id {0} gehören:\n{1}", osmEvent1.Id, String.Join(", ", listOfConnections_Event) );
-            // alle Knoten zu einer Knoten ID
-            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Node = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByTree(nodeIdFilteredTree);
-            Debug.WriteLine("Alle Verbindungen, die zu dem Knoten mit der Id {0} gehören:\n{1}", nodeIdFilteredTree, String.Join(", ", listOfConnections_Node));
-            // alle Knoten zu einer Actions ID
-            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Action = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByActrion(osmAction3.Id);
-            Debug.WriteLine("Alle Verbindungen, die zu der Action mit der Id {0} gehören:\n{1}\n", nodeIdFilteredTree, String.Join(", ", listOfConnections_Action) );
+            Debug.WriteLine("\nAlle Verbindungen, die zu dem Event mit der Id {0} gehören:\n{1}", osmEvent1.Id, String.Join(", ", listOfConnections_Event));
+            //// alle Knoten zu einer Knoten ID
+            //List<OSMTreeEvenActionConnectorTriple> listOfConnections_Node = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByTree(nodeIdFilteredTree);
+            //Debug.WriteLine("Alle Verbindungen, die zu dem Knoten mit der Id {0} gehören:\n{1}", nodeIdFilteredTree, String.Join(", ", listOfConnections_Node));
+            //// alle Knoten zu einer Actions ID
+            //List<OSMTreeEvenActionConnectorTriple> listOfConnections_Action = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByActrion(osmAction3.Id);
+            //Debug.WriteLine("Alle Verbindungen, die zu der Action mit der Id {0} gehören:\n{1}\n", nodeIdFilteredTree, String.Join(", ", listOfConnections_Action));
 
-            //
         }
+
 
 
     }
