@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GRANTManager;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 using GRANTManager.TreeOperations;
 
@@ -15,7 +15,7 @@ namespace StrategyJAVA
     class FilterStrategyJAVA :IFilterStrategy
     {
         private IOperationSystemStrategy specifiedOperationSystem;
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree;
+        private ITreeStrategy<OSMElements.OSMElement> specifiedTree;
         private StrategyManager strategyMgr;
 
         private GeneratedGrantTrees grantTrees;
@@ -27,7 +27,7 @@ namespace StrategyJAVA
 
         public Object filtering(IntPtr hwnd)
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
+            ITreeStrategy<OSMElements.OSMElement> tree = specifiedTree;
             return tree;
         }
 
@@ -43,15 +43,15 @@ namespace StrategyJAVA
 
         public Object NewNodeTree() 
         {
-            ITreeStrategy<OSMElement.OSMElement> tree = specifiedTree;
+            ITreeStrategy<OSMElements.OSMElement> tree = specifiedTree;
             return tree;
         }
 
-        public OSMElement.OSMElement getOSMElement(int pointX, int pointY) {
-            return new OSMElement.OSMElement();
+        public OSMElements.OSMElement getOSMElement(int pointX, int pointY) {
+            return new OSMElements.OSMElement();
         }
 
-        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode) { return new GeneralProperties(); }
+        public GeneralProperties updateNodeContent(OSMElements.OSMElement osmElementFilteredNode) { return new GeneralProperties(); }
 
 
         public Object filtering(IntPtr hwnd, TreeScopeEnum treeScope, int depth)
@@ -60,7 +60,7 @@ namespace StrategyJAVA
         }
 
 
-        public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
+        public Object filtering(OSMElements.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScopeEnum)
         {
             throw new NotImplementedException();
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 using Prism.Events;
-using OSMElement;
+using OSMElements;
 using GRANTManager.TreeOperations;
 
 namespace StrategyEvent

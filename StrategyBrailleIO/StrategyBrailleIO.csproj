@@ -63,6 +63,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrailleConverter.cs" />
     <Compile Include="BrailleDisplayStrategyBrailleIO.cs" />
     <Compile Include="DisplayStrategyBrailleDis.cs" />
     <Compile Include="DisplayStrategyBrailleIoSimulator.cs" />
@@ -88,6 +89,10 @@
     <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO_ShowOff\BrailleIO_ShowOff.csproj">
       <Project>{9cf455a0-b3b8-4d16-b54c-8eaf6bc97e06}</Project>
       <Name>BrailleIO_ShowOff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleRenderer\BrailleRenderer.csproj">
+      <Project>{fc472e01-7c5a-4982-9825-59589aaadccb}</Project>
+      <Name>BrailleRenderer</Name>
     </ProjectReference>
     <ProjectReference Include="..\BrailleIOBraillDisAdapterMVBD\BrailleIOBraillDisAdapterMVBD.csproj">
       <Project>{3b1787c9-b1a9-406f-951a-80e8681e6c6c}</Project>

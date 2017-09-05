@@ -8,7 +8,7 @@ using GRANTManager;
 using System.Windows.Automation;
 using System.Diagnostics;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 
 using Prism.Events;

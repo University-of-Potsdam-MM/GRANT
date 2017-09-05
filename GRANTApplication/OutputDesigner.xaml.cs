@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GRANTManager;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using System.Windows.Media;
 using System.Data;
 using GRANTManager.TreeOperations;
@@ -49,7 +49,7 @@ namespace GRANTApplication
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
             List<Strategy> possibleTrees = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
-            ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
+            ITreeStrategy<OSMElements.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
             List<Strategy> possibleFilter = Settings.getPossibleFilters();
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(cUserFilterName));
@@ -73,6 +73,10 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedEventProcessor().setGrantTrees(grantTrees);
             strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperations);
             #endregion
+
+            strategyMgr.setSpecifiedExternalScreenreader(settings.getPossibleExternalScreenreaders()[0].className);
+            strategyMgr.setSpecifiedBrailleConverter(settings.getPossibleBrailleConverter()[0].className);
+
 
             filteredTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             brailleTreeOutput.SelectedItemChanged += new RoutedPropertyChangedEventHandler<object>(brailleTreeOutput_SelectedItemChanged);
@@ -418,7 +422,7 @@ namespace GRANTApplication
         /// <param name="IdGenerated"></param>
         void updateFilteredTable(String IdGenerated)
         {
-            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+            OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             this.filteredPropRoot = new GuiFunctions.MyViewModel(osmElement);
 
             if (filteredTreeProp.Columns.Count == 0)
@@ -468,7 +472,7 @@ namespace GRANTApplication
             /// <param name="IdGenerated"></param>
             void updateFilteredTable_alt(String IdGenerated)
         {
-            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+            OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             DataTable dataTable = new DataTable();
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
@@ -631,7 +635,7 @@ namespace GRANTApplication
                 else { item = tree.SelectedItem as TreeViewItem; }
                 if (item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
                     if (osmElement.properties.isOffscreenFiltered == false)
                     {
@@ -700,14 +704,14 @@ namespace GRANTApplication
         void screenViewIteration(String IdGenerated)
         {
             brailleDisplaySimul.Items.Refresh();
-            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+            OSMElements.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
             String screenName = osmElement.brailleRepresentation.screenName == null ? "" : osmElement.brailleRepresentation.screenName;
             if (screenName != null & screenName != "")
             {
                 Object screenTree = treeOperations.searchNodes.getSubtreeOfScreen(screenName);
                 foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(screenTree))
                 {
-                    OSMElement.OSMElement osmElement2 = strategyMgr.getSpecifiedTree().GetData(node);
+                    OSMElements.OSMElement osmElement2 = strategyMgr.getSpecifiedTree().GetData(node);
                     bool[,] guiElementRep = strategyMgr.getSpecifiedBrailleDisplay().getRendererExampleRepresentation(osmElement2);
                     Rect rect = osmElement2.properties.boundingRectangleFiltered;
                     int x = (int)rect.X;
@@ -773,7 +777,7 @@ namespace GRANTApplication
         /// diese in die collection übernehmen
         void updateBrailleTable(String IdGenerated)
         {
-           OSMElement.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
+           OSMElements.OSMElement osmElement = treeOperations.searchNodes.getBrailleTreeOsmElementById(IdGenerated);
            this.braillePropRoot = new GuiFunctions.MyViewModel(osmElement);
             List<GuiFunctions.RowDataItem> rowDataItem = this.braillePropRoot.Items;
            guiFunctions.addPossibleValuesByAllTypes(ref rowDataItem, true);
@@ -1083,7 +1087,7 @@ namespace GRANTApplication
                 else { item = tree.SelectedItem as TreeViewItem; }
                 if (item.Header is GuiFunctions.MenuItem && ((GuiFunctions.MenuItem)item.Header).IdGenerated != null)
                 {
-                    OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                    OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     updateBrailleTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     screenViewIteration(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                     #region marked element in filtered tree
@@ -1390,7 +1394,7 @@ namespace GRANTApplication
             }
             else
             {
-                OSMElement.OSMElement brailleNodeObject_osm = strategyMgr.getSpecifiedTree().GetData(brailleNodeObject);
+                OSMElements.OSMElement brailleNodeObject_osm = strategyMgr.getSpecifiedTree().GetData(brailleNodeObject);
                 brailleNodeIdNew = guiFunctions.addFilteredNodeToBrailleTree(guiControlTypeSelected, filteredNodeObject, brailleNodeObject_osm.brailleRepresentation.screenName, brailleNodeObject_osm.brailleRepresentation.typeOfView);
             }
             //refresh + select new node

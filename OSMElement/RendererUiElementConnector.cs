@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OSMElement
+namespace OSMElements
 {
     /// <summary>
     /// Spezifies the structure for connection between a (Braille) rendere and a GUI controllType

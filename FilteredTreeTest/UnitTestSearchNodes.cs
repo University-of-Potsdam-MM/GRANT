@@ -50,7 +50,7 @@ namespace FilteredTreeTest
             
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
-                OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
                 String foundId = treeOperation.searchNodes.getIdFilteredNodeByHwnd(osmData.properties.hWndFiltered);
                 if(IntPtr.Zero.Equals(osmData.properties.hWndFiltered))
                 {
@@ -71,8 +71,8 @@ namespace FilteredTreeTest
 
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
-                OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
-                OSMElement.OSMElement osmDataWithoutId = osmData.DeepCopy();
+                OSMElements.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement osmDataWithoutId = osmData.DeepCopy();
                 osmDataWithoutId.properties.resetIdGenerated = null;
                 List<Object> foundObjects = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, osmDataWithoutId.properties);
                 Assert.AreEqual(1, foundObjects.Count);

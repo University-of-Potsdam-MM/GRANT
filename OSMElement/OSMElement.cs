@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
 
-namespace OSMElement
+namespace OSMElements
 {
     [Serializable]
     public class OSMElement : IEquatable<OSMElement>

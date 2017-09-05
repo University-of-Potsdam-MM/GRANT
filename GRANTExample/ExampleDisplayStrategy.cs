@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using StrategyMVBD;
-using OSMElement;
+using OSMElements;
 
 namespace GRANTExample
 {

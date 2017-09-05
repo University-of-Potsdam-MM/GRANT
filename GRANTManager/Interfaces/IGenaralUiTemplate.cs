@@ -72,11 +72,11 @@ namespace GRANTManager.Interfaces
     [Serializable]
     public struct TemplateUiObject
     {
-        public OSMElement.OSMElement osm { get; set; }
+        public OSMElements.OSMElement osm { get; set; }
         public String groupImplementedClassTypeFullName { get; set; } //nötig?
         public String groupImplementedClassTypeDllName { get; set; } //nötig?
         /// <summary>
-        /// A List of screen names (different to <see cref="OSMElement.BrailleRepresentation"/>)
+        /// A List of screen names (different to <see cref="OSMElements.BrailleRepresentation"/>)
         /// </summary>
         public List<String> Screens { get; set; } //-> neu, da es nicht mit Screen in OSM (BR) zusammenpasst
 
@@ -93,17 +93,17 @@ namespace GRANTManager.Interfaces
         /// <summary>
         /// Specifies the orientation of the element
         /// </summary>
-        public OSMElement.UiElements.Orientation orientation { get; set; }
+        public OSMElements.UiElements.Orientation orientation { get; set; }
 
         /// <summary>
         /// Specifies the elements which build a group; e.g. the tabs in the menu bar are a group; The number of elements can be changed during runtime
         /// </summary>
-        public List<OSMElement.OSMElement> groupElements { get; set; }
+        public List<OSMElements.OSMElement> groupElements { get; set; }
     }
 
     public struct TemplateScreenshotObject
     {
-        public OSMElement.OSMElement osm { get; set; }
+        public OSMElements.OSMElement osm { get; set; }
         public List<String> Screens { get; set; }
         public String viewName { get; set; }
         /// <summary>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRANTManager;
-using OSMElement;
+using OSMElements;
 
 namespace StrategyBrailleIO
 {

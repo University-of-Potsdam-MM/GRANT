@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GRANTManager;
 using System.Collections.Generic;
 using GRANTManager.TreeOperations;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 
 namespace BrailleTreeTests
@@ -68,7 +68,7 @@ namespace BrailleTreeTests
             strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("a1");
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(25, 25);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
-            OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
+            OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
             Assert.AreEqual("0", data.properties.valueFiltered, "An der Position (25,25) hätte der Button mit der Ziffer '0' sein sollen. Somit hätte der Value auch '0' sein sollen!");
             strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
             guiFuctions.deleteGrantTrees();
@@ -85,13 +85,13 @@ namespace BrailleTreeTests
             strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("a1");
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(25, 25);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
-            OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
+            OSMElements.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
             String connectedIdfilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(dataBraille.properties.IdGenerated);
             Assert.AreNotEqual(null, connectedIdfilteredTree, "Es hätte ein zugehöriger Knoten im gefilterten Baum gefunden werden müssen.");
 
-            OSMElement.OSMElement dataFiltere = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdfilteredTree);
+            OSMElements.OSMElement dataFiltere = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdfilteredTree);
             Assert.AreNotEqual(null, dataFiltere, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen.");
-            Assert.AreNotEqual(new OSMElement.OSMElement(), dataFiltere, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen.");
+            Assert.AreNotEqual(new OSMElements.OSMElement(), dataFiltere, "Es hätte ein Knoten im gefilterten Baum gefunden werden müssen.");
             Assert.AreEqual("Button", dataFiltere.properties.controlTypeFiltered, "Der zugehörige Knoten hätte den Controlltype 'Button' haben müssen!");
             Assert.AreEqual("0", dataFiltere.properties.nameFiltered, "Der zugehörige Knoten hätte die Beschriftung '0' haben müssen.");
             strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
@@ -128,7 +128,7 @@ namespace BrailleTreeTests
             int clickY;
             guiFuctions.getScreenshotPointInApplication(nodeAtPoint, pointX, pointY, out clickX, out clickY);
             //nun folgt der Abgleich, ob die richtige Position ermittelt wurde => es sollte der Button '7' auf dem Taschenrechner sein
-            OSMElement.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().getOSMElement(clickX, clickY);
+            OSMElements.OSMElement dataOfPoint = strategyMgr.getSpecifiedFilter().getOSMElement(clickX, clickY);
             Assert.AreEqual("Button", dataOfPoint.properties.controlTypeFiltered, "Es hätte der Button sein sollen!");
             Assert.AreEqual("7", dataOfPoint.properties.nameFiltered, "auf dem Button hätte die Zahl '7' stehen müssen!");
             List<Object> searchresult = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, dataOfPoint.properties);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OSMElement;
+using OSMElements;
 using GRANTManager.TreeOperations;
 
 namespace GRANTManager.Interfaces
@@ -34,7 +34,7 @@ namespace GRANTManager.Interfaces
         /// Updated the content of a specific element
         /// </summary>
         /// <param name="element">element which content should be updated</param>
-        void updateViewContent(ref OSMElement.OSMElement element);
+        void updateViewContent(ref OSMElements.OSMElement element);
 
         /// <summary>
         /// Seeks to a point the associated view name.
@@ -63,7 +63,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="osmElementFilteredNode">a node</param>
         /// <returns>Boolean matrix where <code>true</code> represents a shown pin</returns>
-        bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElementFilteredNode);
+        bool[,] getRendererExampleRepresentation(OSMElements.OSMElement osmElementFilteredNode);
 
         /// <summary>
         /// Gives a example tactile representation to a controll type

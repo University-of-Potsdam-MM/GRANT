@@ -2,7 +2,7 @@
 using GRANTManager.Interfaces;
 using GRANTManager.TreeOperations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OSMElement;
+using OSMElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -76,7 +76,7 @@ namespace GRANTManager.BrailleTreeTests
              */
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -134,7 +134,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region 1. node
 
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -148,7 +148,7 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen";
@@ -171,7 +171,7 @@ namespace GRANTManager.BrailleTreeTests
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -198,7 +198,7 @@ namespace GRANTManager.BrailleTreeTests
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -212,7 +212,7 @@ namespace GRANTManager.BrailleTreeTests
             #endregion
 
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen - 2";
@@ -241,7 +241,7 @@ namespace GRANTManager.BrailleTreeTests
         {
             Assert.AreEqual(null, grantTrees.brailleTree);
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -255,7 +255,7 @@ namespace GRANTManager.BrailleTreeTests
             #endregion
 
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen - 2";
@@ -284,7 +284,7 @@ namespace GRANTManager.BrailleTreeTests
         {
             Assert.AreEqual(null, grantTrees.brailleTree, "Der BrailleBaum sollte noch leer sein!");
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -299,7 +299,7 @@ namespace GRANTManager.BrailleTreeTests
             #endregion
 
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen";
@@ -331,7 +331,7 @@ namespace GRANTManager.BrailleTreeTests
         public void addNavigationbarForScreenTest()
         {
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -344,7 +344,7 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen";
@@ -376,7 +376,7 @@ namespace GRANTManager.BrailleTreeTests
         public void createNavigationbarForScreenTest()
         {
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -389,7 +389,7 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen";
@@ -421,7 +421,7 @@ namespace GRANTManager.BrailleTreeTests
         public void updateNavigationbarForScreenTest()
         {
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -434,7 +434,7 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen";
@@ -449,7 +449,7 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.getSpecifiedGeneralTemplateUi().createNavigationbar(pathToTemplate, osm.brailleRepresentation.typeOfView);
             //Assert.AreEqual(6, strategyMgr.getSpecifiedTree().Count(grantTrees.brailleTree), "Nach dem hinzufügen der Navigationsleiste hätte der Baum 6 Knoten haben müssen!");
             #region 3. node
-            OSMElement.OSMElement osm3 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm3 = new OSMElements.OSMElement();
 
             osm3.brailleRepresentation.isVisible = true;
             osm3.brailleRepresentation.screenName = "TestScreen - 3";
@@ -489,9 +489,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.brailleRepresentation.contrast, 230, "Im gespeicherten Baum hätte der Kontrast-Wert '230' sein sollen!");
             int contrastNew = 200;
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "contrast", contrastNew);
@@ -509,9 +509,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.properties.valueFiltered, "Rechner", "Im gespeicherten Baum hätte der valueFiltered-Wert 'Rechner' sein sollen!");
             String valueFilteredNew = "Calc";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "valueFiltered", valueFilteredNew);
@@ -529,9 +529,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.brailleRepresentation.displayedGuiElementType, "nameFiltered", "Im gespeicherten Baum hätte der displayedGuiElementType-Wert 'nameFiltered' sein sollen!");
             String displayedGuiElementTypeNew = "helpTextFiltered";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "displayedGuiElementType", displayedGuiElementTypeNew);
@@ -549,9 +549,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.brailleRepresentation.displayedGuiElementType, "nameFiltered", "Im gespeicherten Baum hätte der displayedGuiElementType-Wert 'nameFiltered' sein sollen!");
             String displayedGuiElementTypeNew = "notExistProperty";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "displayedGuiElementType", displayedGuiElementTypeNew);
@@ -569,9 +569,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.properties.valueFiltered, "Rechner", "Im gespeicherten Baum hätte der valueFiltered-Wert 'Rechner' sein sollen!");
             String propertyNew = "Calc";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "notExistPropertyName", propertyNew);
@@ -588,9 +588,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.properties.IdGenerated, nodeId);
             String IdNew = "NewIdValue";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "IdGenerated", IdNew);
@@ -608,9 +608,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null, "Das filteredTree-Object ist leer!");
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(node.brailleRepresentation.viewName, "TitleBar");
             String viewNameNew = "viewNameNew";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "viewName", viewNameNew);
@@ -629,13 +629,13 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.brailleTree, null, "Das brailleTree-Object ist leer!");
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
             Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(nodeObject);
-            OSMElement.OSMElement nodeCopy = nodeData.DeepCopy();
-            Assert.AreNotEqual(nodeData, new OSMElement.OSMElement(), "Es wurde kein Knoten gefunden!");
+            OSMElements.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            OSMElements.OSMElement nodeCopy = nodeData.DeepCopy();
+            Assert.AreNotEqual(nodeData, new OSMElements.OSMElement(), "Es wurde kein Knoten gefunden!");
             Assert.AreEqual(nodeData.brailleRepresentation.viewName, "TitleBar");
             Assert.IsTrue(strategyMgr.getSpecifiedTree().HasNext(nodeObject));
             Object nextNode = strategyMgr.getSpecifiedTree().Next(nodeObject);
-            OSMElement.OSMElement nextNodeData = strategyMgr.getSpecifiedTree().GetData(nextNode);
+            OSMElements.OSMElement nextNodeData = strategyMgr.getSpecifiedTree().GetData(nextNode);
             String viewNameNew = nextNodeData.brailleRepresentation.viewName;
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "viewName", viewNameNew);
             Assert.IsFalse(result);
@@ -656,9 +656,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "766D7B8425177D724B967DE5A55198F0"; //Node id of the braille node which is connected to the 'titlebar' -> it's a view in the 'layout view'
             Object nodeObjectOldParent_Lv = strategyMgr.getSpecifiedTree().Parent( treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree)).DeepCopy();
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.screenName, "lv");
             String screenNameNew = "ScreenNameNew";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew); // => move the view to a new screen
@@ -686,9 +686,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "0FCC24CAB3C124C7E6D010E55E91B195";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.screenName, "lv");
             String screenNameNew = "screenNameNew";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew);
@@ -699,7 +699,7 @@ namespace GRANTManager.BrailleTreeTests
             Object subscreenNew = treeOperation.searchNodes.getNode(node.properties.IdGenerated, grantTrees.brailleTree);
             foreach(object o in strategyMgr.getSpecifiedTree().AllNodes(subscreenNew))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 Assert.AreEqual(screenNameNew, data.brailleRepresentation.screenName);
             }
         }
@@ -715,10 +715,10 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "64258A7F603E99810EC9D9CC836D8087";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.screenName, "b");
             String screenNameNew = "a1";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew);
@@ -753,8 +753,8 @@ namespace GRANTManager.BrailleTreeTests
             Object nodeObjectScreen_old = treeOperation.searchNodes.getSubtreeOfScreen(oldScreenName).DeepCopy();
             String screenNameNew = "a1";
             Object nodeObjectNewScreen_old = treeOperation.searchNodes.getSubtreeOfScreen(screenNameNew).DeepCopy();
-            OSMElement.OSMElement nodeData = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            Assert.AreNotEqual(nodeData, new OSMElement.OSMElement(), "Cann't find a node!");
+            OSMElements.OSMElement nodeData = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            Assert.AreNotEqual(nodeData, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(nodeData.brailleRepresentation.screenName, oldScreenName);
             
             result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew);
@@ -778,10 +778,10 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "5D91B25288C6011F4591D0CB66C5CE78";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.screenName, "b");
             String screenNameNew = "a1";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew);
@@ -805,10 +805,10 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "B3E21CB6354236C12E53DD34DC343A45";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId); //MenuBar-View (viewName = "MenuBar")
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId); //MenuBar-View (viewName = "MenuBar")
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.screenName, "b");
             String screenNameNew = "a1";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", screenNameNew);
@@ -844,7 +844,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
             Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject); // controlTypeFiltered = Screenshot; has no siblings
+            OSMElements.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject); // controlTypeFiltered = Screenshot; has no siblings
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "screenName", "sv");
             Assert.IsFalse(result);
@@ -863,9 +863,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "CF317E437395E0F51B06FF208F4A905C";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "typeOfViewNameNew";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
@@ -876,7 +876,7 @@ namespace GRANTManager.BrailleTreeTests
             Object subscreenNew = treeOperation.searchNodes.getNode(node.properties.IdGenerated, grantTrees.brailleTree);
             foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(subscreenNew))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
             }
         }
@@ -893,7 +893,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
             Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree);
-            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            OSMElements.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
             // remove all but one nodes of this screen
             while (strategyMgr.getSpecifiedTree().HasPrevious(nodeObject))
             {
@@ -903,9 +903,9 @@ namespace GRANTManager.BrailleTreeTests
             {
                 treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(nodeObject)).properties.IdGenerated);
             }
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
             Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy(); // => typeOfView-node
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "typeOfViewNameNew";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
@@ -915,7 +915,7 @@ namespace GRANTManager.BrailleTreeTests
             Object subTreeTypeOfViewNew = treeOperation.searchNodes.getNode(node.properties.IdGenerated, grantTrees.brailleTree);
             foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(subTreeTypeOfViewNew))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
             }
 
@@ -939,9 +939,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "0FCC24CAB3C124C7E6D010E55E91B195"; //screen-node
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "SymbolView";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
@@ -951,7 +951,7 @@ namespace GRANTManager.BrailleTreeTests
             Object subTreeTypeOfScreenNew = treeOperation.searchNodes.getNode(node.properties.IdGenerated, grantTrees.brailleTree);
             foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(subTreeTypeOfScreenNew))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
             }
         }
@@ -968,11 +968,11 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
             Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree); //controlType = "Screenshot"; the node has siblings
-            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            OSMElements.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
             Object treeCopy = grantTrees.brailleTree.DeepCopy();
             
             Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "SymbolView";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
@@ -993,8 +993,8 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF"; // view-node -> controlType = Screenshot
             Object nodeObject = treeOperation.searchNodes.getNode(nodeId, grantTrees.brailleTree); //view-node
-            OSMElement.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
+            OSMElements.OSMElement node = strategyMgr.getSpecifiedTree().GetData(nodeObject);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
 
             // remove all but one nodes of this screen
             while(strategyMgr.getSpecifiedTree().HasPrevious(nodeObject))
@@ -1006,7 +1006,7 @@ namespace GRANTManager.BrailleTreeTests
                 treeOperation.updateNodes.removeNodeInBrailleTree(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(nodeObject)).properties.IdGenerated);
             }
             Object parentParentOld_old = strategyMgr.getSpecifiedTree().Parent(strategyMgr.getSpecifiedTree().Parent(nodeObject)).DeepCopy(); //typeOfView-Node
-            Assert.AreNotEqual(node, new OSMElement.OSMElement(), "Cann't find a node!");
+            Assert.AreNotEqual(node, new OSMElements.OSMElement(), "Cann't find a node!");
             Assert.AreEqual(node.brailleRepresentation.typeOfView, "LayoutView");
             String typeOfViewNameNew = "SymbolView";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "typeOfView", typeOfViewNameNew);
@@ -1016,7 +1016,7 @@ namespace GRANTManager.BrailleTreeTests
             Object subTreeTypeOfScreenNew = treeOperation.searchNodes.getNode(node.properties.IdGenerated, grantTrees.brailleTree);
             foreach (object o in strategyMgr.getSpecifiedTree().AllNodes(subTreeTypeOfScreenNew))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 Assert.AreEqual(typeOfViewNameNew, data.brailleRepresentation.typeOfView);
             }
             Object parentParentOld_new = treeOperation.searchNodes.getNode(strategyMgr.getSpecifiedTree().GetData(parentParentOld_old).properties.IdGenerated, grantTrees.brailleTree);
@@ -1040,9 +1040,9 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             Assert.AreNotEqual(grantTrees.brailleTree, null);
             String nodeId = "C0CF02BD3B3567C92BA4A62B09209ACF";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
-            OSMElement.OSMElement nodeCopy = node.DeepCopy();
-            Assert.AreNotEqual(node, new OSMElement.OSMElement());
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement nodeCopy = node.DeepCopy();
+            Assert.AreNotEqual(node, new OSMElements.OSMElement());
             Assert.AreEqual(node.properties.boundingRectangleFiltered.ToString(), "0;7;120;53");
             String rectNew = "10;7;120;53";
             Boolean result = treeOperation.updateNodes.setBrailleTreeProperty(nodeId, "boundingRectangleFiltered", rectNew);
@@ -1062,7 +1062,7 @@ namespace GRANTManager.BrailleTreeTests
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
             String propName = "valueFiltered";
             Assert.IsTrue(SearchNodes.existPropertyName(propName));
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
             String value = UpdateNodes.getProperty(propName, node);
             Assert.AreEqual(node.properties.valueFiltered, value);
         }
@@ -1074,7 +1074,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees, null);
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
             String propName = "valueFiltered";
             Assert.IsTrue(SearchNodes.existPropertyName(propName));
             String value = treeOperation.updateNodes.getPropertyofBrailleTree(propName, nodeId);
@@ -1088,7 +1088,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees, null);
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
             Assert.IsNull(node.properties.helpTextFiltered);
             String propName = "helpTextFiltered";
             String value = UpdateNodes.getProperty(propName, node);
@@ -1103,7 +1103,7 @@ namespace GRANTManager.BrailleTreeTests
             Assert.AreNotEqual(grantTrees, null);
             Assert.AreNotEqual(grantTrees.filteredTree, null);
             String nodeId = "766D7B8425177D724B967DE5A55198F0";
-            OSMElement.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
+            OSMElements.OSMElement node = treeOperation.searchNodes.getBrailleTreeOsmElementById(nodeId);
             String propName = "NotExistProperty";
             String value = UpdateNodes.getProperty(propName, node);
             Assert.IsFalse(SearchNodes.existPropertyName(propName));
@@ -1131,7 +1131,7 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
             strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("sv");
             Object brailleTree_Copy = grantTrees.brailleTree.DeepCopy();
-            OSMElement.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
+            OSMElements.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             System.Windows.Forms.SendKeys.SendWait(osmFiltered_resultNode_old.properties.nameFiltered + "{+}" + osmFiltered_resultNode_old.properties.nameFiltered+"1");
@@ -1139,14 +1139,14 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.filteredTree(idFiltered_resultNode, TreeScopeEnum.Element);
             treeOperation.updateNodes.refreshBrailleOSM(idFiltered_resultNode, TreeScopeEnum.Element, true);
 
-            OSMElement.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
+            OSMElements.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
             List<String> connectedBrailleNodes_resultNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_resultNode);
             Assert.IsFalse(connectedBrailleNodes_resultNode == null || connectedBrailleNodes_resultNode.Count < 1);
             int expectedValue = Convert.ToInt32(osmFiltered_resultNode_old.properties.nameFiltered + "1");
             foreach (String id in connectedBrailleNodes_resultNode)
             {
-                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
-                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                OSMElements.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElements.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
                 if (!id.Equals(idBraille_resultNode1_sv) && !id.Equals(idBraille_resultNode2_sv))
                 {
                     Assert.IsTrue(osmOld.Equals(osmNew));
@@ -1169,7 +1169,7 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
             strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("sv");
             Object brailleTree_Copy = grantTrees.brailleTree.DeepCopy();
-            OSMElement.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
+            OSMElements.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             System.Windows.Forms.SendKeys.SendWait(osmFiltered_resultNode_old.properties.nameFiltered + "{+}" + osmFiltered_resultNode_old.properties.nameFiltered + "1");
@@ -1177,14 +1177,14 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.filteredTree(idFiltered_resultNode, TreeScopeEnum.Element);
             treeOperation.updateNodes.refreshBrailleOSM(idFiltered_resultNode, TreeScopeEnum.Element, false);
 
-            OSMElement.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
+            OSMElements.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
             List<String> connectedBrailleNodes_resultNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_resultNode);
             Assert.IsFalse(connectedBrailleNodes_resultNode == null || connectedBrailleNodes_resultNode.Count < 1);
             int expectedValue =  Convert.ToInt32(osmFiltered_resultNode_old.properties.nameFiltered + "1");
             foreach (String id in connectedBrailleNodes_resultNode)
             {
-                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
-                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                OSMElements.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElements.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
                 if (osmOld.brailleRepresentation.displayedGuiElementType.Equals("nameFiltered"))
                 {
                     Assert.IsFalse(osmOld.Equals(osmNew));
@@ -1205,7 +1205,7 @@ namespace GRANTManager.BrailleTreeTests
             strategyMgr.getSpecifiedBrailleDisplay().generatedBrailleUi();
             strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("sv");
             Object brailleTree_Copy = grantTrees.brailleTree.DeepCopy();
-            OSMElement.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
+            OSMElements.OSMElement osmFiltered_resultNode_old = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode).DeepCopy();
             IntPtr appHwnd = strategyMgr.getSpecifiedOperationSystem().getHandleOfApplication(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.processName);
             strategyMgr.getSpecifiedOperationSystem().setForegroundWindow(appHwnd);
             System.Windows.Forms.SendKeys.SendWait("{ESC}"); 
@@ -1214,15 +1214,15 @@ namespace GRANTManager.BrailleTreeTests
             treeOperation.updateNodes.filteredTree(idFiltered_resultNode, TreeScopeEnum.Application); // TreeScopeEnum.Sibling
             treeOperation.updateNodes.refreshBrailleOSM(idFiltered_resultNode, TreeScopeEnum.Sibling, false);
 
-            OSMElement.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
+            OSMElements.OSMElement osmFiltered_resultNode_new = treeOperation.searchNodes.getFilteredTreeOsmElementById(idFiltered_resultNode);
             List<String> connectedBrailleNodes_resultNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_resultNode);
             List<String> connectedBrailleNodes_verlaufNode = treeOperation.searchNodes.getConnectedBrailleTreenodeIds(idFiltered_VerlaufNode);
             Assert.IsFalse(connectedBrailleNodes_resultNode == null || connectedBrailleNodes_resultNode.Count < 1);
             
             foreach (String id in connectedBrailleNodes_resultNode)
             {
-                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
-                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                OSMElements.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElements.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
                 if (osmOld.brailleRepresentation.displayedGuiElementType.Equals("nameFiltered"))
                 {
                     Assert.IsTrue(osmOld.Equals(osmNew));
@@ -1231,8 +1231,8 @@ namespace GRANTManager.BrailleTreeTests
             String expectedValue = osmFiltered_resultNode_old.properties.nameFiltered+ " +";
             foreach (String id in connectedBrailleNodes_verlaufNode)
             {
-                OSMElement.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
-                OSMElement.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
+                OSMElements.OSMElement osmOld = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, brailleTree_Copy));
+                OSMElements.OSMElement osmNew = strategyMgr.getSpecifiedTree().GetData(treeOperation.searchNodes.getNode(id, grantTrees.brailleTree));
                 if (osmOld.brailleRepresentation.displayedGuiElementType.Equals("nameFiltered"))
                 {
                     if (osmOld.Equals(osmNew))

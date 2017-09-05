@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 
 
 namespace GRANTManager
@@ -13,7 +13,7 @@ namespace GRANTManager
     {
         private IFilterStrategy specifiedFilter; //enthält die gewählte Filterstrategy (UIA, Java-Access-Bridge, ...)
         private IOperationSystemStrategy specifiedOperationSystem; // enthält die gewählte Betriebssystemklasse/-methoden (Windows, ...)
-        private ITreeStrategy<OSMElement.OSMElement> specifiedTree; // enthält die gewählte Klasse der Baumdarstellung/-verarbeitung
+        private ITreeStrategy<OSMElements.OSMElement> specifiedTree; // enthält die gewählte Klasse der Baumdarstellung/-verarbeitung
         private IBrailleDisplayStrategy specifiedBrailleDisplay; // enthält die gewählte Klasse für das Ansprechen der Stiftplatte
         private AOutputManager specifiedDisplayStrategy; //enthält Methoden um  mögliche Ausgabegeräte zu erhalten etc.
 
@@ -24,6 +24,62 @@ namespace GRANTManager
         private IEventStrategy_PRISM eventStrategy_PRISM;
 
         private IGenaralUiTemplate generalUiTemplate;
+        private IExternalScreenreader externalScreenreader;
+        private IBrailleConverter brailleConverter;
+
+        public void setSpecifiedBrailleConverter(String brailleConverterClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(brailleConverterClassName);
+                brailleConverter = (IBrailleConverter)Activator.CreateInstance(type);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Exception in StrategyManager.setBrailleConverter: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Exception in StrategyManager.setBrailleConverter: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Exception in StrategyManager.setBrailleConverter:: " + e.Message);
+            }
+        }
+
+        public IBrailleConverter getSpecifiedBrailleConverter()
+        {
+            return brailleConverter;
+        }
+
+        public void setSpecifiedExternalScreenreader(String externalScreenreaderClassName)
+        {
+            try
+            {
+                Type type = Type.GetType(externalScreenreaderClassName);
+                externalScreenreader = (IExternalScreenreader)Activator.CreateInstance(type, this);
+            }
+            catch (InvalidCastException ic)
+            {
+                throw new InvalidCastException("Exception in StrategyManager.setExternalScreenreader: " + ic.Message);
+            }
+            catch (ArgumentException ae)
+            {
+                throw new ArgumentException("Exception in StrategyManager.setExternalScreenreader: " + ae.Message);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Exception in StrategyManager.setExternalScreenreader:: " + e.Message);
+            }
+        }
+
+        public IExternalScreenreader getSpecifiedExternalScreenreader()
+        {
+            return externalScreenreader;
+        }
 
 
         public void setSpecifiedEventAction(String eventActionClassName)
@@ -273,9 +329,9 @@ namespace GRANTManager
             try
             {
                 Type type = Type.GetType(treeClassName);
-                Type[] typeArgs = { typeof(OSMElement.OSMElement) };
+                Type[] typeArgs = { typeof(OSMElements.OSMElement) };
                 var makeme = type.MakeGenericType(typeArgs);
-                specifiedTree = (ITreeStrategy<OSMElement.OSMElement>)Activator.CreateInstance(makeme);
+                specifiedTree = (ITreeStrategy<OSMElements.OSMElement>)Activator.CreateInstance(makeme);
             }
             catch (InvalidCastException ic)
             {
@@ -292,7 +348,7 @@ namespace GRANTManager
             }
         }
 
-        public void setSpecifiedTree(ITreeStrategy<OSMElement.OSMElement> treeName)
+        public void setSpecifiedTree(ITreeStrategy<OSMElements.OSMElement> treeName)
         {
             try
             {
@@ -305,7 +361,7 @@ namespace GRANTManager
             }
         }
 
-        public ITreeStrategy<OSMElement.OSMElement> getSpecifiedTree()
+        public ITreeStrategy<OSMElements.OSMElement> getSpecifiedTree()
         {
             return specifiedTree;
         }

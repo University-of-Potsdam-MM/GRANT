@@ -197,7 +197,7 @@ namespace StrategyWindows
         /// </summary>
         /// <param name="osmElement">gibt das <c>OSMElement an</c></param>
         /// <returns><c>Rectangle</c> mit der Position des Objektes</returns>
-        public Rectangle getRect(OSMElement.OSMElement osmElement)
+        public Rectangle getRect(OSMElements.OSMElement osmElement)
         {
             int x = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.X;
             int y = (int)osmElement.properties.boundingRectangleFiltered.TopLeft.Y;
@@ -291,10 +291,16 @@ namespace StrategyWindows
         {
             if (processId != 0)
             {
-                Process process = Process.GetProcessById(processId);
-                if (process != null)
+                try
                 {
-                    return process.ProcessName;
+                    Process process = Process.GetProcessById(processId);
+                    if (process != null)
+                    {
+                        return process.ProcessName;
+                    }
+                }catch(ArgumentException e)
+                {
+                    Debug.WriteLine("ArgumentException by getProcessNameOfApplication!");
                 }
             }
             return null;

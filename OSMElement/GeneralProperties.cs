@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
 
-namespace OSMElement
+namespace OSMElements
 {
     [XmlInclude(typeof(List<String>))]
     [Serializable]

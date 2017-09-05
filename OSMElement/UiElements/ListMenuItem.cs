@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OSMElement.UiElements
+namespace OSMElements.UiElements
 {
     /// <summary>
     /// Specifies the properties of a list menu item.

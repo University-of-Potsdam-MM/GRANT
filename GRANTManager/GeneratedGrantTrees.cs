@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using System.IO;
 using System.Xml.Linq;
 using System.Diagnostics;

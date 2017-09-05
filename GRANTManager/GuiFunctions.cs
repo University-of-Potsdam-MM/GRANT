@@ -12,7 +12,7 @@ using System.Xml.Schema;
 using GRANTManager.TreeOperations;
 
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.ComponentModel;
@@ -462,7 +462,7 @@ namespace GRANTManager
                 Items = null;
             }
 
-            public MyViewModel(OSMElement.OSMElement osmElement)
+            public MyViewModel(OSMElements.OSMElement osmElement)
             {
                 Items = null;
                 Items = new List<RowDataItem>();
@@ -470,7 +470,7 @@ namespace GRANTManager
                 List<DataTypeOSMElement> allTypes =  getAllTypes(osmElement);
                 for (int i = 0; i < allTypes.Count; i++)
                 {
-                    var o = OSMElement.OSMElement.getElement(allTypes[i].OSMName, osmElement);
+                    var o = OSMElements.OSMElement.getElement(allTypes[i].OSMName, osmElement);
                     String valueString = null;
                     if (o != null && !o.ToString().Equals(""))
                     {
@@ -582,8 +582,8 @@ namespace GRANTManager
                 {
                     foreach (String id in conIds)
                     {
-                        OSMElement.OSMElement conNode = treeOperation.searchNodes.getNodeElement(id, treeForSearch);
-                        if (!(conNode == null || conNode.Equals(new OSMElement.OSMElement())))
+                        OSMElements.OSMElement conNode = treeOperation.searchNodes.getNodeElement(id, treeForSearch);
+                        if (!(conNode == null || conNode.Equals(new OSMElements.OSMElement())))
                         {
                             if (isFilteredTree && conNode.brailleRepresentation != null)
                             {
@@ -923,7 +923,7 @@ namespace GRANTManager
             {
                 foreach (OsmTreeConnectorTuple con in osmConector)
                 {
-                    OSMElement.OSMElement brailleNode = treeOperation.searchNodes.getBrailleTreeOsmElementById(con.BrailleTreeId);
+                    OSMElements.OSMElement brailleNode = treeOperation.searchNodes.getBrailleTreeOsmElementById(con.BrailleTreeId);
                     treeOperation.updateNodes.updateNodeOfBrailleUi(ref brailleNode);
                 }
             }
@@ -1094,8 +1094,8 @@ namespace GRANTManager
             applicationX = -1;
             applicationY = -1;
             if(brailleNode == null) { return; }
-            OSMElement.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(brailleNode);
-            if (dataBraille.Equals(new OSMElement.OSMElement())) { return; }
+            OSMElements.OSMElement dataBraille = strategyMgr.getSpecifiedTree().GetData(brailleNode);
+            if (dataBraille.Equals(new OSMElements.OSMElement())) { return; }
             if (!dataBraille.properties.controlTypeFiltered.Equals("Screenshot")) { Debug.WriteLine("Attention: This function should be only used if the controlltype of the node 'Screenshot'"); return; }
 
 
@@ -1110,7 +1110,7 @@ namespace GRANTManager
             #region mappes the point on the braille device to a point in the application
             String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(dataBraille.properties.IdGenerated);
             if (connectedIdFilteredTree == null) { return; }
-            OSMElement.OSMElement dataFiltered = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
+            OSMElements.OSMElement dataFiltered = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
             if (nodeinfos.Equals(new TactileNodeInfos()))
             {
                 return;
@@ -1246,7 +1246,7 @@ namespace GRANTManager
         {
             // a temporary view name and if necessary a typeOfView and screen nme will be created
 
-            OSMElement.OSMElement tactileOsm = new OSMElement.OSMElement();
+            OSMElements.OSMElement tactileOsm = new OSMElements.OSMElement();
 
             if (controlType == "" || !strategyMgr.getSpecifiedBrailleDisplay().getUiElementRenderer().Contains(controlType))
             {
@@ -1275,7 +1275,7 @@ namespace GRANTManager
             //Attention: when new Controlletypes are added, these should be added here!
             if (controlType.Equals("DropDownMenuItem"))
             { 
-                OSMElement.UiElements.DropDownMenuItem dropDownMenuItem = new OSMElement.UiElements.DropDownMenuItem();
+                OSMElements.UiElements.DropDownMenuItem dropDownMenuItem = new OSMElements.UiElements.DropDownMenuItem();
                 if (filteredNode != null)
                 {
                     dropDownMenuItem.hasChild = strategyMgr.getSpecifiedTree().HasChild(filteredNode);
@@ -1285,7 +1285,7 @@ namespace GRANTManager
             }
             if (controlType.Equals("ListItem"))
             {
-                OSMElement.UiElements.ListMenuItem listItem = new OSMElement.UiElements.ListMenuItem();
+                OSMElements.UiElements.ListMenuItem listItem = new OSMElements.UiElements.ListMenuItem();
                 if(filteredNode != null)
                 {
                     if (strategyMgr.getSpecifiedTree().GetData(filteredNode).properties.controlTypeFiltered.Equals("CheckBox"))
@@ -1297,8 +1297,8 @@ namespace GRANTManager
             }
             if (controlType.Equals("TabItem"))
             {
-                OSMElement.UiElements.TabItem tabItem = new OSMElement.UiElements.TabItem();
-                tabItem.orientation = OSMElement.UiElements.Orientation.Top;
+                OSMElements.UiElements.TabItem tabItem = new OSMElements.UiElements.TabItem();
+                tabItem.orientation = OSMElements.UiElements.Orientation.Top;
                 tactileOsm.brailleRepresentation.uiElementSpecialContent = tabItem;
             }
            
@@ -1328,16 +1328,16 @@ namespace GRANTManager
 
         public List<DataTypeOSMElement> getAllTypes()
         {
-            return OSMElement.OSMElement.getAllTypes_possibleValues();
+            return OSMElements.OSMElement.getAllTypes_possibleValues();
         }
 
-        public static List<DataTypeOSMElement> getAllTypes(OSMElement.OSMElement osm)
+        public static List<DataTypeOSMElement> getAllTypes(OSMElements.OSMElement osm)
         {
-            if (osm.Equals(new OSMElement.OSMElement())) { return OSMElement.OSMElement.getAllTypes_possibleValues(); }
+            if (osm.Equals(new OSMElements.OSMElement())) { return OSMElements.OSMElement.getAllTypes_possibleValues(); }
             if (osm.brailleRepresentation.Equals(new BrailleRepresentation()) && !osm.properties.Equals(new GeneralProperties())) { return GeneralProperties.getAllTypes_possibleValues(); }
             if (!osm.brailleRepresentation.Equals(new BrailleRepresentation()))
             {
-                List<DataTypeOSMElement> allTypes = OSMElement.OSMElement.getAllTypes_possibleValues().OrderBy(o => o.OSMName).ToList();
+                List<DataTypeOSMElement> allTypes = OSMElements.OSMElement.getAllTypes_possibleValues().OrderBy(o => o.OSMName).ToList();
                 removeProperties_NotUsedInBrailleTree(ref allTypes);
                 switch (osm.properties.controlTypeFiltered)
                 {
@@ -1440,7 +1440,7 @@ namespace GRANTManager
                 }
                 return allTypes;
             }
-            return OSMElement.OSMElement.getAllTypes_possibleValues();
+            return OSMElements.OSMElement.getAllTypes_possibleValues();
         }
 
         public void addPossibleValuesByAllTypes(ref List<DataTypeOSMElement> allTypes, Boolean isUseForBrailleTree)
@@ -1473,7 +1473,7 @@ namespace GRANTManager
         /// </summary>
         /// <param name="allTypes"></param>
         /// <param name="osmNode"></param>
-        public void addConnectedElementIdsByAllTypes(ref List<RowDataItem> allTypes, OSMElement.OSMElement osmNode)
+        public void addConnectedElementIdsByAllTypes(ref List<RowDataItem> allTypes, OSMElements.OSMElement osmNode)
         {
             List<String> connection = getConnectedElementIds(osmNode);
             if(connection != null && connection.Count > 0)
@@ -1498,7 +1498,7 @@ namespace GRANTManager
             }
         }
 
-        private List<String> getConnectedElementIds(OSMElement.OSMElement node)
+        private List<String> getConnectedElementIds(OSMElements.OSMElement node)
         {
             List<String> conIds = new List<string>();
             if (node.brailleRepresentation != null && !node.brailleRepresentation.Equals(new BrailleRepresentation()))  // --> braille Tree // !isFilteredTree)
@@ -1516,7 +1516,7 @@ namespace GRANTManager
             return conIds;
         }
 
-        private static void removePropertiesViewCategoryScreen(ref List<DataTypeOSMElement> propList, OSMElement.OSMElement osm)
+        private static void removePropertiesViewCategoryScreen(ref List<DataTypeOSMElement> propList, OSMElements.OSMElement osm)
         {
             removeProperties_NotUsedInBrailleTree(ref propList);
             allTypesRemove("isEnabledFiltered", ref propList);

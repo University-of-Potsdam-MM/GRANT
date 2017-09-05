@@ -1,6 +1,6 @@
 ﻿using System;
 using GRANTManager;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 using System.Windows.Automation;
 using GRANTManager.TreeOperations;
@@ -38,7 +38,7 @@ namespace GRANTManager.Interfaces
         /// <param name="osmElementOfFirstNodeOfSubtree">osm element of the to filtered application</param>
         /// <param name="treeScope">kind of filtering</param>
         /// <returns>the filtered (sub-)tree</returns>
-        Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope = TreeScopeEnum.Subtree);
+        Object filtering(OSMElements.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope = TreeScopeEnum.Subtree);
 
         Object filtering(String generatedNodeId, TreeScopeEnum treeScope);
         #endregion
@@ -56,14 +56,14 @@ namespace GRANTManager.Interfaces
         /// <param name="pointX">x coordinate of the element to filtering</param>
         /// <param name="pointY">y coordinate of the element to filtering</param>
         /// <returns>the OSM element of the point</returns>
-        OSMElement.OSMElement getOSMElement(int pointX, int pointY);
+        OSMElements.OSMElement getOSMElement(int pointX, int pointY);
 
         /// <summary>
         /// Seeks new data for a node
         /// </summary>
         /// <param name="osmElementFilteredNode">OSM element to update</param>
         /// <returns>new properties for a node</returns>
-        GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode);
+        GeneralProperties updateNodeContent(OSMElements.OSMElement osmElementFilteredNode);
 
         void setStrategyMgr(StrategyManager manager);
         void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);

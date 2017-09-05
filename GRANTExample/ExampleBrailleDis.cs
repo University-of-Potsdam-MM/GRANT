@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GRANTManager;
-using OSMElement;
+using OSMElements;
 using GRANTManager.Interfaces;
 using System.Windows.Forms;
 using GRANTApplication;
 using BrailleIOGuiElementRenderer;
-using OSMElement.UiElements;
+using OSMElements.UiElements;
 using System.Windows;
 using System.Diagnostics;
 using TemplatesUi;
@@ -105,8 +105,8 @@ namespace GRANTExample
                         //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                         treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTreeId);
 
-                    OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTreeId);
-                    if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
+                    OSMElements.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTreeId);
+                    if (!relatedBrailleTreeObject.Equals(new OSMElements.OSMElement()))
                     {
                         treeOperation.updateNodes.updateNodeOfBrailleUi(ref relatedBrailleTreeObject);
                         strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
@@ -145,8 +145,8 @@ namespace GRANTExample
                 //strategyMgr.getSpecifiedFilter().updateNodeOfFilteredTree(osmRelationships.FilteredTree);
                 treeOperation.updateNodes.filteredNodeElementOfApplication(osmRelationships.FilteredTreeId);
 
-                OSMElement.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTreeId);
-                if (!relatedBrailleTreeObject.Equals(new OSMElement.OSMElement()))
+                OSMElements.OSMElement relatedBrailleTreeObject = treeOperation.searchNodes.getBrailleTreeOsmElementById(osmRelationships.BrailleTreeId);
+                if (!relatedBrailleTreeObject.Equals(new OSMElements.OSMElement()))
                 {
                     strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref relatedBrailleTreeObject);
                 }
@@ -170,7 +170,7 @@ namespace GRANTExample
                 Object tree = grantTrees.brailleTree;
                 foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(tree))
                 {
-                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(o);
+                    OSMElements.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(o);
                     if ((!osm.brailleRepresentation.isGroupChild || osm.brailleRepresentation.groupelementsOfSameType.renderer == null) && !osm.properties.boundingRectangleFiltered.Equals(new Rect()))
                     {
                          treeOperation.updateNodes.updateNodeOfBrailleUi(ref osm);
@@ -242,7 +242,7 @@ namespace GRANTExample
            List<Object> screenshotNodes = treeOperation.searchNodes.getNodesByProperties(subnodesOfScreen, prop);
            foreach (Object node in screenshotNodes)
            {
-               OSMElement.OSMElement osmScreenshot = strategyMgr.getSpecifiedTree().GetData(node);
+               OSMElements.OSMElement osmScreenshot = strategyMgr.getSpecifiedTree().GetData(node);
                strategyMgr.getSpecifiedBrailleDisplay().updateViewContent(ref osmScreenshot);
                strategyMgr.getSpecifiedTree().SetData(node, osmScreenshot);
                grantTrees.brailleTree = strategyMgr.getSpecifiedTree().Root(node);

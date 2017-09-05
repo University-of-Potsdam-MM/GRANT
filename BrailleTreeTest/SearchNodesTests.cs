@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 using System.Diagnostics;
 using GRANTManager;
@@ -67,7 +67,7 @@ namespace BrailleTreeTests
         private void initilaizeBrailleTree2Screens()
         {
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -82,7 +82,7 @@ namespace BrailleTreeTests
             #endregion
 
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen -2";
@@ -133,7 +133,7 @@ namespace BrailleTreeTests
             strategyMgr.getSpecifiedBrailleDisplay().setVisibleScreen("TestScreen");
             Object nodeAtPoint = guiFuctions.getBrailleNodeAtPoint(5, 35);
             Assert.AreNotEqual(null, nodeAtPoint, "Es hätte ein Knoten gefunden werden sollen!");
-            OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
+            OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(nodeAtPoint);
             Assert.AreEqual("TestView - 2", data.brailleRepresentation.viewName, "An der Position (5,35) hätte die 'TestView - 2' sein sollen!");
             strategyMgr.getSpecifiedBrailleDisplay().removeActiveAdapter();
             guiFuctions.deleteGrantTrees();
@@ -143,7 +143,7 @@ namespace BrailleTreeTests
         private void initilaizeBrailleTree2Nodes()
         {
             #region 1. node
-            OSMElement.OSMElement osm = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm = new OSMElements.OSMElement();
 
             osm.brailleRepresentation.isVisible = true;
             osm.brailleRepresentation.screenName = "TestScreen";
@@ -157,7 +157,7 @@ namespace BrailleTreeTests
             treeOperation.updateNodes.addNodeInBrailleTree(osm);
             #endregion
             #region 2. node
-            OSMElement.OSMElement osm2 = new OSMElement.OSMElement();
+            OSMElements.OSMElement osm2 = new OSMElements.OSMElement();
 
             osm2.brailleRepresentation.isVisible = true;
             osm2.brailleRepresentation.screenName = "TestScreen";

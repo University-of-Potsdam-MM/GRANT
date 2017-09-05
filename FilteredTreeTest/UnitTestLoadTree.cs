@@ -4,7 +4,7 @@ using GRANTManager;
 using GRANTManager.TreeOperations;
 using System.Collections.Generic;
 using System.Diagnostics;
-using OSMElement;
+using OSMElements;
 
 namespace FilteredTreeTest
 {

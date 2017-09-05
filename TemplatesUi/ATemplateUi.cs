@@ -7,7 +7,7 @@ using System.Diagnostics;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using GRANTManager.TreeOperations;
-using OSMElement;
+using OSMElements;
 
 namespace TemplatesUi
 {
@@ -77,7 +77,7 @@ namespace TemplatesUi
         private void addIdAndRelationship(Object brailleSubtree, Object filteredSubtree, TemplateUiObject templateObject)
         { 
             if (brailleSubtree == null || !strategyMgr.getSpecifiedTree().HasChild(brailleSubtree)) { return; }
-            OSMElement.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
+            OSMElements.OSMElement brailleNode = strategyMgr.getSpecifiedTree().GetData( strategyMgr.getSpecifiedTree().Child(brailleSubtree) );
             brailleSubtree = strategyMgr.getSpecifiedTree().Child(brailleSubtree);
             String idGenerated = treeOperation.updateNodes.addNodeInBrailleTree(brailleNode);
             if (idGenerated == null) { return; }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using OSMElement.UiElements;
+using OSMElements.UiElements;
 using System.Xml.Serialization;
 using System.Windows;
 
-namespace OSMElement
+namespace OSMElements
 {
     //Attention: Every type wich will be used as <c>uiElementSpecialContent</c> must included here to save this project
     [XmlInclude(typeof(DropDownMenuItem))]

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using OSMElement;
+using OSMElements;
 
 namespace GRANTManager
 {
@@ -71,11 +71,18 @@ namespace GRANTManager
                     {
                         Type type = Type.GetType(st.className);
                         if (type == null) { break; }
-                        using (AOutputManager ads = (AOutputManager)Activator.CreateInstance(type, strategyMgr))
-                        {
-                            List<Device> devices = ads.getPosibleDevices();
+                        if (this.GetType().Equals(type)) {
+                            List<Device> devices = this.getPosibleDevices();
                             allDevices.AddRange(devices);
-                        }                        
+                        }
+                        else
+                        {
+                            using (AOutputManager ads = (AOutputManager)Activator.CreateInstance(type, strategyMgr))
+                            {
+                                List<Device> devices = ads.getPosibleDevices();
+                                allDevices.AddRange(devices);
+                            }
+                        }                  
                     }
                     catch (InvalidCastException ic)
                     {

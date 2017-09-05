@@ -1,7 +1,7 @@
 ﻿using GRANTManager;
 using GRANTManager.Interfaces;
 using GRANTManager.TreeOperations;
-using OSMElement;
+using OSMElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -128,8 +128,8 @@ namespace TemplatesUi
                 screensForShowNavigationbar.Add(strategyMgr.getSpecifiedTree().GetData(nbar).brailleRepresentation.screenName);
             }
             templateObject.Screens = screensForShowNavigationbar;
-            List<OSMElement.OSMElement> groupElements = calculatePositionOfScreenTab(screens, templateObject);
-            if (groupElements == null || groupElements.Equals(new List<OSMElement.OSMElement>())) { return; }
+            List<OSMElements.OSMElement> groupElements = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElements == null || groupElements.Equals(new List<OSMElements.OSMElement>())) { return; }
             templateObject.groupElements = groupElements;
             Object tree = grantTrees.filteredTree;
             
@@ -155,13 +155,13 @@ namespace TemplatesUi
             //screenNavi.Add(strategyMgr.getSpecifiedTree().GetData(subtree).brailleRepresentation.screenName);
             screenNavi.Add(screenName);
             templateObject.Screens = screenNavi;
-            List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
-            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
+            List<OSMElements.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElements.OSMElement>())) { return; }
             templateObject.groupElements = groupElementsStatic;
             Object tree = grantTrees.filteredTree;
             BrailleRepresentation br = templateObject.osm.brailleRepresentation;
             br.groupelementsOfSameType = new GroupelementsOfSameType();
-            OSMElement.OSMElement osm = templateObject.osm;
+            OSMElements.OSMElement osm = templateObject.osm;
             osm.brailleRepresentation = br;
             templateObject.osm = osm;
             ATemplateUi generalUiInstance = new TemplateGroupStatic(strategyMgr, grantTrees, treeOperation);
@@ -201,20 +201,20 @@ namespace TemplatesUi
         /// <param name="templateObject">The template object for the navigation bar</param>
         /// <param name="index">the index where the calculation should be start</param>
         /// <returns></returns>
-        private List<OSMElement.OSMElement> calculatePositionOfScreenTab(List<String> screens, TemplateUiObject templateObject, int index = 0)
+        private List<OSMElements.OSMElement> calculatePositionOfScreenTab(List<String> screens, TemplateUiObject templateObject, int index = 0)
         {
-            List<OSMElement.OSMElement> groupElementsStatic = new List<OSMElement.OSMElement>();
+            List<OSMElements.OSMElement> groupElementsStatic = new List<OSMElements.OSMElement>();
             if (screens == null || templateObject.Equals(new TemplateUiObject())) { return null; }
             foreach (String s in screens)
             {
-                OSMElement.OSMElement childOsm = new OSMElement.OSMElement();
+                OSMElements.OSMElement childOsm = new OSMElements.OSMElement();
                 Rect rect = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
                 
-                if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Right))
+                if (templateObject.orientation.Equals(OSMElements.UiElements.Orientation.Left) || templateObject.orientation.Equals(OSMElements.UiElements.Orientation.Right))
                 {
                     rect.Y = (rect.Height + 1) * index + rect.Y + 1;
                 }
-                if (templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElement.UiElements.Orientation.Bottom))
+                if (templateObject.orientation.Equals(OSMElements.UiElements.Orientation.Top) || templateObject.orientation.Equals(OSMElements.UiElements.Orientation.Bottom))
                 {
                     rect.X = (rect.Width + 1) * index + rect.X + 1;
                 }
@@ -226,7 +226,7 @@ namespace TemplatesUi
                 childOsm.brailleRepresentation.isVisible = true;
                 childOsm.brailleRepresentation.viewName = "_" + s;//TODO
                 childOsm.brailleRepresentation.typeOfView = templateObject.osm.brailleRepresentation.typeOfView;
-                OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
+                OSMElements.UiElements.TabItem tabView = new OSMElements.UiElements.TabItem();
                 tabView.orientation = templateObject.orientation;
                 childOsm.brailleRepresentation.uiElementSpecialContent = tabView;
                 groupElementsStatic.Add(childOsm);
@@ -252,8 +252,8 @@ namespace TemplatesUi
                 //we use all available screens of this tpye of view
                 templateObject.Screens = screens;
             }
-            List<OSMElement.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
-            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElement.OSMElement>())) { return; }
+            List<OSMElements.OSMElement> groupElementsStatic = calculatePositionOfScreenTab(screens, templateObject);
+            if (groupElementsStatic == null || groupElementsStatic.Equals(new List<OSMElements.OSMElement>())) { return; }
             templateObject.groupElements = groupElementsStatic;            
           //  templateObject.osm = templateObject.osm;
             templateObject.osm.brailleRepresentation.groupelementsOfSameType = new GroupelementsOfSameType();
@@ -306,7 +306,7 @@ namespace TemplatesUi
             TemplateScreenshotObject templetObject = new TemplateScreenshotObject();
             Int32 result;
             result = 0;
-            templetObject.osm = new OSMElement.OSMElement();
+            templetObject.osm = new OSMElements.OSMElement();
             templetObject.osm.properties.controlTypeFiltered = "Screenshot";
             XElement position = xmlElement.Element("Position");
             bool isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
@@ -375,7 +375,7 @@ namespace TemplatesUi
         private TemplateUiObject xmlUiElementToTemplateUiObject(XElement xmlElement, String typeOfView)
         {
             TemplateUiObject templetObject = new TemplateUiObject();
-            templetObject.osm = new OSMElement.OSMElement();
+            templetObject.osm = new OSMElements.OSMElement();
             Int32 result;
             result = 0;
 
@@ -424,11 +424,11 @@ namespace TemplatesUi
                 GroupelementsOfSameType group = new GroupelementsOfSameType();
                 group.isLinebreak = Convert.ToBoolean(xmlElement.Element("IsGroup").Element("Linebreak").Value);
                 String orientation = xmlElement.Element("IsGroup").Element("Orientation").Value;
-                group.orienataion = orientation.Equals(OSMElement.UiElements.Orientation.Vertical.ToString()) ? OSMElement.UiElements.Orientation.Vertical :
-                    orientation.Equals(OSMElement.UiElements.Orientation.Top.ToString()) ? OSMElement.UiElements.Orientation.Top :
-                    orientation.Equals(OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right :
-                    orientation.Equals(OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left :
-                    orientation.Equals(OSMElement.UiElements.Orientation.Horizontal.ToString()) ? OSMElement.UiElements.Orientation.Horizontal : OSMElement.UiElements.Orientation.Bottom;
+                group.orienataion = orientation.Equals(OSMElements.UiElements.Orientation.Vertical.ToString()) ? OSMElements.UiElements.Orientation.Vertical :
+                    orientation.Equals(OSMElements.UiElements.Orientation.Top.ToString()) ? OSMElements.UiElements.Orientation.Top :
+                    orientation.Equals(OSMElements.UiElements.Orientation.Right.ToString()) ? OSMElements.UiElements.Orientation.Right :
+                    orientation.Equals(OSMElements.UiElements.Orientation.Left.ToString()) ? OSMElements.UiElements.Orientation.Left :
+                    orientation.Equals(OSMElements.UiElements.Orientation.Horizontal.ToString()) ? OSMElements.UiElements.Orientation.Horizontal : OSMElements.UiElements.Orientation.Bottom;
                 position = xmlElement.Element("IsGroup").Element("childBoundingRectangle");
                 Rect childRect = new Rect();
                 isConvertHeight = Int32.TryParse(position.Element("Height").Value, out result);
@@ -455,7 +455,7 @@ namespace TemplatesUi
             if (xmlElement.Element("Orientation") != null && !xmlElement.Element("Orientation").IsEmpty)
             {
                 String value = xmlElement.Element("Orientation").Value;
-                templetObject.orientation = (value.Equals( OSMElement.UiElements.Orientation.Left.ToString()) ? OSMElement.UiElements.Orientation.Left : (value.Equals( OSMElement.UiElements.Orientation.Bottom.ToString()) ? OSMElement.UiElements.Orientation.Bottom : (value.Equals( OSMElement.UiElements.Orientation.Right.ToString()) ? OSMElement.UiElements.Orientation.Right : OSMElement.UiElements.Orientation.Top)));                
+                templetObject.orientation = (value.Equals( OSMElements.UiElements.Orientation.Left.ToString()) ? OSMElements.UiElements.Orientation.Left : (value.Equals( OSMElements.UiElements.Orientation.Bottom.ToString()) ? OSMElements.UiElements.Orientation.Bottom : (value.Equals( OSMElements.UiElements.Orientation.Right.ToString()) ? OSMElements.UiElements.Orientation.Right : OSMElements.UiElements.Orientation.Top)));                
             }
             templetObject.osm.brailleRepresentation.isScrollbarShow = Convert.ToBoolean( xmlElement.Element("ShowScrollbar").Value);
             templetObject.viewName= xmlElement.Attribute("name").Value;
@@ -593,7 +593,7 @@ namespace TemplatesUi
                  *    nicht ignorieren -> Kinder
                  * nur Kinder Zeichnen -> ControllType der Eltern beachten --> evtl. werden mehrere Kinder mit einmal dargestellt
                  */
-                OSMElement.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement osmNode = strategyMgr.getSpecifiedTree().GetData(node);
                 if (idToIgnore == null || !idToIgnore.Contains(osmNode.properties.IdGenerated))
                 {
                     RendererUiElementConnector connector = rendererUiElementConnectorContainsControltype(osmNode.properties.controlTypeFiltered);
@@ -614,13 +614,13 @@ namespace TemplatesUi
 
         private TemplateUiObject createTemplateObjectFromNode(Object nodeFiltered, RendererUiElementConnector connector, ref Rect rectLast, String screenName = null)
         {//TODO: a lot of assigned of variables are hard coded and only so because of testing
-            OSMElement.OSMElement osmNodeFiltered = strategyMgr.getSpecifiedTree().GetData(nodeFiltered);
+            OSMElements.OSMElement osmNodeFiltered = strategyMgr.getSpecifiedTree().GetData(nodeFiltered);
             TemplateUiObject templObject = new TemplateUiObject();
             List<String> screens = new List<string>();
             screens.Add(screenName == null ? "neuerScreen" : screenName);
             templObject.Screens = screens;
             templObject.viewName = osmNodeFiltered.properties.IdGenerated;
-            templObject.osm = new OSMElement.OSMElement();
+            templObject.osm = new OSMElements.OSMElement();
             //Attention: currently all elements are below the other
             rectLast.X = 0;
             rectLast.Y = rectLast.Height == 0 ? 0 : rectLast.Y + rectLast.Height + 1;

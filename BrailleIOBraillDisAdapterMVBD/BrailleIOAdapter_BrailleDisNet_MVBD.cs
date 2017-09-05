@@ -18,7 +18,7 @@ namespace BrailleIOBraillDisAdapter
     {
         protected IPEndPoint        _ep;
         protected TcpClient         _tcpClient;
-
+        private const byte IDENTIFIERIDOFGRANT = 3;
 
         public BrailleIOAdapter_BrailleDisNet_MVBD(IBrailleIOAdapterManager manager) : base(manager)
         {
@@ -26,7 +26,7 @@ namespace BrailleIOBraillDisAdapter
 
             ThreadPool.QueueUserWorkItem( new WaitCallback( Thread_Callback ) );
             while (this.Device == null) { }//warten bis DeviceInfos abgerufen wurden
-
+            SendIdentifierOfClient();
         }
 
         ~BrailleIOAdapter_BrailleDisNet_MVBD()
@@ -326,27 +326,19 @@ namespace BrailleIOBraillDisAdapter
         
         }
 
+        private void SendIdentifierOfClient()
+        {
+            // command 29
+            if ((_tcpClient == null) || (_tcpClient.Connected == false)) return;
 
+            byte[] ba = new byte[4];
+            ba[0] = 29;
+            ba[1] = 1;
+            ba[2] = 0;
+            ba[3] = IDENTIFIERIDOFGRANT;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            Debug.Print("<-- SendIdentifierOfClient");
+            Send(ba);
+        }
     }
 }

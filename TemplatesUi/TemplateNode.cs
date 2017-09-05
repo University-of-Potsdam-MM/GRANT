@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using GRANTManager;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using GRANTManager.TreeOperations;
 
 namespace TemplatesUi
@@ -17,7 +17,7 @@ namespace TemplatesUi
 
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
         {
-            OSMElement.OSMElement brailleNode = templateObject.osm;
+            OSMElements.OSMElement brailleNode = templateObject.osm;
             GeneralProperties prop = templateObject.osm.properties;
             BrailleRepresentation braille = templateObject.osm.brailleRepresentation;
 
@@ -26,7 +26,7 @@ namespace TemplatesUi
             #region DropDownMenuItem
             if (templateObject.osm.properties.controlTypeFiltered.Equals("DropDownMenuItem"))
             {
-                OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
+                OSMElements.UiElements.DropDownMenuItem dropDownMenu = new OSMElements.UiElements.DropDownMenuItem();
                 if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
                 if (strategyMgr.getSpecifiedTree().HasNext(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(filteredSubtree)).properties.controlTypeFiltered.Contains("Item"))
                 {
@@ -45,7 +45,7 @@ namespace TemplatesUi
             #region TabItem
             if (templateObject.osm.properties.controlTypeFiltered.Equals("TabItem"))
             {
-                OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
+                OSMElements.UiElements.TabItem tabView = new OSMElements.UiElements.TabItem();
                 tabView.orientation = templateObject.orientation;
                 braille.uiElementSpecialContent = tabView;
                 //braille.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;

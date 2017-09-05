@@ -55,7 +55,7 @@ namespace GRANTManager.Interfaces
         /// </summary>
         /// <param name="osmElement">gibt das <c>OSMElement an</c></param>
         /// <returns><c>Rectangle</c> mit der Position des Objektes</returns>
-        Rectangle getRect(OSMElement.OSMElement osmElement);
+        Rectangle getRect(OSMElements.OSMElement osmElement);
 
         Boolean isApplicationRunning(String processName);
 

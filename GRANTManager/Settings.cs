@@ -46,6 +46,37 @@ namespace GRANTManager
             return classStrategyName;
         }
 
+        public List<Strategy> getPossibleBrailleConverter()
+        {
+            List<Strategy> brailleConverter = new List<Strategy>();
+            List<String> brailleConverterNames = getPossibleStrategyClasses("BrailleConverter");
+            if (brailleConverterNames == null) { return brailleConverter; }
+            Strategy f = new Strategy();
+            foreach (String osName in brailleConverterNames)
+            {
+                f.userName = osName;
+                f.className = strategyUserNameToClassName(osName);
+                brailleConverter.Add(f);
+            }
+            return brailleConverter;
+        }
+
+
+        public List<Strategy> getPossibleExternalScreenreaders()
+        {
+            List<Strategy> externalScreenreader = new List<Strategy>();
+            List<String> externalScreenreaderNames = getPossibleStrategyClasses("ExternalScreenreader");
+            if (externalScreenreaderNames == null) { return externalScreenreader; }
+            Strategy f = new Strategy();
+            foreach (String osName in externalScreenreaderNames)
+            {
+                f.userName = osName;
+                f.className = strategyUserNameToClassName(osName);
+                externalScreenreader.Add(f);
+            }
+            return externalScreenreader;
+        }
+
         public static String filterStrategyTypeToUserName(Type strategyType)
         {
             List<Strategy> filterStrategies = getPossibleFilters();

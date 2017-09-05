@@ -7,7 +7,7 @@ using GRANTManager;
 using System.Windows.Automation;
 using System.Diagnostics;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 using GRANTManager.TreeOperations;
 
@@ -75,7 +75,7 @@ namespace StrategyUIA2
         /// <param name="osmElementOfFirstNodeOfSubtree">osm element of the to filtered application</param>
         /// <param name="treeScope">kind of filtering</param>
         /// <returns>the filtered (sub-)tree</returns>
-        public Object filtering(OSMElement.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
+        public Object filtering(OSMElements.OSMElement osmElementOfFirstNodeOfSubtree, TreeScopeEnum treeScope)
         {
             AutomationElement au = getAutomationelementOfOsmElement(osmElementOfFirstNodeOfSubtree);
             if (au != null)
@@ -150,7 +150,7 @@ namespace StrategyUIA2
             IntPtr mainAppHwdn = strategyMgr.getSpecifiedOperationSystem().getProcessHwndFromHwnd(element.Current.ProcessId);
             AutomationElement mainAppAutomationelement = deliverAutomationElementFromHWND(mainAppHwdn);
 
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
             osmElement.properties = setProperties(mainAppAutomationelement);
 
             Object top = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
@@ -164,7 +164,7 @@ namespace StrategyUIA2
         /// <param name="tree">the tree object</param>
         private void filterSubtree(AutomationElement element, ref Object tree)
         {
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
             osmElement.properties = setProperties(element);
 
             Object treeTop = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
@@ -180,7 +180,7 @@ namespace StrategyUIA2
         /// <param name="tree">the tree object</param>
         private void filterElement(AutomationElement automationElement, ref Object tree)
         {
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
             osmElement.properties = setProperties(automationElement);
             strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
         }
@@ -219,7 +219,7 @@ namespace StrategyUIA2
             {
                 if (!element.Equals(automationElement) && (strategyMgr.getSpecifiedTree().Depth(tree) < depth || depth <= -1))
                 {
-                    OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+                    OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
                     osmElement.properties = setProperties(element);
                     Object node = strategyMgr.getSpecifiedTree().AddChild(tree, osmElement);
 
@@ -250,7 +250,7 @@ namespace StrategyUIA2
 
         /// <summary>
         /// todo
-        /// AutomationElement-properties to <see cref="OSMElement.GeneralProperties"/>
+        /// AutomationElement-properties to <see cref="OSMElements.GeneralProperties"/>
         /// Desweiteren stellt sich die frage, ob cached abgefragt wird, oder current, wegen geschwindigekti der abfrage
         /// </summary>
         /// <param name="automationElement">the AutomationElement</param>
@@ -520,7 +520,7 @@ namespace StrategyUIA2
             if (strategyMgr.getSpecifiedTree().HasChild(tree))
             {
                 //  Settings settings = new Settings();
-                OSMElement.OSMElement osm = new OSMElement.OSMElement();
+                OSMElements.OSMElement osm = new OSMElements.OSMElement();
                 osm.brailleRepresentation = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).brailleRepresentation;
                 osm.properties = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties;
                 //   osm.properties.grantFilterStrategy = settings.filterStrategyTypeToUserName(this.GetType());
@@ -606,7 +606,7 @@ namespace StrategyUIA2
         /// </summary>
         /// <param name="osmElementFilteredNode">OSM element to update</param>
         /// <returns>new properties for a node</returns>
-        public GeneralProperties updateNodeContent(OSMElement.OSMElement osmElementFilteredNode)
+        public GeneralProperties updateNodeContent(OSMElements.OSMElement osmElementFilteredNode)
         {
             GeneralProperties propertiesUpdated = new GeneralProperties();
             AutomationElement au = getAutomationelementOfOsmElement(osmElementFilteredNode);
@@ -619,11 +619,11 @@ namespace StrategyUIA2
         }
 
         /// <summary>
-        /// Seeks to an <see cref="OSMElement.OSMElement"/> the appropriate <see cref="AutomationElement"/>
+        /// Seeks to an <see cref="OSMElements.OSMElement"/> the appropriate <see cref="AutomationElement"/>
         /// </summary>
         /// <param name="osmElement">OSM element</param>
         /// <returns>the appropriate <see cref="AutomationElement"</returns>
-        private AutomationElement getAutomationelementOfOsmElement(OSMElement.OSMElement osmElement)
+        private AutomationElement getAutomationelementOfOsmElement(OSMElements.OSMElement osmElement)
         {
             AutomationElement au;
             Condition cond = setPropertiesCondition(osmElement.properties);
@@ -665,7 +665,7 @@ namespace StrategyUIA2
             #region set grantFilterStrategiesChildren
             if (collection != null && collection.Count > 0 && !strategyMgr.getSpecifiedTree().IsRoot(top))
             {
-                OSMElement.OSMElement osmTop = strategyMgr.getSpecifiedTree().GetData(top);
+                OSMElements.OSMElement osmTop = strategyMgr.getSpecifiedTree().GetData(top);
                 if (osmTop.properties.grantFilterStrategiesChildren == null)
                 {
                     osmTop.properties.grantFilterStrategiesChildren = new List<string>();
@@ -680,7 +680,7 @@ namespace StrategyUIA2
             {
                 if (strategyMgr.getSpecifiedTree().Depth(top) < depth || depth <= -1)
                 {
-                    OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+                    OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
                     osmElement.properties = setProperties(element);
                     Object node = strategyMgr.getSpecifiedTree().AddChild(top, osmElement);
 
@@ -754,10 +754,10 @@ namespace StrategyUIA2
         /// <param name="pointX">x coordinate of the element to filtering</param>
         /// <param name="pointY">y coordinate of the element to filtering</param>
         /// <returns>the OSM element of the point</returns>
-        public OSMElement.OSMElement getOSMElement(int pointX, int pointY)
+        public OSMElements.OSMElement getOSMElement(int pointX, int pointY)
         {
             AutomationElement mouseElement = deliverAutomationElementFromCursor(pointX, pointY);
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
             osmElement.properties = setProperties(mouseElement);
             //set Id 
             List<Object> node = treeOperation.searchNodes.getNodesByProperties(grantTrees.filteredTree, osmElement.properties, OperatorEnum.and);
@@ -781,13 +781,13 @@ namespace StrategyUIA2
         private void addParentOfNode(AutomationElement parentElement, ref Object tree)
         {
             Object tree2 = getStrategyMgr().getSpecifiedTree().NewTree();
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
             osmElement.properties = setProperties(parentElement);
             #region set grantFilterStrategiesChildren
             if (tree != null)
             {
-                OSMElement.OSMElement osmChild = strategyMgr.getSpecifiedTree().GetData(tree);
-                if (osmChild != null && !osmChild.Equals(new OSMElement.OSMElement()))
+                OSMElements.OSMElement osmChild = strategyMgr.getSpecifiedTree().GetData(tree);
+                if (osmChild != null && !osmChild.Equals(new OSMElements.OSMElement()))
                 {
                     if (osmChild.properties.grantFilterStrategiesChildren != null)
                     {

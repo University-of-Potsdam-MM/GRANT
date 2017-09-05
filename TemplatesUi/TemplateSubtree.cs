@@ -1,6 +1,6 @@
 ﻿using GRANTManager.Interfaces;
-using OSMElement;
-using OSMElement.UiElements;
+using OSMElements;
+using OSMElements.UiElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +39,7 @@ namespace TemplatesUi
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId)
         {
             if (strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.Equals(new GeneralProperties())) { return strategyMgr.getSpecifiedTree().NewTree(); }
-            OSMElement.OSMElement brailleNode = templateObject.osm.DeepCopy();
+            OSMElements.OSMElement brailleNode = templateObject.osm.DeepCopy();
             brailleNode.properties.resetIdGenerated = null; // zurücksetzen, da das die Id vom Elternknoten wäre
                                                        // prop.controlTypeFiltered = templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer; // den Renderer der Kindelemente setzen
             brailleNode.properties.isEnabledFiltered = false;
@@ -51,7 +51,7 @@ namespace TemplatesUi
            // if(templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer != null) { 
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("DropDownMenuItem"))
             {
-                OSMElement.UiElements.DropDownMenuItem dropDownMenu = new OSMElement.UiElements.DropDownMenuItem();
+                OSMElements.UiElements.DropDownMenuItem dropDownMenu = new OSMElements.UiElements.DropDownMenuItem();
                 if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(filteredSubtree)).properties.controlTypeFiltered.Contains("Item")) { dropDownMenu.hasChild = true; }
                 if (strategyMgr.getSpecifiedTree().HasNext(filteredSubtree) && strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Next(filteredSubtree)).properties.controlTypeFiltered.Contains("Item"))
                 {
@@ -68,7 +68,7 @@ namespace TemplatesUi
             }
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("ListItem"))
             {
-                OSMElement.UiElements.ListMenuItem litItem = new ListMenuItem();
+                OSMElements.UiElements.ListMenuItem litItem = new ListMenuItem();
                 if (strategyMgr.getSpecifiedTree().HasNext(filteredSubtree) ) { litItem.hasNext = true; }
                 //TODO: multi
                 if (strategyMgr.getSpecifiedTree().HasChild(filteredSubtree))
@@ -82,15 +82,15 @@ namespace TemplatesUi
             }
             if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("TabItem"))
             {
-                OSMElement.UiElements.TabItem tabView = new OSMElement.UiElements.TabItem();
+                OSMElements.UiElements.TabItem tabView = new OSMElements.UiElements.TabItem();
                 tabView.orientation = templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion; //templateObject.orientation;
                 brailleNode.brailleRepresentation.uiElementSpecialContent = tabView;
                 //                brailleNode.brailleRepresentation.uiElementSpecialContent = templateObject.osm.brailleRepresentation.uiElementSpecialContent;
             }
 
-            OSMElement.OSMElement brailleGroupNode =  treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNodeId);
+            OSMElements.OSMElement brailleGroupNode =  treeOperation.searchNodes.getBrailleTreeOsmElementById(brailleNodeId);
              bool groupViewWithScrollbars = false;
-             if (!brailleGroupNode.Equals(new OSMElement.OSMElement()) && brailleGroupNode !=null && brailleGroupNode.brailleRepresentation != null)
+             if (!brailleGroupNode.Equals(new OSMElements.OSMElement()) && brailleGroupNode !=null && brailleGroupNode.brailleRepresentation != null)
              {
                  groupViewWithScrollbars = brailleGroupNode.brailleRepresentation.isScrollbarShow;
              }
@@ -98,11 +98,11 @@ namespace TemplatesUi
              if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.renderer.Equals("TabItem"))
              {
                  Rect rectTmp = templateObject.osm.brailleRepresentation.groupelementsOfSameType.childBoundingRectangle;
-                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Left) || templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Right))
+                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElements.UiElements.Orientation.Left) || templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElements.UiElements.Orientation.Right))
                  {
                      rectTmp.Y = (rectTmp.Height + 1) * strategyMgr.getSpecifiedTree().BranchIndex(filteredSubtree) + rectTmp.Y + 1;
                  }
-                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Top) || templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Bottom))
+                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElements.UiElements.Orientation.Top) || templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElements.UiElements.Orientation.Bottom))
                  {
                      rectTmp.X = (rectTmp.Width + 1) * strategyMgr.getSpecifiedTree().BranchIndex( filteredSubtree) + rectTmp.X + 1;
                  }
@@ -111,7 +111,7 @@ namespace TemplatesUi
              }
              else
              {
-                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElement.UiElements.Orientation.Vertical))
+                 if (templateObject.osm.brailleRepresentation.groupelementsOfSameType.orienataion.Equals(OSMElements.UiElements.Orientation.Vertical))
                  {
                      int column = 0;
                      int subBoxModel = (brailleGroupNode == null || brailleGroupNode.brailleRepresentation == null)? 0 : brailleGroupNode.brailleRepresentation.boarder.Top + brailleGroupNode.brailleRepresentation.boarder.Bottom + brailleGroupNode.brailleRepresentation.margin.Top + brailleGroupNode.brailleRepresentation.margin.Bottom + brailleGroupNode.brailleRepresentation.padding.Top + brailleGroupNode.brailleRepresentation.padding.Bottom;

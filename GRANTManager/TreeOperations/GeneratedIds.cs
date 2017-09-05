@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OSMElement;
+using OSMElements;
 using System.Security.Cryptography;
 using System.Diagnostics;
 
@@ -33,7 +33,7 @@ namespace GRANTManager.TreeOperations
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null)
                 {
-                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
+                    OSMElements.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
                      osm.properties.IdGenerated = generatedIdFilteredNode(node);
                     strategyMgr.getSpecifiedTree().SetData(node, osm);
                 }
@@ -54,7 +54,7 @@ namespace GRANTManager.TreeOperations
             {
                 if (strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null)
                 {
-                    OSMElement.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
+                    OSMElements.OSMElement osm = strategyMgr.getSpecifiedTree().GetData(node);
                     osm.properties.IdGenerated = generatedIdFilteredNode(node);
                     strategyMgr.getSpecifiedTree().SetData(node, osm);
                 }
@@ -147,7 +147,7 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="node">one node of the braille tree</param>
         /// <returns>the generated id</returns>
-        public String generatedIdBrailleNode(OSMElement.OSMElement osmElement)
+        public String generatedIdBrailleNode(OSMElements.OSMElement osmElement)
         {
             /* https://blogs.msdn.microsoft.com/csharpfaq/2006/10/09/how-do-i-calculate-a-md5-hash-from-a-string/
              * http://stackoverflow.com/questions/12979212/md5-hash-from-string

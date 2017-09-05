@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OSMElement
+namespace OSMElements
 {
     /// <summary>
     /// Represents a control that can be set to a value within a range.

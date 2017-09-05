@@ -45,7 +45,7 @@ namespace GRANTApplication
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
             List<Strategy> possibleTrees = settings.getPossibleTrees();
             strategyMgr.setSpecifiedTree(possibleTrees[0].className);
-            ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
+            ITreeStrategy<OSMElements.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
             List<Strategy> possibleFilter = Settings.getPossibleFilters();
             String cUserFilterName = possibleFilter[0].userName; // der Filter muss dynamisch ermittelt werden
             strategyMgr.setSpecifiedFilter(Settings.strategyUserNameToClassName(cUserFilterName));
@@ -81,7 +81,7 @@ namespace GRANTApplication
         /// <param name="IdGenerated"></param>
         void updatePropertiesTable(String IdGenerated)
         {
-            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+            OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             this.filteredPropRoot = new GuiFunctions.MyViewModel(osmElement);
 
             if (filteredTreeProp.Columns.Count == 0)
@@ -126,7 +126,7 @@ namespace GRANTApplication
         /// <param name="IdGenerated">Id of the Gui element of the selected node in the filtered tree.</param>
         void updatePropertiesTable_alt(String IdGenerated)
         {
-            OSMElement.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
+            OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
             DataTable dataTable = new DataTable();
             DataColumn dc = new DataColumn();
             dataTable.Columns.Add(new DataColumn("Property"));
@@ -301,7 +301,7 @@ namespace GRANTApplication
         {
             IOperationSystemStrategy operationSystemStrategy = strategyMgr.getSpecifiedOperationSystem();
 
-            ITreeStrategy<OSMElement.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
+            ITreeStrategy<OSMElements.OSMElement> treeStrategy = strategyMgr.getSpecifiedTree();
 
             if (e.Key == Key.F1)
             {
@@ -315,7 +315,7 @@ namespace GRANTApplication
                         operationSystemStrategy.getCursorPoint(out pointX, out pointY);
                         Console.WriteLine("Pointx: " + pointX);
                         Console.WriteLine("Pointy: " + pointY);
-                        OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
+                        OSMElements.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         System.Drawing.Rectangle rect = operationSystemStrategy.getRect(osmElement);
                         if (osmElement.properties.isOffscreenFiltered == false)
                         {

@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 using System.Drawing;
 using GRANTApplication;
-using OSMElement;
+using OSMElements;
 using GRANTManager;
 using GRANTManager.Interfaces;
 using TemplatesUi;
@@ -119,6 +119,9 @@ namespace GRANTExample
             strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperation);
             #endregion
 
+            strategyMgr.setSpecifiedExternalScreenreader(settings.getPossibleExternalScreenreaders()[0].className);
+            strategyMgr.setSpecifiedBrailleConverter(settings.getPossibleBrailleConverter()[0].className);
+
 
             List<Strategy> possibleOperationSystems = settings.getPossibleOperationSystems();
             String cUserOperationSystemName = possibleOperationSystems[0].userName; // muss dynamisch ermittelt werden
@@ -164,7 +167,7 @@ namespace GRANTExample
             exampleDisplay = new ExampleDisplayStrategy(strategyMgr);
 
             guiFuctions = new GuiFunctions(strategyMgr, grantTree, treeOperation);
-            
+           
         }
 
 

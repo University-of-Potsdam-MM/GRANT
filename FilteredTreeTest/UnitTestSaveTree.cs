@@ -5,7 +5,7 @@ using GRANTManager.TreeOperations;
 using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
-using OSMElement;
+using OSMElements;
 using System.Windows;
 using System.Xml.Serialization;
 using System.Diagnostics;
@@ -115,7 +115,7 @@ namespace FilteredTreeTest
                 node1Id = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
                 List<Object> associatedNodeList = searchNodes.getNodeList(node1Id, loadedTree2);
                 if (associatedNodeList.Count != 1) { Assert.Fail("Die Id '{0}' kommt mehr als ein mal oder keinmal in dem Baum ({1}) vor!", node1Id, path2); return false; }
-                OSMElement.OSMElement osm1 = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement osm1 = strategyMgr.getSpecifiedTree().GetData(node);
                 //bei Textfeldern kann sich der Text ändern
                 if (osm1.properties.controlTypeFiltered.Equals("Text"))
                 {
@@ -124,7 +124,7 @@ namespace FilteredTreeTest
                 osm1.properties.boundingRectangleFiltered = new Rect();
                 osm1.properties.appPath = null;
                 strategyMgr.getSpecifiedTree().SetData(node, osm1);
-                OSMElement.OSMElement osm2 = strategyMgr.getSpecifiedTree().GetData(associatedNodeList[0]);
+                OSMElements.OSMElement osm2 = strategyMgr.getSpecifiedTree().GetData(associatedNodeList[0]);
                 //bei Textfeldern kann sich der Text ändern
                 if (osm2.properties.controlTypeFiltered.Equals("Text"))
                 {

@@ -1,7 +1,7 @@
 ﻿using GRANTManager.Interfaces;
 using GRANTManager.TreeOperations;
-using OSMElement;
-using OSMElement.UiElements;
+using OSMElements;
+using OSMElements.UiElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +15,7 @@ namespace TemplatesUi
 
         protected override Object createSpecialUiElement(Object filteredSubtree, TemplateUiObject templateObject, String brailleNodeId = null)
         {
-            OSMElement.OSMElement brailleNode = new OSMElement.OSMElement();
+            OSMElements.OSMElement brailleNode = new OSMElements.OSMElement();
             brailleNode.properties = templateObject.osm.properties;
             brailleNode.brailleRepresentation = templateObject.osm.brailleRepresentation;
 
@@ -51,7 +51,7 @@ namespace TemplatesUi
                 String idOsmFilteredSubtree = strategyMgr.getSpecifiedTree().GetData(filteredSubtree).properties.IdGenerated;
                 foreach (Object o in existingNodesWithProperties)
                 {
-                    OSMElement.OSMElement tmpOsmBraille = strategyMgr.getSpecifiedTree().GetData(o);
+                    OSMElements.OSMElement tmpOsmBraille = strategyMgr.getSpecifiedTree().GetData(o);
                     String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(tmpOsmBraille.properties.IdGenerated);
                     if (connectedIdFilteredTree != null && connectedIdFilteredTree.Equals(idOsmFilteredSubtree))
                     {

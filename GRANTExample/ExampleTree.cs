@@ -7,7 +7,7 @@ using System.Diagnostics;
 using GRANTApplication;
 using GRANTManager;
 using GRANTManager.Interfaces;
-using OSMElement;
+using OSMElements;
 using GRANTManager.TreeOperations;
 
 namespace GRANTExample
@@ -198,7 +198,7 @@ namespace GRANTExample
                         int pointY;
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                        OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
+                        OSMElements.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "Screenshot";
                         List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);
@@ -239,7 +239,7 @@ namespace GRANTExample
                         int pointY;
 
                         strategyMgr.getSpecifiedOperationSystem().getCursorPoint(out pointX, out pointY);
-                        OSMElement.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
+                        OSMElements.OSMElement osmElement = filterStrategy.getOSMElement(pointX, pointY);
                         GeneralProperties propertiesForSearch = new GeneralProperties();
                         propertiesForSearch.controlTypeFiltered = "TextBox";
                         List<Object> treeElement = treeOperation.searchNodes.getNodesByProperties(grantTree.brailleTree, propertiesForSearch, OperatorEnum.and);

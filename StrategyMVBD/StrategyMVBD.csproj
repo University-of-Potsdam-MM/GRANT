@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DisplayStrategyMVBD.cs" />
+    <Compile Include="ExternalScreenreaderNVDA.cs" />
+    <Compile Include="MvbdConnectionTCPIP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

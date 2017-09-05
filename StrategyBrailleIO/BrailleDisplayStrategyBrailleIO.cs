@@ -9,8 +9,8 @@ using BrailleIO;
 using BrailleIO.Structs;
 using GRANTManager.Interfaces;
 using GRANTManager;
-using OSMElement;
-using OSMElement.UiElements;
+using OSMElements;
+using OSMElements.UiElements;
 using BrailleIOGuiElementRenderer;
 using BrailleIO.Interface;
 using GRANTManager.TreeOperations;
@@ -164,7 +164,7 @@ namespace StrategyBrailleIO
         /// Updated the content of a specific element
         /// </summary>
         /// <param name="element">element which content should be updated</param>
-        public void updateViewContent(ref OSMElement.OSMElement element)
+        public void updateViewContent(ref OSMElements.OSMElement element)
         {
             IBrailleIOAdapterManager adapter =  brailleIOMediator.AdapterManager;
 
@@ -273,8 +273,8 @@ namespace StrategyBrailleIO
         {
             String connectedIdFilteredTree = treeOperation.searchNodes.getConnectedFilteredTreenodeId(idGeneratedBrailleNode);
            if (connectedIdFilteredTree == null) { return null; }
-            OSMElement.OSMElement nodeFilteredTree = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
-            if (nodeFilteredTree.Equals(new OSMElement.OSMElement())) { return null; }
+            OSMElements.OSMElement nodeFilteredTree = treeOperation.searchNodes.getFilteredTreeOsmElementById(connectedIdFilteredTree);
+            if (nodeFilteredTree.Equals(new OSMElements.OSMElement())) { return null; }
             Image bmp;
            /* int h = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Height);
             int w = Convert.ToInt32(nodeFilteredTree.Data.properties.boundingRectangleFiltered.Width);
@@ -329,14 +329,14 @@ namespace StrategyBrailleIO
         /// Creates an associated view from an OSM element
         /// </summary>
         /// <param name="osmElement">an OSM element</param>
-        private void createView(OSMElement.OSMElement osmElement)
+        private void createView(OSMElements.OSMElement osmElement)
         {
             /* depending on the UI element and the renderer used, different properties are importent
              * die Angabe des 'UI-Element'-Typs steht bei den Propertys in controlTypeFiltered
              */
             if (osmElement.brailleRepresentation.viewName == null || osmElement.brailleRepresentation.viewName.Equals("")) { return; }
 
-            OSMElement.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
+            OSMElements.BrailleRepresentation brailleRepresentation = osmElement.brailleRepresentation;
 
             String uiElementType = osmElement.properties.controlTypeFiltered;
             if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -382,7 +382,7 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown</param>
         /// <param name="osmElement">OSM element for this view </param>
-        private void createViewText(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
+        private void createViewText(BrailleIOScreen screen, OSMElements.OSMElement osmElement)
         {
             if(screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -402,7 +402,7 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown</param>
         /// <param name="osmElement">OSM element for this view </param>
-        private void createViewMatrix(BrailleIOScreen screen, OSMElement.OSMElement osmElement)
+        private void createViewMatrix(BrailleIOScreen screen, OSMElements.OSMElement osmElement)
         {
             if (screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -423,7 +423,7 @@ namespace StrategyBrailleIO
         /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown </param>
         /// <param name="osmElement">OSM element for this view </param>
         /// <param name="image">the image</param>
-        private void createViewImage(BrailleIOScreen screen,  OSMElement.OSMElement osmElement, System.Drawing.Image image)
+        private void createViewImage(BrailleIOScreen screen,  OSMElements.OSMElement osmElement, System.Drawing.Image image)
         {
             if (screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -446,7 +446,7 @@ namespace StrategyBrailleIO
         /// <param name="screen">name of the <code>BrailleIOScreen</code> on which the view souhld be shown</param>
         /// <param name="osmElement">OSM element for this view </param>
         /// <param name="renderer">name of the renderer</param>
-        private void createViewOtherContent(BrailleIOScreen screen, OSMElement.OSMElement osmElement, IBrailleIOContentRenderer renderer)
+        private void createViewOtherContent(BrailleIOScreen screen, OSMElements.OSMElement osmElement, IBrailleIOContentRenderer renderer)
         {
             if (screen == null) { return; }
             BrailleIOGuiElementRenderer.UiElement brailleUiElement = convertToBrailleIOUiElement(osmElement);
@@ -608,15 +608,15 @@ namespace StrategyBrailleIO
         public List<String> getUiElementRenderer()
         {
             List<String> uiElementRenderer = new List<String>();
-           /* foreach(uiElementeTypesBrailleIoEnum uiEnum in Enum.GetValues(typeof(uiElementeTypesBrailleIoEnum)))
-            { 
-                uiElementRenderer.Add(uiEnum.ToString());
-            }*/
-
+            /* foreach(uiElementeTypesBrailleIoEnum uiEnum in Enum.GetValues(typeof(uiElementeTypesBrailleIoEnum)))
+             { 
+                 uiElementRenderer.Add(uiEnum.ToString());
+             }*/
+            Device activeDevice = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
             foreach (uiElementsTypeStruct element in uiElementList)
             {
                 //Angaben zur min. Größe prüfen
-                Device activeDevice = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+                
                 if (activeDevice.height >= element.heightMin && activeDevice.width >= element.widthMin)
                 {
                     uiElementRenderer.Add(element.uiElementType);
@@ -645,7 +645,7 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmElementFilteredNode">a node</param>
         /// <returns>Boolean matrix where <code>true</code> represents a shown pin</returns>
-        public bool[,] getRendererExampleRepresentation(OSMElement.OSMElement osmElementFilteredNode)
+        public bool[,] getRendererExampleRepresentation(OSMElements.OSMElement osmElementFilteredNode)
         {
             if (brailleIOMediator == null)
             {
@@ -739,10 +739,10 @@ namespace StrategyBrailleIO
         }
 
         #region example OSMElements
-        private OSMElement.OSMElement getExampleOsmElement(String uiElementType)
+        private OSMElements.OSMElement getExampleOsmElement(String uiElementType)
         {
             #region common properties
-            OSMElement.OSMElement osmElement = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmElement = new OSMElements.OSMElement();
             osmElement.properties = new GeneralProperties();
             osmElement.brailleRepresentation = new BrailleRepresentation();
             osmElement.properties.controlTypeFiltered = uiElementType;
@@ -804,7 +804,7 @@ namespace StrategyBrailleIO
             {
                 osmElement.properties.valueFiltered = "Item 1";
                 rect = new Rect(0, 0, 30, 7);
-                OSMElement.UiElements.ListMenuItem listMenuItem = new ListMenuItem();
+                OSMElements.UiElements.ListMenuItem listMenuItem = new ListMenuItem();
                 listMenuItem.hasNext = true;
                 listMenuItem.isMultipleSelection = true;
                 osmElement.properties.isToggleStateOn = false;
@@ -814,8 +814,8 @@ namespace StrategyBrailleIO
             {
                 osmElement.properties.valueFiltered = "TabItem";
                 rect = new Rect(0, 0, 8, 8);
-                OSMElement.UiElements.TabItem tabview = new TabItem();
-                tabview.orientation = OSMElement.UiElements.Orientation.Left;
+                OSMElements.UiElements.TabItem tabview = new TabItem();
+                tabview.orientation = OSMElements.UiElements.Orientation.Left;
                 osmElement.brailleRepresentation.uiElementSpecialContent = tabview;
             }
             /*if (uiElementeTypesBrailleIoEnum.GroupElement.ToString().Equals(uiElementType))
@@ -866,7 +866,7 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmMenu"><code>OSMElement.UiElements.DropDownMenuItem</code> DropDownMenuItem</param>
         /// <returns>a <code>BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem</code> object</returns>
-        private BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem convertDropDownMenu(OSMElement.UiElements.DropDownMenuItem osmMenu)
+        private BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem convertDropDownMenu(OSMElements.UiElements.DropDownMenuItem osmMenu)
         {
             BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem brailleIOMenu = new BrailleIOGuiElementRenderer.UiElements.DropDownMenuItem();
             brailleIOMenu.hasChild = osmMenu.hasChild;
@@ -883,15 +883,15 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmElement">node of braille tree</param>
         /// <returns>a <c>BrailleIOGuiElementRenderer.UiElements.ListMenuItem</c> object</returns>
-        private BrailleIOGuiElementRenderer.UiElements.ListMenuItem convertToListItem(OSMElement.OSMElement osmElement)
+        private BrailleIOGuiElementRenderer.UiElements.ListMenuItem convertToListItem(OSMElements.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElements.ListMenuItem brailleListItem = new BrailleIOGuiElementRenderer.UiElements.ListMenuItem();
-            if(osmElement.Equals(new OSMElement.OSMElement())){return  brailleListItem;}
-            if (!osmElement.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.ListMenuItem)))
+            if(osmElement.Equals(new OSMElements.OSMElement())){return  brailleListItem;}
+            if (!osmElement.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElements.UiElements.ListMenuItem)))
             {
                 return brailleListItem;
             }
-            OSMElement.UiElements.ListMenuItem listItem = (OSMElement.UiElements.ListMenuItem)osmElement.brailleRepresentation.uiElementSpecialContent;
+            OSMElements.UiElements.ListMenuItem listItem = (OSMElements.UiElements.ListMenuItem)osmElement.brailleRepresentation.uiElementSpecialContent;
             brailleListItem.hasNext = listItem.hasNext;
             brailleListItem.isMultipleSelection = listItem.isMultipleSelection;
             brailleListItem.isSelected = osmElement.properties.isToggleStateOn != null ? (bool)osmElement.properties.isToggleStateOn : false;
@@ -903,15 +903,15 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmElement">node of braille tree</param>
         /// <returns>a <c>BrailleIOGuiElementRenderer.UiElements.ListMenuItem</c> object</returns>
-        private BrailleIOGuiElementRenderer.UiElements.TabItem convertToTabView(OSMElement.OSMElement osmElement)
+        private BrailleIOGuiElementRenderer.UiElements.TabItem convertToTabView(OSMElements.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElements.TabItem tabViewBraille = new BrailleIOGuiElementRenderer.UiElements.TabItem();
-            if (osmElement.Equals(new OSMElement.OSMElement())) { return tabViewBraille; }
-            if (!osmElement.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElement.UiElements.TabItem)))
+            if (osmElement.Equals(new OSMElements.OSMElement())) { return tabViewBraille; }
+            if (!osmElement.brailleRepresentation.uiElementSpecialContent.GetType().Equals(typeof(OSMElements.UiElements.TabItem)))
             {
                 return tabViewBraille;
             }
-            OSMElement.UiElements.TabItem tabOsm = (OSMElement.UiElements.TabItem)osmElement.brailleRepresentation.uiElementSpecialContent;
+            OSMElements.UiElements.TabItem tabOsm = (OSMElements.UiElements.TabItem)osmElement.brailleRepresentation.uiElementSpecialContent;
             tabViewBraille.orientation = tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Bottom :
                  (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Top.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Top : (tabOsm.orientation.ToString().Equals(BrailleIOGuiElementRenderer.UiElements.Orientation.Right.ToString()) ? BrailleIOGuiElementRenderer.UiElements.Orientation.Right : BrailleIOGuiElementRenderer.UiElements.Orientation.Left));
             return tabViewBraille;
@@ -922,20 +922,20 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmElement">a node</param>
         /// <returns>object with the converted content</returns>
-        private object convertUiElementSpecialContent(OSMElement.OSMElement osmElement)
+        private object convertUiElementSpecialContent(OSMElements.OSMElement osmElement)
         {
             object brailleIOElement = new object();
-            if (osmElement.Equals(new OSMElement.OSMElement()) || osmElement.brailleRepresentation.uiElementSpecialContent == null) { return brailleIOElement; }
+            if (osmElement.Equals(new OSMElements.OSMElement()) || osmElement.brailleRepresentation.uiElementSpecialContent == null) { return brailleIOElement; }
             Type osmElementspecialcontentType = osmElement.brailleRepresentation.uiElementSpecialContent.GetType();
-            if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.DropDownMenuItem)))
+            if (osmElementspecialcontentType.Equals(typeof(OSMElements.UiElements.DropDownMenuItem)))
             {
-                brailleIOElement = convertDropDownMenu((OSMElement.UiElements.DropDownMenuItem)osmElement.brailleRepresentation.uiElementSpecialContent);
+                brailleIOElement = convertDropDownMenu((OSMElements.UiElements.DropDownMenuItem)osmElement.brailleRepresentation.uiElementSpecialContent);
             }
-            if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.ListMenuItem)))
+            if (osmElementspecialcontentType.Equals(typeof(OSMElements.UiElements.ListMenuItem)))
             {
                 brailleIOElement = convertToListItem(osmElement);
             }
-            if (osmElementspecialcontentType.Equals(typeof(OSMElement.UiElements.TabItem)))
+            if (osmElementspecialcontentType.Equals(typeof(OSMElements.UiElements.TabItem)))
             {                
                 brailleIOElement = convertToTabView(osmElement);
             }
@@ -947,7 +947,7 @@ namespace StrategyBrailleIO
         /// </summary>
         /// <param name="osmElement">a node</param>
         /// <returns>a <code>BrailleIOGuiElementRenderer.UiElement</code> object</returns>
-        private BrailleIOGuiElementRenderer.UiElement convertToBrailleIOUiElement(OSMElement.OSMElement osmElement)
+        private BrailleIOGuiElementRenderer.UiElement convertToBrailleIOUiElement(OSMElements.OSMElement osmElement)
         {
             BrailleIOGuiElementRenderer.UiElement brailleIOElement = new BrailleIOGuiElementRenderer.UiElement();
             brailleIOElement.contrast = osmElement.brailleRepresentation.contrast;
@@ -975,7 +975,7 @@ namespace StrategyBrailleIO
             return brailleIOElement;
         }
 
-        private BrailleIOGuiElementRenderer.Groupelements osmSubelementToGroupelement(OSMElement.OSMElement brailleTreeNode)
+        private BrailleIOGuiElementRenderer.Groupelements osmSubelementToGroupelement(OSMElements.OSMElement brailleTreeNode)
         {
             BrailleIOGuiElementRenderer.Groupelements groupelement = new BrailleIOGuiElementRenderer.Groupelements();
             groupelement.childBoundingRectangle = brailleTreeNode.properties.boundingRectangleFiltered;
@@ -994,15 +994,15 @@ namespace StrategyBrailleIO
             childUi.isVisible = true;
             childUi.screenName = brailleTreeNode.brailleRepresentation.screenName;
             childUi.isDisabled = brailleTreeNode.properties.isEnabledFiltered == null ? false : !((bool)brailleTreeNode.properties.isEnabledFiltered);
-            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.DropDownMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElements.UiElements.DropDownMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
-                childUi.uiElementSpecialContent = convertDropDownMenu((OSMElement.UiElements.DropDownMenuItem)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);
+                childUi.uiElementSpecialContent = convertDropDownMenu((OSMElements.UiElements.DropDownMenuItem)brailleTreeNode.brailleRepresentation.uiElementSpecialContent);
             }
-            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.ListMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElements.UiElements.ListMenuItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
                 childUi.uiElementSpecialContent = convertToListItem(brailleTreeNode);
             }
-            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElement.UiElements.TabItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
+            if (brailleTreeNode.brailleRepresentation.uiElementSpecialContent != null && typeof(OSMElements.UiElements.TabItem).Equals(brailleTreeNode.brailleRepresentation.uiElementSpecialContent.GetType()))
             {
                 childUi.uiElementSpecialContent = convertToTabView(brailleTreeNode);
             }
@@ -1217,7 +1217,7 @@ namespace StrategyBrailleIO
         public TactileNodeInfos getTactileNodeInfos(object brailleNode)
         {
             TactileNodeInfos nodeInfos = new TactileNodeInfos();
-            OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(brailleNode);
+            OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(brailleNode);
             object screen = brailleIOMediator.GetView(data.brailleRepresentation.screenName);
             if(screen is BrailleIOScreen)
             {

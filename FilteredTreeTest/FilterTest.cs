@@ -68,7 +68,7 @@ namespace FilteredTreeTest
                 }
             }
             Assert.AreNotEqual(null, subtreeHWND, "Es hätte ein Teilbaum gefunden werden müssen!");
-            OSMElement.OSMElement dataSubtreeHWND = strategyMgr.getSpecifiedTree().GetData(subtreeHWND);
+            OSMElements.OSMElement dataSubtreeHWND = strategyMgr.getSpecifiedTree().GetData(subtreeHWND);
             #endregion
             Object treePoint = strategyMgr.getSpecifiedFilter().filtering(Convert.ToInt32( dataSubtreeHWND.properties.boundingRectangleFiltered.X), Convert.ToInt32( dataSubtreeHWND.properties.boundingRectangleFiltered.Y), TreeScopeEnum.Application, -1);
             Debug.WriteLine("treePoint:\n" + strategyMgr.getSpecifiedTree().ToStringRecursive(treePoint));
@@ -107,7 +107,7 @@ namespace FilteredTreeTest
             Object treeHWND = strategyMgr.getSpecifiedFilter().filtering(appHwnd, TreeScopeEnum.Application, -1);
             Assert.AreNotEqual(null, treeHWND);
             Assert.IsTrue(strategyMgr.getSpecifiedTree().HasChild(treeHWND));
-            OSMElement.OSMElement firstNodeData = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeHWND));
+            OSMElements.OSMElement firstNodeData = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeHWND));
             Assert.IsNotNull(firstNodeData);
             Assert.IsNotNull(firstNodeData.properties);
             Assert.IsNotNull(firstNodeData.properties.grantFilterStrategy, "A filter strategy should be set at the first node.");
@@ -125,8 +125,8 @@ namespace FilteredTreeTest
         {
             if (strategyMgr.getSpecifiedTree().Depth(node1) != strategyMgr.getSpecifiedTree().Depth(node2)) { Assert.Fail("Die Tiefe der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (strategyMgr.getSpecifiedTree().DirectChildCount(node1) != strategyMgr.getSpecifiedTree().DirectChildCount(node2)) { Assert.Fail("Die Anzahl der direkten Kinder der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
-            OSMElement.OSMElement osmNode1 = strategyMgr.getSpecifiedTree().GetData(node1);
-            OSMElement.OSMElement osmNode2 = strategyMgr.getSpecifiedTree().GetData(node2);
+            OSMElements.OSMElement osmNode1 = strategyMgr.getSpecifiedTree().GetData(node1);
+            OSMElements.OSMElement osmNode2 = strategyMgr.getSpecifiedTree().GetData(node2);
             if (osmNode1.properties.acceleratorKeyFiltered != null && !osmNode1.properties.acceleratorKeyFiltered.Equals(osmNode2.properties.acceleratorKeyFiltered)) { Assert.Fail("Der acceleratorKey der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (osmNode1.properties.accessKeyFiltered != null && !osmNode1.properties.accessKeyFiltered.Equals(osmNode2.properties.accessKeyFiltered)) { Assert.Fail("Der accessKeyFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }
             if (osmNode1.properties.autoamtionIdFiltered != null && !osmNode1.properties.autoamtionIdFiltered.Equals(osmNode2.properties.autoamtionIdFiltered)) { Assert.Fail("Der autoamtionIdFiltered der beiden Knoten stimmt nicht überein!\n node1 = {0}\n node2 = {1}", strategyMgr.getSpecifiedTree().GetData(node1), strategyMgr.getSpecifiedTree().GetData(node2)); return false; }

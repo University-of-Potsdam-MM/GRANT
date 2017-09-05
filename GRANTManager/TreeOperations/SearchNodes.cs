@@ -1,4 +1,4 @@
-﻿using OSMElement;
+﻿using OSMElements;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,13 +32,13 @@ namespace GRANTManager.TreeOperations
         /// <param name="generalProperties">properties for the search</param>
         /// <param name="oper">Operator for combining the properties (and, or) </param>
         /// <returns>A list of the found tree objects</returns>
-        public List<Object> getNodesByProperties(Object tree, OSMElement.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
+        public List<Object> getNodesByProperties(Object tree, OSMElements.GeneralProperties generalProperties, OperatorEnum oper = OperatorEnum.and)
         {//TODO: many properties are still missing
             List<Object> result = new List<Object>();
             if (tree == null) { return result; }
             foreach(Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
                 Boolean propertieLocalizedControlType = generalProperties.localizedControlTypeFiltered == null || nodeData.properties.localizedControlTypeFiltered.Equals(generalProperties.localizedControlTypeFiltered);
                 Boolean propertieName = generalProperties.nameFiltered == null || nodeData.properties.nameFiltered.Equals(generalProperties.nameFiltered);
                 Boolean propertieIsEnabled = generalProperties.isEnabledFiltered == null || nodeData.properties.isEnabledFiltered == generalProperties.isEnabledFiltered;
@@ -85,21 +85,21 @@ namespace GRANTManager.TreeOperations
         /// <param name="properties">properties for the search</param>
         /// <param name="oper">Operator for combining the properties (and, or) </param>
         /// <returns>A list of the found tree objects</returns>
-        public List<Object> getNodesByProperties(Object tree, OSMElement.OSMElement properties, OperatorEnum oper = OperatorEnum.and)
+        public List<Object> getNodesByProperties(Object tree, OSMElements.OSMElement properties, OperatorEnum oper = OperatorEnum.and)
         {
             List<Object> result = new List<Object>();
             if (tree == null) { return result; }
-            List<String> listOfUsedProperties = OSMElement.OSMElement.getAllTypes();
+            List<String> listOfUsedProperties = OSMElements.OSMElement.getAllTypes();
             listOfUsedProperties = trimListOfProperties(listOfUsedProperties, properties);
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
-                OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
                 Boolean isToAdd = true;
                 foreach (String s in listOfUsedProperties)
                 {
                     Boolean resultEquals = false;
-                    var data_1 = OSMElement.OSMElement.getElement(s, nodeData);
-                    var data_2 = OSMElement.OSMElement.getElement(s, properties);
+                    var data_1 = OSMElements.OSMElement.getElement(s, nodeData);
+                    var data_2 = OSMElements.OSMElement.getElement(s, properties);
                     if ((data_1 != null && data_1.Equals(data_2)) || (data_1 == null && data_2 == null))
                     {
                         resultEquals = true;
@@ -130,13 +130,13 @@ namespace GRANTManager.TreeOperations
             return result;
         }
 
-        private List<String> trimListOfProperties(List<String> listOfProperties, OSMElement.OSMElement osmValues)
+        private List<String> trimListOfProperties(List<String> listOfProperties, OSMElements.OSMElement osmValues)
         {
             List<String> trimmedList = new List<string>();
             foreach (String s in listOfProperties)
             {
                 Type typeOfProperty;
-                var data = OSMElement.OSMElement.getElement(s, osmValues, out typeOfProperty);
+                var data = OSMElements.OSMElement.getElement(s, osmValues, out typeOfProperty);
 
                 if (data != null)
                 {
@@ -178,7 +178,7 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="idGenerated">id of the searched node</param>
         /// <returns><c>OSMElement.OSMElement</c> with the searched node</returns>
-        public OSMElement.OSMElement getFilteredTreeOsmElementById(String idGenerated)
+        public OSMElements.OSMElement getFilteredTreeOsmElementById(String idGenerated)
         {
             return getNodeElement(idGenerated, grantTrees.filteredTree);
         }
@@ -188,7 +188,7 @@ namespace GRANTManager.TreeOperations
         /// </summary>
         /// <param name="idGenerated">id of the searched node</param>
         /// <returns><c>OSMElement.OSMElement</c> with the searched node</returns>
-        public OSMElement.OSMElement getBrailleTreeOsmElementById(String idGenerated)
+        public OSMElements.OSMElement getBrailleTreeOsmElementById(String idGenerated)
         {
             return getNodeElement(idGenerated, grantTrees.brailleTree);
         }
@@ -199,7 +199,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="idGenerated">id of the searched node</param>
         /// <param name="tree">Specifies the tree for the search</param>
         /// <returns><c>OSMElement.OSMElement</c> with the searched node</returns>
-        internal OSMElement.OSMElement getNodeElement(String idGenerated, Object tree)
+        internal OSMElements.OSMElement getNodeElement(String idGenerated, Object tree)
         {
             object osmObject = getNode(idGenerated, tree);
             if(osmObject != null && !osmObject.Equals(new Object()))
@@ -208,7 +208,7 @@ namespace GRANTManager.TreeOperations
             }
             else
             {
-                return new OSMElement.OSMElement();
+                return new OSMElements.OSMElement();
             }
         }
 
@@ -241,7 +241,7 @@ namespace GRANTManager.TreeOperations
             if (IntPtr.Zero.Equals(hwnd) || grantTrees.filteredTree == null) { return null; }
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(grantTrees.filteredTree))
             {
-                OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
+                OSMElements.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
                 if (hwnd.Equals(osmData.properties.hWndFiltered))
                 {
                     return node;
@@ -259,7 +259,7 @@ namespace GRANTManager.TreeOperations
         {
             Object node = getFilteredNodeByHwnd(hwnd);
             if(node == null) { return null; }
-            OSMElement.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
+            OSMElements.OSMElement osmData = strategyMgr.getSpecifiedTree().GetData(node);
             return osmData.properties.IdGenerated;
         }
         #endregion
@@ -402,8 +402,8 @@ namespace GRANTManager.TreeOperations
         public String getScreenIdToScreenName(String screenId)
         {
             if(screenId == null) { return null; }
-            OSMElement.OSMElement osm = getBrailleTreeOsmElementById(screenId);
-            if(osm == null || osm.Equals(new OSMElement.OSMElement()) || osm.brailleRepresentation == null) { return null; }
+            OSMElements.OSMElement osm = getBrailleTreeOsmElementById(screenId);
+            if(osm == null || osm.Equals(new OSMElements.OSMElement()) || osm.brailleRepresentation == null) { return null; }
             return osm.brailleRepresentation.screenName;
         }
 
@@ -476,7 +476,7 @@ namespace GRANTManager.TreeOperations
             if (viewName == null || viewName.Equals("")) { return false; }
             foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 if (viewName.Equals(data.brailleRepresentation.viewName))
                 {
                     return true;
@@ -491,7 +491,7 @@ namespace GRANTManager.TreeOperations
             if (viewName == null || viewName.Equals("")) { return false; }
             foreach (Object o in strategyMgr.getSpecifiedTree().AllChildrenNodes(subtree))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 if (viewName.Equals(data.brailleRepresentation.viewName))
                 {
                     view = o;
@@ -511,7 +511,7 @@ namespace GRANTManager.TreeOperations
         public bool existViewInScreen(String screenName, String viewName, String typeOfView)
         {
             if (screenName == null || screenName.Equals("") || viewName == null || viewName.Equals("") || typeOfView == null || typeOfView.Equals("")) { return false; }
-            OSMElement.OSMElement osmScreen = new OSMElement.OSMElement();
+            OSMElements.OSMElement osmScreen = new OSMElements.OSMElement();
             osmScreen.brailleRepresentation = new BrailleRepresentation();
             osmScreen.brailleRepresentation.screenName = screenName;
             osmScreen.brailleRepresentation.typeOfView = typeOfView;
@@ -527,12 +527,12 @@ namespace GRANTManager.TreeOperations
                 {
                     foreach (Object node in strategyMgr.getSpecifiedTree().DirectChildrenNodes(vC))
                     {
-                        OSMElement.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
+                        OSMElements.OSMElement nodeData = strategyMgr.getSpecifiedTree().GetData(node);
                         if (nodeData.brailleRepresentation.screenName != null && nodeData.brailleRepresentation.screenName.Equals(screenName))
                         {
                             foreach (Object childScreen in strategyMgr.getSpecifiedTree().AllChildrenNodes(node))
                             {
-                                OSMElement.OSMElement childScreenData = strategyMgr.getSpecifiedTree().GetData(childScreen);
+                                OSMElements.OSMElement childScreenData = strategyMgr.getSpecifiedTree().GetData(childScreen);
                                 if (childScreenData.brailleRepresentation.viewName != null && childScreenData.brailleRepresentation.viewName.Equals(viewName))
                                 {
                                     return true;
@@ -566,7 +566,7 @@ namespace GRANTManager.TreeOperations
             { //typeOfView-Branch
                 foreach (Object screenBranch in strategyMgr.getSpecifiedTree().DirectChildrenNodes(typOfView))
                 { // screen-Branch
-                    OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(screenBranch);
+                    OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(screenBranch);
                     if (screenName.Equals(data.brailleRepresentation.screenName))
                     {
                         screen = screenBranch;
@@ -589,7 +589,7 @@ namespace GRANTManager.TreeOperations
             if (typeOfViewName == null || typeOfViewName.Equals("")) { return false; }
             foreach (Object o in strategyMgr.getSpecifiedTree().DirectChildrenNodes(grantTrees.brailleTree))
             {
-                OSMElement.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
+                OSMElements.OSMElement data = strategyMgr.getSpecifiedTree().GetData(o);
                 if (typeOfViewName.Equals(data.brailleRepresentation.typeOfView))
                 {
                     typeOfView = o;
@@ -607,7 +607,7 @@ namespace GRANTManager.TreeOperations
 
         public static Boolean existPropertyName(String propertyName)
         {
-            List<String> propNames = OSMElement.OSMElement.getAllTypes();
+            List<String> propNames = OSMElements.OSMElement.getAllTypes();
             return propNames.Contains(propertyName);
         }
 

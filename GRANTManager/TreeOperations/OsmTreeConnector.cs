@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using OSMElement;
+using OSMElements;
 
 namespace GRANTManager.TreeOperations
 {   
