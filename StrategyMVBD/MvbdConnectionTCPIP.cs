@@ -26,7 +26,7 @@ namespace StrategyMVBD
         #endregion
 
         private IPEndPoint _endPoint;
-        private TcpClient _tcpClient;
+        internal TcpClient _tcpClient;
         private bool isDisposed = false;
         private StrategyManager strategyMgr;
 

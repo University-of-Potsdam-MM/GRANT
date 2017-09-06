@@ -46,9 +46,11 @@ namespace StrategyMVBD
         public DisplayStrategyMVBD(StrategyManager strategyMgr) : base(strategyMgr) 
         {
             mvbdTcpIpConnection = new MvbdConnectionTCPIP(strategyMgr, this);
-
-            //Deviceliste abrufen
-            deviceList = getPosibleDevices();
+            if (mvbdTcpIpConnection._tcpClient != null)
+            {
+                //Deviceliste abrufen
+                deviceList = getPosibleDevices();
+            }
         }
 
         ~DisplayStrategyMVBD() { Dispose(); }

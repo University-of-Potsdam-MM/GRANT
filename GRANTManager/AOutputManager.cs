@@ -73,14 +73,20 @@ namespace GRANTManager
                         if (type == null) { break; }
                         if (this.GetType().Equals(type)) {
                             List<Device> devices = this.getPosibleDevices();
-                            allDevices.AddRange(devices);
+                            if (devices != null)
+                            {
+                                allDevices.AddRange(devices);
+                            }
                         }
                         else
                         {
                             using (AOutputManager ads = (AOutputManager)Activator.CreateInstance(type, strategyMgr))
                             {
                                 List<Device> devices = ads.getPosibleDevices();
-                                allDevices.AddRange(devices);
+                                if (devices != null)
+                                {
+                                    allDevices.AddRange(devices);
+                                }
                             }
                         }                  
                     }

@@ -395,6 +395,9 @@ namespace GRANTApplication
             Device d = strategyMgr.getSpecifiedDisplayStrategy().getDeviceByName(value);
             strategyMgr.getSpecifiedDisplayStrategy().setActiveDevice(d);
             listGuiElements();
+            while (!d.name.Equals(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().name)){
+                System.Threading.Thread.Sleep(20); // wait until the new device will be set
+            }
             int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
             int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
             createBrailleDisplay(dWidth, dHeight, brailleDisplaySimul); // später das zu matrix machen
