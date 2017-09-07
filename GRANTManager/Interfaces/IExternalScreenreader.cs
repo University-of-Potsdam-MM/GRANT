@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OSMElements;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,7 @@ namespace GRANTManager.Interfaces
     /// </summary>
     public interface IExternalScreenreader
     {
-        void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees);
-        
-        OSMElements.OSMElement getContentAsOSM();
+        OSMElement getScreenreaderContent();
         void sendScreenreaderCommand();
         void getListOfScreenreaderCommands(); //TODO return-Wert
     }

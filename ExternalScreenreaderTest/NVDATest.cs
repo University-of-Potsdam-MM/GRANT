@@ -16,6 +16,8 @@ namespace ExternalScreenreaderTest
         TreeOperation treeOperation;
         GuiFunctions guiFuctions;
 
+        private String treePath;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -42,12 +44,14 @@ namespace ExternalScreenreaderTest
             strategyMgr.setSpecifiedBrailleConverter(settings.getPossibleBrailleConverter()[0].className);
             strategyMgr.getSpecifiedFilter().setTreeOperation(treeOperation);
             guiFuctions = new GuiFunctions(strategyMgr, grantTrees, treeOperation);
+
+            treePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "SavedTrees", "calc.grant");
         }
 
 
 
         [TestMethod]
-        public void TestGetPinsAsOSM()
+        public void TestGetPinsAsString()
         {
             System.Windows.Forms.SendKeys.SendWait("{ESC}"); // set focus back to Visual Studio
             System.Threading.Thread.Sleep(2000); // Wait of connection to MVBD & first conntent sets
@@ -60,9 +64,40 @@ namespace ExternalScreenreaderTest
                 Assert.Fail("NVDA isn't running!");
             }
             System.Threading.Thread.Sleep(2000);
-            OSMElement osm = strategyMgr.getSpecifiedExternalScreenreader().getContentAsOSM();
-            Assert.AreNotEqual(null, osm.properties.valueFiltered);
-            Debug.WriteLine("Braillezeile NVDA: "+ osm.properties.valueFiltered);
+            OSMElement content = strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent();
+            Assert.AreNotEqual(null, content);
+            Debug.WriteLine("Braillezeile NVDA: "+ content);
         }
+
+        [TestMethod]
+        public void TestGetPinsAsStringInFilteredTree()
+        {
+            guiFuctions.loadGrantProject(treePath);
+            Assert.AreNotEqual(grantTrees, null);
+            Assert.AreNotEqual(grantTrees.filteredTree, null);
+            Assert.AreNotEqual(grantTrees.brailleTree, null);
+
+            System.Windows.Forms.SendKeys.SendWait("{ESC}"); // set focus back to Visual Studio
+            System.Threading.Thread.Sleep(2000); // Wait of connection to MVBD & first conntent sets
+            if (!strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("MVBD"))
+            {
+                Assert.Fail("MVBD isn't running!");
+            }
+            if (!strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("NVDA"))
+            {
+                Assert.Fail("NVDA isn't running!");
+            }
+            System.Threading.Thread.Sleep(2000);
+            OSMElement content = strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent();
+            Assert.AreNotEqual(null, content);
+            Debug.WriteLine(content);
+            int treeNodeOld = strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree);
+            // add node to filtered tree
+            treeOperation.updateNodes.addNodeExternalScreenreaderInFilteredTree(content);
+            Assert.AreEqual(treeNodeOld + 1, strategyMgr.getSpecifiedTree().Count(grantTrees.filteredTree));
+            Debug.WriteLine("Tree with external screenreader node:\n"+ strategyMgr.getSpecifiedTree().ToStringRecursive(grantTrees.filteredTree));
+        }
+
+
     }
 }

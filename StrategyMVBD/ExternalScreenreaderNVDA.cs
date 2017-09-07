@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GRANTManager;
 using OSMElements;
+using System.Security.Cryptography;
 
 namespace StrategyMVBD
 {
@@ -15,7 +16,6 @@ namespace StrategyMVBD
     public class ExternalScreenreaderNVDA : IExternalScreenreader
     {
         private StrategyManager strategyMgr;
-        private GeneratedGrantTrees grantTrees;
         private MvbdConnectionTCPIP mvbdTcpIpConnection;
         internal String lastContent { get; set; }
 
@@ -25,13 +25,12 @@ namespace StrategyMVBD
             mvbdTcpIpConnection = new MvbdConnectionTCPIP(strategyMgr, this);
             lastContent = null;
         }
-
-        public void setGeneratedGrantTrees(GeneratedGrantTrees grantTrees)
-        {
-            this.grantTrees = grantTrees;
-        }
-
-        public OSMElement getContentAsOSM()
+                
+        /// <summary>
+        /// Returns an <c>OSMElement</c> with the last received content from NVDA
+        /// </summary>
+        /// <returns></returns>
+        public OSMElement getScreenreaderContent()
         {
             //throw new NotImplementedException();
             /*
@@ -39,12 +38,42 @@ namespace StrategyMVBD
              * 
              * 
              */
+            if (!strategyMgr.getSpecifiedOperationSystem().isApplicationRunning("NVDA")) { return null; }
+            // Das hier ist erstmal nur zum Testen
+            Settings settings = new Settings();
+            List<Strategy> externalSRStrategies = settings.getPossibleExternalScreenreaders();
+            if (externalSRStrategies.Exists(p => p.className.Equals(this.GetType().FullName + ", " + this.GetType().Namespace)))
+            {
+                OSMElement osm = new OSMElement();
+                osm.properties.valueFiltered = lastContent;
+                osm.properties.controlTypeFiltered = "external screenreader";
+                osm.properties.grantFilterStrategy = externalSRStrategies.Find(p => p.className.Equals(this.GetType().FullName + ", " + this.GetType().Namespace)).userName;
 
-             // Das hier ist erstmal nur zum Testen
-            OSMElement osm = new OSMElement();
-            osm.properties.valueFiltered = lastContent;
-            return osm;
-            
+                osm.properties.IdGenerated = generatedIdforOsmNode();
+                return osm;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Generated the id for a NVDA node in the filtered tree;
+        /// The Id is always the same.
+        /// </summary>
+        /// <returns></returns>
+        private String generatedIdforOsmNode()
+        {
+            byte[] hash;
+            using (var md5 = MD5.Create())
+            {
+                hash = md5.ComputeHash(Encoding.UTF8.GetBytes(this.GetType().FullName));
+            }
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            String tmpHash = String.Join(" : ", hash.Select(p => p.ToString()).ToArray());
+            return sb.ToString();
         }
 
         public void getListOfScreenreaderCommands()

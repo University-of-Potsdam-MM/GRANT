@@ -266,6 +266,7 @@ namespace GRANTApplication
                 Object tree = grantTrees.filteredTree;
                 filteredTreeOutput.Items.Clear();
                 filteredRoot.Items.Clear();
+                filteredRoot.Header = "Filtered - Tree";
                 guiFunctions.createTreeForOutput(tree, ref filteredRoot);
               //  filteredTreeProp.ItemsSource = "";
                 filteredTreeProp.Items.Refresh();
@@ -289,7 +290,7 @@ namespace GRANTApplication
                     SaveButton.IsEnabled = true;
                     brailleTreeOutput.Items.Add(brailleRoot);
                     brailleDisplaySimul.Items.Refresh();
-
+                    
                     #endregion
                 }else
                 {

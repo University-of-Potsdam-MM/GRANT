@@ -12,7 +12,11 @@ using System.Threading.Tasks;
 
 namespace StrategyMVBD
 {
-    //TODO: Rooting beachten!
+    /* TODO: Rooting beachten!
+     *  
+     * 
+     */
+
 
     /// <summary>
     /// Handles the TCP/IP connection to MVBD (see: http://download.metec-ag.de/MVBD/ )
@@ -100,30 +104,54 @@ namespace StrategyMVBD
                             ns.Read(ba, 0, len);
                             switch (cmd)
                             {
-                                    case 1:
-                                        // Pin data (for single cells and brailleline-devices)
-                                        getPinData(ba);
-                                        break;
-                                    case 20:
-                                        // Device Info
-                                        setActiveDeviceGrant(ba);
-                                        break;
-                                    case 26:
-                                        // possible Devices
-                                        if (cmd == 26)
-                                        {
-                                        if (displayStrategyMVBD != null)
-                                        {
-                                            displayStrategyMVBD.deviceList = interpretDeviceList(ba);
-                                        }
-                                        }
-                                        break;
-                                }
+                                case 1:
+                                    // Pin data (for single cells and brailleline-devices)
+                                    getPinData(ba);
+                                    break;
+                                case 20:
+                                    // Device Info
+                                    setActiveDeviceGrant(ba);
+                                    break;
+                                case 26:
+                                    // possible Devices
+                                    if (displayStrategyMVBD != null)
+                                    {
+                                        displayStrategyMVBD.deviceList = interpretDeviceList(ba);
+                                    }
+                                    break;
+                                case 31:
+                                    // GetTcpRoots
+                                    getTcpRoots(ba);
+                                    break;
+                            }
                         }
                     }
                 }
                 catch (Exception e) { Console.WriteLine("Fehler bei 'DisplayStrategyMVBD \n Fehler:\n {0}", e); }
             }
+        }
+
+        private void getTcpRoots(byte[] ba)
+        {
+            // Command 31
+            //  16 identifiers 0=Unknown, 1=MVBD, 2=NVDA, 3=GRANT, 4=HyperBrailleGeo, 5=Monitor, 6=MATLAB, 7=Presentation, 8=Eprime, 9...15 are for future use or custom use.
+            int commandsCount = ba[0];
+            int identifiersCount = ba[1];
+            // TODO ...
+        }
+
+        private void sendGetTcpRoots()
+        {
+            // Command 31
+            if ((_tcpClient == null) || (_tcpClient.Connected == false)) return;
+
+            byte[] ba = new byte[3];
+            ba[0] = 31;
+            ba[1] = 0;
+            ba[2] = 0;
+
+            Debug.Print("<-- SendIdentifierOfClient");
+            Send(ba);
         }
 
         private void setActiveDeviceGrant(Byte[] bas)

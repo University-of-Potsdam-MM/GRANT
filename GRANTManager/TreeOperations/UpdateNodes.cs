@@ -27,6 +27,45 @@ namespace GRANTManager.TreeOperations
         }
 
         #region (update)  filtering
+        /// <summary>
+        /// Adds a node withe data from an external screenreader to the filtered tree
+        /// </summary>
+        /// <param name="osm">the OSMElement</param>
+        public void addNodeExternalScreenreaderInFilteredTree(OSMElement osm)
+        {
+            if(osm == null || osm.Equals(new OSMElement()) || grantTrees.filteredTree == null || strategyMgr.getSpecifiedExternalScreenreader() == null) { return; }
+            // TODO: ggf. prüfen, ob der Knoten schon existiert, dann nur aktualisieren!
+            if (osm.properties.grantFilterStrategy != null && isFilteredWithExternalScreenreader(osm.properties.grantFilterStrategy) && grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree))
+            {
+                if (treeOperation.searchNodes.getFilteredTreeOsmElementById(osm.properties.IdGenerated).Equals(new OSMElements.OSMElement()))
+                {
+                    strategyMgr.getSpecifiedTree().Add(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree), osm);
+                    //strategyMgr.getSpecifiedTree().Add(strategyMgr.getSpecifiedTree().Child(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)), osm);
+                }
+                else
+                {
+                    updateNodeExternalScreenreaderInFilteredTree(osm);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the node of an external screenreader in the filtered tree
+        /// </summary>
+        /// <param name="osm">the OSMElement</param>
+        public void updateNodeExternalScreenreaderInFilteredTree(OSMElement osm)
+        {
+            if (isFilteredWithExternalScreenreader(osm.properties.grantFilterStrategy))
+            {
+                changePropertiesOfFilteredNode(osm.properties);
+            }
+        }
+
+        internal Boolean isFilteredWithExternalScreenreader(String filterstrategy)
+        {
+            Settings settings = new Settings();
+            return settings.getPossibleExternalScreenreaders().Exists(p => p.userName.Equals(filterstrategy));
+        }
 
         /// <summary>
         /// Filters a node with the current filter strategy,

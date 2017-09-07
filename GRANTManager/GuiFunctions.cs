@@ -609,15 +609,16 @@ namespace GRANTManager
         /// <param name="root">the treeViewItem object</param>
         /// <param name="isFilteredTree">Determines whether the tree object is a filtered tree</param>
         public void createTreeForOutput(Object tree, ref TreeViewItem root, bool isFilteredTree = true)
-        {            
+        {
             foreach (Object node in strategyMgr.getSpecifiedTree().AllNodes(tree))
             {
+                
                  MenuItem child = new MenuItem();
                 TreeViewItem treeViewItem = new TreeViewItem();
                 #region add values
                 child.controlTypeFiltered = strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.controlTypeFiltered;
                 child.IdGenerated = strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated == null ? " " : strategyMgr.getSpecifiedTree().GetData(node).properties.IdGenerated;
-              
+                
                 String nameFiltered;
                 if (!isFilteredTree)
                 {
@@ -659,10 +660,10 @@ namespace GRANTManager
                 }
                 if (!strategyMgr.getSpecifiedTree().IsRoot(node))
                 {
-                    if (!(isFilteredTree && strategyMgr.getSpecifiedTree().IsTop(node)))
+                    //  if (!(isFilteredTree && strategyMgr.getSpecifiedTree().IsTop(node)))
                     {
                         child.parentMenuItem = root;
-
+                        
                         root.Items.Add(treeViewItem);
                         if (strategyMgr.getSpecifiedTree().IsLast(node))
                         {
@@ -677,7 +678,7 @@ namespace GRANTManager
                 }
             }
             //go back to "root" menuItem
-            while (root.Header != null && root.Header is MenuItem && ((MenuItem)root.Header).parentMenuItem != null)
+            while (root != null && root.Header != null && root.Header is MenuItem && ((MenuItem)root.Header).parentMenuItem != null)
             {
                 root = ((MenuItem)root.Header).parentMenuItem;
             }
@@ -701,8 +702,7 @@ namespace GRANTManager
                 {
                     return getRootForNextElement(strategyMgr.getSpecifiedTree().Parent(node), ((MenuItem)nodeItem.Header).parentMenuItem);
                 }
-            }
-            
+            }            
             return nodeItem;
         }
 

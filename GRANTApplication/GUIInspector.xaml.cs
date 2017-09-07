@@ -67,6 +67,10 @@ namespace GRANTApplication
             strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperations);
             #endregion
 
+
+            strategyMgr.setSpecifiedExternalScreenreader(settings.getPossibleExternalScreenreaders()[0].className);
+            strategyMgr.setSpecifiedBrailleConverter(settings.getPossibleBrailleConverter()[0].className);
+
             filteredTreeOutput.SelectedItemChanged +=new RoutedPropertyChangedEventHandler<object>(filteredTreeOutput_SelectedItemChanged);
             guiFunctions = new GuiFunctions(strategyMgr, grantTrees, treeOperations);
             root = new TreeViewItem();
@@ -115,159 +119,6 @@ namespace GRANTApplication
             }
             filteredTreeProp.DataContext = this.filteredPropRoot;
 
-            System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
-            strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
-            NodeButton.CommandParameter = IdGenerated;
-        }
-
-        /// <summary>
-        /// Displays properties of the selected tree node of the filtered tree in the properties table.
-        /// </summary>
-        /// <param name="IdGenerated">Id of the Gui element of the selected node in the filtered tree.</param>
-        void updatePropertiesTable_alt(String IdGenerated)
-        {
-            OSMElements.OSMElement osmElement = treeOperations.searchNodes.getFilteredTreeOsmElementById(IdGenerated);
-            DataTable dataTable = new DataTable();
-            DataColumn dc = new DataColumn();
-            dataTable.Columns.Add(new DataColumn("Property"));
-            dataTable.Columns.Add(new DataColumn("Content"));
-            
-            DataRow dataRow = dataTable.NewRow();
-            DataRow dataRow1 = dataTable.NewRow();
-            DataRow dataRow2 = dataTable.NewRow();
-            DataRow dataRow3 = dataTable.NewRow();
-            DataRow dataRow4 = dataTable.NewRow();
-            DataRow dataRow5 = dataTable.NewRow();
-            DataRow dataRow6 = dataTable.NewRow();
-            DataRow dataRow7 = dataTable.NewRow();
-            DataRow dataRow8 = dataTable.NewRow();
-            DataRow dataRow9 = dataTable.NewRow();
-            DataRow dataRow10 = dataTable.NewRow();
-            DataRow dataRow11 = dataTable.NewRow();
-            DataRow dataRow12 = dataTable.NewRow();
-            DataRow dataRow13 = dataTable.NewRow();
-            DataRow dataRow14 = dataTable.NewRow();
-            DataRow dataRow15 = dataTable.NewRow();
-            DataRow dataRow16 = dataTable.NewRow();
-            DataRow dataRow17 = dataTable.NewRow();
-            DataRow dataRow18 = dataTable.NewRow();
-            DataRow dataRow19 = dataTable.NewRow();
-            DataRow dataRow20 = dataTable.NewRow();
-            DataRow dataRow21 = dataTable.NewRow();
-            DataRow dataRow22 = dataTable.NewRow();
-            DataRow dataRow23 = dataTable.NewRow();
-            DataRow dataRow24 = dataTable.NewRow();
-            DataRow dataRow25 = dataTable.NewRow();
-
-            dataRow[0] = "IdGenerated";
-            if (osmElement.properties.IdGenerated == null) { return; }
-            dataRow[1] = osmElement.properties.IdGenerated.ToString();
-            dataTable.Rows.Add(dataRow);
-
-            dataRow1[0] = "ControlType";
-            dataRow1[1] = osmElement.properties.controlTypeFiltered.ToString();
-            dataTable.Rows.Add(dataRow1);
-
-            dataRow2[0] = "Name";
-            dataRow2[1] = osmElement.properties.nameFiltered.ToString();
-            dataTable.Rows.Add(dataRow2);
-
-            dataRow3["Property"] = "AcceleratorKey";
-            dataRow3["Content"] = osmElement.properties.acceleratorKeyFiltered.ToString();
-            dataTable.Rows.Add(dataRow3);
-
-            dataRow4["Property"] = "AccessKey";
-            dataRow4["Content"] = osmElement.properties.accessKeyFiltered.ToString();
-            dataTable.Rows.Add(dataRow4);
-
-            dataRow5["Property"] = "HelpText";
-            dataRow5["Content"] = osmElement.properties.helpTextFiltered.ToString();
-            dataTable.Rows.Add(dataRow5);
-
-            dataRow6["Property"] = "AutoamtionId";
-            dataRow6["Content"] = osmElement.properties.autoamtionIdFiltered.ToString();
-            dataTable.Rows.Add(dataRow6);
-
-            dataRow7["Property"] = "ClassName";
-            dataRow7["Content"] = osmElement.properties.classNameFiltered.ToString();
-            dataTable.Rows.Add(dataRow7);
-
-            dataRow8["Property"] = "Value";
-            dataRow8["Content"] = osmElement.properties.valueFiltered;
-            dataTable.Rows.Add(dataRow8);
-
-            dataRow9["Property"] = "FrameWorkId";
-            dataRow9["Content"] = osmElement.properties.frameWorkIdFiltered.ToString();
-            dataTable.Rows.Add(dataRow9);
-
-            dataRow10["Property"] = "ItemType";
-            dataRow10["Content"] = osmElement.properties.itemTypeFiltered.ToString();
-            dataTable.Rows.Add(dataRow10);
-
-            dataRow11["Property"] = "ItemStatus";
-            dataRow11["Content"] = osmElement.properties.itemStatusFiltered.ToString();
-            dataTable.Rows.Add(dataRow11);
-
-            dataRow12["Property"] = "Filterstrategy";
-            dataRow12["Content"] = osmElement.properties.grantFilterStrategy;
-            dataTable.Rows.Add(dataRow12);
-
-            dataRow13["Property"] = "labeledByFiltered";
-            dataRow13["Content"] = osmElement.properties.labeledByFiltered == null ? " " : osmElement.properties.labeledByFiltered.ToString();
-            dataTable.Rows.Add(dataRow13);
-
-            dataRow14["Property"] = "localizedControlTypeFiltered";
-            dataRow14["Content"] = osmElement.properties.localizedControlTypeFiltered.ToString();
-            dataTable.Rows.Add(dataRow14);
-
-            dataRow15["Property"] = "processIdFiltered";
-            dataRow15["Content"] = osmElement.properties.processIdFiltered.ToString();
-            dataTable.Rows.Add(dataRow15);
-
-            dataRow16["Property"] = "isKeyboardFocusableFiltered";
-            dataRow16["Content"] = osmElement.properties.isKeyboardFocusableFiltered == null ? " " : osmElement.properties.isKeyboardFocusableFiltered.ToString();
-            dataTable.Rows.Add(dataRow16);
-
-            dataRow17["Property"] = "isEnabledFiltered";
-            dataRow17["Content"] = osmElement.properties.isEnabledFiltered == null ? " " : osmElement.properties.isEnabledFiltered.ToString();
-            dataTable.Rows.Add(dataRow17);
-
-            dataRow18["Property"] = "isOffscreenFiltered";
-            dataRow18["Content"] = osmElement.properties.isOffscreenFiltered == null ? " " : osmElement.properties.isOffscreenFiltered.ToString();
-            dataTable.Rows.Add(dataRow18);
-
-            dataRow19["Property"] = "isContentElementFiltered";
-            dataRow19["Content"] = osmElement.properties.isContentElementFiltered == null ? " " : osmElement.properties.isContentElementFiltered.ToString();
-            dataTable.Rows.Add(dataRow19);
-
-            dataRow20["Property"] = "hasKeyboardFocusFiltered";
-            dataRow20["Content"] = osmElement.properties.hasKeyboardFocusFiltered == null ? " " : osmElement.properties.hasKeyboardFocusFiltered.ToString();
-            dataTable.Rows.Add(dataRow20);
-
-            dataRow21["Property"] = "isPasswordFiltered";
-            dataRow21["Content"] = osmElement.properties.isPasswordFiltered == null ? " " : osmElement.properties.isPasswordFiltered.ToString();
-            dataTable.Rows.Add(dataRow21);
-
-            dataRow22["Property"] = "isRequiredForFormFiltered";
-            dataRow22["Content"] = osmElement.properties.isRequiredForFormFiltered == null ? " " : osmElement.properties.isRequiredForFormFiltered.ToString();
-            dataTable.Rows.Add(dataRow22);
-
-            dataRow23["Property"] = "hWndFiltered";
-            dataRow23["Content"] = osmElement.properties.hWndFiltered == null ? " " : osmElement.properties.hWndFiltered.ToString();
-            dataTable.Rows.Add(dataRow23);
-
-            String ids = osmElement.properties.runtimeIDFiltered == null ? " " : String.Join(" : ", osmElement.properties.runtimeIDFiltered.Select(p => p.ToString()).ToArray());
-
-            dataRow24["Property"] = "runtimeIDFiltered";
-            dataRow24["Content"] = ids;
-            dataTable.Rows.Add(dataRow24);
-
-            dataRow25["Property"] = "boundingRectangleFiltered";
-            dataRow25["Content"] = osmElement.properties.boundingRectangleFiltered == null ? " " : osmElement.properties.boundingRectangleFiltered.ToString();
-            dataTable.Rows.Add(dataRow25);
-            dataTable.Rows.Add();
-
-            filteredTreeProp.ItemsSource = dataTable.DefaultView;
             System.Drawing.Rectangle rect = strategyMgr.getSpecifiedOperationSystem().getRect(osmElement);
             strategyMgr.getSpecifiedOperationSystem().paintRect(rect);
             NodeButton.CommandParameter = IdGenerated;
@@ -352,13 +203,15 @@ namespace GRANTApplication
                         grantTrees.filteredTree = tree;
                         filteredTreeOutput.Items.Clear();
                         root.Items.Clear();
+                        root.Header = "Filtered - Tree";
                         guiFunctions.createTreeForOutput(tree, ref root);
                         SaveButton.IsEnabled = true;
                         filteredTreeOutput.Items.Add(root);
                         NodeButton.IsEnabled = false;
-                        updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
+                        /* updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
                         ((TreeViewItem)filteredTreeOutput.Items[0]).IsSelected = true;
-                        ((TreeViewItem)filteredTreeOutput.Items[0]).IsExpanded = true;
+                        ((TreeViewItem)filteredTreeOutput.Items[0]).IsExpanded = true;*/
+                        clearTable(filteredTreeProp);
                     }
 
                     catch (Exception ex)
@@ -466,5 +319,44 @@ namespace GRANTApplication
             string myCellValue = rowView.Row[0].ToString();
             Console.WriteLine("AUSGABE: " + myCellValue);
         }
+
+        private void ExternalScreenreader_Click(object sender, RoutedEventArgs e)
+        {
+            OSMElements.OSMElement osm = strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent();
+            if (osm != null)
+            {
+                treeOperations.updateNodes.addNodeExternalScreenreaderInFilteredTree(osm);
+                filteredTreeOutput.Items.Clear();
+                root.Items.Clear();                
+              //  root.Header = "Filtered - Tree";
+                guiFunctions.createTreeForOutput(grantTrees.filteredTree, ref root);
+                SaveButton.IsEnabled = true;
+                filteredTreeOutput.Items.Add(root);
+                NodeButton.IsEnabled = false;
+
+                /* updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.IdGenerated);
+                 ((TreeViewItem)filteredTreeOutput.Items[0]).IsSelected = true;
+                 ((TreeViewItem)filteredTreeOutput.Items[0]).IsExpanded = true;*/
+                clearTable(filteredTreeProp);
+            }
+            else { System.Diagnostics.Debug.WriteLine("Can't find content from an external screenreader!"); }
+        }
+
+        private void clearTable(DataGrid table)
+        {
+            try
+            {
+                table.DataContext = new GuiFunctions.MyViewModel();
+                table.Items.Refresh();
+            }
+            catch (InvalidOperationException)
+            { // http://www.solutionsss.de/index.php/kontakt/blog/item/11-sorting-ist-waehrend-einer-addnew-oder-edititem-transaktion-nicht-zulaessig
+                table.CommitEdit();
+                table.CancelEdit();
+                table.DataContext = new GuiFunctions.MyViewModel();
+                table.Items.Refresh();
+            }
+        }
+
     }
 }

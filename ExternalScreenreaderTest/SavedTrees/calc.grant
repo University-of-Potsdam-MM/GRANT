@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GrantProjectObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <grantBrailleStrategyFullName>StrategyBrailleIO.BrailleDisplayStrategyBrailleIO</grantBrailleStrategyFullName>
+  <grantBrailleStrategyNamespace>StrategyBrailleIO</grantBrailleStrategyNamespace>
+  <grantDisplayStrategyFullName>StrategyBrailleIO.DisplayStrategyBrailleIoSimulator</grantDisplayStrategyFullName>
+  <grantDisplayStrategyNamespace>StrategyBrailleIO</grantDisplayStrategyNamespace>
+  <grantTreeStrategyFullName>StrategyGenericTree.Tree2Extended`1</grantTreeStrategyFullName>
+  <grantTreeStrategyNamespace>StrategyGenericTree</grantTreeStrategyNamespace>
+  <grantOperationSystemStrategyFullName>StrategyWindows.OperationSystemStrategyWindows</grantOperationSystemStrategyFullName>
+  <grantOperationSystemStrategyNamespace>StrategyWindows</grantOperationSystemStrategyNamespace>
+  <device>
+    <height>60</height>
+    <width>120</width>
+    <orientation>Front</orientation>
+    <name>BrailleDisSimulator</name>
+    <deviceClassTypeFullName>StrategyBrailleIO.DisplayStrategyBrailleIoSimulator</deviceClassTypeFullName>
+    <deviceClassTypeNamespace>StrategyBrailleIO</deviceClassTypeNamespace>
+    <id>0</id>
+  </device>
+</GrantProjectObject>
