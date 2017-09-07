@@ -185,7 +185,7 @@ namespace StrategyEvent
             osmEvent1.Id = treeOperations.generatedIds.generatedIdOsmEvent(osmEvent1);
 
             // alle Knoten zu einer Event ID
-            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Event = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEvent(osmEvent1.Id);
+            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Event = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEventId(osmEvent1.Id);
             Debug.WriteLine("\nAlle Verbindungen, die zu dem Event mit der Id {0} gehören:\n{1}", osmEvent1.Id, String.Join(", ", listOfConnections_Event));
             //// alle Knoten zu einer Knoten ID
             //List<OSMTreeEvenActionConnectorTriple> listOfConnections_Node = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByTree(nodeIdFilteredTree);

@@ -109,11 +109,11 @@ namespace StrategyEvent
             treeOperations.oSMNodeEventActionConnector.addOsmNodeEventActionConnection(nodeIdBrailleTree, osmEvent2.Id, new List<string>() { osmAction3.Id });
 
             // alle Knoten zu einer Event ID
-            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Event = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEvent(osmEvent1.Id);
+            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Event = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEventId(osmEvent1.Id);
             Debug.WriteLine("\nAlle Verbindungen, die zu dem Event mit der Id {0} gehören:\n{1}", osmEvent1.Id, String.Join(", ", listOfConnections_Event));
 
             //OSMAction test 
-            List<string> testActions2GivenEvent = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEvent(osmEvent1.Id)[0].ActionIds;
+            List<string> testActions2GivenEvent = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByEventId(osmEvent1.Id)[0].ActionIds;
 
             //wichtige abfrage der action, als objekt und davon des namens über die methdoe find https://stackoverflow.com/questions/9854917/how-can-i-find-a-specific-element-in-a-listt
             //für die weitere verarbeitung in getaction()
@@ -125,7 +125,7 @@ namespace StrategyEvent
             List<OSMTreeEvenActionConnectorTriple> listOfConnections_Node = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByTree(nodeIdFilteredTree);
             Debug.WriteLine("Alle Verbindungen, die zu dem Knoten mit der Id {0} gehören:\n{1}", nodeIdFilteredTree, String.Join(", ", listOfConnections_Node));
             // alle Knoten zu einer Actions ID
-            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Action = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByActrion(osmAction3.Id);
+            List<OSMTreeEvenActionConnectorTriple> listOfConnections_Action = treeOperations.oSMNodeEventActionConnector.getAllOSMNodeEventActionConnectionsByActionId(osmAction3.Id);
             Debug.WriteLine("Alle Verbindungen, die zu der Action mit der Id {0} gehören:\n{1}\n", nodeIdFilteredTree, String.Join(", ", listOfConnections_Action));
         }
 
