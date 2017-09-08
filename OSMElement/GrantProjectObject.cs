@@ -71,6 +71,13 @@ namespace OSMElements
         public String grantBrailleConverterFullName { get; set; }
         public String grantBrailleConverterNamespace { get; set; }
 
+        public String grantEventActionFullName { get; set; }
+        public String grantEventManagerFullName { get; set; }
+        public String grantEventProcessorFullName { get; set; }
+        public String grantEventActionNamespace { get; set; }
+        public String grantEventManagerNamespace { get; set; }
+        public String grantEventProcessorNamespace { get; set; }
+
         /// <summary>
         /// The choosen braille display
         /// </summary>

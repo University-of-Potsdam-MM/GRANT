@@ -772,6 +772,15 @@ namespace GRANTManager
             projectObject.grantExternalScreenreaderNamespace = strategyMgr.getSpecifiedExternalScreenreader() == null ? null : strategyMgr.getSpecifiedExternalScreenreader().GetType().Namespace;
             projectObject.grantBrailleConverterFullName = strategyMgr.getSpecifiedBrailleConverter() == null ? null : strategyMgr.getSpecifiedBrailleConverter().GetType().FullName;
             projectObject.grantBrailleConverterNamespace = strategyMgr.getSpecifiedBrailleConverter() == null ? null : strategyMgr.getSpecifiedBrailleConverter().GetType().Namespace;
+
+            projectObject.grantEventActionFullName = strategyMgr.getSpecifiedEventAction() == null ? null : strategyMgr.getSpecifiedEventAction().GetType().FullName;
+            projectObject.grantEventActionNamespace = strategyMgr.getSpecifiedEventAction() == null ? null : strategyMgr.getSpecifiedEventAction().GetType().Namespace;
+
+            projectObject.grantEventManagerFullName = strategyMgr.getSpecifiedEventManager() == null ? null : strategyMgr.getSpecifiedEventManager().GetType().FullName;
+            projectObject.grantEventManagerNamespace = strategyMgr.getSpecifiedEventManager() == null ? null : strategyMgr.getSpecifiedEventManager().GetType().Namespace;
+
+            projectObject.grantEventProcessorFullName = strategyMgr.getSpecifiedEventProcessor() == null ? null : strategyMgr.getSpecifiedEventProcessor().GetType().FullName;
+            projectObject.grantEventProcessorNamespace = strategyMgr.getSpecifiedEventProcessor() == null ? null : strategyMgr.getSpecifiedEventProcessor().GetType().Namespace;
             #endregion
             //creates a directory for the project
             try
@@ -891,7 +900,26 @@ namespace GRANTManager
             {
                 strategyMgr.setSpecifiedExternalScreenreader(grantProjectObject.grantExternalScreenreaderFullName + ", " + grantProjectObject.grantExternalScreenreaderNamespace);
             }
-                   #endregion
+            if (grantProjectObject.grantEventActionFullName != null && grantProjectObject.grantEventActionNamespace != null)
+            {
+                strategyMgr.setSpecifiedEventAction(grantProjectObject.grantEventActionFullName + ", " + grantProjectObject.grantEventActionNamespace);
+                strategyMgr.getSpecifiedEventAction().setGrantTrees(grantTrees);
+                strategyMgr.getSpecifiedEventAction().setTreeOperation(treeOperation);
+            }
+            if (grantProjectObject.grantEventManagerFullName != null && grantProjectObject.grantEventManagerNamespace != null)
+            {
+                strategyMgr.setSpecifiedEventManager(grantProjectObject.grantEventManagerFullName + ", " + grantProjectObject.grantEventManagerNamespace);
+                strategyMgr.getSpecifiedEventManager().setGrantTrees(grantTrees);
+                strategyMgr.getSpecifiedEventManager().setTreeOperations(treeOperation);
+            }
+            if (grantProjectObject.grantEventProcessorFullName != null && grantProjectObject.grantEventProcessorNamespace != null)
+            {
+                strategyMgr.setSpecifiedEventProcessor(grantProjectObject.grantEventProcessorFullName + ", " + grantProjectObject.grantEventProcessorNamespace);
+                strategyMgr.getSpecifiedEventProcessor().setGrantTrees(grantTrees);
+                strategyMgr.getSpecifiedEventProcessor().setTreeOperations(treeOperation);
+            }
+
+            #endregion
             // if necessary set the output device
             if (!grantProjectObject.device.Equals(new Device()))
             {

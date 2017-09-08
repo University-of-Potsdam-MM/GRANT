@@ -159,7 +159,7 @@ namespace GRANTManager
 
         /// <summary>
         /// </summary>
-        /// <param name="filterClassName">Gibt den Namen der der Klasse der Filterstrategie an (dieser muss in der Strategy.config vorhanden sein)</param>
+        /// <param name="eventManagerClassName"></param>
         public void setSpecifiedEventStrategy(String eventManagerClassName)
         {
             try
@@ -191,6 +191,7 @@ namespace GRANTManager
             return eventStrategy_PRISM;
         }
 
+        /// <summary>
         /// Setzt die gewählte Klasse für die Braille-Ausgabe
         /// </summary>
         /// <param name="brailleDisplayName"></param>
@@ -291,8 +292,7 @@ namespace GRANTManager
             try
             {
                 Type type = Type.GetType(operationSystemClassName);
-                specifiedOperationSystem = (IOperationSystemStrategy)Activator.CreateInstance(type, this);
-                //specifiedOperationSystem.setStrategyMgr(this); //damit beim Filter-Wechsel nicht der Setter vergessen wird           
+                specifiedOperationSystem = (IOperationSystemStrategy)Activator.CreateInstance(type, this);       
             }
             catch (InvalidCastException ic)
             {
