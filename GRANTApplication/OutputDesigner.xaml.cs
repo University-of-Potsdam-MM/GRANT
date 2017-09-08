@@ -248,67 +248,55 @@ namespace GRANTApplication
         /// <param name="e"></param>
         private void LoadProject_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            // dlg.FileName = "filteredTree_"; // Default file name
-            dlg.DefaultExt = ".grant"; // Default file extension
-            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
+            String fileName = guiFunctions.openFileDialog(".grant", "GRANT documents (.grant)|*.grant", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            if (fileName == null) { System.Windows.Forms.MessageBox.Show("The chosen screen reader doesn't exist!", "GRANT exception"); return; }
 
-            // Process open file dialog box results
-            if (result == true)
+
+            guiFunctions.loadGrantProject(fileName);
+            String[] pathSplit = System.Text.RegularExpressions.Regex.Split(fileName, "\\\\");
+            loadedProjectName.Content = "Loaded project name: ";
+            if (pathSplit != null)
             {
-                guiFunctions.loadGrantProject(dlg.FileName);
-
-                loadedProjectName.Content = "Loaded project name: " + dlg.SafeFileName.ToString();
-                loadedProjectName.ToolTip = dlg.FileName.ToString();
-                Object tree = grantTrees.filteredTree;
-                filteredTreeOutput.Items.Clear();
-                filteredRoot.Items.Clear();
-                filteredRoot.Header = "Filtered - Tree";
-                guiFunctions.createTreeForOutput(tree, ref filteredRoot);
-              //  filteredTreeProp.ItemsSource = "";
-                filteredTreeProp.Items.Refresh();
-                SaveButton.IsEnabled = true;
-                LoadTemplate.IsEnabled = true;
-                filteredTreeOutput.Items.Add(filteredRoot);
-                int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
-                comboBox2.SelectedIndex = var3;
-                listGuiElements();
-                int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
-                int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
-                createBrailleDisplay(dWidth, dHeight, brailleDisplaySimul);
-                AddNodeButton.IsEnabled = true;
-                if(grantTrees.brailleTree != null)
-                {
-                    #region Braille-Baum Darstellung  (Kopie von Template laden => Funktion)
-                    brailleTreeOutput.Items.Clear();
-                    brailleRoot.Items.Clear();
-                    brailleRoot.Header = "Braille-Tree";
-                    guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false); 
-                    SaveButton.IsEnabled = true;
-                    brailleTreeOutput.Items.Add(brailleRoot);
-                    brailleDisplaySimul.Items.Refresh();
-                    
-                    #endregion
-                }else
-                {
-                    brailleTreeOutput.Items.Clear();
-                    brailleRoot.Items.Clear();
-                }
-                clearTable(brailleTreeProp);
-                clearTable(filteredTreeProp);
-                // brailleTreeProp.DataContext = data;
-                // brailleTreeProp.ItemsSource = "";
-                //  brailleTreeProp.Items.Refresh();
-                //   brailleTreeProp.DataContext = "";
-                //   brailleTreeProp.Items.Refresh();
-                /////oder grid
-
-                //     grid.ItemsSource = "";
-                //     grid.Items.Refresh();
+                loadedProjectName.Content  += pathSplit[pathSplit.Count() -1];
             }
+            loadedProjectName.ToolTip = fileName;
+            Object tree = grantTrees.filteredTree;
+            filteredTreeOutput.Items.Clear();
+            filteredRoot.Items.Clear();
+            filteredRoot.Header = "Filtered - Tree";
+            guiFunctions.createTreeForOutput(tree, ref filteredRoot);
+            //  filteredTreeProp.ItemsSource = "";
+            filteredTreeProp.Items.Refresh();
+            SaveButton.IsEnabled = true;
+            LoadTemplate.IsEnabled = true;
+            filteredTreeOutput.Items.Add(filteredRoot);
+            int var3 = comboBox2.Items.IndexOf(strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().ToString());
+            comboBox2.SelectedIndex = var3;
+            listGuiElements();
+            int dWidth = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().width;
+            int dHeight = strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice().height;
+            createBrailleDisplay(dWidth, dHeight, brailleDisplaySimul);
+            AddNodeButton.IsEnabled = true;
+            if (grantTrees.brailleTree != null)
+            {
+                #region Braille-Baum Darstellung  (Kopie von Template laden => Funktion)
+                brailleTreeOutput.Items.Clear();
+                brailleRoot.Items.Clear();
+                brailleRoot.Header = "Braille-Tree";
+                guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false);
+                SaveButton.IsEnabled = true;
+                brailleTreeOutput.Items.Add(brailleRoot);
+                brailleDisplaySimul.Items.Refresh();
+
+                #endregion
+            }
+            else
+            {
+                brailleTreeOutput.Items.Clear();
+                brailleRoot.Items.Clear();
+            }
+            GuiFunctions.clearTable(brailleTreeProp);
+            GuiFunctions.clearTable(filteredTreeProp);
         }
 
         /// <summary>
@@ -651,7 +639,7 @@ namespace GRANTApplication
                     updateFilteredTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                 }else
                 {
-                    clearTable(filteredTreeProp);
+                   GuiFunctions.clearTable(filteredTreeProp);
                 }
             }
         }
@@ -1105,7 +1093,7 @@ namespace GRANTApplication
                     }
                     else
                     {
-                        clearTable(filteredTreeProp);
+                        GuiFunctions.clearTable(filteredTreeProp);
                         if (((TreeViewItem)filteredTreeOutput.SelectedItem) != null)
                         {
                             ((TreeViewItem)filteredTreeOutput.SelectedItem).IsSelected = false;
@@ -1117,8 +1105,8 @@ namespace GRANTApplication
                     }
                 }else
                 {
-                    clearTable(brailleTreeProp);
-                    clearTable(filteredTreeProp);
+                    GuiFunctions.clearTable(brailleTreeProp);
+                    GuiFunctions.clearTable(filteredTreeProp);
                 }
             }
         }
@@ -1244,21 +1232,7 @@ namespace GRANTApplication
 
         }
 
-        private void clearTable(DataGrid table)
-        {
-            try
-            {
-                table.DataContext = new GuiFunctions.MyViewModel();
-                table.Items.Refresh();
-            }
-            catch (InvalidOperationException)
-            { // http://www.solutionsss.de/index.php/kontakt/blog/item/11-sorting-ist-waehrend-einer-addnew-oder-edititem-transaktion-nicht-zulaessig
-                table.CommitEdit();
-                table.CancelEdit();
-                table.DataContext = new GuiFunctions.MyViewModel();
-                table.Items.Refresh();
-            }
-        }
+
 
         /// <summary>
         /// Reload the TreeView of the filtered tree and the Braille tree
@@ -1274,7 +1248,7 @@ namespace GRANTApplication
                 filteredRoot.Items.Clear();
                 guiFunctions.createTreeForOutput(grantTrees.filteredTree, ref filteredRoot, true);
                 filteredTreeOutput.Items.Add(filteredRoot);
-                clearTable(filteredTreeProp);
+                GuiFunctions.clearTable(filteredTreeProp);
             }
             #endregion
 
@@ -1287,7 +1261,7 @@ namespace GRANTApplication
                 guiFunctions.createTreeForOutput(grantTrees.brailleTree, ref brailleRoot, false);
                 brailleTreeOutput.Items.Add(brailleRoot);
                 brailleDisplaySimul.Items.Refresh();
-                clearTable(brailleTreeProp);
+                GuiFunctions.clearTable(brailleTreeProp);
             }
             #endregion
             if (markedFilteredNodeId != null && !markedFilteredNodeId.Equals(""))
@@ -1308,64 +1282,6 @@ namespace GRANTApplication
             Console.WriteLine("AUSGABE: " + myCellValue);
         }
 
-  /*      private void brailleTreeProp_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            DataGrid grid = (DataGrid)sender;
-
-            int columns = grid.CurrentCell.Column.DisplayIndex;
-            int columns1 = columns - 1;
-
-            FrameworkElement element_2 = grid.Columns[columns].GetCellContent(e.Row);
-            var text2 = ((TextBox)element_2).Text;
-
-            FrameworkElement element_3 = grid.Columns[columns1].GetCellContent(e.Row);
-            var text3 = ((TextBox)element_3).Text;
-
-            Console.WriteLine(" text3:" + text3);
-            Console.WriteLine(" ID:" + braillePropRoot.Items.First(p => p.Values.Name.Equals("IdGenerated")).Values.currentValue);
-            Console.WriteLine(" text2:" + text2);
-
-
-            //treeOperations.updateNodes.setBrailleTreeProperty(globalID, text2, el.Text);
-            //updateBrailleTable(globalID);
-            //screenViewIteration(globalID);
-
-            e.Row.HeaderTemplate = (DataTemplate)grid.FindResource("IdGenerated");
-            e.Row.UpdateLayout();
-        }*/
-
-            /*
-        private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-            DataGrid grid = (DataGrid)sender;
-
-            int columns = grid.CurrentCell.Column.DisplayIndex;
-            int columns1 = columns - 1;
-
-            //FrameworkElement element_2 = grid.Columns[columns].GetCellContent(e.Row);
-            //var text2 = ((TextBox)element_2).Text;
-
-
-
-            var _emp = e.Row.Item;
-            Console.WriteLine(" emp:" + _emp);
-
-            //FrameworkElement element_3 = grid.Columns[columns1].GetCellContent(e.Row);
-            //var text3 = ((TextBox)element_3).Text;
-            //var text2 = element_3 as TextBox;
-
-
-            //      Console.WriteLine(" text3:" + text3);
-            //      Console.WriteLine(" ID:" + globalID);
-            //      Console.WriteLine(" text2:" + text2);
-                  
-            //treeOperations.updateNodes.setBrailleTreeProperty(globalID, text2, el.Text);
-            //updateBrailleTable(globalID);
-            //screenViewIteration(globalID);
-
-            e.Row.HeaderTemplate = (DataTemplate)grid.FindResource("IdGenerated");
-            e.Row.UpdateLayout();
-        } */
 
         private void AddNode_Click(object sender, RoutedEventArgs e)
         {
@@ -1418,7 +1334,7 @@ namespace GRANTApplication
                    TreeViewItem itemFiltered = getMenuItemById(filteredTreeOutput, ((GuiFunctions.MenuItem)selectedItem_filteredTree.Header).IdGenerated);
                     itemFiltered.IsSelected = false;
                 }
-                clearTable(filteredTreeProp);
+                GuiFunctions.clearTable(filteredTreeProp);
             }
             TreeViewItem selectedItem_brailleTree = brailleTreeOutput.SelectedItem as TreeViewItem;
             if (selectedItem_brailleTree != null)
@@ -1428,124 +1344,10 @@ namespace GRANTApplication
                     TreeViewItem itemBraille = getMenuItemById(brailleTreeOutput, ((GuiFunctions.MenuItem)selectedItem_brailleTree.Header).IdGenerated);
                     itemBraille.IsSelected = false;
                 }
-                clearTable(brailleTreeProp);
+                GuiFunctions.clearTable(brailleTreeProp);
             }
         }
 
-
-        /*
-        void brailleTreeProp_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-                {
-                    DataGrid grid = (DataGrid)sender;
-                    Console.WriteLine("Stufe 1:");
-                    if (e.EditAction == DataGridEditAction.Commit)
-                    {
-                        Console.WriteLine("Stufe 2:");
-                        var column = e.Column as DataGridBoundColumn;
-                        if (column != null)
-                        {
-                            Console.WriteLine("Stufe 3:");
-                            var bindingPath = (column.Binding as Binding).Path.Path;
-                           // if (bindingPath == "Value_Titel")
-                            //{
-
-                                int rowIndex = e.Row.GetIndex();
-                            int rowIndex1 = e.Row.GetIndex()-1;
-                            var el = e.EditingElement as TextBox;
-
-                            var dataGridCellInfo = new DataGridCellInfo(grid.Items[rowIndex1], grid.Columns[0]);
-                            Console.WriteLine(" cellinfo:" + dataGridCellInfo);
-
-
-
-                            DataGridRow row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(rowIndex1);
-                            Console.WriteLine("row" + row);
-
-
-                            //  var currentRowIndex = grid.Items.IndexOf(grid.CurrentItem);
-
-                            Console.WriteLine(" text:" + el.Text);
-                            Console.WriteLine(" ID:" + globalID);
-
-                            int ColumnIndex = e.Column.DisplayIndex;
-                               // Double amount = Double.Parse(((TextBox)e.EditingElement).Text);
-
-                                Console.WriteLine("ColumnIndex:" + ColumnIndex);
-                                Console.WriteLine("AUSGABE: " + DataGridEditingUnit.Row.ToString());
-
-
-
-
-                            //   this.braillePropRoot.Items.Where
-
-                            //  int colIndex = brailleTreeProp.Columns.IndexOf(brailleTreeProp.Columns[IdGenerated]);
-                            //  DataRow dtr = ((System.Data.DataRowView)(DataGrid1.SelectedValue)).Row;
-
-                            //string strEID = _DataGrid.SelectedCells[0].Item.ToString();
-                            // this.braillePropRoot.ColumnNames.Select()
-
-                            // rowIndex has the row index
-                            // bindingPath has the column's binding
-                            // el.Text has the new, user-entered value
-                            //}
-                        }
-                    }
-                }
-
-                private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
-                {
-                    DataGrid dataGrid = sender as DataGrid;
-                    DataRowView rowView = dataGrid.SelectedItem as DataRowView;
-                    string myCellValue = rowView.Row[0].ToString();
-                    Console.WriteLine("AUSGABE: " + myCellValue);
-                }
-
-                private void brailleTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
-                {
-                    DataGrid dataGrid = sender as DataGrid;
-                    DataRowView rowView = dataGrid.SelectedItem as DataRowView;
-                    string myCellValue = rowView.Row[0].ToString();
-                    Console.WriteLine("AUSGABE: " + myCellValue);
-                }
-
-
-
-                private bool isManualEditCommit;
-                private void brailleTreeProp_CellEditEnding_1(object sender, DataGridCellEditEndingEventArgs e)
-                {
-                    if (!isManualEditCommit)
-                    {
-                        isManualEditCommit = true;
-                        DataGrid grid = (DataGrid)sender;
-                        grid.CommitEdit(DataGridEditingUnit.Row, true);
-                        isManualEditCommit = false;
-
-
-
-
-
-                        Console.WriteLine("AUSGABE: " + DataGridEditingUnit.Row.ToString());
-
-                    }
-                }
-
-
-
-                */
-
-
-
-
-
-        /*
-private void brailleTreeProp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-{
-if(e.EditAction == DataGridEditAction.Commit)
-{
-
-
-}
-}*/
     }
 }
 

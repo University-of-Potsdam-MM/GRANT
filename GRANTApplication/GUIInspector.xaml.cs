@@ -141,7 +141,7 @@ namespace GRANTApplication
                 }
                 else
                 {
-                    clearTable(filteredTreeProp);
+                    GuiFunctions.clearTable(filteredTreeProp);
                 }
             //Methode MenuItem übergeben - tabelle
             }
@@ -215,7 +215,7 @@ namespace GRANTApplication
                         /* updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
                         ((TreeViewItem)filteredTreeOutput.Items[0]).IsSelected = true;
                         ((TreeViewItem)filteredTreeOutput.Items[0]).IsExpanded = true;*/
-                        clearTable(filteredTreeProp);
+                        GuiFunctions.clearTable(filteredTreeProp);
                     }
 
                     catch (Exception ex)
@@ -273,27 +273,21 @@ namespace GRANTApplication
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.DefaultExt = ".grant"; // Default file extension
-            dlg.Filter = "GRANT documents (.grant)|*.grant"; // Filter files by extension
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            // Show open file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
-            // Process open file dialog box results
-            if (result == true)
-            {
-                guiFunctions.loadGrantProject(dlg.FileName);
-                Object tree = grantTrees.filteredTree;
-                filteredTreeOutput.Items.Clear();
-                root.Items.Clear();
-                root.Header = "Filtered - Tree - Updated";
-                guiFunctions.createTreeForOutput(tree, ref root); filteredTreeOutput.Items.Add(root);
-                NodeButton.IsEnabled = false;
-                updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
-                SaveButton.IsEnabled = true;
-            }
+            String fileName = guiFunctions.openFileDialog(".grant", "GRANT documents (.grant)|*.grant", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            if (fileName == null) { System.Windows.Forms.MessageBox.Show("The chosen screen reader doesn't exist!", "GRANT exception"); return; }
+
+            guiFunctions.loadGrantProject(fileName);
+            Object tree = grantTrees.filteredTree;
+            filteredTreeOutput.Items.Clear();
+            root.Items.Clear();
+            root.Header = "Filtered - Tree - Updated";
+            guiFunctions.createTreeForOutput(tree, ref root); filteredTreeOutput.Items.Add(root);
+            NodeButton.IsEnabled = false;
+            updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(tree)).properties.IdGenerated);
+            SaveButton.IsEnabled = true;
+
         }
-        
+
         private void SaveStartButton_Click(object sender, RoutedEventArgs e)
         {
             if (outputDesignerWindowOpen == false)
@@ -341,26 +335,9 @@ namespace GRANTApplication
                 /* updatePropertiesTable(strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(grantTrees.filteredTree)).properties.IdGenerated);
                  ((TreeViewItem)filteredTreeOutput.Items[0]).IsSelected = true;
                  ((TreeViewItem)filteredTreeOutput.Items[0]).IsExpanded = true;*/
-                clearTable(filteredTreeProp);
+                GuiFunctions.clearTable(filteredTreeProp);
             }
             else { System.Diagnostics.Debug.WriteLine("Can't find content from an external screenreader!"); }
         }
-
-        private void clearTable(DataGrid table)
-        {
-            try
-            {
-                table.DataContext = new GuiFunctions.MyViewModel();
-                table.Items.Refresh();
-            }
-            catch (InvalidOperationException)
-            { // http://www.solutionsss.de/index.php/kontakt/blog/item/11-sorting-ist-waehrend-einer-addnew-oder-edititem-transaktion-nicht-zulaessig
-                table.CommitEdit();
-                table.CancelEdit();
-                table.DataContext = new GuiFunctions.MyViewModel();
-                table.Items.Refresh();
-            }
-        }
-
     }
 }

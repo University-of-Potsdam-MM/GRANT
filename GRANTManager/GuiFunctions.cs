@@ -1603,5 +1603,25 @@ namespace GRANTManager
                 return dlg.FileName;
             }else { return null; }
         }
+
+        /// <summary>
+        /// Clears all properties in the given table
+        /// </summary>
+        /// <param name="table">name of the table</param>
+        public static void clearTable(DataGrid table)
+        {
+            try
+            {
+                table.DataContext = new GuiFunctions.MyViewModel();
+                table.Items.Refresh();
+            }
+            catch (InvalidOperationException)
+            { // http://www.solutionsss.de/index.php/kontakt/blog/item/11-sorting-ist-waehrend-einer-addnew-oder-edititem-transaktion-nicht-zulaessig
+                table.CommitEdit();
+                table.CancelEdit();
+                table.DataContext = new GuiFunctions.MyViewModel();
+                table.Items.Refresh();
+            }
+        }
     }
 }
