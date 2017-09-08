@@ -767,6 +767,11 @@ namespace GRANTManager
             projectObject.grantOperationSystemStrategyFullName = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().FullName;
             projectObject.grantOperationSystemStrategyNamespace = strategyMgr.getSpecifiedOperationSystem() == null ? null : strategyMgr.getSpecifiedOperationSystem().GetType().Namespace;
             projectObject.device = strategyMgr.getSpecifiedDisplayStrategy() == null ? default(Device) : strategyMgr.getSpecifiedDisplayStrategy().getActiveDevice();
+
+            projectObject.grantExternalScreenreaderFullName = strategyMgr.getSpecifiedExternalScreenreader() == null ? null : strategyMgr.getSpecifiedExternalScreenreader().GetType().FullName;
+            projectObject.grantExternalScreenreaderNamespace = strategyMgr.getSpecifiedExternalScreenreader() == null ? null : strategyMgr.getSpecifiedExternalScreenreader().GetType().Namespace;
+            projectObject.grantBrailleConverterFullName = strategyMgr.getSpecifiedBrailleConverter() == null ? null : strategyMgr.getSpecifiedBrailleConverter().GetType().FullName;
+            projectObject.grantBrailleConverterNamespace = strategyMgr.getSpecifiedBrailleConverter() == null ? null : strategyMgr.getSpecifiedBrailleConverter().GetType().Namespace;
             #endregion
             //creates a directory for the project
             try
@@ -878,7 +883,15 @@ namespace GRANTManager
             {
                 strategyMgr.setSpecifiedOperationSystem(grantProjectObject.grantOperationSystemStrategyFullName + ", " + grantProjectObject.grantOperationSystemStrategyNamespace);
             }
-            #endregion
+            if( grantProjectObject.grantBrailleConverterFullName != null && grantProjectObject.grantBrailleConverterNamespace != null)
+            {
+                strategyMgr.setSpecifiedBrailleConverter(grantProjectObject.grantBrailleConverterFullName + ", " + grantProjectObject.grantBrailleConverterNamespace);
+            }
+            if(grantProjectObject.grantExternalScreenreaderFullName != null && grantProjectObject.grantExternalScreenreaderNamespace != null)
+            {
+                strategyMgr.setSpecifiedExternalScreenreader(grantProjectObject.grantExternalScreenreaderFullName + ", " + grantProjectObject.grantExternalScreenreaderNamespace);
+            }
+                   #endregion
             // if necessary set the output device
             if (!grantProjectObject.device.Equals(new Device()))
             {

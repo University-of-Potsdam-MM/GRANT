@@ -65,6 +65,12 @@ namespace OSMElements
         /// </summary>
         public String grantOperationSystemStrategyNamespace { get; set; }
 
+        public String grantExternalScreenreaderFullName { get; set; }
+        public String grantExternalScreenreaderNamespace { get; set; }
+
+        public String grantBrailleConverterFullName { get; set; }
+        public String grantBrailleConverterNamespace { get; set; }
+
         /// <summary>
         /// The choosen braille display
         /// </summary>

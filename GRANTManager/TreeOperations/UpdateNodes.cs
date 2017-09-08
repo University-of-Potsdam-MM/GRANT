@@ -19,6 +19,9 @@ namespace GRANTManager.TreeOperations
         private GeneratedGrantTrees grantTrees;
         private TreeOperation treeOperation;
 
+
+        private String externalScreenreaderControlltype = "external screenreader";
+
         public UpdateNodes(StrategyManager strategyMgr, GeneratedGrantTrees grantTrees, TreeOperation treeOperation)
         {
             this.strategyMgr = strategyMgr;
@@ -34,8 +37,8 @@ namespace GRANTManager.TreeOperations
         public void addNodeExternalScreenreaderInFilteredTree(OSMElement osm)
         {
             if(osm == null || osm.Equals(new OSMElement()) || grantTrees.filteredTree == null || strategyMgr.getSpecifiedExternalScreenreader() == null) { return; }
-            // TODO: ggf. prüfen, ob der Knoten schon existiert, dann nur aktualisieren!
-            if (osm.properties.grantFilterStrategy != null && isFilteredWithExternalScreenreader(osm.properties.grantFilterStrategy) && grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree))
+
+            if (osm.properties.grantFilterStrategy != null && isFilteredWithExternalScreenreader(osm.properties) && grantTrees.filteredTree != null && strategyMgr.getSpecifiedTree().HasChild(grantTrees.filteredTree))
             {
                 if (treeOperation.searchNodes.getFilteredTreeOsmElementById(osm.properties.IdGenerated).Equals(new OSMElements.OSMElement()))
                 {
@@ -55,17 +58,48 @@ namespace GRANTManager.TreeOperations
         /// <param name="osm">the OSMElement</param>
         public void updateNodeExternalScreenreaderInFilteredTree(OSMElement osm)
         {
-            if (isFilteredWithExternalScreenreader(osm.properties.grantFilterStrategy))
+            if (isFilteredWithExternalScreenreader(osm.properties))
             {
                 changePropertiesOfFilteredNode(osm.properties);
             }
         }
 
-        internal Boolean isFilteredWithExternalScreenreader(String filterstrategy)
+        /// <summary>
+        /// Updates the node of an external screenreader in the filtered tree
+        /// </summary>
+        public void updateNodeExternalScreenreaderInFilteredTree()
         {
-            Settings settings = new Settings();
-            return settings.getPossibleExternalScreenreaders().Exists(p => p.userName.Equals(filterstrategy));
+            updateNodeExternalScreenreaderInFilteredTree( strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent());
         }
+
+        internal Boolean isFilteredWithExternalScreenreader(GeneralProperties properties)
+        {
+            if(properties == null || properties.Equals(new GeneralProperties()) || properties.controlTypeFiltered == null || properties.grantFilterStrategy == null) { return false; }
+            Settings settings = new Settings();
+            Boolean result = properties.controlTypeFiltered.Equals(externalScreenreaderControlltype) &&  settings.getPossibleExternalScreenreaders().Exists(p => p.userName.Equals(properties.grantFilterStrategy));
+            return result;
+        }
+
+        private void updateNodeExternalScreenreaderAfterReloadInFilteredTree(Object tree)
+        {
+            if(strategyMgr.getSpecifiedExternalScreenreader() == null) { return; }
+            //  the node of the external screenreader is the 2. node after root
+            if (strategyMgr.getSpecifiedTree().IsRoot(tree))
+            {
+                if(strategyMgr.getSpecifiedTree().DirectChildCount(tree) == 2)
+                {
+                    // thery are a external screenreader node?!
+                    OSMElement osmExternalScreenreader = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().LastChild(tree));
+                    if ( isFilteredWithExternalScreenreader(osmExternalScreenreader.properties))
+                    {
+                        //updateNodeExternalScreenreaderInFilteredTree(strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent());
+                        // in the currend reloaded and (re)filtered tree the node for the external screenreader dosn't exist
+                        addNodeExternalScreenreaderInFilteredTree(strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent());
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Filters a node with the current filter strategy,
@@ -82,14 +116,22 @@ namespace GRANTManager.TreeOperations
 
         /// <summary>
         /// filtered a subtree and updates the tree object in the <c>GrantProjectObject</c> object;
-        /// it will be filtering with the current selectet filter library
+        /// it will be filtering with the current selectet filter library OR if a node wich was filtered with an external schreenreader was selected, this node will be updated
         /// </summary>
         /// <param name="idGeneratedOfFirstNodeOfSubtree">id of the node of the subtree to be updated</param>
         public void filterSubtreeWithCurrentFilterStrtegy(String idGeneratedOfFirstNodeOfSubtree) // filterSubtreeWithCurrentFilterStrtegy
         {
             OSMElements.OSMElement osmElementOfFirstNodeOfSubtree = treeOperation.searchNodes.getFilteredTreeOsmElementById(idGeneratedOfFirstNodeOfSubtree);
-            Object subtree = strategyMgr.getSpecifiedFilter().filtering(idGeneratedOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
-            String idParent = treeOperation.updateNodes.changeSubtreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
+            // checks wether an external screenreader will be use for filtering
+            if (isFilteredWithExternalScreenreader(osmElementOfFirstNodeOfSubtree.properties))
+            {
+                updateNodeExternalScreenreaderInFilteredTree();
+            }
+            else
+            {
+                Object subtree = strategyMgr.getSpecifiedFilter().filtering(idGeneratedOfFirstNodeOfSubtree, TreeScopeEnum.Subtree);
+                String idParent = treeOperation.updateNodes.changeSubtreeOfFilteredTree(subtree, idGeneratedOfFirstNodeOfSubtree);
+            }
         }
 
         /// <summary>
@@ -109,6 +151,9 @@ namespace GRANTManager.TreeOperations
             String mainFS_userName = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeLoaded)).properties.grantFilterStrategy;
             List<String> fsChildren = strategyMgr.getSpecifiedTree().GetData(strategyMgr.getSpecifiedTree().Child(treeLoaded)).properties.grantFilterStrategiesChildren;
             filterChild(treeLoaded, mainFS_userName, fsChildren);
+
+            updateNodeExternalScreenreaderAfterReloadInFilteredTree(treeLoaded);
+
         }
 
         /// <summary>
@@ -118,7 +163,7 @@ namespace GRANTManager.TreeOperations
         /// <param name="treescope">the scope for filtering</param>
         public void filteredTree(String idGenerated, TreeScopeEnum treescope)
         {
-            if(grantTrees.filteredTree == null) { return; }
+            if(grantTrees.filteredTree == null || idGenerated == null) { return; }
             if (TreeScopeEnum.Application.Equals(treescope))
             {
                 //in this case the generatedId will be ignore and the hwnd of the first noe fil be used for filtering
@@ -185,6 +230,11 @@ namespace GRANTManager.TreeOperations
             bool changeFilter = false;
             OSMElements.OSMElement osmOfNode = treeOperation.searchNodes.getFilteredTreeOsmElementById(generatedId).DeepCopy();
             if (osmOfNode.Equals(new OSMElements.OSMElement())) { return; }
+            // checks wether an external screenreader will be use for filtering
+            if(isFilteredWithExternalScreenreader(osmOfNode.properties) )
+            {
+                updateNodeExternalScreenreaderInFilteredTree();
+            }
             String mainFilterstrategy = treeOperation.searchNodes.getMainFilterstrategyOfTree();
             String nodeFilterstrategy = treeOperation.searchNodes.getFilteredTreeOsmElementById(generatedId).properties.grantFilterStrategy;
             // if necessary changes the filter strategy
@@ -411,7 +461,7 @@ namespace GRANTManager.TreeOperations
             }
             if (osmParent.properties.grantFilterStrategiesChildren.Count == 1 && osmParent.properties.grantFilterStrategiesChildren[0].Equals(fs_parent))
             {
-                // all siblings should be filteredt with the same filterstrategy like his parent node --> :)
+                // all siblings should be filtered with the same filterstrategy like his parent node --> :)
             }
             else
             {

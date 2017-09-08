@@ -24,8 +24,7 @@
             <StackPanel VerticalAlignment="Top" Margin="0,0,0,0">
                 <Menu Width="Auto" Height="20" Margin="0,0,0,0" >
                     <MenuItem Header="_File">
-                        <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140"/>
-                        <!-- Click="AppExit_Click"-->
+                        <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140" Click="ExitApp" />
                     </MenuItem>
                     <MenuItem Header="_Tools">
                         <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>

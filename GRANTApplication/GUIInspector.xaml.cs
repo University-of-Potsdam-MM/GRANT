@@ -307,17 +307,6 @@ namespace GRANTApplication
             outputDesignerWindowOpen = false;
         }
 
-        private void filteredTreeProp_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Überflüssig ?!
-            Console.WriteLine("HIER!!!!!!xxx: ");
-            DataGrid dataGrid = sender as DataGrid;
-            DataRowView rowView = dataGrid.SelectedItem as DataRowView;
-            if(rowView == null) { return; }
-            string myCellValue = rowView.Row[0].ToString();
-            Console.WriteLine("AUSGABE: " + myCellValue);
-        }
-
         private void ExternalScreenreader_Click(object sender, RoutedEventArgs e)
         {
             OSMElements.OSMElement osm = strategyMgr.getSpecifiedExternalScreenreader().getScreenreaderContent();
@@ -338,6 +327,27 @@ namespace GRANTApplication
                 GuiFunctions.clearTable(filteredTreeProp);
             }
             else { System.Diagnostics.Debug.WriteLine("Can't find content from an external screenreader!"); }
+        }
+
+        private void ExitApp(object sender, RoutedEventArgs e)
+        {
+            if (grantTrees.filteredTree != null)
+            {
+                System.Windows.MessageBoxResult dialogResult = MessageBox.Show("Do you want to save the project before closing?", this.Title + " Close", MessageBoxButton.YesNoCancel);
+                switch (dialogResult)
+                {
+                    case MessageBoxResult.Cancel:
+                        break;
+                    case MessageBoxResult.No:
+                        this.Close();
+                        break;
+                    case MessageBoxResult.Yes:
+                        SaveButton_Click(sender, e);
+                        this.Close();
+                        break;
+                }
+            }
+            this.Close();
         }
     }
 }

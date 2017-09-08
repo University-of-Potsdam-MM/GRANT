@@ -1348,6 +1348,27 @@ namespace GRANTApplication
             }
         }
 
+        private void ExitApp(object sender, RoutedEventArgs e)
+        {
+            if (grantTrees.filteredTree != null)
+            {
+                System.Windows.MessageBoxResult dialogResult = MessageBox.Show("Do you want to save the project before closing?", this.Title + " Close", MessageBoxButton.YesNoCancel);
+                switch (dialogResult)
+                {
+                    case MessageBoxResult.Cancel:
+                        break;
+                    case MessageBoxResult.No:
+                        this.Close();
+                        break;
+                    case MessageBoxResult.Yes:
+                        SaveProject_Click(sender, e);
+                        this.Close();
+                        break;
+                }
+            }
+            this.Close();
+        }
+
     }
 }
 
