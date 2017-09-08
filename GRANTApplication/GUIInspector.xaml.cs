@@ -139,6 +139,10 @@ namespace GRANTApplication
                 {
                     updatePropertiesTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
                 }
+                else
+                {
+                    clearTable(filteredTreeProp);
+                }
             //Methode MenuItem übergeben - tabelle
             }
             else if (tree.SelectedItem is string)

@@ -649,6 +649,9 @@ namespace GRANTApplication
                     if (var1 < 0) { var1 = listBox_GuiElements.Items.IndexOf("Text"); }
                     listBox_GuiElements.SelectedIndex = var1;
                     updateFilteredTable(((GuiFunctions.MenuItem)item.Header).IdGenerated);
+                }else
+                {
+                    clearTable(filteredTreeProp);
                 }
             }
         }
