@@ -692,7 +692,7 @@ namespace StrategyBrailleIO
                 }
                 IBrailleIOContentRenderer renderer = getRenderer(uiElementType);
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetOtherContent());
-                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.RenderMatrix(tmpView, matrix);
                 //setVisibleScreen(osmElementFilteredNode.brailleRepresentation.screenName);
             }
             else if(uiElementType.Equals(uiElementeTypesBrailleIoEnum.Text.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -702,7 +702,7 @@ namespace StrategyBrailleIO
                     matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetText());
                     BrailleIOViewMatixRenderer vmr = new BrailleIO.Renderer.BrailleIOViewMatixRenderer();
                     matrix = vmr.RenderMatrix(tmpView, matrix);
-                    matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                    matrix = BrailleIOBorderRenderer.RenderMatrix(tmpView, matrix);
                 }
                 else
                 {
@@ -712,12 +712,12 @@ namespace StrategyBrailleIO
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Matrix.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetMatrix());
-                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.RenderMatrix(tmpView, matrix);
             }
             else if (uiElementType.Equals(uiElementeTypesBrailleIoEnum.Screenshot.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 matrix = tmpView.ContentRender.RenderMatrix(tmpView, tmpView.GetImage());
-                matrix = BrailleIOBorderRenderer.renderMatrix(tmpView, matrix);
+                matrix = BrailleIOBorderRenderer.RenderMatrix(tmpView, matrix);
             }
             else { throw new Exception("It can't found a matching renderer!"); }
 

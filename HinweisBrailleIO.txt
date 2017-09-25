@@ -1,3 +1,14 @@
-BrailleIO muss aus dem git der TU-Dresden (https://github.com/TUD-INF-IAI-MCI/BrailleIO/) hinzugefügt werden!
+Damit GRANT ausgeführt werden kann, muss BrailleIO muss aus dem git der TU-Dresden (https://github.com/TUD-INF-IAI-MCI/BrailleIO/) heruntergeladen und verlinkt werden werden!
+Verlinkungen müssen dabei zu den folgenden Projekten gesetzt werden:
+- BrailleIO
+- BrailleIO_Interfaces
+- BrailleIO_ShowOff
+- BrailleRenderer
+- GestureRecognition
 
-Damit auch das BrailleDis angesprochen werden kann müssen die Projekte HBBrailleDisV2 und BrailleIOBraillDisAdapter auch hinzugefügt werden. Diese sind nicht im offiziellen git der TU Dresden enthalten sondern befinden sich bei BoxUP im Ordner BrailleDis.
+Damit auch das BrailleDis über BrailleIO angesprochen werden kann, müssen die Projekte HBBrailleDisV2 und BrailleIOBraillDisAdapter auch hinzugefügt werden. Diese sind nicht im offiziellen git der TU Dresden enthalten! Anschließend müssen die folgenden Verlinkungen in Visual Studio bei BrailleIOBraillDisAdapter gesetzt werden.
+- BrailleIO
+- BrailleIO_Interfaces
+- HBBrailleDisV2
+
+Alternativ kann eine beliebige Stiftplatt auch mithilfe des Treibers für MVBD (BrailleIOBraillDisAdapterMVBD -- im git enthalten) angesprochen werden.

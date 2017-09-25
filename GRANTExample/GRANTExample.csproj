@@ -132,11 +132,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BrailleIO\BrailleDis\BrailleIOBraillDisAdapter\BrailleIOBraillDisAdapter.csproj">
-      <Project>{4306fcd9-4dd1-42ce-b449-07abab7fd8f7}</Project>
-      <Name>BrailleIOBraillDisAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO\BrailleIO.csproj">
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO.csproj">
       <Project>{623e618c-f034-473e-a5af-280b20a5ba8f}</Project>
       <Name>BrailleIO</Name>
     </ProjectReference>
