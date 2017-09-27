@@ -27,4 +27,7 @@ Alternativ kann eine beliebiges Braille Display auch mithilfe des Treibers für M
 # Starten
 GRANTApplication ist das auszuführende Projekt. Zusätzlich sollte MVBD gestartet werden und, falls gewünscht, NVDA.
 
-Weitere Informationen zum Projekt sind im [Wiki](./wiki) zu finden.
+Weitere Informationen zum Projekt sind im [Wiki](../../wiki) zu finden.
+
+# Veröffentlichungen
+[Zinke F., Mazandarani E., Karlapp M., Lucke U.:  "A Generic Framework for Creating Customized Tactile User Interfaces.", HCI International 2017. Springer, 2017](https://link.springer.com/chapter/10.1007%2F978-3-319-58703-5_28)
