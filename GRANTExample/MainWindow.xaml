@@ -1,0 +1,57 @@
+﻿<Window x:Class="GRANTExample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        Icon="Icons/grant.ico"
+        Title="Beispielaufrufe" Height="651.557" Width="662.705"
+        KeyDown="Window_KeyDown">
+
+    <Grid Margin="0,0,0,-30" Height="652" VerticalAlignment="Top">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="225*"/>
+            <RowDefinition Height="373*"/>
+            <RowDefinition Height="54*"/>
+        </Grid.RowDefinitions>
+        <Button Content="wechseln" HorizontalAlignment="Left" Margin="182,57,0,0" VerticalAlignment="Top" Width="74" Height="22" Click="Button_Click_Screen"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="126" Width="613"><Run Text="Mögliche &quot;Tests&quot; per  Key-Event:"/><LineBreak/><Run Text="F1 - inspect GUI-Element"/><LineBreak/><Run Text="F2 - mögliche Screens"/><LineBreak/><Run Text="F3 - zu angegebenen Screen wechseln"/><LineBreak/><Run Text="F4 - aktualisiert den Baum und die Anzeige"/><LineBreak/><Run Text="F5 - gibt alle möglichen Ausgabegeräte an"/><LineBreak/><Run Text="F6 - gibt das ausgewählte Ausgabegerät an"/><LineBreak/><Run Text="F7 - filtern"/></TextBlock>
+        <TextBlock x:Name="NodeBox" HorizontalAlignment="Left" Margin="10,0,0,-60" TextWrapping="Wrap" VerticalAlignment="Top" Height="487" Width="622" Grid.Row="1" Grid.RowSpan="2"/>
+        <TextBox Name="Screen" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap"  VerticalAlignment="Top" Width="84" Margin="75,60,0,0" RenderTransformOrigin="-1.53,0.435"/>
+        <TextBlock HorizontalAlignment="Left" Height="18" Margin="19,60,0,0" TextWrapping="Wrap" Text="Screen" VerticalAlignment="Top" Width="51"/>
+        <Menu HorizontalAlignment="Left" Height="21" Margin="-2,0,0,0" VerticalAlignment="Top" Width="657">
+
+            <MenuItem Header="_File">
+                <MenuItem Click="AddScreenReaderCommand"  Header="_Add screen reader" HorizontalAlignment="Left"/>
+                <MenuItem Header="Hide Window" Click="HideWindowCommand" Name="HideWindowMenuItem" IsCheckable="True" IsChecked="False"/>
+                <MenuItem Click="ExitApp" x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left"/>
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                <Separator />
+                <MenuItem x:Name="Autor" Header="&amp;Autor" HorizontalAlignment="Left" Width="140"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <!-- see: https://www.codeproject.com/Articles/36468/WPF-NotifyIcon and http://www.hardcodet.net/wpf-notifyicon -->
+            <tb:TaskbarIcon
+                        IconSource="Icons/grant.ico"
+                        ToolTipText="GRANT - Screenreader"
+                        x:Name="MyNotifyicon"
+                        PopupActivation="RightClick">
+                <tb:TaskbarIcon.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Select screen reader" Name="SelectScreenReader" Click="ScreenReaderCommand"/>
+                        <Separator />
+                        <MenuItem Header="Hide Window" Name="HideWindowNotification" Click="HideWindowCommand" IsCheckable="True" IsChecked="False"/>
+                        <MenuItem Header="Exit" Click="ExitApp"/>
+                    </ContextMenu>
+                </tb:TaskbarIcon.ContextMenu>
+            </tb:TaskbarIcon>
+            <Button x:Name="button_eventProcessorTest" Click="button_eventProcessorTest_Click"  Content="Test EventProzessor" HorizontalAlignment="Left" Margin="518,60,0,0" VerticalAlignment="Top" Width="123"/>
+        </Grid>
+    </Grid>
+
+</Window>

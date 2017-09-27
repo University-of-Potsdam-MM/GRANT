@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6F97C6E3-FD39-4FD7-B660-73B4226AAB42}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GRANTExample</RootNamespace>
+    <AssemblyName>GRANTExample</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>grant.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExampleBrailleDis.cs" />
+    <Compile Include="ExampleDisplayStrategy.cs" />
+    <Compile Include="ExampleTree.cs" />
+    <Compile Include="InspectGui.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BrailleIO\BrailleIO\BrailleIO.csproj">
+      <Project>{623e618c-f034-473e-a5af-280b20a5ba8f}</Project>
+      <Name>BrailleIO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BrailleIOBraillDisAdapterMVBD\BrailleIOBraillDisAdapterMVBD.csproj">
+      <Project>{3b1787c9-b1a9-406f-951a-80e8681e6c6c}</Project>
+      <Name>BrailleIOBraillDisAdapterMVBD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BrailleIOGuiElementRenderer\BrailleIOGuiElementRenderer.csproj">
+      <Project>{8fdc0093-e06d-4116-b182-79eeed0645ab}</Project>
+      <Name>BrailleIOGuiElementRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GRANTApplication\GRANTApplication.csproj">
+      <Project>{8c26f616-879f-425c-952f-97fd074909db}</Project>
+      <Name>GRANTApplication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GRANTManager\GRANTManager.csproj">
+      <Project>{394e1f1d-b5d0-46e2-b60e-7bee3a939de2}</Project>
+      <Name>GRANTManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OSMElement\OSMElements.csproj">
+      <Project>{6eafefc6-7479-4591-a8d7-0f5ec7802f16}</Project>
+      <Name>OSMElements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyBrailleIO\StrategyBrailleIO.csproj">
+      <Project>{7765dc51-ff98-42eb-868b-582a0c2ba0aa}</Project>
+      <Name>StrategyBrailleIO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyEventManager_AggregatorPRISM\StrategyEvent_PRISM.csproj">
+      <Project>{3b5c2d5a-23a6-4c0c-9f06-d7ef60766c3c}</Project>
+      <Name>StrategyEvent_PRISM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyEvent\StrategyEvent.csproj">
+      <Project>{9af4ee26-5e2d-4bcc-b4e3-a55f8937a783}</Project>
+      <Name>StrategyEvent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyGenericTree\StrategyGenericTree.csproj">
+      <Project>{11274856-9c54-4d3d-b7e9-82b45414ea50}</Project>
+      <Name>StrategyGenericTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyJAVA\StrategyJAVA.csproj">
+      <Project>{24eb754e-2408-4b52-b9ea-1f11c4417f9f}</Project>
+      <Name>StrategyJAVA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyMVBD\StrategyMVBD.csproj">
+      <Project>{1fe9346f-83a2-4ae3-9c3c-8b77d9dd4a52}</Project>
+      <Name>StrategyMVBD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyUIA2\StrategyUIA2.csproj">
+      <Project>{843cdd4d-dc6a-40d4-984f-73f18413117e}</Project>
+      <Name>StrategyUIA2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyUIA\StrategyUIA.csproj">
+      <Project>{f181e453-0ebe-4775-9cc1-1ce26cdc4ed2}</Project>
+      <Name>StrategyUIA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StrategyWindows\StrategyWindows.csproj">
+      <Project>{8635b65c-13f9-4a97-88f6-e0507bd73d8d}</Project>
+      <Name>StrategyWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TemplatesUi\TemplatesUi.csproj">
+      <Project>{f1c8aabe-05d8-45cd-8a52-b3b894e58a5c}</Project>
+      <Name>TemplatesUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TemplateTextview\TemplateTextview.csproj">
+      <Project>{9aee5067-3959-4eec-8215-bb562d0025e2}</Project>
+      <Name>TemplateTextview</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TemplateUi.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\grant.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="grant.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:element name="TemplateUi">
+    <xs:complexType>
+      <xs:sequence>   
+        <xs:element name="MinDeviceHeight" type="xs:positiveInteger" />
+        <xs:element name="MinDeviceWidth" type="xs:positiveInteger" />
+        <xsd:element name="SymbolView" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xs:element maxOccurs="unbounded" name="UiElement">
+          <xs:complexType>
+            <xs:sequence>
+             <xs:element name="AllElementsOfType"  type="xs:boolean" minOccurs="0"/>
+              <xs:element name="IsGroup">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <xs:element name="Linebreak" type="xs:boolean" />
+                    <xs:element name="childBoundingRectangle">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Height"  type="xs:positiveInteger" nillable="true"/> <!-- xsi:nil="true"  entspricht der Höhe des Gerätes (Abzüglich StartY) -->
+                          <xs:element name="Width" type="xs:positiveInteger" nillable="true" /> <!-- xsi:nil="true"  entspricht der Bereite des Gerätes (Abzüglich StartX) -->
+                          <!-- xs:element name="StartX" type="xs:int" nillable="true" / --> <!-- xsi:nil="true"  entspricht ganz rechts abzüglich Width -->
+                          <!-- xs:element name="StartY" type="xs:int" nillable="true" /--> <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Orientation"> <!-- gibt bei (einigen) Elementen die Ausrichtung an-->
+                      <xs:simpleType> 
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="Top"/>
+                          <xs:enumeration value="Bottom"/>
+                          <xs:enumeration value="Left"/>
+                          <xs:enumeration value="Right"/>
+                          <xs:enumeration value="Vertical"/>
+                          <xs:enumeration value="Horizontal"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Renderer"> <!-- Bei gruppen-Elementen bezieht sich diese Angabe auf die KindElemente-->
+                <xs:simpleType> <!-- je nach genuzter IBrailleDisplayStrategy sind anderer Renderer möglich eine Liste der aktuell Möglichen Renderer gibt die Methode getUiElementRenderer(), Es sollten hier alle Renderer aller implementierten IBrailleDisplayStrategy auftauchen -->
+                  <xs:restriction base="xs:string">
+                    <xs:enumeration value="Text"/>
+                    <xs:enumeration value="Button"/>
+                    <xs:enumeration value="DropDownMenuItem"/>
+                    <xs:enumeration value="Screenshot"/>
+                    <xs:enumeration value="TextBox"/>
+                    <xs:enumeration value="GroupElement"/>
+                    <xs:enumeration value="ListItem" />
+                    <xs:enumeration value="TabItem" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Position">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Height"  type="xs:positiveInteger" nillable="true"/> <!-- xsi:nil="true"  entspricht der Höhe des Gerätes (Abzüglich StartY) -->
+                    <xs:element name="Width" type="xs:positiveInteger" nillable="true" /><!-- xsi:nil="true"  entspricht der Bereite des Gerätes (Abzüglich StartX) -->
+                    <xs:element name="StartX" type="xs:int" nillable="true" /> <!-- xsi:nil="true"  entspricht ganz rechts abzüglich Width -->
+                    <xs:element name="StartY" type="xs:int" nillable="true" /> <!-- xsi:nil="true"  entspricht ganz unten abzüglich Height -->
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xsd:element name="BoxModel">
+                <xsd:complexType>
+                  <xsd:sequence minOccurs="0">
+                    <xsd:element name="Margin">
+                      <xsd:complexType>
+                        <xsd:sequence minOccurs="0">
+                          <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0" />
+                          <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Bottom" type="xsd:int" default="0" minOccurs="0"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Padding">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Bottom" type="xsd:int" default="0" minOccurs="0"/>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Boarder">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Left" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Top" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Right" type="xsd:int" default="0" minOccurs="0"/>
+                          <xsd:element name="Bottom" type="xsd:int" default="0" minOccurs="0" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xs:element name="ShowScrollbar" type="xs:boolean"/> <!--true, falls Scrollbar angezeit werden soll-->
+              <xsd:element name="Screens"> <!-- Wenn die Liste leer ist, soll das entsprechende Element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
+                <xsd:complexType>
+                  <xsd:sequence minOccurs="0">
+                    <xsd:element maxOccurs="unbounded" name="Screen" type="xsd:string" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xs:element name="TextFromUIElement" type="xs:string" /> <!-- Gibt den Namen einer GeneralProperties an, von welcher der Text angezeigt werden soll; wenn es leer ist, bezieht sich dieses Objekt auf kein Element des gefilterten Baumes-->
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" /> <!-- Vordefinierte Namen sind: ("TitleBar",)  "BrailleStatusBar", "NavigationBarScreens" bei diesen ist der name so zu verwenden, damit die Events ensprechend verarbeitet werden können, die Elemente sind aber nicht zwingend zu nutzen -->
+          </xs:complexType>
+        </xs:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      
+    <xsd:element name="LayoutView" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="UiElement">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="IsGroup" />
+                    <xsd:element name="Renderer" type="xsd:string" />
+                    <xsd:element name="Position">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Height" type="xsd:unsignedByte" />
+                          <xsd:element name="Width" nillable="true" />
+                          <xsd:element name="StartX" type="xsd:unsignedByte" />
+                          <xsd:element name="StartY" nillable="true" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="BoxModel">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Margin" />
+                          <xsd:element name="Padding">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element minOccurs="0" name="Left" type="xsd:unsignedByte" />
+                                <xsd:element name="Top" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Right" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Bottom" type="xsd:unsignedByte" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                          <xsd:element name="Boarder">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element minOccurs="0" name="Left" type="xsd:unsignedByte" />
+                                <xsd:element name="Top" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Right" type="xsd:unsignedByte" />
+                                <xsd:element minOccurs="0" name="Bottom" type="xsd:unsignedByte" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ShowScrollbar" type="xsd:boolean" />
+                    <xsd:element name="Screens" />
+                    <xsd:element name="TextFromUIElement" type="xsd:string" />
+                  </xsd:sequence>
+                  <xsd:attribute name="name" type="xsd:string" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="Screenshot">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Position">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Height" type="xsd:unsignedByte" />
+                          <xsd:element name="Width" nillable="true" />
+                          <xsd:element name="StartX" type="xsd:unsignedByte" />
+                          <xsd:element name="StartY" type="xsd:unsignedByte" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Screens">
+                      <!-- Wenn die Liste leer ist, soll das entsprechende Element auf jeden Screen. Ansonsten soll das Element auf jeden der angegebenen Screens erscheinen-->
+                      <xsd:complexType>
+                        <xsd:sequence minOccurs="0">
+                          <xsd:element maxOccurs="unbounded" name="Screen" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="ConnectedFilteredNode" type="xs:string"/> <!--Gibt den Controltype des gefilterten Knotens an, von welchem ein screenshot erstellt werden soll-->
+                    <xs:element name="Zoom"  type="xs:double" minOccurs="0"/><!--Gibt den Zoom-Wert des Screenshots an. Dieser muss zwischen 0.0 und 3.0 liegen-->
+                    <xs:element name="Contrast"  type="xs:int" minOccurs="0"/><!--Gibt den Kontrast-Wert des Screenshots an. Dieser muss zwischen 0 und 255 liegen-->
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>  
+    
+      </xs:sequence>
+     <xsd:attribute name="Version" type="xsd:unsignedByte" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

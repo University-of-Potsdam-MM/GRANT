@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DisplayStrategyType>
+	<!-- Strategy>
+		<DeviceClassTypeFullName>StrategyBrailleIO.DisplayStrategyBrailleIoSimulator</DeviceClassTypeFullName>
+		<DeviceClassTypeDllName>StrategyBrailleIO</DeviceClassTypeDllName>
+		<AdaptClassTypeFullName> </AdaptClassTypeFullName>
+		<AdapterClassTypeDllName> </AdapterClassTypeDllName>
+	</Strategy -->
+	<Strategy>
+		<DeviceClassTypeFullName>StrategyBrailleIO.DisplayStrategyBrailleDis</DeviceClassTypeFullName>
+		<DeviceClassTypeDllName>StrategyBrailleIO</DeviceClassTypeDllName>
+		<AdaptClassTypeFullName>BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet</AdaptClassTypeFullName>
+		<AdapterClassTypeDllName>BrailleIOBrailleDisAdapter</AdapterClassTypeDllName>
+	</Strategy>
+	<Strategy>
+		<DeviceClassTypeFullName>StrategyMVBD.DisplayStrategyMVBD</DeviceClassTypeFullName>
+		<DeviceClassTypeDllName>StrategyMVBD</DeviceClassTypeDllName>
+		<AdaptClassTypeFullName>BrailleIOBraillDisAdapter.BrailleIOAdapter_BrailleDisNet_MVBD</AdaptClassTypeFullName>
+		<AdapterClassTypeDllName>BrailleIOBrailleDisAdapterMVBD</AdapterClassTypeDllName>
+	</Strategy>
+
+</DisplayStrategyType>
