@@ -23,3 +23,8 @@ Damit auch das BrailleDis (spezielles Braille Display) über BrailleIO angesproch
 - HBBrailleDisV2
 
 Alternativ kann eine beliebiges Braille Display auch mithilfe des Treibers für MVBD (BrailleIOBraillDisAdapterMVBD -- im git enthalten) angesprochen werden.
+
+# Starten
+GRANTApplication ist das auszuführende Projekt. Zusätzlich sollte MVBD gestartet werden und, falls gewünscht, NVDA.
+
+Weitere Informationen zum Projekt sind im [Wiki](./wiki) zu finden.
