@@ -294,7 +294,7 @@ namespace GRANTApplication
             {
                 var aboutOutputDesigner = new OutputDesigner();
                 aboutOutputDesigner.Closed += new EventHandler(aboutOutputDesignerWindow_Closed);
-                aboutOutputDesigner.Topmost = true;
+                aboutOutputDesigner.Topmost = false;
                 aboutOutputDesigner.Show();
                 bool TreeLoad = true;
                 SaveStartButton.CommandParameter = TreeLoad;
