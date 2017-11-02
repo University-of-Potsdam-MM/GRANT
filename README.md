@@ -32,4 +32,4 @@ Weitere Informationen zum Projekt sind im [Wiki](../../wiki) zu finden.
 # Veröffentlichungen
 [Zinke F., Mazandarani E., Karlapp M., Lucke U.:  "A Generic Framework for Creating Customized Tactile User Interfaces.", HCI International 2017. Springer, 2017](https://link.springer.com/chapter/10.1007%2F978-3-319-58703-5_28)
 
-[Karlapp M., Mazandarani E., Lucke U., Zinke F.: "Personalisierte Screenreader - Einfach, schnell und ohne Programmierkenntnisse", Informatik Spektrum. Springer, 2017] (https://link.springer.com/article/10.1007/s00287-017-1072-z)
+[Karlapp M., Mazandarani E., Lucke U., Zinke F.: "Personalisierte Screenreader - Einfach, schnell und ohne Programmierkenntnisse", Informatik Spektrum. Springer, 2017](https://link.springer.com/article/10.1007/s00287-017-1072-z)
